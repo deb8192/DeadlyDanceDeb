@@ -9,4 +9,4 @@
 
 ### Informes de iteraciones
 
-- [Informe Hito 1 Iteracion 3](https://github.com/ABPMultimediaUA/Deadly-Dance/raw/45886dfa1de60afc7e9e282abd09293bdfebec5f/Documentacion/informe_iteracion_3_CrazyCats.pdf)
+- [Informe Hito 1 Iteracion 3](https://github.com/ABPMultimediaUA/Deadly-Dance/raw/ee4b8725973f6c8a00ed3eaf421ca790e712450f/Documentacion/informe_iteracion_3_CrazyCats.pdf)
