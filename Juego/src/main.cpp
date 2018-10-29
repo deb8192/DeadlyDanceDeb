@@ -1,22 +1,19 @@
 #include <iostream>
-#include "MotorGrafico.hpp"
+#include "Juego.hpp"
 
 int main()
 {
-	cout << "\e[32m Iniciando Main \e[0m" << endl;
-	MotorGrafico *motor = MotorGrafico::getInstance();
-	if(!motor->crearVentana(1))
+	cout << "\e[42m Iniciando Juego \e[0m" << endl;
+	Juego *juego = Juego::getInstance();
+	juego->InicializarVentana();
+	while(juego->Running())//comprobamos que esta activo el dispositivo
 	{
-		return 1;//no se puede crear el device	
-	}//baja resolucion	
-	motor->CrearCamara();//creamos la camara
-	motor->crearTextoDePrueba();
-	while(motor->sigueFuncionando())//comprobamos que esta activo el dispositivo
-	{
-		motor->updateMotor();//si lo esta actualizamos la escena
+		juego->Update();//si lo esta actualizamos la escena
 	}
 
-	motor->limpiarDevice(); //si no lo esta borramos de memoria el dispositivo
-
+	cout << "\e[32m Ventana cerrada \e[0m" << endl;
+	juego->LimpiarVentana(); //si no lo esta borramos de memoria el dispositivo
+	cout << "\e[32m Limpieza buffer ventana \e[0m" << endl;
+	cout << "\e[42m Cierre Juego \e[0m" << endl;
 	return 0; //retornamos cero de ejecucion correcta
 }
