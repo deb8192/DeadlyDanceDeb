@@ -21,7 +21,7 @@ void Juego::LimpiarVentana()
 
 void Juego::InicializarVentana()
 {
-    motor->crearVentana(1);//crea ventana
+    motor->crearVentana(3);//crea ventana
     motor->CrearCamara();//creamos la camara
 	motor->crearTextoDePrueba();//crea un texto
 }
