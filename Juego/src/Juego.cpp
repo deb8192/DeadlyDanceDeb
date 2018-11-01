@@ -21,9 +21,11 @@ void Juego::LimpiarVentana()
 
 void Juego::InicializarVentana()
 {
-    motor->crearVentana(3);//crea ventana
+    motor->crearVentana(2);//crea ventana
     motor->CrearCamara();//creamos la camara
 	motor->crearTextoDePrueba();//crea un texto
+    motor->activarFuenteDefault();//activa la fuente por defecto que trae irrlicht
+    motor->PintarBotonesMenu();//pinta los botones del menu -> esto mover a menu
 }
 
 void Juego::Update()

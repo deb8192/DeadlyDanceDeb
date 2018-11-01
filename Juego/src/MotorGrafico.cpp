@@ -4,6 +4,14 @@
 MotorGrafico* MotorGrafico::unica_instancia = 0;
 //fin indicador singleton
 
+enum
+{
+	GUI_ID_EMPEZAR_BUTTON = 101,
+    GUI_ID_SALIR_BUTTON = 102,
+    GUI_ID_CREDITOS_BUTTON = 103,
+    GUI_ID_CONFIGURACION_BUTTON = 104
+};
+
 /*Tipo 1(640x480), Tipo 2(800x600), Tipo 3(1024x768), Tipo 4(1280x1024)
 Esta clase define que tipo de pantalla quieres
 */
@@ -23,6 +31,7 @@ bool MotorGrafico::crearVentana(int tipo)
     {
         device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(640, 480), 16,false, false, false, 0);
         device->setWindowCaption(L"DeadlyDance LowResolution");
+        device->setResizable(false);
         PropiedadesDevice();
         return true;
     }
@@ -31,6 +40,7 @@ bool MotorGrafico::crearVentana(int tipo)
     {
        device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(800, 600), 16,false, false, false, 0);
        device->setWindowCaption(L"DeadlyDance MediumResolution");
+       device->setResizable(false);
        PropiedadesDevice();
        return true; 
     }
@@ -39,6 +49,7 @@ bool MotorGrafico::crearVentana(int tipo)
     {
        device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(1024, 768), 16,false, false, false, 0);
        device->setWindowCaption(L"DeadlyDance NormalResolution");
+       device->setResizable(false);
        PropiedadesDevice();
        return true; 
     }
@@ -47,6 +58,7 @@ bool MotorGrafico::crearVentana(int tipo)
     {
        device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(1280, 1024), 16,false, false, false, 0);
        device->setWindowCaption(L"DeadlyDance HightResolution");
+       device->setResizable(false);
        PropiedadesDevice();
        return true; 
     }
@@ -66,7 +78,7 @@ void MotorGrafico::limpiarDevice()
 
 void MotorGrafico::crearTextoDePrueba()
 {
-    guienv->addStaticText(L"Si ves este texto es que estas viendo el comienzo de un gran juego",rect<s32>(150,10,500,100), true);
+    guienv->addStaticText(L"Deadly Dance",rect<s32>(0,0,80,20), true);
 }
 
 void MotorGrafico::updateMotor()
@@ -88,5 +100,27 @@ void MotorGrafico::PropiedadesDevice()
     driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
+    
     cout << "\e[32m Propiedades aplicadas \e[0m" << endl;
+}
+
+void MotorGrafico::PintarBotonesMenu()
+{
+    guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_EMPEZAR_BUTTON,L"Iniciar Juego", L"Empieza a jugar");
+    guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_CONFIGURACION_BUTTON,L"Configuracion", L"Configuracion del juego");
+    guienv->addButton(rect<s32>(300,280,500,310), 0, GUI_ID_CREDITOS_BUTTON,L"Creditos", L"Creditos del juego");
+    guienv->addButton(rect<s32>(300,320,500,350), 0, GUI_ID_SALIR_BUTTON,L"Salir del juego", L"Sale del juego");    
+}
+
+void MotorGrafico::activarFuenteDefault()
+{
+    skin = guienv->getSkin();
+    font = guienv->getFont("assets/fonts/default.bmp");
+    if (font)
+    {
+        skin->setFont(font);
+        cout << "\e[36m Se encuentra fuente \e[0m" << endl;
+    }
+
+    skin->setFont(guienv->getBuiltInFont(), EGDF_TOOLTIP);
 }

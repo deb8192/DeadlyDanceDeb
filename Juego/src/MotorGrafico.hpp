@@ -39,6 +39,10 @@ using namespace std;
             void updateMotor();
             //crea una camara para ver el escenario
             void CrearCamara();
+            //crea los botones del menu
+            void PintarBotonesMenu();
+            //define fuente por defecto
+            void activarFuenteDefault();
 
         private: //clases solo accesibles por MotorGrafico
 
@@ -52,6 +56,8 @@ using namespace std;
             IVideoDriver *driver;
 	        ISceneManager *smgr;
 	        IGUIEnvironment *guienv;
+            IGUIFont *font;
+            IGUISkin *skin;
     };
 
 #endif /* MotorGrafico_HPP */

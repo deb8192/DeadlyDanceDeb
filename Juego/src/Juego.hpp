@@ -1,4 +1,5 @@
 #include "MotorGrafico.hpp"
+#include "Estado.hpp"
 
 #ifndef Juego_HPP
 #define Juego_CPP
@@ -28,7 +29,7 @@
             Juego();
             static Juego* unica_instancia;
             //fin clase singleton private
-
+            Estado * estado;//puntero del estado
             MotorGrafico *motor;//instancia de la fachada
     };
 
