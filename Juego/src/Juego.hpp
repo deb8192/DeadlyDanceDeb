@@ -1,6 +1,7 @@
 #include "MotorGrafico.hpp"
 #include "Estado.hpp"
 
+
 #ifndef Juego_HPP
 #define Juego_CPP
 
@@ -22,6 +23,8 @@
             void InicializarVentana();//te inicializa la ventana en la que se va a mostrar el juego
             void Update(); //actualiza las ia, renderizados, control de teclas
             void LimpiarVentana();//borra de la memoria la ventana del juego.
+            void Salir();//sale del juego
+            void Jugar();//cambia de estado y cargar mapa //aqui saldra el selector de nivel cuando se implemente
 
         private:
 
@@ -31,6 +34,9 @@
             //fin clase singleton private
             Estado * estado;//puntero del estado
             MotorGrafico *motor;//instancia de la fachada
+            Cinematica cinematica;//contiene la clase cinematica (estado)
+            Menu menu;//contiene la clase menu (estado)
+            Jugando jugando;//contiene la clase Jugando (estado)
     };
 
 #endif /* MotorGrafico_HPP */

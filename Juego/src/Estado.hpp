@@ -8,10 +8,13 @@ private:
     //funciones que tiene la interfaz como virtual (porque no existen pero deberian)
     virtual void Draw() = 0;
     virtual void Clean() = 0;
-    virtual int Esta() = 0;    
+    virtual void Update() = 0;
+    virtual int Esta() = 0;
+
 public:
     void Pintar(){ Draw(); };
     void Borrar(){ Clean(); };
+    void Actualizar(){ Update(); };
     int QueEstado(){ return Esta(); };
 };
 
@@ -22,21 +25,27 @@ class Menu: public Estado{
     private:
         void Draw();
         void Clean();
+        void Update();
         int Esta();
+        //MotorGrafico *motor = MotorGrafico::getInstance();   
 };
 
 class Jugando: public Estado{
     private:
         void Draw();
         void Clean();
+        void Update();
         int Esta();
+        //MotorGrafico *motor = MotorGrafico::getInstance();   
 };
 
 class Cinematica: public Estado{
     private:
         void Draw();
         void Clean();
+        void Update();
         int Esta();
+        //MotorGrafico *motor = MotorGrafico::getInstance();   
 };
 
 #endif /* ESTADO_HPP */
