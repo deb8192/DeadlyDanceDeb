@@ -1,4 +1,5 @@
 #include "Estado.hpp"
+#include "MotorGrafico.hpp"
 
 void Menu::Draw()
 {
@@ -8,6 +9,12 @@ void Menu::Draw()
 void Menu::Clean()
 {
     //se pintan los menus
+}
+
+void Menu::Update()
+{
+    MotorGrafico *motor = MotorGrafico::getInstance();
+    motor->updateMotorMenu();
 }
 
 int Menu::Esta()
@@ -25,6 +32,12 @@ void Jugando::Clean()
     //se borran los objetos y escenarios
 }
 
+void Jugando::Update()
+{
+    MotorGrafico *motor = MotorGrafico::getInstance();
+    motor->updateMotorJuego();
+}
+
 int Jugando::Esta()
 {
     return 2;
@@ -38,6 +51,12 @@ void Cinematica::Draw()
 void Cinematica::Clean()
 {
     //em
+}
+
+void Cinematica::Update()
+{
+    MotorGrafico *motor = MotorGrafico::getInstance();
+    motor->updateMotorCinematica();
 }
 
 int Cinematica::Esta()

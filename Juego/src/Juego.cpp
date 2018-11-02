@@ -6,7 +6,8 @@ Juego* Juego::unica_instancia = 0;
 
 Juego::Juego()
 {
-    motor = MotorGrafico::getInstance();
+    motor = MotorGrafico::getInstance();//se recoge instancia de motor
+    estado = &menu;//se empieza en el estado menu
 }
 
 bool Juego::Running()
@@ -30,5 +31,29 @@ void Juego::InicializarVentana()
 
 void Juego::Update()
 {
-    motor->updateMotor();
+    estado->Actualizar();//con esto se llama al update adecuado
+    //cout << "\e[24m Aqui \e[0m" << endl;
+    if(motor->ocurreEvento(101))//cambiamos de estado porque han pulsado boton jugar
+    {
+        //limpiamos el gui y la scena
+        motor->borrarScena();
+        motor->borrarGui();
+        Jugar();
+    }
+    if(motor->ocurreEvento(102))//salimos del juego
+    {
+        motor->closeGame();   
+    }
+}
+
+//se llama cuando se presiona un boton de salir del juego.
+void Juego::Salir()
+{   
+    
+}
+
+//cuando se presiona boton de jugar
+void Juego::Jugar()
+{
+    estado = &jugando;//se cambia a estado jugando
 }

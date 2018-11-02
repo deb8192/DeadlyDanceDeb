@@ -1,23 +1,14 @@
 #include "MotorGrafico.hpp" //se llama a su cabezera para cargar las dependencias
-
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 MotorGrafico* MotorGrafico::unica_instancia = 0;
 //fin indicador singleton
-
-enum
-{
-	GUI_ID_EMPEZAR_BUTTON = 101,
-    GUI_ID_SALIR_BUTTON = 102,
-    GUI_ID_CREDITOS_BUTTON = 103,
-    GUI_ID_CONFIGURACION_BUTTON = 104
-};
 
 /*Tipo 1(640x480), Tipo 2(800x600), Tipo 3(1024x768), Tipo 4(1280x1024)
 Esta clase define que tipo de pantalla quieres
 */
 MotorGrafico::MotorGrafico()
 {
-
+    input.setDevice(device);//lo  utilizamos para que los eventos puedan llamar a funciones de 
 }
 
 MotorGrafico::~MotorGrafico()
@@ -29,7 +20,7 @@ bool MotorGrafico::crearVentana(int tipo)
 {
     if(tipo == 1)
     {
-        device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(640, 480), 16,false, false, false, 0);
+        device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(640, 480), 16,false, false, false, &input);
         device->setWindowCaption(L"DeadlyDance LowResolution");
         device->setResizable(false);
         PropiedadesDevice();
@@ -38,7 +29,7 @@ bool MotorGrafico::crearVentana(int tipo)
 
     if(tipo == 2)
     {
-       device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(800, 600), 16,false, false, false, 0);
+       device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(800, 600), 16,false, false, false, &input);
        device->setWindowCaption(L"DeadlyDance MediumResolution");
        device->setResizable(false);
        PropiedadesDevice();
@@ -47,7 +38,7 @@ bool MotorGrafico::crearVentana(int tipo)
 
     if(tipo == 3)
     {
-       device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(1024, 768), 16,false, false, false, 0);
+       device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(1024, 768), 16,false, false, false, &input);
        device->setWindowCaption(L"DeadlyDance NormalResolution");
        device->setResizable(false);
        PropiedadesDevice();
@@ -56,7 +47,7 @@ bool MotorGrafico::crearVentana(int tipo)
 
     if(tipo == 4)
     {
-       device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(1280, 1024), 16,false, false, false, 0);
+       device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(1280, 1024), 16,false, false, false, &input);
        device->setWindowCaption(L"DeadlyDance HightResolution");
        device->setResizable(false);
        PropiedadesDevice();
@@ -64,6 +55,11 @@ bool MotorGrafico::crearVentana(int tipo)
     }
 
     return false;
+}
+
+void MotorGrafico::closeGame()
+{
+    device->closeDevice();
 }
 
 bool MotorGrafico::sigueFuncionando()
@@ -81,9 +77,25 @@ void MotorGrafico::crearTextoDePrueba()
     guienv->addStaticText(L"Deadly Dance",rect<s32>(0,0,80,20), true);
 }
 
-void MotorGrafico::updateMotor()
+void MotorGrafico::updateMotorMenu()
 {
     driver->beginScene(true, true, SColor(255,100,101,140));
+	smgr->drawAll();
+	guienv->drawAll();
+	driver->endScene();
+}
+
+void MotorGrafico::updateMotorJuego()
+{
+    driver->beginScene(true, true, SColor(255,255,101,140));
+	smgr->drawAll();
+	guienv->drawAll();
+	driver->endScene();
+}
+
+void MotorGrafico::updateMotorCinematica()
+{
+    driver->beginScene(true, true, SColor(255,100,255,140));
 	smgr->drawAll();
 	guienv->drawAll();
 	driver->endScene();
@@ -123,4 +135,44 @@ void MotorGrafico::activarFuenteDefault()
     }
 
     skin->setFont(guienv->getBuiltInFont(), EGDF_TOOLTIP);
+}
+
+void MotorGrafico::borrarScena()
+{
+    smgr->clear();    
+}
+
+void MotorGrafico::borrarGui()
+{
+    guienv->clear();
+}
+
+bool MotorGrafico::estaPulsado(int boton)
+{
+    switch(boton)
+    {
+        case 1:     
+            return input.IsKeyDown(irr::KEY_KEY_A);
+
+        case 2:
+            return input.IsKeyDown(irr::KEY_KEY_S);
+        
+        case 3:
+            return input.IsKeyDown(irr::KEY_KEY_D);
+        
+        case 4:
+            return input.IsKeyDown(irr::KEY_KEY_W);
+        
+        case 5:
+            return input.IsKeyDown(irr::KEY_SPACE);
+
+        case 6:
+            return input.IsKeyDown(irr::KEY_ACCEPT);
+    }
+    return false;
+}
+
+bool MotorGrafico::ocurreEvento(int event)
+{
+    return input.IsEventOn(event);
 }
