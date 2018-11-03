@@ -36,6 +36,7 @@ void Jugando::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorJuego();
+    //prueba jose ramon para su rama
 }
 
 int Jugando::Esta()
