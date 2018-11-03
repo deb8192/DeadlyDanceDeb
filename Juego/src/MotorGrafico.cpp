@@ -147,6 +147,13 @@ void MotorGrafico::borrarGui()
     guienv->clear();
 }
 
+void MotorGrafico::JointsTest()
+{
+  scene::IAnimatedMesh* mesh = smgr->getMesh("assets/models/ninja.b3d");
+  scene::IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode( mesh );
+  //no da error cargando pero en estado jugando no se ve, y en menu si
+}
+
 bool MotorGrafico::estaPulsado(int boton)
 {
     switch(boton)
