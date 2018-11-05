@@ -56,4 +56,5 @@ void Juego::Salir()
 void Juego::Jugar()
 {
     estado = &jugando;//se cambia a estado jugando
+    estado->Ini();
 }

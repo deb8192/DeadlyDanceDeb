@@ -118,6 +118,7 @@ void MotorGrafico::PropiedadesDevice()
 
 void MotorGrafico::PintarBotonesMenu()
 {
+
     guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_EMPEZAR_BUTTON,L"Iniciar Juego", L"Empieza a jugar");
     guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_CONFIGURACION_BUTTON,L"Configuracion", L"Configuracion del juego");
     guienv->addButton(rect<s32>(300,280,500,310), 0, GUI_ID_CREDITOS_BUTTON,L"Creditos", L"Creditos del juego");
@@ -149,7 +150,7 @@ void MotorGrafico::borrarGui()
 
 void MotorGrafico::JointsTest()
 {
-  scene::IAnimatedMesh* mesh = smgr->getMesh("assets/models/ninja.b3d");
+  scene::IAnimatedMesh* mesh = smgr->getMesh("assets/models/Puerta.3ds");
   scene::IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode( mesh );
   //no da error cargando pero en estado jugando no se ve, y en menu si
 }
