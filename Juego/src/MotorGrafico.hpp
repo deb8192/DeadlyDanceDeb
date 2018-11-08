@@ -55,7 +55,12 @@ using namespace idsEventos;
             //borrar gui
             void borrarGui();//borra todo lo que haya en la ventana relacionado con el gui
             void JointsTest();
-             
+
+
+            /*IMPORTANTE para bullet motor de fisicas y Joints*/
+            //btHingeConstraint(btRigidBody& rbA,const btTransform& rbAFrame, const btTransform& rbBFrame);
+            
+
             //eventos facade
             //detecta si esta pulsado un boton, 1=a, 2 =s, 3=d, 4=w, 5=space, 6=intro 
             bool estaPulsado(int);

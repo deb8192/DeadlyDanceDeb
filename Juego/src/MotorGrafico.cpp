@@ -151,9 +151,54 @@ void MotorGrafico::borrarGui()
 void MotorGrafico::JointsTest()
 {
   scene::IAnimatedMesh* mesh = smgr->getMesh("assets/models/Puerta.3ds");
-  scene::IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode( mesh );
-  //no da error cargando pero en estado jugando no se ve, y en menu si
+  scene::IAnimatedMeshSceneNode* node = smgr->addAnimatedMeshSceneNode(mesh);
+
+  scene::IAnimatedMesh* mesh2 = smgr->getMesh("assets/models/MarcoPuerta.3ds");
+  scene::IAnimatedMeshSceneNode* node2 = smgr->addAnimatedMeshSceneNode(mesh2);
+  //la forma correcta para cargar modelos empleaba xml y me ha dado problemas de violacion de segmento
+  //carpeta tutorial: irrlicht-1.8.4/examples/09.Meshviewer/tutorial.html
+
+  /*btBoxShape
+  //funciones joints utiles para motor de fisica bullet, 
+  //falta elegir motor en clase 
+  
+  btCollisionShape* pDoorShape = new btBoxShape(btVector3(2.0f, 5.0f, 0.2f));
+  m_collisionShapes.push_back(pDoorShape);
+  btTransform doorTrans;
+  doorTrans.setIdentity();
+  doorTrans.setOrigin(btVector3(-5.0f, -2.0f, 0.0f));
+  btRigidBody* pDoorBody = createRigidBody(1.0, doorTrans, pDoorShape);
+  pDoorBody->setActivationState(DISABLE_DEACTIVATION);
+  const btVector3 btPivotA(10.f + 2.1f, -2.0f, 0.0f);  // right next to the door slightly outside
+  btVector3 btAxisA(0.0f, 1.0f, 0.0f);                 // pointing upwards, aka Y-axis
+
+  spDoorHinge = new btHingeConstraint(*pDoorBody, btPivotA, btAxisA);
+
+  spDoorHinge->setLimit(-SIMD_PI * 0.25f, SIMD_PI * 0.25f);
+  m_dynamicsWorld->addConstraint(spDoorHinge);
+  spDoorHinge->setDbgDrawSize(btScalar(5.f));*/
+  
 }
+/*
+btHingeConstraint::btHingeConstraint(btRigidBody& rbA, const btTransform& rbAFrame, const btTransform& rbBFrame)
+:btTypedConstraint(HINGE_CONSTRAINT_TYPE, rbA),m_rbAFrame(rbAFrame),m_rbBFrame(rbBFrame),
+m_angularOnly(false),
+m_enableAngularMotor(false)
+{
+  // flip axis
+  m_rbBFrame.getBasis()[0][2] *= btScalar(-1.);
+  m_rbBFrame.getBasis()[1][2] *= btScalar(-1.);
+  m_rbBFrame.getBasis()[2][2] *= btScalar(-1.);
+  
+  //start with free
+  m_lowerLimit = btScalar(1e30);
+  m_upperLimit = btScalar(-1e30); 
+  m_biasFactor = 0.3f;
+  m_relaxationFactor = 1.0f;
+  m_limitSoftness = 0.9f;
+  m_solveLimit = false;
+}*/
+
 
 bool MotorGrafico::estaPulsado(int boton)
 {
