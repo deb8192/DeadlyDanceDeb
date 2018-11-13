@@ -1,6 +1,6 @@
 #include "MotorGrafico.hpp"
 #include "Estado.hpp"
-
+#include "Nivel.hpp"
 
 #ifndef Juego_HPP
 #define Juego_CPP
@@ -37,6 +37,7 @@
             Cinematica cinematica;//contiene la clase cinematica (estado)
             Menu menu;//contiene la clase menu (estado)
             Jugando jugando;//contiene la clase Jugando (estado)
+            Nivel nivel;
     };
 
 #endif /* MotorGrafico_HPP */
