@@ -54,7 +54,7 @@ using namespace idsEventos;
             void borrarScena();//borra todo lo que haya en la ventana
             //borrar gui
             void borrarGui();//borra todo lo que haya en la ventana relacionado con el gui
-            void JointsTest();
+           
 
 
             /*IMPORTANTE para bullet motor de fisicas y Joints*/
