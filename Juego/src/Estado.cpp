@@ -40,7 +40,6 @@ void Jugando::Clean()
 void Jugando::Init()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
-    motor->JointsTest();
     motor->CrearCamara();
 }
 
