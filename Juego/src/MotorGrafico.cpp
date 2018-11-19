@@ -177,3 +177,19 @@ bool MotorGrafico::ocurreEvento(int event)
 {
     return input.IsEventOn(event);
 }
+
+void MotorGrafico::resetEvento(int event)
+{
+    input.ResetEvento(event);
+}
+
+void MotorGrafico::CargarObjeto(int x,int y,int z, const char *ruta_objeto,const char *ruta_textura)
+{
+    IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+	if (!objeto)
+	{
+		//error
+	}
+    IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+    Plataformas_Scena.push_back(objeto_en_scena);
+}

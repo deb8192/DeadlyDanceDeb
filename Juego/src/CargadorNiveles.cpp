@@ -9,6 +9,7 @@ CargadorNiveles::CargadorNiveles()
 
 void CargadorNiveles::CargarNivelXml(int level)
 {
+    MotorGrafico * motor = MotorGrafico::getInstance();
     //definimos los strings
     std::string nivel = ""; //donde se almacenara el nombre del nivel   
     std::string extension = ".xml"; // extension del archivo a abrir
@@ -29,8 +30,14 @@ void CargadorNiveles::CargarNivelXml(int level)
     pugi::xml_document doc;//instanciamos el objeto de la libreria xml
     pugi::xml_parse_result resultado = doc.load_file(cadena);//cargamos el archivo
 
-    std::cout << "Load result: " << resultado.description() << ", La textura de la primera plataforma se encuenta en: " << doc.child("Level").child("Platform").attribute("Texture").value()<< std::endl;
-
+    std::cout << "Load result: " << resultado.description() << ",El objeto de la primera plataforma se encuenta en: " << doc.child("Level").child("Platform").attribute("Model").value()<< std::endl;
+    
+    int x = doc.child("Level").child("Platform").attribute("X").as_int();
+    int y = doc.child("Level").child("Platform").attribute("Y").as_int();
+    int z = doc.child("Level").child("Platform").attribute("Z").as_int();
+    const char * textura =  doc.child("Level").child("Platform").attribute("Texture").value(); 
+    const char * modelo =  doc.child("Level").child("Platform").attribute("Model").value(); 
+    motor->CargarObjeto(x,y,z,modelo,textura);
 
 }
 

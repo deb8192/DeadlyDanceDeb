@@ -40,6 +40,7 @@ void Juego::Update()
         motor->borrarScena();
         motor->borrarGui();
         nivel->CargarNivel(1);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
+        motor->resetEvento(101);//reseteamos el evento
         Jugar();
     }
     if(motor->ocurreEvento(102))//salimos del juego

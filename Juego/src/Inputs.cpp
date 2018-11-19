@@ -40,6 +40,12 @@
 	{
 		return EventosActivos[event];
 	}
+
+	// This is used to check whether a key is being held down
+	void Inputs::ResetEvento(int event)
+	{
+		EventosActivos[event]=false;
+	}
 	
 	Inputs::Inputs()
 	{
