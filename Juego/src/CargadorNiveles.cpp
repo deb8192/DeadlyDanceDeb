@@ -1,5 +1,6 @@
 #include "CargadorNiveles.hpp"
 #include "Nivel.hpp"
+#include "MotorGrafico.hpp"
 
 CargadorNiveles::CargadorNiveles()
 {
