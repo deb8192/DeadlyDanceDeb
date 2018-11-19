@@ -1,12 +1,18 @@
 #include "Nivel.hpp"
 
+//para clases singleton deben tener un indicador de que se ha creado el unico objeto
+Nivel* Nivel::unica_instancia = 0;
+//fin indicador singleton
+
+
 Nivel::Nivel()
 {
-    cargador.CargarNivelXml(1);
+    
 }
 
 bool Nivel::CargarNivel(int level)
 {
-    return false; 
+    cargador.CargarNivelXml(level);
+    return false;
 }
 
