@@ -1,6 +1,6 @@
 <Level><!--- Esto nos indica que estamos definiendo un nivel -->
 	<Light Type="Ambiental" Intensity="50" Attenuation="0" Color="Red" X="100" Y="100" Z="100"> </Light>
-	<Platform Type="1" Texture="assets/texture/platform1.png" UserStar="True" StarX="10" StarY="5" X="100" Y="100" Z="100" >
+	<Platform Type="1" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="True" StarX="10" StarY="5" X="100" Y="100" Z="100" >
 		<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
 		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
 	</Platform>
