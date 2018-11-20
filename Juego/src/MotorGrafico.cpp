@@ -183,7 +183,7 @@ void MotorGrafico::resetEvento(int event)
     input.ResetEvento(event);
 }
 
-void MotorGrafico::CargarObjeto(int x,int y,int z, const char *ruta_objeto,const char *ruta_textura)
+void MotorGrafico::CargarPlataformas(int x,int y,int z, const char *ruta_objeto,const char *ruta_textura)
 {
     IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!objeto)

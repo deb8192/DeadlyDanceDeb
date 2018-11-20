@@ -28,16 +28,16 @@ void CargadorNiveles::CargarNivelXml(int level)
     //ahora vamos a abrir el fichero en xml y crear una instancia de pugixml(libreria)
 
     pugi::xml_document doc;//instanciamos el objeto de la libreria xml
-    pugi::xml_parse_result resultado = doc.load_file(cadena);//cargamos el archivo
+    doc.load_file(cadena);//cargamos el archivo
 
-    for (pugi::xml_node hijo = doc.child("Level").child("Platform"); hijo; hijo = hijo.next_sibling("Platform"))
+    for (pugi::xml_node hijo = doc.child("Level").child("Platform"); hijo; hijo = hijo.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
-        int x = hijo.attribute("X").as_int();
-        int y = hijo.attribute("Y").as_int();
-        int z = hijo.attribute("Z").as_int();
-        const char * textura = hijo.attribute("Texture").value(); 
-        const char * modelo  =  hijo.attribute("Model").value(); 
-        motor->CargarObjeto(x,y,z,modelo,textura);
+        int x = hijo.attribute("X").as_int();//nos devuelve un int
+        int y = hijo.attribute("Y").as_int();//nos devuelve un int
+        int z = hijo.attribute("Z").as_int();//nos devuelve un int 
+        const char * textura = hijo.attribute("Texture").value(); //nos da un char[] = string
+        const char * modelo  =  hijo.attribute("Model").value(); //nos da un char[] = string
+        motor->CargarPlataformas(x,y,z,modelo,textura); //cargamos el objeto
     }
 }
 
