@@ -30,15 +30,15 @@ void CargadorNiveles::CargarNivelXml(int level)
     pugi::xml_document doc;//instanciamos el objeto de la libreria xml
     pugi::xml_parse_result resultado = doc.load_file(cadena);//cargamos el archivo
 
-    std::cout << "Load result: " << resultado.description() << ",El objeto de la primera plataforma se encuenta en: " << doc.child("Level").child("Platform").attribute("Model").value()<< std::endl;
-    
-    int x = doc.child("Level").child("Platform").attribute("X").as_int();
-    int y = doc.child("Level").child("Platform").attribute("Y").as_int();
-    int z = doc.child("Level").child("Platform").attribute("Z").as_int();
-    const char * textura =  doc.child("Level").child("Platform").attribute("Texture").value(); 
-    const char * modelo =  doc.child("Level").child("Platform").attribute("Model").value(); 
-    motor->CargarObjeto(x,y,z,modelo,textura);
-
+    for (pugi::xml_node hijo = doc.child("Level").child("Platform"); hijo; hijo = hijo.next_sibling("Platform"))
+    {
+        int x = hijo.attribute("X").as_int();
+        int y = hijo.attribute("Y").as_int();
+        int z = hijo.attribute("Z").as_int();
+        const char * textura = hijo.attribute("Texture").value(); 
+        const char * modelo  =  hijo.attribute("Model").value(); 
+        motor->CargarObjeto(x,y,z,modelo,textura);
+    }
 }
 
 void CargadorNiveles::GuardarNivelXml(int level)
