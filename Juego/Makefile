@@ -1,10 +1,11 @@
-# Declaration of variables
+﻿# Declaration of variables
 CC_FLAGS = -w #comandos extras para el compilador
 RUTACPP = src/ #variable donde iran las clases que utilizamos
 # $(CXX) - Es la variable de entorno del compilador si estas con g++ o gcc te lo detecta solo+
 CXXFLAGS = -g -Wall # lo que hace es que crea archivos debug para que se pueda comprobar la informacion
-irrlicht =-I/usr/include/irrlicht #nos dice donde estan los includes
+irrlicht = -I/usr/include/irrlicht #nos dice donde estan los includes
 irrlichtN = -l Irrlicht #porque nombre llamarla
+
 # ${CXXFLAGS} - Son las opciones del compilador
 #pwd
 
@@ -17,11 +18,11 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 # Aqui es donde se hace la magia y se unifican las clases en una sola, basicamente se le pasa las clases de objeto (.o) para unificarlas
 $(EXEC): $(OBJECTS) 
-	$(CXX) $(OSOURCES) -o $(EXEC) $(irrlicht) $(irrlichtN)
+	$(CXX) $(OSOURCES) -o $(EXEC) $(irrlicht) $(irrlichtN) 
 	
 # si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
 %.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) $< -o $@ $(irrlicht) $(irrlichtN)
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(irrlicht) $(irrlichtN) 
 	mv src/*.o obj/
 
 #main: main.o MotorGrafico.o
