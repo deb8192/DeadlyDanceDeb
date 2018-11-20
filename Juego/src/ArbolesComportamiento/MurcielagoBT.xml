@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbol de comportamiento del Murcielago-->
+<BehaviorTree>
+    <Root id="1" type="selector">
+        <Composition id="2" type="secuencia">
+            <Leaf id="3" type="tarea" action="oye" target="jugador">
+                <Blackboard task="escribe" info="pos-jugador"></Blackboard>
+            </Leaf>
+            <Leaf id="4" type="tarea" action="pide" target="ayuda">
+                <Blackboard task="escribe" info="pos-ayuda"></Blackboard>
+            </Leaf>
+            <Composition id="5" type="selector">
+                <Composition id="6" type="secuencia">
+                    <Leaf id="7" type="tarea" action="esta" target="cerca-jugador"></Leaf>
+                    <Leaf id="8" type="tarea" action="ataca" target="jugador"></Leaf>
+                </Composition>
+                <Decorator id="9" type="iterador" end="true" alternative="max-puertas-3">
+                    <Composition id="10" type="tarea" action="busca" target="pos-jugador">
+                    <Blackboard task="lee" info="pos-jugador"></Blackboard>
+                        <Composition id="11" type="secuencia">
+                            <Leaf id="12" type="tarea" action="esta" target="cerca-jugador"></Leaf>
+                            <Leaf id="13" type="tarea" action="ataca" target="jugador"></Leaf>
+                        </Composition>
+                    </Composition>
+                </Decorator>
+            </Composition>
+        </Composition>
+        <Composition id="14" type="secuencia">   
+            <Leaf id="15" type="tarea" action="oye" target="ayuda">
+                <Blackboard task="lee" info="pos-ayuda"></Blackboard>
+            </Leaf>
+            <Leaf id="16" type="tarea" action="busca" target="pos-ayuda"></Leaf>
+        </Composition>
+        <Composition id="17" type="tarea" action="comprueba" target="zona-oscura">
+            <Composition id="18" type="selector">
+                <Composition id="19" type="secuencia">
+                    <Leaf id="20" type="tarea" action="esta" target="zona-oscura"></Leaf>
+                    <Leaf id="21" type="tarea" action="recupera" target="vida"></Leaf>
+                </Composition>
+                <Leaf id="22" type="tarea" action="busca" target="<zona-oscura"></Leaf>
+            </Composition>
+        </Composition>
+    </Root>
+</BehaviorTree>
