@@ -1,6 +1,6 @@
 #include "MotorGrafico.hpp"
 #include "Estado.hpp"
-#include "Nivel.hpp"
+#include <irrlicht/irrlicht.h> //la utilizaremos para las funcionalidades del motor
 
 #ifndef Juego_HPP
 #define Juego_CPP
@@ -25,7 +25,7 @@
             void LimpiarVentana();//borra de la memoria la ventana del juego.
             void Salir();//sale del juego
             void Jugar();//cambia de estado y cargar mapa //aqui saldra el selector de nivel cuando se implemente
-
+            Estado * getEstado();
         private:
 
             //clase singleton 
@@ -36,8 +36,9 @@
             MotorGrafico *motor;//instancia de la fachada
             Cinematica cinematica;//contiene la clase cinematica (estado)
             Menu menu;//contiene la clase menu (estado)
-            Jugando jugando;//contiene la clase Jugando (estado)
-            Nivel nivel;
+            Jugando jugando;//contiene la clase Jugando (estado)            
+            bool cambioEstado = false;
+            return Estado;
     };
 
 #endif /* MotorGrafico_HPP */

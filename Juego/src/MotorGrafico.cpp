@@ -2,10 +2,8 @@
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 MotorGrafico* MotorGrafico::unica_instancia = 0;
 //fin indicador singleton
+//#include <Box2D/Box2D.h>
 
-/*Tipo 1(640x480), Tipo 2(800x600), Tipo 3(1024x768), Tipo 4(1280x1024)
-Esta clase define que tipo de pantalla quieres
-*/
 MotorGrafico::MotorGrafico()
 {
     input.setDevice(device);//lo  utilizamos para que los eventos puedan llamar a funciones de 
@@ -103,7 +101,7 @@ void MotorGrafico::updateMotorCinematica()
 
 void MotorGrafico::CrearCamara()
 {
-    smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,5,0));
+    smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,10,0));
 }
 
 void MotorGrafico::PropiedadesDevice()
@@ -118,6 +116,7 @@ void MotorGrafico::PropiedadesDevice()
 
 void MotorGrafico::PintarBotonesMenu()
 {
+
     guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_EMPEZAR_BUTTON,L"Iniciar Juego", L"Empieza a jugar");
     guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_CONFIGURACION_BUTTON,L"Configuracion", L"Configuracion del juego");
     guienv->addButton(rect<s32>(300,280,500,310), 0, GUI_ID_CREDITOS_BUTTON,L"Creditos", L"Creditos del juego");
@@ -145,6 +144,68 @@ void MotorGrafico::borrarScena()
 void MotorGrafico::borrarGui()
 {
     guienv->clear();
+}
+
+void MotorGrafico::JointsTest()
+{ 
+    //que gire 
+    //HACERLO CON INTERPOLADO NO CON FRAMES
+        cout << "\e[36m Se encuentra fuente \e[0m" << endl;
+  
+    scene::IAnimatedMesh* mesh = smgr->getMesh("assets/models/sydney.md2");
+    node = smgr->addAnimatedMeshSceneNode( mesh );
+       
+  if (mesh)
+  {      
+      node->setMaterialFlag(video::EMF_LIGHTING, false);
+      node->setMD2Animation(scene::EMAT_STAND);
+      node->setScale(core::vector3df(1,1,1));
+      node->setMaterialTexture(0, driver->getTexture("assets/textures/sydney.bmp"));
+      node->setPosition(core::vector3df(30,0,0));
+      //node->setScale(core::vector3df(0.2,0.2,0.2));
+  }
+    //movimiento; http://irrlicht.sourceforge.net/docu/example004.html
+}
+
+
+void MotorGrafico::movimiento()
+{
+
+    // This is the movemen speed in units per second.
+    //para obtener el tiempo de reloj (const u32 currentTime = device->getTimer()->getTime();) en vez de oclock
+    const f32 MOVEMENT_SPEED = 10.f;
+
+    float newTime, frameTime, intepolation;
+    const u32 currentTime = device->getTimer()->getTime();//buscar que devuelve cada interacion
+
+    float acumulator = 0.0f;
+
+    while(){
+        
+    }
+    
+    /* Check if keys W, S, A or D are being held down, and move the
+    sphere node around respectively. */
+    core::vector3df nodePosition = node->getPosition();
+
+    if(input.IsKeyDown(irr::KEY_KEY_W))
+    {
+      nodePosition.Y += MOVEMENT_SPEED;
+    }
+    else if(input.IsKeyDown(irr::KEY_KEY_S))
+    {
+      nodePosition.Y -= MOVEMENT_SPEED;
+    }
+
+    if(input.IsKeyDown(irr::KEY_KEY_A))
+    {
+      nodePosition.X -= MOVEMENT_SPEED;
+    }
+    else if(input.IsKeyDown(irr::KEY_KEY_D))
+    {
+      nodePosition.X += MOVEMENT_SPEED;
+    }
+    node->setPosition(nodePosition);
 }
 
 bool MotorGrafico::estaPulsado(int boton)

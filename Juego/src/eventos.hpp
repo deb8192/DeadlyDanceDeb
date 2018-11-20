@@ -6,7 +6,6 @@ namespace idsEventos
         GUI_ID_EMPEZAR_BUTTON = 101,
         GUI_ID_SALIR_BUTTON,
         GUI_ID_CREDITOS_BUTTON,
-        GUI_ID_SUBIR_SONIDO,
         //meter aqui los nuevos eventos
         
         //fin de los nuevos eventos

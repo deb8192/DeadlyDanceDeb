@@ -54,7 +54,8 @@ using namespace idsEventos;
             void borrarScena();//borra todo lo que haya en la ventana
             //borrar gui
             void borrarGui();//borra todo lo que haya en la ventana relacionado con el gui
-            
+            void JointsTest();
+             
             //eventos facade
             //detecta si esta pulsado un boton, 1=a, 2 =s, 3=d, 4=w, 5=space, 6=intro 
             bool estaPulsado(int);
@@ -62,8 +63,9 @@ using namespace idsEventos;
             //detecta si un evento con un id pasado a sido llamado
             bool ocurreEvento(int);
             //fin evento botones se puede utilizar para cualquier tipo de evento de irrlicht
-            
+            void movimiento();
             void closeGame();
+            void setThen();
             
         private: //clases solo accesibles por MotorGrafico
 
@@ -80,6 +82,9 @@ using namespace idsEventos;
             IGUIFont *font;
             IGUISkin *skin;
             Inputs input;
+            u32 then;
+            scene::ISceneNode *n;
+            scene::IAnimatedMeshSceneNode* node;
     };
 
 #endif /* MotorGrafico_HPP */
