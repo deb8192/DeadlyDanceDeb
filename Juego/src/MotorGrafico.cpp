@@ -191,5 +191,6 @@ void MotorGrafico::CargarObjeto(int x,int y,int z, const char *ruta_objeto,const
 		//error
 	}
     IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+    objeto_en_scena->setPosition(core::vector3df(x,y,z));
     Plataformas_Scena.push_back(objeto_en_scena);
 }

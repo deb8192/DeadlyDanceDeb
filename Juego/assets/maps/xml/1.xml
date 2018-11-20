@@ -1,15 +1,65 @@
 <Level><!--- Esto nos indica que estamos definiendo un nivel -->
+	
 	<Light Type="Ambiental" Intensity="50" Attenuation="0" Color="Red" X="100" Y="100" Z="100"> </Light>
-	<Platform Type="1" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="True" StarX="10" StarY="5" X="100" Y="100" Z="100" >
+	
+	<Platform Type="1" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="True" StarX="10" StarY="0" X="0" Y="0" Z="0" >
 		<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
 		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
 	</Platform>
-	<Platform Type="1" Texture="assets/texture/platform1.png" UserStar="True" StarX="10" StarY="5" X="100" Y="100" Z="100" >
+	
+	<Platform Type="1" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="False" StarX="10" StarY="0" X="-35" Y="0" Z="0" >
+		<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
+		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
+	</Platform>
+
+	<Platform Type="1" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="False" StarX="10" StarY="0" X="-25" Y="0" Z="0" >
+		<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
+		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
+	</Platform>
+
+	<Platform Type="2" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="False" StarX="10" StarY="5" X="-15" Y="0" Z="0" >
 	    	<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
 		<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
 	</Platform>
-	<Platform Type="1" Texture="assets/texture/platform1.png" UserStar="True" StarX="10" StarY="5" X="100" Y="100" Z="100" >
+
+	<Platform Type="2" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="False" StarX="10" StarY="5" X="15" Y="0" Z="0" >
+	    	<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
+		<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
+	</Platform>
+
+	<Platform Type="2" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="False" StarX="10" StarY="5" X="15" Y="0" Z="30" >
+	    	<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
+		<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
+	</Platform>
+
+	<Platform Type="2" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="False" StarX="10" StarY="5" X="15" Y="0" Z="40" >
+	    	<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
+		<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
+	</Platform>
+
+	<Platform Type="2" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="False" StarX="10" StarY="5" X="15" Y="0" Z="50" >
+	    	<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
+		<Enemy Type="1" StarY="5" X="100" Y="100" Z="100" ></Enemy>
+	</Platform>
+
+	<Platform Type="3" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj"  UserStar="False" StarX="10" StarY="5" X="15" Y="0" Z="15" >
+		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
+		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
+	</Platform>./
+
+	<Platform Type="3" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj"  UserStar="False" StarX="10" StarY="5" X="15" Y="0" Z="-15" >
 		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
 		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
 	</Platform>
+
+	<Platform Type="3" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj"  UserStar="False" StarX="10" StarY="5" X="15" Y="0" Z="-25" >
+		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
+		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
+	</Platform>
+
+	<Platform Type="3" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj"  UserStar="False" StarX="10" StarY="5" X="15" Y="0" Z="-35" >
+		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
+		<Object Type="1" StarY="5" X="100" Y="100" Z="100"></Object>
+	</Platform>
+
 </Level> <!-- Fin del nivel -->
