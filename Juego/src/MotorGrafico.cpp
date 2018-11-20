@@ -105,6 +105,18 @@ void MotorGrafico::CrearCamara()
 {
     smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,5,0));
 }
+/******----------------Crear Jugador------------------******
+ * Metodo que sirve para generar la malla 3D de un jugador 
+ * al iniciar estado Juego.
+ * Entradas:
+ *      malla: string con la direccion del modelo 3D 
+ */
+
+void MotorGrafico::crearJugador(std::string malla)
+{
+    ninja = smgr->addAnimatedMeshSceneNode(smgr->getMesh(malla.c_str()));
+    ninja->setScale(core::vector3df(0.1,0.1,0.1));
+}
 
 void MotorGrafico::PropiedadesDevice()
 {

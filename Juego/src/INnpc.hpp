@@ -43,6 +43,7 @@ protected:
     int suerte;//valor que determina la probabilidad de ataque critico y en el caso de jugador tambien de que suerte objetos 
     int proAtaCritico;//valor que determina cuantas veces se hacen ataques criticos.
     int buffos[4];//1 aumento de vida, 2 aumento de ataque, 3 aumento de suerte, 4 aumento de pCritica.
+    std::string malla; //malla 3d del personaje
 };
 
 #endif /* INnpc_HPP */
