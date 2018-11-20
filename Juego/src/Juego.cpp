@@ -55,7 +55,6 @@ void Juego::Salir()
 //cuando se presiona boton de jugar
 void Juego::Jugar()
 {
-    cout<<"Cambia a juego"<<endl;
     estado = &jugando;//se cambia a estado jugando
     nivel = new Nivel();
 }
