@@ -157,11 +157,7 @@
                     <Blackboard task="lee" info="ultima-puerta"></Blackboard>
                 </Leaf>
             </Composition>
-            <Leaf id="79" type="tarea" action="merodea" target="">
-                <ID>74</ID>
-                <Type>tarea</Type>
-                <Content>merodea</Content>
-            </Leaf>
+            <Leaf id="79" type="tarea" action="merodea" target=""></Leaf>
         </Composition>
     </Root>
 </BehaviorTree>
