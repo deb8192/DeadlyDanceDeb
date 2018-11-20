@@ -11,8 +11,8 @@ class Nivel
         Nivel();
         
     private:
-        Jugador jugador;//objeto del jugador en el nivel
-        Enemigo enemigos[10];//objeto de los enemigos en el juego
+        Jugador *jugador;//objeto del jugador en el nivel
+        Enemigo *enemigos[10];//objeto de los enemigos en el juego
 };
 
 #endif 

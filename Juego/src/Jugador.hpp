@@ -11,7 +11,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
 {
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
-        Jugador(int,int,int,int,int,int);//defines tu la informacion del jugador
+        Jugador(int,int,int,int,int,int,std::string malla);//defines tu la informacion del jugador
         void AtacarEspecial();//define el ataque especial para el jugador
     private:
 };

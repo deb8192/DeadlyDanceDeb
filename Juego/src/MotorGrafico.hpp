@@ -46,6 +46,8 @@ using namespace idsEventos;
             void updateMotorCinematica();
             //crea una camara para ver el escenario
             void CrearCamara();
+            //crea al jugador
+            void crearJugador(std::string malla);
             //crea los botones del menu
             void PintarBotonesMenu();
             //define fuente por defecto
@@ -80,6 +82,7 @@ using namespace idsEventos;
             IGUIFont *font;
             IGUISkin *skin;
             Inputs input;
+            IAnimatedMeshSceneNode* ninja;
     };
 
 #endif /* MotorGrafico_HPP */
