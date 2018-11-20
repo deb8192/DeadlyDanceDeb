@@ -72,7 +72,7 @@ using namespace idsEventos;
             void resetEvento(int);//resetea el evento
             
             //cargadores de objetos
-            void CargarObjeto(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
+            void CargarPlataformas(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
 
             void closeGame();
             
