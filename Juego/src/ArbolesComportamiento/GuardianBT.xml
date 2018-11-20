@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbol de comportamiento de El Guardian-->
+<BehaviorTree>
+    <Root id="1" type="secuencia">
+        <Leaf id="2" type="tarea" action="detecta" target="escondite"></Leaf>
+        <Composition id="3" type="selector">
+            <Composition id="4" type="secuencia">
+                <Leaf id="5" type="tarea" action="comprueba" target="modo-peligro">
+                    <Blackboard task="lee" info="modo-peligro"></Blackboard>
+                </Leaf>
+                <Leaf id="6" type="tarea" action="comprueba" target="max-vida-jugador<=25%"></Leaf>
+                <Leaf id="7" type="tarea" action="cambia" target="modo-peligro">
+                    <Blackboard task="escribe" info="modo-peligro"></Blackboard>
+                </Leaf>
+            </Composition>
+            <Composition id="8" type="tarea" action="ve" target="jugador">
+                <Composition id="9" type="selector">
+                    <Composition id="10" type="secuencia">
+                        <Leaf id="11" type="tarea" action="comprueba" target="modo-peligro">
+                            <Blackboard task="lee" info="modo-peligro"></Blackboard>
+                        </Leaf>
+                        <Leaf id="12" type="tarea" action="atraviesa" target="ultima-puerta">
+                            <Blackboard task="lee" info="ultima-puerta"></Blackboard>
+                        </Leaf>
+                    </Composition>
+                    <Composition id="13" type="secuencia">
+                        <Leaf id="14" type="tarea" action="comprueba" target="modo-ataque">
+                            <Blackboard task="lee" info="modo"></Blackboard>
+                        </Leaf>
+                        <Decorator id="15" type="iterador" end="2-5">
+                            <Composition id="16" type="secuencia-aleatoria">
+                                <Leaf id="17" type="tarea" action="ataca" target="jugador"></Leaf>
+                                <Leaf id="18" type="tarea" action="defensa" target=""></Leaf>
+                                <Leaf id="19" type="tarea" action="ataca" target="jugador"></Leaf>
+                            </Composition>
+                        </Decorator>
+                        <Leaf id="20" type="tarea" action="atraviesa" target="ultima-puerta">
+                            <Blackboard task="lee" info="ultima-puerta"></Blackboard>
+                        </Leaf>
+                    </Composition>
+                    <Composition id="21" type="secuencia">
+                        <Leaf id="22" type="tarea" action="comprueba" traget="modo-ocultacion">
+                            <Blackboard task="lee" info="modo"></Blackboard>
+                        </Leaf>
+                        <Decorator id="23" type="iterador">
+                            <Composition id="24" type="selector">
+                                <Composition id="25" type="secuencia">
+                                    <Leaf id="26" type="tarea" action="danyado" target="guardian"></Leaf>
+                                    <Leaf id="27" type="tarea" action="cambia" target="modo-ataque">
+                                        <Blackboard task="escribe" info="modo-ataque"></Blackboard>
+                                    </Leaf>
+                                </Composition>
+                                <Composition id="28" type="secuencia">
+                                    <Leaf id="29" type="tarea" action="no-ve" target="jugador"></Leaf>
+                                    <Leaf id="30" type="tarea" action="cambia" target="modo-normal">
+                                        <Blackboard task="escribe" info="modo-normal"></Blackboard>
+                                    </Leaf>
+                                </Composition>
+                            </Composition>
+                        </Decorator>
+                    </Composition>
+                    <Composition id="30" type="secuencia">
+                        <Leaf id="32" type="tarea" action="ocultarse" target="escondite">
+                            <Blackboard task="lee" info="escondite"></Blackboard>
+                        </Leaf>
+                        <Leaf id="33" type="tarea" action="cambia" target="modo-ocultacion">
+                            <Blackboard task="escribe" info="modo-ocultacion"></Blackboard>
+                        </Leaf>
+                    </Composition>
+                </Composition>
+            </Composition>
+            <Composition id="34" type="secuencia">
+                <Leaf id="35" type="tarea" action="comprueba" target="modo-ataque">
+                    <Blackboard task="lee" info="modo"></Blackboard>
+                </Leaf>
+                <Leaf id="36" type="tarea" action="cambia" target="modo-normal">
+                    <Blackboard task="escribe" info="modo-normal"></Blackboard>
+                </Leaf>
+            </Composition>
+            <Composition id="37" type="secuencia">
+                <Leaf id="38" type="tarea" action="oye" target="jugador"></Leaf>
+                <Leaf id="39" type="tarea" action="atraviesa" target="ultima-puerta">
+                    <Blackboard task="lee" info="ultima-puerta"></Blackboard>
+                </Leaf>
+            </Composition>
+            <Composition id="40" type="tarea" action="ve" target="algo">
+                <Composition id="41" type="selector">
+                    <Composition id="42" type="tarea" action="ve" target="mecanismo">
+                        <Composition id="43" type="selector">
+                            <Composition id="44" type="tarea" action="ve" target="mecanismo">
+                                <Composition id="45" type="selector">
+                                    <Composition id="46" type="secuencia">
+                                        <Leaf id="47" type="tarea" action="esta" target="accionado"></Leaf>
+                                        <Leaf id="48" type="tarea" action="moverse" target="jugador"></Leaf>
+                                        <Leaf id="49" type="tarea" action="desaccionar" target="mecanismo">
+                                            <Blackboard task="escribe" info="mecanismo"></Blackboard>
+                                        </Leaf>
+                                        <Leaf id="50" type="tarea" action="atraviesa" target="ultima-puerta">
+                                            <Blackboard task="lee" info="ultima-puerta"></Blackboard>
+                                        </Leaf>
+                                    </Composition>
+                                    <Leaf id="51" type="tarea" action="merodea" target=""></Leaf>
+                                </Composition>
+                            </Composition>
+                            <Composition id="52" type="selector">
+                                <Composition id="53" type="tarea" action="esta" target="abierta">
+                                    <Composition id="54" type="selector">
+                                        <Composition id="55" type="secuencia">
+                                            <Leaf id="56" type="tarea" action="debe" target="cerrarse"></Leaf>
+                                            <Leaf id="57" type="tarea" action="moverse" target="puerta"></Leaf>
+                                            <Leaf id="58" type="tarea" action="cerrar" target="puerta">
+                                                <Blackboard task="escribe" info="puerta"></Blackboard>
+                                            </Leaf>
+                                            <Leaf id="59" type="tarea" action="atraviesa" target="ultima-puerta">
+                                                <Blackboard task="lee" info="ultima-puerta"></Blackboard>
+                                            </Leaf>
+                                        </Composition>
+                                        <Leaf id="60" type="tarea" action="atraviesa" target="puerta">
+                                            <Blackboard task="escribe" info="ultima-puerta"></Blackboard>
+                                        </Leaf>
+                                    </Composition>
+                                </Composition>
+                                <Composition id="61" type="tarea" action="esta" target="cerrada">
+                                    <Composition id="62" type="secuencia">
+                                        <Leaf id="63" type="tarea" action="moverse" target="puerta"></Leaf>
+                                        <Leaf id="64" type="tarea" action="abrir" target="puerta"></Leaf>
+                                        <Composition id="65" type="selector">
+                                            <Composition id="66" type="secuencia">
+                                                <Leaf id="67" type="tarea" action="esta" target="abierta"></Leaf>
+                                                <Leaf id="68" type="tarea" action="atraviesa" target="puerta">
+                                                    <Blackboard task="escribe" info="ultima-puerta"></Blackboard>
+                                                </Leaf>
+                                            </Composition>
+                                            <Leaf id="69" type="tarea" action="merodea" target=""></Leaf>
+                                        </Composition>
+                                    </Composition>
+                                </Composition>
+                            </Composition>
+                        </Composition>
+                    </Composition>
+                    <Composition id="70" type="tarea" action="ve" target="cofre">
+                        <Composition id="71" type="selector">
+                            <Composition id="72" type="secuencia">
+                                <Leaf id="73" type="tarea" action="esta" target="abierto"></Leaf>
+                                <Leaf id="74" type="tarea" action="atraviesa" target="ultima-puerta">
+                                    <Blackboard task="lee" info="ultima-puerta"></Blackboard>
+                                </Leaf>
+                            </Composition>
+                            <Leaf id="75" type="tarea" action="merodea" target=""></Leaf>
+                        </Composition>
+                    </Composition>
+                </Composition>
+            </Composition>
+            <Composition id="76" type="secuencia">
+                <Leaf id="77" type="tarea" action="oye" target="mecanismo"></Leaf>
+                <Leaf id="78" type="tarea" action="atraviesa" target="ultima-puerta">
+                    <Blackboard task="lee" info="ultima-puerta"></Blackboard>
+                </Leaf>
+            </Composition>
+            <Leaf id="79" type="tarea" action="merodea" target="">
+                <ID>74</ID>
+                <Type>tarea</Type>
+                <Content>merodea</Content>
+            </Leaf>
+        </Composition>
+    </Root>
+</BehaviorTree>
