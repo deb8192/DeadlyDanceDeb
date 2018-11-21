@@ -1,8 +1,8 @@
-#include "pugixml.hpp"
 #include <stdio.h>
 #include <iostream>
 #include <string>
 #include <cstring>
+#include "Nodo.hpp"
 
 #ifndef CargadorBehaviorTrees_HPP
 #define CargadorBehaviorTrees_HPP
@@ -15,7 +15,9 @@ class CargadorBehaviorTrees
         void guardarBehaviorTreeXml(std::string);
 
     private:
-        int * lista;    
+        int * lista; 
+        Nodo *nodo;
+         
 };
 
 #endif

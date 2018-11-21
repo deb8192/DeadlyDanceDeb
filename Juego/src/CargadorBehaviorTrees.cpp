@@ -1,3 +1,4 @@
+#include "pugixml.hpp"
 #include "CargadorBehaviorTrees.hpp"
 //#include "MotorGrafico.hpp"
 
@@ -39,10 +40,27 @@ void CargadorBehaviorTrees::cargarBehaviorTreeXml(std::string tree)
     //Se pasa a la lectura del archivo .xml
     //Prueba de lectura de nodos
     pugi::xml_node raiz = doc.child("BehaviorTree").child("Root");
-    int id = raiz.attribute("id").as_int();
-    std::string tipo = raiz.attribute("type").as_string();
 
-    std::cout<<"El nodo raiz tiene el id "<< id <<" y es del tipo "<< tipo <<""<<std::endl;
+    std::string nombre = raiz.name();
+    std::string selector = "selector";
+    int id = raiz.attribute("id").as_int();
+    int tipo;
+    std::string accion;
+    std::string objetivo;
+    bool pizarra;
+    int tarea;
+    std::string info;
+    if(selector == (raiz.attribute("type").as_string()))
+    {
+        tipo = 2;
+        accion = "";
+        objetivo = "";
+        pizarra = false;
+        tarea = 0;
+        info = "";
+    }
+    nodo = new Nodo(nombre, id, tipo, accion, objetivo, pizarra, tarea, info);
+    std::cout<<"El nodo raiz tiene el nombre" << nodo->getNombre() << "el id "<< nodo->getId() <<" y es del tipo "<< nodo->getTipo() <<""<<std::endl;
     //for(pugi::xml_node hijo = doc.child("Composition"))
     
 }
