@@ -73,7 +73,11 @@ using namespace idsEventos;
             
             //cargadores de objetos
             void CargarPlataformas(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
-
+            void CargarLuces(int x,int y,int z);
+            void CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            
             void closeGame();
             
         private: //clases solo accesibles por MotorGrafico
@@ -92,6 +96,10 @@ using namespace idsEventos;
             IGUISkin *skin;
             Inputs input;
             std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
+            std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
+            std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
+            std::vector<IAnimatedMeshSceneNode*> Jugador_Scena;//Jugador en scena
+            std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
     };
 
 #endif /* MotorGrafico_HPP */

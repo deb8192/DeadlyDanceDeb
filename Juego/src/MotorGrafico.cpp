@@ -87,7 +87,7 @@ void MotorGrafico::updateMotorMenu()
 
 void MotorGrafico::updateMotorJuego()
 {
-    driver->beginScene(true, true, SColor(255,255,101,140));
+    driver->beginScene(true, true, SColor(255,0,0,0));
 	smgr->drawAll();
 	guienv->drawAll();
 	driver->endScene();
@@ -193,4 +193,45 @@ void MotorGrafico::CargarPlataformas(int x,int y,int z, const char *ruta_objeto,
     IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario   
     objeto_en_scena->setPosition(core::vector3df(x,y,z));
     Plataformas_Scena.push_back(objeto_en_scena);
+}
+
+void MotorGrafico::CargarLuces(int x,int y,int z)
+{
+    // add light 1 (more green)
+    scene::ILightSceneNode* light1 =
+    smgr->addLightSceneNode(0, core::vector3df(x,y,z),video::SColorf(0.5f, 1.0f, 0.5f, 0.0f), 100.0f);
+
+    light1->setDebugDataVisible ( scene::EDS_BBOX );
+
+
+    // add fly circle animator to light 1
+    scene::ISceneNodeAnimator* anim = smgr->createFlyCircleAnimator (core::vector3df(x,y,z),0.0f, -0.003f);
+    light1->addAnimator(anim);
+    anim->drop();
+
+    Luces_Scena.push_back(light1);
+    // attach billboard to the light
+    scene::IBillboardSceneNode* bill =
+        smgr->addBillboardSceneNode(light1, core::dimension2d<f32>(10, 10));
+
+    bill->setMaterialFlag(video::EMF_LIGHTING, false);
+    bill->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
+    bill->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
+    bill->setMaterialTexture(0, driver->getTexture("assets/models/particlegreen.jpg"));
+    cout << "\e[32m se agrega luz \e[0m" << endl;
+}
+
+void MotorGrafico::CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+
+}
+
+void MotorGrafico::CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+
+}
+
+void MotorGrafico::CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+
 }
