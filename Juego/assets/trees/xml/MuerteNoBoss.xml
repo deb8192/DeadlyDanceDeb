@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbol de comportamiento de la Muerte GameMaster-->
+<BehaviorTree>
+    <Root id="1" type="selector">
+        <Composition id="2" type="secuecia">
+            <Leaf id="3" type="tarea" action="comprueba" target="contador">
+                <Blackboard task="lee" info="contador"></Blackboard>
+            </Leaf>
+            <Leaf id="4" type="tarea" action="activa" target="contador">
+                <Blackboard task="escribe" info="contador-activo"></Blackboard>
+            </Leaf>
+        </Composition>
+        <Composition id="5" type="secuencia">
+            <Leaf id="6" type="tarea" action="comprueba" target="modo-hardcore">
+                <Blackboard task="lee" info="modo-hardcore"></Blackboard>
+            </Leaf>
+            <Composition id="7" type="selector">
+                <Composition id="8" type="secuencia">
+                    <Leaf id="9" type="tarea" action="comprueba" target="max-enemigos-hardcore<=20%"></Leaf>
+                    <Leaf id="10" type="tarea" action="crea" target="enemigo"></Leaf>
+                </Composition>
+                <Composition id="11" type="secuencia">
+                    <Leaf id="12" type="tarea" action="comprueba" target="contador">
+                        <Blackboard task="lee" info="contador-terminado"></Blackboard>
+                    </Leaf>
+                    <Leaf id="13" type="tarea" action="comprueba" target="max-vida-jugador<=25%">
+                        <Blackboard task="escribe" info="modo-normal"></Blackboard>
+                    </Leaf>
+                    <Leaf id="14" type="tarea" action="cambia" target="modo-normal">
+                        <Blackboard task="escribe" info="modo-normal"></Blackboard>
+                    </Leaf>
+                </Composition>
+            </Composition>
+        </Composition>
+        <Composition id="15" type="selector">
+            <Composition id="15" type="secuencia">
+                <Leaf id="17" type="tarea" action="comprueba" target="max-enemigos-normal<=20%"></Leaf>
+                <Leaf id="18" type="tarea" action="crea" target="enemigo"></Leaf>
+            </Composition>
+            <Composition id="19" type="secuencia">
+                <Leaf id="20" type="tarea" action="comprueba" target="contador">
+                    <Blackboard task="lee" info="contador-terminado"></Blackboard>
+                </Leaf>
+                <Leaf id="21" type="tarea" action="comprueba" target="max-vida-jugador>=50%">
+                    <Blackboard task="escribe" info="modo-normal"></Blackboard>
+                </Leaf>
+                <Leaf id="22" type="tarea" action="cambia" target="modo-normal">
+                    <Blackboard task="escribe" info="modo-normal"></Blackboard>
+                </Leaf>
+            </Composition>
+        </Composition>
+    </Root>
+</BehaviorTree>
