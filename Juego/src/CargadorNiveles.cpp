@@ -38,7 +38,32 @@ void CargadorNiveles::CargarNivelXml(int level)
         const char * textura = hijo.attribute("Texture").value(); //nos da un char[] = string
         const char * modelo  =  hijo.attribute("Model").value(); //nos da un char[] = string
         motor->CargarPlataformas(x,y,z,modelo,textura); //cargamos el objeto
+
+        //carga del jugador
+        //if(estajugador){}
+
+        for (pugi::xml_node enem = hijo.child("Enemy"); enem; enem = enem.next_sibling("Enemy"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+        {
+            //aqui va la carga de enemigos
+            //motor->CargarEnemigos(x,y,z,modelo,textura); //cargamos el enemigo
+        }
+
+        for (pugi::xml_node obj = hijo.child("Object"); obj; obj = obj.next_sibling("Object"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+        {
+            //aqui va la carga de objetos
+            //motor->CargarObjetos(x,y,z,modelo,textura); //cargamos el enemigo
+        }
     }
+
+    for (pugi::xml_node hijo = doc.child("Level").child("Light"); hijo; hijo = hijo.next_sibling("Light"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        int x = hijo.attribute("X").as_int();//nos devuelve un int
+        int z = hijo.attribute("Y").as_int();//nos devuelve un int
+        int y = hijo.attribute("Z").as_int();//nos devuelve un int 
+        motor->CargarLuces(x,y,z); //cargamos el objeto
+    }
+
+
 }
 
 void CargadorNiveles::GuardarNivelXml(int level)
