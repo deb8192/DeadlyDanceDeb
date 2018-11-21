@@ -188,24 +188,44 @@ void MotorGrafico::movimiento()
     sphere node around respectively. */
     core::vector3df nodePosition = node->getPosition();
 
+    // Variables de la camara
+    core::vector3df nodeCamPosition = camera->getPosition();
+    core::vector3df nodeCamTarget = camera->getTarget();
+    
+    // Centrar la camara
+    nodeCamPosition.X = nodePosition.X;
+    nodeCamTarget.X = nodePosition.X;
+    nodeCamTarget.Y = nodePosition.Y;
+
+    // Comprobar teclas para mover el personaje y la camara
     if(input.IsKeyDown(irr::KEY_KEY_W))
     {
       nodePosition.Y += MOVEMENT_SPEED;
+      //nodeCamPosition.Y += MOVEMENT_SPEED;
+      //nodeCamTarget.Y += MOVEMENT_SPEED;
     }
     else if(input.IsKeyDown(irr::KEY_KEY_S))
     {
       nodePosition.Y -= MOVEMENT_SPEED;
+      //nodeCamPosition.Y -= MOVEMENT_SPEED;
+      //nodeCamTarget.Y -= MOVEMENT_SPEED;
     }
 
     if(input.IsKeyDown(irr::KEY_KEY_A))
     {
       nodePosition.X -= MOVEMENT_SPEED;
+      //nodeCamPosition.X -= MOVEMENT_SPEED;
+      //nodeCamTarget.X -= MOVEMENT_SPEED;
     }
     else if(input.IsKeyDown(irr::KEY_KEY_D))
     {
       nodePosition.X += MOVEMENT_SPEED;
+      //nodeCamPosition.X += MOVEMENT_SPEED;
+      //nodeCamTarget.X += MOVEMENT_SPEED;
     }
     node->setPosition(nodePosition);
+    camera->setPosition(nodeCamPosition);
+    camera->setTarget(nodeCamTarget);
 }
 
 bool MotorGrafico::estaPulsado(int boton)

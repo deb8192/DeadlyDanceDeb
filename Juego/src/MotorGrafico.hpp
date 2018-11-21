@@ -85,6 +85,7 @@ using namespace idsEventos;
             u32 then;
             scene::ISceneNode *n;
             scene::IAnimatedMeshSceneNode* node;
+            scene::ICameraSceneNode* camera;
     };
 
 #endif /* MotorGrafico_HPP */
