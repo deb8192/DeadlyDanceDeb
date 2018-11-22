@@ -8,7 +8,7 @@ int main()
 	Juego *juego = Juego::getInstance();
 	juego->InicializarVentana();
 	CargadorBehaviorTrees cargadorBT;
-	cargadorBT.cargarBehaviorTreeXml("BossesBT");
+	cargadorBT.cargarBehaviorTreeXml("PolloBT");
 	while(juego->Running())//comprobamos que esta activo el dispositivo
 	{
 		juego->Update();//si lo esta actualizamos la escena
