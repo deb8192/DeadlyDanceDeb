@@ -6,7 +6,8 @@
 class Nodo
 {
     public:
-        Nodo(std::string, int, int, std::string, std::string, bool, int, std::string);
+        Nodo();
+        /*Nodo(std::string, int, int, std::string, std::string, bool, int, std::string);
         std::string getNombre();
         int getId();
         int getTipo();
@@ -18,6 +19,10 @@ class Nodo
         std::string objetivo;
         bool pizarra;
         int tarea;
-        std::string info;
+        std::string info;*/
+    
+    private:
+        Nodo *hijos [6];
+        Nodo *padre;
 };
 #endif

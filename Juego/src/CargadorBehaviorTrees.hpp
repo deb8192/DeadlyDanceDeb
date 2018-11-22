@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include "pugixml.hpp"
 #include "Nodo.hpp"
 
 #ifndef CargadorBehaviorTrees_HPP
@@ -23,6 +24,7 @@ class CargadorBehaviorTrees
         void guardarBehaviorTreeXml(std::string);
 
     private:
+        pugi::xml_node sacarNodo(pugi::xml_node, int);
         int * lista; 
         Nodo *nodo;
          
