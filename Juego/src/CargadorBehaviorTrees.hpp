@@ -10,6 +10,14 @@
 class CargadorBehaviorTrees
 {
     public:
+    	const std::string SELECTOR  = "selector";
+    	const std::string SEL_ALEATORIO  = "selector-aleatorio";
+    	const std::string SECUENCIA  = "secuencia";
+    	const std::string SEC_ALEATORIA  = "secuencia-aleatoria";
+    	const std::string TAREA  = "tarea";
+    	const std::string ITERATOR  = "iterador";
+
+
         void cargadorBehaviorTrees();
         void cargarBehaviorTreeXml(std::string);
         void guardarBehaviorTreeXml(std::string);
