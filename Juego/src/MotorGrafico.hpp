@@ -98,7 +98,7 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
             std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
             std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
-            std::vector<IAnimatedMeshSceneNode*> Jugador_Scena;//Jugador en scena
+            IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
     };
 
