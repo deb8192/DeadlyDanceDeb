@@ -1,6 +1,6 @@
 #include "Nodo.hpp"
 
-Nodo::Nodo(std::string name, int idXml, int type, std::string action, std::string target, bool blackboard, int task, std::string information)
+/*Nodo::Nodo(std::string name, int idXml, int type, std::string action, std::string target, bool blackboard, int task, std::string information)
 {
     nombre = name;
     tipo = type;
@@ -22,4 +22,8 @@ int Nodo::getId()
 int Nodo::getTipo()
 {
     return tipo;
+}*/
+Nodo::Nodo()
+{
+
 }

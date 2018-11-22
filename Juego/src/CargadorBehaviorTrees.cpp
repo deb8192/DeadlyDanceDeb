@@ -1,16 +1,16 @@
-#include "pugixml.hpp"
 #include "CargadorBehaviorTrees.hpp"
 using namespace std;
 //#include "MotorGrafico.hpp"
 
 /* Función recursiva para acceder a todos los nodos */
-pugi::xml_node sacarNodo(pugi::xml_node nodo) {
-   if(nodo == NULL) {
+pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node nodo, int nivel) {
+    nivel++;
+    if(nodo == NULL) {
         cout << "No hijos" << "\n" <<endl;
         return nodo;
-   }
-   else {
-       for (pugi::xml_node tool = nodo.first_child(); tool; tool = tool.next_sibling())
+    }
+    else {
+        for (pugi::xml_node tool = nodo.first_child(); tool; tool = tool.next_sibling())
         {
             cout << tool.name();
 
@@ -18,10 +18,11 @@ pugi::xml_node sacarNodo(pugi::xml_node nodo) {
             {
                 cout << " " << attr.name() << "=" << attr.value();
             }
-            cout << "\n" <<endl;
-            sacarNodo(tool);
+            cout << "nivel = " << nivel << "\n" <<endl;
+            sacarNodo(tool, nivel);
         }
     }
+    nivel--;
 }
 
 void CargadorBehaviorTrees::cargadorBehaviorTrees()
@@ -45,6 +46,8 @@ void CargadorBehaviorTrees::cargarBehaviorTreeXml(string arbol)
     ruta_completa = ruta+arbol+extension;
     cout<<ruta_completa<<endl;  
     
+    int nivel = 0;
+
     //Se transforma el string a un char array
     char cadena[sizeof(ruta_completa)];
     strcpy(cadena, ruta_completa.c_str()); 
@@ -59,9 +62,9 @@ void CargadorBehaviorTrees::cargarBehaviorTreeXml(string arbol)
 
     //Se pasa a la lectura del archivo .xml
     //Prueba de lectura de nodos
-    pugi::xml_node raiz = doc.child("BehaviorTree").child("Root");
+    pugi::xml_node tree = doc.child("BehaviorTree");
 
-    sacarNodo(raiz);
+    sacarNodo(tree, nivel);
     cout << "FIN" << "\n" <<endl;
 
     /*string nombre = raiz.name();
