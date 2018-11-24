@@ -1,4 +1,8 @@
+#include <stdio.h>
 #include <iostream>
+#include <string>
+#include <vector>
+#include <cstring>
 
 #ifndef Nodo_HPP
 #define Nodo_HPP
@@ -6,23 +10,42 @@
 class Nodo
 {
     public:
-        Nodo();
-        /*Nodo(std::string, int, int, std::string, std::string, bool, int, std::string);
-        std::string getNombre();
-        int getId();
-        int getTipo();
-    private:
-        std::string nombre;
-        int tipo;
+        
+    protected:
         int id;
+        int tipo;
+        Nodo *padre;
+        
+};
+
+class Composicion: public Nodo
+{
+    public:
+        Composicion();
+    private:
+        std::vector<Nodo> *hijos;
+};
+
+class Decorador: public Nodo
+{
+    public:
+        Decorador();
+    private:
+        std::vector<Nodo> *Shijos;
+        int fin;
+        int alternativa;
+};
+
+
+class Hoja: public Nodo
+{
+    public:
+        Hoja();
+    private:
         std::string accion;
         std::string objetivo;
         bool pizarra;
         int tarea;
-        std::string info;*/
-    
-    private:
-        Nodo *hijos [6];
-        Nodo *padre;
+        std::string info;
 };
 #endif
