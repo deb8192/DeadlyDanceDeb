@@ -22,8 +22,8 @@ int Nodo::getId()
 int Nodo::getTipo()
 {
     return tipo;
-}*/
+}
 Nodo::Nodo()
 {
 
-}
+}*/
