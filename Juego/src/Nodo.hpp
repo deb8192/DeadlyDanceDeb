@@ -10,37 +10,41 @@
 class Nodo
 {
     public:
+        int getID();
         
     protected:
         int id;
         int tipo;
         Nodo *padre;
-        
 };
 
 class Composicion: public Nodo
 {
     public:
-        Composicion();
+        Composicion(int, int, Nodo*);
+        int getID();
     private:
-        std::vector<Nodo> *hijos;
+        std::vector<Nodo> hijos;
 };
 
 class Decorador: public Nodo
 {
     public:
-        Decorador();
+        Decorador(int, int, Nodo*, const char*, const char*);
+        void addHijo();
+        int getID();
     private:
-        std::vector<Nodo> *Shijos;
-        int fin;
-        int alternativa;
+        std::vector<Nodo> hijos;
+        std::string fin;
+        std::string alternativa;
 };
 
 
 class Hoja: public Nodo
 {
     public:
-        Hoja();
+        Hoja(int, int, Nodo*, const char*, const char*, const char*, int, const char*);
+        int getID();
     private:
         std::string accion;
         std::string objetivo;

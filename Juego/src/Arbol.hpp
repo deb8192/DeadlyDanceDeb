@@ -9,10 +9,10 @@ using namespace std;
 class Arbol
 {
     public:
-        Arbol(Nodo, string);
+        Arbol(Nodo *, const char*);
     private:
         
-        string nombre;
-        Nodo raiz;
+        const char* nombre;
+        Nodo *raiz;
 };
 #endif
