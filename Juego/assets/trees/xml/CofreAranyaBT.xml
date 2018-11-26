@@ -2,7 +2,7 @@
 <!--Arbol de comportamiento de los Cofres aranya-->
 <BehaviorTree>
     <Root id="1" type="selector">
-        <Composition id="1" type="secuencia">
+        <Composition id="2" type="secuencia">
             <Leaf id="3" type="tarea" action="comprueba" target="abierto"></Leaf>
             <Leaf id="4" type="tarea" action="cambia" target="modo-ataque">
                 <Blackboard task="escribe" info="modo-ataque"></Blackboard>

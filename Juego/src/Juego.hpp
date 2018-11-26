@@ -1,6 +1,7 @@
 #include "MotorGrafico.hpp"
 #include "Estado.hpp"
 #include "Nivel.hpp"
+#include "CargadorBehaviorTrees.hpp" //prueba
 
 #ifndef Juego_HPP
 #define Juego_CPP
