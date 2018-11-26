@@ -1,14 +1,11 @@
 #include <iostream>
 #include "Juego.hpp"
-#include "CargadorBehaviorTrees.hpp" //prueba
 
 int main()
 {
 	cout << "\e[42m Iniciando Juego \e[0m" << endl;
 	Juego *juego = Juego::getInstance();
 	juego->InicializarVentana();
-	CargadorBehaviorTrees cargadorBT;
-	cargadorBT.cargarBehaviorTreeXml("PolloBT");
 	while(juego->Running())//comprobamos que esta activo el dispositivo
 	{
 		juego->Update();//si lo esta actualizamos la escena

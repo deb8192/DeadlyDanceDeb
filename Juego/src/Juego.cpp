@@ -7,6 +7,13 @@ Juego* Juego::unica_instancia = 0;
 Juego::Juego()
 {
     motor = MotorGrafico::getInstance();//se recoge instancia de motor
+	CargadorBehaviorTrees cargadorBT;
+	cargadorBT.cargarBehaviorTreeXml("GuardianBT");
+	cargadorBT.cargarBehaviorTreeXml("MurcielagoBT");
+	cargadorBT.cargarBehaviorTreeXml("PolloBT");
+	cargadorBT.cargarBehaviorTreeXml("BossesBT");
+	cargadorBT.cargarBehaviorTreeXml("MuerteNoBossBT");
+	cargadorBT.cargarBehaviorTreeXml("CofreAranyaBT");
     estado = &menu;//se empieza en el estado menu
 }
 

@@ -37,9 +37,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                 cout << " " << attr.name() << "=" << atributos[i];
                 i++;
             }
-            
-            cout<<" Sigue"<<endl;
-
+            cout<<endl;
             //Se crea y actualizan los nodos del arbol.
             if(std::strcmp(tool.name(), "root") == 0)
             {
@@ -103,7 +101,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                 }
             }
             sacarNodo(tool, nodo, padre);
-            cout<<"sale"<<endl;
+            cout<< "sale"<<endl;
         }
     }
 }
@@ -144,28 +142,6 @@ void CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
 
     sacarNodo(tree, nodo, padre);
     cout << "FIN" << "\n" <<endl;
-
-    /*string nombre = raiz.name();
-    //string selector = "selector";
-    int id = raiz.attribute("id").as_int();
-    int tipo;
-    string accion;
-    string objetivo;
-    bool pizarra;
-    int tarea;
-    string info;
-    if(SELECTOR == (raiz.attribute("type").as_string()))
-    {
-        tipo = 2;
-        accion = "";
-        objetivo = "";
-        pizarra = false;
-        tarea = 0;
-        info = "";
-    }
-    nodo = new Nodo(nombre, id, tipo, accion, objetivo, pizarra, tarea, info);
-    cout<<"El nodo raiz tiene el nombre " << nodo->getNombre() << " el id "<< nodo->getId() <<" y es del tipo "<< nodo->getTipo() <<""<<endl;
-    */
     
 }
 
