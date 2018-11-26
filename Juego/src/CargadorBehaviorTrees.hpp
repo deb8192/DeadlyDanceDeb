@@ -4,6 +4,7 @@
 #include <cstring>
 #include "pugixml.hpp"
 #include "Nodo.hpp"
+#include "Arbol.hpp"
 
 #ifndef CargadorBehaviorTrees_HPP
 #define CargadorBehaviorTrees_HPP
@@ -11,23 +12,22 @@
 class CargadorBehaviorTrees
 {
     public:
-    	const std::string SELECTOR  = "selector";
-    	const std::string SEL_ALEATORIO  = "selector-aleatorio";
-    	const std::string SECUENCIA  = "secuencia";
-    	const std::string SEC_ALEATORIA  = "secuencia-aleatoria";
-    	const std::string TAREA  = "tarea";
-    	const std::string ITERATOR  = "iterador";
+    	const char* SELECTOR  = "selector";
+    	const char* SEL_ALEATORIO  = "selector-aleatorio";
+    	const char* SECUENCIA  = "secuencia";
+    	const char* SEC_ALEATORIA  = "secuencia-aleatoria";
+    	const char* TAREA  = "tarea";
+    	const char* ITERATOR  = "iterador";
 
 
-        void cargadorBehaviorTrees();
+        CargadorBehaviorTrees();
         void cargarBehaviorTreeXml(std::string);
         void guardarBehaviorTreeXml(std::string);
 
     private:
-        pugi::xml_node sacarNodo(pugi::xml_node, int);
-        int * lista; 
-        Nodo *nodo;
+        pugi::xml_node sacarNodo(pugi::xml_node, Nodo *, Nodo *);
+        int * lista;
+        Arbol *behavior_tree;
          
 };
-
 #endif
