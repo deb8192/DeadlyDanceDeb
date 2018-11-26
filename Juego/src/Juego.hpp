@@ -38,6 +38,7 @@
             Menu menu;//contiene la clase menu (estado)
             Jugando jugando;//contiene la clase Jugando (estado)
             Nivel nivel;
+            bool cambioEstado;
     };
 
 #endif /* MotorGrafico_HPP */

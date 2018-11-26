@@ -147,6 +147,57 @@ void MotorGrafico::borrarGui()
     guienv->clear();
 }
 
+
+void MotorGrafico::JointsTest()
+{   
+  n = smgr->addCubeSceneNode();
+  if (n)
+  {
+      n->setMaterialFlag(video::EMF_LIGHTING, false);
+      n->setPosition(core::vector3df(30,0,0));
+      n->setScale(core::vector3df(0.2,0.2,0.2));
+     // n->setMaterialTexture(0, driver->getTexture("assets/textures/Color.bmp"));
+      
+  }
+
+ 
+    //movimiento; http://irrlicht.sourceforge.net/docu/example004.html
+
+ 
+  
+}
+
+
+void MotorGrafico::movimiento()
+{
+
+    // This is the movemen speed in units per second.
+    const f32 MOVEMENT_SPEED = 4.f;
+    
+    /* Check if keys W, S, A or D are being held down, and move the
+    sphere node around respectively. */
+    core::vector3df nodePosition = n->getPosition();
+
+    if(input.IsKeyDown(irr::KEY_KEY_W))
+    {
+      nodePosition.Y += MOVEMENT_SPEED;
+    }
+    else if(input.IsKeyDown(irr::KEY_KEY_S))
+    {
+      nodePosition.Y -= MOVEMENT_SPEED;
+    }
+
+    if(input.IsKeyDown(irr::KEY_KEY_A))
+    {
+      nodePosition.X -= MOVEMENT_SPEED;
+    }
+    else if(input.IsKeyDown(irr::KEY_KEY_D))
+    {
+      nodePosition.X += MOVEMENT_SPEED;
+    }
+    n->setPosition(nodePosition);
+}
+
 bool MotorGrafico::estaPulsado(int boton)
 {
     switch(boton)
