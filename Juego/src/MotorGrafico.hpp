@@ -64,6 +64,9 @@ using namespace idsEventos;
             //fin evento botones se puede utilizar para cualquier tipo de evento de irrlicht
             
             void closeGame();
+
+             void JointsTest();
+              void movimiento();
             
         private: //clases solo accesibles por MotorGrafico
 
@@ -80,6 +83,9 @@ using namespace idsEventos;
             IGUIFont *font;
             IGUISkin *skin;
             Inputs input;
+
+             scene::ISceneNode *n;
+   
     };
 
 #endif /* MotorGrafico_HPP */
