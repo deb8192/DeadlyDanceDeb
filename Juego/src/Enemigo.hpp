@@ -3,6 +3,7 @@
 
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
+#include "Sala.hpp"
 
 class Enemigo : public INnpc , public INdrawable //multiple herencia a esto se le llama derivacion multiple
 {
@@ -11,7 +12,7 @@ class Enemigo : public INnpc , public INdrawable //multiple herencia a esto se l
         Enemigo();
         
     private:
-
+        Sala * estoy;//sala en la que esta el enemigo
 };
 
 #endif 
