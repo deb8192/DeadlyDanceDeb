@@ -10,7 +10,7 @@ private:
     virtual void Clean() = 0;
     virtual void Update() = 0;
     virtual int Esta() = 0;
-    virtual void Init() = 0;
+    virtual void Init()=0;
 
 public:
     void Pintar(){ Draw(); };
@@ -50,7 +50,6 @@ class Cinematica: public Estado{
         void Update();
         int Esta();
         void Init();
-
         //MotorGrafico *motor = MotorGrafico::getInstance();   
 };
 

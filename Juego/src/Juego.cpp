@@ -65,3 +65,7 @@ void Juego::Jugar()
     }
     cambioEstado = true;
 }
+
+void Juego::setMotorThen(){
+    motor->setThen();
+}
