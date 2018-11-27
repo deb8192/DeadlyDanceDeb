@@ -1,74 +1,34 @@
-#include "fmod_studio.hpp"
+#ifndef MOTOR_AUDIO_HPP
+#define MOTOR_AUDIO_HPP
+
 #include "fmod.hpp"
-#include <string>
-#include <map>
-#include <vector>
-#include <math.h>
-#include <iostream>
 
-using namespace std;
+class MotorAudio
+{
+  //Puntero de instancia a FMOD
+  FMOD::System *m_pSystem;
+  MotorAudio(){}
+}
 
-#ifndef _MOTOR_AUDIO_H_
-#define _MOTOR_AUDIO_H_
+//Clase sonido por defecto
+typedef FMOD::Sound* ClaseSonido;
 
-//Estructura para colocar nuestro sonido en un espacio 3D
-struct Vector3 {
-    float x;
-    float y;
-    float z;
-};
+MotorAudio()
+{
+  //Si ya existe el sistema, error
+  if(FMOD::System_Create(&m_pSystem) != FMOD_OK)
+  {
+    return; //error
+  }
 
-//Estructura para inizializar y apagar el motor
-struct Implementation {
-    Implementation();
-    ~Implementation();
+  //Contar los
+  int driverCount = 0;
+  m_pSystem->getNumDrivers(&driverCount)
 
-    void Update();
-
-    FMOD::Studio::System* mpStudioSystem;
-    FMOD::System* mpSystem;
-
-    int mnNextChannelId;
-
-		//Mapas con todos los sonidos
-    typedef map<string, FMOD::Sound*> SoundMap;
-    typedef map<int, FMOD::Channel*> ChannelMap;
-    typedef map<string, FMOD::Studio::EventInstance*> EventMap;
-    typedef map<string, FMOD::Studio::Bank*> BankMap;
-
-    BankMap mBanks;
-    EventMap mEvents;
-    SoundMap mSounds;
-    ChannelMap mChannels;
-};
-
-//Clase del Motor de Audio
-class CAudioEngine {
-public:
-    static void Init();
-    static void Update();
-    static void Shutdown();
-    static int ErrorCheck(FMOD_RESULT result);
-
-    void LoadBank(const string& strBankName, FMOD_STUDIO_LOAD_BANK_FLAGS flags);
-    void LoadEvent(const string& strEventName);
-    void Loadsound(const string& strSoundName, bool b3d = true, bool bLooping = false, bool bStream = false);
-    void UnLoadSound(const string& strSoundName);
-    void Set3dListenerAndOrientation(const Vector3& vPos = Vector3{ 0, 0, 0 }, float fVolumedB = 0.0f);
-    void PlaySound(const string& strSoundName, const Vector3& vPos = Vector3{ 0, 0, 0 }, float fVolumedB = 0.0f);
-    void PlayEvent(const string& strEventName);
-    void StopChannel(int nChannelId);
-    void StopEvent(const string& strEventName, bool bImmediate = false);
-    void GeteventParameter(const string& strEventName, const string& strEventParameter, float* parameter);
-    void SetEventParameter(const string& strEventName, const string& strParameterName, float fValue);
-    void StopAllChannels();
-    void SetChannel3dPosition(int nChannelId, const Vector3& vPosition);
-    void SetChannelvolume(int nChannelId, float fVolumedB);
-    bool IsPlaying(int nChannelId) const;
-    bool IsEventPlaying(const string& strEventName) const;
-    float dbToVolume(float db);
-    float VolumeTodb(float volume);
-    FMOD_VECTOR VectorToFmod(const Vector3& vPosition);
-};
+  if/driverCount == 0)
+  {
+    return; //Error
+  }
+}
 
 #endif

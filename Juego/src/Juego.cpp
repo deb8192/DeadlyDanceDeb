@@ -42,14 +42,14 @@ void Juego::Update()
     }
     if(motor->ocurreEvento(102))//salimos del juego
     {
-        motor->closeGame();   
+        motor->closeGame();
     }
 }
 
 //se llama cuando se presiona un boton de salir del juego.
 void Juego::Salir()
-{   
-    
+{
+
 }
 
 //cuando se presiona boton de jugar
