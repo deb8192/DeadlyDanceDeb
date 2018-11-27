@@ -224,7 +224,7 @@ void MotorGrafico::movimiento()
     test.toEuler(rot);
     ballSceneNode->setRotation(rot * core::RADTODEG);
 */
-    core::vector3df rotaPersona = n->getRotation();
+  
     core::vector3df nodePosition = n->getPosition();
 /*
     // Variables de la camara
@@ -258,8 +258,10 @@ void MotorGrafico::movimiento()
     {
 
         nodePosition.X -= MOVEMENT_SPEED;
-        core::vector3df rot(90,0,0);// Esto gira el personaje 90 grados en el eje Z
-        n->setRotation(rot);
+    
+        n->setRotation(core::vector3df(0,45,0));
+        // Esto gira el personaje 90 grados en el eje Z
+        //n->setRotation(rot);
 
       //nodeCamPosition.X -= MOVEMENT_SPEED;
       //nodeCamTarget.X -= MOVEMENT_SPEED;
@@ -271,6 +273,7 @@ void MotorGrafico::movimiento()
       //nodeCamPosition.X += MOVEMENT_SPEED;
       //nodeCamTarget.X += MOVEMENT_SPEED;
     }
+      core::vector3df rotaPersona = n->getRotation();
     n->setPosition(nodePosition);
     n->setRotation(rotaPersona);
     /*
