@@ -66,6 +66,7 @@ using namespace idsEventos;
             void movimiento();
             void closeGame();
             void setThen();
+            //const f32 getdt();
             
         private: //clases solo accesibles por MotorGrafico
 
@@ -86,6 +87,10 @@ using namespace idsEventos;
             scene::ISceneNode *n;
             scene::IAnimatedMeshSceneNode* node;
             scene::ICameraSceneNode* camera;
+<<<<<<< HEAD
+            float dt;
+=======
+>>>>>>> d71e9ddbaa8ccd77b9aa9a4ebf41ebff6fb27eab
     };
 
 #endif /* MotorGrafico_HPP */

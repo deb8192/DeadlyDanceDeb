@@ -26,6 +26,7 @@
             void Salir();//sale del juego
             void Jugar();//cambia de estado y cargar mapa //aqui saldra el selector de nivel cuando se implemente
             Estado * getEstado();
+            void setMotorThen();
         private:
 
             //clase singleton 
@@ -38,7 +39,6 @@
             Menu menu;//contiene la clase menu (estado)
             Jugando jugando;//contiene la clase Jugando (estado)            
             bool cambioEstado = false;
-            return Estado;
     };
 
 #endif /* MotorGrafico_HPP */

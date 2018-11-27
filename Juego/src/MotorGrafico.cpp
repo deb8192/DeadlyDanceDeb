@@ -162,36 +162,71 @@ void MotorGrafico::JointsTest()
       node->setScale(core::vector3df(1,1,1));
       node->setMaterialTexture(0, driver->getTexture("assets/textures/sydney.bmp"));
       node->setPosition(core::vector3df(30,0,0));
-      //node->setScale(core::vector3df(0.2,0.2,0.2));
   }
     //movimiento; http://irrlicht.sourceforge.net/docu/example004.html
 }
-
-
+void MotorGrafico::setThen(){
+    dt =1.0f/60.0f;
+}
+/*const f32 getdt(){
+    return dt;
+}*/
 void MotorGrafico::movimiento()
 {
-
     // This is the movemen speed in units per second.
-    //para obtener el tiempo de reloj (const u32 currentTime = device->getTimer()->getTime();) en vez de oclock
+    float newTime, frameTime, interpolation;
+    u32 currentTime = device->getTimer()->getTime();//buscar que devuelve cada interacion
+	float acumulator = 0.0f;
     const f32 MOVEMENT_SPEED = 10.f;
-
-    float newTime, frameTime, intepolation;
-    const u32 currentTime = device->getTimer()->getTime();//buscar que devuelve cada interacion
-
-    float acumulator = 0.0f;
-
-    while(){
-        
+    newTime = device->getTimer()->getTime();
+    frameTime = newTime - currentTime;
+    if(frameTime>0.25f){
+        frameTime=0.25f;
     }
+
+    currentTime = newTime;
+    acumulator+=frameTime;
+
+    acumulator -= dt; 
+		
+	interpolation = acumulator/dt;
+    /*float newTime, frameTime, intepolation;
+    const u32 currentTime = device->getTimer()->getTime();//para obtener el tiempo de reloj en vez de oclock
+
+    float acumulator = 0.0f;*/
     
-    /* Check if keys W, S, A or D are being held down, and move the
-    sphere node around respectively. */
+    //ROTAR PERSONAJE 
+    /*core::vector3df rotaPersona = node->getRotation();
+    core::vector3df muevePersona = node->getPosition();
+
+    if(rotarPersona == rotarPersona.Z){
+        core::vector3df rot(0,0,90);// Esto gira el personaje 90 grados en el eje Z
+        node->setRotation(rot);
+    }else{
+        if(rotarPersona == rotarPersona.Y){
+
+        }
+    }*/
+    /*MAS INFO SOBRE ROTAR EL PERSONAJE
+    ballPosition.Z += movement;
+    core::quaternion test;
+    test.fromAngleAxis(xAxisAngle, core::vector3df(1,0,0));
+    xAxisAngle += 0.1f;
+    test.normalize();
+    core::vector3df rot;
+    test.toEuler(rot);
+    ballSceneNode->setRotation(rot * core::RADTODEG);*/
+
     core::vector3df nodePosition = node->getPosition();
 
     // Variables de la camara
     core::vector3df nodeCamPosition = camera->getPosition();
     core::vector3df nodeCamTarget = camera->getTarget();
+<<<<<<< HEAD
+   
+=======
     
+>>>>>>> d71e9ddbaa8ccd77b9aa9a4ebf41ebff6fb27eab
     // Centrar la camara
     nodeCamPosition.X = nodePosition.X;
     nodeCamTarget.X = nodePosition.X;
@@ -200,26 +235,42 @@ void MotorGrafico::movimiento()
     // Comprobar teclas para mover el personaje y la camara
     if(input.IsKeyDown(irr::KEY_KEY_W))
     {
+<<<<<<< HEAD
+      nodePosition.Y += MOVEMENT_SPEED*dt;
+=======
       nodePosition.Y += MOVEMENT_SPEED;
+>>>>>>> d71e9ddbaa8ccd77b9aa9a4ebf41ebff6fb27eab
       //nodeCamPosition.Y += MOVEMENT_SPEED;
       //nodeCamTarget.Y += MOVEMENT_SPEED;
     }
     else if(input.IsKeyDown(irr::KEY_KEY_S))
     {
+<<<<<<< HEAD
+      nodePosition.Y -= MOVEMENT_SPEED*dt;
+=======
       nodePosition.Y -= MOVEMENT_SPEED;
+>>>>>>> d71e9ddbaa8ccd77b9aa9a4ebf41ebff6fb27eab
       //nodeCamPosition.Y -= MOVEMENT_SPEED;
       //nodeCamTarget.Y -= MOVEMENT_SPEED;
     }
 
     if(input.IsKeyDown(irr::KEY_KEY_A))
     {
+<<<<<<< HEAD
+      nodePosition.X -= MOVEMENT_SPEED*dt;
+=======
       nodePosition.X -= MOVEMENT_SPEED;
+>>>>>>> d71e9ddbaa8ccd77b9aa9a4ebf41ebff6fb27eab
       //nodeCamPosition.X -= MOVEMENT_SPEED;
       //nodeCamTarget.X -= MOVEMENT_SPEED;
     }
     else if(input.IsKeyDown(irr::KEY_KEY_D))
     {
+<<<<<<< HEAD
+      nodePosition.X += MOVEMENT_SPEED*dt;
+=======
       nodePosition.X += MOVEMENT_SPEED;
+>>>>>>> d71e9ddbaa8ccd77b9aa9a4ebf41ebff6fb27eab
       //nodeCamPosition.X += MOVEMENT_SPEED;
       //nodeCamTarget.X += MOVEMENT_SPEED;
     }

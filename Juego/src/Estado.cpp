@@ -43,7 +43,7 @@ void Jugando::Init()
     motor->JointsTest();
     motor->CrearCamara();
     int boton = 1;
-    motor->estaPulsado(boton);
+    motor->estaPulsado(boton);          
 }
 
 void Jugando::Update()
@@ -56,6 +56,10 @@ void Jugando::Update()
 int Jugando::Esta()
 {
     return 2;
+}
+
+void Jugando::setMotorThen(float dt){
+    motor->setdt(dt);
 }
 
 void Cinematica::Draw()
@@ -81,3 +85,8 @@ int Cinematica::Esta()
 {
     return 3;
 }
+void Cinematica::HandleInput()
+{
+
+}
+
