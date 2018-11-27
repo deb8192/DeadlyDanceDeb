@@ -5,11 +5,7 @@ RUTACPP = src/ #variable donde iran las clases que utilizamos
 CXXFLAGS = -g -Wall # lo que hace es que crea archivos debug para que se pueda comprobar la informacion
 irrlicht =-I/usr/include/irrlicht #nos dice donde estan los includes
 irrlichtN = -l Irrlicht #porque nombre llamarla
-<<<<<<< HEAD
-
-=======
 SHELL = /bin/bash
->>>>>>> master
 # ${CXXFLAGS} - Son las opciones del compilador
 #pwd
 
@@ -19,7 +15,7 @@ BEGIN = Comienzo
 SOURCES = $(wildcard src/*.cpp)
 SOURCESHEADER = $(wildcard src/*.hpp)
 #OSOURCES = $(wildcard obj/*.o) #se elimina por problemas de no refrescarse
-OSOURCESV2 = $(shell ls obj/*.o) 
+OSOURCESV2 = $(shell ls obj/*.o)
 OBJECTS = $(SOURCES:.cpp=.o)
 RECUR = Recursiva
 RECUR2 = Recursiva2
@@ -31,54 +27,36 @@ INCLUDE_DIRS = \
     -Ifmod/lowlevel/inc \
     -Ifmod/studio/inc
 
-LOWLEVEL_LIB = fmod/lowlevel/lib/x86_64/libfmod.so
-STUDIO_LIB = fmod/studio/lib/x86_64/libfmodstudio.so
+LOWLEVEL_LIB = -Ifmod/lowlevel/lib/x86_64/libfmod.so
+STUDIO_LIB = -Ifmod/studio/lib/x86_64/libfmodstudio.so
 
 # Aqui es donde se hace la magia y se unifican las clases en una sola, basicamente se le pasa las clases de objeto (.o) para unificarlas
-<<<<<<< HEAD
-$(EXEC): $(OBJECTS)
-	$(CXX) $(OSOURCES) -o $(EXEC) $(irrlicht) $(irrlichtN) $(LOWLEVEL_LIB) $(STUDIO_LIB) $(INCLUDE_DIRS)
-
-# si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
-%.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) $< -o $@ $(irrlicht) $(irrlichtN) $(LOWLEVEL_LIB) $(STUDIO_LIB) $(INCLUDE_DIRS)
-	mv src/*.o obj/
-=======
 $(BEGIN): $(RECUR) $(OBJECTS) $(RECUR2) $(EXEC)
 	#Finalizado Comprobaciones
 
 $(EXEC): $(OSOURCESV2)
 	#Comprobando ejecutable si esta actualizado
-	$(CXX) $(OSOURCESV2) -o $(EXEC) $(irrlicht) $(irrlichtN)
+	$(CXX) $(OSOURCESV2) -o $(EXEC) $(irrlicht) $(irrlichtN) $(LOWLEVEL_LIB) $(STUDIO_LIB) $(INCLUDE_DIRS)
 	#Ejecutable Actualizado
 
-$(RECUR): 
+$(RECUR):
 	if [ $(BUSQ) -gt 0 ] ; then mv obj/*.o src/ ; fi
 
 # si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
-%.o: %.cpp 
-	$(CXX) -c $(CXXFLAGS) $< -o $@ $(irrlicht) $(irrlichtN)
+%.o: %.cpp
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(irrlicht) $(irrlichtN) $(LOWLEVEL_LIB) $(STUDIO_LIB) $(INCLUDE_DIRS)
 	mv $@ obj/
->>>>>>> master
 
 $(RECUR2):
 	 if [ $(BUSQ2) -gt 0 ] ; then mv src/*.o obj/ ; fi
-	 
+
 #main: main.o MotorGrafico.o
 #le decimos que clase depende de irrlicht
 #obj/clase.o: $(irrlicht)
 
 # Limpia los .o y el ejecutable creado, si se ponen archivos autogenerados deben ponerse aqui para que se quiten
 clean:
-<<<<<<< HEAD
-	rm -f $(EXEC) $(OSOURCES)
-# si ejecutas "make run" despues de compilar ejecutara automaticamente el ejecutable
-run: $(EXEC)
-	./$(EXEC)
-=======
 	rm -f $(EXEC) $(OSOURCESV2)
-# si ejecutas "make run" despues de compilar ejecutara automaticamente el ejecutable 
+# si ejecutas "make run" despues de compilar ejecutara automaticamente el ejecutable
 run: $(BEGIN)
 	./$(EXEC)
-	
->>>>>>> master

@@ -1,116 +1,74 @@
-#ifndef SoundSystem_h
-#define SoundSystem_h
-
-#include <map>
+#include "fmod_studio.hpp"
+#include "fmod.hpp"
 #include <string>
+#include <map>
+#include <vector>
+#include <math.h>
+#include <iostream>
 
 using namespace std;
 
-#include "fmod_studio.h"
-#include "fmod_studio.hpp"
+#ifndef _MOTOR_AUDIO_H_
+#define _MOTOR_AUDIO_H_
 
-class SoundEvent;
-
-class SoundSystem {
-
-public:
-    /**
-     *  Constructor
-     *  \param soundBanksPath ruta del directorio donde se encuentran los bancos generados con FMOD Studio
-     */
-	SoundSystem(string soundBanksPath);
-
-	~SoundSystem();
-
-    /**
-     *  Método factoría que Construye un SoundEvent a partir del nombre de un evento de FMOD Studio,
-     *  p. ej. "event:/Ambience/Country"
-     *
-     *  \param eventPath nombre del evento según la nomenclatura de FMOD Studio
-     */
-    SoundEvent* getEvent(string eventPath);
-
-    /**
-     *  Modifica el volumen general del motor de sonido
-     */
-    void setVolume(float vol);
-
-    /**
-     *  Modifica la posición del punto de escucha (en esta aplicación sólo hay uno)
-     */
-    void setListernerPosition(Vec3 pos);
-
-    /**
-     *  Actualiza el motor de audio
-     *  \param paused indica si hay que pausar el motor de audio o no
-     */
-    void update(bool paused);
-private:
-    string banksPath;
-	FMOD::Studio::System*	system = NULL;
-	FMOD::System*			lowLevelSystem = NULL;
-	FMOD::Studio::Bank* masterBank = NULL;
-	FMOD::Studio::Bank* stringsBank = NULL;
-    map<string, FMOD::Studio::Bank*> banks;
-    map<string, FMOD::Studio::EventDescription*> eventDescriptions;
-    map<string, SoundEvent*> soundEvents;
-
+//Estructura para colocar nuestro sonido en un espacio 3D
+struct Vector3 {
+    float x;
+    float y;
+    float z;
 };
 
-class SoundEvent {
-public:
-    SoundEvent();
-    virtual ~SoundEvent() = 0; /**>  SoundEvent es una clase abstracta */
-		
-    /**
-     *  Comienza a reproducir el evento
-     */
-    virtual void start();
+//Estructura para inizializar y apagar el motor
+struct Implementation {
+    Implementation();
+    ~Implementation();
 
-    /**
-     *  Detiene la reproducción del evento inmediatamente
-     */
-    void stop();
+    void Update();
 
-    /**
-     *  Pausa la reproducción del evento.
-     *  Para continuar la reproducción, usar start()
-     *  \sa start()
-     */
-    void pause();
+    FMOD::Studio::System* mpStudioSystem;
+    FMOD::System* mpSystem;
 
-    /**
-     *  Modifica el volumen del evento
-     *  \param vol volumen del evento: 0=silencio, 1=máximo volumen
-     */
-    void setVolume(float vol);
+    int mnNextChannelId;
 
-    /**
-     *  Modifca el volumen del evento multiplicando por un factor de ganancia
-     *  \param gain factor de ganancia. 0=silencio, 1=mantener el volumen
-     */
-    void setGain(float gain);
+		//Mapas con todos los sonidos
+    typedef map<string, FMOD::Sound*> SoundMap;
+    typedef map<int, FMOD::Channel*> ChannelMap;
+    typedef map<string, FMOD::Studio::EventInstance*> EventMap;
+    typedef map<string, FMOD::Studio::Bank*> BankMap;
 
-    /**
-     *  Modifica la posición 3D del evento de sonido
-     *  \param pos nuevo vector de posición
-     */
-    void setPosition(Vec3 pos);
-
-    /**
-     *  Consulta si el evento está sonando
-     *  \return devuelve cierto si el evento está sonando
-     */
-    bool isPlaying();
-
-protected:
-    FMOD::Studio::EventInstance* soundInstance;
-    /**
-     * Este método crea un SoundEvent (EngineSound, WindSound, etc.) correspondiente
-     * al evento que recibe como argumento
-     */
-    virtual SoundEvent* newSoundEvent(FMOD::Studio::EventInstance*) = 0;
+    BankMap mBanks;
+    EventMap mEvents;
+    SoundMap mSounds;
+    ChannelMap mChannels;
 };
 
+//Clase del Motor de Audio
+class CAudioEngine {
+public:
+    static void Init();
+    static void Update();
+    static void Shutdown();
+    static int ErrorCheck(FMOD_RESULT result);
 
-#endif /* SoundSystem_h */
+    void LoadBank(const string& strBankName, FMOD_STUDIO_LOAD_BANK_FLAGS flags);
+    void LoadEvent(const string& strEventName);
+    void Loadsound(const string& strSoundName, bool b3d = true, bool bLooping = false, bool bStream = false);
+    void UnLoadSound(const string& strSoundName);
+    void Set3dListenerAndOrientation(const Vector3& vPos = Vector3{ 0, 0, 0 }, float fVolumedB = 0.0f);
+    void PlaySound(const string& strSoundName, const Vector3& vPos = Vector3{ 0, 0, 0 }, float fVolumedB = 0.0f);
+    void PlayEvent(const string& strEventName);
+    void StopChannel(int nChannelId);
+    void StopEvent(const string& strEventName, bool bImmediate = false);
+    void GeteventParameter(const string& strEventName, const string& strEventParameter, float* parameter);
+    void SetEventParameter(const string& strEventName, const string& strParameterName, float fValue);
+    void StopAllChannels();
+    void SetChannel3dPosition(int nChannelId, const Vector3& vPosition);
+    void SetChannelvolume(int nChannelId, float fVolumedB);
+    bool IsPlaying(int nChannelId) const;
+    bool IsEventPlaying(const string& strEventName) const;
+    float dbToVolume(float db);
+    float VolumeTodb(float volume);
+    FMOD_VECTOR VectorToFmod(const Vector3& vPosition);
+};
+
+#endif
