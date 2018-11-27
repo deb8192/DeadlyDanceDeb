@@ -8,11 +8,16 @@ Nivel* Nivel::unica_instancia = 0;
 
 Nivel::Nivel()
 {
-    
+    primeraSala = nullptr; 
 }
 
 bool Nivel::CargarNivel(int level)
 {
+    if(primeraSala != nullptr)
+    {
+        primeraSala->~Sala();
+        primeraSala = nullptr;
+    }
     cargador.CargarNivelXml(level);
     return false;
 }
@@ -38,10 +43,19 @@ void Nivel::CrearObjeto(int x,int y,int z, const char *ruta_objeto, const char *
     motor->CargarObjetos(x,y,z,ruta_objeto,ruta_textura);
 }
 
-void Nivel::CrearPlataforma(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+Sala * Nivel::CrearPlataforma(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
-    motor->CargarPlataformas(x,y,z,ruta_objeto,ruta_textura);
+    Sala * sala = new Sala(100,100,x,y,z,0);
+    int id = motor->CargarPlataformas(x,y,z,ruta_objeto,ruta_textura);
+    sala->definirID(id);
+
+    if(primeraSala == nullptr)
+    {
+        primeraSala = sala;
+    }
+
+    return sala;
 }
 
 void Nivel::CrearLuz(int x,int y,int z)
