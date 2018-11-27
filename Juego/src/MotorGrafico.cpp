@@ -222,11 +222,8 @@ void MotorGrafico::movimiento()
     // Variables de la camara
     core::vector3df nodeCamPosition = camera->getPosition();
     core::vector3df nodeCamTarget = camera->getTarget();
-<<<<<<< HEAD
-   
-=======
-    
->>>>>>> d71e9ddbaa8ccd77b9aa9a4ebf41ebff6fb27eab
+  
+ 
     // Centrar la camara
     nodeCamPosition.X = nodePosition.X;
     nodeCamTarget.X = nodePosition.X;
@@ -235,42 +232,40 @@ void MotorGrafico::movimiento()
     // Comprobar teclas para mover el personaje y la camara
     if(input.IsKeyDown(irr::KEY_KEY_W))
     {
-<<<<<<< HEAD
+
       nodePosition.Y += MOVEMENT_SPEED*dt;
-=======
+
       nodePosition.Y += MOVEMENT_SPEED;
->>>>>>> d71e9ddbaa8ccd77b9aa9a4ebf41ebff6fb27eab
       //nodeCamPosition.Y += MOVEMENT_SPEED;
       //nodeCamTarget.Y += MOVEMENT_SPEED;
     }
     else if(input.IsKeyDown(irr::KEY_KEY_S))
     {
-<<<<<<< HEAD
+
       nodePosition.Y -= MOVEMENT_SPEED*dt;
-=======
+
       nodePosition.Y -= MOVEMENT_SPEED;
->>>>>>> d71e9ddbaa8ccd77b9aa9a4ebf41ebff6fb27eab
+
       //nodeCamPosition.Y -= MOVEMENT_SPEED;
       //nodeCamTarget.Y -= MOVEMENT_SPEED;
     }
 
     if(input.IsKeyDown(irr::KEY_KEY_A))
     {
-<<<<<<< HEAD
+
       nodePosition.X -= MOVEMENT_SPEED*dt;
-=======
+
       nodePosition.X -= MOVEMENT_SPEED;
->>>>>>> d71e9ddbaa8ccd77b9aa9a4ebf41ebff6fb27eab
+
       //nodeCamPosition.X -= MOVEMENT_SPEED;
       //nodeCamTarget.X -= MOVEMENT_SPEED;
     }
     else if(input.IsKeyDown(irr::KEY_KEY_D))
     {
-<<<<<<< HEAD
+
       nodePosition.X += MOVEMENT_SPEED*dt;
-=======
+
       nodePosition.X += MOVEMENT_SPEED;
->>>>>>> d71e9ddbaa8ccd77b9aa9a4ebf41ebff6fb27eab
       //nodeCamPosition.X += MOVEMENT_SPEED;
       //nodeCamTarget.X += MOVEMENT_SPEED;
     }
