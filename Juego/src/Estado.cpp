@@ -58,10 +58,6 @@ int Jugando::Esta()
     return 2;
 }
 
-void Jugando::setMotorThen(float dt){
-    motor->setdt(dt);
-}
-
 void Cinematica::Draw()
 {
     //em
@@ -84,9 +80,5 @@ void Cinematica::Init()
 int Cinematica::Esta()
 {
     return 3;
-}
-void Cinematica::HandleInput()
-{
-
 }
 

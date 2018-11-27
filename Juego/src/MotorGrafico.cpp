@@ -152,9 +152,19 @@ void MotorGrafico::JointsTest()
     //HACERLO CON INTERPOLADO NO CON FRAMES
         cout << "\e[36m Se encuentra fuente \e[0m" << endl;
   
-    scene::IAnimatedMesh* mesh = smgr->getMesh("assets/models/sydney.md2");
-    node = smgr->addAnimatedMeshSceneNode( mesh );
-       
+    //scene::IAnimatedMesh* mesh = smgr->getMesh("assets/models/sydney.md2");
+    
+    n = smgr->addCubeSceneNode();
+    //node = smgr->addAnimatedMeshSceneNode( mesh );
+           
+  if (n)
+  {      
+      n->setMaterialFlag(video::EMF_LIGHTING, false);
+      n->setScale(core::vector3df(1,1,1));
+      n->setMaterialTexture(0, driver->getTexture("assets/textures/sydney.bmp"));
+      n->setPosition(core::vector3df(30,0,0));
+  }
+ /*      
   if (mesh)
   {      
       node->setMaterialFlag(video::EMF_LIGHTING, false);
@@ -162,7 +172,8 @@ void MotorGrafico::JointsTest()
       node->setScale(core::vector3df(1,1,1));
       node->setMaterialTexture(0, driver->getTexture("assets/textures/sydney.bmp"));
       node->setPosition(core::vector3df(30,0,0));
-  }
+
+  }*/
     //movimiento; http://irrlicht.sourceforge.net/docu/example004.html
 }
 void MotorGrafico::setThen(){
@@ -173,11 +184,11 @@ void MotorGrafico::setThen(){
 }*/
 void MotorGrafico::movimiento()
 {
-    // This is the movemen speed in units per second.
+    const f32 MOVEMENT_SPEED = 10.f;
     float newTime, frameTime, interpolation;
     u32 currentTime = device->getTimer()->getTime();//buscar que devuelve cada interacion
 	float acumulator = 0.0f;
-    const f32 MOVEMENT_SPEED = 10.f;
+    
     newTime = device->getTimer()->getTime();
     frameTime = newTime - currentTime;
     if(frameTime>0.25f){
@@ -190,13 +201,9 @@ void MotorGrafico::movimiento()
     acumulator -= dt; 
 		
 	interpolation = acumulator/dt;
-    /*float newTime, frameTime, intepolation;
-    const u32 currentTime = device->getTimer()->getTime();//para obtener el tiempo de reloj en vez de oclock
-
-    float acumulator = 0.0f;*/
-    
+    /*
     //ROTAR PERSONAJE 
-    /*core::vector3df rotaPersona = node->getRotation();
+    core::vector3df rotaPersona = node->getRotation();
     core::vector3df muevePersona = node->getPosition();
 
     if(rotarPersona == rotarPersona.Z){
@@ -206,8 +213,8 @@ void MotorGrafico::movimiento()
         if(rotarPersona == rotarPersona.Y){
 
         }
-    }*/
-    /*MAS INFO SOBRE ROTAR EL PERSONAJE
+    }
+    //MAS INFO SOBRE ROTAR EL PERSONAJE
     ballPosition.Z += movement;
     core::quaternion test;
     test.fromAngleAxis(xAxisAngle, core::vector3df(1,0,0));
@@ -215,10 +222,11 @@ void MotorGrafico::movimiento()
     test.normalize();
     core::vector3df rot;
     test.toEuler(rot);
-    ballSceneNode->setRotation(rot * core::RADTODEG);*/
-
-    core::vector3df nodePosition = node->getPosition();
-
+    ballSceneNode->setRotation(rot * core::RADTODEG);
+*/
+    core::vector3df rotaPersona = n->getRotation();
+    core::vector3df nodePosition = n->getPosition();
+/*
     // Variables de la camara
     core::vector3df nodeCamPosition = camera->getPosition();
     core::vector3df nodeCamTarget = camera->getTarget();
@@ -228,12 +236,10 @@ void MotorGrafico::movimiento()
     nodeCamPosition.X = nodePosition.X;
     nodeCamTarget.X = nodePosition.X;
     nodeCamTarget.Y = nodePosition.Y;
-
+*/
     // Comprobar teclas para mover el personaje y la camara
     if(input.IsKeyDown(irr::KEY_KEY_W))
     {
-
-      nodePosition.Y += MOVEMENT_SPEED*dt;
 
       nodePosition.Y += MOVEMENT_SPEED;
       //nodeCamPosition.Y += MOVEMENT_SPEED;
@@ -241,8 +247,6 @@ void MotorGrafico::movimiento()
     }
     else if(input.IsKeyDown(irr::KEY_KEY_S))
     {
-
-      nodePosition.Y -= MOVEMENT_SPEED*dt;
 
       nodePosition.Y -= MOVEMENT_SPEED;
 
@@ -253,9 +257,9 @@ void MotorGrafico::movimiento()
     if(input.IsKeyDown(irr::KEY_KEY_A))
     {
 
-      nodePosition.X -= MOVEMENT_SPEED*dt;
-
-      nodePosition.X -= MOVEMENT_SPEED;
+        nodePosition.X -= MOVEMENT_SPEED;
+        core::vector3df rot(90,0,0);// Esto gira el personaje 90 grados en el eje Z
+        n->setRotation(rot);
 
       //nodeCamPosition.X -= MOVEMENT_SPEED;
       //nodeCamTarget.X -= MOVEMENT_SPEED;
@@ -263,15 +267,16 @@ void MotorGrafico::movimiento()
     else if(input.IsKeyDown(irr::KEY_KEY_D))
     {
 
-      nodePosition.X += MOVEMENT_SPEED*dt;
-
       nodePosition.X += MOVEMENT_SPEED;
       //nodeCamPosition.X += MOVEMENT_SPEED;
       //nodeCamTarget.X += MOVEMENT_SPEED;
     }
-    node->setPosition(nodePosition);
+    n->setPosition(nodePosition);
+    n->setRotation(rotaPersona);
+    /*
     camera->setPosition(nodeCamPosition);
-    camera->setTarget(nodeCamTarget);
+    camera->setTarget(nodeCamTarget);*/
+    
 }
 
 bool MotorGrafico::estaPulsado(int boton)

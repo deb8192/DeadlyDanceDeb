@@ -87,7 +87,8 @@ using namespace idsEventos;
             scene::ISceneNode *n;
             scene::IAnimatedMeshSceneNode* node;
             scene::ICameraSceneNode* camera;
-
+            f32 xAxisAngle = 0;
+            f32 zAxisAngle = 0;
             float dt;
 
     };
