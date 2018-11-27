@@ -1,11 +1,12 @@
 #include "Sala.hpp"
 
-Sala::Sala(int anch,int larg, int nx, int ny, int type)
+Sala::Sala(int anch,int larg, int nx, int ny, int nz, int type)
 {
     ancho = anch;
     largo = larg;
     x = nx;
     y = ny;
+    z = nz;
     if(type >= 0 && type <= 4)
     {
         tipocentro=type;
@@ -46,11 +47,12 @@ void Sala::agregarSalida(Sala * plataforma)
 
 int * Sala::getSizes()
 {
-    int * valores = new int[4];
+    int * valores = new int[5];
     valores[0] = ancho;
     valores[1] = largo;
     valores[2] = x; 
     valores[3] = y;
+    valores[4] = z;
     return valores;
 }
 
@@ -67,4 +69,9 @@ std::vector<Sala*> Sala::getEntradas()
 std::vector<Sala*> Sala::getSalidas()
 {
     return salidas;
+}
+
+void Sala::definirID(int id)
+{
+    posicion_en_grafica = id;
 }

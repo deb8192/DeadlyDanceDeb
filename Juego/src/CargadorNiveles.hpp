@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include "Sala.hpp"
 
 #ifndef CargadorNiveles_HPP
 #define CargadorNiveles_HPP
