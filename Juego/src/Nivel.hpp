@@ -1,3 +1,4 @@
+#include "Sala.hpp"
 #include "Jugador.hpp"
 #include "Enemigo.hpp"
 #include "CargadorNiveles.hpp"
@@ -42,6 +43,7 @@ class Nivel
         std::vector<Enemigo> enemigos;//Enemigos en scena
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
+        Sala * primeraSala;// la primera sala del arbol
 };
 
 #endif 
