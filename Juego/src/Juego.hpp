@@ -15,7 +15,7 @@
             {
                 if(unica_instancia == 0)
                 unica_instancia = new Juego();
-                return unica_instancia;  
+                return unica_instancia;
             }
             //fin singleton public
 
@@ -28,7 +28,7 @@
 
         private:
 
-            //clase singleton 
+            //clase singleton
             Juego();
             static Juego* unica_instancia;
             //fin clase singleton private

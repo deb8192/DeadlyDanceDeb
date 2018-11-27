@@ -27,8 +27,8 @@ INCLUDE_DIRS = \
     -Ifmod/lowlevel/inc \
     -Ifmod/studio/inc
 
-LOWLEVEL_LIB = -Ifmod/lowlevel/lib/x86_64/libfmod.so
-STUDIO_LIB = -Ifmod/studio/lib/x86_64/libfmodstudio.so
+LOWLEVEL_LIB = -Ifmod/lowlevel/lib/x86_64
+STUDIO_LIB = -Ifmod/studio/lib/x86_64
 
 # Aqui es donde se hace la magia y se unifican las clases en una sola, basicamente se le pasa las clases de objeto (.o) para unificarlas
 $(BEGIN): $(RECUR) $(OBJECTS) $(RECUR2) $(EXEC)
