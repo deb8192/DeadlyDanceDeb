@@ -10,7 +10,7 @@ class Enemigo : public INnpc , public INdrawable //multiple herencia a esto se l
 
     public:
         Enemigo();
-        
+        void definirSala(Sala * sala);
     private:
         Sala * estoy;//sala en la que esta el enemigo
 };
