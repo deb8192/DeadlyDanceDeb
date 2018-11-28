@@ -22,11 +22,12 @@ bool Nivel::CargarNivel(int level)
     return false;
 }
 
-void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
     Enemigo ene;
     ene.setPosiciones(x,y,z);
+    ene.definirSala(sala);
     enemigos.push_back(ene);
     motor->CargarEnemigos(x,y,z,ruta_objeto,ruta_textura);
 }
@@ -43,10 +44,12 @@ void Nivel::CrearObjeto(int x,int y,int z, const char *ruta_objeto, const char *
     motor->CargarObjetos(x,y,z,ruta_objeto,ruta_textura);
 }
 
-Sala * Nivel::CrearPlataforma(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+Sala * Nivel::CrearPlataforma(int x,int y,int z, int ancho, int largo, int centro, const char *ruta_objeto, const char *ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
-    Sala * sala = new Sala(100,100,x,y,z,0);
+    Sala * sala = new Sala(ancho,largo,x,y,z,centro);
+    //int * datos = sala->getSizes(); //para comprobar la informacion de la sala
+    //cout << "\e[36m datos de la sala: \e[0m" << datos[0] << " " << datos[1]  << " " << datos[2] << " " << datos[3] << " " << datos[4] << endl;
     int id = motor->CargarPlataformas(x,y,z,ruta_objeto,ruta_textura);
     sala->definirID(id);
 
