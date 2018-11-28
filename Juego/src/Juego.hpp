@@ -37,7 +37,7 @@
             Cinematica cinematica;//contiene la clase cinematica (estado)
             Menu menu;//contiene la clase menu (estado)
             Jugando jugando;//contiene la clase Jugando (estado)
-            Nivel nivel;
+            Nivel *nivel;
     };
 
 #endif /* MotorGrafico_HPP */

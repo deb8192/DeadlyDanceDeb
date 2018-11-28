@@ -5,6 +5,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include "eventos.hpp" //este archivo contiene los ids de los eventos
 #include "Inputs.hpp"
 #include <iostream> //la utilizamos para mostrar el log en la consola.
+#include <vector>//para los objetos en escena
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;
@@ -55,6 +56,12 @@ using namespace idsEventos;
             //borrar gui
             void borrarGui();//borra todo lo que haya en la ventana relacionado con el gui
             
+
+
+            /*IMPORTANTE para bullet motor de fisicas y Joints*/
+            //btHingeConstraint(btRigidBody& rbA,const btTransform& rbAFrame, const btTransform& rbBFrame);
+            
+
             //eventos facade
             //detecta si esta pulsado un boton, 1=a, 2 =s, 3=d, 4=w, 5=space, 6=intro 
             bool estaPulsado(int);
@@ -62,6 +69,14 @@ using namespace idsEventos;
             //detecta si un evento con un id pasado a sido llamado
             bool ocurreEvento(int);
             //fin evento botones se puede utilizar para cualquier tipo de evento de irrlicht
+            void resetEvento(int);//resetea el evento
+            
+            //cargadores de objetos
+            int CargarPlataformas(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
+            void CargarLuces(int x,int y,int z);
+            void CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             
             void closeGame();
             
@@ -80,6 +95,11 @@ using namespace idsEventos;
             IGUIFont *font;
             IGUISkin *skin;
             Inputs input;
+            std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
+            std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
+            std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
+            IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
+            std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
     };
 
 #endif /* MotorGrafico_HPP */
