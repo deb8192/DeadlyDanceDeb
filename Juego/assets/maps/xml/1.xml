@@ -1,0 +1,25 @@
+<Level><!--- Esto nos indica que estamos definiendo un nivel -->
+	
+	<Light Type="Ambiental" Intensity="50" Attenuation="0" Color="Red" X="0" Y="0" Z="10"> </Light>
+	
+	<Platform Type="1" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" StarTexture="assets/texture/jugador.png" StarModel="assets/models/jugador.obj" UserStar="True" StarX="0" StarY="0" StarZ="5" X="0" Y="0" Z="0" >
+		
+		<Platform Type="1" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="False" StarX="10" StarY="0" X="0" Y="10" Z="0" >
+			<Enemy Type="1" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj" X="10" Y="0" Z="4" ></Enemy>
+			<Object Type="1" X="10" Y="4" Z="0" Texture="assets/texture/platform1.png" Model="assets/models/objeto.obj"></Object>
+			
+			<Platform Type="1" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="False" StarX="10" StarY="0" X="10" Y="10" Z="0" >
+				<Enemy Type="1" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj" X="11" Y="10" Z="4" ></Enemy>
+				<Enemy Type="1" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj" X="13" Y="10" Z="4" ></Enemy>
+			</Platform>
+		
+		</Platform>
+		
+		<Platform Type="1" Texture="assets/texture/platform1.png" Model="assets/models/scene_example.obj" UserStar="False" StarX="10" StarY="0" X="0" Y="-10" Z="0" >
+			<Enemy Type="1" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj" X="2" Y="-10" Z="4" ></Enemy>
+			<Object Type="1" X="5" Y="-10" Z="4" Texture="assets/texture/platform1.png" Model="assets/models/objeto.obj"></Object>
+		</Platform>
+	
+	</Platform>
+
+</Level> <!-- Fin del nivel -->

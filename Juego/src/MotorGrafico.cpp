@@ -87,7 +87,7 @@ void MotorGrafico::updateMotorMenu()
 
 void MotorGrafico::updateMotorJuego()
 {
-    driver->beginScene(true, true, SColor(255,255,101,140));
+    driver->beginScene(true, true, SColor(255,0,0,0));
 	smgr->drawAll();
 	guienv->drawAll();
 	driver->endScene();
@@ -118,6 +118,7 @@ void MotorGrafico::PropiedadesDevice()
 
 void MotorGrafico::PintarBotonesMenu()
 {
+
     guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_EMPEZAR_BUTTON,L"Iniciar Juego", L"Empieza a jugar");
     guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_CONFIGURACION_BUTTON,L"Configuracion", L"Configuracion del juego");
     guienv->addButton(rect<s32>(300,280,500,310), 0, GUI_ID_CREDITOS_BUTTON,L"Creditos", L"Creditos del juego");
@@ -175,4 +176,96 @@ bool MotorGrafico::estaPulsado(int boton)
 bool MotorGrafico::ocurreEvento(int event)
 {
     return input.IsEventOn(event);
+}
+
+void MotorGrafico::resetEvento(int event)
+{
+    input.ResetEvento(event);
+}
+
+int MotorGrafico::CargarPlataformas(int x,int y,int z, const char *ruta_objeto,const char *ruta_textura)
+{
+    IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+	if (!objeto)
+	{
+		//error
+        return -1;//no se ha podido crear esta sala
+	}
+    else
+    {
+        IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+        objeto_en_scena->setPosition(core::vector3df(x,y,z));
+        Plataformas_Scena.push_back(objeto_en_scena);
+        return (Plataformas_Scena.size()-1);
+    }
+}
+
+void MotorGrafico::CargarLuces(int x,int y,int z)
+{
+    // add light 1 (more green)
+    scene::ILightSceneNode* light1 =
+    smgr->addLightSceneNode(0, core::vector3df(x,y,z),video::SColorf(0.5f, 1.0f, 0.5f, 0.0f), 100.0f);
+
+    light1->setDebugDataVisible ( scene::EDS_BBOX );
+
+
+    // add fly circle animator to light 1
+    scene::ISceneNodeAnimator* anim = smgr->createFlyCircleAnimator (core::vector3df(x,y,z),0.0f, -0.003f);
+    light1->addAnimator(anim);
+    anim->drop();
+
+    Luces_Scena.push_back(light1);
+    // attach billboard to the light
+    scene::IBillboardSceneNode* bill =
+        smgr->addBillboardSceneNode(light1, core::dimension2d<f32>(10, 10));
+
+    bill->setMaterialFlag(video::EMF_LIGHTING, false);
+    bill->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
+    bill->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
+    bill->setMaterialTexture(0, driver->getTexture("assets/models/particlegreen.jpg"));
+}
+
+void MotorGrafico::CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+    IAnimatedMesh* enemigo = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+	if (!enemigo)
+	{
+		//error
+	}
+    else
+    {
+        IAnimatedMeshSceneNode* enemigo_en_scena = smgr->addAnimatedMeshSceneNode(enemigo); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+        enemigo_en_scena->setPosition(core::vector3df(x,y,z));
+        Enemigos_Scena.push_back(enemigo_en_scena);
+    }
+}
+
+void MotorGrafico::CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+    IAnimatedMesh* jugador = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+	if (!jugador)
+	{
+		//error
+	}
+    else
+    {
+        IAnimatedMeshSceneNode* jugador_en_scena = smgr->addAnimatedMeshSceneNode(jugador); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+        jugador_en_scena->setPosition(core::vector3df(x,y,z));
+        Jugador_Scena = jugador_en_scena;
+    }
+}
+
+void MotorGrafico::CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+    IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+	if (!objeto)
+	{
+		//error
+	}
+    else
+    {
+        IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+        objeto_en_scena->setPosition(core::vector3df(x,y,z));
+        Objetos_Scena.push_back(objeto_en_scena);
+    }
 }

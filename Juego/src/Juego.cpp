@@ -7,6 +7,7 @@ Juego* Juego::unica_instancia = 0;
 Juego::Juego()
 {
     motor = MotorGrafico::getInstance();//se recoge instancia de motor
+    nivel = Nivel::getInstance();//se recoge la instancia de nivel
     estado = &menu;//se empieza en el estado menu
 }
 
@@ -38,6 +39,8 @@ void Juego::Update()
         //limpiamos el gui y la scena
         motor->borrarScena();
         motor->borrarGui();
+        nivel->CargarNivel(1);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
+        motor->resetEvento(101);//reseteamos el evento
         Jugar();
     }
     if(motor->ocurreEvento(102))//salimos del juego
@@ -56,4 +59,5 @@ void Juego::Salir()
 void Juego::Jugar()
 {
     estado = &jugando;//se cambia a estado jugando
+    estado->Ini();
 }

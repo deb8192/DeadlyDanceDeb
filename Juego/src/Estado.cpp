@@ -17,6 +17,11 @@ void Menu::Update()
     motor->updateMotorMenu();
 }
 
+void Menu::Init()
+{
+
+}
+
 int Menu::Esta()
 {
     return 1;
@@ -32,10 +37,18 @@ void Jugando::Clean()
     //se borran los objetos y escenarios
 }
 
+void Jugando::Init()
+{
+    MotorGrafico *motor = MotorGrafico::getInstance();
+    motor->CrearCamara();
+}
+
 void Jugando::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorJuego();
+  
+   
 }
 
 int Jugando::Esta()
@@ -58,7 +71,10 @@ void Cinematica::Update()
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorCinematica();
 }
+void Cinematica::Init()
+{
 
+}
 int Cinematica::Esta()
 {
     return 3;

@@ -10,12 +10,14 @@ private:
     virtual void Clean() = 0;
     virtual void Update() = 0;
     virtual int Esta() = 0;
+    virtual void Init() = 0;
 
 public:
     void Pintar(){ Draw(); };
     void Borrar(){ Clean(); };
     void Actualizar(){ Update(); };
     int QueEstado(){ return Esta(); };
+    void Ini(){Init();};
 };
 
 //diferentes clases de estado
@@ -27,6 +29,7 @@ class Menu: public Estado{
         void Clean();
         void Update();
         int Esta();
+        void Init();
         //MotorGrafico *motor = MotorGrafico::getInstance();   
 };
 
@@ -36,6 +39,7 @@ class Jugando: public Estado{
         void Clean();
         void Update();
         int Esta();
+        void Init();
         //MotorGrafico *motor = MotorGrafico::getInstance();   
 };
 
@@ -45,6 +49,8 @@ class Cinematica: public Estado{
         void Clean();
         void Update();
         int Esta();
+        void Init();
+
         //MotorGrafico *motor = MotorGrafico::getInstance();   
 };
 
