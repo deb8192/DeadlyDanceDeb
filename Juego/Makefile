@@ -27,8 +27,8 @@ INCLUDE_DIRS = \
     -Ifmod/lowlevel/inc \
     -Ifmod/studio/inc
 
-LOWLEVEL_LIB = -Ifmod/lowlevel/lib/x86_64
-STUDIO_LIB = -Ifmod/studio/lib/x86_64
+LOWLEVEL_LIB = -Lfmod/lowlevel/lib/x86_64
+STUDIO_LIB = -Lfmod/studio/lib/x86_64
 
 # Aqui es donde se hace la magia y se unifican las clases en una sola, basicamente se le pasa las clases de objeto (.o) para unificarlas
 $(BEGIN): $(RECUR) $(OBJECTS) $(RECUR2) $(EXEC)
@@ -36,7 +36,7 @@ $(BEGIN): $(RECUR) $(OBJECTS) $(RECUR2) $(EXEC)
 
 $(EXEC): $(OSOURCESV2)
 	#Comprobando ejecutable si esta actualizado
-	$(CXX) $(OSOURCESV2) -o $(EXEC) $(irrlicht) $(irrlichtN) $(LOWLEVEL_LIB) $(STUDIO_LIB) $(INCLUDE_DIRS)
+	$(CXX) $(OSOURCESV2) -o $(EXEC) $(irrlicht) $(irrlichtN) $(INCLUDE_DIRS) $(LOWLEVEL_LIB) $(STUDIO_LIB)
 	#Ejecutable Actualizado
 
 $(RECUR):
@@ -44,7 +44,7 @@ $(RECUR):
 
 # si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
 %.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) $< -o $@ $(irrlicht) $(irrlichtN) $(LOWLEVEL_LIB) $(STUDIO_LIB) $(INCLUDE_DIRS)
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(irrlicht) $(irrlichtN) $(INCLUDE_DIRS) $(LOWLEVEL_LIB) $(STUDIO_LIB)
 	mv $@ obj/
 
 $(RECUR2):

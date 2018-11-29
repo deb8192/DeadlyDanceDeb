@@ -1,5 +1,6 @@
 #include "Estado.hpp"
 #include "MotorGrafico.hpp"
+#include "MotorAudio.hpp"
 
 void Menu::Draw()
 {
@@ -36,6 +37,20 @@ void Jugando::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorJuego();
+
+    // Initialize our sound system
+    MotorAudio *sound = new MotorAudio();
+
+    // Create a sample sound
+    ClaseSonido soundSample;
+    sound->createSound(&soundSample, "assets/sounds/01.mp3");
+
+    // Play the sound, with loop mode
+    sound->playSound(soundSample);
+
+    // Release the sound
+    //sound.releaseSound(soundSample);
+
 }
 
 int Jugando::Esta()
