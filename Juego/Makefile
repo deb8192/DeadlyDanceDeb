@@ -22,13 +22,13 @@ RECUR2 = Recursiva2
 BUSQ = $(shell find ./obj -name "*.o" | wc -l)
 BUSQ2 = $(shell find ./src -name "*.o" | wc -l)
 
-# direcorio de librerias de fmod
 INCLUDE_DIRS = \
-    -Ifmod/lowlevel/inc \
-    -Ifmod/studio/inc
-
-LOWLEVEL_LIB = -Lfmod/lowlevel/lib/x86_64
-STUDIO_LIB = -Lfmod/studio/lib/x86_64
+    -Ilibrerias/fmod/lowlevel/inc \
+		-Ilibrerias/fmod/studio/inc
+PATHL_LIB = -Llibrerias/fmod/lowlevel/lib/x86_64
+PATHS_LIB = -Llibrerias/fmod/studio/lib/x86_64
+LOWLEVEL_LIB = -l libfmod.so
+STUDIO_LIB = -l libfmodstudio.so
 
 # Aqui es donde se hace la magia y se unifican las clases en una sola, basicamente se le pasa las clases de objeto (.o) para unificarlas
 $(BEGIN): $(RECUR) $(OBJECTS) $(RECUR2) $(EXEC)
@@ -36,7 +36,7 @@ $(BEGIN): $(RECUR) $(OBJECTS) $(RECUR2) $(EXEC)
 
 $(EXEC): $(OSOURCESV2)
 	#Comprobando ejecutable si esta actualizado
-	$(CXX) $(OSOURCESV2) -o $(EXEC) $(irrlicht) $(irrlichtN) $(INCLUDE_DIRS) $(LOWLEVEL_LIB) $(STUDIO_LIB)
+	$(CXX) $(OSOURCESV2) -o $(EXEC) $(irrlicht) $(irrlichtN) $(INCLUDE_DIRS) $(PATHS_LIB) $(PATHL_LIB) -Bdynamic $(STUDIO_LIB) $(LOWLEVEL_LIB)
 	#Ejecutable Actualizado
 
 $(RECUR):
@@ -44,7 +44,7 @@ $(RECUR):
 
 # si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
 %.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) $< -o $@ $(irrlicht) $(irrlichtN) $(INCLUDE_DIRS) $(LOWLEVEL_LIB) $(STUDIO_LIB)
+	$(CXX) -c $(CXXFLAGS) $< -o $@ $(irrlicht) $(irrlichtN) $(INCLUDE_DIRS) $(PATHS_LIB) $(PATHL_LIB) -Bdynamic $(STUDIO_LIB) $(LOWLEVEL_LIB)
 	mv $@ obj/
 
 $(RECUR2):

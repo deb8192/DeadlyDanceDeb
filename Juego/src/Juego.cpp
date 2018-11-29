@@ -39,17 +39,6 @@ void Juego::Update()
         motor->borrarScena();
         motor->borrarGui();
         Jugar();
-
-        // Inicializar motor de sonido
-        SoundSystemClass sound;
-        sound.Initialize();
-        // Crear un sonido
-        SoundClass soundSample;
-        sound.createSound(&soundSample, "assets/sounds/01.mp3");
-        // Play the sound, with loop mode
-        sound.playSound(soundSample, true);
-        // Release the sound
-        sound.releaseSound(soundSample);
     }
     if(motor->ocurreEvento(102))//salimos del juego
     {
