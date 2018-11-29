@@ -9,6 +9,7 @@ Esta clase define que tipo de pantalla quieres
 MotorGrafico::MotorGrafico()
 {
     input.setDevice(device);//lo  utilizamos para que los eventos puedan llamar a funciones de 
+    debugGrafico = false;
 }
 
 MotorGrafico::~MotorGrafico()
@@ -169,6 +170,9 @@ bool MotorGrafico::estaPulsado(int boton)
 
         case 6:
             return input.IsKeyDown(irr::KEY_ACCEPT);
+
+        case 7:
+            return input.IsKeyDown(irr::KEY_KEY_G);//para modo debug
     }
     return false;
 }
@@ -267,5 +271,50 @@ void MotorGrafico::CargarObjetos(int x,int y,int z, const char *ruta_objeto, con
         IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario   
         objeto_en_scena->setPosition(core::vector3df(x,y,z));
         Objetos_Scena.push_back(objeto_en_scena);
+    }
+}
+
+void MotorGrafico::activarDebugGrafico()
+{
+    if(debugGrafico)
+    {
+        debugGrafico = false;
+        if(Objetos_Debug.size()>0)
+        {
+            for(std::size_t i=0;i<Objetos_Debug.size();i++)
+            {
+                Objetos_Debug[i]->remove();
+                Objetos_Debug[i] = NULL;
+                delete Objetos_Debug[i]; 
+            }
+            Objetos_Debug.resize(0);
+        }
+        cout << "\e[38m Modo Debug Desactivado \e[0m" << endl;
+    }
+    else
+    {
+        debugGrafico = true;
+        cout << "\e[38m Modo Debug Activado \e[0m" << endl;
+    }
+}
+
+void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, int intensidad)
+{
+    if(debugGrafico)
+    {
+        IAnimatedMesh* circulo = smgr->getMesh("assets/models/circuloDebugSonido.obj");
+        if(!circulo)
+        {
+            //no se ha podido cargar
+        }
+        else
+        {
+            //vamos a cargar el circulo en su posicion con su intensidad
+            //cout << "\e[36m Generamos Circulo \e[0m" << endl;
+            IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(circulo); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+            objeto_en_scena->setPosition(core::vector3df(x,y,z));
+            objeto_en_scena->setScale(core::vector3df(intensidad,intensidad,1));
+            Objetos_Debug.push_back(objeto_en_scena);
+        }
     }
 }

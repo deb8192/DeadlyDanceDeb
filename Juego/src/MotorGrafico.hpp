@@ -80,6 +80,10 @@ using namespace idsEventos;
             
             void closeGame();
             
+            //debug grafico
+            void activarDebugGrafico();//se activa o desactiva el modo debug grafico
+            void dibujarCirculoEventoSonido(int x, int y, int z, int intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
+        
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton 
@@ -100,6 +104,8 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
+            std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
+            bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
     };
 
 #endif /* MotorGrafico_HPP */
