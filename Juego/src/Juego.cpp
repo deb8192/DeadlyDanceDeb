@@ -47,6 +47,11 @@ void Juego::Update()
     {
         motor->closeGame();   
     }
+    //para modo debug
+    if(motor->estaPulsado(7))
+    {
+        motor->activarDebugGrafico();
+    }
 }
 
 //se llama cuando se presiona un boton de salir del juego.

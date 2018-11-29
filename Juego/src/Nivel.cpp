@@ -30,6 +30,7 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
     ene.definirSala(sala);
     enemigos.push_back(ene);
     motor->CargarEnemigos(x,y,z,ruta_objeto,ruta_textura);
+    ene.generarSonido(8,5.0);
 }
 
 void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto

@@ -1,5 +1,6 @@
 #include "Estado.hpp"
 #include "MotorGrafico.hpp"
+#include "SenseEventos.hpp"
 
 void Menu::Draw()
 {
@@ -45,6 +46,8 @@ void Jugando::Init()
 
 void Jugando::Update()
 {
+    SenseEventos *sense = SenseEventos::getInstance();
+    sense->update();
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorJuego();
   

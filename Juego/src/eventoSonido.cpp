@@ -1,6 +1,6 @@
 #include "eventoSonido.hpp"
 
-eventoSonido::eventoSonido(int inten,int durac,int nx,int ny,int nz,int prop,int tip)
+eventoSonido::eventoSonido(int inten,double durac,int nx,int ny,int nz,int prop,int tip)
 {
     intensidad = inten;
     duracion = durac;
@@ -9,6 +9,11 @@ eventoSonido::eventoSonido(int inten,int durac,int nx,int ny,int nz,int prop,int
     z = nz;
     propietario = prop;
     tipo = tip;
+}
+
+eventoSonido::~eventoSonido()
+{
+    
 }
 
 int * eventoSonido::getPropiedades()
@@ -22,4 +27,21 @@ int * eventoSonido::getPropiedades()
     datos[5] = propietario;
     datos[6] = tipo;
     return datos;
+}
+
+void eventoSonido::restarTiempo(double tiempo)
+{
+    if(duracion-tiempo < 0)
+    {
+        duracion = 0;
+    }
+    else
+    {
+        duracion = duracion - tiempo;
+    }
+}
+
+double eventoSonido::getDuracion()
+{
+    return duracion;
 }
