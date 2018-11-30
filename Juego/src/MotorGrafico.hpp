@@ -82,8 +82,9 @@ using namespace idsEventos;
             
             //debug grafico
             void activarDebugGrafico();//se activa o desactiva el modo debug grafico
-            void dibujarCirculoEventoSonido(int x, int y, int z, int intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
-        
+            void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
+            void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
+            
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton 

@@ -46,12 +46,11 @@ void Jugando::Init()
 
 void Jugando::Update()
 {
+    MotorGrafico *motor = MotorGrafico::getInstance();
+    motor->clearDebug();
     SenseEventos *sense = SenseEventos::getInstance();
     sense->update();
-    MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorJuego();
-  
-   
 }
 
 int Jugando::Esta()

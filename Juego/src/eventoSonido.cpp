@@ -4,11 +4,13 @@ eventoSonido::eventoSonido(int inten,double durac,int nx,int ny,int nz,int prop,
 {
     intensidad = inten;
     duracion = durac;
+    duracionOriginal = durac;
     x = nx;
     y = ny;
     z = nz;
     propietario = prop;
     tipo = tip;
+    multiplicador = ((float)intensidad)/((float)duracion);
 }
 
 eventoSonido::~eventoSonido()
@@ -19,7 +21,7 @@ eventoSonido::~eventoSonido()
 int * eventoSonido::getPropiedades()
 {
     int * datos = new int[7];
-    datos[0] = intensidad ;
+    datos[0] = intensidad;
     datos[1] = duracion ;
     datos[2] = x ;
     datos[3] = y ;
@@ -44,4 +46,10 @@ void eventoSonido::restarTiempo(double tiempo)
 double eventoSonido::getDuracion()
 {
     return duracion;
+}
+
+float eventoSonido::getIntensidad()
+{
+    float result = ((float)duracionOriginal)-((float)duracion);
+    return (multiplicador*result);
 }

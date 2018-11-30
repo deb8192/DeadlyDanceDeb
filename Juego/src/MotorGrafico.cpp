@@ -298,7 +298,21 @@ void MotorGrafico::activarDebugGrafico()
     }
 }
 
-void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, int intensidad)
+void MotorGrafico::clearDebug()
+{
+    if(Objetos_Debug.size()>0)
+    {
+        for(std::size_t i=0;i<Objetos_Debug.size();i++)
+        {
+            Objetos_Debug[i]->remove();
+            Objetos_Debug[i] = NULL;
+            delete Objetos_Debug[i]; 
+        }
+        Objetos_Debug.resize(0);
+    }
+}
+
+void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensidad)
 {
     if(debugGrafico)
     {
