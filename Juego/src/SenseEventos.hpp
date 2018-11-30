@@ -5,6 +5,7 @@
 #include <vector>//para los diferentes eventos
 #include <ctime>//nos sirve para saber los tiempos de ejecucion
 #include <iostream>
+#include <math.h>
 
 class SenseEventos
 {
@@ -23,7 +24,9 @@ class SenseEventos
 
         void update();//actualizamos los tiempos de todos los eventos, si hay alguno a cero se elimina, se llama tambien a debuggrafico
         
-        void agregarEvento(eventoSonido * evento);
+        void agregarEvento(eventoSonido * evento);//agregamos un evento de sonido
+
+        std::vector<eventoSonido *> listarSonidos(int x, int y);
 
     private:
     

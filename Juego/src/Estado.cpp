@@ -1,6 +1,7 @@
 #include "Estado.hpp"
 #include "MotorGrafico.hpp"
 #include "SenseEventos.hpp"
+#include "Nivel.hpp"
 
 void Menu::Draw()
 {
@@ -48,9 +49,11 @@ void Jugando::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->clearDebug();
+    Nivel *nivel = Nivel::getInstance();
     SenseEventos *sense = SenseEventos::getInstance();
-    sense->update();
-    motor->updateMotorJuego();
+    sense->update();//se actualizan sentidos
+    nivel->update();//se actualiza posiciones y interpolado
+    motor->updateMotorJuego();// se actualiza lo que se ve por pantalla
 }
 
 int Jugando::Esta()
