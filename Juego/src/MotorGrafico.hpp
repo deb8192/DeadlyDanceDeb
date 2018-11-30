@@ -90,6 +90,7 @@ using namespace idsEventos;
             f32 xAxisAngle = 0;
             f32 zAxisAngle = 0;
             float dt;
+            float grados;
 
     };
 
