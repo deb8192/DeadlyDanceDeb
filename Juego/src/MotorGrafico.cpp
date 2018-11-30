@@ -150,7 +150,7 @@ void MotorGrafico::JointsTest()
 { 
     //que gire 
     //HACERLO CON INTERPOLADO NO CON FRAMES
-        cout << "\e[36m Se encuentra fuente \e[0m" << endl;
+    cout << "\e[36m Se encuentra fuente \e[0m" << endl;
   
     //scene::IAnimatedMesh* mesh = smgr->getMesh("assets/models/sydney.md2");
     
@@ -160,7 +160,7 @@ void MotorGrafico::JointsTest()
   if (n)
   {      
       n->setMaterialFlag(video::EMF_LIGHTING, false);
-      n->setScale(core::vector3df(1,1,1));
+      n->setScale(core::vector3df(0.5,0.5,0.5));
       n->setMaterialTexture(0, driver->getTexture("assets/textures/sydney.bmp"));
       n->setPosition(core::vector3df(30,0,0));
   }
@@ -184,48 +184,29 @@ void MotorGrafico::setThen(){
 }*/
 void MotorGrafico::movimiento()
 {
-    const f32 MOVEMENT_SPEED = 10.f;
+    //variables
+    const f32 MOVEMENT_SPEED = 2.f;
+    bool hagiradoA;
+    bool hagiradoD;
+    bool hagiradoW;
+    bool hagiradoS;
     float newTime, frameTime, interpolation;
     u32 currentTime = device->getTimer()->getTime();//buscar que devuelve cada interacion
 	float acumulator = 0.0f;
     
+    //Interpolacion
     newTime = device->getTimer()->getTime();
     frameTime = newTime - currentTime;
     if(frameTime>0.25f){
         frameTime=0.25f;
     }
-
     currentTime = newTime;
     acumulator+=frameTime;
-
     acumulator -= dt; 
-		
 	interpolation = acumulator/dt;
-    /*
-    //ROTAR PERSONAJE 
-    core::vector3df rotaPersona = node->getRotation();
-    core::vector3df muevePersona = node->getPosition();
 
-    if(rotarPersona == rotarPersona.Z){
-        core::vector3df rot(0,0,90);// Esto gira el personaje 90 grados en el eje Z
-        node->setRotation(rot);
-    }else{
-        if(rotarPersona == rotarPersona.Y){
-
-        }
-    }
-    //MAS INFO SOBRE ROTAR EL PERSONAJE
-    ballPosition.Z += movement;
-    core::quaternion test;
-    test.fromAngleAxis(xAxisAngle, core::vector3df(1,0,0));
-    xAxisAngle += 0.1f;
-    test.normalize();
-    core::vector3df rot;
-    test.toEuler(rot);
-    ballSceneNode->setRotation(rot * core::RADTODEG);
-*/
-  
     core::vector3df nodePosition = n->getPosition();
+    
 /*
     // Variables de la camara
     core::vector3df nodeCamPosition = camera->getPosition();
@@ -238,42 +219,102 @@ void MotorGrafico::movimiento()
     nodeCamTarget.Y = nodePosition.Y;
 */
     // Comprobar teclas para mover el personaje y la camara
-    if(input.IsKeyDown(irr::KEY_KEY_W))
-    {
 
-      nodePosition.Y += MOVEMENT_SPEED;
-      //nodeCamPosition.Y += MOVEMENT_SPEED;
-      //nodeCamTarget.Y += MOVEMENT_SPEED;
+    if(input.IsKeyDown(irr::KEY_KEY_W)){
+        hagiradoD=false;
+        hagiradoA=false;
+        hagiradoS=false;
+
+        if(grados > 90){
+            if(grados <= 90){
+                hagiradoW=true;
+            }
+            if(grados > 90 && hagiradoW==false){
+                n->setRotation(core::vector3df(0,grados,0));
+                //cout << grados<< endl;
+                grados-=0.4;
+            }
+        }else{
+            if(grados >= 90){
+                hagiradoW=true;
+            }
+            if(grados < 90 && hagiradoW==false){
+                n->setRotation(core::vector3df(0,grados,0));
+                //cout << grados<< endl;
+                grados+=0.4;
+            }
+        }
+        nodePosition.Z += MOVEMENT_SPEED*dt;
+        //nodeCamPosition.Y += MOVEMENT_SPEED;
+        //nodeCamTarget.Y += MOVEMENT_SPEED;
     }
-    else if(input.IsKeyDown(irr::KEY_KEY_S))
-    {
-
-      nodePosition.Y -= MOVEMENT_SPEED;
-
-      //nodeCamPosition.Y -= MOVEMENT_SPEED;
-      //nodeCamTarget.Y -= MOVEMENT_SPEED;
+    else if(input.IsKeyDown(irr::KEY_KEY_S)){
+        hagiradoD=false;
+        hagiradoA=false;
+        hagiradoW=false;
+        if(grados >= 270){
+            hagiradoS=true;
+        }
+        if(grados < 270 && hagiradoS==false){
+            n->setRotation(core::vector3df(0,grados,0));
+            //cout << grados<< endl;
+            grados+=0.4;
+        }
+        nodePosition.Z -= MOVEMENT_SPEED*dt;
+        //nodeCamPosition.Y -= MOVEMENT_SPEED;
+        //nodeCamTarget.Y -= MOVEMENT_SPEED;
     }
+    if(input.IsKeyDown(irr::KEY_KEY_A)){
+        hagiradoD=false;
+        hagiradoW=false;
+        hagiradoS=false;
 
-    if(input.IsKeyDown(irr::KEY_KEY_A))
-    {
-
-        nodePosition.X -= MOVEMENT_SPEED;
-    
-        n->setRotation(core::vector3df(0,45,0));
-        // Esto gira el personaje 90 grados en el eje Z
-        //n->setRotation(rot);
-
-      //nodeCamPosition.X -= MOVEMENT_SPEED;
-      //nodeCamTarget.X -= MOVEMENT_SPEED;
+        if(grados > 180){
+            if(grados <= 180){
+                hagiradoA=true;
+            }
+            if(grados > 180 && hagiradoA==false){
+                n->setRotation(core::vector3df(0,grados,0));
+                //cout << grados<< endl;
+                grados-=0.4;
+            }
+        }else{
+            if(grados >= 180){
+                hagiradoA=true;
+            }
+            if(grados < 180 && hagiradoA==false){
+                n->setRotation(core::vector3df(0,grados,0));
+                //cout << grados<< endl;
+                grados+=0.4;
+            }
+        }
+        
+        nodePosition.X -= MOVEMENT_SPEED*dt;
+        //nodeCamPosition.X -= MOVEMENT_SPEED;
+        //nodeCamTarget.X -= MOVEMENT_SPEED;
     }
-    else if(input.IsKeyDown(irr::KEY_KEY_D))
-    {
-
-      nodePosition.X += MOVEMENT_SPEED;
+    else if(input.IsKeyDown(irr::KEY_KEY_D)){
+        hagiradoW=false;
+        hagiradoS=false;
+        hagiradoA=false;//Ha cabiado el giro ya no esta mirando hacia la izquierda
+        if(grados <= 0){
+            hagiradoD=true;
+        }
+        if(grados > 0 && hagiradoD==false){
+            n->setRotation(core::vector3df(0,grados,0));
+            cout << grados<< endl;
+            grados-=0.4;
+        }
+        nodePosition.X += MOVEMENT_SPEED*dt;
       //nodeCamPosition.X += MOVEMENT_SPEED;
       //nodeCamTarget.X += MOVEMENT_SPEED;
     }
-      core::vector3df rotaPersona = n->getRotation();
+    /*else{
+        if(grados >= 90 && hagiradoA==true){
+            grados=0;
+        }
+    }*/
+    core::vector3df rotaPersona = n->getRotation();
     n->setPosition(nodePosition);
     n->setRotation(rotaPersona);
     /*
