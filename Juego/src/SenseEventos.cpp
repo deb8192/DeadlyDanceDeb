@@ -18,7 +18,14 @@ void SenseEventos::update()
 {
     //nos recorremos los eventos de sonido
     tiempoFinal = clock();
-    double tiempoPasado = (double(tiempoFinal-tiempoInicio)/CLOCKS_PER_SEC);
+    
+    double tiempoPasado = 0.0;
+    
+    if(tiempoInicio != 0.0)
+    {
+       tiempoPasado = (double(tiempoFinal-tiempoInicio)/CLOCKS_PER_SEC);
+    }
+
     if(sonidos.size()>0)
     {
         for(std::size_t i=0;i<sonidos.size();i++)
