@@ -11,9 +11,12 @@ class eventoSonido
         int * getPropiedades();
         void restarTiempo(double tiempo);
         double getDuracion();
+        float getIntensidad();
 
     private:
         double duracion;
+        double duracionOriginal;
+        float multiplicador;//este valor se encarga de medir como de grande es la onda en cada momento
         int intensidad;
         int x,y,z;
         int propietario;

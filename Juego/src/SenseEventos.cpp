@@ -34,8 +34,9 @@ void SenseEventos::update()
             else
             {
                 int * propie = sonidos[i]->getPropiedades();
+                float inten = sonidos[i]->getIntensidad();
                 MotorGrafico * motor = MotorGrafico::getInstance();
-                motor->dibujarCirculoEventoSonido(propie[2],propie[3],propie[4],propie[0]);
+                motor->dibujarCirculoEventoSonido(propie[2],propie[3],propie[4],inten);
                 delete [] propie;
             }
             
