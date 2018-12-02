@@ -75,3 +75,7 @@ void Sala::definirID(int id)
 {
     posicion_en_grafica = id;
 }
+int Sala::getPosicionEnGrafica()
+{
+    return posicion_en_grafica;
+}
