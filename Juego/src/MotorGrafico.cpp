@@ -103,7 +103,7 @@ void MotorGrafico::updateMotorCinematica()
 
 void MotorGrafico::CrearCamara()
 {
-    smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,5,0));
+    camera = smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,5,0));
 }
 
 void MotorGrafico::PropiedadesDevice()
@@ -149,22 +149,41 @@ void MotorGrafico::borrarGui()
 
 
 void MotorGrafico::JointsTest()
-{   
-  n = smgr->addCubeSceneNode();
-  if (n)
-  {
-      n->setMaterialFlag(video::EMF_LIGHTING, false);
-      n->setPosition(core::vector3df(30,0,0));
-      n->setScale(core::vector3df(0.2,0.2,0.2));
-     // n->setMaterialTexture(0, driver->getTexture("assets/textures/Color.bmp"));
-      
-  }
-
- 
-    //movimiento; http://irrlicht.sourceforge.net/docu/example004.html
-
- 
+{  
+    me = smgr->getMesh("assets/models/objeto.3ds");
+   no = smgr->addAnimatedMeshSceneNode( me );      
   
+  if (me)
+  {
+      no->setMaterialFlag(video::EMF_LIGHTING, false);
+      no->setPosition(core::vector3df(30,0,0));
+      no->setRotation(core::vector3df(0,0,0));
+      no->setScale(core::vector3df(2,2,2));
+      no->setMaterialTexture(0, driver->getTexture("assets/textures/Color.bmp"));     
+  }   
+    mesh = smgr->getMesh("assets/models/objeto.3ds");
+  node = smgr->addAnimatedMeshSceneNode( mesh );      
+  
+  if (mesh)
+  {
+      node->setMaterialFlag(video::EMF_LIGHTING, false);
+      node->setPosition(core::vector3df(0,0,0));
+      node->setRotation(core::vector3df(0,0,0));
+      node->setScale(core::vector3df(6,6,6));
+      node->setMaterialTexture(0, driver->getTexture("assets/textures/Color.bmp"));     
+  }  
+
+    s = smgr->createTriangleSelectorFromBoundingBox(no); 
+    no->setTriangleSelector(s); 
+    s->drop();
+
+    anim = smgr->createCollisionResponseAnimator(
+	    s, node, core::vector3df(0,0,0),
+		core::vector3df(0,0,0), core::vector3df(0,0,0));
+	s->drop();
+	node->addAnimator(anim);
+	anim->drop();  
+
 }
 
 
@@ -172,19 +191,19 @@ void MotorGrafico::movimiento()
 {
 
     // This is the movemen speed in units per second.
-    const f32 MOVEMENT_SPEED = 4.f;
+    const f32 MOVEMENT_SPEED = 1.f;
     
     /* Check if keys W, S, A or D are being held down, and move the
     sphere node around respectively. */
-    core::vector3df nodePosition = n->getPosition();
+    core::vector3df nodePosition = no->getPosition();
 
     if(input.IsKeyDown(irr::KEY_KEY_W))
     {
-      nodePosition.Y += MOVEMENT_SPEED;
+      nodePosition.Z += MOVEMENT_SPEED;
     }
     else if(input.IsKeyDown(irr::KEY_KEY_S))
     {
-      nodePosition.Y -= MOVEMENT_SPEED;
+      nodePosition.Z -= MOVEMENT_SPEED;
     }
 
     if(input.IsKeyDown(irr::KEY_KEY_A))
@@ -195,7 +214,7 @@ void MotorGrafico::movimiento()
     {
       nodePosition.X += MOVEMENT_SPEED;
     }
-    n->setPosition(nodePosition);
+    no->setPosition(nodePosition);
 }
 
 bool MotorGrafico::estaPulsado(int boton)
