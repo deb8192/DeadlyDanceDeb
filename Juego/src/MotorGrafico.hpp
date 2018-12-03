@@ -84,7 +84,25 @@ using namespace idsEventos;
             IGUISkin *skin;
             Inputs input;
 
-             scene::ISceneNode *n;
+            scene::ISceneNode *n;
+            scene::ISceneNode *nodo;
+            scene::ICameraSceneNode* camera;
+            scene::ISceneNodeAnimator* anim = 0; 
+            scene::ITriangleSelector* s = 0; 
+            scene::IAnimatedMeshSceneNode* node = 0; 
+             scene::IAnimatedMeshSceneNode* no = 0; 
+            scene::IAnimatedMesh* me; 
+            scene::IAnimatedMesh* mesh; 
+ 
+            enum
+            {
+                ID_IsNotPickable = 0,
+
+                IDFlag_IsPickable = 1 << 0,
+
+                IDFlag_IsHighlightable = 1 << 1
+            };
+
    
     };
 

@@ -35,9 +35,6 @@ void Juego::Update()
     //cout << "\e[24m Aqui \e[0m" << endl;
     if(motor->ocurreEvento(101))//cambiamos de estado porque han pulsado boton jugar
     {
-        //limpiamos el gui y la scena
-        motor->borrarScena();
-        motor->borrarGui();
         Jugar();
     }
     if(motor->ocurreEvento(102))//salimos del juego
@@ -57,6 +54,10 @@ void Juego::Jugar()
 {
      if(!cambioEstado)
     {
+        //limpiamos el gui y la scena
+        motor->borrarScena();
+        motor->borrarGui();
+        
         estado = &jugando;//se cambia a estado jugando
         estado->Ini();
     }
