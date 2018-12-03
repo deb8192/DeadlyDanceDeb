@@ -18,7 +18,7 @@ class Pathfinder
         int comprobarListas(Sala*, vector <struct NodeRecord> lista);
         int  calcularCostes(struct NodeRecord, Sala*);
         bool coincide(Sala*, Sala*);
-        vector <struct NodeRecord> encontrarCamino(Nivel, Sala*, Sala*, float);
+        vector <struct NodeRecord> encontrarCamino(Sala*, Sala*);
         void getSmallest();
     private:
         struct NodeRecord{
@@ -31,5 +31,6 @@ class Pathfinder
         vector <struct NodeRecord> listaAbierta;
         vector <struct NodeRecord> listaCerrada;
         vector <struct NodeRecord> camino;
+        vector <struct NodeRecord> conexiones;
 };
 #endif
