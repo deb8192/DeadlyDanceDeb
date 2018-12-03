@@ -1,6 +1,6 @@
 #include "Estado.hpp"
 #include "MotorGrafico.hpp"
-
+#include "MotorAudio.hpp"
 
 void Menu::Draw()
 {
@@ -16,6 +16,9 @@ void Menu::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorMenu();
+
+    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
+    motora->update(false);
 }
 
 int Menu::Esta()

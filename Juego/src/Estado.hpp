@@ -27,7 +27,7 @@ class Menu: public Estado{
         void Clean();
         void Update();
         int Esta();
-        //MotorGrafico *motor = MotorGrafico::getInstance();   
+        //MotorGrafico *motor = MotorGrafico::getInstance();
 };
 
 class Jugando: public Estado{
@@ -36,7 +36,7 @@ class Jugando: public Estado{
         void Clean();
         void Update();
         int Esta();
-        //MotorGrafico *motor = MotorGrafico::getInstance();   
+        //MotorGrafico *motor = MotorGrafico::getInstance();
 };
 
 class Cinematica: public Estado{
@@ -45,7 +45,7 @@ class Cinematica: public Estado{
         void Clean();
         void Update();
         int Esta();
-        //MotorGrafico *motor = MotorGrafico::getInstance();   
+        //MotorGrafico *motor = MotorGrafico::getInstance();
 };
 
 #endif /* ESTADO_HPP */

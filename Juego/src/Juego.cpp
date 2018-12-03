@@ -55,5 +55,6 @@ void Juego::Salir()
 //cuando se presiona boton de jugar
 void Juego::Jugar()
 {
+
     estado = &jugando;//se cambia a estado jugando
 }
