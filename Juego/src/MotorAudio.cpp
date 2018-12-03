@@ -1,50 +1,56 @@
 #include "MotorAudio.hpp"
 
-MotorAudio* MotorAudio::maudio_instancia = 0;
-
-//Comprobar errores en FMOD
-void MotorAudio::ERRCHECK(FMOD_RESULT result)
-{
-  if (result != FMOD_OK){
-     printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
-     exit(-1);
-  }
-}
+MotorAudioSystem* MotorAudioSystem::maudio_instancia = 0;
 
 //Constructor
-MotorAudio::MotorAudio()
+MotorAudioSystem::MotorAudioSystem()
 {
   //Creamos el sistema
-  ERRCHECK(FMOD::Studio::System::create(&pSystem));
+  ERRCHECK(FMOD::Studio::System::create(&pstudioSystem));
 
   //Obtener LOW-level system
-  ERRCHECK(pSystem->getLowLevelSystem(&plSystem));
-  ERRCHECK(plSystem->setSoftwareFormat(0,FMOD_SPEAKERMODE_5POINT1, 0));
-  ERRCHECK(plSystem->setOutput(FMOD_OUTPUTTYPE_AUTODETECT));
+  ERRCHECK(pstudioSystem->getLowLevelSystem(&plowSystem));
+  ERRCHECK(plowSystem->setSoftwareFormat(0,FMOD_SPEAKERMODE_5POINT1, 0));
+  ERRCHECK(plowSystem->setOutput(FMOD_OUTPUTTYPE_AUTODETECT));
 
   //Inicializar la instancia con x canales
-  ERRCHECK(pSystem->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, 0));
+  ERRCHECK(pstudioSystem->initialize(1024, FMOD_STUDIO_INIT_NORMAL, FMOD_INIT_NORMAL, 0));
+
+  //Cargar Banco Maestro
+  ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/Master Bank.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &masterBank));
+  ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/Master Bank.strings.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &stringsBank));
+
+  //Cargar Bancos
+  FMOD::Studio::Bank* pBank;
+  ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/Music.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
+  if(pBank)banks["Music"] = pBank; //Insertar en el mapa de Bancos
+
+  //Cargar eventos
+  FMOD::Studio::EventDescription* pEventInstance;
+  ERRCHECK(pstudioSystem->getEvent("event:/Music/Level 01", &pEventInstance));
+  if(pEventInstance)eventDescriptions["Level01"] = pEventInstance; //Insertar en el mapa de descripcion de eventos
+  ERRCHECK(pstudioSystem->getEvent("event:/Music/Level 02", &pEventInstance));
+  if(pEventInstance)eventDescriptions["Level02"] = pEventInstance;
+  ERRCHECK(pstudioSystem->getEvent("event:/Music/Level 03", &pEventInstance));
+  if(pEventInstance)eventDescriptions["Level03"] = pEventInstance;
+
+ //***********EJEMPLO DE EJECUCION MUSICA*****************
+  FMOD::Studio::EventInstance* eventInstance;
+  ERRCHECK(eventDescriptions["Level02"]->createInstance(&eventInstance));
+  ERRCHECK(eventInstance->start());
+
 }
 
-MotorAudio::~MotorAudio()
+//Destructor
+MotorAudioSystem::~MotorAudioSystem()
 {
-
+  ERRCHECK(pstudioSystem->unloadAll());
+  ERRCHECK(pstudioSystem->release());
 }
 
-//Crear sonido
-void MotorAudio::createSound(ClaseSonido *pSound, const char* pFile)
+//Actualizar
+void MotorAudioSystem::update(bool paused)
 {
-  ERRCHECK(plSystem->createSound(pFile, FMOD_3D, 0, pSound));
-}
-
-//Ejecutar sonido
-void MotorAudio::playSound(ClaseSonido pSound)
-{
-  ERRCHECK(plSystem->playSound(pSound, 0, false, 0));
-}
-
-//Liberar sonido
-void MotorAudio::releaseSound(ClaseSonido pSound)
-{
-  pSound->release();
+  //Actualizar systema, una vez por frame (si no estas en pausa)
+  if(paused == false)ERRCHECK(pstudioSystem->update());
 }
