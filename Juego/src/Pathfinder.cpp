@@ -15,7 +15,7 @@ int Pathfinder::comprobarListas(Sala* nodo, vector <struct NodeRecord> lista)
             i++;
         }
     }
-    return 0;
+    return -1;
 }
 
 int Pathfinder::calcularCostes(struct NodeRecord nodo, Sala* destino)
@@ -25,9 +25,14 @@ int Pathfinder::calcularCostes(struct NodeRecord nodo, Sala* destino)
     int * datosDestino = destino->getSizes();
 
     //Se saca la distancia entre las salas (vector)
-    double costeX = datosDestino[2] - datosOrigen[2];
-    double costeY = datosDestino[3] - datosOrigen[3];
-    double costeZ = datosDestino[4] - datosOrigen[4];
+
+    cout << "Datos" << datosDestino[2] << " " << datosOrigen[2] <<endl;
+    cout << "Datos" << datosDestino[3] << " " << datosOrigen[3] <<endl;
+    cout << "Datos" << datosDestino[4] << " " << datosOrigen[4] <<endl;
+    cout << "Coste" << nodo.costSoFar <<endl;
+    double costeX = abs(datosDestino[2] - datosOrigen[2]);
+    double costeY = abs(datosDestino[3] - datosOrigen[3]);
+    double costeZ = abs(datosDestino[4] - datosOrigen[4]);
 
     //Se obtiene la distancia en un valor (modulo del vector)
     double coste = pow(costeX, 2) + pow(costeY, 2) + pow(costeZ, 2);
@@ -53,20 +58,23 @@ void Pathfinder::getSmallest()
 
 bool Pathfinder::coincide(Sala *nodo, Sala *end)
 {
+                cout << "Pero comrpueba?" <<endl;
     if(nodo->getPosicionEnGrafica() == end->getPosicionEnGrafica())
     {
         return true;
     }
     return false;
 }
-std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Nivel instanciaNivel, Sala *start, Sala *end, float totalCostSoFar)
+std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *start, Sala *end)
 {
+
+    cout << "Entra" << endl;
     startNodo.nodo = start;
     startNodo.conexion = NULL;
     startNodo.costSoFar = 0;
     startNodo.estimatedTotalCost = calcularCostes(startNodo, end);
 
-    vector <Sala*> conexiones;
+    vector <Sala*> salas;
 
     listaAbierta.push_back(startNodo);
 
@@ -76,37 +84,54 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Nivel in
 
     while(listaAbierta.size() > 0)
     {
+        int estaCerrado = -1, estaAbierto = -1;
+        cout << "Bucle" << listaAbierta.size() << endl;
         Pathfinder::getSmallest();     //Se obtiene el nodo con menor coste estimado
         termina = coincide(actualNodo.nodo, end);             //SE comprueba si es el último (la primera vez solo comprueba la sala start).
 
         //Si las salas coinciden, se ha llegado al final y se acaba la ejecucion.
         if(termina)                                 
         {
+            cout << "Devuelve el camino" << endl;
             //Falta hacer el camino inverso
-            while(coincide(actualNodo.nodo, start) == false)
+            while(!coincide(actualNodo.nodo, start))
             {
+                cout << "Pero coincide?" <<endl;
+                cout << "Nodo " <<actualNodo.nodo->getPosicionEnGrafica() << endl;
+                cout << "Nodo " <<start->getPosicionEnGrafica() << endl;
+                cout << "Conexion " <<actualNodo.conexion->nodo->getPosicionEnGrafica() << endl;
                 camino.insert(camino.begin(), actualNodo);
+
+                cout << "Pero continua?" <<endl;
                 actualNodo = *actualNodo.conexion;
             }
+                cout << "Sale" <<endl;
+            camino.insert(camino.begin(), actualNodo);
             return camino;
         }
         //En caso contrario comprobamos las demas salas conectadas a la sala actual
         else
         {
-            conexiones = actualNodo.nodo->getSalidas();
-            for(i = 0; i < conexiones.size(); i++)
+            cout << "No devuelve el camino" << endl;
+            salas = actualNodo.nodo->getSalidas();
+            for(i = 0; i < salas.size(); i++)
             {
-                Sala * sala = conexiones.at(i);
+                Sala * sala = salas.at(i);
+                cout << "Nodo " <<actualNodo.nodo->getPosicionEnGrafica() << endl;
+                cout << "Nodo " <<sala->getPosicionEnGrafica() << endl;
                 int costeLlegada = calcularCostes(actualNodo, sala);
-                int estaCerrado = 0, estaAbierto = 0;
+                cout << "conexiones " << salas.size() << endl;
+                cout << costeLlegada << endl;
 
                 //Se comprueba si la sala actual esta en la lista cerrada
                 estaCerrado = comprobarListas(sala, listaCerrada);
+                cout << estaCerrado << endl;
 
                 //Se comprueba si la sala actual esta en la lista cerrada
                 estaAbierto = comprobarListas(sala, listaAbierta);
+                cout << estaAbierto << endl;
 
-                if(estaCerrado > 0)
+                if(estaCerrado >= 0)
                 {
                     endNodo = listaCerrada.at(estaCerrado);
                         
@@ -119,7 +144,7 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Nivel in
                     }
                 }
 
-                else if(estaAbierto > 0)
+                else if(estaAbierto >= 0)
                 {
                     endNodo = listaAbierta.at(estaAbierto);
 
@@ -134,22 +159,30 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Nivel in
                 else
                 {
                     endNodo.nodo = sala;
+                    endNodo.costSoFar = costeLlegada;
                     endNodo.estimatedTotalCost = calcularCostes(endNodo, end);
+                    cout << endNodo.estimatedTotalCost <<endl;
                 }
 
                 //Se han hecho todas las comprobaciones y se deben
                 //terminar de rellenar todos los datos del nodo
-                endNodo.costSoFar = costeLlegada;
-                endNodo.conexion = &actualNodo;
+                conexiones.push_back(actualNodo);
+                endNodo.conexion = &conexiones.back();
                 endNodo.estimatedTotalCost += costeLlegada;
 
-                estaAbierto = comprobarListas(actualNodo.nodo, listaAbierta);
-                if(estaAbierto != 0)
+                cout << "Nodo " <<actualNodo.nodo->getPosicionEnGrafica() << endl;
+                cout << "End " <<endNodo.nodo->getPosicionEnGrafica() << endl;
+                cout << "Conexion " <<endNodo.conexion->nodo->getPosicionEnGrafica() << endl;
+
+                estaAbierto = comprobarListas(endNodo.nodo, listaAbierta);
+                if(estaAbierto < 0)
                 {
-                    listaAbierta.erase(listaAbierta.begin() + estaAbierto);
+                    listaAbierta.push_back(endNodo);
                 }
-                listaCerrada.push_back(actualNodo);
             }
+            estaAbierto = comprobarListas(actualNodo.nodo, listaAbierta);
+            listaAbierta.erase(listaAbierta.begin() + estaAbierto);
+            listaCerrada.push_back(actualNodo);
         }
     }
     return camino;

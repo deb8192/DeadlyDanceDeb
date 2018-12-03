@@ -30,6 +30,10 @@ class Nivel
         void CrearObjeto(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         Sala * CrearPlataforma(int x,int y,int z, int ancho, int largo, int centro, const char *ruta_objeto, const char *ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
+        Sala * getPrimeraSala();
+
+        //Pruebas Pathfinding
+        Enemigo getPrimerEnemigo();
         
 
     private:

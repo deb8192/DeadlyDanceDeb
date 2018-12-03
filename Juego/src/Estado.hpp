@@ -1,6 +1,9 @@
+
+#include <iostream>
+
+
 #ifndef ESTADO_HPP
 #define ESTADO_HPP
-#include <iostream>
 
 //aqui definimos la clase interfaz de los estados
 class Estado {
