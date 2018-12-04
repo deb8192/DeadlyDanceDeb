@@ -52,6 +52,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                     padre = nodo;
                     behavior_tree = new Arbol(nodo, tool.name());
                }
+               //Faltaria comprobar otro tipo de nodos raiz pero principalmente seran secuencias o selectores
             }
             //Se crean el resto de nodos del arbol
             else
@@ -63,7 +64,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                     ID >> IDInt;
                     tipo >> tipoInt;
                     nodo = new Composicion(IDInt, tipoInt, padre);
-                    //padre->addHijo(nodo);
+                    
                     padre = nodo;
                 }
                 else if(std::strcmp(tool.name(), "Decorator") == 0)

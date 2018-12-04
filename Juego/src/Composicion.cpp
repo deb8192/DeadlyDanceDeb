@@ -10,10 +10,10 @@ Composicion::Composicion(int idxml, int type, Nodo *father)
     padre = father;
 }
 
-/*void Composicion::addHijo(Nodo* hijo)
+void Composicion::addHijo(Nodo* hijo)
 {
     hijos.push_back(*hijo);
-}*/
+}
 
 int Composicion::getID()
 {
