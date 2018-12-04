@@ -1,7 +1,7 @@
 #include "Estado.hpp"
 #include "MotorGrafico.hpp"
 #include "MotorAudio.hpp"
-
+using namespace std;
 void Menu::Draw()
 {
     //contiene los pintados del menu
@@ -17,7 +17,14 @@ void Menu::Update()
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorMenu();
 
+    //Motor de audio
     MotorAudioSystem *motora = MotorAudioSystem::getInstance();
+    motora->setListenerPosition(0.0f, 0.0f, 0.0f);
+    //Reproducir evento
+    motora->getEvent("Level02")->setVolume(1.0f);
+    motora->getEvent("Level02")->setPosition(0.0f, 0.0f, 0.0f);
+    motora->getEvent("Level02")->start();
+    //Actualiza el motor de audio
     motora->update(false);
 }
 

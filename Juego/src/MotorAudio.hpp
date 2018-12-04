@@ -33,10 +33,9 @@ struct MotorAudioSystem
         return maudio_instancia;
     }
 
-    MotorAudioEvent* getEvent(std::string eventPath); //Contruye un Motoraudioevent a partir de un evento
-    void setVolume(float vol);                        //Volumen del motor
-    void setListenerPosition(Vector3 pos);            //posicion del punto de escucha
-    void update(bool paused);                         //Actualizar motor
+    MotorAudioEvent* getEvent(std::string name);                   //Devuelve el evento con un nombre
+    void setListenerPosition(float posx, float posy, float posz);  //posicion del punto de escucha
+    void update(bool paused);                                      //Actualizar motor
 
     //Comprobar errores en FMOD
     void ERRCHECK(FMOD_RESULT result)
@@ -46,9 +45,10 @@ struct MotorAudioSystem
          exit(-1);
       }
     }
+
   private:
 
-    MotorAudioSystem();                         //Singleton
+    MotorAudioSystem();                           //Singleton
     static MotorAudioSystem* maudio_instancia;
 
     FMOD::Studio::System* pstudioSystem;          //Puntero de instancia a FMOD
@@ -58,27 +58,33 @@ struct MotorAudioSystem
     std::map<std::string, FMOD::Studio::Bank*> banks;       //Mapa de bancos
     std::map<std::string, FMOD::Studio::EventDescription*> eventDescriptions;  //Mapa de descripcion de eventos
     std::map<std::string, MotorAudioEvent*> MotorAudioEvents;                  //Mapa con MotorAudioEvents
-
 };
 
 //Motor de audio de eventos
 class MotorAudioEvent
 {
   public:
-    MotorAudioEvent();
-    virtual ~MotorAudioEvent() = 0;   //Clase abstracta
+    MotorAudioEvent(FMOD::Studio::EventDescription* eventdesc);
+    ~MotorAudioEvent();
 
-    virtual void start();          //Reproducir el evento
+    void start();                  //Reproducir el evento
     void stop();                   //Detener el evento
     void pause();                  //Pausar el evento, start() continuar reproduccion
     void setVolume(float vol);     //Modifica el volumen del evento (entre 0 y 1)
-    void setGain(float gain);      //Modifica el volumen con ganancia (entre 0 y 1)
-    void setPosition(Vector3 pos); //Posicion 3D del evento
+    void setPosition(float posx, float posy, float posz); //Posicion 3D del evento
     bool isPlaying();              //Si el evento esta sonando
 
-  protected:
+    //Comprobar errores en FMOD
+    void ERRCHECK(FMOD_RESULT result)
+    {
+      if (result != FMOD_OK){
+         printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
+         exit(-1);
+      }
+    }
+
+  private:
     FMOD::Studio::EventInstance* soundInstance;
-    virtual MotorAudioEvent* newMotorAudioEvent(FMOD::Studio::EventInstance*) = 0;
 };
 
 #endif
