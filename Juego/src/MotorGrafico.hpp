@@ -92,9 +92,11 @@ using namespace idsEventos;
             f32 zAxisAngle = 0;
             float dt;
             float grados;
+            bool atras;
             float newTime, frameTime, interpolation;
             u32 currentTime;
             float acumulator;
+            bool del, det, izq, der;
     };
 
 #endif /* MotorGrafico_HPP */

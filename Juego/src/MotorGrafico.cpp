@@ -179,7 +179,7 @@ void MotorGrafico::setThen(){
 void MotorGrafico::movimiento()
 {
     //variables
-    const f32 MOVEMENT_SPEED = 6;   
+    const f32 MOVEMENT_SPEED = 0.6;   
     
     //Interpolacion
     newTime = device->getTimer()->getTime();
@@ -190,11 +190,7 @@ void MotorGrafico::movimiento()
     currentTime = newTime;
     acumulator += frameTime;
     while(acumulator >= dt)
-    {
-        acumulator -= dt; 
-    }
-
-   
+    {  
     
 /* Hay codigo de marines 
     // Variables de la camara
@@ -210,8 +206,9 @@ void MotorGrafico::movimiento()
      core::vector3df nodePosition = n->getPosition();
 
     // Comprobar teclas para mover el personaje y la camara
-   
-    if(input.IsKeyDown(irr::KEY_KEY_W)){  
+       
+    if(input.IsKeyDown(irr::KEY_KEY_W)){ 
+        atras = false;
         
         nodePosition.X += MOVEMENT_SPEED*sin(grados*DEGTORAD)*dt;
         nodePosition.Z += MOVEMENT_SPEED*cos(grados*DEGTORAD)*dt;
@@ -219,16 +216,25 @@ void MotorGrafico::movimiento()
         //nodeCamTarget.Y += MOVEMENT_SPEED;
     }
     else if(input.IsKeyDown(irr::KEY_KEY_S)){
+        atras = true;
         
         nodePosition.X -= MOVEMENT_SPEED*sin(grados*DEGTORAD)*dt;
         nodePosition.Z -= MOVEMENT_SPEED*cos(grados*DEGTORAD)*dt;
         //nodeCamPosition.Y -= MOVEMENT_SPEED;
         //nodeCamTarget.Y -= MOVEMENT_SPEED;
     }
+
     if(input.IsKeyDown(irr::KEY_KEY_A)){
        
         n->setRotation(core::vector3df(0,grados,0));
-        grados-=0.4;
+        if(atras)
+        {
+            grados+=2*dt;
+        }
+        else
+        {
+            grados-=2*dt;
+        }
         
         //nodeCamPosition.X -= MOVEMENT_SPEED;
         //nodeCamTarget.X -= MOVEMENT_SPEED;
@@ -236,7 +242,14 @@ void MotorGrafico::movimiento()
     else if(input.IsKeyDown(irr::KEY_KEY_D)){
                 
         n->setRotation(core::vector3df(0,grados,0));
-        grados+=0.4;
+        if(atras)
+        {
+            grados-=2*dt;
+        }
+        else
+        {
+            grados+=2*dt;
+        }
                 
       //nodeCamPosition.X += MOVEMENT_SPEED;
       //nodeCamTarget.X += MOVEMENT_SPEED;
@@ -247,7 +260,9 @@ void MotorGrafico::movimiento()
    
     /*camera->setPosition(nodeCamPosition);
     camera->setTarget(nodeCamTarget);*/
-    
+
+        acumulator -= dt;  
+    }
 }
 
 bool MotorGrafico::estaPulsado(int boton)
