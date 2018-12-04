@@ -67,3 +67,13 @@ void Nivel::CrearLuz(int x,int y,int z)
     motor->CargarLuces(x,y,z);
 }
 
+//Purebas pathfinding
+Sala * Nivel::getPrimeraSala()
+{
+    return primeraSala;
+}
+
+Enemigo  Nivel::getPrimerEnemigo()
+{
+    return enemigos.at(1);
+}
