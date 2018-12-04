@@ -103,7 +103,7 @@ void MotorGrafico::updateMotorCinematica()
 
 void MotorGrafico::CrearCamara()
 {
-    smgr->addCameraSceneNode(0, vector3df(0,-30,30), vector3df(0,15,0)); //primer vector traslacion, segundo rotacion
+    smgr->addCameraSceneNode(0, vector3df(0,0,90), vector3df(0,0,0)); //primer vector traslacion, segundo rotacion
 }
 
 void MotorGrafico::PropiedadesDevice()
