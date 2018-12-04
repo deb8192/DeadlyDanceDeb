@@ -51,8 +51,12 @@ void Jugando::Update()
     MotorGrafico *motor = MotorGrafico::getInstance();
     Nivel *nivel = Nivel::getInstance();//se recoge la instancia de nivel
     motor->updateMotorJuego();
-    Pathfinder path;
-    vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(nivel->getPrimerEnemigo().getSala(), nivel->getPrimeraSala());
+    //Prueba de Patfinder
+    if(motor->estaPulsado(8))
+    {
+        Pathfinder path;
+        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(nivel->getPrimerEnemigo().getSala(), nivel->getPrimeraSala());
+    }
 }
 
 int Jugando::Esta()
