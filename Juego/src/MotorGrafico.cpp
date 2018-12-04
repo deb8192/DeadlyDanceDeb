@@ -4,6 +4,9 @@ MotorGrafico* MotorGrafico::unica_instancia = 0;
 //fin indicador singleton
 //#include <Box2D/Box2D.h>
 
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
+
 MotorGrafico::MotorGrafico()
 {
     input.setDevice(device);//lo  utilizamos para que los eventos puedan llamar a funciones de 
@@ -164,35 +167,19 @@ void MotorGrafico::JointsTest()
       n->setMaterialTexture(0, driver->getTexture("assets/textures/sydney.bmp"));
       n->setPosition(core::vector3df(30,0,0));
   }
- /*      
-  if (mesh)
-  {      
-      node->setMaterialFlag(video::EMF_LIGHTING, false);
-      node->setMD2Animation(scene::EMAT_STAND);
-      node->setScale(core::vector3df(1,1,1));
-      node->setMaterialTexture(0, driver->getTexture("assets/textures/sydney.bmp"));
-      node->setPosition(core::vector3df(30,0,0));
 
-  }*/
-    //movimiento; http://irrlicht.sourceforge.net/docu/example004.html
 }
 void MotorGrafico::setThen(){
+    
+    currentTime = device->getTimer()->getTime();//buscar que devuelve cada interacion
+	acumulator = 0.0f;
     dt =1.0f/60.0f;
 }
-/*const f32 getdt(){
-    return dt;
-}*/
+
 void MotorGrafico::movimiento()
 {
     //variables
-    const f32 MOVEMENT_SPEED = 2.f;
-    bool hagiradoA;
-    bool hagiradoD;
-    bool hagiradoW;
-    bool hagiradoS;
-    float newTime, frameTime, interpolation;
-    u32 currentTime = device->getTimer()->getTime();//buscar que devuelve cada interacion
-	float acumulator = 0.0f;
+    const f32 MOVEMENT_SPEED = 10;   
     
     //Interpolacion
     newTime = device->getTimer()->getTime();
@@ -201,13 +188,15 @@ void MotorGrafico::movimiento()
         frameTime=0.25f;
     }
     currentTime = newTime;
-    acumulator+=frameTime;
-    acumulator -= dt; 
-	interpolation = acumulator/dt;
+    acumulator += frameTime;
+    while(acumulator >= dt)
+    {
+        acumulator -= dt; 
+    }
 
-    core::vector3df nodePosition = n->getPosition();
+   
     
-/*
+/* Hay codigo de marines 
     // Variables de la camara
     core::vector3df nodeCamPosition = camera->getPosition();
     core::vector3df nodeCamTarget = camera->getTarget();
@@ -218,107 +207,48 @@ void MotorGrafico::movimiento()
     nodeCamTarget.X = nodePosition.X;
     nodeCamTarget.Y = nodePosition.Y;
 */
+     core::vector3df nodePosition = n->getPosition();
+     
     // Comprobar teclas para mover el personaje y la camara
-
-    if(input.IsKeyDown(irr::KEY_KEY_W)){
-        hagiradoD=false;
-        hagiradoA=false;
-        hagiradoS=false;
-
-        if(grados > 90){
-            if(grados <= 90){
-                hagiradoW=true;
-            }
-            if(grados > 90 && hagiradoW==false){
-                n->setRotation(core::vector3df(0,grados,0));
-                //cout << grados<< endl;
-                grados-=0.4;
-            }
-        }else{
-            if(grados >= 90){
-                hagiradoW=true;
-            }
-            if(grados < 90 && hagiradoW==false){
-                n->setRotation(core::vector3df(0,grados,0));
-                //cout << grados<< endl;
-                grados+=0.4;
-            }
-        }
-        nodePosition.Z += MOVEMENT_SPEED*dt;
+    if(input.IsKeyDown(irr::KEY_KEY_E)){  
+        nodePosition.X = 0;
+        nodePosition.Z = 0;
+    }
+    if(input.IsKeyDown(irr::KEY_KEY_W)){  
+        
+        nodePosition.X += MOVEMENT_SPEED*sin(grados*DEGTORAD)*dt;
+        nodePosition.Z += MOVEMENT_SPEED*cos(grados*DEGTORAD)*dt;
         //nodeCamPosition.Y += MOVEMENT_SPEED;
         //nodeCamTarget.Y += MOVEMENT_SPEED;
     }
     else if(input.IsKeyDown(irr::KEY_KEY_S)){
-        hagiradoD=false;
-        hagiradoA=false;
-        hagiradoW=false;
-        if(grados >= 270){
-            hagiradoS=true;
-        }
-        if(grados < 270 && hagiradoS==false){
-            n->setRotation(core::vector3df(0,grados,0));
-            //cout << grados<< endl;
-            grados+=0.4;
-        }
-        nodePosition.Z -= MOVEMENT_SPEED*dt;
+        
+        nodePosition.X -= MOVEMENT_SPEED*sin(grados*DEGTORAD)*dt;
+        nodePosition.Z -= MOVEMENT_SPEED*cos(grados*DEGTORAD)*dt;
         //nodeCamPosition.Y -= MOVEMENT_SPEED;
         //nodeCamTarget.Y -= MOVEMENT_SPEED;
     }
     if(input.IsKeyDown(irr::KEY_KEY_A)){
-        hagiradoD=false;
-        hagiradoW=false;
-        hagiradoS=false;
-
-        if(grados > 180){
-            if(grados <= 180){
-                hagiradoA=true;
-            }
-            if(grados > 180 && hagiradoA==false){
-                n->setRotation(core::vector3df(0,grados,0));
-                //cout << grados<< endl;
-                grados-=0.4;
-            }
-        }else{
-            if(grados >= 180){
-                hagiradoA=true;
-            }
-            if(grados < 180 && hagiradoA==false){
-                n->setRotation(core::vector3df(0,grados,0));
-                //cout << grados<< endl;
-                grados+=0.4;
-            }
-        }
+       
+        n->setRotation(core::vector3df(0,grados,0));
+        grados-=0.4;
         
-        nodePosition.X -= MOVEMENT_SPEED*dt;
         //nodeCamPosition.X -= MOVEMENT_SPEED;
         //nodeCamTarget.X -= MOVEMENT_SPEED;
     }
     else if(input.IsKeyDown(irr::KEY_KEY_D)){
-        hagiradoW=false;
-        hagiradoS=false;
-        hagiradoA=false;//Ha cabiado el giro ya no esta mirando hacia la izquierda
-        if(grados <= 0){
-            hagiradoD=true;
-        }
-        if(grados > 0 && hagiradoD==false){
-            n->setRotation(core::vector3df(0,grados,0));
-            cout << grados<< endl;
-            grados-=0.4;
-        }
-        nodePosition.X += MOVEMENT_SPEED*dt;
+                
+        n->setRotation(core::vector3df(0,grados,0));
+        grados+=0.4;
+                
       //nodeCamPosition.X += MOVEMENT_SPEED;
       //nodeCamTarget.X += MOVEMENT_SPEED;
     }
-    /*else{
-        if(grados >= 90 && hagiradoA==true){
-            grados=0;
-        }
-    }*/
     core::vector3df rotaPersona = n->getRotation();
     n->setPosition(nodePosition);
     n->setRotation(rotaPersona);
-    /*
-    camera->setPosition(nodeCamPosition);
+   
+    /*camera->setPosition(nodeCamPosition);
     camera->setTarget(nodeCamTarget);*/
     
 }

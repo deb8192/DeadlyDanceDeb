@@ -12,6 +12,7 @@ int main()
 
     // In order to do framerate independent movement, we have to know
     // how long it was since the last frame
+	
 	juego->setMotorThen();
 
 	while(juego->Running())//comprobamos que esta activo el dispositivo
