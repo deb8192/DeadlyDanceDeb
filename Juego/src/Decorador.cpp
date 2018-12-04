@@ -3,8 +3,9 @@
 
 using namespace std;
 
-Decorador::Decorador(int idxml, int type, Nodo *father, const char* end, const char* alternative)
+Decorador::Decorador(const char* name, int idxml, int type, Nodo *father, const char* end, const char* alternative)
 {
+    nombre = name;
     id = idxml;
     tipo = type;
     padre = father;
@@ -20,4 +21,8 @@ void Decorador::addHijo(Nodo* hijo)
 int Decorador::getID()
 {
     return id;
+}
+const char* Decorador::getNombre()
+{
+    return nombre;
 }

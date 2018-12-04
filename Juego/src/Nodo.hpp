@@ -7,24 +7,28 @@
 #ifndef Nodo_HPP
 #define Nodo_HPP
 
+using namespace std;
+
 class Nodo
 {
     public:
-        int getID();
+        virtual int getID();
+        virtual const char*  getNombre();
         
     protected:
         int id;
         int tipo;
-        std::string nombre;
+        const char* nombre;
         Nodo *padre;
 };
 
 class Composicion: public Nodo
 {
     public:
-        Composicion(int, int, Nodo*);
+        Composicion(const char*, int, int, Nodo*);
         void addHijo(Nodo*);
         int getID();
+        const char* getNombre();
     private:
         std::vector<Nodo> hijos;
 };
@@ -32,9 +36,10 @@ class Composicion: public Nodo
 class Decorador: public Nodo
 {
     public:
-        Decorador(int, int, Nodo*, const char*, const char*);
+        Decorador(const char*, int, int, Nodo*, const char*, const char*);
         void addHijo(Nodo*);
         int getID();
+        const char* getNombre();
     private:
         std::vector<Nodo> hijos;
         std::string fin;
@@ -45,8 +50,9 @@ class Decorador: public Nodo
 class Hoja: public Nodo
 {
     public:
-        Hoja(int, int, Nodo*, const char*, const char*, const char*, int, const char*);
+        Hoja(const char*, int, int, Nodo*, const char*, const char*, const char*, int, const char*);
         int getID();
+        const char* getNombre();
     private:
         std::string accion;
         std::string objetivo;
