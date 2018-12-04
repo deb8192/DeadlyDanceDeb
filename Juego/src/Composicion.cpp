@@ -3,8 +3,9 @@
 
 using namespace std;
 
-Composicion::Composicion(int idxml, int type, Nodo *father)
+Composicion::Composicion(const char* name, int idxml, int type, Nodo *father)
 {
+    nombre = name;
     id = idxml;
     tipo = type;
     padre = father;
@@ -18,4 +19,8 @@ void Composicion::addHijo(Nodo* hijo)
 int Composicion::getID()
 {
     return id;
+}
+const char* Composicion::getNombre()
+{
+    return nombre;
 }

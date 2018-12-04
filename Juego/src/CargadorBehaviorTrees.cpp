@@ -38,6 +38,8 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                 i++;
             }
             cout<<endl;
+
+            
             //Se crea y actualizan los nodos del arbol.
             if(std::strcmp(tool.name(), "root") == 0)
             {
@@ -48,7 +50,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                     tipo << atributos[1];
                     ID >> IDInt;
                     tipo >> tipoInt;
-                    nodo = new Composicion(IDInt, tipoInt, NULL);
+                    nodo = new Composicion(tool.name(), IDInt, tipoInt, NULL);
                     padre = nodo;
                     behavior_tree = new Arbol(nodo, tool.name());
                }
@@ -63,8 +65,19 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                     tipo << atributos[1];
                     ID >> IDInt;
                     tipo >> tipoInt;
-                    nodo = new Composicion(IDInt, tipoInt, padre);
-                    
+                    nodo = new Composicion(tool.name(), IDInt, tipoInt, padre);
+
+                    //SEPARAR EN UNA FUNCION DISTINTA
+                    if(std::strcmp(padre->getNombre(), "Composicion") == 0)
+                    {
+                        Composicion * dad = (Composicion*)padre;
+                        dad->addHijo(nodo);
+                    }
+                    else if(std::strcmp(padre->getNombre(), "Decorator") == 0)
+                    {
+                        Decorador * dad = (Decorador*)padre;
+                        dad->addHijo(nodo);
+                    }
                     padre = nodo;
                 }
                 else if(std::strcmp(tool.name(), "Decorator") == 0)
@@ -73,8 +86,19 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                     tipo << atributos[1];
                     ID >> IDInt;
                     tipo >> tipoInt;
-                    nodo = new Decorador(IDInt, tipoInt, padre, atributos[2], atributos[3]);
-                    //padre->addHijo(nodo);
+                    nodo = new Decorador(tool.name(), IDInt, tipoInt, padre, atributos[2], atributos[3]);
+
+                    //SEPARAR EN UNA FUNCION DISTINTA
+                    if(std::strcmp(padre->getNombre(), "Composicion") == 0)
+                    {
+                        Composicion * dad = (Composicion*)padre;
+                        dad->addHijo(nodo);
+                    }
+                    else if(std::strcmp(padre->getNombre(), "Decorator") == 0)
+                    {
+                        Decorador * dad = (Decorador*)padre;
+                        dad->addHijo(nodo);
+                    }
                     padre = nodo;
                 }
                 else if(std::strcmp(tool.name(), "Leaf") == 0)
@@ -96,7 +120,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                         ID >> IDInt;
                         tipo >> tipoInt;
                         tarea >> tareaInt;
-                        nodo = new Hoja(IDInt, tipoInt, padre, atributos[2], atributos[3], atributos[4], tareaInt, atributos[6]);
+                        nodo = new Hoja(tool.name(), IDInt, tipoInt, padre, atributos[2], atributos[3], atributos[4], tareaInt, atributos[6]);
                         //padre->addHijo(nodo);
                     }
                 }

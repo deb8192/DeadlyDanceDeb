@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Hoja::Hoja(int idxml, int type, Nodo* father, const char* action, const char* target, const char* blackboard, int task, const char* information)
+Hoja::Hoja(const char* name, int idxml, int type, Nodo* father, const char* action, const char* target, const char* blackboard, int task, const char* information)
 {
     id = idxml;
     tipo = type;
@@ -26,4 +26,8 @@ Hoja::Hoja(int idxml, int type, Nodo* father, const char* action, const char* ta
 int Hoja::getID()
 {
     return id;
+}
+const char* Hoja::getNombre()
+{
+    return nombre;
 }
