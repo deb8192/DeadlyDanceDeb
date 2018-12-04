@@ -179,7 +179,7 @@ void MotorGrafico::setThen(){
 void MotorGrafico::movimiento()
 {
     //variables
-    const f32 MOVEMENT_SPEED = 10;   
+    const f32 MOVEMENT_SPEED = 6;   
     
     //Interpolacion
     newTime = device->getTimer()->getTime();
@@ -208,12 +208,9 @@ void MotorGrafico::movimiento()
     nodeCamTarget.Y = nodePosition.Y;
 */
      core::vector3df nodePosition = n->getPosition();
-     
+
     // Comprobar teclas para mover el personaje y la camara
-    if(input.IsKeyDown(irr::KEY_KEY_E)){  
-        nodePosition.X = 0;
-        nodePosition.Z = 0;
-    }
+   
     if(input.IsKeyDown(irr::KEY_KEY_W)){  
         
         nodePosition.X += MOVEMENT_SPEED*sin(grados*DEGTORAD)*dt;
