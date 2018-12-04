@@ -15,6 +15,7 @@ class Nodo
     protected:
         int id;
         int tipo;
+        std::string nombre;
         Nodo *padre;
 };
 
@@ -22,6 +23,7 @@ class Composicion: public Nodo
 {
     public:
         Composicion(int, int, Nodo*);
+        void addHijo(Nodo*);
         int getID();
     private:
         std::vector<Nodo> hijos;
@@ -31,7 +33,7 @@ class Decorador: public Nodo
 {
     public:
         Decorador(int, int, Nodo*, const char*, const char*);
-        void addHijo();
+        void addHijo(Nodo*);
         int getID();
     private:
         std::vector<Nodo> hijos;

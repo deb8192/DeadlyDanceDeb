@@ -12,10 +12,10 @@ Decorador::Decorador(int idxml, int type, Nodo *father, const char* end, const c
     alternativa = alternative;
 }
 
-/*void Decorador::addHijo(Nodo* hijo)
+void Decorador::addHijo(Nodo* hijo)
 {
     hijos.push_back(*hijo);
-}*/
+}
 
 int Decorador::getID()
 {
