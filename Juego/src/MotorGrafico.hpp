@@ -5,6 +5,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include "eventos.hpp" //este archivo contiene los ids de los eventos
 #include "Inputs.hpp"
 #include <iostream> //la utilizamos para mostrar el log en la consola.
+#include <math.h>
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;
@@ -91,7 +92,9 @@ using namespace idsEventos;
             f32 zAxisAngle = 0;
             float dt;
             float grados;
-
+            float newTime, frameTime, interpolation;
+            u32 currentTime;
+            float acumulator;
     };
 
 #endif /* MotorGrafico_HPP */
