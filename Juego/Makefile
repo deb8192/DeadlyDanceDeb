@@ -46,7 +46,7 @@ $(RECUR):
 	if [ $(BUSQ) -gt 0 ] ; then mv obj/*.o src/ ; fi
 
 # si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
-%.o: %.cpp %.hpp
+%.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $< -pthread -o $@ $(irrlicht) $(irrlichtN) -Wl,-rpath=\$$ORIGIN/$(dir $(LOWLEVEL_LIB)) -Wl,-rpath=\$$ORIGIN/$(dir $(STUDIO_LIB)) $(INCLUDE_DIRS) $(STUDIO_LIB) $(LOWLEVEL_LIB)
 	mv $@ obj/
 
