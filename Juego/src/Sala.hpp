@@ -15,6 +15,7 @@ class Sala
         std::vector<Sala*> getEntradas();//devuelve las plataformas de entrada
         std::vector<Sala*> getSalidas();//devuelve las plataformas de salida
         void definirID(int);//nos define que id tiene en el motor grafico su modelo CUIDADO: si se elimina alguna plataforma este id no se actualiza solo sera un id erroneo
+        int getPosicionEnGrafica();
     private:
         int ancho,largo,x,y,z;//ancho y largo de la plataforma segun el tipo de centro se divide el espacio de una forma o otra. X e Y posicion en la que se encuentra en el mundo 3d
         int tipocentro;//esto es para saber si el centro de la figura esta en el centro(0), derecha-abajo(1), derecha-arriba(2), izquierda-abajo(3), izquierda-arriba(4) 

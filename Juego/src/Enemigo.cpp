@@ -30,3 +30,8 @@ void Enemigo::queVes()
     SenseEventos * eventos = SenseEventos::getInstance();
     eventos->listaObjetos(x,y);
 }
+
+Sala* Enemigo::getSala()
+{
+    return estoy;
+}
