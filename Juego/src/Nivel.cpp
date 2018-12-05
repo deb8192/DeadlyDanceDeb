@@ -87,3 +87,14 @@ void Nivel::updateIA()
 {
 
 }
+
+//Purebas pathfinding
+Sala * Nivel::getPrimeraSala()
+{
+    return primeraSala;
+}
+
+Enemigo  Nivel::getPrimerEnemigo()
+{
+    return enemigos.at(1);
+}

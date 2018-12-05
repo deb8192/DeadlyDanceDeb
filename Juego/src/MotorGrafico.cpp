@@ -104,7 +104,7 @@ void MotorGrafico::updateMotorCinematica()
 
 void MotorGrafico::CrearCamara()
 {
-    smgr->addCameraSceneNode(0, vector3df(0,0,90), vector3df(0,0,0)); //primer vector rotacion, segundo traslacion
+    smgr->addCameraSceneNode(0, vector3df(0,0,90), vector3df(0,0,0)); //primer vector traslacion, segundo rotacion
 }
 
 void MotorGrafico::PropiedadesDevice()
@@ -173,6 +173,9 @@ bool MotorGrafico::estaPulsado(int boton)
 
         case 7:
             return input.IsKeyDown(irr::KEY_KEY_G);//para modo debug
+
+        case 8:
+            return input.IsKeyDown(irr::KEY_KEY_P);
     }
     return false;
 }
