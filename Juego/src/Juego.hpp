@@ -1,4 +1,5 @@
 #include "MotorGrafico.hpp"
+#include "MotorAudio.hpp"
 #include "Estado.hpp"
 #include "Nivel.hpp"
 
@@ -34,6 +35,7 @@
             //fin clase singleton private
             Estado * estado;//puntero del estado
             MotorGrafico *motor;//instancia de la fachada
+            MotorAudioSystem *motora;//instancia de la fachada audio
             Cinematica cinematica;//contiene la clase cinematica (estado)
             Menu menu;//contiene la clase menu (estado)
             Jugando jugando;//contiene la clase Jugando (estado)
