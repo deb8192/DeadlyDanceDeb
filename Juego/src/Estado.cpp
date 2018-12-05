@@ -3,7 +3,7 @@
 #include "MotorGrafico.hpp"
 #include "Enemigo.hpp"
 #include "Nivel.hpp"
-
+#include "MotorAudio.hpp"
 void Menu::Draw()
 {
     //contiene los pintados del menu
@@ -18,6 +18,10 @@ void Menu::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorMenu();
+
+    //Actualiza el motor de audio
+    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
+    motora->update(false);
 }
 
 void Menu::Init()
@@ -51,6 +55,11 @@ void Jugando::Update()
     MotorGrafico *motor = MotorGrafico::getInstance();
     Nivel *nivel = Nivel::getInstance();//se recoge la instancia de nivel
     motor->updateMotorJuego();
+    
+    //Actualiza el motor de audio
+    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
+    motora->update(false);
+
     //Prueba de Patfinder
     if(motor->estaPulsado(8))
     {
