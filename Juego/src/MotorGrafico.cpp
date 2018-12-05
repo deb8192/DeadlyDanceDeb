@@ -155,15 +155,15 @@ void MotorGrafico::JointsTest()
     //HACERLO CON INTERPOLADO NO CON FRAMES
     cout << "\e[36m Se encuentra fuente \e[0m" << endl;
   
-    //scene::IAnimatedMesh* mesh = smgr->getMesh("assets/models/sydney.md2");
+    scene::IAnimatedMesh* mesh = smgr->getMesh("assets/models/ninja.b3d");
     
-    n = smgr->addCubeSceneNode();
-    //node = smgr->addAnimatedMeshSceneNode( mesh );
+    node = smgr->addCubeSceneNode();
+    n = smgr->addAnimatedMeshSceneNode( mesh );
            
   if (n)
   {      
       n->setMaterialFlag(video::EMF_LIGHTING, false);
-      n->setScale(core::vector3df(0.5,0.5,0.5));
+      n->setScale(core::vector3df(2,2,2));
       n->setMaterialTexture(0, driver->getTexture("assets/textures/sydney.bmp"));
       n->setPosition(core::vector3df(30,0,0));
   }
@@ -296,7 +296,9 @@ void MotorGrafico::movimiento()
     }
 
     //obtienes la arcotangente que te da el angulo de giro en grados
-    deg = RADTODEG * atan(x/z);
+    z < 0 ? 
+        deg = 180 + (RADTODEG * atan(x/z)) :
+        deg =  RADTODEG * atan(x/z) ;
 
     ang = core::vector3df(0.0,deg,0.0);
     rotaPersona = ang;
