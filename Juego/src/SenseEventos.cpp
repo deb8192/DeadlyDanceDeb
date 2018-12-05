@@ -82,3 +82,11 @@ void SenseEventos::agregarEvento(eventoSonido * evento)
 
     return listaSonidos;
  }
+
+//para la vista devuelve los objetos que ve
+void SenseEventos::listaObjetos(int x, int y)
+{ 
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    //mandamos los diferentes rayos 
+    motor->dibujarRayo(x,y,20,0,0,0,10);
+}

@@ -30,7 +30,6 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
     ene.definirSala(sala);
     enemigos.push_back(ene);
     motor->CargarEnemigos(x,y,z,ruta_objeto,ruta_textura);
-    ene.generarSonido(40,6.0);
 }
 
 void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -71,14 +70,16 @@ void Nivel::CrearLuz(int x,int y,int z)
 void Nivel::update()
 {
     //actualizamos los enemigos
-    if(enemigos.size() > 0)
+    if(enemigos.size() > 0)//posiciones interpolacion
     {
         for(std::size_t i=0;i<enemigos.size();i++)
         {
-            cout << "Enemigo " << i << endl;
-            enemigos[i].queEscuchas();//esto iria mas en ia o algun proceso relacionado no debe estar aqui, lo pongo de PRUEBA
+            //cout << "Enemigo " << i << endl;
+            //enemigos[i].queVes();
         }
     }
+
+    //actualizamos el jugador
 
 }
 

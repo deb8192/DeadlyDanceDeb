@@ -80,11 +80,15 @@ using namespace idsEventos;
             
             void closeGame();
             
+            //colision rayo
+            bool colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);
+
             //debug grafico
             void activarDebugGrafico();//se activa o desactiva el modo debug grafico
             void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
             void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
-            
+            void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea 
+        
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton 

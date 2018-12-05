@@ -332,3 +332,30 @@ void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensi
         }
     }
 }
+
+bool MotorGrafico::colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension)
+{
+    return true;
+}
+
+void MotorGrafico::dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension)
+{
+    if(debugGrafico)
+    {
+        IAnimatedMesh* linea = smgr->getMesh("assets/models/linea.obj");
+        if(!linea)
+        {
+            //no se ha podido cargar
+        }
+        else
+        {
+            //vamos a cargar el circulo en su posicion con su intensidad
+            //cout << "\e[36m Generamos Circulo \e[0m" << endl;
+            IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(linea); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+            objeto_en_scena->setPosition(core::vector3df(x,y,z));
+            objeto_en_scena->setRotation(core::vector3df(rx,ry,rz));
+            objeto_en_scena->setScale(core::vector3df(dimension,0.2,0.5));
+            Objetos_Debug.push_back(objeto_en_scena);
+        }
+    }
+}
