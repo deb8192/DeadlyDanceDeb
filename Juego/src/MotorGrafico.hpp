@@ -6,6 +6,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include "Inputs.hpp"
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
+#include <complex>
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;
@@ -67,6 +68,7 @@ using namespace idsEventos;
             void movimiento();
             void closeGame();
             void setThen();
+            float mcd(float ax, float az);
             //const f32 getdt();
             
         private: //clases solo accesibles por MotorGrafico
@@ -91,12 +93,12 @@ using namespace idsEventos;
             f32 xAxisAngle = 0;
             f32 zAxisAngle = 0;
             float dt;
-            float grados;
-            bool atras;
+            bool girar;
             float newTime, frameTime, interpolation;
             u32 currentTime;
             float acumulator;
-            bool del, det, izq, der;
+            core::vector3df dir, ang;
+            float x, z,deg;   
     };
 
 #endif /* MotorGrafico_HPP */

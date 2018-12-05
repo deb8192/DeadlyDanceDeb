@@ -104,7 +104,7 @@ void MotorGrafico::updateMotorCinematica()
 
 void MotorGrafico::CrearCamara()
 {
-    smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,10,0));
+    camera = smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,10,0));
 }
 
 void MotorGrafico::PropiedadesDevice()
@@ -168,19 +168,50 @@ void MotorGrafico::JointsTest()
       n->setPosition(core::vector3df(30,0,0));
   }
 
+    x = 1;
+    z = 20;
 }
+
+float MotorGrafico::mcd(float ax, float az)
+{
+    return az ? mcd(az, fmod(ax, az)) : ax;
+}
+/*
+
+float MotorGrafico::mcd(float ax, float az)
+{
+   
+    if(ax<az)
+    {
+        float aux = ax;
+        ax = az;
+        az = aux;
+    }
+     cout << "ax1: " << x << endl;
+    cout << "az1: " << z << endl;
+    while(az<0)
+    {
+        float f = fmod(ax,az);
+        ax = az;
+        az = f;
+    }
+     cout << "ax2: " << x << endl;
+    cout << "az2: " << z << endl;
+    return ax;
+    
+}
+*/
+
 void MotorGrafico::setThen(){
     
     currentTime = device->getTimer()->getTime();//buscar que devuelve cada interacion
 	acumulator = 0.0f;
     dt =1.0f/60.0f;
+
 }
 
 void MotorGrafico::movimiento()
-{
-    //variables
-    const f32 MOVEMENT_SPEED = 0.6;   
-    
+{    
     //Interpolacion
     newTime = device->getTimer()->getTime();
     frameTime = newTime - currentTime;
@@ -192,7 +223,10 @@ void MotorGrafico::movimiento()
     while(acumulator >= dt)
     {  
     
-/* Hay codigo de marines 
+
+    core::vector3df nodePosition = n->getPosition();
+    core::vector3df rotaPersona = n->getRotation();
+
     // Variables de la camara
     core::vector3df nodeCamPosition = camera->getPosition();
     core::vector3df nodeCamTarget = camera->getTarget();
@@ -202,64 +236,76 @@ void MotorGrafico::movimiento()
     nodeCamPosition.X = nodePosition.X;
     nodeCamTarget.X = nodePosition.X;
     nodeCamTarget.Y = nodePosition.Y;
-*/
-     core::vector3df nodePosition = n->getPosition();
-
+    
     // Comprobar teclas para mover el personaje y la camara
        
-    if(input.IsKeyDown(irr::KEY_KEY_W)){ 
-        atras = false;
-        
-        nodePosition.X += MOVEMENT_SPEED*sin(grados*DEGTORAD)*dt;
-        nodePosition.Z += MOVEMENT_SPEED*cos(grados*DEGTORAD)*dt;
-        //nodeCamPosition.Y += MOVEMENT_SPEED;
-        //nodeCamTarget.Y += MOVEMENT_SPEED;
+
+    if(input.IsKeyDown(irr::KEY_KEY_W))
+    { 
+        //variables usadas para calcular giro, como vector director (x,z)
+        x += 0.0;
+        z += 50.0; //cuando mas alto mejor es el efecto de giro
+        //dir es un vector director usado para incrementar el movimiento     
+        dir = core::vector3df(0.0,0.0,0.6);
+        nodePosition += dir*dt;   
+        nodeCamPosition += dir*dt;  
+        nodeCamTarget += dir*dt;      
     }
-    else if(input.IsKeyDown(irr::KEY_KEY_S)){
-        atras = true;
-        
-        nodePosition.X -= MOVEMENT_SPEED*sin(grados*DEGTORAD)*dt;
-        nodePosition.Z -= MOVEMENT_SPEED*cos(grados*DEGTORAD)*dt;
-        //nodeCamPosition.Y -= MOVEMENT_SPEED;
-        //nodeCamTarget.Y -= MOVEMENT_SPEED;
+    if(input.IsKeyDown(irr::KEY_KEY_S))
+    { 
+        //variables usadas para calcular giro, como vector director (x,z)
+        x += 0.0;
+        z += -50.0;
+        //dir es un vector director usado para incrementar el movimiento    
+        dir = core::vector3df(0.0,0.0,-0.6);
+        nodePosition += dir*dt; 
+        nodeCamPosition += dir*dt; 
+        nodeCamTarget += dir*dt; 
+    }
+    if(input.IsKeyDown(irr::KEY_KEY_A))
+    { 
+        //variables usadas para calcular giro, como vector director (x,z)
+        x += -50.0;
+        z += 0.0;
+        //dir es un vector director usado para incrementar el movimiento      
+        dir = core::vector3df(-0.6,0.0,0.0);
+        nodePosition += dir*dt; 
+        nodeCamPosition += dir*dt; 
+        nodeCamTarget += dir*dt; 
+    }
+    if(input.IsKeyDown(irr::KEY_KEY_D))
+    { 
+        //variables usadas para calcular giro, como vector director (x,z)
+        x += 50.0;
+        z += 0.0;
+        //dir es un vector director usado para incrementar el movimiento            
+        dir = core::vector3df(0.6,0.0,0.0);
+        nodePosition += dir*dt; 
+        nodeCamPosition += dir*dt; 
+        nodeCamTarget += dir*dt; 
+    }
+    
+    //Para giro: obtienes el maximo comun divisor y lo divides entre x, z
+    //asi evitas que ambas variables aumenten excesivamente de valor
+    float div = mcd(x,z);
+    
+    if(abs(div) != 1.0)
+    {
+        x /= abs(div);
+        z /= abs(div);
     }
 
-    if(input.IsKeyDown(irr::KEY_KEY_A)){
-       
-        n->setRotation(core::vector3df(0,grados,0));
-        if(atras)
-        {
-            grados+=2*dt;
-        }
-        else
-        {
-            grados-=2*dt;
-        }
-        
-        //nodeCamPosition.X -= MOVEMENT_SPEED;
-        //nodeCamTarget.X -= MOVEMENT_SPEED;
-    }
-    else if(input.IsKeyDown(irr::KEY_KEY_D)){
-                
-        n->setRotation(core::vector3df(0,grados,0));
-        if(atras)
-        {
-            grados-=2*dt;
-        }
-        else
-        {
-            grados+=2*dt;
-        }
-                
-      //nodeCamPosition.X += MOVEMENT_SPEED;
-      //nodeCamTarget.X += MOVEMENT_SPEED;
-    }
-    core::vector3df rotaPersona = n->getRotation();
+    //obtienes la arcotangente que te da el angulo de giro en grados
+    deg = RADTODEG * atan(x/z);
+
+    ang = core::vector3df(0.0,deg,0.0);
+    rotaPersona = ang;
+
     n->setPosition(nodePosition);
     n->setRotation(rotaPersona);
    
-    /*camera->setPosition(nodeCamPosition);
-    camera->setTarget(nodeCamTarget);*/
+    camera->setPosition(nodeCamPosition);
+    camera->setTarget(nodeCamTarget);
 
         acumulator -= dt;  
     }
