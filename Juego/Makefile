@@ -46,8 +46,11 @@ $(RECUR):
 	if [ $(BUSQ) -gt 0 ] ; then mv obj/*.o src/ ; fi
 
 # si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
-%.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) $< -pthread -o $@ $(irrlicht) $(irrlichtN) -Wl,-rpath=\$$ORIGIN/$(dir $(LOWLEVEL_LIB)) -Wl,-rpath=\$$ORIGIN/$(dir $(STUDIO_LIB)) $(INCLUDE_DIRS) $(STUDIO_LIB) $(LOWLEVEL_LIB)
+%.o: %.cpp #comprobacion solo para libreria fmod
+	$(CXX) -c $(CXXFLAGS) $< -pthread -o $@ -Wl,-rpath=\$$ORIGIN/$(dir $(LOWLEVEL_LIB)) -Wl,-rpath=\$$ORIGIN/$(dir $(STUDIO_LIB)) $(INCLUDE_DIRS) $(STUDIO_LIB) $(LOWLEVEL_LIB)
+	mv $@ obj/
+%.o: %.cpp %.hpp
+	$(CXX) -c $(CXXFLAGS) $< -pthread -o $@ $(irrlicht) $(irrlichtN)
 	mv $@ obj/
 
 $(RECUR2):
