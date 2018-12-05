@@ -24,3 +24,9 @@ void Enemigo::queEscuchas()
     int cuantos = listaSonidos.size();
     cout << "Esta escuchando " << cuantos << " sonidos" << endl;
 }
+
+void Enemigo::queVes()
+{
+    SenseEventos * eventos = SenseEventos::getInstance();
+    eventos->listaObjetos(x,y);
+}
