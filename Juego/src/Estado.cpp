@@ -17,14 +17,8 @@ void Menu::Update()
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorMenu();
 
-    //Motor de audio
-    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
-    motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    //Reproducir evento
-    motora->getEvent("Level02")->setVolume(1.0f);
-    motora->getEvent("Level02")->setPosition(0.0f, 0.0f, 0.0f);
-    motora->getEvent("Level02")->start();
     //Actualiza el motor de audio
+    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
     motora->update(false);
 }
 
@@ -47,6 +41,10 @@ void Jugando::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorJuego();
+
+    //Actualiza el motor de audio
+    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
+    motora->update(false);
 
     // Release the sound
     // sound.releaseSound(soundSample);
