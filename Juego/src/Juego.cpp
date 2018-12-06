@@ -11,7 +11,7 @@ Juego::Juego()
     //Motor de audio inicializar
     motora = MotorAudioSystem::getInstance();
     motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    motora->getEvent("Level01")->start(); //Reproducir musica Menu
+    motora->getEvent("Level02")->start(); //Reproducir musica Menu
 
     nivel = Nivel::getInstance();//se recoge la instancia de nivel
     estado = &menu;//se empieza en el estado menu
