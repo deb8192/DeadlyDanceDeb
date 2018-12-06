@@ -5,8 +5,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include "eventos.hpp" //este archivo contiene los ids de los eventos
 #include "Inputs.hpp"
 #include <iostream> //la utilizamos para mostrar el log en la consola.
-#include <math.h>
-#include <complex>
+#include <vector>//para los objetos en escena
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;
@@ -56,8 +55,13 @@ using namespace idsEventos;
             void borrarScena();//borra todo lo que haya en la ventana
             //borrar gui
             void borrarGui();//borra todo lo que haya en la ventana relacionado con el gui
-            void JointsTest();
-             
+            
+
+
+            /*IMPORTANTE para bullet motor de fisicas y Joints*/
+            //btHingeConstraint(btRigidBody& rbA,const btTransform& rbAFrame, const btTransform& rbBFrame);
+            
+
             //eventos facade
             //detecta si esta pulsado un boton, 1=a, 2 =s, 3=d, 4=w, 5=space, 6=intro 
             bool estaPulsado(int);
@@ -65,12 +69,26 @@ using namespace idsEventos;
             //detecta si un evento con un id pasado a sido llamado
             bool ocurreEvento(int);
             //fin evento botones se puede utilizar para cualquier tipo de evento de irrlicht
-            void movimiento();
-            void closeGame();
-            void setThen();
-            float mcd(float ax, float az);
-            //const f32 getdt();
+            void resetEvento(int);//resetea el evento
             
+            //cargadores de objetos
+            int CargarPlataformas(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
+            void CargarLuces(int x,int y,int z);
+            void CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            
+            void closeGame();
+            
+            //colision rayo
+            bool colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);
+
+            //debug grafico
+            void activarDebugGrafico();//se activa o desactiva el modo debug grafico
+            void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
+            void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
+            void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea 
+            void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton 
@@ -83,22 +101,17 @@ using namespace idsEventos;
             IVideoDriver *driver;
 	        ISceneManager *smgr;
 	        IGUIEnvironment *guienv;
+            scene::ICameraSceneNode* camera;
             IGUIFont *font;
             IGUISkin *skin;
             Inputs input;
-            u32 then;
-            scene::ISceneNode *node;
-            scene::IAnimatedMeshSceneNode* n;
-            scene::ICameraSceneNode* camera;
-            f32 xAxisAngle = 0;
-            f32 zAxisAngle = 0;
-            float dt;
-            bool girar;
-            float newTime, frameTime, interpolation;
-            u32 currentTime;
-            float acumulator;
-            core::vector3df dir, ang;
-            float x, z,deg;   
+            std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
+            std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
+            std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
+            IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
+            std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
+            std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
+            bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
     };
 
 #endif /* MotorGrafico_HPP */
