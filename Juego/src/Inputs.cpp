@@ -32,15 +32,7 @@
 	// This is used to check whether a key is being held down
 	bool Inputs::IsKeyDown(EKEY_CODE keyCode)
 	{
-		if(KeyIsDown[keyCode])
-		{
-			KeyIsDown[keyCode]=false;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return KeyIsDown[keyCode];			
 	}
 
 	// This is used to check whether a key is being held down

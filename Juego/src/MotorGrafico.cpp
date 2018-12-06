@@ -104,7 +104,9 @@ void MotorGrafico::updateMotorCinematica()
 
 void MotorGrafico::CrearCamara()
 {
-    smgr->addCameraSceneNode(0, vector3df(0,0,90), vector3df(0,0,0)); //primer vector traslacion, segundo rotacion
+  //primer vector traslacion, segundo rotacion
+  //  smgr->addCameraSceneNode(0, vector3df(0,0,90), vector3df(0,0,0)); 
+  camera = smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,0,0));
 }
 
 void MotorGrafico::PropiedadesDevice()
@@ -150,7 +152,7 @@ void MotorGrafico::borrarGui()
 }
 
 bool MotorGrafico::estaPulsado(int boton)
-{
+{    
     switch(boton)
     {
         case 1:     
@@ -260,6 +262,29 @@ void MotorGrafico::CargarJugador(int x,int y,int z, const char *ruta_objeto, con
         jugador_en_scena->setPosition(core::vector3df(x,y,z));
         Jugador_Scena = jugador_en_scena;
     }
+}
+
+void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry, float rz)
+{
+    
+    // Variables de la camara
+    core::vector3df nodeCamPosition = camera->getPosition();
+    core::vector3df nodeCamTarget = camera->getTarget();  
+ 
+    // Centrar la camara
+    nodeCamPosition.X = x;
+    nodeCamPosition.Y = y+30;
+    nodeCamPosition.Z = z-40;
+    nodeCamTarget.X = x;
+    nodeCamTarget.Y = y;
+    nodeCamTarget.Z = z;
+   
+    camera->setPosition(nodeCamPosition);
+    camera->setTarget(nodeCamTarget);
+    
+
+    Jugador_Scena->setPosition(core::vector3df(x,y,z));
+    Jugador_Scena->setRotation(core::vector3df(rx,ry,rz));
 }
 
 void MotorGrafico::CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)

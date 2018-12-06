@@ -3,6 +3,7 @@
 #include "Enemigo.hpp"
 #include "CargadorNiveles.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
+#include <ctime>
 
 #ifndef Nivel_HPP
 #define Nivel_HPP
@@ -37,6 +38,7 @@ class Nivel
 
         //Pruebas Pathfinding
         Enemigo getPrimerEnemigo();
+        void setThen();
 
 
     private:
@@ -51,6 +53,13 @@ class Nivel
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala * primeraSala;// la primera sala del arbol
+        
+        float dt;            
+        float frameTime;
+        float acumulator;
+        clock_t newTime;
+        clock_t currentTime;
+        bool a,s,d,w;
 };
 
 #endif 
