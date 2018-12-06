@@ -7,11 +7,11 @@ Juego* Juego::unica_instancia = 0;
 Juego::Juego()
 {
     motor = MotorGrafico::getInstance();//se recoge instancia de motor
-    
+
     //Motor de audio inicializar
     motora = MotorAudioSystem::getInstance();
     motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    motora->getEvent("Level02")->start(); //Reproducir musica Menu
+    motora->getEvent("Level01")->start(); //Reproducir musica Menu
 
     nivel = Nivel::getInstance();//se recoge la instancia de nivel
     estado = &menu;//se empieza en el estado menu
@@ -69,6 +69,10 @@ void Juego::Salir()
 //cuando se presiona boton de jugar
 void Juego::Jugar()
 {
+    motora->getEvent("Level02")->stop(); //Detener musica Menu
+    motora->setListenerPosition(0.0f, 0.0f, 0.0f);
+    motora->getEvent("Level01")->start(); //Reproducir musica juego
+
     estado = &jugando;//se cambia a estado jugando
     estado->Ini();
 }
