@@ -26,7 +26,8 @@
             void LimpiarVentana();//borra de la memoria la ventana del juego.
             void Salir();//sale del juego
             void Jugar();//cambia de estado y cargar mapa //aqui saldra el selector de nivel cuando se implemente
-
+            void setNivelThen();
+            
         private:
 
             //clase singleton

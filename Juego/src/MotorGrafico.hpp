@@ -88,7 +88,7 @@ using namespace idsEventos;
             void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
             void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
             void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea 
-        
+            void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton 
@@ -101,6 +101,7 @@ using namespace idsEventos;
             IVideoDriver *driver;
 	        ISceneManager *smgr;
 	        IGUIEnvironment *guienv;
+            scene::ICameraSceneNode* camera;
             IGUIFont *font;
             IGUISkin *skin;
             Inputs input;

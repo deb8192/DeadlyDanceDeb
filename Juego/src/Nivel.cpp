@@ -67,6 +67,13 @@ void Nivel::CrearLuz(int x,int y,int z)
     motor->CargarLuces(x,y,z);
 }
 
+void Nivel::setThen()
+{   //variables de la interpolacion 
+    currentTime = clock();
+	acumulator = 0.0f;
+    dt =1.0f/60.0f;
+}
+
 void Nivel::update()
 {
     //actualizamos los enemigos
@@ -80,6 +87,36 @@ void Nivel::update()
     }
 
     //actualizamos el jugador
+     MotorGrafico * motor = MotorGrafico::getInstance();
+    //Interpolacion
+    newTime = clock();
+    frameTime = newTime - currentTime;
+    if(frameTime>0.25f){
+        frameTime=0.25f;
+    }
+    currentTime = newTime;
+    acumulator += frameTime;
+    while(acumulator >= dt)
+    { 
+        //actualizamos movimiento del jugador
+
+       jugador.movimiento(dt,
+            motor->estaPulsado(1),
+            motor->estaPulsado(2),
+            motor->estaPulsado(3),
+            motor->estaPulsado(4)
+        );
+       
+       motor->mostrarJugador(jugador.getX(),
+            jugador.getY(),
+            jugador.getZ(),
+            jugador.getRX(),
+            jugador.getRY(),
+            jugador.getRZ()
+        );
+
+ 	   acumulator -= dt;  
+    } 
 
 }
 

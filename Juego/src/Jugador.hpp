@@ -1,6 +1,7 @@
 #ifndef Jugador_HPP
 #define Jugador_HPP
 #include <iostream>
+#include <math.h>
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
 
@@ -13,7 +14,18 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         Jugador();//esto le deja a la entidad el constructor por defecto
         Jugador(int,int,int,int,int,int);//defines tu la informacion del jugador
         void AtacarEspecial();//define el ataque especial para el jugador
+        float mcd(float ax, float az);
+        void movimiento(float dt,bool a, bool s, bool d, bool w);
+        float getX();
+        float getY();
+        float getZ();
+        float getRX();
+        float getRY();
+        float getRZ(); 
+
     private:
+        float ax, az,deg;          
+      //  core::vector3df dir; 
 };
 
 #endif /* Jugador_HPP */

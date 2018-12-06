@@ -7,7 +7,7 @@ Juego* Juego::unica_instancia = 0;
 Juego::Juego()
 {
     motor = MotorGrafico::getInstance();//se recoge instancia de motor
-
+    
     //Motor de audio inicializar
     motora = MotorAudioSystem::getInstance();
     motora->setListenerPosition(0.0f, 0.0f, 0.0f);
@@ -34,6 +34,11 @@ void Juego::InicializarVentana()
 	motor->crearTextoDePrueba();//crea un texto
     motor->activarFuenteDefault();//activa la fuente por defecto que trae irrlicht
     motor->PintarBotonesMenu();//pinta los botones del menu -> esto mover a menu
+}
+
+void Juego::setNivelThen()
+{
+    nivel->setThen();
 }
 
 void Juego::Update()
