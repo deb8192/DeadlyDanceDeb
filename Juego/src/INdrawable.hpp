@@ -9,9 +9,7 @@ class INdrawable
 {
 
 public:
-     virtual ~INdrawable(){};
-     
-     virtual void setPosiciones(int nx,int ny,int nz){x=nx;y=ny;z=nz;};
+     virtual void setPosiciones(int nx,int ny,int nz)=0;
 
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:
@@ -22,6 +20,7 @@ protected:
     float rx = 0.0f;
     float ry = 0.0f;
     float rz = 0.0f; 
+    int id = -1;
     //fin posiciones
 };
 
