@@ -2,6 +2,7 @@
 #include "Jugador.hpp"
 #include "Enemigo.hpp"
 #include "CargadorNiveles.hpp"
+#include "pollo.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
 

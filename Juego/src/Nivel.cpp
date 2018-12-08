@@ -25,7 +25,7 @@ bool Nivel::CargarNivel(int level)
 void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
-    Enemigo ene;
+    pollo ene;
     ene.setPosiciones(x,y,z);
     ene.definirSala(sala);
     enemigos.push_back(ene);
@@ -82,7 +82,8 @@ void Nivel::update()
         for(std::size_t i=0;i<enemigos.size();i++)
         {
             //cout << "Enemigo " << i << endl;
-            //enemigos[i].queVes();
+            //enemigos[i].Atacar();
+            //enemigos[i].AtacarEspecial();
         }
     }
 
@@ -125,7 +126,7 @@ void Nivel::updateIA()
 
 }
 
-//Purebas pathfinding
+//Pruebas pathfinding
 Sala * Nivel::getPrimeraSala()
 {
     return primeraSala;

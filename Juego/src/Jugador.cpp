@@ -15,17 +15,34 @@ Jugador::Jugador(int,int,int,int,int,int)
     z = 20;
 }
 
-float Jugador::getX(){return x;}
-float Jugador::getY(){return y;}
-float Jugador::getZ(){return z;}
-float Jugador::getRX(){return rx;}
-float Jugador::getRY(){return ry;}
-float Jugador::getRZ(){return rz;}
-
-
-void Jugador::AtacarEspecial()
+float Jugador::getX()
 {
-    cout << "Se realiza ataque especial jugador" << endl;
+    return x;
+}
+
+float Jugador::getY()
+{
+    return y;
+}
+
+float Jugador::getZ()
+{
+    return z;
+}
+
+float Jugador::getRX()
+{
+    return rx;
+}
+
+float Jugador::getRY()
+{
+    return ry;
+}
+
+float Jugador::getRZ()
+{
+    return rz;
 }
 
 float Jugador::mcd(float ax, float az)
@@ -87,4 +104,107 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     x = px;
     z = pz;
     ry = deg;   
+}
+
+void Jugador::setPosiciones(int nx,int ny,int nz)
+{
+    x = nx;
+    y = ny;
+    z = nz;
+}
+
+void Jugador::Atacar()
+{
+
+}
+
+void Jugador::AtacarEspecial()
+{
+
+}
+        
+void Jugador::QuitarVida(int can)
+{
+            
+}
+
+void Jugador::RecuperarVida(int can)
+{
+
+}
+
+void Jugador::AumentarBarraAtEs(int can)
+{
+
+} 
+
+void Jugador::Interactuar(int id, int id2)
+{
+
+}
+
+void Jugador::setVida(int vid)
+{
+
+}
+
+void Jugador::setTipo(int tip)
+{
+
+}
+
+void Jugador::setBarraAtEs(int bar)
+{
+
+}
+
+void Jugador::setAtaque(int ataq)
+{
+
+}
+
+void Jugador::setSuerte(int suer)
+{
+
+}
+
+void Jugador::setProAtaCritico(int probabilidad)
+{
+
+}
+
+int Jugador::getVida()
+{
+    return -1;
+}
+
+int Jugador::getTipo()
+{
+    return -1;
+}
+
+int Jugador::getBarraAtEs()
+{
+    return -1;
+}
+    
+int Jugador::getAtaque()
+{
+    return -1;
+}
+
+int Jugador::getSuerte()
+{
+    return -1;
+}
+
+int Jugador::getProAtaCritico()
+{
+    return -1;
+}
+
+int * Jugador::getBuffos()
+{
+    int * valores = new int[6];
+    return valores;
 }
