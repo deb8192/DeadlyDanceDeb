@@ -10,9 +10,10 @@ class Arbol
 {
     public:
         Arbol(Nodo *, const char*);
+        Nodo* anyadirHijo(Nodo *);
     private:
         
         const char* nombre;
-        Nodo *raiz;
+        Composicion *raiz;
 };
 #endif

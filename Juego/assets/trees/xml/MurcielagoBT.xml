@@ -16,7 +16,7 @@
                 </Composition>
                 <Decorator id="9" type="iterador" end="true" alternative="max-puertas-3">
                     <Composition id="10" type="tarea" action="busca" target="pos-jugador">
-                    <Blackboard task="lee" info="pos-jugador"></Blackboard>
+                    	<Blackboard task="lee" info="pos-jugador"></Blackboard>
                         <Composition id="11" type="secuencia">
                             <Leaf id="12" type="tarea" action="esta" target="cerca-jugador"></Leaf>
                             <Leaf id="13" type="tarea" action="ataca" target="jugador"></Leaf>

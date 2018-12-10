@@ -3,11 +3,8 @@
 
 using namespace std;
 
-Hoja::Hoja(const char* name, int idxml, int type, Nodo* father, const char* action, const char* target, const char* blackboard, int task, const char* information)
+Hoja::Hoja(const char* name, int idxml, int type, int level, Nodo* father, const char* action, const char* target, const char* blackboard, int task, const char* information) : Nodo(name, idxml, type, level, father)
 {
-    id = idxml;
-    tipo = type;
-    padre = father;
     accion = action;
     objetivo = target;
     if(std::strcmp(blackboard, "true") == 0)
@@ -22,12 +19,4 @@ Hoja::Hoja(const char* name, int idxml, int type, Nodo* father, const char* acti
         tarea = 0;
         info = "";
     }
-}
-int Hoja::getID()
-{
-    return id;
-}
-const char* Hoja::getNombre()
-{
-    return nombre;
 }

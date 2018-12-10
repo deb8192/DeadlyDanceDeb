@@ -3,26 +3,17 @@
 
 using namespace std;
 
-Decorador::Decorador(const char* name, int idxml, int type, Nodo *father, const char* end, const char* alternative)
+Decorador::Decorador(const char* name, int idxml, int type, int level, Nodo *father, const char* end, const char* alternative) : Nodo(name, idxml, type, level, father)
 {
-    nombre = name;
-    id = idxml;
-    tipo = type;
-    padre = father;
     fin = end;
     alternativa = alternative;
 }
 
 void Decorador::addHijo(Nodo* hijo)
 {
-    hijos.push_back(*hijo);
+    hijos.push_back(hijo);
 }
-
-int Decorador::getID()
+vector <Nodo*> Decorador::getHijos()
 {
-    return id;
-}
-const char* Decorador::getNombre()
-{
-    return nombre;
+    return hijos;
 }

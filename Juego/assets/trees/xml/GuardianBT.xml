@@ -59,7 +59,7 @@
                             </Composition>
                         </Decorator>
                     </Composition>
-                    <Composition id="30" type="secuencia">
+                    <Composition id="31" type="secuencia">
                         <Leaf id="32" type="tarea" action="ocultarse" target="escondite">
                             <Blackboard task="lee" info="escondite"></Blackboard>
                         </Leaf>
