@@ -23,7 +23,7 @@ Nodo* Arbol::anyadirHijo(Nodo * nod)
     if(raiz->getNivel() == nod->getNivel() - 1)
     {
         raiz->addHijo(nod);
-                        return raiz;
+        return raiz;
     }
     //Entra en los hijos de la raiz del arbol
     else
