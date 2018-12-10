@@ -8,27 +8,89 @@ CargadorBehaviorTrees::CargadorBehaviorTrees()
 
 }
 
-/* Función recursiva para acceder a todos los nodos */
-pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo, Nodo *padre) {
-    int i = 0;
-    const char* atributos[8];
-    stringstream ID;
-    stringstream tipo;
-    stringstream tarea;
-    int IDInt;
-    int tipoInt;
-    int tareaInt;
+void CargadorBehaviorTrees::generarTarea(pugi::xml_node tool, const char ** atributos, int tarea, unsigned int i, int tipo)
+{
+    if((tool.first_child() != NULL) && (std::strcmp(tool.first_child().name(), PIZARRA) == 0))
+    {
+        cout<<"Pizarra?"<<endl;
+        atributos[i] = VERDADERO;
+        i++;
+        for (pugi::xml_attribute attr = tool.first_child().first_attribute(); attr; attr = attr.next_attribute())
+        {
+            atributos[i] = attr.value();
+            cout << " " << attr.name() << "=" << atributos[i];
+            i++;
+        }
+
+        if(std::strcmp(atributos[5], LEE) == 0)
+        {
+            tarea = 1;
+        }
+        else if(std::strcmp(atributos[5], ESCRIBE) == 0)
+        {
+            tarea = 2;
+        }
+    }
+    else
+    {
+        cout<<"No Pizarra"<<endl;
+        atributos[i] = FALSO;
+        i++;
+        while(i < sizeof(atributos))
+        {
+            atributos[i] = "";
+            i++;
+        }
+        tarea = 0;
+    }
+        tipo = 1;
+}
+
+Nodo* CargadorBehaviorTrees::anyadirHijo(Arbol *arbol, Nodo* padre, Nodo* nodo, int nivel)
+{
+    if(nodo != NULL)
+    {
+        padre = arbol->anyadirHijo(nodo);
+    }
+    return padre;
+}
+
+/*******************  Sacar nodo  *********************
+ * Descripcion: Metodo que sirve par leer los nodos y
+ * los atributos de un arbol en formato xml y almacernarlos
+ * en una estructura arborea a modo de arbol de comportamiento
+ * Entradas:
+ *      tree: nodo del archivo xml
+ *      *nodo: puntero hacia el nodo en que se guardara la info del nuevo nodo
+ *      *padre: puntero hacia el nodo padre del nodo pasado por parametro  
+ * Salidas:
+ *      tree: nodo del archivo xml
+ */
+pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo, Nodo *padre, int nivel) {
+    unsigned int i = 0;
+    const char** atributos = (const char**) malloc(8 * sizeof(const char*));
+    int IDInt = 0;
+    int tipo = 0;
+    int tarea =0;
+    
 
     //Caso base
-    if(tree == NULL) {
+    if(tree == NULL || (nodo != NULL && strcmp(nodo->getNombre(), HOJA) == 0)) {
         cout << "No hijos" << "\n" <<endl;
         return tree;
     }
     //Algoritmo recursivo
-    else {
+    else 
+    {
         //Bucle para recorrer el arbol
         for (pugi::xml_node tool = tree.first_child(); tool; tool = tool.next_sibling())
         {
+            if(std::strcmp(tool.name(), PIZARRA)  == 0)
+            {
+                tool = tool.next_sibling();
+            }
+            free(atributos);
+            nivel++;
             i = 0;
             //Se recorren los atributos de cada nodo
             for (pugi::xml_attribute attr = tool.first_attribute(); attr; attr = attr.next_attribute())
@@ -37,96 +99,144 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                 cout << " " << attr.name() << "=" << atributos[i];
                 i++;
             }
-            cout<<endl;
 
+            std::string s(atributos[0]);
+            IDInt = std::stoi(s);
             
-            //Se crea y actualizan los nodos del arbol.
-            if(std::strcmp(tool.name(), "root") == 0)
+            //Se crea el arbol.
+            if(std::strcmp(tool.name(), RAIZ) == 0)
             {
                 //Se crea la raiz y el arbol
-               if((std::strcmp(atributos[1], SELECTOR)  == 0) || (std::strcmp(atributos[1], SECUENCIA) == 0))
+               if((std::strcmp(atributos[1], SELECTOR)  == 0) || (std::strcmp(atributos[1], SECUENCIA) == 0) || (std::strcmp(atributos[1], TAREA) == 0))
                {
-                    ID << atributos[0];
-                    tipo << atributos[1];
-                    ID >> IDInt;
-                    tipo >> tipoInt;
-                    nodo = new Composicion(tool.name(), IDInt, tipoInt, NULL);
+                    if(std::strcmp(atributos[1], TAREA) == 0)
+                    {
+                        generarTarea(tool, atributos, tarea, i, tipo);
+                    }
+                    else
+                    {
+                        atributos[i] = FALSO;
+                        i++;
+                        while(i < sizeof(atributos))
+                        {
+                            atributos[i] = "";
+                            i++;
+                        }
+                        tarea = 0;
+                    }
+                    if(std::strcmp(atributos[1], SECUENCIA) == 0)
+                    {
+                        tipo = 2;
+                    }
+                    else if(std::strcmp(atributos[1], SELECTOR) == 0)
+                    {
+                        tipo = 3;
+                    }
+                    
+
+                    nodo = nullptr;
+                    nodo = new Composicion(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3], atributos[4], tarea, atributos[6], false);
+
                     padre = nodo;
-                    behavior_tree = new Arbol(nodo, tool.name());
+                    raiz = nodo;
                }
+               else if((std::strcmp(atributos[1], SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], SEC_ALEATORIA) == 0))
+               {
+                    if(std::strcmp(atributos[1], SEL_ALEATORIO)  == 0)
+                    {
+                        tipo = 4;
+                    } 
+                    else if(std::strcmp(atributos[1], SEC_ALEATORIA)  == 0)
+                    {
+                        tipo = 5;
+                    }
+                    nodo = nullptr;
+                    nodo = new Composicion(tool.name(), IDInt, tipo, nivel, padre, NULL, NULL, NULL, 0, NULL, true);
+                    padre = nodo;
+                    raiz = nodo;
+               }
+                behavior_tree = new Arbol(raiz, raiz->getNombre());
                //Faltaria comprobar otro tipo de nodos raiz pero principalmente seran secuencias o selectores
             }
             //Se crean el resto de nodos del arbol
-            else
+            else if(std::strcmp(tool.name(), COMPOSICION) == 0)
             {
-                if(std::strcmp(tool.name(), "Composition") == 0)
+                if((std::strcmp(atributos[1], SELECTOR)  == 0) || (std::strcmp(atributos[1], SECUENCIA) == 0) || (std::strcmp(atributos[1], TAREA) == 0))
                 {
-                    ID << atributos[0];
-                    tipo << atributos[1];
-                    ID >> IDInt;
-                    tipo >> tipoInt;
-                    nodo = new Composicion(tool.name(), IDInt, tipoInt, padre);
-
-                    //SEPARAR EN UNA FUNCION DISTINTA
-                    if(std::strcmp(padre->getNombre(), "Composicion") == 0)
+                    if(std::strcmp(atributos[1], TAREA) == 0)
                     {
-                        Composicion * dad = (Composicion*)padre;
-                        dad->addHijo(nodo);
+                        generarTarea(tool, atributos, tarea, i, tipo);
                     }
-                    else if(std::strcmp(padre->getNombre(), "Decorator") == 0)
+                    else
                     {
-                        Decorador * dad = (Decorador*)padre;
-                        dad->addHijo(nodo);
-                    }
-                    padre = nodo;
-                }
-                else if(std::strcmp(tool.name(), "Decorator") == 0)
-                {
-                    ID << atributos[0];
-                    tipo << atributos[1];
-                    ID >> IDInt;
-                    tipo >> tipoInt;
-                    nodo = new Decorador(tool.name(), IDInt, tipoInt, padre, atributos[2], atributos[3]);
-
-                    //SEPARAR EN UNA FUNCION DISTINTA
-                    if(std::strcmp(padre->getNombre(), "Composicion") == 0)
-                    {
-                        Composicion * dad = (Composicion*)padre;
-                        dad->addHijo(nodo);
-                    }
-                    else if(std::strcmp(padre->getNombre(), "Decorator") == 0)
-                    {
-                        Decorador * dad = (Decorador*)padre;
-                        dad->addHijo(nodo);
-                    }
-                    padre = nodo;
-                }
-                else if(std::strcmp(tool.name(), "Leaf") == 0)
-                {
-                    if((tool.first_child() != NULL) && (std::strcmp(tool.first_child().name(), "Blackboard") == 0))
-                    {
-                        cout<<"Pizarra?"<<endl;
-                        atributos[i] = "true";
+                        atributos[i] = FALSO;
                         i++;
-                        for (pugi::xml_attribute attr = tool.first_child().first_attribute(); attr; attr = attr.next_attribute())
+                        while(i < sizeof(atributos))
                         {
-                            atributos[i] = attr.value();
-                            cout << " " << attr.name() << "=" << atributos[i];
+                            atributos[i] = "";
                             i++;
                         }
-                        ID << atributos[0];
-                        tipo << atributos[1];
-                        tarea << atributos[5];
-                        ID >> IDInt;
-                        tipo >> tipoInt;
-                        tarea >> tareaInt;
-                        nodo = new Hoja(tool.name(), IDInt, tipoInt, padre, atributos[2], atributos[3], atributos[4], tareaInt, atributos[6]);
-                        //padre->addHijo(nodo);
+                        tarea = 0;
                     }
-                }
+                    if(std::strcmp(atributos[1], SECUENCIA) == 0)
+                    {
+                        tipo = 2;
+                    }
+                    else if(std::strcmp(atributos[1], SELECTOR) == 0)
+                    {
+                        tipo = 3;
+                    }
+                    nodo = nullptr;
+                    nodo = new Composicion(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3], atributos[4], tarea, atributos[6], false);
+               }
+               else if((std::strcmp(atributos[1], SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], SEC_ALEATORIA) == 0))
+               {
+                    if(std::strcmp(atributos[1], SEL_ALEATORIO)  == 0)
+                    {
+                        tipo = 4;
+                    } 
+                    else if(std::strcmp(atributos[1], SEC_ALEATORIA)  == 0)
+                    {
+                        tipo = 5;
+                    }
+                    nodo = nullptr;
+                    nodo = new Composicion(tool.name(), IDInt, tipo, nivel, padre, "", "", "", 0, "", true);
+
+               }
+                
+                //SEPARAR EN UNA FUNCION DISTINTA
+
+                padre = CargadorBehaviorTrees::anyadirHijo(behavior_tree, padre, nodo, nivel);
+                
+                padre = nodo;
             }
-            sacarNodo(tool, nodo, padre);
-            cout<< "sale"<<endl;
+            else if(std::strcmp(tool.name(), DECORADOR) == 0)
+            {
+                tipo = 6;
+                nodo = nullptr;
+                nodo = new Decorador(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3]);
+
+                //SEPARAR EN UNA FUNCION DISTINTA
+                padre = CargadorBehaviorTrees::anyadirHijo(behavior_tree, padre, nodo, nivel);
+                padre = nodo;
+            }
+            else if(std::strcmp(tool.name(), HOJA) == 0)
+            {
+                
+                generarTarea(tool, atributos, tarea, i, tipo);
+                
+                nodo = nullptr;
+                nodo = new Hoja(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3], atributos[4], tarea, atributos[6]);
+                
+                padre = CargadorBehaviorTrees::anyadirHijo(behavior_tree, padre, nodo, nivel);
+                
+                 
+            }
+            sacarNodo(tool, nodo, padre, nivel);
+            
+            nivel--;
+            
+            padre = (Nodo*)nodo->getPadre();
         }
     }
 }
@@ -135,11 +245,14 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
  * arbol de comportamiento y cargarlo en memoria
  * Entradas:
  *      tree: string con el nombre del arbol  
+ * Salidas:
+ *      behavior_tree: estructura que contiene un arbol de comportamiento
  */
-void CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
+Arbol* CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
 {
-    Nodo *nodo;
-    Nodo *padre;
+    int level = 0;
+    Nodo *nodo = nullptr;
+    Nodo *padre = nullptr;
     //definimos los strings
     string extension = ".xml";
     string ruta = "assets/trees/xml/";
@@ -165,9 +278,9 @@ void CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
     //Prueba de lectura de nodos
     pugi::xml_node tree = doc.child("BehaviorTree");
 
-    sacarNodo(tree, nodo, padre);
+    sacarNodo(tree, nodo, padre, level);
     cout << "FIN" << "\n" <<endl;
-    
+    return behavior_tree;
 }
 
 void CargadorBehaviorTrees::guardarBehaviorTreeXml(string arbol)

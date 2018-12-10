@@ -3,24 +3,35 @@
 
 using namespace std;
 
-Composicion::Composicion(const char* name, int idxml, int type, Nodo *father)
+Composicion::Composicion(const char* name, int idxml, int type, int level, Nodo *father, const char* action, const char* target, const char* blackboard, int task, const char* information, bool random) : Nodo(name, idxml, type, level, father)
 {
-    nombre = name;
-    id = idxml;
-    tipo = type;
-    padre = father;
+    
+    aleatorio = random;
+    accion = action;
+    objetivo = target;
+    if(std::strcmp(blackboard, "true") == 0)
+    {
+        pizarra = true;
+        tarea = task;
+        info = information;
+    }
+    else
+    {
+        pizarra = false;
+        tarea = 0;
+        info = "";
+    }
 }
 
 void Composicion::addHijo(Nodo* hijo)
 {
-    hijos.push_back(*hijo);
+    hijos.push_back(hijo);
 }
-
-int Composicion::getID()
+vector <Nodo*> Composicion::getHijos()
 {
-    return id;
+    return hijos;
 }
-const char* Composicion::getNombre()
+bool Composicion::getAleatorio()
 {
-    return nombre;
+    return aleatorio;
 }

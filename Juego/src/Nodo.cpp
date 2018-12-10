@@ -1,29 +1,33 @@
 #include "Nodo.hpp"
+#include <iostream>
 
-/*Nodo::Nodo(std::string name, int idXml, int type, std::string action, std::string target, bool blackboard, int task, std::string information)
+using namespace std;
+
+Nodo::Nodo(const char* name, int idxml, int type, int level, Nodo* father)
 {
     nombre = name;
+    id = idxml;
     tipo = type;
-    id = idXml;
-    accion = action;
-    objetivo = target;
-    pizarra = blackboard;
-    tarea = task;
-    info = information;
+    padre = father;
+    nivel = level;
 }
-std::string Nodo::getNombre()
+Nodo* Nodo::getPadre()
 {
-    return nombre;
+    return padre;
 }
-int Nodo::getId()
+int Nodo::getNivel()
+{
+    return nivel;
+}
+int Nodo::getID()
 {
     return id;
+}
+const char* Nodo::getNombre()
+{
+    return nombre;
 }
 int Nodo::getTipo()
 {
     return tipo;
 }
-Nodo::Nodo()
-{
-
-}*/
