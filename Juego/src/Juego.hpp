@@ -1,4 +1,5 @@
 #include "MotorGrafico.hpp"
+#include "MotorAudio.hpp"
 #include "Estado.hpp"
 #include "Nivel.hpp"
 
@@ -15,7 +16,7 @@
             {
                 if(unica_instancia == 0)
                 unica_instancia = new Juego();
-                return unica_instancia;  
+                return unica_instancia;
             }
             //fin singleton public
 
@@ -25,20 +26,21 @@
             void LimpiarVentana();//borra de la memoria la ventana del juego.
             void Salir();//sale del juego
             void Jugar();//cambia de estado y cargar mapa //aqui saldra el selector de nivel cuando se implemente
-
+            void setNivelThen();
+            
         private:
 
-            //clase singleton 
+            //clase singleton
             Juego();
             static Juego* unica_instancia;
             //fin clase singleton private
             Estado * estado;//puntero del estado
             MotorGrafico *motor;//instancia de la fachada
+            MotorAudioSystem *motora;//instancia de la fachada audio
             Cinematica cinematica;//contiene la clase cinematica (estado)
             Menu menu;//contiene la clase menu (estado)
             Jugando jugando;//contiene la clase Jugando (estado)
-            Nivel nivel;
-            bool cambioEstado;
+            Nivel *nivel;
     };
 
 #endif /* MotorGrafico_HPP */

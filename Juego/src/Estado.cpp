@@ -1,5 +1,10 @@
 #include "Estado.hpp"
+#include "Pathfinder.hpp"
 #include "MotorGrafico.hpp"
+#include "SenseEventos.hpp"
+#include "Nivel.hpp"
+#include "Enemigo.hpp"
+#include "MotorAudio.hpp"
 
 void Menu::Draw()
 {
@@ -15,6 +20,10 @@ void Menu::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorMenu();
+
+    //Actualiza el motor de audio
+    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
+    motora->update(false);
 }
 
 void Menu::Init()
@@ -40,18 +49,29 @@ void Jugando::Clean()
 void Jugando::Init()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
-    motor->JointsTest();
     motor->CrearCamara();
-    int boton = 1;
-    motor->estaPulsado(boton);
 }
-
 
 void Jugando::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
-    motor->movimiento(); 
-    motor->updateMotorJuego();
+    motor->clearDebug();
+    Nivel *nivel = Nivel::getInstance();
+    SenseEventos *sense = SenseEventos::getInstance();
+    sense->update();//se actualizan sentidos
+    nivel->update();//se actualiza posiciones y interpolado
+    motor->updateMotorJuego();// se actualiza lo que se ve por pantalla
+    
+    //Actualiza el motor de audio
+    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
+    motora->update(false);
+
+    //Prueba de Patfinder
+    if(motor->estaPulsado(8))
+    {
+        Pathfinder path;
+        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(nivel->getPrimerEnemigo().getSala(), nivel->getPrimeraSala());
+    }
 }
 
 int Jugando::Esta()
