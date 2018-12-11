@@ -16,16 +16,19 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         void definirSala(Sala * sala);
 
+        //sentidos metodos
         void generarSonido(int intensidad, double duracion);
 
         void queEscuchas();//recupera la informacion de los sonidos que escucha
         
         void queVes();//recupera informacion de los objetos,enemigos,jugador que ve.
-        
+        //drawables metodos
         void setPosiciones(int nx,int ny,int nz);
-
-        virtual void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
-        virtual void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+        void setID(int);
+        int getID();
+        //npc metodos
+        void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
+        void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
         
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
@@ -46,7 +49,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getSuerte();
         int getProAtaCritico();
         int* getBuffos();
-
+        //propios
         Sala* getSala();
 
     protected:
