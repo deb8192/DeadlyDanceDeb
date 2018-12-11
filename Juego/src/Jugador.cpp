@@ -208,3 +208,13 @@ int * Jugador::getBuffos()
     int * valores = new int[6];
     return valores;
 }
+
+void Jugador::setID(int nid)
+{
+    id = nid;
+}
+
+int Jugador::getID()
+{
+    return id;
+}

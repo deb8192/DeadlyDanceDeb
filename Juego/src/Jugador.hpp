@@ -16,8 +16,11 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float mcd(float ax, float az);
         void movimiento(float dt,bool a, bool s, bool d, bool w);
 
+        //drawable metodos
         void setPosiciones(int nx,int ny,int nz);
-
+        void setID(int);
+        int getID();
+        //npc metodos
         void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
         void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
         void QuitarVida(int);//quita vida a la entidad

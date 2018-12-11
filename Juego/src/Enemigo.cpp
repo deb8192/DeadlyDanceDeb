@@ -2,7 +2,7 @@
 
 Enemigo::Enemigo()
 {
-    std::cout << "Con 1" << std::endl;    
+
 }
 
 void Enemigo::definirSala(Sala * sala)
@@ -137,4 +137,14 @@ int * Enemigo::getBuffos()
 {
     int * valores = new int[6];
     return valores;
+}
+
+void Enemigo::setID(int nid)
+{
+    id = nid;
+}
+
+int Enemigo::getID()
+{
+    return id;
 }

@@ -9,6 +9,7 @@ Nivel* Nivel::unica_instancia = 0;
 Nivel::Nivel()
 {
     primeraSala = nullptr; 
+    id = 0;
 }
 
 bool Nivel::CargarNivel(int level)
@@ -24,12 +25,14 @@ bool Nivel::CargarNivel(int level)
 
 void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
-    MotorGrafico * motor = MotorGrafico::getInstance();
-    pollo ene;
-    ene.setPosiciones(x,y,z);
-    ene.definirSala(sala);
-    enemigos.push_back(ene);
-    motor->CargarEnemigos(x,y,z,ruta_objeto,ruta_textura);
+    MotorGrafico * motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
+    pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
+    ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    ene->definirSala(sala);//le pasamos la sala en donde esta
+    enemigos.push_back(ene);//guardamos el enemigo en el vector
+    id++;//generamos id para la figura
+    ene->setID(id);//le damos el id unico en esta partida al enemigo
+    motor->CargarEnemigos(x,y,z,ruta_objeto,ruta_textura);//creamos la figura pasando el id
 }
 
 void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -82,8 +85,8 @@ void Nivel::update()
         for(std::size_t i=0;i<enemigos.size();i++)
         {
             //cout << "Enemigo " << i << endl;
-            //enemigos[i].Atacar();
-            //enemigos[i].AtacarEspecial();
+            //enemigos[i]->Atacar();
+            //enemigos[i]->AtacarEspecial();
         }
     }
 
@@ -132,7 +135,7 @@ Sala * Nivel::getPrimeraSala()
     return primeraSala;
 }
 
-Enemigo  Nivel::getPrimerEnemigo()
+Enemigo * Nivel::getPrimerEnemigo()
 {
     return enemigos.at(1);
 }

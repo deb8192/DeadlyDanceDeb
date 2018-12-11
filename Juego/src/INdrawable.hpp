@@ -9,8 +9,9 @@ class INdrawable
 {
 
 public:
-     virtual void setPosiciones(int nx,int ny,int nz)=0;
-
+    virtual void setPosiciones(int nx,int ny,int nz)=0;//modifica las posiciones de la figura
+    virtual void setID(int)=0;//nos sirve para definir el id que tiene esta figura
+    virtual int getID()=0;//nos sirve para saber que id tiene esta figura
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:
     //posiciones del objeto drawable

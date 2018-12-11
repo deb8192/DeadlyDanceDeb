@@ -70,7 +70,7 @@ void Jugando::Update()
     if(motor->estaPulsado(8))
     {
         Pathfinder path;
-        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(nivel->getPrimerEnemigo().getSala(), nivel->getPrimeraSala());
+        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(nivel->getPrimerEnemigo()->getSala(), nivel->getPrimeraSala());
     }
 }
 
