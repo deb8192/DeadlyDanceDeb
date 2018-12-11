@@ -6,6 +6,9 @@ int main()
 	cout << "\e[42m Iniciando Juego \e[0m" << endl;
 	Juego *juego = Juego::getInstance();
 	juego->InicializarVentana();
+	// se debe dar valor a las variables de interpolacion antes del bucle	
+	juego->setNivelThen(); 
+
 	while(juego->Running())//comprobamos que esta activo el dispositivo
 	{
 		juego->Update();//si lo esta actualizamos la escena
