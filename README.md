@@ -6,6 +6,7 @@
 - [Presupuesto](https://github.com/ABPMultimediaUA/Deadly-Dance/raw/master/Documentacion/Presupuesto.xlsx)
 - [Especificaciones del proyecto](https://github.com/ABPMultimediaUA/Deadly-Dance/raw/master/Documentacion/Especificaciones.pdf)
 - [Plan General](https://github.com/ABPMultimediaUA/Deadly-Dance/raw/master/Documentacion/ABP%20Planificacion.mpp)(Se actualiza)
+- [Plan de Riesgos](https://github.com/ABPMultimediaUA/Deadly-Dance/blob/master/Documentacion/Documento%20Plan%20Riesgos.pdf)
 
 ### Informes de iteraciones
 
