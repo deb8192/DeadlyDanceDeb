@@ -32,13 +32,19 @@
 	// This is used to check whether a key is being held down
 	bool Inputs::IsKeyDown(EKEY_CODE keyCode)
 	{
-		return KeyIsDown[keyCode];
+		return KeyIsDown[keyCode];			
 	}
 
 	// This is used to check whether a key is being held down
 	bool Inputs::IsEventOn(int event)
 	{
 		return EventosActivos[event];
+	}
+
+	// This is used to check whether a key is being held down
+	void Inputs::ResetEvento(int event)
+	{
+		EventosActivos[event]=false;
 	}
 	
 	Inputs::Inputs()
