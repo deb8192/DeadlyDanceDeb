@@ -95,8 +95,8 @@ void Nivel::update()
     //Interpolacion
     newTime = clock();
     frameTime = newTime - currentTime;
-    if(frameTime>0.25f){
-        frameTime=0.25f;
+    if(frameTime>0.10f){
+        frameTime=0.10f;
     }
     currentTime = newTime;
     acumulator += frameTime;
@@ -128,7 +128,6 @@ void Nivel::update()
           if(atacktime > 0.0f)
           {
             atacktime--;
-            cout << atacktime << endl;
           }
           if(atacktime > 500.0f)
           {
@@ -136,7 +135,7 @@ void Nivel::update()
             motor->colorearJugador(255,255,0,0);
           }else{
             //Colorear gris
-            motor->colorearJugador(255,128,128,128);
+            motor->colorearJugador(255,0,0,255);
           }
       }
 
