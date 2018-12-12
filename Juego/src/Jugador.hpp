@@ -4,6 +4,7 @@
 #include <math.h>
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
+#include "Arma.hpp"
 
 using namespace std;
 
@@ -22,7 +23,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int getID();
         //npc metodos
         void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
-        void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+        void AtacarEspecial(int, int);//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico 
@@ -51,7 +52,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getRZ(); 
 
     private:
-        float ax, az,deg;          
+        float ax, az,deg;   
+        //Arma armaEquipada;       
       //  core::vector3df dir; 
 };
 

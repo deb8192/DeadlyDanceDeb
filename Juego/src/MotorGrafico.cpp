@@ -178,6 +178,15 @@ bool MotorGrafico::estaPulsado(int boton)
 
         case 8:
             return input.IsKeyDown(irr::KEY_KEY_P);
+        
+        case 9:
+            return input.IsMouseClick(irr::EMIE_RMOUSE_PRESSED_DOWN);
+        
+        case 10:
+            return input.IsMouseClick(irr::EMIE_LMOUSE_PRESSED_DOWN);
+        
+        case 11:
+            return input.IsKeyDown(irr::KEY_KEY_Q);
     }
     return false;
 }
