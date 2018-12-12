@@ -8,7 +8,7 @@ Nivel* Nivel::unica_instancia = 0;
 
 Nivel::Nivel()
 {
-    primeraSala = nullptr; 
+    primeraSala = nullptr;
     id = 0;
 }
 
@@ -71,7 +71,7 @@ void Nivel::CrearLuz(int x,int y,int z)
 }
 
 void Nivel::setThen()
-{   //variables de la interpolacion 
+{   //variables de la interpolacion
     currentTime = clock();
 	acumulator = 0.0f;
     dt =1.0f/60.0f;
@@ -101,7 +101,7 @@ void Nivel::update()
     currentTime = newTime;
     acumulator += frameTime;
     while(acumulator >= dt)
-    { 
+    {
         //actualizamos movimiento del jugador
 
        jugador.movimiento(dt,
@@ -110,7 +110,7 @@ void Nivel::update()
             motor->estaPulsado(3),
             motor->estaPulsado(4)
         );
-       
+
        motor->mostrarJugador(jugador.getX(),
             jugador.getY(),
             jugador.getZ(),
@@ -119,8 +119,29 @@ void Nivel::update()
             jugador.getRZ()
         );
 
- 	   acumulator -= dt;  
-    } 
+      //Actualizar ataca
+      if((motor->estaPulsado(5) || motor->estaPulsado(11)) && atacktime == 0.0f)
+      {
+          jugador.Atacar(0,0); //Enviar IDs
+          atacktime = 2000.0f;
+      }else{
+          if(atacktime > 0.0f)
+          {
+            atacktime--;
+            cout << atacktime << endl;
+          }
+          if(atacktime > 500.0f)
+          {
+            //Colorear rojo
+            motor->colorearJugador(255,255,0,0);
+          }else{
+            //Colorear gris
+            motor->colorearJugador(255,128,128,128);
+          }
+      }
+
+ 	   acumulator -= dt;
+    }
 
 }
 

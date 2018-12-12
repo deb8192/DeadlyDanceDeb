@@ -9,7 +9,7 @@
 #ifndef Nivel_HPP
 #define Nivel_HPP
 
-class Nivel 
+class Nivel
 {
 
     public:
@@ -20,12 +20,12 @@ class Nivel
         {
             if(unica_instancia == 0)
             unica_instancia = new Nivel();
-            return unica_instancia;  
+            return unica_instancia;
         }
         //fin singleton public
 
         bool CargarNivel(int);//carga eñ nivel siempre que exista dicho nivel en assets/maps/xml/
-        
+
         //cargar objetos
         void CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -43,24 +43,25 @@ class Nivel
 
 
     private:
-        
-        //clase singleton 
+
+        //clase singleton
         Nivel();
         static Nivel* unica_instancia;
-        //fin clase singleton private 
+        //fin clase singleton private
         //std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena //crear clase objetos
-        
+
         std::vector<Enemigo*> enemigos;//Enemigos en scena
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala * primeraSala;// la primera sala del arbol
         int id;//id para las figuras
-        float dt;            
+        float dt;
         float frameTime;
         float acumulator;
+        float atacktime = 0.0f;
         clock_t newTime;
         clock_t currentTime;
         bool a,s,d,w;
 };
 
-#endif 
+#endif
