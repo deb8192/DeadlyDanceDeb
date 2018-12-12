@@ -9,6 +9,7 @@ class INobjetos
 {
     public:
 
+
     /*el protected es para que tenga acceso sus descendientes o parientes*/
     protected:
 };

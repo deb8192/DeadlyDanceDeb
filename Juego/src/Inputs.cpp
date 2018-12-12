@@ -26,6 +26,10 @@
 		{	
 			KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
 		}
+		if (event.EventType == irr::EET_MOUSE_INPUT_EVENT)
+		{	
+			MouseClick[event.MouseInput.Event] = event.MouseInput.ButtonStates;
+		}
 		return false;
 	}
 
@@ -33,6 +37,12 @@
 	bool Inputs::IsKeyDown(EKEY_CODE keyCode)
 	{
 		return KeyIsDown[keyCode];			
+	}
+
+	// This is used to check whether a mouse key is being held down
+	bool Inputs::IsMouseClick(EMOUSE_INPUT_EVENT mouseEvent)
+	{
+		return MouseClick[mouseEvent];			
 	}
 
 	// This is used to check whether a key is being held down

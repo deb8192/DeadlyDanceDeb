@@ -37,6 +37,8 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
 
 void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
+    jugador.setID(idJugador);
+    jugador.setBarraAtEs(100);
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarJugador(x,y,z,ruta_objeto,ruta_textura);
 }
@@ -135,7 +137,12 @@ Sala * Nivel::getPrimeraSala()
     return primeraSala;
 }
 
-Enemigo * Nivel::getPrimerEnemigo()
+std::vector<Enemigo *>  Nivel::getEnemigos()
 {
-    return enemigos.at(1);
+    return enemigos;
+}
+
+Jugador Nivel::getJugador()
+{
+    return jugador;
 }
