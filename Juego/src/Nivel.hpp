@@ -36,8 +36,9 @@ class Nivel
 
         Sala * getPrimeraSala();
 
-        //Pruebas Pathfinding
-        Enemigo getPrimerEnemigo();
+        //Pruebas Pathfinding y ataque especial
+        std::vector<Enemigo>  getEnemigos();
+        Jugador getJugador();
         void setThen();
 
 
@@ -54,6 +55,10 @@ class Nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala * primeraSala;// la primera sala del arbol
         
+        //PROVISIONAL
+        int id;
+        int idJugador;
+        //!PROVISIONAL
         float dt;            
         float frameTime;
         float acumulator;

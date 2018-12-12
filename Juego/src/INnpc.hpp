@@ -11,7 +11,7 @@ public:
 
     virtual ~INnpc(){};
     virtual void Atacar(){cout << "Se realiza ataque normal generico" << endl;};//efectua un ataque normal, llama al motor para ejecutar la animacion.
-    virtual void AtacarEspecial(){cout << "Se realiza ataque especial generico" << endl;};//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+    virtual void AtacarEspecial(int, int, int){cout << "Se realiza ataque especial generico" << endl;};//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
     virtual void QuitarVida(int){};//quita vida a la entidad
     virtual void RecuperarVida(int){};//le suma vida a la entidad
     virtual void AumentarBarraAtEs(int){};//aumenta el valor de la barra de ataque critico 
@@ -21,7 +21,7 @@ public:
     
     virtual void setVida(int vid){ vida = vid; };
     virtual void setTipo(int tip){ tipo = tip; };
-    virtual void setBarraAtEs(int bar){ if(bar <= 100){barraAtEs=bar;}};
+    virtual void setBarraAtEs(int bar){ if(bar <= 100 && bar > 0){barraAtEs=bar;}};
     virtual void setAtaque(int ataq){ataque = ataq;};
     virtual void setSuerte(int suer){suerte = suer;};
     virtual void setProAtaCritico(int probabilidad){if(probabilidad <= 100){proAtaCritico=probabilidad;}};

@@ -4,6 +4,7 @@
 #include <math.h>
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
+#include "Arma.hpp"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
         Jugador(int,int,int,int,int,int);//defines tu la informacion del jugador
-        void AtacarEspecial();//define el ataque especial para el jugador
+        void AtacarEspecial(int, int);//define el ataque especial para el jugador
         float mcd(float ax, float az);
         void movimiento(float dt,bool a, bool s, bool d, bool w);
         float getX();
@@ -24,7 +25,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getRZ(); 
 
     private:
-        float ax, az,deg;          
+        float ax, az,deg;   
+        //Arma armaEquipada;       
       //  core::vector3df dir; 
 };
 

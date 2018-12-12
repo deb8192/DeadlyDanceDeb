@@ -12,9 +12,16 @@ public:
      virtual ~INdrawable(){};
      
      virtual void setPosiciones(int nx,int ny,int nz){x=nx;y=ny;z=nz;};
+     virtual void setID(int id){ ID = id; }
+
+     virtual int getID() { return ID; } 
 
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:
+
+    //Provisional
+    int ID; //ID de la entidad
+    //!Provisional
     //posiciones del objeto drawable
     float x = 0.0f;
     float y = 0.0f;
