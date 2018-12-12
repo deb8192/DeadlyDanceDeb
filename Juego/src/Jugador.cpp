@@ -45,10 +45,6 @@ float Jugador::getRZ()
     return rz;
 }
 
-float Jugador::mcd(float ax, float az)
-{
-    return az ? mcd(az, fmod(ax, az)) : ax;
-}
 
 void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
 {   
@@ -86,12 +82,12 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     
     //Para giro: obtienes el maximo comun divisor y lo divides entre x, z
     //asi evitas que ambas variables aumenten excesivamente de valor
-    float div = mcd(ax,az);
+        float div = (float)__gcd((int)abs(ax),(int)abs(az));
     
-        if(abs(div) != 1.0)
+        if(div != 1.0)
         {    
-            ax /= abs(div);
-            az /= abs(div);
+            ax /= div;
+            az /= div;
         }
 
     //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
