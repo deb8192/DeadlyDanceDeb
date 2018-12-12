@@ -15,23 +15,36 @@ Jugador::Jugador(int,int,int,int,int,int)
     z = 20;
 }
 
-float Jugador::getX(){return x;}
-float Jugador::getY(){return y;}
-float Jugador::getZ(){return z;}
-float Jugador::getRX(){return rx;}
-float Jugador::getRY(){return ry;}
-float Jugador::getRZ(){return rz;}
-
-
-void Jugador::AtacarEspecial()
+float Jugador::getX()
 {
-    cout << "Se realiza ataque especial jugador" << endl;
+    return x;
 }
 
-float Jugador::mcd(float ax, float az)
+float Jugador::getY()
 {
-    return az ? mcd(az, fmod(ax, az)) : ax;
+    return y;
 }
+
+float Jugador::getZ()
+{
+    return z;
+}
+
+float Jugador::getRX()
+{
+    return rx;
+}
+
+float Jugador::getRY()
+{
+    return ry;
+}
+
+float Jugador::getRZ()
+{
+    return rz;
+}
+
 
 void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
 {   
@@ -69,12 +82,12 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     
     //Para giro: obtienes el maximo comun divisor y lo divides entre x, z
     //asi evitas que ambas variables aumenten excesivamente de valor
-    float div = mcd(ax,az);
+        float div = (float)__gcd((int)abs(ax),(int)abs(az));
     
-        if(abs(div) != 1.0)
+        if(div != 1.0)
         {    
-            ax /= abs(div);
-            az /= abs(div);
+            ax /= div;
+            az /= div;
         }
 
     //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
@@ -87,4 +100,117 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     x = px;
     z = pz;
     ry = deg;   
+}
+
+void Jugador::setPosiciones(int nx,int ny,int nz)
+{
+    x = nx;
+    y = ny;
+    z = nz;
+}
+
+void Jugador::Atacar()
+{
+
+}
+
+void Jugador::AtacarEspecial()
+{
+
+}
+        
+void Jugador::QuitarVida(int can)
+{
+            
+}
+
+void Jugador::RecuperarVida(int can)
+{
+
+}
+
+void Jugador::AumentarBarraAtEs(int can)
+{
+
+} 
+
+void Jugador::Interactuar(int id, int id2)
+{
+
+}
+
+void Jugador::setVida(int vid)
+{
+
+}
+
+void Jugador::setTipo(int tip)
+{
+
+}
+
+void Jugador::setBarraAtEs(int bar)
+{
+
+}
+
+void Jugador::setAtaque(int ataq)
+{
+
+}
+
+void Jugador::setSuerte(int suer)
+{
+
+}
+
+void Jugador::setProAtaCritico(int probabilidad)
+{
+
+}
+
+int Jugador::getVida()
+{
+    return -1;
+}
+
+int Jugador::getTipo()
+{
+    return -1;
+}
+
+int Jugador::getBarraAtEs()
+{
+    return -1;
+}
+    
+int Jugador::getAtaque()
+{
+    return -1;
+}
+
+int Jugador::getSuerte()
+{
+    return -1;
+}
+
+int Jugador::getProAtaCritico()
+{
+    return -1;
+}
+
+int * Jugador::getBuffos()
+{
+    int * valores = new int[6];
+    return valores;
+}
+
+void Jugador::setID(int nid)
+{
+    id = nid;
+}
+
+int Jugador::getID()
+{
+    return id;
 }

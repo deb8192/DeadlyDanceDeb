@@ -2,6 +2,7 @@
 #include "Jugador.hpp"
 #include "Enemigo.hpp"
 #include "CargadorNiveles.hpp"
+#include "pollo.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
 
@@ -37,7 +38,7 @@ class Nivel
         Sala * getPrimeraSala();
 
         //Pruebas Pathfinding
-        Enemigo getPrimerEnemigo();
+        Enemigo * getPrimerEnemigo();
         void setThen();
 
 
@@ -49,11 +50,11 @@ class Nivel
         //fin clase singleton private 
         //std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena //crear clase objetos
         
-        std::vector<Enemigo> enemigos;//Enemigos en scena
+        std::vector<Enemigo*> enemigos;//Enemigos en scena
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala * primeraSala;// la primera sala del arbol
-        
+        int id;//id para las figuras
         float dt;            
         float frameTime;
         float acumulator;
