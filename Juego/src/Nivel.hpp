@@ -39,7 +39,7 @@ class Nivel
 
 
         //Pruebas Pathfinding y ataque especial
-        std::vector<Enemigo>  getEnemigos();
+        std::vector<Enemigo*>  getEnemigos();
         Jugador getJugador();
         void setThen();
 

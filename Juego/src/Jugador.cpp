@@ -44,6 +44,7 @@ float Jugador::getRY()
 float Jugador::getRZ()
 {
     return rz;
+}
 
 float Jugador::mcd(float ax, float az)
 {
@@ -130,15 +131,18 @@ void Jugador::AtacarEspecial(int IDplayer, int IDenemy)
         bool encontrado = false;
         while(i < nivel->getEnemigos().size() && !encontrado)
         {
-            if(nivel->getEnemigos().at(i).getID() == IDenemy)
+            if(nivel->getEnemigos().at(i)->getID() == IDenemy)
             {
-                cout<<"Pupa al" << nivel->getEnemigos().at(i).getID()<<endl;
+                Enemigo * en = nivel->getEnemigos().at(i);
+                cout<<"Pupa al " << en->getID();
+                en->QuitarVida(5);
+                cout<<" " << en->getVida()<<endl;
                 encontrado = true;
             }
             else
             {
 
-                cout<<"NO daño" << nivel->getEnemigos().at(i).getID()<<endl;
+                cout<<"NO daño" << nivel->getEnemigos().at(i)->getID()<<endl;
             }
             i++;
         }
@@ -181,7 +185,7 @@ void Jugador::setTipo(int tip)
 
 void Jugador::setBarraAtEs(int bar)
 {
-
+    barraAtEs = bar;
 }
 
 void Jugador::setAtaque(int ataq)
@@ -211,7 +215,7 @@ int Jugador::getTipo()
 
 int Jugador::getBarraAtEs()
 {
-    return -1;
+    return barraAtEs;
 }
     
 int Jugador::getAtaque()

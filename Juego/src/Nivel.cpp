@@ -28,6 +28,7 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
     MotorGrafico * motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
     pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    ene->setVida(50);
     ene->definirSala(sala);//le pasamos la sala en donde esta
     enemigos.push_back(ene);//guardamos el enemigo en el vector
     id++;//generamos id para la figura
@@ -37,7 +38,7 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
 
 void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
-    jugador.setID(idJugador);
+    jugador.setID(id++);
     jugador.setBarraAtEs(100);
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarJugador(x,y,z,ruta_objeto,ruta_textura);

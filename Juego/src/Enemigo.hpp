@@ -28,7 +28,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getID();
         //npc metodos
         void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
-        void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+        void AtacarEspecial(int, int);//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
         
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad

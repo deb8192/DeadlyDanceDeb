@@ -48,14 +48,14 @@ void Enemigo::Atacar()
     std::cout << "Ataque normal enemigo" << std::endl;
 }
 
-void Enemigo::AtacarEspecial()
+void Enemigo::AtacarEspecial(int, int)
 {
     std::cout << "Ataque especial enemigo" << std::endl;
 }
         
 void Enemigo::QuitarVida(int can)
 {
-            
+    vida-=can;
 }
 
 void Enemigo::RecuperarVida(int can)
@@ -75,7 +75,7 @@ void Enemigo::Interactuar(int id, int id2)
 
 void Enemigo::setVida(int vid)
 {
-
+    vida = vid;
 }
 
 void Enemigo::setTipo(int tip)
@@ -105,7 +105,7 @@ void Enemigo::setProAtaCritico(int probabilidad)
 
 int Enemigo::getVida()
 {
-    return -1;
+    return vida;
 }
 
 int Enemigo::getTipo()
