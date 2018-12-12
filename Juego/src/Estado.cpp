@@ -67,11 +67,11 @@ void Jugando::Update()
     motora->update(false);
 
     //Prueba de Patfinder y ataque especial
-    std::vector <Enemigo> enemigos = nivel->getEnemigos();
+    std::vector <Enemigo*> enemigos = nivel->getEnemigos();
     if(motor->estaPulsado(8))
     {
         Pathfinder path;
-        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(enemigos.at(1).getSala(), nivel->getPrimeraSala());
+        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(enemigos.at(1)->getSala(), nivel->getPrimeraSala());
     }
     if(motor->estaPulsado(9) || motor->estaPulsado(11))
     {
@@ -80,6 +80,7 @@ void Jugando::Update()
         else
             cout<<"Q"<<endl;
         nivel->getJugador().AtacarEspecial(0,2);
+        mecanicas-ataque-especial
     }
 }
 

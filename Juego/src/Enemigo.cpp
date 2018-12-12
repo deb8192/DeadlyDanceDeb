@@ -2,7 +2,7 @@
 
 Enemigo::Enemigo()
 {
-    
+
 }
 
 void Enemigo::definirSala(Sala * sala)
@@ -34,4 +34,117 @@ void Enemigo::queVes()
 Sala* Enemigo::getSala()
 {
     return estoy;
+}
+
+void Enemigo::setPosiciones(int nx,int ny,int nz)
+{
+    x = nx;
+    y = ny;
+    z = nz;
+}
+
+void Enemigo::Atacar()
+{
+    std::cout << "Ataque normal enemigo" << std::endl;
+}
+
+void Enemigo::AtacarEspecial()
+{
+    std::cout << "Ataque especial enemigo" << std::endl;
+}
+        
+void Enemigo::QuitarVida(int can)
+{
+            
+}
+
+void Enemigo::RecuperarVida(int can)
+{
+
+}
+
+void Enemigo::AumentarBarraAtEs(int can)
+{
+
+} 
+
+void Enemigo::Interactuar(int id, int id2)
+{
+
+}
+
+void Enemigo::setVida(int vid)
+{
+
+}
+
+void Enemigo::setTipo(int tip)
+{
+
+}
+
+void Enemigo::setBarraAtEs(int bar)
+{
+
+}
+
+void Enemigo::setAtaque(int ataq)
+{
+
+}
+
+void Enemigo::setSuerte(int suer)
+{
+
+}
+
+void Enemigo::setProAtaCritico(int probabilidad)
+{
+
+}
+
+int Enemigo::getVida()
+{
+    return -1;
+}
+
+int Enemigo::getTipo()
+{
+    return -1;
+}
+
+int Enemigo::getBarraAtEs()
+{
+    return -1;
+}
+    
+int Enemigo::getAtaque()
+{
+    return -1;
+}
+
+int Enemigo::getSuerte()
+{
+    return -1;
+}
+
+int Enemigo::getProAtaCritico()
+{
+    return -1;
+}
+
+int * Enemigo::getBuffos()
+{
+    int * valores = new int[6];
+    return valores;
+}
+
+void Enemigo::setID(int nid)
+{
+    id = nid;
+}
+
+int Enemigo::getID()
+{
+    return id;
 }

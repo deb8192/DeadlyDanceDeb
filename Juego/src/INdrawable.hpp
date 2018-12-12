@@ -9,19 +9,11 @@ class INdrawable
 {
 
 public:
-     virtual ~INdrawable(){};
-     
-     virtual void setPosiciones(int nx,int ny,int nz){x=nx;y=ny;z=nz;};
-     virtual void setID(int id){ ID = id; }
-
-     virtual int getID() { return ID; } 
-
+    virtual void setPosiciones(int nx,int ny,int nz)=0;//modifica las posiciones de la figura
+    virtual void setID(int)=0;//nos sirve para definir el id que tiene esta figura
+    virtual int getID()=0;//nos sirve para saber que id tiene esta figura
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:
-
-    //Provisional
-    int ID; //ID de la entidad
-    //!Provisional
     //posiciones del objeto drawable
     float x = 0.0f;
     float y = 0.0f;
@@ -29,6 +21,7 @@ protected:
     float rx = 0.0f;
     float ry = 0.0f;
     float rz = 0.0f; 
+    int id = -1;
     //fin posiciones
 };
 
