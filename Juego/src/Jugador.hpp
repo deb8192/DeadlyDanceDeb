@@ -51,7 +51,9 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getRZ(); 
 
     private:
-        float ax, az,deg;          
+        float ax = 1.0f,
+              az = 20.0f,
+              deg;          
       //  core::vector3df dir; 
 };
 
