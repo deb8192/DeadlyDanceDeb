@@ -114,7 +114,6 @@ void Jugador::Atacar(int IDatacante, int IDatacado)
     if(vida > 0)
     {
       cout << "ATAQUE NORMAL" << endl;
-      bool encontrado = false;
       //Colision
 
       //Buscar en array de enemigos el IDatacado, si se encuentra quitarle vida
