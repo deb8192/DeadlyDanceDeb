@@ -13,6 +13,7 @@ public:
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:
 
+    //int tipoObjeto;//tipo de objeto: 1 para armas
 };
 
 #endif /* INobjetos_HPP */

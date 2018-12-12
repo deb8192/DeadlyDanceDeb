@@ -1,11 +1,11 @@
 #include "Jugador.hpp"
+#include "Nivel.hpp"
 
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
 Jugador::Jugador()
 {
-
 }
 
 Jugador::Jugador(int,int,int,int,int,int)
@@ -13,6 +13,7 @@ Jugador::Jugador(int,int,int,int,int,int)
     vida = 100;//esto lo hereda de la interfaz por el protected
     x = 1;
     z = 20;
+    //armaEquipada = NULL;
 }
 
 float Jugador::getX(){return x;}
@@ -23,9 +24,35 @@ float Jugador::getRY(){return ry;}
 float Jugador::getRZ(){return rz;}
 
 
-void Jugador::AtacarEspecial()
+void Jugador::AtacarEspecial(int IDplayer, int IDenemy)
 {
+    Nivel* nivel = Nivel::getInstance();
     cout << "Se realiza ataque especial jugador" << endl;
+    //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
+    if(vida > 0 && barraAtEs == 100)
+    {
+        cout << "Supera las restricciones"<<endl;
+        unsigned int i = 0;
+        bool encontrado = false;
+        while(i < nivel->getEnemigos().size() && !encontrado)
+        {
+            if(nivel->getEnemigos().at(i).getID() == IDenemy)
+            {
+                cout<<"Pupa al" << nivel->getEnemigos().at(i).getID()<<endl;
+                encontrado = true;
+            }
+            else
+            {
+
+                cout<<"NO daño" << nivel->getEnemigos().at(i).getID()<<endl;
+            }
+            i++;
+        }
+    }
+    else
+    {
+        cout << "No supera las restricciones"<<endl;
+    }
 }
 
 float Jugador::mcd(float ax, float az)
