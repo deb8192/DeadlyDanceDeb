@@ -16,44 +16,34 @@ Jugador::Jugador(int,int,int,int,int,int)
     //armaEquipada = NULL;
 }
 
-float Jugador::getX(){return x;}
-float Jugador::getY(){return y;}
-float Jugador::getZ(){return z;}
-float Jugador::getRX(){return rx;}
-float Jugador::getRY(){return ry;}
-float Jugador::getRZ(){return rz;}
-
-
-void Jugador::AtacarEspecial(int IDplayer, int IDenemy)
+float Jugador::getX()
 {
-    Nivel* nivel = Nivel::getInstance();
-    cout << "Se realiza ataque especial jugador" << endl;
-    //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
-    if(vida > 0 && barraAtEs == 100)
-    {
-        cout << "Supera las restricciones"<<endl;
-        unsigned int i = 0;
-        bool encontrado = false;
-        while(i < nivel->getEnemigos().size() && !encontrado)
-        {
-            if(nivel->getEnemigos().at(i).getID() == IDenemy)
-            {
-                cout<<"Pupa al" << nivel->getEnemigos().at(i).getID()<<endl;
-                encontrado = true;
-            }
-            else
-            {
-
-                cout<<"NO daño" << nivel->getEnemigos().at(i).getID()<<endl;
-            }
-            i++;
-        }
-    }
-    else
-    {
-        cout << "No supera las restricciones"<<endl;
-    }
+    return x;
 }
+
+float Jugador::getY()
+{
+    return y;
+}
+
+float Jugador::getZ()
+{
+    return z;
+}
+
+float Jugador::getRX()
+{
+    return rx;
+}
+
+float Jugador::getRY()
+{
+    return ry;
+}
+
+float Jugador::getRZ()
+{
+    return rz;
 
 float Jugador::mcd(float ax, float az)
 {
@@ -114,4 +104,143 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     x = px;
     z = pz;
     ry = deg;   
+}
+
+void Jugador::setPosiciones(int nx,int ny,int nz)
+{
+    x = nx;
+    y = ny;
+    z = nz;
+}
+
+void Jugador::Atacar()
+{
+
+}
+
+void Jugador::AtacarEspecial(int IDplayer, int IDenemy)
+{
+    Nivel* nivel = Nivel::getInstance();
+    cout << "Se realiza ataque especial jugador" << endl;
+    //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
+    if(vida > 0 && barraAtEs == 100)
+    {
+        cout << "Supera las restricciones"<<endl;
+        unsigned int i = 0;
+        bool encontrado = false;
+        while(i < nivel->getEnemigos().size() && !encontrado)
+        {
+            if(nivel->getEnemigos().at(i).getID() == IDenemy)
+            {
+                cout<<"Pupa al" << nivel->getEnemigos().at(i).getID()<<endl;
+                encontrado = true;
+            }
+            else
+            {
+
+                cout<<"NO daño" << nivel->getEnemigos().at(i).getID()<<endl;
+            }
+            i++;
+        }
+    }
+    else
+    {
+        cout << "No supera las restricciones"<<endl;
+    }
+}
+        
+void Jugador::QuitarVida(int can)
+{
+            
+}
+
+void Jugador::RecuperarVida(int can)
+{
+
+}
+
+void Jugador::AumentarBarraAtEs(int can)
+{
+
+} 
+
+void Jugador::Interactuar(int id, int id2)
+{
+
+}
+
+void Jugador::setVida(int vid)
+{
+
+}
+
+void Jugador::setTipo(int tip)
+{
+
+}
+
+void Jugador::setBarraAtEs(int bar)
+{
+
+}
+
+void Jugador::setAtaque(int ataq)
+{
+
+}
+
+void Jugador::setSuerte(int suer)
+{
+
+}
+
+void Jugador::setProAtaCritico(int probabilidad)
+{
+
+}
+
+int Jugador::getVida()
+{
+    return -1;
+}
+
+int Jugador::getTipo()
+{
+    return -1;
+}
+
+int Jugador::getBarraAtEs()
+{
+    return -1;
+}
+    
+int Jugador::getAtaque()
+{
+    return -1;
+}
+
+int Jugador::getSuerte()
+{
+    return -1;
+}
+
+int Jugador::getProAtaCritico()
+{
+    return -1;
+}
+
+int * Jugador::getBuffos()
+{
+    int * valores = new int[6];
+    return valores;
+}
+
+void Jugador::setID(int nid)
+{
+    id = nid;
+}
+
+int Jugador::getID()
+{
+    return id;
 }
