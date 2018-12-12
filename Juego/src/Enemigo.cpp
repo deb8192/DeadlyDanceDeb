@@ -43,7 +43,7 @@ void Enemigo::setPosiciones(int nx,int ny,int nz)
     z = nz;
 }
 
-void Enemigo::Atacar()
+void Enemigo::Atacar(int, int)
 {
     std::cout << "Ataque normal enemigo" << std::endl;
 }
@@ -52,10 +52,10 @@ void Enemigo::AtacarEspecial()
 {
     std::cout << "Ataque especial enemigo" << std::endl;
 }
-        
+
 void Enemigo::QuitarVida(int can)
 {
-            
+
 }
 
 void Enemigo::RecuperarVida(int can)
@@ -66,7 +66,7 @@ void Enemigo::RecuperarVida(int can)
 void Enemigo::AumentarBarraAtEs(int can)
 {
 
-} 
+}
 
 void Enemigo::Interactuar(int id, int id2)
 {
@@ -117,7 +117,7 @@ int Enemigo::getBarraAtEs()
 {
     return -1;
 }
-    
+
 int Enemigo::getAtaque()
 {
     return -1;
