@@ -76,7 +76,7 @@ void Juego::Jugar()
 {
     motora->getEvent("Level02")->stop(); //Detener musica Menu
     motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    motora->getEvent("Level01")->start(); //Reproducir musica juego
+    motora->getEvent("Level03")->start(); //Reproducir musica juego
 
     estado = &jugando;//se cambia a estado jugando
     estado->Ini();
