@@ -5,6 +5,7 @@
 #include "pollo.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
+#include "MotorFisicas.hpp"
 
 #ifndef Nivel_HPP
 #define Nivel_HPP
@@ -56,6 +57,7 @@ class Nivel
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala * primeraSala;// la primera sala del arbol
+        MotorFisicas *fisicas;//motor de fisicas (hace falta mas descripcion ?)
         int id;//id para las figuras
         float dt;            
         float frameTime;
