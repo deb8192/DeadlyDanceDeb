@@ -40,6 +40,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
         void setSuerte(int suer);
+        void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
 
         int getVida();
@@ -47,6 +48,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getBarraAtEs();
         int getAtaque();
         int getSuerte();
+        int getDanyoCritico();
         int getProAtaCritico();
         int* getBuffos();
         //propios

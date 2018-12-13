@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
+#include "Arma.hpp"
 
 using namespace std;
 
@@ -32,14 +33,20 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setTipo(int tip);
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
+        void setArma(Arma *arma);
+        void setArmaEspecial();
         void setSuerte(int suer);
+        void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
 
         int getVida();
         int getTipo();
         int getBarraAtEs();
         int getAtaque();
+        Arma* getArma();
+        Arma* getArmaEspecial();
         int getSuerte();
+        int getDanyoCritico();
         int getProAtaCritico();
         int* getBuffos();
 
@@ -53,7 +60,10 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
     private:
         float ax = 1.0f,
               az = 20.0f,
-              deg;          
+              deg;        
+        Arma *armaEquipada;
+        Arma *armaEspecial;    
+        const char * rutaArmaEspecial = "/assets/models/Arma.3ds";  
       //  core::vector3df dir; 
 };
 
