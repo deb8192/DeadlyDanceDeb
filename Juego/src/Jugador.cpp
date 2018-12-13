@@ -119,7 +119,7 @@ void Jugador::Atacar()
 
 }
 
-void Jugador::AtacarEspecial(int IDplayer, int IDenemy)
+void Jugador::AtacarEspecial()
 {
     Nivel* nivel = Nivel::getInstance();
     cout << "Se realiza ataque especial jugador" << endl;
