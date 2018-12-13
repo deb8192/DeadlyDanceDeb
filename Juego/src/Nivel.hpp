@@ -5,6 +5,9 @@
 #include "pollo.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
+#include "reactphysics3d.h"
+
+using namespace reactphysics3d;
 
 #ifndef Nivel_HPP
 #define Nivel_HPP
@@ -41,14 +44,18 @@ class Nivel
         Enemigo * getPrimerEnemigo();
         void setThen();
 
-
     private:
+        //Crear mundo de colisiones
+        rp3d::CollisionWorld world;
+        rp3d::CollisionBody* body = NULL;
+        rp3d::CollisionBody* body2 = NULL;
 
         //clase singleton
         Nivel();
         static Nivel* unica_instancia;
         //fin clase singleton private
         //std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena //crear clase objetos
+
 
         std::vector<Enemigo*> enemigos;//Enemigos en scena
         Jugador jugador;//objeto del jugador en el nivel

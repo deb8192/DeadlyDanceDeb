@@ -107,7 +107,7 @@ void Jugador::setPosiciones(int nx,int ny,int nz)
     z = nz;
 }
 
-void Jugador::Atacar(int IDatacante, int IDatacado)
+void Jugador::Atacar(int IDatacante)
 {
     if(vida > 0)
     {
