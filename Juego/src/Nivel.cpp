@@ -9,6 +9,7 @@ Nivel* Nivel::unica_instancia = 0;
 Nivel::Nivel()
 {
     primeraSala = nullptr; 
+    fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     id = 0;
 }
 
@@ -33,18 +34,21 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
     id++;//generamos id para la figura
     ene->setID(id);//le damos el id unico en esta partida al enemigo
     motor->CargarEnemigos(x,y,z,ruta_objeto,ruta_textura);//creamos la figura pasando el id
+    fisicas->crearCuerpo(x,y,z,2,10,10,10,2);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
 }
 
 void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarJugador(x,y,z,ruta_objeto,ruta_textura);
+    fisicas->crearCuerpo(x,y,z,3,10,10,10,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
 }
 
 void Nivel::CrearObjeto(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarObjetos(x,y,z,ruta_objeto,ruta_textura);
+    fisicas->crearCuerpo(x,y,z,1,10,10,10,3);
 }
 
 Sala * Nivel::CrearPlataforma(int x,int y,int z, int ancho, int largo, int centro, const char *ruta_objeto, const char *ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -95,7 +99,8 @@ void Nivel::update()
     //Interpolacion
     newTime = clock();
     frameTime = newTime - currentTime;
-    if(frameTime>0.25f){
+    if(frameTime>0.25f)
+    {
         frameTime=0.25f;
     }
     currentTime = newTime;
@@ -119,6 +124,8 @@ void Nivel::update()
             jugador.getRZ()
         );
 
+        fisicas->updateJugador(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
+        
  	   acumulator -= dt;  
     } 
 
