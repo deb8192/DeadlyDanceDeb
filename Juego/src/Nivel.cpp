@@ -33,12 +33,37 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
     id++;//generamos id para la figura
     ene->setID(id);//le damos el id unico en esta partida al enemigo
     motor->CargarEnemigos(x,y,z,ruta_objeto,ruta_textura);//creamos la figura pasando el id
+
+    //Crear su colision
+    //Initial position and orientation of the collision body
+    rp3d::Vector3 initPosition(x,y,z);
+    rp3d::Quaternion initOrientation = rp3d::Quaternion::identity();
+    rp3d::Transform transform(initPosition, initOrientation);
+    //Create a collision body in the world
+    body = world.createCollisionBody(transform);
+    //Half extents of the box in the x, y and z directions
+    rp3d::Vector3 halfExtents(2.0, 2.0, 2.0);
+    rp3d::BoxShape boxShape(halfExtents);
+    //Add the collision shape to the rigid body
+    body->addCollisionShape(&boxShape, transform);
 }
 
 void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarJugador(x,y,z,ruta_objeto,ruta_textura);
+
+    // Initial position and orientation of the collision body
+    rp3d::Vector3 initPosition2(x,y,z);
+    rp3d::Quaternion initOrientation2 = rp3d::Quaternion::identity();
+    rp3d::Transform transform2(initPosition2, initOrientation2);
+    // Create a collision body in the world
+    body2 = world.createCollisionBody(transform2);
+    // Half extents of the box in the x, y and z directions
+    rp3d::Vector3 halfExtents2(2.0, 2.0, 2.0);
+    rp3d::BoxShape boxShape2(halfExtents2);
+    //Add the collision shape to the rigid body
+    body2->addCollisionShape(&boxShape2, transform2);
 }
 
 void Nivel::CrearObjeto(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -79,6 +104,10 @@ void Nivel::setThen()
 
 void Nivel::update()
 {
+    //
+    // if(body != NULL && body2 != NULL)
+    // {cout << world.testOverlap(body,body2) << endl;}
+
     //actualizamos los enemigos
     if(enemigos.size() > 0)//posiciones interpolacion
     {
@@ -122,7 +151,7 @@ void Nivel::update()
       //Actualizar ataca
       if((motor->estaPulsado(5) || motor->estaPulsado(11)) && atacktime == 0.0f)
       {
-          jugador.Atacar(0,0); //Enviar IDs
+          jugador.Atacar(0); //Enviar IDs
           atacktime = 2000.0f;
       }else{
           if(atacktime > 0.0f)
