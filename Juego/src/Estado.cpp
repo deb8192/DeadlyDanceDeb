@@ -66,11 +66,20 @@ void Jugando::Update()
     MotorAudioSystem *motora = MotorAudioSystem::getInstance();
     motora->update(false);
 
-    //Prueba de Patfinder
+    //Prueba de Patfinder y ataque especial
+    std::vector <Enemigo*> enemigos = nivel->getEnemigos();
     if(motor->estaPulsado(8))
     {
         Pathfinder path;
-        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(nivel->getPrimerEnemigo()->getSala(), nivel->getPrimeraSala());
+        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(enemigos.at(1)->getSala(), nivel->getPrimeraSala());
+    }
+    if(motor->estaPulsado(9) || motor->estaPulsado(11))
+    {
+        if(motor->estaPulsado(9))
+            cout<<"Raton"<<endl;
+        else
+            cout<<"Q"<<endl;
+        nivel->getJugador().AtacarEspecial();
     }
 }
 

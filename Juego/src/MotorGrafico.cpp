@@ -178,6 +178,15 @@ bool MotorGrafico::estaPulsado(int boton)
 
         case 8:
             return input.IsKeyDown(irr::KEY_KEY_P);
+        
+        case 9:
+            return input.IsMouseClick(irr::EMIE_RMOUSE_PRESSED_DOWN);
+        
+        case 10:
+            return input.IsMouseClick(irr::EMIE_LMOUSE_PRESSED_DOWN);
+        
+        case 11:
+            return input.IsKeyDown(irr::KEY_KEY_Q);
     }
     return false;
 }
@@ -261,6 +270,19 @@ void MotorGrafico::CargarJugador(int x,int y,int z, const char *ruta_objeto, con
         IAnimatedMeshSceneNode* jugador_en_scena = smgr->addAnimatedMeshSceneNode(jugador); //metemos el objeto en el escenario para eso lo pasamos al escenario   
         jugador_en_scena->setPosition(core::vector3df(x,y,z));
         Jugador_Scena = jugador_en_scena;
+    }
+}
+
+void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+    IAnimatedMesh* armaEsp = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+	if (!armaEsp)
+	{
+		//error
+	}
+    else
+    {
+        ArmaEspecial_Jugador = armaEsp;
     }
 }
 
