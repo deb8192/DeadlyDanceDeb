@@ -10,7 +10,7 @@ class INnpc {
 public:
   
     virtual void Atacar()=0;//efectua un ataque normal, llama al motor para ejecutar la animacion.
-    virtual void AtacarEspecial(int, int)=0;//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+    virtual void AtacarEspecial()=0;//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
     virtual void QuitarVida(int)=0;//quita vida a la entidad
     virtual void RecuperarVida(int)=0;//le suma vida a la entidad
     virtual void AumentarBarraAtEs(int)=0;//aumenta el valor de la barra de ataque critico 
