@@ -2,6 +2,7 @@
 #define Jugador_HPP
 #include <iostream>
 #include <math.h>
+#include <algorithm>
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
 #include "Arma.hpp"
@@ -14,7 +15,6 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
         Jugador(int,int,int,int,int,int);//defines tu la informacion del jugador
-        float mcd(float ax, float az);
         void movimiento(float dt,bool a, bool s, bool d, bool w);
 
         //drawable metodos
@@ -58,7 +58,9 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getRZ(); 
 
     private:
-        float ax, az,deg;   
+        float ax = 1.0f,
+              az = 20.0f,
+              deg;        
         Arma *armaEquipada;
         Arma *armaEspecial;    
         const char * rutaArmaEspecial = "/assets/models/Arma.3ds";  
