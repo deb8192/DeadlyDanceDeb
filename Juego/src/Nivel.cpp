@@ -102,8 +102,8 @@ void Nivel::update()
     //Interpolacion
     newTime = clock();
     frameTime = newTime - currentTime;
-    if(frameTime>0.10f){
-        frameTime=0.10f;
+    if(frameTime>0.05f){
+        frameTime=0.05f;
     }
     currentTime = newTime;
     acumulator += frameTime;
@@ -151,7 +151,11 @@ void Nivel::update()
           {
             atacktime--;
           }
-          if(atacktime == 1000.0f)motor->borrarObjetoTemporal();
+          if(atacktime == 1000.0f) //Zona de pruebas
+          {
+            motor->borrarObjetoTemporal();
+            motor->colorearEnemigo(255,255,255,255,0);
+          }
           if(atacktime > 500.0f)
           {
             //Colorear rojo
@@ -161,7 +165,6 @@ void Nivel::update()
             motor->colorearJugador(255,0,0,255);
           }
       }
-
  	   acumulator -= dt;
     }
 
