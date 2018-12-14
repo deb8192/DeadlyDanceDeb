@@ -61,7 +61,7 @@ void Jugando::Update()
     sense->update();//se actualizan sentidos
     nivel->update();//se actualiza posiciones y interpolado
     motor->updateMotorJuego();// se actualiza lo que se ve por pantalla
-    
+
     //Actualiza el motor de audio
     MotorAudioSystem *motora = MotorAudioSystem::getInstance();
     motora->update(false);
