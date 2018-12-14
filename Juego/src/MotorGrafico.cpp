@@ -273,6 +273,19 @@ void MotorGrafico::CargarJugador(int x,int y,int z, const char *ruta_objeto, con
     }
 }
 
+void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+    IAnimatedMesh* armaEsp = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+	if (!armaEsp)
+	{
+		//error
+	}
+    else
+    {
+        ArmaEspecial_Jugador = armaEsp;
+    }
+}
+
 void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry, float rz)
 {
     
