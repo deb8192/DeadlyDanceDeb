@@ -77,6 +77,8 @@ using namespace idsEventos;
             void CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void crearObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int dimension);
+            void borrarObjetoTemporal();
 
             void closeGame();
 
@@ -115,6 +117,7 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
             bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
+            IAnimatedMeshSceneNode* tmpobjt_en_scena;
     };
 
 #endif /* MotorGrafico_HPP */

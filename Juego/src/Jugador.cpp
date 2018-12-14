@@ -1,5 +1,10 @@
 #include "Jugador.hpp"
+#include "Nivel.hpp"
+#include "MotorFisicas.hpp"
+#include "MotorGrafico.hpp"
+#include "math.h"
 
+#define PI 3.14159265358979323846
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
@@ -107,12 +112,41 @@ void Jugador::setPosiciones(int nx,int ny,int nz)
     z = nz;
 }
 
-void Jugador::Atacar(int IDatacante)
+void Jugador::Atacar()
 {
-    cout << "ATAQUE NORMAL" << endl;
-    //Colision
+    cout << "ATAQUE NORMAL DEL JUGADOR" << endl;
+    Nivel* nivel = Nivel::getInstance();
 
-    //Buscar en array de enemigos el IDatacado, si se encuentra quitarle vida
+    //Crear cuerpo
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    motor->crearObjetoTemporal(getX(),getY(),getZ(),getRX(),getRY(),getRZ(),3);
+
+    //Crear colision de ataque delante del jugador
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    float atposX = (getX()/2);
+    float atposY = (getY()/2);
+    float atposZ = (getZ()/2);
+    rp3d::Vector3 posiciones(atposX,atposY,atposZ);
+    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+    Transform transformacion(posiciones,orientacion);
+    rp3d::CollisionBody * cuerpo = fisicas->getWorld()->createCollisionBody(transformacion);
+    SphereShape * forma = new SphereShape(4);
+    cuerpo->addCollisionShape(forma,transformacion);
+
+    //Pasar por cada uno de los enemigos del nivel y comprobar colision
+    long unsigned int num = 0;
+    while(nivel->getEnemies().size() > num)
+    {
+      //Si colisiona algun enemigo
+      if(fisicas->getWorld()->testOverlap(cuerpo,fisicas->getEnemies(num)))
+      {
+        cout << "Enemigo " << num << " danyado" << endl;
+      }
+      num++;
+    }
+
+    //Destruir cuerpo colision
+    fisicas->getWorld()->destroyCollisionBody(cuerpo);
 }
 
 void Jugador::AtacarEspecial()

@@ -21,7 +21,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setID(int);
         int getID();
         //npc metodos
-        void Atacar(int);//efectua un ataque normal, llama al motor para ejecutar la animacion.
+        void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
         void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
@@ -54,6 +54,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float ax = 1.0f,
               az = 20.0f,
               deg;
+        float danyo_arma = 10.0f;
       //  core::vector3df dir;
 };
 

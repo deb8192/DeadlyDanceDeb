@@ -102,8 +102,8 @@ void Nivel::update()
     //Interpolacion
     newTime = clock();
     frameTime = newTime - currentTime;
-    if(frameTime>0.025f){
-        frameTime=0.025f;
+    if(frameTime>0.10f){
+        frameTime=0.10f;
     }
     currentTime = newTime;
     acumulator += frameTime;
@@ -134,23 +134,24 @@ void Nivel::update()
             jugador.getRZ()
         );
 
-      if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getEnemies(0)))
-      {
-        motor->colorearEnemigo(255,255,0,0,0);
-      }else{
-        motor->colorearEnemigo(255,255,255,255,0);
-      }
+      // if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getEnemies(0)))
+      // {
+      //   motor->colorearEnemigo(255,255,0,0,0);
+      // }else{
+      //   motor->colorearEnemigo(255,255,255,255,0);
+      // }
 
       //Actualizar ataca
       if((motor->estaPulsado(5) || motor->estaPulsado(11)) && atacktime == 0.0f)
       {
-          jugador.Atacar(0); //Enviar IDs
+          jugador.Atacar(); //Enviar IDs
           atacktime = 2000.0f;
       }else{
           if(atacktime > 0.0f)
           {
             atacktime--;
           }
+          if(atacktime == 1000.0f)motor->borrarObjetoTemporal();
           if(atacktime > 500.0f)
           {
             //Colorear rojo
@@ -180,4 +181,9 @@ Sala * Nivel::getPrimeraSala()
 Enemigo * Nivel::getPrimerEnemigo()
 {
     return enemigos.at(1);
+}
+
+std::vector<Enemigo*> Nivel::getEnemies()
+{
+  return enemigos;
 }

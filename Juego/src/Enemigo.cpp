@@ -43,7 +43,7 @@ void Enemigo::setPosiciones(int nx,int ny,int nz)
     z = nz;
 }
 
-void Enemigo::Atacar(int)
+void Enemigo::Atacar()
 {
     std::cout << "Ataque normal enemigo" << std::endl;
 }

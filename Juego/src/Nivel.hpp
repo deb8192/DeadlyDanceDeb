@@ -34,6 +34,7 @@ class Nivel
         void CrearLuz(int x,int y,int z);
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
+        std::vector<Enemigo*> getEnemies();
 
         Sala * getPrimeraSala();
 
