@@ -234,7 +234,7 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
     bill->setMaterialTexture(0, driver->getTexture("assets/models/particlegreen.jpg"));
 }
 
-void MotorGrafico::CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarEnemigos(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* enemigo = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!enemigo)
@@ -249,7 +249,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char *ruta_objeto, co
     }
 }
 
-void MotorGrafico::CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* jugador = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!jugador)
@@ -260,7 +260,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, const char *ruta_objeto, con
     {
         IAnimatedMeshSceneNode* jugador_en_scena = smgr->addAnimatedMeshSceneNode(jugador); //metemos el objeto en el escenario para eso lo pasamos al escenario   
         jugador_en_scena->setPosition(core::vector3df(x,y,z));
-        Jugador_Scena = jugador_en_scena;
+        Jugador_Scena = jugador_en_scena;       
     }
 }
 
@@ -285,9 +285,10 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
     Jugador_Scena->setPosition(core::vector3df(x,y,z));
     Jugador_Scena->setRotation(core::vector3df(rx,ry,rz));
+
 }
 
-void MotorGrafico::CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarObjetos(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!objeto)
