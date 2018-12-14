@@ -237,6 +237,7 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
 void MotorGrafico::CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* enemigo = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+
 	if (!enemigo)
 	{
 		//error
@@ -245,11 +246,8 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char *ruta_objeto, co
     {
         IAnimatedMeshSceneNode* enemigo_en_scena = smgr->addAnimatedMeshSceneNode(enemigo); //metemos el objeto en el escenario para eso lo pasamos al escenario
         enemigo_en_scena->setPosition(core::vector3df(x,y,z));
-        //Color pruebas
-        const SColor COLOR  = SColor(255,255,255,255);
-        smgr->getMeshManipulator()->setVertexColors(enemigo_en_scena->getMesh(),COLOR);
-
         Enemigos_Scena.push_back(enemigo_en_scena);
+
     }
 }
 
@@ -397,6 +395,12 @@ void MotorGrafico::dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int d
 
 void MotorGrafico::colorearJugador(int a, int r, int g, int b)
 {
-  const SColor COLOR  = SColor(a, r, g, b);
+  SColor COLOR  = SColor(a, r, g, b);
   smgr->getMeshManipulator()->setVertexColors(Jugador_Scena->getMesh(),COLOR);
+}
+
+void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
+{
+  SColor COLOR  = SColor(a, r, g, b);
+  smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena[enem]->getMesh(),COLOR);
 }
