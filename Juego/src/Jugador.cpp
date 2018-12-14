@@ -109,15 +109,10 @@ void Jugador::setPosiciones(int nx,int ny,int nz)
 
 void Jugador::Atacar(int IDatacante)
 {
-    if(vida > 0)
-    {
-      cout << "ATAQUE NORMAL" << endl;
-      //Colision
+    cout << "ATAQUE NORMAL" << endl;
+    //Colision
 
-      //Buscar en array de enemigos el IDatacado, si se encuentra quitarle vida
-    }else{
-      cout << "NO PUEDE ATACAR" << endl;
-    }
+    //Buscar en array de enemigos el IDatacado, si se encuentra quitarle vida
 }
 
 void Jugador::AtacarEspecial()
