@@ -74,9 +74,9 @@ using namespace idsEventos;
             //cargadores de objetos
             int CargarPlataformas(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
-            void CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
-            void CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
-            void CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void CargarEnemigos(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
+            void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
+            void CargarObjetos(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             
             void closeGame();
             
@@ -112,6 +112,7 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
+            core::aabbox3d<f32> bounding_jugador;
     };
 
 #endif /* MotorGrafico_HPP */
