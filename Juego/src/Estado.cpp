@@ -79,7 +79,7 @@ void Jugando::Update()
             cout<<"Raton"<<endl;
         else
             cout<<"Q"<<endl;
-        nivel->getJugador().AtacarEspecial(nivel->getJugador().getID(),2);
+        nivel->getJugador().AtacarEspecial();
     }
 }
 

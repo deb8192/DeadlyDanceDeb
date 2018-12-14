@@ -48,7 +48,7 @@ void Enemigo::Atacar()
     std::cout << "Ataque normal enemigo" << std::endl;
 }
 
-void Enemigo::AtacarEspecial(int, int)
+void Enemigo::AtacarEspecial()
 {
     std::cout << "Ataque especial enemigo" << std::endl;
 }
@@ -90,10 +90,15 @@ void Enemigo::setBarraAtEs(int bar)
 
 void Enemigo::setAtaque(int ataq)
 {
-
+    ataque = ataq;
 }
 
 void Enemigo::setSuerte(int suer)
+{
+
+}
+
+void Enemigo::setDanyoCritico(int danyoC)
 {
 
 }
@@ -124,6 +129,11 @@ int Enemigo::getAtaque()
 }
 
 int Enemigo::getSuerte()
+{
+    return -1;
+}
+
+int Enemigo::getDanyoCritico()
 {
     return -1;
 }

@@ -23,6 +23,7 @@ public:
     virtual void setBarraAtEs(int bar)=0;
     virtual void setAtaque(int ataq)=0;
     virtual void setSuerte(int suer)=0;
+    virtual void setDanyoCritico(int danyoC)=0;
     virtual void setProAtaCritico(int probabilidad)=0;
     
     virtual int getVida()=0;
@@ -30,6 +31,7 @@ public:
     virtual int getBarraAtEs()=0;
     virtual int getAtaque()=0;
     virtual int getSuerte()=0;
+    virtual int getDanyoCritico()=0;
     virtual int getProAtaCritico()=0;
     virtual int* getBuffos()=0;
 
@@ -40,6 +42,7 @@ protected:
     int barraAtEs;//barra que va de 0 a 100, cuando se 100 se puede ejecutar ataque especial.
     int ataque;//dano base que hace la entidad  
     int suerte;//valor que determina la probabilidad de ataque critico y en el caso de jugador tambien de que suerte objetos 
+    int danyoCritico;//valor base del danyo anyadido a un golpe critico;
     int proAtaCritico;//valor que determina cuantas veces se hacen ataques criticos.
     int buffos[4];//1 aumento de vida, 2 aumento de ataque, 3 aumento de suerte, 4 aumento de pCritica.
 };

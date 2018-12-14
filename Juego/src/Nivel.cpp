@@ -40,6 +40,9 @@ void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char 
 {
     jugador.setID(id++);
     jugador.setBarraAtEs(100);
+    jugador.setAtaque(15);
+    jugador.setDanyoCritico(50);
+    jugador.setProAtaCritico(10);
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarJugador(x,y,z,ruta_objeto,ruta_textura);
 }
