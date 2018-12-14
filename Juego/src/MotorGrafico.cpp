@@ -192,6 +192,37 @@ void MotorGrafico::resetEvento(int event)
     input.ResetEvento(event);
 }
 
+void MotorGrafico::resetKey(int event)
+{
+    switch(event)
+    {
+        case 1:     
+            input.ResetKey(irr::KEY_KEY_A);
+        break;
+        case 2:
+            input.ResetKey(irr::KEY_KEY_S);
+        break;
+        case 3:
+            input.ResetKey(irr::KEY_KEY_D);
+        break;
+        case 4:
+            input.ResetKey(irr::KEY_KEY_W);
+        break;
+        case 5:
+            input.ResetKey(irr::KEY_SPACE);
+        break;
+        case 6:
+            input.ResetKey(irr::KEY_ACCEPT);
+        break;
+        case 7:
+            input.ResetKey(irr::KEY_KEY_G);//para modo debug
+        break;
+        case 8:
+            input.ResetKey(irr::KEY_KEY_P);
+        break;
+    }
+}
+
 int MotorGrafico::CargarPlataformas(int x,int y,int z, const char *ruta_objeto,const char *ruta_textura)
 {
     IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria

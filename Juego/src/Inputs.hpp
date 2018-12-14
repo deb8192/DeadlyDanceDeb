@@ -14,6 +14,7 @@ using namespace gui;
         public:
             virtual bool OnEvent(const SEvent& event);
             virtual bool IsKeyDown(EKEY_CODE keyCode);
+            void ResetKey(int);//pone el evento a false
             void ResetEvento(int);//pone el evento a false
             bool IsEventOn(int event);
             Inputs();

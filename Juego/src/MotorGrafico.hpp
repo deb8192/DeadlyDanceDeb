@@ -56,12 +56,9 @@ using namespace idsEventos;
             //borrar gui
             void borrarGui();//borra todo lo que haya en la ventana relacionado con el gui
             
-
-
             /*IMPORTANTE para bullet motor de fisicas y Joints*/
             //btHingeConstraint(btRigidBody& rbA,const btTransform& rbAFrame, const btTransform& rbBFrame);
             
-
             //eventos facade
             //detecta si esta pulsado un boton, 1=a, 2 =s, 3=d, 4=w, 5=space, 6=intro 
             bool estaPulsado(int);
@@ -71,6 +68,8 @@ using namespace idsEventos;
             //fin evento botones se puede utilizar para cualquier tipo de evento de irrlicht
             void resetEvento(int);//resetea el evento
             
+            void resetKey(int);//despulsa la tecla que le pases
+
             //cargadores de objetos
             int CargarPlataformas(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
