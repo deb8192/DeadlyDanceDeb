@@ -117,15 +117,20 @@ void Jugador::Atacar()
     cout << "ATAQUE NORMAL DEL JUGADOR" << endl;
     Nivel* nivel = Nivel::getInstance();
 
+    //Calcular posiciones
+    int distance = 5;
+    float newz = distance * cos(PI * getRY() / 180.0f) + getZ();
+    float newx = distance * sin(PI * getRY() / 180.0f) + getX();
+
     //Crear cuerpo
     MotorGrafico * motor = MotorGrafico::getInstance();
-    motor->crearObjetoTemporal(getX(),getY(),getZ(),getRX(),getRY(),getRZ(),3);
+    motor->crearObjetoTemporal(newx,getY(),newz,getRX(),getRY(),getRZ(),3);
 
     //Crear colision de ataque delante del jugador
     MotorFisicas* fisicas = MotorFisicas::getInstance();
-    float atposX = (getX()/2);
+    float atposX = (newx/2);
     float atposY = (getY()/2);
-    float atposZ = (getZ()/2);
+    float atposZ = (newz/2);
     rp3d::Vector3 posiciones(atposX,atposY,atposZ);
     rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
     Transform transformacion(posiciones,orientacion);
@@ -141,6 +146,7 @@ void Jugador::Atacar()
       if(fisicas->getWorld()->testOverlap(cuerpo,fisicas->getEnemies(num)))
       {
         cout << "Enemigo " << num << " danyado" << endl;
+        motor->colorearEnemigo(255,255,0,0,num);
       }
       num++;
     }
