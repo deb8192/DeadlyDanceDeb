@@ -32,6 +32,7 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->setVida(75);
     ene->definirSala(sala);//le pasamos la sala en donde esta
+    ene->generarSonido(20,5);
     enemigos.push_back(ene);//guardamos el enemigo en el vector
     id++;//generamos id para la figura
     ene->setID(id);//le damos el id unico en esta partida al enemigo
@@ -48,6 +49,7 @@ void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char 
     jugador.setArmaEspecial(100);
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
+    jugador.setVida(100);
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarJugador(x,y,z,ruta_objeto,ruta_textura);
     motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
@@ -103,6 +105,7 @@ void Nivel::update()
             //cout << "Enemigo " << i << endl;
             //enemigos[i]->Atacar();
             //enemigos[i]->AtacarEspecial();
+            //enemigos[i]->queEscuchas();
         }
     }
 
