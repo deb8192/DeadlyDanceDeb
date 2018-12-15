@@ -10,6 +10,7 @@
 
 Jugador::Jugador()
 {
+
 }
 
 Jugador::Jugador(int,int,int,int,int,int)
@@ -280,7 +281,7 @@ void Jugador::Interactuar(int id, int id2)
 
 void Jugador::setVida(int vid)
 {
-
+    vida = vid;
 }
 
 void Jugador::setTipo(int tip)
