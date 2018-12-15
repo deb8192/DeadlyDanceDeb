@@ -9,7 +9,7 @@ Nivel* Nivel::unica_instancia = 0;
 
 Nivel::Nivel()
 {
-    primeraSala = nullptr; 
+    primeraSala = nullptr;
     fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     id = 0;
 }
@@ -129,7 +129,7 @@ void Nivel::update()
             motor->estaPulsado(3),
             motor->estaPulsado(4)
         );
-      
+
         motor->mostrarJugador(jugador.getX(),
             jugador.getY(),
             jugador.getZ(),
@@ -145,7 +145,7 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
-            this->updateIA(); 
+            this->updateIA();
       // if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getEnemies(0)))
       // {
       //   motor->colorearEnemigo(255,255,0,0,0);
@@ -153,44 +153,44 @@ void Nivel::update()
       //   motor->colorearEnemigo(255,255,255,255,0);
       // }
 
-      //Actualizar ataca
-      if((motor->estaPulsado(5)/* || motor->estaPulsado(10)*/) && atacktime == 0.0f)
-        {
-            jugador.Atacar();
-            atacktime = 2000.0f;
-        }else{
-            if(atacktime > 0.0f)
-            {
-                atacktime--;
-            }
-            if(atacktime > 0.0f && atacktime < 999.0f)
-            {
-                jugador.AtacarUpdate();
-            }
-            if(atacktime == 1000.0f) //Zona de pruebas
-            {
-                motor->colorearEnemigo(255,255,255,255,0);
-                motor->clearDebug2();
-            }
-            if(atacktime > 500.0f)
-            {
-                //Colorear rojo
-                motor->colorearJugador(255,255,0,0);
-            }else{
-                //Colorear gris
-                motor->colorearJugador(255,0,0,255);
-            }
-        }
  	   acumulator -= dt;
     }
 
+}
+
+void Nivel::updateAt(int *danyo, MotorGrafico *motor)
+{
+  if((motor->estaPulsado(5)/* || motor->estaPulsado(10)*/) && atacktime == 0.0f)
+    {
+        *danyo = jugador.Atacar();
+        motor->colorearJugador(255, 55, 0, 255);
+        atacktime = 2000.0f;
+    }else{
+        if(atacktime > 0.0f)
+        {
+            atacktime--;
+        }
+        if(atacktime == 1000.0f) //Zona de pruebas
+        {
+            motor->colorearEnemigo(255,255,255,255,0);
+            motor->clearDebug2();
+        }
+        if(atacktime > 500.0f)
+        {
+            //Colorear rojo
+            motor->colorearJugador(255,255,0,0);
+        }else{
+            //Colorear gris
+            motor->colorearJugador(255,0,0,255);
+        }
+    }
 }
 
 void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
 {
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
     if((motor->estaPulsado(9) || motor->estaPulsado(11)) && atackEsptime == 0.0)
-    {            
+    {
         *danyo = jugador.AtacarEspecial();
         motor->colorearJugador(255, 55, 0, 255);
         atackEsptime = 1500.0f;
@@ -201,17 +201,17 @@ void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
         {
             atackEsptime--;
             motor->mostrarArmaEspecial(
-            jugador.getX(), 
-            jugador.getY(), 
-            jugador.getZ(), 
-            jugador.getRX(), 
-            jugador.getRY(), 
+            jugador.getX(),
+            jugador.getY(),
+            jugador.getZ(),
+            jugador.getRX(),
+            jugador.getRY(),
             jugador.getRZ());
         }
         if(atackEsptime <= 750.0f && motor->getArmaEspecial()) //Zona de pruebas
         {
             motor->borrarArmaEspecial();
-            
+
             motor->colorearJugador(255, 150, 150, 150);
         }
     }
@@ -225,13 +225,14 @@ void Nivel::updateIA()
     vector <unsigned int> atacados;     //lista de enteros que senyalan a los enemigos atacados
     //Actualizar ataque especial
     this->updateAtEsp(&danyo, motor);
+    this->updateAt(&danyo, motor);
 
     //Si se realiza el ataque se comprueban las colisiones
     if(atackEsptime > 0.0)
     {
 
         atacados = fisicas->updateArmaEspecial(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
-        
+
         //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
         //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
         if(!atacados.empty() && (int) atackEsptime % 500 == 0)
@@ -250,6 +251,11 @@ void Nivel::updateIA()
                 motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
             }
         }
+    }
+
+    else if(atacktime > 0.0)
+    {
+        jugador.AtacarUpdate();
     }
 
     //En caso contrario se colorean los enemigos de color gris
