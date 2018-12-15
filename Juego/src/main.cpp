@@ -8,8 +8,8 @@ int main()
 	Juego *juego = Juego::getInstance();
 	times *tiempo = times::getInstance();
 	juego->InicializarVentana();
-	// se debe dar valor a las variables de interpolacion antes del bucle	
-	juego->setNivelThen(); 
+	// se debe dar valor a las variables de interpolacion antes del bucle
+	juego->setNivelThen();
 	tiempo->setFrames(60,4);//definimos a cuanto queremos que vaya el programa
 	while(juego->Running())//comprobamos que esta activo el dispositivo
 	{
@@ -17,7 +17,7 @@ int main()
 		{
 			if(tiempo->EjecutoIA())
 			{
-				
+
 			}
 			juego->Update();//si lo esta actualizamos la escena
 		}
