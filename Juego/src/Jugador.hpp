@@ -6,6 +6,8 @@
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
 #include "Arma.hpp"
+#include "MotorFisicas.hpp"
+#include <ctime>
 
 using namespace std;
 
@@ -24,6 +26,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         //npc metodos
         void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
         void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+        int AtacareEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico 
@@ -34,10 +37,11 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
         void setArma(Arma *arma);
-        void setArmaEspecial();
+        void setArmaEspecial(int ataque);
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
+        void setTimeAtEsp(float time); 
 
         int getVida();
         int getTipo();
@@ -49,21 +53,26 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int getDanyoCritico();
         int getProAtaCritico();
         int* getBuffos();
+        float getTimeAtEsp(); 
+        const char *getRutaArmaEsp();
 
         float getX();
         float getY();
         float getZ();
         float getRX();
         float getRY();
-        float getRZ(); 
+        float getRZ();
 
     private:
         float ax = 1.0f,
               az = 20.0f,
               deg;        
+        //PRUEBAS ATAQUE ESPECIAL
+        float timeAtEsp = 0.0;
+        MotorFisicas *fisicas;
         Arma *armaEquipada;
         Arma *armaEspecial;    
-        const char * rutaArmaEspecial = "/assets/models/Arma.3ds";  
+        const char * rutaArmaEspecial = "assets/models/Arma.obj";  
       //  core::vector3df dir; 
 };
 

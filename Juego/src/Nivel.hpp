@@ -5,7 +5,7 @@
 #include "pollo.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
-#include "MotorFisicas.hpp"
+//#include "MotorFisicas.hpp"
 
 #ifndef Nivel_HPP
 #define Nivel_HPP
@@ -34,6 +34,7 @@ class Nivel
         Sala * CrearPlataforma(int x,int y,int z, int ancho, int largo, int centro, const char *ruta_objeto, const char *ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
+        void updateAtEsp();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
 
         Sala * getPrimeraSala();
@@ -64,7 +65,7 @@ class Nivel
         float acumulator;
         clock_t newTime;
         clock_t currentTime;
-        bool a,s,d,w;
+        bool a,s,d,w,atEsp;
 };
 
 #endif 

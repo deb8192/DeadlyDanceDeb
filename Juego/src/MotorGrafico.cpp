@@ -282,7 +282,10 @@ void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto
 	}
     else
     {
-        ArmaEspecial_Jugador = armaEsp;
+        IAnimatedMeshSceneNode* armaEsp_en_scena = smgr->addAnimatedMeshSceneNode(armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+        armaEsp_en_scena->setPosition(core::vector3df(x,y,z));
+        ArmaEspecial_Jugador = armaEsp_en_scena;
+        cout <<"Crea el arma"<<endl;
     }
 }
 
@@ -322,6 +325,14 @@ void MotorGrafico::CargarObjetos(int x,int y,int z, const char *ruta_objeto, con
         objeto_en_scena->setPosition(core::vector3df(x,y,z));
         Objetos_Scena.push_back(objeto_en_scena);
     }
+}
+
+void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
+{
+    ArmaEspecial_Jugador->setPosition(core::vector3df(x,y,z));
+    ArmaEspecial_Jugador->setRotation(core::vector3df(-rx,-ry,rz));
+    ArmaEspecial_Jugador->setScale(core::vector3df(0.25,0.25,0.25));
+    cout<<"DIBUJA"<<endl;
 }
 
 void MotorGrafico::activarDebugGrafico()
@@ -408,4 +419,9 @@ void MotorGrafico::dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int d
             Objetos_Debug.push_back(objeto_en_scena);
         }
     }
+}
+void MotorGrafico::colorearJugador(int a, int r, int g, int b)
+{
+  const SColor COLOR  = SColor(a, r, g, b);
+  smgr->getMeshManipulator()->setVertexColors(Jugador_Scena->getMesh(),COLOR);
 }
