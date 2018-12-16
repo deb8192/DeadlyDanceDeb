@@ -9,22 +9,22 @@ class INnpc {
 
 public:
 
-    virtual void Atacar()=0;//efectua un ataque normal, llama al motor para ejecutar la animacion.
-    virtual void AtacarEspecial()=0;//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+    virtual void Atacar(int)=0;//efectua un ataque normal, llama al motor para ejecutar la animacion.
+    virtual void AtacarEspecial()=0;//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
     virtual void QuitarVida(int)=0;//quita vida a la entidad
     virtual void RecuperarVida(int)=0;//le suma vida a la entidad
-    virtual void AumentarBarraAtEs(int)=0;//aumenta el valor de la barra de ataque critico 
+    virtual void AumentarBarraAtEs(int)=0;//aumenta el valor de la barra de ataque critico
     virtual void Interactuar(int, int)=0;//llama a la mecanica de interactuar
-    
+
     //set y gets
-    
+
     virtual void setVida(int vid)=0;
     virtual void setTipo(int tip)=0;
     virtual void setBarraAtEs(int bar)=0;
     virtual void setAtaque(int ataq)=0;
     virtual void setSuerte(int suer)=0;
     virtual void setProAtaCritico(int probabilidad)=0;
-    
+
     virtual int getVida()=0;
     virtual int getTipo()=0;
     virtual int getBarraAtEs()=0;
@@ -38,8 +38,8 @@ protected:
     int tipo;//tipo de enemigo(mayor de cero) o jugador(0)
     int vida;//vida de la entida
     int barraAtEs;//barra que va de 0 a 100, cuando se 100 se puede ejecutar ataque especial.
-    int ataque;//dano base que hace la entidad  
-    int suerte;//valor que determina la probabilidad de ataque critico y en el caso de jugador tambien de que suerte objetos 
+    int ataque;//dano base que hace la entidad
+    int suerte;//valor que determina la probabilidad de ataque critico y en el caso de jugador tambien de que suerte objetos
     int proAtaCritico;//valor que determina cuantas veces se hacen ataques criticos.
     int buffos[4];//1 aumento de vida, 2 aumento de ataque, 3 aumento de suerte, 4 aumento de pCritica.
 };

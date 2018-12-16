@@ -24,14 +24,14 @@ using namespace idsEventos;
     class MotorGrafico
     {
         public: //clases accesibles desde fuera
-            
+
             //clase singleton en public
             ~MotorGrafico(void);
             static MotorGrafico *getInstance() //esto se utiliza para crear el objeto una sola vez
             {
                 if(unica_instancia == 0)
                 unica_instancia = new MotorGrafico();
-                return unica_instancia;  
+                return unica_instancia;
             }
             //fin singleton public
 
@@ -55,31 +55,31 @@ using namespace idsEventos;
             void borrarScena();//borra todo lo que haya en la ventana
             //borrar gui
             void borrarGui();//borra todo lo que haya en la ventana relacionado con el gui
-            
+
 
 
             /*IMPORTANTE para bullet motor de fisicas y Joints*/
             //btHingeConstraint(btRigidBody& rbA,const btTransform& rbAFrame, const btTransform& rbBFrame);
-            
+
 
             //eventos facade
-            //detecta si esta pulsado un boton, 1=a, 2 =s, 3=d, 4=w, 5=space, 6=intro 
+            //detecta si esta pulsado un boton, 1=a, 2 =s, 3=d, 4=w, 5=space, 6=intro
             bool estaPulsado(int);
             //fin eventos del teclado
             //detecta si un evento con un id pasado a sido llamado
             bool ocurreEvento(int);
             //fin evento botones se puede utilizar para cualquier tipo de evento de irrlicht
             void resetEvento(int);//resetea el evento
-            
+
             //cargadores de objetos
-            int CargarPlataformas(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
+            int CargarPlataformas(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
             void CargarEnemigos(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             void CargarObjetos(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             
             void closeGame();
-            
+
             //colision rayo
             bool colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);
 
@@ -87,11 +87,17 @@ using namespace idsEventos;
             void activarDebugGrafico();//se activa o desactiva el modo debug grafico
             void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
             void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
-            void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea 
+            void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
+            void colorearJugador(int a, int r, int g, int b);
+            void colorearEnemigo(int a, int r, int g, int b, int enem);
+            void colorearObjeto(int a, int r, int g, int b, int obj);
+            void debugBox(int x,int y, int z,int ancho, int alto, int largo);
+
+
         private: //clases solo accesibles por MotorGrafico
 
-            //clase singleton 
+            //clase singleton
             MotorGrafico();
             static MotorGrafico* unica_instancia;
             //fin clase singleton private
@@ -108,9 +114,9 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
             std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
             std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
-            IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
+            IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
             bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
             core::aabbox3d<f32> bounding_jugador;
     };

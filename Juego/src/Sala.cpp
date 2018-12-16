@@ -1,9 +1,10 @@
 #include "Sala.hpp"
 
-Sala::Sala(int anch,int larg, int nx, int ny, int nz, int type)
+Sala::Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type)
 {
     ancho = anch;
     largo = larg;
+    alto = alt;
     x = nx;
     y = ny;
     z = nz;
@@ -47,12 +48,13 @@ void Sala::agregarSalida(Sala * plataforma)
 
 int * Sala::getSizes()
 {
-    int * valores = new int[5];
+    int * valores = new int[6];
     valores[0] = ancho;
     valores[1] = largo;
     valores[2] = x; 
     valores[3] = y;
     valores[4] = z;
+    valores[5] = alto;
     return valores;
 }
 
