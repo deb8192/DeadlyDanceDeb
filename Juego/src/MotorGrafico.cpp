@@ -405,13 +405,13 @@ void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
   smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena[enem]->getMesh(),COLOR);
 }
 
-void MotorGrafico::crearObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int dimension)
+void MotorGrafico::crearObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto)
 {
   IAnimatedMesh* tmpobjt = smgr->getMesh("assets/models/ataqueprueba.obj");
   tmpobjt_en_scena = smgr->addAnimatedMeshSceneNode(tmpobjt);
   tmpobjt_en_scena->setPosition(core::vector3df(x,y,z));
   tmpobjt_en_scena->setRotation(core::vector3df(rx,ry,rz));
-  tmpobjt_en_scena->setScale(core::vector3df(dimension,0.2,dimension));
+  tmpobjt_en_scena->setScale(core::vector3df(ancho,0.5,alto));
 }
 
 void MotorGrafico::borrarObjetoTemporal()
