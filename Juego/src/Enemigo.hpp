@@ -19,19 +19,19 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void generarSonido(int intensidad, double duracion);
 
         void queEscuchas();//recupera la informacion de los sonidos que escucha
-        
+
         void queVes();//recupera informacion de los objetos,enemigos,jugador que ve.
         //drawables metodos
         void setPosiciones(int nx,int ny,int nz);
         void setID(int);
         int getID();
         //npc metodos
-        void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
-        void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
-        
+        void Atacar(int);//efectua un ataque normal, llama al motor para ejecutar la animacion.
+        void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
+
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
-        void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico 
+        void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
 
         void setVida(int vid);
@@ -55,4 +55,4 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Sala * estoy;//sala en la que esta el enemigo
 };
 
-#endif 
+#endif

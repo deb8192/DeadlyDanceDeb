@@ -114,12 +114,13 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
         int y = plat.attribute("Y").as_int();//nos devuelve un int
         int z = plat.attribute("Z").as_int();//nos devuelve un int 
         int ancho = plat.attribute("ancho").as_int();//nos devuelve un int
-        int largo = plat.attribute("largo").as_int();//nos devuelve un int 
+        int largo = plat.attribute("largo").as_int();//nos devuelve un int
+        int alto = plat.attribute("alto").as_int();//nos devuelve un int 
         int centro = plat.attribute("TypeCenter").as_int();//nos devuelve el tipo de centro de masas del objeto
         bool jugadorEstasAqui = plat.attribute("UserStar").as_bool();//nos devuelve true si es donde empieza el jugador 
         const char * textura = plat.attribute("Texture").value(); //nos da un char[] = string
         const char * modelo  =  plat.attribute("Model").value(); //nos da un char[] = string
-        padren = nivel_instancia->CrearPlataforma(x,y,z,ancho,largo,centro,modelo,textura); //cargamos el objeto
+        padren = nivel_instancia->CrearPlataforma(x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
 
         if(padre != nullptr)
         {
