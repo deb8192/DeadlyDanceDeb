@@ -77,7 +77,7 @@ using namespace idsEventos;
             void CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
-            void crearObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int dimension);
+            void crearObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto);
             void borrarObjetoTemporal();
 
             void closeGame();

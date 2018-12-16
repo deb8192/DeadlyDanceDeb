@@ -144,12 +144,16 @@ void Nivel::update()
       //Actualizar ataca
       if((motor->estaPulsado(5) || motor->estaPulsado(11)) && atacktime == 0.0f)
       {
-          jugador.Atacar(); //Enviar IDs
+          jugador.Atacar();
           atacktime = 2000.0f;
       }else{
           if(atacktime > 0.0f)
           {
             atacktime--;
+          }
+          if(atacktime > 0.0f && atacktime < 1000.0f)
+          {
+            //jugador.AtacarUpdate();
           }
           if(atacktime == 1000.0f) //Zona de pruebas
           {
