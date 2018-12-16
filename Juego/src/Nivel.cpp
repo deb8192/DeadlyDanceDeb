@@ -47,7 +47,9 @@ void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char 
     jugador.setProAtaCritico(10);
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarJugador(x,y,z,ruta_objeto,ruta_textura);
+    motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
     fisicas->crearCuerpo(x,y,z,3,10,10,10,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
+    fisicas->crearCuerpo(x,y,z,2,10,10,10,4);
 }
 
 void Nivel::CrearObjeto(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -89,6 +91,7 @@ void Nivel::setThen()
 
 void Nivel::update()
 {
+    int danyo = 0;
     //actualizamos los enemigos
     if(enemigos.size() > 0)//posiciones interpolacion
     {
@@ -115,14 +118,47 @@ void Nivel::update()
     { 
         //actualizamos movimiento del jugador
 
-       jugador.movimiento(dt,
+        jugador.movimiento(dt,
             motor->estaPulsado(1),
             motor->estaPulsado(2),
             motor->estaPulsado(3),
             motor->estaPulsado(4)
         );
+
+        //Compureba si se realiza el ataque especial o si la animacion esta a medias
+        if((motor->estaPulsado(9) || motor->estaPulsado(11)) || (jugador.getTimeAtEsp() > 0.0 && jugador.getTimeAtEsp() < 0.5))
+        {
+            if(motor->estaPulsado(9))
+                cout<<"Raton"<<endl;
+            else
+                cout<<"Q"<<endl;
+            
+            if(danyo == 0)
+            {
+                danyo = jugador.AtacareEspecial();
+            }
+            else
+            {
+                cout << "PINTA" <<endl;
+                motor->colorearJugador(255, 55, 0, 255);
+            }
+            jugador.setTimeAtEsp(jugador.getTimeAtEsp() + frameTime);
+            motor->mostrarArmaEspecial(
+                jugador.getX(), 
+                jugador.getY(), 
+                jugador.getZ(), 
+                jugador.getRX(), 
+                jugador.getRY(), 
+                jugador.getRZ());
+        }
+        else
+        {
+            motor->colorearJugador(255, 150, 150, 150);
+            jugador.setTimeAtEsp(0);
+            danyo = 0;
+        }
        
-       motor->mostrarJugador(jugador.getX(),
+        motor->mostrarJugador(jugador.getX(),
             jugador.getY(),
             jugador.getZ(),
             jugador.getRX(),
@@ -131,9 +167,15 @@ void Nivel::update()
         );
 
         fisicas->updateJugador(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
+        fisicas->updateArmaEspecial(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
         
  	   acumulator -= dt;  
     } 
+
+}
+
+void Nivel::updateAtEsp()
+{
 
 }
 

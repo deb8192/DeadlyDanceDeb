@@ -3,7 +3,7 @@
 #include <iostream>
 #include "INobjetos.hpp"
 #include "INdrawable.hpp"
-#include "MotorGrafico.hpp"
+//#include "MotorGrafico.hpp"
 
 using namespace std;
 
@@ -12,8 +12,13 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
 {
     public:
         Arma();         //esto le deja a la entidad el constructor por defecto
-        Arma(int ataque, const char * ruta);
+        Arma(int ataque);
         ~Arma();
+        
+        //drawable metodos
+        void setPosiciones(int nx,int ny,int nz);
+        void setID(int);
+        int getID();
         //Arma(int ataque);//defines tu la informacion del jugador
         /*float getX();
         float getY();
@@ -25,7 +30,7 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
     private:
         //float ax, az,deg;    
         int potenciaAtaque;      
-        MotorGrafico * motor;
+        //MotorGrafico * motor;
       //  core::vector3df dir; 
 };
 

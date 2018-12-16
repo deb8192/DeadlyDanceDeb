@@ -90,6 +90,8 @@ using namespace idsEventos;
             void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
             void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea 
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
+            void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
+            void colorearJugador(int a, int r, int g, int b);
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton 
@@ -110,7 +112,7 @@ using namespace idsEventos;
             std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
             std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
-            IAnimatedMesh *ArmaEspecial_Jugador;//Malla del arma del jugador
+            IAnimatedMeshSceneNode *ArmaEspecial_Jugador;//Malla del arma del jugador
             std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico

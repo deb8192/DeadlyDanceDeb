@@ -2,7 +2,7 @@
 #include "Pathfinder.hpp"
 #include "MotorGrafico.hpp"
 #include "SenseEventos.hpp"
-#include "Nivel.hpp"
+//#include "Nivel.hpp"
 #include "Enemigo.hpp"
 #include "MotorAudio.hpp"
 
@@ -72,14 +72,6 @@ void Jugando::Update()
     {
         Pathfinder path;
         vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(enemigos.at(1)->getSala(), nivel->getPrimeraSala());
-    }
-    if(motor->estaPulsado(9) || motor->estaPulsado(11))
-    {
-        if(motor->estaPulsado(9))
-            cout<<"Raton"<<endl;
-        else
-            cout<<"Q"<<endl;
-        nivel->getJugador().AtacarEspecial();
     }
 }
 
