@@ -18,7 +18,6 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
 
         //drawable metodos
         void setPosiciones(int nx,int ny,int nz);
-        void setDimensiones(int anc,int lar,int alt);
         void setID(int);
         int getID();
         //npc metodos
@@ -50,9 +49,6 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getRX();
         float getRY();
         float getRZ();
-        float getAncho();
-        float getLargo();
-        float getAlto();
 
     private:
         float ax = 1.0f,
