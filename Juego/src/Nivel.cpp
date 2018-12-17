@@ -153,7 +153,7 @@ void Nivel::update()
           }
           if(atacktime > 0.0f && atacktime < 1000.0f)
           {
-            //jugador.AtacarUpdate();
+            jugador.AtacarUpdate();
           }
           if(atacktime == 1000.0f) //Zona de pruebas
           {
