@@ -196,7 +196,7 @@ void MotorGrafico::resetKey(int event)
 {
     switch(event)
     {
-        case 1:     
+        case 1:
             input.ResetKey(irr::KEY_KEY_A);
         break;
         case 2:
@@ -408,7 +408,7 @@ void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, in
     {
       tmpobjt = smgr->getMesh("assets/models/capsule.obj");
     }
-    tmpobjt_en_scena = smgr->addAnimatedMeshSceneNode(tmpobjt);
+    IAnimatedMeshSceneNode* tmpobjt_en_scena = smgr->addAnimatedMeshSceneNode(tmpobjt);
     tmpobjt_en_scena->setPosition(core::vector3df(x,y,z));
     tmpobjt_en_scena->setRotation(core::vector3df(rx,ry,rz));
     tmpobjt_en_scena->setScale(core::vector3df(ancho,alto,profund));
