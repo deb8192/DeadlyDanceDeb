@@ -26,7 +26,7 @@ using namespace reactphysics3d;
             Ray * crearRayo(float x, float y, float z, float longitud);//crea un rayo en esas posiciones con la longitud
             void colisionRayoUnCuerpo(float x,float y,float z,float longitud);//colisiona solo con un cuerpo (el primero)
             void updateJugador(float x, float y, float z, float rx, float ry, float rz);//actualizamos al jugador en el espacio de las fisicas
-            void updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
+            std::vector <unsigned int> updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
 
         private:
             //clase singleton 

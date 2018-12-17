@@ -1,6 +1,6 @@
 #include "Estado.hpp"
 #include "Pathfinder.hpp"
-#include "MotorGrafico.hpp"
+//#include "MotorGrafico.hpp"
 #include "SenseEventos.hpp"
 //#include "Nivel.hpp"
 #include "Enemigo.hpp"
