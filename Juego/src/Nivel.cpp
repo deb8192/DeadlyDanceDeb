@@ -1,5 +1,6 @@
 #include "Nivel.hpp"
-#include "MotorGrafico.hpp"
+
+#include <math.h>
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 Nivel* Nivel::unica_instancia = 0;
@@ -35,7 +36,7 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
     id++;//generamos id para la figura
     ene->setID(id);//le damos el id unico en esta partida al enemigo
     motor->CargarEnemigos(x,y,z,ruta_objeto,ruta_textura);//creamos la figura pasando el id
-    fisicas->crearCuerpo(x,y,z,2,10,10,10,2);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
+    fisicas->crearCuerpo(x/4,y/4,z/4,2,1,1,1,2);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
 }
 
 void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -48,8 +49,8 @@ void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char 
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarJugador(x,y,z,ruta_objeto,ruta_textura);
     motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
-    fisicas->crearCuerpo(x,y,z,3,10,10,10,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
-    fisicas->crearCuerpo(x,y,z,2,10,10,10,4);
+    fisicas->crearCuerpo(x/2,y/2,z/2,3,1,1,1,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
+    fisicas->crearCuerpo(x/2,y/2,z/2,2,5,5,0.5,4);
 }
 
 void Nivel::CrearObjeto(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -125,39 +126,7 @@ void Nivel::update()
             motor->estaPulsado(4)
         );
 
-        //Compureba si se realiza el ataque especial o si la animacion esta a medias
-        if((motor->estaPulsado(9) || motor->estaPulsado(11)) || (jugador.getTimeAtEsp() > 0.0 && jugador.getTimeAtEsp() < 0.5))
-        {
-            if(motor->estaPulsado(9))
-                cout<<"Raton"<<endl;
-            else
-                cout<<"Q"<<endl;
-            
-            if(danyo == 0)
-            {
-                danyo = jugador.AtacareEspecial();
-            }
-            else
-            {
-                cout << "PINTA" <<endl;
-                motor->colorearJugador(255, 55, 0, 255);
-            }
-            jugador.setTimeAtEsp(jugador.getTimeAtEsp() + frameTime);
-            motor->mostrarArmaEspecial(
-                jugador.getX(), 
-                jugador.getY(), 
-                jugador.getZ(), 
-                jugador.getRX(), 
-                jugador.getRY(), 
-                jugador.getRZ());
-        }
-        else
-        {
-            motor->colorearJugador(255, 150, 150, 150);
-            jugador.setTimeAtEsp(0);
-            danyo = 0;
-        }
-       
+               
         motor->mostrarJugador(jugador.getX(),
             jugador.getY(),
             jugador.getZ(),
@@ -165,17 +134,90 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
+        this->updateAtEsp(&danyo, motor);
 
         fisicas->updateJugador(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
-        fisicas->updateArmaEspecial(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
         
+        vector <unsigned int> atacados;
+
+        if(danyo >0)
+        {
+            atacados = fisicas->updateArmaEspecial(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
+            
+            if(!atacados.empty())
+            {
+                for(unsigned int i = 0; i < atacados.size(); i++)
+                {
+                    float variacion = rand() % 21 - 10;
+                    variacion = variacion / 100;
+                    variacion = roundf(variacion * 10) / 10;
+                    danyo += (int) variacion;
+                    enemigos.at(i)->QuitarVida(danyo);
+                    cout<<"Daño "<<danyo<<endl;
+                    cout<<"Vida enemigo "<<enemigos.at(i)->getID()<<" "<<enemigos.at(i)->getVida()<<endl;
+                    motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+                }
+            }
+        }
+        else
+        {
+            for(unsigned int i = 0; i < enemigos.size(); i++)
+            {
+                motor->colorearEnemigos(255, 150, 150, 150, i);
+            }
+        }
+
  	   acumulator -= dt;  
     } 
 
 }
 
-void Nivel::updateAtEsp()
+void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
 {
+//Compureba si se realiza el ataque especial o si la animacion esta a medias
+    bool dibujado = false;
+    if((motor->estaPulsado(9) || motor->estaPulsado(11)) || (jugador.getTimeAtEsp() > 0.0 && jugador.getTimeAtEsp() < 500.0))
+    {
+        if(motor->estaPulsado(9))
+            cout<<"Raton"<<endl;
+        else
+            cout<<"Q"<<endl;
+        
+        if(*danyo == 0)
+        {
+            *danyo = jugador.AtacareEspecial();
+        }
+        else
+        {
+            cout << "PINTA" << *danyo <<endl;
+            motor->colorearJugador(255, 55, 0, 255);
+        }
+        
+        if(jugador.getTimeAtEsp() < 250)
+        {
+            
+            motor->mostrarArmaEspecial(
+            jugador.getX(), 
+            jugador.getY(), 
+            jugador.getZ(), 
+            jugador.getRX(), 
+            jugador.getRY(), 
+            jugador.getRZ());
+
+            dibujado = true;
+        }
+        jugador.setTimeAtEsp(jugador.getTimeAtEsp() + frameTime);
+        
+        
+
+    }
+    else
+    {
+            //cout << "NO PINTA" << *danyo <<endl;
+        motor->colorearJugador(255, 150, 150, 150);
+        jugador.setTimeAtEsp(0);
+        *danyo = 0;
+    }
 
 }
 

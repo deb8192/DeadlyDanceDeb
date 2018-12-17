@@ -3,6 +3,7 @@
 #include "Enemigo.hpp"
 #include "CargadorNiveles.hpp"
 #include "pollo.hpp"
+#include "MotorGrafico.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
 //#include "MotorFisicas.hpp"
@@ -34,7 +35,7 @@ class Nivel
         Sala * CrearPlataforma(int x,int y,int z, int ancho, int largo, int centro, const char *ruta_objeto, const char *ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
-        void updateAtEsp();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
+        void updateAtEsp(int *, MotorGrafico *);//se actualiza la ejecucion de los ataques
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
 
         Sala * getPrimeraSala();

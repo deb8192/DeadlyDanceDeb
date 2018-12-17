@@ -3,6 +3,10 @@
 #include <iostream>
 
 using namespace std;
+
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
+
 MotorFisicas* MotorFisicas::unica_instancia = 0;
 //fin indicador singleton
 
@@ -87,21 +91,27 @@ void MotorFisicas::updateJugador(float x, float y, float z, float rx, float ry, 
     }
 }
 
-void MotorFisicas::updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
+vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
 {
+    vector<unsigned int> atacados;
     if(armaAtEsp != nullptr)
     {
-        rp3d::Vector3 posiciones(x,y,z);
+        float newx = x + 6.5*(sin(DEGTORAD*ry));
+        float newz = z + 6.5*(cos(DEGTORAD*ry));
+        float atposX = (newx/2);
+        float atposY = (y/2);
+        float atposZ = (newz/2);
+        rp3d::Vector3 posiciones(atposX,atposY,atposZ);
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         armaAtEsp->setTransform(transformacion);
-        if(space->testOverlap(armaAtEsp, enemigos.at(1)))
+        for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            cout<<"GOLPEEEE"<<endl;
-        }
-        else
-        {
-            cout<<"NAH"<<endl;
+            if(space->testOverlap(armaAtEsp, enemigos.at(i)))
+            {
+                atacados.push_back(i);
+            }
         }
     }
+    return atacados;
 }
