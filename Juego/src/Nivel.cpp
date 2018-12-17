@@ -115,35 +115,34 @@ void Nivel::update()
     acumulator += frameTime;
     while(acumulator >= dt)
     {
-      //adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
-      if(motor->estaPulsado(1))
-        fisicas->updateJugador(jugador.getX()-1, jugador.getY(), jugador.getZ(), jugador.getRX(), jugador.getRY(), jugador.getRZ());    
-      if(motor->estaPulsado(2))
-        fisicas->updateJugador(jugador.getX(), jugador.getY(), jugador.getZ()-1, jugador.getRX(), jugador.getRY(), jugador.getRZ());  
-      if(motor->estaPulsado(3))
-        fisicas->updateJugador(jugador.getX()+1, jugador.getY(), jugador.getZ(), jugador.getRX(), jugador.getRY(), jugador.getRZ());  
-      if(motor->estaPulsado(4))
-        fisicas->updateJugador(jugador.getX(), jugador.getY(), jugador.getZ()+1, jugador.getRX(), jugador.getRY(), jugador.getRZ());  
-      
-    if(motor->estaPulsado(9))
-    {  
-      if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getObjects(7)))
-      {
-        //Si colisiona que coja el objeto       
-            motor->colorearObjeto(255,255,0,0,7);
-      }
-      else if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getObjects(8)))
-      {
-        //Si colisiona que coja el objeto          
-            motor->colorearObjeto(255,255,0,0,8);        
-      } 
-      
-    }
-    else
-    {
-        motor->colorearObjeto(255,0,0,255,8); 
-    } 
     
+        //adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
+        fisicas->colisionChecker(motor->estaPulsado(1),
+            motor->estaPulsado(2),
+            motor->estaPulsado(3),
+            motor->estaPulsado(4),
+            jugador.getX(),
+            jugador.getY(),            
+            jugador.getZ()
+        );
+     
+    //mejorar esto va muy mal
+    motor->estaPulsado(9) && fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getObjects(7)) ? cogerObjeto = !cogerObjeto, objetoCogido = 7 : false;
+    motor->estaPulsado(9) && fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getObjects(8)) ? cogerObjeto = !cogerObjeto, objetoCogido = 8 : false;
+    
+    if(cogerObjeto)
+    {
+        //Si colisiona que coja el objeto   
+        motor->llevarObjeto(objetoCogido,
+            jugador.getX(),
+            jugador.getY(),
+            jugador.getZ(),
+            jugador.getRX(),
+            jugador.getRY(),
+            jugador.getRZ()
+        ); 
+    }
+
       //colisiones con todos los objetos y enemigos que no se traspasan     
       if(fisicas->collideObstacle())
       {
@@ -155,7 +154,7 @@ void Nivel::update()
             motor->estaPulsado(1),
             motor->estaPulsado(2),
             motor->estaPulsado(3),
-            motor->estaPulsado(4)
+            motor->estaPulsado(4)            
         );
 
         motor->mostrarJugador(jugador.getX(),
@@ -168,10 +167,7 @@ void Nivel::update()
 
         fisicas->updateJugador(jugador.getX(),
             jugador.getY(),
-            jugador.getZ(),
-            jugador.getRX(),
-            jugador.getRY(),
-            jugador.getRZ()
+            jugador.getZ()
         );     
     }
       

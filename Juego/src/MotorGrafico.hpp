@@ -93,6 +93,7 @@ using namespace idsEventos;
             void colorearEnemigo(int a, int r, int g, int b, int enem);
             void colorearObjeto(int a, int r, int g, int b, int obj);
             void debugBox(int x,int y, int z,int ancho, int alto, int largo);
+            void llevarObjeto(int id, float x, float y, float z, float rx, float ry, float rz);
 
 
         private: //clases solo accesibles por MotorGrafico
