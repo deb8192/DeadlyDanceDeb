@@ -45,21 +45,6 @@ float Jugador::getRZ()
     return rz;
 }
 
-float Jugador::getAncho()
-{
-    return ancho;
-}
-
-float Jugador::getLargo()
-{
-    return alto;
-}
-
-float Jugador::getAlto()
-{
-    return largo;
-}
-
 void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
 {
     float px = x,
@@ -121,13 +106,6 @@ void Jugador::setPosiciones(int nx,int ny,int nz)
     x = nx;
     y = ny;
     z = nz;
-}
-
-void Jugador::setDimensiones(int anc,int lar,int alt)
-{
-    ancho = anc;
-    largo = lar;
-    alto = alt;
 }
 
 void Jugador::Atacar(int IDatacante)

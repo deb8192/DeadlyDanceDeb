@@ -127,6 +127,7 @@ void Nivel::update()
         );
      
     //mejorar esto va muy mal
+        /*
     motor->estaPulsado(9) && fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getObjects(7)) ? cogerObjeto = !cogerObjeto, objetoCogido = 7 : false;
     motor->estaPulsado(9) && fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getObjects(8)) ? cogerObjeto = !cogerObjeto, objetoCogido = 8 : false;
     
@@ -142,7 +143,7 @@ void Nivel::update()
             jugador.getRZ()
         ); 
     }
-
+*/
       //colisiones con todos los objetos y enemigos que no se traspasan     
       if(fisicas->collideObstacle())
       {
