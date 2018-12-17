@@ -137,7 +137,7 @@ void Jugador::Atacar()
     if(tipo_arma == 1)
     {
       //DEBUG DEL ATAQUE Crear cuerpo
-      motor->crearObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),3,3);
+      motor->dibujarObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),3,1,3,2);
 
       //Crear cuerpo de colision de ataque delante del jugador
       fisicas->crearCuerpo(atposX,atposY,atposZ,1,4,0,0,4);
@@ -147,7 +147,7 @@ void Jugador::Atacar()
     else if(tipo_arma == 2)
     {
       //DEBUG DEL ATAQUE Crear cuerpo
-      motor->crearObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),1,2);
+      motor->dibujarObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),1,1,2,1);
 
       //Crear cuerpo de colision de ataque delante del jugador
       fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,0.5,1,4);
@@ -182,14 +182,14 @@ void Jugador::Atacar()
 void Jugador::AtacarUpdate()
 {
   //MotorFisicas* fisicas = MotorFisicas::getInstance();
-  if(tipo_arma == 2)
-  {
-    //(float x, float y, float z, float rx, float ry, float rz)
-    atz += (cos(PI * getRY() / 180.0f) + getZ()) * 0.01;
-    atx += (sin(PI * getRY() / 180.0f) + getX()) * 0.01;
-    cout << atz << " " << atx << endl;
-    // fisicas->updateAtaque(atx,0,atz,0,0,0);
-  }
+  // if(tipo_arma == 2)
+  // {
+  //   //(float x, float y, float z, float rx, float ry, float rz)
+  //   atz += (cos(PI * getRY() / 180.0f) + getZ()) * 0.01;
+  //   atx += (sin(PI * getRY() / 180.0f) + getX()) * 0.01;
+  //   cout << atz << " " << atx << endl;
+  //   // fisicas->updateAtaque(atx,0,atz,0,0,0);
+  // }
 }
 
 void Jugador::AtacarEspecial()
