@@ -103,6 +103,7 @@ void MotorFisicas::updateAtaque(float x, float y, float z, float rx, float ry, f
         // std::cout << "jx: " << x << std::endl;
         // std::cout << "jy: " << y << std::endl;
         // std::cout << "jz: " << z << std::endl;
+        std::cout << "entras" << std::endl;
     }
 }
 

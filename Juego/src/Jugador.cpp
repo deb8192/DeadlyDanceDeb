@@ -181,14 +181,15 @@ void Jugador::Atacar()
 
 void Jugador::AtacarUpdate()
 {
-  // MotorFisicas* fisicas = MotorFisicas::getInstance();
-  // if(tipo_arma == 2)
-  // {
-    // //(float x, float y, float z, float rx, float ry, float rz)
-    // atz += 5 * cos(PI * getRY() / 180.0f) + getZ();
-    // atx += 5 * sin(PI * getRY() / 180.0f) + getX();
+  //MotorFisicas* fisicas = MotorFisicas::getInstance();
+  if(tipo_arma == 2)
+  {
+    //(float x, float y, float z, float rx, float ry, float rz)
+    atz += (cos(PI * getRY() / 180.0f) + getZ()) * 0.01;
+    atx += (sin(PI * getRY() / 180.0f) + getX()) * 0.01;
+    cout << atz << " " << atx << endl;
     // fisicas->updateAtaque(atx,0,atz,0,0,0);
-  // }
+  }
 }
 
 void Jugador::AtacarEspecial()
