@@ -38,7 +38,7 @@
 	{
 		return KeyIsDown[keyCode];
 	}
-	
+
 	bool Inputs::IsMouseClick(EMOUSE_INPUT_EVENT mouseEvent)
 	{
 		return MouseClick[mouseEvent];
@@ -54,6 +54,12 @@
 	void Inputs::ResetEvento(int event)
 	{
 		EventosActivos[event]=false;
+	}
+
+	// This is used to check whether a key is being held down
+	void Inputs::ResetKey(int keyCode)
+	{
+		KeyIsDown[keyCode]=false;
 	}
 
 	Inputs::Inputs()

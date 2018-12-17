@@ -192,6 +192,37 @@ void MotorGrafico::resetEvento(int event)
     input.ResetEvento(event);
 }
 
+void MotorGrafico::resetKey(int event)
+{
+    switch(event)
+    {
+        case 1:
+            input.ResetKey(irr::KEY_KEY_A);
+        break;
+        case 2:
+            input.ResetKey(irr::KEY_KEY_S);
+        break;
+        case 3:
+            input.ResetKey(irr::KEY_KEY_D);
+        break;
+        case 4:
+            input.ResetKey(irr::KEY_KEY_W);
+        break;
+        case 5:
+            input.ResetKey(irr::KEY_SPACE);
+        break;
+        case 6:
+            input.ResetKey(irr::KEY_ACCEPT);
+        break;
+        case 7:
+            input.ResetKey(irr::KEY_KEY_G);//para modo debug
+        break;
+        case 8:
+            input.ResetKey(irr::KEY_KEY_P);
+        break;
+    }
+}
+
 int MotorGrafico::CargarPlataformas(int x,int y,int z, const char *ruta_objeto,const char *ruta_textura)
 {
     IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
@@ -366,6 +397,30 @@ void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensi
     }
 }
 
+void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo)
+{
+  if(debugGrafico)
+  {
+    //Crear objetos debug
+    IAnimatedMesh* tmpobjt;
+    if(tipo == 1)
+    {
+      tmpobjt = smgr->getMesh("assets/models/sphere.obj");
+    }else if(tipo == 2)
+    {
+      tmpobjt = smgr->getMesh("assets/models/cube.obj");
+    }else if(tipo == 3)
+    {
+      tmpobjt = smgr->getMesh("assets/models/capsule.obj");
+    }
+    IAnimatedMeshSceneNode* tmpobjt_en_scena = smgr->addAnimatedMeshSceneNode(tmpobjt);
+    tmpobjt_en_scena->setPosition(core::vector3df(x,y,z));
+    tmpobjt_en_scena->setRotation(core::vector3df(rx,ry,rz));
+    tmpobjt_en_scena->setScale(core::vector3df(ancho,alto,profund));
+    Objetos_Debug.push_back(smgr->addAnimatedMeshSceneNode(tmpobjt));
+  }
+}
+
 bool MotorGrafico::colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension)
 {
     return true;
@@ -391,30 +446,4 @@ void MotorGrafico::dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int d
             Objetos_Debug.push_back(objeto_en_scena);
         }
     }
-}
-
-void MotorGrafico::colorearJugador(int a, int r, int g, int b)
-{
-  SColor COLOR  = SColor(a, r, g, b);
-  smgr->getMeshManipulator()->setVertexColors(Jugador_Scena->getMesh(),COLOR);
-}
-
-void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
-{
-  SColor COLOR  = SColor(a, r, g, b);
-  smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena[enem]->getMesh(),COLOR);
-}
-
-void MotorGrafico::crearObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto)
-{
-  IAnimatedMesh* tmpobjt = smgr->getMesh("assets/models/ataqueprueba.obj");
-  tmpobjt_en_scena = smgr->addAnimatedMeshSceneNode(tmpobjt);
-  tmpobjt_en_scena->setPosition(core::vector3df(x,y,z));
-  tmpobjt_en_scena->setRotation(core::vector3df(rx,ry,rz));
-  tmpobjt_en_scena->setScale(core::vector3df(ancho,0.5,alto));
-}
-
-void MotorGrafico::borrarObjetoTemporal()
-{
-  tmpobjt_en_scena->remove();
 }
