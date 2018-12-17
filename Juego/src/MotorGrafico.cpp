@@ -447,3 +447,15 @@ void MotorGrafico::dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int d
         }
     }
 }
+
+void MotorGrafico::colorearJugador(int a, int r, int g, int b)
+{
+  SColor COLOR  = SColor(a, r, g, b);
+  smgr->getMeshManipulator()->setVertexColors(Jugador_Scena->getMesh(),COLOR);
+}
+
+void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
+{
+  SColor COLOR  = SColor(a, r, g, b);
+  smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena[enem]->getMesh(),COLOR);
+}

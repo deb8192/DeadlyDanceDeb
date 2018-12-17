@@ -71,6 +71,8 @@ using namespace idsEventos;
             //fin evento botones se puede utilizar para cualquier tipo de evento de irrlicht
             void resetEvento(int);//resetea el evento
 
+            void resetKey(int event);
+
             //cargadores de objetos
             int CargarPlataformas(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
