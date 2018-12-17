@@ -25,13 +25,14 @@ using namespace reactphysics3d;
             void actualizarPosicionCuerpo(float px, float py, float pz,int posicion);//se le pasa las nuevas posiciones del cuerpo del array de cuerpos de la posicion
             Ray * crearRayo(float x, float y, float z, float longitud);//crea un rayo en esas posiciones con la longitud
             void colisionRayoUnCuerpo(float x,float y,float z,float longitud);//colisiona solo con un cuerpo (el primero)
-            void updateJugador(float x, float y, float z, float rx, float ry, float rz);//actualizamos al jugador en el espacio de las fisicas
+            void updateJugador(float x, float y, float z);//actualizamos al jugador en el espacio de las fisicas
             CollisionWorld* getWorld();
             CollisionBody* getJugador();
             CollisionBody* getEnemies(int n);
             CollisionBody* getObjects(int n);
             bool collideObstacle();
             bool collidePlatform();
+            void colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z);
             
         private:
             //clase singleton

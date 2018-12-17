@@ -116,18 +116,53 @@ void MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float longitud)
 
     //bool colision = true;
 }
+void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z)
+{    
+    float px = x,
+          pz = z;
+    if(a)
+     px -= 1;
+    if(s)
+     pz -= 1;
+    if(d)
+     px += 1;
+    if(w)
+     pz += 1;
 
-void MotorFisicas::updateJugador(float x, float y, float z, float rx, float ry, float rz)
-{
     if(jugador != nullptr)
     {
-        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Vector3 posiciones(px,y,pz); 
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         jugador->setTransform(transformacion);
-        // std::cout << "jx: " << x << std::endl;
-        // std::cout << "jy: " << y << std::endl;
-        // std::cout << "jz: " << z << std::endl;
+        /*
+        rp3d::Vector3 posiciones(ix,y,iz);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        rp3d::Vector3 medidas(ancho,alto,largo);
+        BoxShape * forma = new BoxShape(medidas);
+        jugador->addCollisionShape(forma,transformacion);
+        */
+    }
+
+}
+void MotorFisicas::updateJugador(float x, float y, float z)
+{
+    if(jugador != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);        
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        jugador->setTransform(transformacion);
+
+        /*
+        rp3d::Vector3 posiciones(ix,y,iz);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        rp3d::Vector3 medidas(ancho,alto,largo);
+        BoxShape * forma = new BoxShape(medidas);
+        jugador->addCollisionShape(forma,transformacion);
+        */
     }
 }
 

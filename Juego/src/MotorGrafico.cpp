@@ -273,6 +273,14 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     }
 }
 
+
+void MotorGrafico::llevarObjeto(int id, float x, float y, float z, float rx, float ry, float rz)
+{
+    Objetos_Scena[id]->setPosition(core::vector3df(x,y+3,z));
+    Objetos_Scena[id]->setRotation(core::vector3df(rx,ry,rz));
+
+}
+
 void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry, float rz)
 {
 
