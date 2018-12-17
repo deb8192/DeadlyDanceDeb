@@ -77,8 +77,6 @@ using namespace idsEventos;
             void CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
-            void crearObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto);
-            void borrarObjetoTemporal();
 
             void closeGame();
 
@@ -88,6 +86,7 @@ using namespace idsEventos;
             //debug grafico
             void activarDebugGrafico();//se activa o desactiva el modo debug grafico
             void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
+            void dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo);
             void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
             void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
