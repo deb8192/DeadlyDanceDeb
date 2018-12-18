@@ -28,6 +28,7 @@ using namespace reactphysics3d;
             void updateJugador(float x, float y, float z, float rx, float ry, float rz);//actualizamos al jugador en el espacio de las fisicas
             std::vector <unsigned int> updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
             void updateAtaque(float x, float y, float z, float rx, float ry, float rz);
+            bool IfCollision(CollisionBody * body1, CollisionBody * body2);
             CollisionWorld* getWorld();
             CollisionBody* getJugador();
             CollisionBody* getEnemies(int n);
@@ -48,4 +49,3 @@ using namespace reactphysics3d;
     };
 
 #endif
-

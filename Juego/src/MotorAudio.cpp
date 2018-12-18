@@ -30,7 +30,7 @@ MotorAudioSystem::MotorAudioSystem()
   //Cargar eventos
   FMOD::Studio::EventDescription* pEventInstance;
   ERRCHECK(pstudioSystem->getEvent("event:/Level 01", &pEventInstance));
-cout << "Aqui todo bien" << endl;
+
   if(pEventInstance)
   {
     eventDescriptions["Level01"] = pEventInstance; //Insertar en el mapa de descripcion de eventos
