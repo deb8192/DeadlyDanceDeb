@@ -26,6 +26,7 @@ using namespace reactphysics3d;
             Ray * crearRayo(float x, float y, float z, float longitud);//crea un rayo en esas posiciones con la longitud
             void colisionRayoUnCuerpo(float x,float y,float z,float longitud);//colisiona solo con un cuerpo (el primero)
             void updateJugador(float x, float y, float z, float rx, float ry, float rz);//actualizamos al jugador en el espacio de las fisicas
+            std::vector <unsigned int> updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
             void updateAtaque(float x, float y, float z, float rx, float ry, float rz);
             CollisionWorld* getWorld();
             CollisionBody* getJugador();
@@ -41,8 +42,11 @@ using namespace reactphysics3d;
             CollisionWorld * space; //espacio o mundo de fisicas
             std::vector<CollisionBody *> enemigos;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody * jugador;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
+            CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
+            std::vector<CollisionBody *> objetos;
             CollisionBody* jugadorAtack; //contiene el ataque normal del jugador
             std::vector<CollisionBody *> objetos;
     };
 
 #endif
+
