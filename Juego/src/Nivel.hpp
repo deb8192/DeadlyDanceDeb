@@ -2,13 +2,16 @@
 #include "Jugador.hpp"
 #include "Enemigo.hpp"
 #include "CargadorNiveles.hpp"
+#include "pollo.hpp"
+//#include "MotorGrafico.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
+//#include "MotorFisicas.hpp"
 
 #ifndef Nivel_HPP
 #define Nivel_HPP
 
-class Nivel 
+class Nivel
 {
 
     public:
@@ -19,12 +22,12 @@ class Nivel
         {
             if(unica_instancia == 0)
             unica_instancia = new Nivel();
-            return unica_instancia;  
+            return unica_instancia;
         }
         //fin singleton public
 
         bool CargarNivel(int);//carga eñ nivel siempre que exista dicho nivel en assets/maps/xml/
-        
+
         //cargar objetos
         void CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -32,34 +35,41 @@ class Nivel
         Sala * CrearPlataforma(int x,int y,int z, int ancho, int largo, int centro, const char *ruta_objeto, const char *ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
+        void updateAtEsp(int *, MotorGrafico *);//se actualiza la ejecucion de los ataques
+        void updateAt(int *, MotorGrafico *);
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
+        std::vector<Enemigo*> getEnemies();
 
         Sala * getPrimeraSala();
 
-        //Pruebas Pathfinding
-        Enemigo getPrimerEnemigo();
+
+        //Pruebas Pathfinding y ataque especial
+        std::vector<Enemigo*>  getEnemigos();
+        Jugador getJugador();
         void setThen();
 
-
     private:
-        
-        //clase singleton 
+
+        //clase singleton
         Nivel();
         static Nivel* unica_instancia;
-        //fin clase singleton private 
+        //fin clase singleton private
         //std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena //crear clase objetos
-        
-        std::vector<Enemigo> enemigos;//Enemigos en scena
+
+        std::vector<Enemigo*> enemigos;//Enemigos en scena
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala * primeraSala;// la primera sala del arbol
-        
-        float dt;            
+        MotorFisicas *fisicas;//motor de fisicas (hace falta mas descripcion ?)
+        int id;//id para las figuras
+        float dt;
         float frameTime;
         float acumulator;
+        float atacktime = 0.0f;
+        float atackEsptime = 0.0f;
         clock_t newTime;
         clock_t currentTime;
-        bool a,s,d,w;
+        bool a,s,d,w,atEsp;
 };
 
-#endif 
+#endif
