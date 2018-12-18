@@ -1,8 +1,6 @@
 #include "Nivel.hpp"
 #include <math.h>
-#include "MotorGrafico.hpp"
 #include "reactphysics3d.h"
-#include "MotorFisicas.hpp"
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 Nivel* Nivel::unica_instancia = 0;
@@ -144,8 +142,7 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
-        this->updateIA(); 
-
+            //this->updateIA(); 
       // if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getEnemies(0)))
       // {
       //   motor->colorearEnemigo(255,255,0,0,0);
@@ -154,33 +151,33 @@ void Nivel::update()
       // }
 
       //Actualizar ataca
-      if((motor->estaPulsado(5) || motor->estaPulsado(11)) && atacktime == 0.0f)
-      {
-          jugador.Atacar();
-          atacktime = 2000.0f;
-      }else{
-          if(atacktime > 0.0f)
-          {
-            atacktime--;
-          }
-          if(atacktime > 0.0f && atacktime < 999.0f)
-          {
-            jugador.AtacarUpdate();
-          }
-          if(atacktime == 1000.0f) //Zona de pruebas
-          {
-            motor->colorearEnemigo(255,255,255,255,0);
-            motor->clearDebug2();
-          }
-          if(atacktime > 500.0f)
-          {
-            //Colorear rojo
-            motor->colorearJugador(255,255,0,0);
-          }else{
-            //Colorear gris
-            motor->colorearJugador(255,0,0,255);
-          }
-      }
+      if((motor->estaPulsado(5)/* || motor->estaPulsado(10)*/) && atacktime == 0.0f)
+        {
+            jugador.Atacar();
+            atacktime = 2000.0f;
+        }else{
+            if(atacktime > 0.0f)
+            {
+                atacktime--;
+            }
+            if(atacktime > 0.0f && atacktime < 999.0f)
+            {
+                jugador.AtacarUpdate();
+            }
+            if(atacktime == 1000.0f) //Zona de pruebas
+            {
+                motor->colorearEnemigo(255,255,255,255,0);
+                motor->clearDebug2();
+            }
+            if(atacktime > 500.0f)
+            {
+                //Colorear rojo
+                motor->colorearJugador(255,255,0,0);
+            }else{
+                //Colorear gris
+                motor->colorearJugador(255,0,0,255);
+            }
+        }
  	   acumulator -= dt;
     }
 

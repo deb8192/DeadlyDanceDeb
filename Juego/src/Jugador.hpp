@@ -6,6 +6,8 @@
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
 #include "Arma.hpp"
+#include "MotorFisicas.hpp"
+#include "MotorGrafico.hpp"
 #include <ctime>
 
 using namespace std;

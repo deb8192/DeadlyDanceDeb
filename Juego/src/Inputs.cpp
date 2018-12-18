@@ -38,12 +38,7 @@
 	{
 		return KeyIsDown[keyCode];
 	}
-
-	bool Inputs::IsMouseClick(EMOUSE_INPUT_EVENT mouseEvent)
-	{
-		return MouseClick[mouseEvent];
-	}
-
+	
 	// This is used to check whether a mouse key is being held down
 	bool Inputs::IsMouseClick(EMOUSE_INPUT_EVENT mouseEvent)
 	{
