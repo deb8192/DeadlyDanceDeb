@@ -6,6 +6,7 @@
 Nivel* Nivel::unica_instancia = 0;
 //fin indicador singleton
 
+#define PI 3.14159265358979323846
 
 Nivel::Nivel()
 {
@@ -53,8 +54,7 @@ void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char 
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarJugador(x,y,z,ruta_objeto,ruta_textura);
     motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
-    fisicas->crearCuerpo(x/2,y/2,z/2,3,1,1,1,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
-    fisicas->crearCuerpo(x/2,y/2,z/2,2,5,5,0.5,5);
+    fisicas->crearCuerpo(x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
 }
 
 void Nivel::CrearObjeto(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -189,11 +189,14 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
 {
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((motor->estaPulsado(9) || motor->estaPulsado(11)) && atackEsptime == 0.0)
+    if((/*motor->estaPulsado(9)|| */motor->estaPulsado(11)) && atackEsptime == 0.0)
     {
         *danyo = jugador.AtacarEspecial();
         motor->colorearJugador(255, 55, 0, 255);
-        atackEsptime = 1500.0f;
+        if(*danyo > 0)
+        {
+            atackEsptime = 1500.0f;
+        }
     }
     else
     {
@@ -207,11 +210,32 @@ void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
             jugador.getRX(),
             jugador.getRY(),
             jugador.getRZ());
+
+
+            float atespx = 6.5 * sin(PI * jugador.getRY() / 180.0f) + jugador.getX();
+            float atespz = 6.5 * cos(PI * jugador.getRY() / 180.0f) + jugador.getZ();
+
+            motor->clearDebug2();
+
+            motor->dibujarObjetoTemporal(
+            atespx,
+            jugador.getY(),
+            atespz,
+            jugador.getRX(),
+            jugador.getRY(),
+            jugador.getRZ(),
+            8,
+            1,
+            8,
+            2);
+        }
+        if(atackEsptime == 1000.0f)
+        {
+            motor->colorearEnemigo(255,255,255,255,0);
         }
         if(atackEsptime <= 750.0f && motor->getArmaEspecial()) //Zona de pruebas
         {
             motor->borrarArmaEspecial();
-
             motor->colorearJugador(255, 150, 150, 150);
         }
     }
@@ -222,7 +246,6 @@ void Nivel::updateIA()
 
     MotorGrafico * motor = MotorGrafico::getInstance();
     int danyo = 0;                      //Valor que indica si se ha podido realizar el ataque
-    vector <unsigned int> atacados;     //lista de enteros que senyalan a los enemigos atacados
     //Actualizar ataque especial
     this->updateAtEsp(&danyo, motor);
     this->updateAt(&danyo, motor);
@@ -230,27 +253,7 @@ void Nivel::updateIA()
     //Si se realiza el ataque se comprueban las colisiones
     if(atackEsptime > 0.0)
     {
-
-        atacados = fisicas->updateArmaEspecial(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
-
-        //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
-        //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
-        if(!atacados.empty() && (int) atackEsptime % 500 == 0)
-        {
-
-            cout<<"Funciona"<<endl;
-            for(unsigned int i = 0; i < atacados.size(); i++)
-            {
-                float variacion = rand() % 7 - 3;
-                danyo += (int) variacion;
-                enemigos.at(i)->QuitarVida(danyo);
-                cout<<"Daño "<<danyo<<endl;
-                danyo -= (int) variacion;
-                cout<<"variacion "<<variacion<<endl;
-                cout<<"Vida enemigo "<<enemigos.at(i)->getID()<<" "<<enemigos.at(i)->getVida()<<endl;
-                motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
-            }
-        }
+        jugador.AtacarEspecialUpdate(&danyo);
     }
 
     else if(atacktime > 0.0)

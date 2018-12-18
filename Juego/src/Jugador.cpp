@@ -7,6 +7,8 @@
 #define PI 3.14159265358979323846
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
+#define NOMBREHEABY "Heavy"
+#define NOMBREBAILAORA "Bailaora"
 
 Jugador::Jugador()
 {
@@ -206,9 +208,40 @@ int Jugador::AtacarEspecial()
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
     if(vida > 0 && barraAtEs == por100)
     {
+        cout << "Supera las restricciones, ATAQUE ESPECIAL"<<endl;
+
+        //Calcular posiciones
+        atespx = 6.5 * sin(PI * getRY() / 180.0f) + getX();
+        atespy = getY();
+        atespz = 6.5 * cos(PI * getRY() / 180.0f) + getZ();
+        atgx = getRX();
+        atgy = getRY();
+        atgz = getRZ();
+
+        MotorFisicas* fisicas = MotorFisicas::getInstance();
+        MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+
+        //Posiciones en el mundo 3D
+        atespposX = (atespx/2);
+        atespposY = (getY()/2);
+        atespposZ = (atespz/2);
+
+        //ATAQUE ESPECIAL DEL HEAVY
+        if(strcmp(armaEspecial->getNombre(), NOMBREHEABY) == 0)
+        {
+            //Crear cuerpo de colision de ataque delante del jugador
+            fisicas->crearCuerpo(atespposX,atespposY,atespposZ,2,8,1,8,5);
+            motora->getEvent("Bow")->start();
+        }
+        //ATAQUE ESPECIAL DE LA BAILAORA
+        else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
+        {
+            //Crear cuerpo de colision de ataque delante del jugador
+            /*fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,0.5,1,4);
+            motora->getEvent("Bow")->start();*/
+        }
+
         //Se calcula el danyo del ataque
-        cout << "Supera las restricciones"<<endl;
-        //int variacion = rand() % 21 - 10;
         if(armaEquipada != NULL)
         {
             aumentosAtaque += por1 + (float) armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
@@ -217,28 +250,62 @@ int Jugador::AtacarEspecial()
         aumentosAtaque += por1 + (float) armaEspecial->getAtaque()/por100;
         aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
 
-        //cout << "aumentos " << aumentosAtaque <<endl;
-        int probabilidad = rand() % por100 + 1;
-
         //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
+        int probabilidad = rand() % por100 + 1;
         if(probabilidad <= proAtaCritico)
         {
             critico += (float) danyoCritico / por100;
             critico = roundf(critico * por10) / por10;
             cout<<"critico " << proAtaCritico << " " << critico <<endl;
         }
+
         //Se aplican todas las modificaciones en la variable danyo
         danyoF = ataque * critico * aumentosAtaque;
         danyo = roundf(danyoF * por10) / por10;
         cout << "daño" <<danyo<<endl;
-        //barraAtEs = 0;
+        barraAtEs = 0;
         return danyo;
     }
     else
     {
         cout << "No supera las restricciones"<<endl;
+        barraAtEs = por100;
     }
     return danyo;
+}
+
+void Jugador::AtacarEspecialUpdate(int *danyo)
+{
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorFisicas * fisicas = MotorFisicas::getInstance();
+    Nivel* nivel = Nivel::getInstance();
+
+    atespx = 6.5 * sin(PI * this->getRY() / 180.0f) + this->getX();
+    atespz = 6.5 * cos(PI * this->getRY() / 180.0f) + this->getZ();
+    atespposX = atespx/2;
+    atespposZ = atespz/2;
+    
+    //lista de enteros que senyalan a los enemigos atacados
+    vector <unsigned int> atacados = fisicas->updateArmaEspecial(atespposX,this->getY(),atespposZ);
+    
+    //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
+    //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
+    if(!atacados.empty() && *danyo > 0)
+    {
+
+        cout<<"Funciona"<<endl;
+        for(unsigned int i = 0; i < atacados.size(); i++)
+        {
+            float variacion = rand() % 7 - 3;
+            *danyo += (int) variacion;
+            nivel->getEnemigos().at(i)->QuitarVida(*danyo);
+            cout<<"Daño "<<*danyo<<endl;
+            *danyo -= (int) variacion;
+            cout<<"variacion "<<variacion<<endl;
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+        }
+    }
 }
 
 void Jugador::QuitarVida(int can)
