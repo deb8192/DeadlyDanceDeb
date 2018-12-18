@@ -25,8 +25,9 @@ bool Nivel::CargarNivel(int level)
     return false;
 }
 
-void Nivel::CrearEnemigo(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
+    //accion indicara futuramente que tipo de enemigo sera (herencia)
     MotorGrafico * motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
     pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
@@ -34,29 +35,29 @@ void Nivel::CrearEnemigo(int x,int y,int z, int ancho, int largo, int alto, cons
     enemigos.push_back(ene);//guardamos el enemigo en el vector
     id++;//generamos id para la figura
     ene->setID(id);//le damos el id unico en esta partida al enemigo
-    motor->CargarEnemigos(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
+    motor->CargarEnemigos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
     MotorFisicas* fisicas = MotorFisicas::getInstance();
-    fisicas->crearCuerpo(x/2,y/2,z/2,2,ancho,alto,largo,2);
+    fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2);
 }
 
-void Nivel::CrearJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     MotorFisicas* fisicas = MotorFisicas::getInstance();
-    fisicas->crearCuerpo(x/2,y/2,z/2,3,1,1,1,1);
+    fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,1,4,1,1);
 }
 
-void Nivel::CrearObjeto(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearObjeto(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
-    motor->CargarObjetos(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+    motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     MotorFisicas* fisicas = MotorFisicas::getInstance();
-    fisicas->crearCuerpo(x/2,y/2,z/2,2,ancho,alto,largo,3);
-    //motor->debugBox(x,y,z,ancho,alto,largo);
+    fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
+    //motor->debugBox(x,y,z,ancho,alto,largo); 
 }
 
-Sala * Nivel::CrearPlataforma(int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+Sala * Nivel::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
     Sala * sala = new Sala(ancho,largo,alto,x,y,z,centro);
@@ -66,7 +67,7 @@ Sala * Nivel::CrearPlataforma(int x,int y,int z, int ancho, int largo, int alto,
     sala->definirID(id);
 
     MotorFisicas* fisicas = MotorFisicas::getInstance();
-    fisicas->crearCuerpo(x/2,y/2,z/2,2,ancho,alto,largo,4);
+    fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,4);
 
     if(primeraSala == nullptr)
     {
@@ -116,22 +117,13 @@ void Nivel::update()
     while(acumulator >= dt)
     {
     
-        //adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
-        fisicas->colisionChecker(motor->estaPulsado(1),
-            motor->estaPulsado(2),
-            motor->estaPulsado(3),
-            motor->estaPulsado(4),
-            jugador.getX(),
-            jugador.getY(),            
-            jugador.getZ()
-        );
      
     //mejorar esto va muy mal
-        /*
-    motor->estaPulsado(9) && fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getObjects(7)) ? cogerObjeto = !cogerObjeto, objetoCogido = 7 : false;
-    motor->estaPulsado(9) && fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getObjects(8)) ? cogerObjeto = !cogerObjeto, objetoCogido = 8 : false;
-    
-    if(cogerObjeto)
+        
+    //motor->estaPulsado(9) && fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getColectables(0)) ? cogerObjeto = !cogerObjeto, objetoCogido = 0 : false;
+    //motor->estaPulsado(9) && fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getColectables(1)) ? cogerObjeto = !cogerObjeto, objetoCogido = 1 : false;
+    //cout << motor->estaPulsado(9) << fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getColectables(0)) << endl;
+    /*if(cogerObjeto && objetoCogido >= 0)
     {
         //Si colisiona que coja el objeto   
         motor->llevarObjeto(objetoCogido,
@@ -142,8 +134,25 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         ); 
-    }
-*/
+
+         fisicas->llevarBox(objetoCogido,
+            jugador.getX(),
+            jugador.getY(),
+            jugador.getZ()
+        ); 
+    }*/
+
+
+      //adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
+      fisicas->colisionChecker(motor->estaPulsado(1),
+          motor->estaPulsado(2),
+          motor->estaPulsado(3),
+          motor->estaPulsado(4),
+          jugador.getX(),
+          jugador.getY(),            
+          jugador.getZ()
+      );
+
       //colisiones con todos los objetos y enemigos que no se traspasan     
       if(fisicas->collideObstacle())
       {
