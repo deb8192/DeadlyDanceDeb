@@ -22,7 +22,7 @@ void Enemigo::queEscuchas()
     SenseEventos * eventos = SenseEventos::getInstance();
     std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(x,y);//le pasamos nuestra x e y
     int cuantos = listaSonidos.size();
-    cout << "Esta escuchando " << cuantos << " sonidos" << endl;
+    //cout << "Esta escuchando " << cuantos << " sonidos" << endl;
 }
 
 void Enemigo::queVes()
@@ -52,7 +52,11 @@ int Enemigo::Atacar()
 int Enemigo::AtacarEspecial()
 {
     std::cout << "Ataque especial enemigo" << std::endl;
+<<<<<<< HEAD
     return 0;
+=======
+    return -1;
+>>>>>>> 01d553623a9ae4eec5dde1b607054590ca3d0ffe
 }
 
 void Enemigo::QuitarVida(int can)
