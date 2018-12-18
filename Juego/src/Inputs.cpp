@@ -56,6 +56,12 @@
 	{
 		EventosActivos[event]=false;
 	}
+
+	// This is used to check whether a key is being held down
+	void Inputs::ResetKey(int keyCode)
+	{
+		KeyIsDown[keyCode]=false;
+	}
 	
 	Inputs::Inputs()
 	{
