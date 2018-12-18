@@ -1,5 +1,6 @@
 #include "Jugador.hpp"
 #include "Nivel.hpp"
+#include <stdlib.h>
 #include "MotorFisicas.hpp"
 #include "MotorGrafico.hpp"
 #include "MotorAudio.hpp"
@@ -11,12 +12,12 @@
 
 Jugador::Jugador()
 {
-
 }
 
 Jugador::Jugador(int,int,int,int,int,int)
 {
     vida = 100;//esto lo hereda de la interfaz por el protected
+    //armaEquipada = NULL;
 }
 
 float Jugador::getX()
@@ -211,10 +212,52 @@ void Jugador::AtacarUpdate()
     }
   }
 }
-
-void Jugador::AtacarEspecial()
+/*void Jugador::AtacarEspecial()
 {
 
+}*/
+
+int Jugador::AtacarEspecial()
+{  
+    float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
+    int danyo = 0, por10 = 10, por100 = 100;
+
+    //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
+    if(vida > 0 && barraAtEs == por100)
+    {
+        //Se calcula el danyo del ataque
+        cout << "Supera las restricciones"<<endl;
+        //int variacion = rand() % 21 - 10;
+        if(armaEquipada != NULL)
+        {
+            aumentosAtaque += por1 + (float) armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
+            aumentosAtaque = roundf(aumentosAtaque * por10) / por10;  //FUNCION ROUND SEPARADA
+        }
+        aumentosAtaque += por1 + (float) armaEspecial->getAtaque()/por100;
+        aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
+
+        //cout << "aumentos " << aumentosAtaque <<endl;
+        int probabilidad = rand() % por100 + 1;
+
+        //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
+        if(probabilidad <= proAtaCritico)
+        {
+            critico += (float) danyoCritico / por100;
+            critico = roundf(critico * por10) / por10;
+            cout<<"critico " << proAtaCritico << " " << critico <<endl;
+        }
+        //Se aplican todas las modificaciones en la variable danyo
+        danyoF = ataque * critico * aumentosAtaque;
+        danyo = roundf(danyoF * por10) / por10;
+        cout << "daño" <<danyo<<endl;
+        //barraAtEs = 0;
+        return danyo;
+    }
+    else
+    {
+        cout << "No supera las restricciones"<<endl;
+    }
+    return danyo;
 }
 
 void Jugador::QuitarVida(int can)
@@ -249,12 +292,23 @@ void Jugador::setTipo(int tip)
 
 void Jugador::setBarraAtEs(int bar)
 {
-
+    barraAtEs = bar;
 }
 
 void Jugador::setAtaque(int ataq)
 {
+    ataque = ataq;
+}
 
+void Jugador::setArma(Arma * arma)
+{
+    armaEquipada = arma;
+}
+
+
+void Jugador::setArmaEspecial(int ataque)
+{
+    armaEspecial = new Arma(ataque, nombreJugador);
 }
 
 void Jugador::setSuerte(int suer)
@@ -262,9 +316,18 @@ void Jugador::setSuerte(int suer)
 
 }
 
+void Jugador::setDanyoCritico(int danyoC)
+{
+    danyoCritico = danyoC;
+}
+
 void Jugador::setProAtaCritico(int probabilidad)
 {
-
+    proAtaCritico = probabilidad;
+}
+void Jugador::setTimeAtEsp(float time)
+{
+    timeAtEsp = time;
 }
 
 int Jugador::getVida()
@@ -279,7 +342,7 @@ int Jugador::getTipo()
 
 int Jugador::getBarraAtEs()
 {
-    return -1;
+    return barraAtEs;
 }
 
 int Jugador::getAtaque()
@@ -287,7 +350,23 @@ int Jugador::getAtaque()
     return -1;
 }
 
+Arma * Jugador::getArma()
+{
+    return armaEquipada;
+}
+
+
+Arma * Jugador::getArmaEspecial()
+{
+    return armaEspecial;
+}
+
 int Jugador::getSuerte()
+{
+    return -1;
+}
+
+int Jugador::getDanyoCritico()
 {
     return -1;
 }
@@ -301,6 +380,15 @@ int * Jugador::getBuffos()
 {
     int * valores = new int[6];
     return valores;
+}
+float Jugador::getTimeAtEsp()
+{
+    return timeAtEsp;
+}
+
+const char *Jugador::getRutaArmaEsp()
+{
+    return rutaArmaEspecial;
 }
 
 void Jugador::setID(int nid)

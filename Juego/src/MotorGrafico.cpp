@@ -1,5 +1,9 @@
 #include "MotorGrafico.hpp" //se llama a su cabezera para cargar las dependencias
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
+
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
+
 MotorGrafico* MotorGrafico::unica_instancia = 0;
 //fin indicador singleton
 
@@ -178,6 +182,15 @@ bool MotorGrafico::estaPulsado(int boton)
 
         case 8:
             return input.IsKeyDown(irr::KEY_KEY_P);
+        
+        case 9:
+            return input.IsMouseClick(irr::EMIE_RMOUSE_PRESSED_DOWN);
+        
+        case 10:
+            return input.IsMouseClick(irr::EMIE_LMOUSE_PRESSED_DOWN);
+        
+        case 11:
+            return input.IsKeyDown(irr::KEY_KEY_Q);
     }
     return false;
 }
@@ -300,6 +313,11 @@ void MotorGrafico::CargarJugador(int x,int y,int z, const char *ruta_objeto, con
     }
 }
 
+void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+    armaEsp = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+}
+
 void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry, float rz)
 {
 
@@ -336,6 +354,31 @@ void MotorGrafico::CargarObjetos(int x,int y,int z, const char *ruta_objeto, con
         objeto_en_scena->setPosition(core::vector3df(x,y,z));
         Objetos_Scena.push_back(objeto_en_scena);
     }
+}
+
+void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
+{
+    if (!armaEsp)
+	{
+		//error
+	}
+    else
+    {
+        if(ArmaEspecial_Jugador)
+        {
+            this->borrarArmaEspecial();
+        }
+        ArmaEspecial_Jugador = smgr->addAnimatedMeshSceneNode(armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+        ArmaEspecial_Jugador->setPosition(core::vector3df(x + 6.5*(sin(DEGTORAD*ry)),y,z + 6.5*(cos(DEGTORAD*ry))));
+        ArmaEspecial_Jugador->setRotation(core::vector3df(rx,ry -180,rz));
+        ArmaEspecial_Jugador->setScale(core::vector3df(0.25,0.25,0.25));
+    }
+}
+
+void MotorGrafico::borrarArmaEspecial()
+{
+    ArmaEspecial_Jugador->remove();
+    ArmaEspecial_Jugador = nullptr;
 }
 
 void MotorGrafico::activarDebugGrafico()
@@ -472,4 +515,14 @@ void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
 {
   SColor COLOR  = SColor(a, r, g, b);
   smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena[enem]->getMesh(),COLOR);
+}
+  //SUSTITUIR POR LA DE ARRIBA
+void MotorGrafico::colorearEnemigos(int a, int r, int g, int b, unsigned int seleccion)
+{
+    const SColor COLOR  = SColor(a, r, g, b);
+    smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena.at(seleccion)->getMesh(),COLOR);
+}
+IAnimatedMeshSceneNode* MotorGrafico::getArmaEspecial()
+{
+    return ArmaEspecial_Jugador;
 }

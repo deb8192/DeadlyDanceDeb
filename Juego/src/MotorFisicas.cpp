@@ -1,5 +1,12 @@
 #include "MotorFisicas.hpp" //se llama a su cabezera para cargar las dependencias
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
+#include <iostream>
+
+using namespace std;
+
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
+
 MotorFisicas* MotorFisicas::unica_instancia = 0;
 //fin indicador singleton
 
@@ -13,7 +20,6 @@ MotorFisicas::MotorFisicas()
 
 void MotorFisicas::crearCuerpo(float px, float py, float pz, int type, float ancho, float largo, float alto,int typeCreator)
 {
-
     rp3d::Vector3 posiciones(px,py,pz);
     rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
 
@@ -38,7 +44,6 @@ void MotorFisicas::crearCuerpo(float px, float py, float pz, int type, float anc
         CapsuleShape * forma = new CapsuleShape(ancho,alto);
         cuerpo->addCollisionShape(forma,transformacion);
     }
-
     if(typeCreator == 1)//jugador
     {
         jugador = cuerpo;
@@ -54,6 +59,10 @@ void MotorFisicas::crearCuerpo(float px, float py, float pz, int type, float anc
     else if(typeCreator == 4)//ataque de jugador
     {
         jugadorAtack = cuerpo;
+    }
+    else if(typeCreator == 5)//objetos
+    {
+        armaAtEsp = cuerpo;
     }
 
     // std::cout << "px: " << posiciones.x << std::endl;
@@ -91,6 +100,32 @@ void MotorFisicas::updateJugador(float x, float y, float z, float rx, float ry, 
         // std::cout << "jz: " << z << std::endl;
     }
 }
+
+vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
+{
+    vector<unsigned int> atacados;
+    if(armaAtEsp != nullptr)
+    {
+        float newx = x + 6.5*(sin(DEGTORAD*ry));
+        float newz = z + 6.5*(cos(DEGTORAD*ry));
+        float atposX = (newx/2);
+        float atposY = (y/2);
+        float atposZ = (newz/2);
+        rp3d::Vector3 posiciones(atposX,atposY,atposZ);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        armaAtEsp->setTransform(transformacion);
+        for(unsigned int i = 0; i < enemigos.size(); i++)
+        {
+            if(space->testOverlap(armaAtEsp, enemigos.at(i)))
+            {
+                atacados.push_back(i);
+            }
+        }
+    }
+    return atacados;
+}
+
 
 void MotorFisicas::updateAtaque(float x, float y, float z, float rx, float ry, float rz)
 {

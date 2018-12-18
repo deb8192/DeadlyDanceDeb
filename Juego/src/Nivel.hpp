@@ -3,8 +3,10 @@
 #include "Enemigo.hpp"
 #include "CargadorNiveles.hpp"
 #include "pollo.hpp"
+#include "MotorGrafico.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
+#include "MotorFisicas.hpp"
 
 #ifndef Nivel_HPP
 #define Nivel_HPP
@@ -33,13 +35,16 @@ class Nivel
         Sala * CrearPlataforma(int x,int y,int z, int ancho, int largo, int centro, const char *ruta_objeto, const char *ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
+        void updateAtEsp(int *, MotorGrafico *);//se actualiza la ejecucion de los ataques
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
         std::vector<Enemigo*> getEnemies();
 
         Sala * getPrimeraSala();
 
-        //Pruebas Pathfinding
-        Enemigo * getPrimerEnemigo();
+
+        //Pruebas Pathfinding y ataque especial
+        std::vector<Enemigo*>  getEnemigos();
+        Jugador getJugador();
         void setThen();
 
     private:
@@ -54,6 +59,7 @@ class Nivel
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala * primeraSala;// la primera sala del arbol
+        MotorFisicas *fisicas;//motor de fisicas (hace falta mas descripcion ?)
         int id;//id para las figuras
         float dt;
         float frameTime;
@@ -61,7 +67,7 @@ class Nivel
         float atacktime = 0.0f;
         clock_t newTime;
         clock_t currentTime;
-        bool a,s,d,w;
+        bool a,s,d,w,atEsp;
 };
 
 #endif
