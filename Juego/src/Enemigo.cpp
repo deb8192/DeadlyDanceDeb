@@ -52,11 +52,7 @@ int Enemigo::Atacar()
 int Enemigo::AtacarEspecial()
 {
     std::cout << "Ataque especial enemigo" << std::endl;
-<<<<<<< HEAD
-    return 0;
-=======
     return -1;
->>>>>>> 01d553623a9ae4eec5dde1b607054590ca3d0ffe
 }
 
 void Enemigo::QuitarVida(int can)
