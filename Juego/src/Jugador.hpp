@@ -29,6 +29,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         void AtacarUpdate();
+        void AtacarEspecialUpdate(int *danyo);
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
@@ -78,8 +79,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         //!PRUEBAS ATAQUE ESPECIAL
        //  core::vector3df dir;
         float danyo_arma = 10.0f;
-        float atx, aty, atz, atgx, atgy, atgz;
-        float atposX, atposY, atposZ;
+        float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz;
+        float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
         int tipo_arma = 2;
 };
 

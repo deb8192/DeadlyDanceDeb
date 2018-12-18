@@ -101,17 +101,12 @@ void MotorFisicas::updateJugador(float x, float y, float z, float rx, float ry, 
     }
 }
 
-vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
+vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z)
 {
     vector<unsigned int> atacados;
     if(armaAtEsp != nullptr)
     {
-        float newx = x + 6.5*(sin(DEGTORAD*ry));
-        float newz = z + 6.5*(cos(DEGTORAD*ry));
-        float atposX = (newx/2);
-        float atposY = (y/2);
-        float atposZ = (newz/2);
-        rp3d::Vector3 posiciones(atposX,atposY,atposZ);
+        rp3d::Vector3 posiciones(x,y,z);
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         armaAtEsp->setTransform(transformacion);
@@ -130,6 +125,21 @@ vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z,
 void MotorFisicas::updateAtaque(float x, float y, float z, float rx, float ry, float rz)
 {
     if(jugadorAtack != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        jugadorAtack->setTransform(transformacion);
+        // std::cout << "jx: " << x << std::endl;
+        // std::cout << "jy: " << y << std::endl;
+        // std::cout << "jz: " << z << std::endl;
+
+    }
+}
+
+void MotorFisicas::updateAtaqueEspecial(float x, float y, float z, float rx, float ry, float rz)
+{
+    if(armaAtEsp != nullptr)
     {
         rp3d::Vector3 posiciones(x,y,z);
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
