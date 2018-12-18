@@ -56,8 +56,10 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
               az = 20.0f,
               deg;
         float danyo_arma = 10.0f;
-        float atx, aty, atz;
+        float atx, aty, atz, atgx, atgy, atgz;
+        float atposX, atposY, atposZ;
         int tipo_arma = 2;
+
       //  core::vector3df dir;
 };
 

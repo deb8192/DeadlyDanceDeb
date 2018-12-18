@@ -151,13 +151,14 @@ void Nivel::update()
           {
             atacktime--;
           }
-          if(atacktime > 0.0f && atacktime < 1000.0f)
+          if(atacktime > 0.0f && atacktime < 999.0f)
           {
-            //jugador.AtacarUpdate();
+            jugador.AtacarUpdate();
           }
           if(atacktime == 1000.0f) //Zona de pruebas
           {
             motor->colorearEnemigo(255,255,255,255,0);
+            motor->clearDebug2();
           }
           if(atacktime > 500.0f)
           {

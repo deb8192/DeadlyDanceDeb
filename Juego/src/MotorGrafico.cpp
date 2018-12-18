@@ -376,6 +376,20 @@ void MotorGrafico::clearDebug()
     }
 }
 
+void MotorGrafico::clearDebug2()
+{
+    if(Objetos_Debug2.size()>0)
+    {
+        for(std::size_t i=0;i<Objetos_Debug2.size();i++)
+        {
+            Objetos_Debug2[i]->remove();
+            Objetos_Debug2[i] = NULL;
+            delete Objetos_Debug2[i];
+        }
+        Objetos_Debug2.resize(0);
+    }
+}
+
 void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensidad)
 {
     if(debugGrafico)
@@ -417,7 +431,7 @@ void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, in
     tmpobjt_en_scena->setPosition(core::vector3df(x,y,z));
     tmpobjt_en_scena->setRotation(core::vector3df(rx,ry,rz));
     tmpobjt_en_scena->setScale(core::vector3df(ancho,alto,profund));
-    Objetos_Debug.push_back(smgr->addAnimatedMeshSceneNode(tmpobjt));
+    Objetos_Debug2.push_back(tmpobjt_en_scena);
   }
 }
 
