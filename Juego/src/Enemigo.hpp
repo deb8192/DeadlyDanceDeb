@@ -26,9 +26,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setID(int);
         int getID();
         //npc metodos
-        void Atacar(int);//efectua un ataque normal, llama al motor para ejecutar la animacion.
-        void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
-
+        void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
+        //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+        int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
@@ -39,6 +39,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
         void setSuerte(int suer);
+        void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
 
         int getVida();
@@ -46,6 +47,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getBarraAtEs();
         int getAtaque();
         int getSuerte();
+        int getDanyoCritico();
         int getProAtaCritico();
         int* getBuffos();
         //propios
