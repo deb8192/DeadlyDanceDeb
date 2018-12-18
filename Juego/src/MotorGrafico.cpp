@@ -330,19 +330,19 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
     {
         if(ArmaEspecial_Jugador)
         {
-            ArmaEspecial_Jugador->remove();
+            this->borrarArmaEspecial();
         }
         ArmaEspecial_Jugador = smgr->addAnimatedMeshSceneNode(armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario   
         ArmaEspecial_Jugador->setPosition(core::vector3df(x + 6.5*(sin(DEGTORAD*ry)),y,z + 6.5*(cos(DEGTORAD*ry))));
         ArmaEspecial_Jugador->setRotation(core::vector3df(rx,ry -180,rz));
         ArmaEspecial_Jugador->setScale(core::vector3df(0.25,0.25,0.25));
-        cout<<"DIBUJA"<<endl;
     }
 }
 
 void MotorGrafico::borrarArmaEspecial()
 {
     ArmaEspecial_Jugador->remove();
+    ArmaEspecial_Jugador = nullptr;
 }
 
 void MotorGrafico::activarDebugGrafico()

@@ -12,24 +12,21 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
 {
     public:
         Arma();         //esto le deja a la entidad el constructor por defecto
-        Arma(int ataque);
+        Arma(int ataque, const char *nombre);
         ~Arma();
         
         //drawable metodos
         void setPosiciones(int nx,int ny,int nz);
+        //void getPosiciones();
+        int getAtaque();
         void setID(int);
         int getID();
-        //Arma(int ataque);//defines tu la informacion del jugador
-        /*float getX();
-        float getY();
-        float getZ();
-        float getRX();
-        float getRY();
-        float getRZ(); */
+
 
     private:
         //float ax, az,deg;    
-        int potenciaAtaque;      
+        int potenciaAtaque;
+        const char* nombreArma;      
         //MotorGrafico * motor;
       //  core::vector3df dir; 
 };

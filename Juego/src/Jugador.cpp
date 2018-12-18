@@ -115,74 +115,46 @@ void Jugador::Atacar()
 {
 
 }
-void Jugador::AtacarEspecial()
+/*void Jugador::AtacarEspecial()
 {
 
-}
+}*/
 
-int Jugador::AtacareEspecial()
+int Jugador::AtacarEspecial()
 {  
-    bool danya = false, atacado = false;
-    float danyoF = 0.0;
-    int danyo = 0;
-    //SE USARAN MAS VECES ASI QUE CONVENDRIA GENERAR VARIABLES DE INSTANCIA
-    //Nivel* nivel = Nivel::getInstance();
-    /*MotorGrafico *motor = MotorGrafico::getInstance();
-    fisicas = MotorFisicas::getInstance();
-    motor->CargarObjetos(x, y, z, rutaArmaEspecial, "");*/
-    cout << "Se realiza ataque especial jugador" << endl;
-    //int IDenemy = 2;
+    float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
+    int danyo = 0, por10 = 10, por100 = 100;
 
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
-    if(vida > 0 && barraAtEs == 100)
+    if(vida > 0 && barraAtEs == por100)
     {
+        //Se calcula el danyo del ataque
         cout << "Supera las restricciones"<<endl;
         //int variacion = rand() % 21 - 10;
-        //float aumentosAtaque = 1.0 + (float) ataque / 100;// + (float) variacion / 100;
-        /*float aumentosAtaque = roundf(aumentosAtaque * 10) / 10;
-        cout << "aumentos " << aumentosAtaque <<endl;*/
+        if(armaEquipada != NULL)
+        {
+            aumentosAtaque += por1 + (float) armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
+            aumentosAtaque = roundf(aumentosAtaque * por10) / por10;  //FUNCION ROUND SEPARADA
+        }
+        aumentosAtaque += por1 + (float) armaEspecial->getAtaque()/por100;
+        aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
 
-        cout << "daño" <<danyo<<endl;
-        float critico = 1.0;
-        int probabilidad = rand() % 100 + 1;
+        //cout << "aumentos " << aumentosAtaque <<endl;
+        int probabilidad = rand() % por100 + 1;
+
+        //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
         if(probabilidad <= proAtaCritico)
         {
-            critico += (float) danyoCritico / 100;
+            critico += (float) danyoCritico / por100;
+            critico = roundf(critico * por10) / por10;
             cout<<"critico " << proAtaCritico << " " << critico <<endl;
         }
-        danyoF = ataque * critico;
-        danyo = roundf(danyoF * 10) / 10;
+        //Se aplican todas las modificaciones en la variable danyo
+        danyoF = ataque * critico * aumentosAtaque;
+        danyo = roundf(danyoF * por10) / por10;
         cout << "daño" <<danyo<<endl;
         //barraAtEs = 0;
         return danyo;
-
-        /*unsigned int i = 0;
-        bool encontrado = false;
-
-        nivel->updateAtEsp();
-
-        //Se comprueba la colision;
-        if(danya && !atacado)
-        {
-            if(nivel->getEnemigos().at(i)->getID() == IDenemy)
-            {
-                Enemigo * en = nivel->getEnemigos().at(i);
-                cout<<"Pupa al " << en->getID();
-                en->QuitarVida(danyo);
-                cout<<" " << en->getVida()<<endl;
-                encontrado = true;
-            }
-            else
-            {
-                cout<<"NO daño" << nivel->getEnemigos().at(i)->getID()<<endl;
-            }
-            i++;
-        }
-
-        while(i < nivel->getEnemigos().size() && !encontrado)
-        {
-            
-        }*/
     }
     else
     {
@@ -239,7 +211,7 @@ void Jugador::setArma(Arma * arma)
 
 void Jugador::setArmaEspecial(int ataque)
 {
-    armaEspecial = new Arma(ataque);
+    armaEspecial = new Arma(ataque, nombreJugador);
 }
 
 void Jugador::setSuerte(int suer)
