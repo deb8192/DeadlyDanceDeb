@@ -2,7 +2,7 @@
 
 Enemigo::Enemigo()
 {
-    
+
 }
 
 void Enemigo::definirSala(Sala * sala)
@@ -21,8 +21,8 @@ void Enemigo::queEscuchas()
 {
     SenseEventos * eventos = SenseEventos::getInstance();
     std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(x,y);//le pasamos nuestra x e y
-    int cuantos = listaSonidos.size();
-    cout << "Esta escuchando " << cuantos << " sonidos" << endl;
+    //int cuantos = listaSonidos.size();
+    //cout << "Esta escuchando " << cuantos << " sonidos" << endl;
 }
 
 void Enemigo::queVes()
@@ -34,4 +34,129 @@ void Enemigo::queVes()
 Sala* Enemigo::getSala()
 {
     return estoy;
+}
+
+void Enemigo::setPosiciones(int nx,int ny,int nz)
+{
+    x = nx;
+    y = ny;
+    z = nz;
+}
+
+int Enemigo::Atacar()
+{
+    std::cout << "Ataque normal enemigo" << std::endl;
+    return 0;
+}
+
+int Enemigo::AtacarEspecial()
+{
+    std::cout << "Ataque especial enemigo" << std::endl;
+    return -1;
+}
+
+void Enemigo::QuitarVida(int can)
+{
+    vida-=can;
+}
+
+void Enemigo::RecuperarVida(int can)
+{
+
+}
+
+void Enemigo::AumentarBarraAtEs(int can)
+{
+
+}
+
+void Enemigo::Interactuar(int id, int id2)
+{
+
+}
+
+void Enemigo::setVida(int vid)
+{
+    vida = vid;
+}
+
+void Enemigo::setTipo(int tip)
+{
+
+}
+
+void Enemigo::setBarraAtEs(int bar)
+{
+
+}
+
+void Enemigo::setAtaque(int ataq)
+{
+    ataque = ataq;
+}
+
+void Enemigo::setSuerte(int suer)
+{
+
+}
+
+void Enemigo::setDanyoCritico(int danyoC)
+{
+
+}
+
+void Enemigo::setProAtaCritico(int probabilidad)
+{
+
+}
+
+int Enemigo::getVida()
+{
+    return vida;
+}
+
+int Enemigo::getTipo()
+{
+    return -1;
+}
+
+int Enemigo::getBarraAtEs()
+{
+    return -1;
+}
+
+int Enemigo::getAtaque()
+{
+    return -1;
+}
+
+int Enemigo::getSuerte()
+{
+    return -1;
+}
+
+int Enemigo::getDanyoCritico()
+{
+    return -1;
+}
+
+int Enemigo::getProAtaCritico()
+{
+    return -1;
+}
+
+int * Enemigo::getBuffos()
+{
+    int * valores = new int[6];
+    return valores;
+}
+
+void Enemigo::setID(int nid)
+{
+    id = nid;
+}
+
+int Enemigo::getID()
+{
+    return id;
 }
