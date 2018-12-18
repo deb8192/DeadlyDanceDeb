@@ -1,5 +1,9 @@
 #include "MotorGrafico.hpp" //se llama a su cabezera para cargar las dependencias
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
+
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
+
 MotorGrafico* MotorGrafico::unica_instancia = 0;
 //fin indicador singleton
 
@@ -180,7 +184,17 @@ bool MotorGrafico::estaPulsado(int boton)
             return input.IsKeyDown(irr::KEY_KEY_P);
 
         case 9:
+            return input.IsMouseClick(irr::EMIE_RMOUSE_PRESSED_DOWN);
+        
+        case 10:
+            return input.IsMouseClick(irr::EMIE_LMOUSE_PRESSED_DOWN);
+        
+        case 11:
+            return input.IsKeyDown(irr::KEY_KEY_Q);
+        
+        case 12:
             return input.IsKeyDown(irr::KEY_KEY_E);
+
     }
     return false;
 }
@@ -193,6 +207,37 @@ bool MotorGrafico::ocurreEvento(int event)
 void MotorGrafico::resetEvento(int event)
 {
     input.ResetEvento(event);
+}
+
+void MotorGrafico::resetKey(int event)
+{
+    switch(event)
+    {
+        case 1:
+            input.ResetKey(irr::KEY_KEY_A);
+        break;
+        case 2:
+            input.ResetKey(irr::KEY_KEY_S);
+        break;
+        case 3:
+            input.ResetKey(irr::KEY_KEY_D);
+        break;
+        case 4:
+            input.ResetKey(irr::KEY_KEY_W);
+        break;
+        case 5:
+            input.ResetKey(irr::KEY_SPACE);
+        break;
+        case 6:
+            input.ResetKey(irr::KEY_ACCEPT);
+        break;
+        case 7:
+            input.ResetKey(irr::KEY_KEY_G);//para modo debug
+        break;
+        case 8:
+            input.ResetKey(irr::KEY_KEY_P);
+        break;
+    }
 }
 
 int MotorGrafico::CargarPlataformas(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto,const char *ruta_textura)
@@ -291,6 +336,12 @@ void MotorGrafico::llevarObjeto(int id, float x, float y, float z, float rx, flo
 
 }
 
+void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+    armaEsp = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+
+}
+
 void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry, float rz)
 {
 
@@ -331,6 +382,31 @@ void MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int l
     }
 }
 
+void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
+{
+    if (!armaEsp)
+	{
+		//error
+	}
+    else
+    {
+        if(ArmaEspecial_Jugador)
+        {
+            this->borrarArmaEspecial();
+        }
+        ArmaEspecial_Jugador = smgr->addAnimatedMeshSceneNode(armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+        ArmaEspecial_Jugador->setPosition(core::vector3df(x + 6.5*(sin(DEGTORAD*ry)),y,z + 6.5*(cos(DEGTORAD*ry))));
+        ArmaEspecial_Jugador->setRotation(core::vector3df(rx,ry -180,rz));
+        ArmaEspecial_Jugador->setScale(core::vector3df(0.25,0.25,0.25));
+    }
+}
+
+void MotorGrafico::borrarArmaEspecial()
+{
+    ArmaEspecial_Jugador->remove();
+    ArmaEspecial_Jugador = nullptr;
+}
+
 void MotorGrafico::activarDebugGrafico()
 {
     if(debugGrafico)
@@ -369,6 +445,20 @@ void MotorGrafico::clearDebug()
     }
 }
 
+void MotorGrafico::clearDebug2()
+{
+    if(Objetos_Debug2.size()>0)
+    {
+        for(std::size_t i=0;i<Objetos_Debug2.size();i++)
+        {
+            Objetos_Debug2[i]->remove();
+            Objetos_Debug2[i] = NULL;
+            delete Objetos_Debug2[i];
+        }
+        Objetos_Debug2.resize(0);
+    }
+}
+
 void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensidad)
 {
     if(debugGrafico)
@@ -388,6 +478,30 @@ void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensi
             Objetos_Debug.push_back(objeto_en_scena);
         }
     }
+}
+
+void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo)
+{
+  if(debugGrafico)
+  {
+    //Crear objetos debug
+    IAnimatedMesh* tmpobjt;
+    if(tipo == 1)
+    {
+      tmpobjt = smgr->getMesh("assets/models/sphere.obj");
+    }else if(tipo == 2)
+    {
+      tmpobjt = smgr->getMesh("assets/models/cube.obj");
+    }else if(tipo == 3)
+    {
+      tmpobjt = smgr->getMesh("assets/models/capsule.obj");
+    }
+    IAnimatedMeshSceneNode* tmpobjt_en_scena = smgr->addAnimatedMeshSceneNode(tmpobjt);
+    tmpobjt_en_scena->setPosition(core::vector3df(x,y,z));
+    tmpobjt_en_scena->setRotation(core::vector3df(rx,ry,rz));
+    tmpobjt_en_scena->setScale(core::vector3df(ancho,alto,profund));
+    Objetos_Debug2.push_back(tmpobjt_en_scena);
+  }
 }
 
 bool MotorGrafico::colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension)
@@ -449,5 +563,17 @@ void MotorGrafico::colorearObjeto(int a, int r, int g, int b, int obj)
 {
   SColor COLOR  = SColor(a, r, g, b);
   smgr->getMeshManipulator()->setVertexColors(Objetos_Scena[obj]->getMesh(),COLOR);
+}
+
+  //SUSTITUIR POR LA DE ARRIBA
+void MotorGrafico::colorearEnemigos(int a, int r, int g, int b, unsigned int seleccion)
+{
+    const SColor COLOR  = SColor(a, r, g, b);
+    smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena.at(seleccion)->getMesh(),COLOR);
+}
+
+IAnimatedMeshSceneNode* MotorGrafico::getArmaEspecial()
+{
+    return ArmaEspecial_Jugador;
 }
 

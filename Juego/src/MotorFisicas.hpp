@@ -25,17 +25,24 @@ using namespace reactphysics3d;
             void actualizarPosicionCuerpo(float px, float py, float pz,int posicion);//se le pasa las nuevas posiciones del cuerpo del array de cuerpos de la posicion
             Ray * crearRayo(float x, float y, float z, float longitud);//crea un rayo en esas posiciones con la longitud
             void colisionRayoUnCuerpo(float x,float y,float z,float longitud);//colisiona solo con un cuerpo (el primero)
+
             void updateJugador(float x, float y, float z);//actualizamos al jugador en el espacio de las fisicas
-            CollisionWorld* getWorld();
-            CollisionBody* getJugador();
-            CollisionBody* getEnemies(int n);
+         
             CollisionBody* getColectables(int n);
             CollisionBody* getObstacles(int n);
             bool collideObstacle();
             bool collidePlatform();
             void colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z);
             void llevarBox(int id, float x, float y, float z);
-            
+
+            void updateJugador(float x, float y, float z, float rx, float ry, float rz);//actualizamos al jugador en el espacio de las fisicas
+            std::vector <unsigned int> updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
+            void updateAtaque(float x, float y, float z, float rx, float ry, float rz);
+            CollisionWorld* getWorld();
+            CollisionBody* getJugador();
+            CollisionBody* getEnemies(int n);
+            CollisionBody* getAtack();
+
         private:
             //clase singleton
             MotorFisicas();
@@ -45,9 +52,16 @@ using namespace reactphysics3d;
             CollisionWorld * space; //espacio o mundo de fisicas
             std::vector<CollisionBody *> enemigos;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody * jugador;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
+
             std::vector<CollisionBody *> recolectables;
             std::vector<CollisionBody *> obstaculos;
             std::vector<CollisionBody *> plataformas;
+
+            CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
+            CollisionBody* jugadorAtack; //contiene el ataque normal del jugador
+            std::vector<CollisionBody *> objetos;
+
     };
 
 #endif
+

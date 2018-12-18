@@ -5,6 +5,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include "eventos.hpp" //este archivo contiene los ids de los eventos
 #include "Inputs.hpp" //
 #include <iostream> //la utilizamos para mostrar el log en la consola.
+#include <math.h>
 #include <vector>//para los objetos en escena
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
@@ -71,13 +72,19 @@ using namespace idsEventos;
             //fin evento botones se puede utilizar para cualquier tipo de evento de irrlicht
             void resetEvento(int);//resetea el evento
 
+            void resetKey(int event);
+
             //cargadores de objetos
             int CargarPlataformas(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
+
             void CargarEnemigos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             void CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
-            
+            void CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+           
+
+
             void closeGame();
 
             //colision rayo
@@ -86,15 +93,23 @@ using namespace idsEventos;
             //debug grafico
             void activarDebugGrafico();//se activa o desactiva el modo debug grafico
             void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
+            void dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo);
             void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
+            void clearDebug2();
             void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
+            void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
+            void borrarArmaEspecial();
             void colorearJugador(int a, int r, int g, int b);
+            void colorearEnemigos(int a, int r, int g, int b, unsigned int seleccion);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
+
             void colorearObjeto(int a, int r, int g, int b, int obj);
             void debugBox(int x,int y, int z,int ancho, int alto, int largo);
             void llevarObjeto(int id, float x, float y, float z, float rx, float ry, float rz);
 
+
+            IAnimatedMeshSceneNode* getArmaEspecial();
 
         private: //clases solo accesibles por MotorGrafico
 
@@ -115,12 +130,19 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
             std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
             std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
+            IAnimatedMesh *armaEsp;//Malla del arma del jugador
+            IAnimatedMeshSceneNode *ArmaEspecial_Jugador;//Malla del arma del jugador en escena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
             std::vector<int> Accion_Object;//para saber que accion realiza objeto en motorgrafico            
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
+            std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
             bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
+
             core::aabbox3d<f32> bounding_jugador;
+
+            IAnimatedMeshSceneNode* tmpobjt_en_scena;
+
     };
 
 #endif /* MotorGrafico_HPP */
