@@ -142,7 +142,7 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
-            //this->updateIA(); 
+            this->updateIA(); 
       // if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getEnemies(0)))
       // {
       //   motor->colorearEnemigo(255,255,0,0,0);
@@ -186,17 +186,17 @@ void Nivel::update()
 void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
 {
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((motor->estaPulsado(9) || motor->estaPulsado(11)) && atacktime == 0.0)
+    if((motor->estaPulsado(9) || motor->estaPulsado(11)) && atackEsptime == 0.0)
     {            
         *danyo = jugador.AtacarEspecial();
         motor->colorearJugador(255, 55, 0, 255);
-        atacktime = 1500.0f;
+        atackEsptime = 1500.0f;
     }
     else
     {
-        if(atacktime > 0.f)
+        if(atackEsptime > 0.f)
         {
-            atacktime--;
+            atackEsptime--;
             motor->mostrarArmaEspecial(
             jugador.getX(), 
             jugador.getY(), 
@@ -205,7 +205,7 @@ void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
             jugador.getRY(), 
             jugador.getRZ());
         }
-        if(atacktime <= 750.0f && motor->getArmaEspecial()) //Zona de pruebas
+        if(atackEsptime <= 750.0f && motor->getArmaEspecial()) //Zona de pruebas
         {
             motor->borrarArmaEspecial();
             
@@ -224,14 +224,14 @@ void Nivel::updateIA()
     this->updateAtEsp(&danyo, motor);
 
     //Si se realiza el ataque se comprueban las colisiones
-    if(atacktime > 0.0)
+    if(atackEsptime > 0.0)
     {
 
         atacados = fisicas->updateArmaEspecial(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
         
         //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
         //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
-        if(!atacados.empty() && (int) atacktime % 500 == 0)
+        if(!atacados.empty() && (int) atackEsptime % 500 == 0)
         {
 
             cout<<"Funciona"<<endl;
