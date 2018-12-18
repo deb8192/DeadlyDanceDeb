@@ -1,6 +1,8 @@
 #include "Nivel.hpp"
-
 #include <math.h>
+#include "MotorGrafico.hpp"
+#include "reactphysics3d.h"
+#include "MotorFisicas.hpp"
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 Nivel* Nivel::unica_instancia = 0;
@@ -36,7 +38,7 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
     id++;//generamos id para la figura
     ene->setID(id);//le damos el id unico en esta partida al enemigo
     motor->CargarEnemigos(x,y,z,ruta_objeto,ruta_textura);//creamos la figura pasando el id
-    fisicas->crearCuerpo(x/4,y/4,z/4,2,1,1,1,2);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
+    fisicas->crearCuerpo(x/2,y/2,z/2,1,1,1,2,2);
 }
 
 void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -52,7 +54,7 @@ void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char 
     motor->CargarJugador(x,y,z,ruta_objeto,ruta_textura);
     motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
     fisicas->crearCuerpo(x/2,y/2,z/2,3,1,1,1,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
-    fisicas->crearCuerpo(x/2,y/2,z/2,2,5,5,0.5,4);
+    fisicas->crearCuerpo(x/2,y/2,z/2,2,5,5,0.5,5);
 }
 
 void Nivel::CrearObjeto(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -86,7 +88,7 @@ void Nivel::CrearLuz(int x,int y,int z)
 }
 
 void Nivel::setThen()
-{   //variables de la interpolacion 
+{   //variables de la interpolacion
     currentTime = clock();
 	acumulator = 0.0f;
     dt =1.0f/60.0f;
@@ -94,6 +96,7 @@ void Nivel::setThen()
 
 void Nivel::update()
 {
+  MotorFisicas* fisicas = MotorFisicas::getInstance();
     //actualizamos los enemigos
     if(enemigos.size() > 0)//posiciones interpolacion
     {
@@ -117,8 +120,7 @@ void Nivel::update()
     currentTime = newTime;
     acumulator += frameTime;
     while(acumulator >= dt)
-    { 
-        //cout << "tiempo ataque" << jugador.getTimeAtEsp()<<endl;
+    {
         //actualizamos movimiento del jugador
         jugador.movimiento(dt,
             motor->estaPulsado(1),
@@ -126,8 +128,7 @@ void Nivel::update()
             motor->estaPulsado(3),
             motor->estaPulsado(4)
         );
-
-               
+      
         motor->mostrarJugador(jugador.getX(),
             jugador.getY(),
             jugador.getZ(),
@@ -143,9 +144,44 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
-        //ESTO SE DEBE LLAMAR CON MENOS FRECUENCIA PERO DE MOMENTO SE QUEDA ASÍ
         this->updateIA(); 
- 	    acumulator -= dt;  
+
+      // if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getEnemies(0)))
+      // {
+      //   motor->colorearEnemigo(255,255,0,0,0);
+      // }else{
+      //   motor->colorearEnemigo(255,255,255,255,0);
+      // }
+
+      //Actualizar ataca
+      if((motor->estaPulsado(5) || motor->estaPulsado(11)) && atacktime == 0.0f)
+      {
+          jugador.Atacar();
+          atacktime = 2000.0f;
+      }else{
+          if(atacktime > 0.0f)
+          {
+            atacktime--;
+          }
+          if(atacktime > 0.0f && atacktime < 999.0f)
+          {
+            jugador.AtacarUpdate();
+          }
+          if(atacktime == 1000.0f) //Zona de pruebas
+          {
+            motor->colorearEnemigo(255,255,255,255,0);
+            motor->clearDebug2();
+          }
+          if(atacktime > 500.0f)
+          {
+            //Colorear rojo
+            motor->colorearJugador(255,255,0,0);
+          }else{
+            //Colorear gris
+            motor->colorearJugador(255,0,0,255);
+          }
+      }
+ 	   acumulator -= dt;
     }
 
 }
@@ -240,4 +276,9 @@ std::vector<Enemigo *>  Nivel::getEnemigos()
 Jugador Nivel::getJugador()
 {
     return jugador;
+}
+
+std::vector<Enemigo*> Nivel::getEnemies()
+{
+  return enemigos;
 }

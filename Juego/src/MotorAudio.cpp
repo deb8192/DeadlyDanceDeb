@@ -24,26 +24,35 @@ MotorAudioSystem::MotorAudioSystem()
   FMOD::Studio::Bank* pBank;
   ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/Music.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
   if(pBank)banks["Music"] = pBank; //Insertar en el mapa de Bancos
+  ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/SFX.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
+  if(pBank)banks["SFX"] = pBank; //Insertar en el mapa de Bancos
 
   //Cargar eventos
   FMOD::Studio::EventDescription* pEventInstance;
-  ERRCHECK(pstudioSystem->getEvent("event:/Music/Level 01", &pEventInstance));
+  ERRCHECK(pstudioSystem->getEvent("event:/Level 01", &pEventInstance));
+cout << "Aqui todo bien" << endl;
   if(pEventInstance)
   {
     eventDescriptions["Level01"] = pEventInstance; //Insertar en el mapa de descripcion de eventos
     MotorAudioEvents.insert(pair<std::string, MotorAudioEvent*>("Level01",new MotorAudioEvent(pEventInstance)));
   }
-  ERRCHECK(pstudioSystem->getEvent("event:/Music/Level 02", &pEventInstance));
+  ERRCHECK(pstudioSystem->getEvent("event:/Level 02", &pEventInstance));
   if(pEventInstance)
   {
     eventDescriptions["Level02"] = pEventInstance; //Insertar en el mapa de descripcion de eventos
     MotorAudioEvents.insert(pair<std::string, MotorAudioEvent*>("Level02",new MotorAudioEvent(pEventInstance)));
   }
-  ERRCHECK(pstudioSystem->getEvent("event:/Music/Level 03", &pEventInstance));
+  ERRCHECK(pstudioSystem->getEvent("event:/Level 03", &pEventInstance));
   if(pEventInstance)
   {
     eventDescriptions["Level03"] = pEventInstance; //Insertar en el mapa de descripcion de eventos
     MotorAudioEvents.insert(pair<std::string, MotorAudioEvent*>("Level03",new MotorAudioEvent(pEventInstance)));
+  }
+  ERRCHECK(pstudioSystem->getEvent("event:/Bow", &pEventInstance));
+  if(pEventInstance)
+  {
+    eventDescriptions["Bow"] = pEventInstance; //Insertar en el mapa de descripcion de eventos
+    MotorAudioEvents.insert(pair<std::string, MotorAudioEvent*>("Bow",new MotorAudioEvent(pEventInstance)));
   }
 
  //***********EJEMPLO DE EJECUCION MUSICA*****************
