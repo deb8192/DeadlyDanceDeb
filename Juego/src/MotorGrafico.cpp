@@ -474,7 +474,7 @@ void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensi
             //cout << "\e[36m Generamos Circulo \e[0m" << endl;
             IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(circulo); //metemos el objeto en el escenario para eso lo pasamos al escenario
             objeto_en_scena->setPosition(core::vector3df(x,y,z));
-            objeto_en_scena->setScale(core::vector3df(intensidad,intensidad,1));
+            objeto_en_scena->setScale(core::vector3df(intensidad,1,intensidad));
             Objetos_Debug.push_back(objeto_en_scena);
         }
     }
