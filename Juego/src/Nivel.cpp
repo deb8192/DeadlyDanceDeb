@@ -30,7 +30,7 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
     MotorGrafico * motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
     pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-    ene->setVida(50);
+    ene->setVida(75);
     ene->definirSala(sala);//le pasamos la sala en donde esta
     enemigos.push_back(ene);//guardamos el enemigo en el vector
     id++;//generamos id para la figura
@@ -44,6 +44,8 @@ void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char 
     jugador.setID(id++);
     jugador.setBarraAtEs(100);
     jugador.setAtaque(15);
+    jugador.setArma(NULL);
+    jugador.setArmaEspecial(100);
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
     MotorGrafico * motor = MotorGrafico::getInstance();
@@ -92,7 +94,6 @@ void Nivel::setThen()
 
 void Nivel::update()
 {
-    int danyo = 0;
     //actualizamos los enemigos
     if(enemigos.size() > 0)//posiciones interpolacion
     {
@@ -117,8 +118,8 @@ void Nivel::update()
     acumulator += frameTime;
     while(acumulator >= dt)
     { 
+        //cout << "tiempo ataque" << jugador.getTimeAtEsp()<<endl;
         //actualizamos movimiento del jugador
-
         jugador.movimiento(dt,
             motor->estaPulsado(1),
             motor->estaPulsado(2),
@@ -134,68 +135,35 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
-        this->updateAtEsp(&danyo, motor);
 
-        fisicas->updateJugador(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
-        
-        vector <unsigned int> atacados;
-
-        if(danyo >0)
-        {
-            atacados = fisicas->updateArmaEspecial(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
-            
-            if(!atacados.empty())
-            {
-                for(unsigned int i = 0; i < atacados.size(); i++)
-                {
-                    float variacion = rand() % 21 - 10;
-                    variacion = variacion / 100;
-                    variacion = roundf(variacion * 10) / 10;
-                    danyo += (int) variacion;
-                    enemigos.at(i)->QuitarVida(danyo);
-                    cout<<"Daño "<<danyo<<endl;
-                    cout<<"Vida enemigo "<<enemigos.at(i)->getID()<<" "<<enemigos.at(i)->getVida()<<endl;
-                    motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
-                }
-            }
-        }
-        else
-        {
-            for(unsigned int i = 0; i < enemigos.size(); i++)
-            {
-                motor->colorearEnemigos(255, 150, 150, 150, i);
-            }
-        }
-
- 	   acumulator -= dt;  
-    } 
+        fisicas->updateJugador(jugador.getX(),
+            jugador.getY(),
+            jugador.getZ(),
+            jugador.getRX(),
+            jugador.getRY(),
+            jugador.getRZ()
+        );
+        //ESTO SE DEBE LLAMAR CON MENOS FRECUENCIA PERO DE MOMENTO SE QUEDA ASÍ
+        this->updateIA(); 
+ 	    acumulator -= dt;  
+    }
 
 }
 
 void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
 {
-//Compureba si se realiza el ataque especial o si la animacion esta a medias
-    bool dibujado = false;
-    if((motor->estaPulsado(9) || motor->estaPulsado(11)) || (jugador.getTimeAtEsp() > 0.0 && jugador.getTimeAtEsp() < 500.0))
+    //Compureba si se realiza el ataque especial o si la animacion esta a medias
+    if((motor->estaPulsado(9) || motor->estaPulsado(11)) && atacktime == 0.0)
+    {            
+        *danyo = jugador.AtacarEspecial();
+        motor->colorearJugador(255, 55, 0, 255);
+        atacktime = 3000.0f;
+    }
+    else
     {
-        if(motor->estaPulsado(9))
-            cout<<"Raton"<<endl;
-        else
-            cout<<"Q"<<endl;
-        
-        if(*danyo == 0)
+        if(atacktime > 0.f)
         {
-            *danyo = jugador.AtacareEspecial();
-        }
-        else
-        {
-            cout << "PINTA" << *danyo <<endl;
-            motor->colorearJugador(255, 55, 0, 255);
-        }
-        
-        if(jugador.getTimeAtEsp() < 250)
-        {
-            
+            atacktime--;
             motor->mostrarArmaEspecial(
             jugador.getX(), 
             jugador.getY(), 
@@ -203,27 +171,59 @@ void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
             jugador.getRX(), 
             jugador.getRY(), 
             jugador.getRZ());
-
-            dibujado = true;
         }
-        jugador.setTimeAtEsp(jugador.getTimeAtEsp() + frameTime);
-        
-        
-
+        if(atacktime <= 1000.0f && motor->getArmaEspecial()) //Zona de pruebas
+        {
+            motor->borrarArmaEspecial();
+            
+            motor->colorearJugador(255, 150, 150, 150);
+        }
     }
-    else
-    {
-            //cout << "NO PINTA" << *danyo <<endl;
-        motor->colorearJugador(255, 150, 150, 150);
-        jugador.setTimeAtEsp(0);
-        *danyo = 0;
-    }
-
 }
 
 void Nivel::updateIA()
 {
 
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    int danyo = 0;                      //Valor que indica si se ha podido realizar el ataque
+    vector <unsigned int> atacados;     //lista de enteros que senyalan a los enemigos atacados
+    //Actualizar ataque especial
+    this->updateAtEsp(&danyo, motor);
+
+    //Si se realiza el ataque se comprueban las colisiones
+    if(atacktime > 0.0)
+    {
+
+        atacados = fisicas->updateArmaEspecial(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
+        
+        //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
+        //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
+        if(!atacados.empty() && (int) atacktime % 1000 == 0)
+        {
+
+            cout<<"Funciona"<<endl;
+            for(unsigned int i = 0; i < atacados.size(); i++)
+            {
+                float variacion = rand() % 7 - 3;
+                danyo += (int) variacion;
+                enemigos.at(i)->QuitarVida(danyo);
+                cout<<"Daño "<<danyo<<endl;
+                danyo -= (int) variacion;
+                cout<<"variacion "<<variacion<<endl;
+                cout<<"Vida enemigo "<<enemigos.at(i)->getID()<<" "<<enemigos.at(i)->getVida()<<endl;
+                motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+            }
+        }
+    }
+
+    //En caso contrario se colorean los enemigos de color gris
+    else
+    {
+        for(unsigned int i = 0; i < enemigos.size(); i++)
+        {
+            motor->colorearEnemigos(255, 150, 150, 150, i);
+        }
+    }
 }
 
 //Pruebas pathfinding

@@ -6,7 +6,6 @@
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
 #include "Arma.hpp"
-#include "MotorFisicas.hpp"
 #include <ctime>
 
 using namespace std;
@@ -25,8 +24,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int getID();
         //npc metodos
         void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
-        void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
-        int AtacareEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+        //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+        int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico 
@@ -69,10 +68,11 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
               deg;        
         //PRUEBAS ATAQUE ESPECIAL
         float timeAtEsp = 0.0;
-        MotorFisicas *fisicas;
         Arma *armaEquipada;
         Arma *armaEspecial;    
         const char * rutaArmaEspecial = "assets/models/Arma.obj";  
+        const char * nombreJugador = "Heavy"; 
+        //!PRUEBAS ATAQUE ESPECIAL
       //  core::vector3df dir; 
 };
 

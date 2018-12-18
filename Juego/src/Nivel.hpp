@@ -6,7 +6,7 @@
 #include "MotorGrafico.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
-//#include "MotorFisicas.hpp"
+#include "MotorFisicas.hpp"
 
 #ifndef Nivel_HPP
 #define Nivel_HPP
@@ -64,6 +64,7 @@ class Nivel
         float dt;            
         float frameTime;
         float acumulator;
+        float atacktime = 0.0f;
         clock_t newTime;
         clock_t currentTime;
         bool a,s,d,w,atEsp;
