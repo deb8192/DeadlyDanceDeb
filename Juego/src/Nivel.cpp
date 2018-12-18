@@ -157,7 +157,7 @@ void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
     {            
         *danyo = jugador.AtacarEspecial();
         motor->colorearJugador(255, 55, 0, 255);
-        atacktime = 3000.0f;
+        atacktime = 1500.0f;
     }
     else
     {
@@ -172,7 +172,7 @@ void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
             jugador.getRY(), 
             jugador.getRZ());
         }
-        if(atacktime <= 1000.0f && motor->getArmaEspecial()) //Zona de pruebas
+        if(atacktime <= 750.0f && motor->getArmaEspecial()) //Zona de pruebas
         {
             motor->borrarArmaEspecial();
             
@@ -198,7 +198,7 @@ void Nivel::updateIA()
         
         //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
         //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
-        if(!atacados.empty() && (int) atacktime % 1000 == 0)
+        if(!atacados.empty() && (int) atacktime % 500 == 0)
         {
 
             cout<<"Funciona"<<endl;
