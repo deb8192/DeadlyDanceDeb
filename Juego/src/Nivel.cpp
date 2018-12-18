@@ -172,16 +172,8 @@ void Nivel::update()
           jugador.getZ()
       );
 
-      bool solape = fisicas->collideObstacle();
-
-
-        fisicas->updateJugador(jugador.getX(),
-            jugador.getY(),
-            jugador.getZ()
-        );   
-
       //colisiones con todos los objetos y enemigos que no se traspasan     
-      if(solape)
+      if(fisicas->collideObstacle())
       {
         //colisiona
       }

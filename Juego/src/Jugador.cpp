@@ -132,7 +132,6 @@ void Jugador::Atacar()
     MotorAudioSystem* motora = MotorAudioSystem::getInstance();
     rp3d::CollisionBody * cuerpo;
 
-    cout << "ATAQUE NORMAL DEL JUGADOR" << endl;
     //Posiciones en el mundo 3D
     atposX = (atx/2);
     atposY = (getY()/2);
@@ -170,9 +169,7 @@ void Jugador::Atacar()
       //Pasar por cada uno de los enemigos del nivel y comprobar colision
       long unsigned int num = 0;
       while(nivel->getEnemies().size() > num)
-      {  
-      
-    cout << fisicas->getEnemies(num) << endl;      
+      {            
         //Si colisiona algun enemigo
         if(fisicas->getWorld()->testOverlap(cuerpo,fisicas->getEnemies(num)))
         {
@@ -181,7 +178,6 @@ void Jugador::Atacar()
         }
         num++;
       }   
-
       //Destruir cuerpo colision
       //fisicas->getWorld()->destroyCollisionBody(cuerpo);
     }
