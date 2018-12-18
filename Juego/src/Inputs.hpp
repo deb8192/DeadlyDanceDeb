@@ -14,7 +14,7 @@ using namespace gui;
         public:
             virtual bool OnEvent(const SEvent& event);
             virtual bool IsKeyDown(EKEY_CODE keyCode);
-            bool IsMouseClick(EMOUSE_INPUT_EVENT mouseEvent)
+            bool IsMouseClick(EMOUSE_INPUT_EVENT mouseEvent);
             void ResetKey(int);//pone el evento a false
             void ResetEvento(int);//pone el evento a false
             bool IsEventOn(int event);

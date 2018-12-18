@@ -1,8 +1,6 @@
 #include "Jugador.hpp"
 #include "Nivel.hpp"
 #include <stdlib.h>
-#include "MotorFisicas.hpp"
-#include "MotorGrafico.hpp"
 #include "MotorAudio.hpp"
 #include "math.h"
 
