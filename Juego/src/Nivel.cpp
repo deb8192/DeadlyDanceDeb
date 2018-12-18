@@ -32,6 +32,7 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->setVida(75);
     ene->definirSala(sala);//le pasamos la sala en donde esta
+    ene->generarSonido(20,5);
     enemigos.push_back(ene);//guardamos el enemigo en el vector
     id++;//generamos id para la figura
     ene->setID(id);//le damos el id unico en esta partida al enemigo
@@ -104,6 +105,7 @@ void Nivel::update()
             //cout << "Enemigo " << i << endl;
             //enemigos[i]->Atacar();
             //enemigos[i]->AtacarEspecial();
+            //enemigos[i]->queEscuchas();
         }
     }
 

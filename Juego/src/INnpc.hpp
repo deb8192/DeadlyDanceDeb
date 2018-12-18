@@ -16,7 +16,7 @@ public:
     virtual void RecuperarVida(int)=0;//le suma vida a la entidad
     virtual void AumentarBarraAtEs(int)=0;//aumenta el valor de la barra de ataque critico
     virtual void Interactuar(int, int)=0;//llama a la mecanica de interactuar
-
+    
     //set y gets
 
     virtual void setVida(int vid)=0;
