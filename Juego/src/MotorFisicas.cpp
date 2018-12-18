@@ -238,6 +238,14 @@ void MotorFisicas::updateAtaque(float x, float y, float z, float rx, float ry, f
     }
 }
 
+bool MotorFisicas::IfCollision(CollisionBody * body1, CollisionBody * body2)
+{
+  if(space->testOverlap(body1,body2))
+  {
+    return true;
+  }
+  return false;
+}
 
 CollisionWorld* MotorFisicas::getWorld()
 {
