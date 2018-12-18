@@ -1,5 +1,7 @@
 #include "Nivel.hpp"
 #include "MotorGrafico.hpp"
+#include "reactphysics3d.h"
+#include "MotorFisicas.hpp"
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 Nivel* Nivel::unica_instancia = 0;
@@ -8,7 +10,7 @@ Nivel* Nivel::unica_instancia = 0;
 
 Nivel::Nivel()
 {
-    primeraSala = nullptr; 
+    primeraSala = nullptr;
     id = 0;
 }
 
@@ -33,12 +35,16 @@ void Nivel::CrearEnemigo(int x,int y,int z, const char *ruta_objeto, const char 
     id++;//generamos id para la figura
     ene->setID(id);//le damos el id unico en esta partida al enemigo
     motor->CargarEnemigos(x,y,z,ruta_objeto,ruta_textura);//creamos la figura pasando el id
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    fisicas->crearCuerpo(x/2,y/2,z/2,1,1,1,2,2);
 }
 
 void Nivel::CrearJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarJugador(x,y,z,ruta_objeto,ruta_textura);
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    fisicas->crearCuerpo(x/2,y/2,z/2,3,1,1,1,1);
 }
 
 void Nivel::CrearObjeto(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -71,7 +77,7 @@ void Nivel::CrearLuz(int x,int y,int z)
 }
 
 void Nivel::setThen()
-{   //variables de la interpolacion 
+{   //variables de la interpolacion
     currentTime = clock();
 	acumulator = 0.0f;
     dt =1.0f/60.0f;
@@ -79,6 +85,7 @@ void Nivel::setThen()
 
 void Nivel::update()
 {
+  MotorFisicas* fisicas = MotorFisicas::getInstance();
     //actualizamos los enemigos
     if(enemigos.size() > 0)//posiciones interpolacion
     {
@@ -95,13 +102,13 @@ void Nivel::update()
     //Interpolacion
     newTime = clock();
     frameTime = newTime - currentTime;
-    if(frameTime>0.25f){
-        frameTime=0.25f;
+    if(frameTime>0.05f){
+        frameTime=0.05f;
     }
     currentTime = newTime;
     acumulator += frameTime;
     while(acumulator >= dt)
-    { 
+    {
         //actualizamos movimiento del jugador
 
        jugador.movimiento(dt,
@@ -110,7 +117,7 @@ void Nivel::update()
             motor->estaPulsado(3),
             motor->estaPulsado(4)
         );
-       
+
        motor->mostrarJugador(jugador.getX(),
             jugador.getY(),
             jugador.getZ(),
@@ -119,8 +126,51 @@ void Nivel::update()
             jugador.getRZ()
         );
 
- 	   acumulator -= dt;  
-    } 
+        fisicas->updateJugador(jugador.getX(),
+            jugador.getY(),
+            jugador.getZ(),
+            jugador.getRX(),
+            jugador.getRY(),
+            jugador.getRZ()
+        );
+
+      // if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getEnemies(0)))
+      // {
+      //   motor->colorearEnemigo(255,255,0,0,0);
+      // }else{
+      //   motor->colorearEnemigo(255,255,255,255,0);
+      // }
+
+      //Actualizar ataca
+      if((motor->estaPulsado(5) || motor->estaPulsado(11)) && atacktime == 0.0f)
+      {
+          jugador.Atacar();
+          atacktime = 2000.0f;
+      }else{
+          if(atacktime > 0.0f)
+          {
+            atacktime--;
+          }
+          if(atacktime > 0.0f && atacktime < 999.0f)
+          {
+            jugador.AtacarUpdate();
+          }
+          if(atacktime == 1000.0f) //Zona de pruebas
+          {
+            motor->colorearEnemigo(255,255,255,255,0);
+            motor->clearDebug2();
+          }
+          if(atacktime > 500.0f)
+          {
+            //Colorear rojo
+            motor->colorearJugador(255,255,0,0);
+          }else{
+            //Colorear gris
+            motor->colorearJugador(255,0,0,255);
+          }
+      }
+ 	   acumulator -= dt;
+    }
 
 }
 
@@ -138,4 +188,9 @@ Sala * Nivel::getPrimeraSala()
 Enemigo * Nivel::getPrimerEnemigo()
 {
     return enemigos.at(1);
+}
+
+std::vector<Enemigo*> Nivel::getEnemies()
+{
+  return enemigos;
 }

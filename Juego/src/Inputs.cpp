@@ -1,5 +1,5 @@
-#include "Inputs.hpp" 
-#include "eventos.hpp" 
+#include "Inputs.hpp"
+#include "eventos.hpp"
 //se llama a su cabezera para cargar las dependencias
 //#include "eventos.hpp"
 
@@ -23,8 +23,12 @@
 		}
 
 		if (event.EventType == irr::EET_KEY_INPUT_EVENT)
-		{	
+		{
 			KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
+		}
+		if (event.EventType == irr::EET_MOUSE_INPUT_EVENT)
+		{
+			MouseClick[event.MouseInput.Event] = event.MouseInput.ButtonStates;
 		}
 		return false;
 	}
@@ -32,7 +36,12 @@
 	// This is used to check whether a key is being held down
 	bool Inputs::IsKeyDown(EKEY_CODE keyCode)
 	{
-		return KeyIsDown[keyCode];			
+		return KeyIsDown[keyCode];
+	}
+
+	bool Inputs::IsMouseClick(EMOUSE_INPUT_EVENT mouseEvent)
+	{
+		return MouseClick[mouseEvent];
 	}
 
 	// This is used to check whether a key is being held down
@@ -52,21 +61,21 @@
 	{
 		KeyIsDown[keyCode]=false;
 	}
-	
+
 	Inputs::Inputs()
 	{
 		for (u32 i=0; i<KEY_KEY_CODES_COUNT; ++i)
-		{	
+		{
 			KeyIsDown[i] = false;
 		}
 
 		EventosActivos = new bool[idsEventos::UltimoEvento];
-		
+
 		for (int i=0; i<idsEventos::UltimoEvento; ++i)
-		{	
+		{
 			EventosActivos[i] = false;
 		}
-	} 
+	}
 
 	void Inputs::setDevice(IrrlichtDevice *devi)
 	{

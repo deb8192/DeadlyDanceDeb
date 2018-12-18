@@ -9,9 +9,9 @@ class pollo : public Enemigo
     public:
         ~pollo();
         pollo();
-        
+
     protected:
-        
+
 };
 
-#endif 
+#endif
