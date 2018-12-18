@@ -26,9 +26,10 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
         //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+        void AtacarUpdate();
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
-        void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico 
+        void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
 
         void setVida(int vid);
@@ -65,7 +66,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
     private:
         float ax = 1.0f,
               az = 20.0f,
-              deg;        
+              deg;      
         //PRUEBAS ATAQUE ESPECIAL
         float timeAtEsp = 0.0;
         Arma *armaEquipada;
@@ -73,7 +74,11 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         const char * rutaArmaEspecial = "assets/models/Arma.obj";  
         const char * nombreJugador = "Heavy"; 
         //!PRUEBAS ATAQUE ESPECIAL
-      //  core::vector3df dir; 
+       //  core::vector3df dir; 
+        float danyo_arma = 10.0f;
+        float atx, aty, atz, atgx, atgy, atgz;
+        float atposX, atposY, atposZ;
+        int tipo_arma = 2;
 };
 
 #endif /* Jugador_HPP */

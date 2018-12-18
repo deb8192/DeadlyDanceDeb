@@ -14,11 +14,11 @@ public:
     virtual int AtacarEspecial()=0;//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
     virtual void QuitarVida(int)=0;//quita vida a la entidad
     virtual void RecuperarVida(int)=0;//le suma vida a la entidad
-    virtual void AumentarBarraAtEs(int)=0;//aumenta el valor de la barra de ataque critico 
+    virtual void AumentarBarraAtEs(int)=0;//aumenta el valor de la barra de ataque critico
     virtual void Interactuar(int, int)=0;//llama a la mecanica de interactuar
-    
+
     //set y gets
-    
+
     virtual void setVida(int vid)=0;
     virtual void setTipo(int tip)=0;
     virtual void setBarraAtEs(int bar)=0;
@@ -26,7 +26,7 @@ public:
     virtual void setSuerte(int suer)=0;
     virtual void setDanyoCritico(int danyoC)=0;
     virtual void setProAtaCritico(int probabilidad)=0;
-    
+
     virtual int getVida()=0;
     virtual int getTipo()=0;
     virtual int getBarraAtEs()=0;

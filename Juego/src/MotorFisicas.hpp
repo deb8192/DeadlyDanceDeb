@@ -16,7 +16,7 @@ using namespace reactphysics3d;
             {
                 if(unica_instancia == 0)
                 unica_instancia = new MotorFisicas();
-                return unica_instancia;  
+                return unica_instancia;
             }
             //fin singleton public
 
@@ -27,9 +27,14 @@ using namespace reactphysics3d;
             void colisionRayoUnCuerpo(float x,float y,float z,float longitud);//colisiona solo con un cuerpo (el primero)
             void updateJugador(float x, float y, float z, float rx, float ry, float rz);//actualizamos al jugador en el espacio de las fisicas
             std::vector <unsigned int> updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
+            void updateAtaque(float x, float y, float z, float rx, float ry, float rz);
+            CollisionWorld* getWorld();
+            CollisionBody* getJugador();
+            CollisionBody* getEnemies(int n);
+            CollisionBody* getAtack();
 
         private:
-            //clase singleton 
+            //clase singleton
             MotorFisicas();
             static MotorFisicas* unica_instancia;
             //fin clase singleton private
@@ -39,6 +44,9 @@ using namespace reactphysics3d;
             CollisionBody * jugador;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             std::vector<CollisionBody *> objetos;
+            CollisionBody* jugadorAtack; //contiene el ataque normal del jugador
+            std::vector<CollisionBody *> objetos;
     };
 
 #endif
+
