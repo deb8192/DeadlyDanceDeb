@@ -119,9 +119,9 @@ void Jugador::Atacar()
     Nivel* nivel = Nivel::getInstance();
 
     //Calcular posiciones
-    atx = sin(PI * getRY() / 180.0f) + getX();
+    atx = 5 * sin(PI * getRY() / 180.0f) + getX();
     aty = getY();
-    atz = cos(PI * getRY() / 180.0f) + getZ();
+    atz = 5 * cos(PI * getRY() / 180.0f) + getZ();
     atgx = getRX();
     atgy = getRY();
     atgz = getRZ();
@@ -140,7 +140,7 @@ void Jugador::Atacar()
     if(tipo_arma == 1)
     {
       //DEBUG DEL ATAQUE Crear cuerpo
-      motor->dibujarObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),3,3,3,1);
+      motor->dibujarObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),3,1,3,1);
 
       //Crear cuerpo de colision de ataque delante del jugador
       fisicas->crearCuerpo(atposX,atposY,atposZ,1,4,0,0,4);
@@ -150,7 +150,7 @@ void Jugador::Atacar()
     else if(tipo_arma == 2)
     {
       //DEBUG DEL ATAQUE Crear cuerpo
-      motor->dibujarObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),1,1,2,2);
+      motor->dibujarObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),1,1,2,3);
 
       //Crear cuerpo de colision de ataque delante del jugador
       fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,0.5,1,4);
@@ -195,20 +195,20 @@ void Jugador::AtacarUpdate()
 
     fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
     motor->clearDebug2();
-    motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,2);
-  }
+    motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
 
-  //Pasar por cada uno de los enemigos del nivel y comprobar colision
-  long unsigned int num = 0;
-  while(nivel->getEnemies().size() > num)
-  {
-    //Si colisiona algun enemigo
-    if(fisicas->getWorld()->testOverlap(fisicas->getAtack(),fisicas->getEnemies(num)))
+    //Pasar por cada uno de los enemigos del nivel y comprobar colision
+    long unsigned int num = 0;
+    while(nivel->getEnemies().size() > num)
     {
-      cout << "Enemigo " << num << " danyado" << endl;
-      motor->colorearEnemigo(255,255,0,0,num);
+      //Si colisiona algun enemigo
+      if(fisicas->getWorld()->testOverlap(fisicas->getAtack(),fisicas->getEnemies(num)))
+      {
+        cout << "Enemigo " << num << " danyado" << endl;
+        motor->colorearEnemigo(255,255,0,0,num);
+      }
+      num++;
     }
-    num++;
   }
 }
 
