@@ -25,9 +25,9 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setID(int);
         int getID();
         //npc metodos
-        void Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
-        //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
-        int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra 
+        int Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
+        //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
+        int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         void AtacarUpdate();
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
@@ -43,7 +43,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
-        void setTimeAtEsp(float time); 
+        void setTimeAtEsp(float time);
 
         int getVida();
         int getTipo();
@@ -55,7 +55,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int getDanyoCritico();
         int getProAtaCritico();
         int* getBuffos();
-        float getTimeAtEsp(); 
+        float getTimeAtEsp();
         const char *getRutaArmaEsp();
 
         float getX();
@@ -68,15 +68,15 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
     private:
         float ax = 1.0f,
               az = 20.0f,
-              deg;      
+              deg;
         //PRUEBAS ATAQUE ESPECIAL
         float timeAtEsp = 0.0;
         Arma *armaEquipada;
-        Arma *armaEspecial;    
-        const char * rutaArmaEspecial = "assets/models/Arma.obj";  
-        const char * nombreJugador = "Heavy"; 
+        Arma *armaEspecial;
+        const char * rutaArmaEspecial = "assets/models/Arma.obj";
+        const char * nombreJugador = "Heavy";
         //!PRUEBAS ATAQUE ESPECIAL
-       //  core::vector3df dir; 
+       //  core::vector3df dir;
         float danyo_arma = 10.0f;
         float atx, aty, atz, atgx, atgy, atgz;
         float atposX, atposY, atposZ;
