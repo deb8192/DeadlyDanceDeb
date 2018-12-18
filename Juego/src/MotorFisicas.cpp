@@ -11,7 +11,7 @@ MotorFisicas::MotorFisicas()
     jugador = nullptr;
 }
 
-void MotorFisicas::crearCuerpo(float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator)
+void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator)
 {
 
     rp3d::Vector3 posiciones(px,py,pz);
@@ -49,7 +49,14 @@ void MotorFisicas::crearCuerpo(float px, float py, float pz, int type, float anc
     }
     else if(typeCreator == 3)//objetos
     {
-        objetos.push_back(cuerpo);
+        if(accion == 2)
+        {
+            recolectables.push_back(cuerpo);
+        }
+        if(accion == 1)
+        {
+            obstaculos.push_back(cuerpo);
+        }
     }
     else if(typeCreator == 4)//objetos
     {
@@ -86,10 +93,9 @@ bool MotorFisicas::collidePlatform()
 bool MotorFisicas::collideObstacle()
 {   
     //abra que indicar tipo de objeto de alguna manera (que sean obstaculos)
-    //for(long unsigned int i = 0; i < objetos.size();i++)
-    for(long unsigned int i = 0; i < 7;i++)
+    for(long unsigned int i = 0; i < obstaculos.size();i++)
     {
-      if(space->testOverlap(jugador,objetos[i]))
+      if(space->testOverlap(jugador,obstaculos[i]))
       {
         return true;
       }
@@ -146,6 +152,18 @@ void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, floa
     }
 
 }
+
+void MotorFisicas::llevarBox(int id, float x, float y, float z)
+{
+    if(recolectables[id] != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y+3,z);        
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        recolectables[id]->setTransform(transformacion);
+    }
+}
+
 void MotorFisicas::updateJugador(float x, float y, float z)
 {
     if(jugador != nullptr)
@@ -182,7 +200,12 @@ CollisionBody* MotorFisicas::getEnemies(int n)
  return enemigos[n];
 }
 
-CollisionBody* MotorFisicas::getObjects(int n)
+CollisionBody* MotorFisicas::getColectables(int n)
 {
- return objetos[n];
+ return recolectables[n];
+}
+
+CollisionBody* MotorFisicas::getObstacles(int n)
+{
+ return obstaculos[n];
 }

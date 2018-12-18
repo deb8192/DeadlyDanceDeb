@@ -20,7 +20,7 @@ using namespace reactphysics3d;
             }
             //fin singleton public
 
-            void crearCuerpo(float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
+            void crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             //int crearCuerpo(float px, float py, float pz, int type, float ancho, float largo, float alto);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             void actualizarPosicionCuerpo(float px, float py, float pz,int posicion);//se le pasa las nuevas posiciones del cuerpo del array de cuerpos de la posicion
             Ray * crearRayo(float x, float y, float z, float longitud);//crea un rayo en esas posiciones con la longitud
@@ -29,10 +29,12 @@ using namespace reactphysics3d;
             CollisionWorld* getWorld();
             CollisionBody* getJugador();
             CollisionBody* getEnemies(int n);
-            CollisionBody* getObjects(int n);
+            CollisionBody* getColectables(int n);
+            CollisionBody* getObstacles(int n);
             bool collideObstacle();
             bool collidePlatform();
             void colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z);
+            void llevarBox(int id, float x, float y, float z);
             
         private:
             //clase singleton
@@ -43,7 +45,8 @@ using namespace reactphysics3d;
             CollisionWorld * space; //espacio o mundo de fisicas
             std::vector<CollisionBody *> enemigos;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody * jugador;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
-            std::vector<CollisionBody *> objetos;
+            std::vector<CollisionBody *> recolectables;
+            std::vector<CollisionBody *> obstaculos;
             std::vector<CollisionBody *> plataformas;
     };
 

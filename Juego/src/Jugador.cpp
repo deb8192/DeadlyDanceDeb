@@ -57,26 +57,26 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
         az += 50.0; //cuando mas alto mejor es el efecto de giro
         az < -1000 ? az = 0 : false;
         //dir es un vector director usado para incrementar el movimiento
-        pz += 10.0*dt;
+        pz += 1.0*dt;
     }
     if(s)
     {
         az += -50.0;
         az > 1000 ? az = 0 : false;
-        pz += -10.0*dt;
+        pz += -1.0*dt;
     }
     if(a)
     {
         ax += -50.0;
         ax > 1000 ? ax = 0 : false;
-        px += -10.0*dt;
+        px += -1.0*dt;
 
     }
     if(d)
     {
         ax += 50.0;
         ax < -1000 ? ax = 0 : false;
-        px += 10.0*dt;
+        px += 1.0*dt;
     }
 
     //Para giro: obtienes el maximo comun divisor y lo divides entre x, z

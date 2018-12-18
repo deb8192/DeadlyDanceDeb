@@ -238,7 +238,7 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
     bill->setMaterialTexture(0, driver->getTexture("assets/models/particlegreen.jpg"));
 }
 
-void MotorGrafico::CargarEnemigos(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarEnemigos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* enemigo = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 
@@ -276,8 +276,18 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
 
 void MotorGrafico::llevarObjeto(int id, float x, float y, float z, float rx, float ry, float rz)
 {
-    Objetos_Scena[id]->setPosition(core::vector3df(x,y+3,z));
-    Objetos_Scena[id]->setRotation(core::vector3df(rx,ry,rz));
+    //este codigo te permite a partir del vector Accion_object obtener el objecto recolectable 
+    //numero id (primer recolectable, segundo recolectable... el que te interese) para llevarlo
+    int n = 0;
+    for(long unsigned int i = 0; i < Accion_Object.size();i++)
+    {
+       if(Accion_Object[i]==2 && n == id)
+       {
+            Objetos_Scena[i]->setPosition(core::vector3df(x,y+3,z));
+            Objetos_Scena[i]->setRotation(core::vector3df(rx,ry,rz));
+            n++;
+       } 
+    }
 
 }
 
@@ -305,7 +315,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
 }
 
-void MotorGrafico::CargarObjetos(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!objeto)
@@ -316,7 +326,8 @@ void MotorGrafico::CargarObjetos(int x,int y,int z, int ancho, int largo, int al
     {
         IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
         objeto_en_scena->setPosition(core::vector3df(x,y,z));
-        Objetos_Scena.push_back(objeto_en_scena);
+        Objetos_Scena.push_back(objeto_en_scena);        
+        Accion_Object.push_back(accion);
     }
 }
 
