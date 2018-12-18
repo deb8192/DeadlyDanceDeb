@@ -119,9 +119,12 @@ void Jugador::Atacar()
     Nivel* nivel = Nivel::getInstance();
 
     //Calcular posiciones
-    int distance = 5;
-    atz = distance * cos(PI * getRY() / 180.0f) + getZ();
-    atx = distance * sin(PI * getRY() / 180.0f) + getX();
+    atx = sin(PI * getRY() / 180.0f) + getX();
+    aty = getY();
+    atz = cos(PI * getRY() / 180.0f) + getZ();
+    atgx = getRX();
+    atgy = getRY();
+    atgz = getRZ();
 
     MotorGrafico * motor = MotorGrafico::getInstance();
     MotorFisicas* fisicas = MotorFisicas::getInstance();
@@ -129,15 +132,15 @@ void Jugador::Atacar()
     rp3d::CollisionBody * cuerpo;
 
     //Posiciones en el mundo 3D
-    float atposX = (atx/2);
-    float atposY = (getY()/2);
-    float atposZ = (atz/2);
+    atposX = (atx/2);
+    atposY = (getY()/2);
+    atposZ = (atz/2);
 
     //ATAQUE CUERPO A CUERPO
     if(tipo_arma == 1)
     {
       //DEBUG DEL ATAQUE Crear cuerpo
-      motor->dibujarObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),3,1,3,2);
+      motor->dibujarObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),3,3,3,1);
 
       //Crear cuerpo de colision de ataque delante del jugador
       fisicas->crearCuerpo(atposX,atposY,atposZ,1,4,0,0,4);
@@ -147,14 +150,13 @@ void Jugador::Atacar()
     else if(tipo_arma == 2)
     {
       //DEBUG DEL ATAQUE Crear cuerpo
-      motor->dibujarObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),1,1,2,1);
+      motor->dibujarObjetoTemporal(atx,getY(),atz,getRX(),getRY(),getRZ(),1,1,2,2);
 
       //Crear cuerpo de colision de ataque delante del jugador
       fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,0.5,1,4);
       cuerpo = fisicas->getAtack();
 
       //Sonido
-      //motora->getEvent("Explosion")->setPosition(atx,getY(),atz); //(float posx, float posy, float posz)
       //motora->getEvent("Bow")->setVolume(0.5f);
       motora->getEvent("Bow")->start();
     }
@@ -175,21 +177,39 @@ void Jugador::Atacar()
       }
 
       //Destruir cuerpo colision
-      fisicas->getWorld()->destroyCollisionBody(cuerpo);
+      //fisicas->getWorld()->destroyCollisionBody(cuerpo);
     }
 }
 
 void Jugador::AtacarUpdate()
 {
-  //MotorFisicas* fisicas = MotorFisicas::getInstance();
-  // if(tipo_arma == 2)
-  // {
-  //   //(float x, float y, float z, float rx, float ry, float rz)
-  //   atz += (cos(PI * getRY() / 180.0f) + getZ()) * 0.01;
-  //   atx += (sin(PI * getRY() / 180.0f) + getX()) * 0.01;
-  //   cout << atz << " " << atx << endl;
-  //   // fisicas->updateAtaque(atx,0,atz,0,0,0);
-  // }
+  Nivel* nivel = Nivel::getInstance();
+  MotorFisicas* fisicas = MotorFisicas::getInstance();
+  MotorGrafico * motor = MotorGrafico::getInstance();
+  if(tipo_arma == 2)
+  {
+    atz += (0.02 * cos(PI * atgy / 180.0f));
+    atx += (0.02 * sin(PI * atgy / 180.0f));
+    atposZ += (0.02 * cos(PI * atgy / 180.0f));
+    atposX += (0.02 * sin(PI * atgy / 180.0f));
+
+    fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
+    motor->clearDebug2();
+    motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,2);
+  }
+
+  //Pasar por cada uno de los enemigos del nivel y comprobar colision
+  long unsigned int num = 0;
+  while(nivel->getEnemies().size() > num)
+  {
+    //Si colisiona algun enemigo
+    if(fisicas->getWorld()->testOverlap(fisicas->getAtack(),fisicas->getEnemies(num)))
+    {
+      cout << "Enemigo " << num << " danyado" << endl;
+      motor->colorearEnemigo(255,255,0,0,num);
+    }
+    num++;
+  }
 }
 
 void Jugador::AtacarEspecial()
