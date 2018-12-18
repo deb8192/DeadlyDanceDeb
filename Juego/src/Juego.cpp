@@ -62,6 +62,7 @@ void Juego::Update()
     if(motor->estaPulsado(7))
     {
         motor->activarDebugGrafico();
+        motor->resetKey(7);
     }
 }
 
