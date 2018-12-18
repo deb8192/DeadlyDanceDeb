@@ -263,11 +263,7 @@ void Jugador::Interactuar(int id, int id2)
 
 void Jugador::setVida(int vid)
 {
-<<<<<<< HEAD
-  vida = vid;
-=======
     vida = vid;
->>>>>>> 01d553623a9ae4eec5dde1b607054590ca3d0ffe
 }
 
 void Jugador::setTipo(int tip)
