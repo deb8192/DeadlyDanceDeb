@@ -102,8 +102,8 @@ void Nivel::update()
     //Interpolacion
     newTime = clock();
     frameTime = newTime - currentTime;
-    if(frameTime>0.05f){
-        frameTime=0.05f;
+    if(frameTime>0.25f){
+        frameTime=0.25f;
     }
     currentTime = newTime;
     acumulator += frameTime;
