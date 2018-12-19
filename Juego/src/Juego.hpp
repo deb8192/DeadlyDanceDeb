@@ -2,6 +2,7 @@
 #include "MotorAudio.hpp"
 #include "Estado.hpp"
 #include "Nivel.hpp"
+#include "CargadorXML.hpp"
 
 #ifndef Juego_HPP
 #define Juego_CPP
@@ -28,6 +29,9 @@
             void Jugar();//cambia de estado y cargar mapa //aqui saldra el selector de nivel cuando se implemente
             void setNivelThen();
             
+            void CargarArbolesXML();
+            void CargarPuzzlesXML();
+
         private:
 
             //clase singleton
@@ -41,6 +45,10 @@
             Menu menu;//contiene la clase menu (estado)
             Jugando jugando;//contiene la clase Jugando (estado)
             Nivel *nivel;
+
+            // Probando puzzles
+            Puzzles haciendo_puzzles;//contiene la clase Puzzles (estado)
+            CargadorXML cargadorXML;
     };
 
 #endif /* MotorGrafico_HPP */
