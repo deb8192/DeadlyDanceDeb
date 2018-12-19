@@ -766,8 +766,8 @@ bool MotorGrafico::SeleccionarNodo()
         if (nodoSeleccionado->getID() != -1) { // Comprobamos que no sea el fondo
             return true;
         }
-        return false;
     }
+    return false;
 }
 
 void MotorGrafico::DeseleccionarNodo()
@@ -806,8 +806,9 @@ void MotorGrafico::RecolocarFicha(short y, short z)
 
 void MotorGrafico::ReiniciarHanoi()
 {
+	short tam = fichasMesh.size();
     short posY=0;
-    for (int pos = 0; pos<fichasMesh.size(); pos++)
+    for (int pos = 0; pos<tam; pos++)
     {
         fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
         posY++;
