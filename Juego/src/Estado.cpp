@@ -558,9 +558,10 @@ void Puzzles::ReiniciarPilas()
 
 void Puzzles::ComprobarGanar()
 {
+    short tam = pilaDer.size();
     if (pasos <= GetSolucion()*2) {
         // Comprobar fin de juego
-        if (pilaDer.size() == GetOpciones()) {
+        if (tam == GetOpciones()) {
             if (pilaDer.top()->GetTamayo() == 1) {
                 ficha = pilaDer.top();
                 pilaDer.pop();
