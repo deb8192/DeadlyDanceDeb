@@ -5,6 +5,7 @@
 #include "math.h"
 
 #define PI 3.14159265358979323846
+#define PIRADIAN 180.0f
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 #define NOMBREHEABY "Heavy"
@@ -98,7 +99,7 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
 
     //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
     az < 0 ?
-        deg = 180 + (RADTODEG * atan(ax/az)) :
+        deg = PIRADIAN + (RADTODEG * atan(ax/az)) :
         deg =  RADTODEG * atan(ax/az) ;
 
     //ahora actualizas movimiento y rotacion
@@ -121,9 +122,9 @@ int Jugador::Atacar()
   if(vida > 0)
   {
     //Calcular posiciones
-    atx = 5 * sin(PI * getRY() / 180.0f) + getX();
+    atx = 5 * sin(PI * getRY() / PIRADIAN) + getX();
     aty = getY();
-    atz = 5 * cos(PI * getRY() / 180.0f) + getZ();
+    atz = 5 * cos(PI * getRY() / PIRADIAN) + getZ();
     atgx = getRX();
     atgy = getRY();
     atgz = getRZ();
@@ -168,10 +169,10 @@ void Jugador::AtacarUpdate()
     MotorGrafico * motor = MotorGrafico::getInstance();
     if(tipo_arma == 2)
     {
-      atz += (0.02 * cos(PI * atgy / 180.0f));
-      atx += (0.02 * sin(PI * atgy / 180.0f));
-      atposZ += (0.02 * cos(PI * atgy / 180.0f));
-      atposX += (0.02 * sin(PI * atgy / 180.0f));
+      atz += (0.02 * cos(PI * atgy / PIRADIAN));
+      atx += (0.02 * sin(PI * atgy / PIRADIAN));
+      atposZ += (0.02 * cos(PI * atgy / PIRADIAN));
+      atposX += (0.02 * sin(PI * atgy / PIRADIAN));
 
       fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
       motor->clearDebug2();
@@ -211,9 +212,9 @@ int Jugador::AtacarEspecial()
         cout << "Supera las restricciones, ATAQUE ESPECIAL"<<endl;
 
         //Calcular posiciones
-        atespx = 6.5 * sin(PI * getRY() / 180.0f) + getX();
+        atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
         atespy = getY();
-        atespz = 6.5 * cos(PI * getRY() / 180.0f) + getZ();
+        atespz = 6.5 * cos(PI * getRY() / PIRADIAN) + getZ();
         atgx = getRX();
         atgy = getRY();
         atgz = getRZ();
@@ -237,8 +238,8 @@ int Jugador::AtacarEspecial()
         else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
         {
             //Crear cuerpo de colision de ataque delante del jugador
-            /*fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,0.5,1,4);
-            motora->getEvent("Bow")->start();*/
+            fisicas->crearCuerpo(atespposX,atespposY,atespposZ,2,8,8,8,5);
+            motora->getEvent("Bow")->start();
         }
 
         //Se calcula el danyo del ataque
@@ -280,19 +281,73 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     MotorFisicas * fisicas = MotorFisicas::getInstance();
     Nivel* nivel = Nivel::getInstance();
 
-    atespx = 6.5 * sin(PI * this->getRY() / 180.0f) + this->getX();
-    atespz = 6.5 * cos(PI * this->getRY() / 180.0f) + this->getZ();
-    atespposX = atespx/2;
-    atespposZ = atespz/2;
-    
+    if(strcmp(armaEspecial->getNombre(), NOMBREHEABY) == 0)
+    {
+        atespx = 6.5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
+        atespz = 6.5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
+        atespposX = atespx/2;
+        atespposZ = atespz/2;
+        atgy = this->getY();
+
+
+        motor->mostrarArmaEspecial(
+            this->getX(),
+            this->getY(),
+            this->getZ(),
+            this->getRX(),
+            this->getRY(),
+            this->getRZ());
+
+        motor->clearDebug2();
+
+        motor->dibujarObjetoTemporal(
+            atespx,
+            this->getY(),
+            atespz,
+            this->getRX(),
+            this->getRY(),
+            this->getRZ(),
+            8,
+            1,
+            8,
+            2);
+    }
+    else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
+    {
+        atespz += (0.02 * cos(PI * atgy / PIRADIAN));
+        atespx += (0.02 * sin(PI * atgy / PIRADIAN));
+        atespposZ = atespz/2;
+        atespposX = atespx/2;
+
+        motor->mostrarArmaEspecial(
+            atespx,
+            atespy,
+            atespz,
+            atgx,
+            atgy,
+            atgz);
+
+        motor->clearDebug2();
+
+        motor->dibujarObjetoTemporal(
+            atespx,
+            atespy,
+            atespz,
+            atgx,
+            atgy,
+            atgz,
+            8,
+            1,
+            8,
+            3);
+    }
     //lista de enteros que senyalan a los enemigos atacados
-    vector <unsigned int> atacados = fisicas->updateArmaEspecial(atespposX,this->getY(),atespposZ);
+    vector <unsigned int> atacados = fisicas->updateArmaEspecial(atespposX,atgy,atespposZ);
     
     //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
     //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
-    if(!atacados.empty() && *danyo > 0)
+    if(!atacados.empty())
     {
-
         cout<<"Funciona"<<endl;
         for(unsigned int i = 0; i < atacados.size(); i++)
         {
@@ -359,6 +414,11 @@ void Jugador::setArmaEspecial(int ataque)
     armaEspecial = new Arma(ataque, nombreJugador);
 }
 
+void Jugador::setNombre(const char * nombre)
+{
+    nombreJugador = nombre;
+}
+
 void Jugador::setSuerte(int suer)
 {
 
@@ -407,6 +467,11 @@ Arma * Jugador::getArma()
 Arma * Jugador::getArmaEspecial()
 {
     return armaEspecial;
+}
+
+const char* Jugador::getNombre()
+{
+    return nombreJugador;
 }
 
 int Jugador::getSuerte()
