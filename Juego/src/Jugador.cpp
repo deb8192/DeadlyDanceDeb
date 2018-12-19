@@ -120,24 +120,33 @@ int Jugador::Atacar()
   int danyo = 0;
   if(vida > 0)
   {
-    //Calcular posiciones
-    atx = 5 * sin(PI * getRY() / 180.0f) + getX();
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+
+    //Calcular posiciones que no se modifican
+    int distance = 5;
+    if(tipo_arma == 0)distance= 3;
+    atx = distance * sin(PI * getRY() / 180.0f) + getX();
     aty = getY();
-    atz = 5 * cos(PI * getRY() / 180.0f) + getZ();
+    atz = distance * cos(PI * getRY() / 180.0f) + getZ();
     atgx = getRX();
     atgy = getRY();
     atgz = getRZ();
-
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
-    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
     //Posiciones en el mundo 3D
     atposX = (atx/2);
     atposY = (getY()/2);
     atposZ = (atz/2);
 
+    //ATAQUE SIN ARMA
+    if(tipo_arma == 0){
+      fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,1,1,4);
+
+      //Calculos de danyo
+      danyo = 5.0f;
+    }
     //ATAQUE CUERPO A CUERPO
-    if(tipo_arma == 1)
+    else if(tipo_arma == 1)
     {
       //Crear cuerpo de colision de ataque delante del jugador
       fisicas->crearCuerpo(atposX,atposY,atposZ,1,4,0,0,4);
@@ -159,14 +168,25 @@ int Jugador::Atacar()
   return danyo;
 }
 
-void Jugador::AtacarUpdate()
+void Jugador::AtacarUpdate(int *danyo)
 {
   if(vida > 0)
   {
     Nivel* nivel = Nivel::getInstance();
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     MotorGrafico * motor = MotorGrafico::getInstance();
-    if(tipo_arma == 2)
+    if(tipo_arma == 0){
+      fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
+      motor->clearDebug2();
+      motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,2,1,1,2);
+    }
+    else if(tipo_arma == 1)
+    {
+      fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
+      motor->clearDebug2();
+      motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,3,1,3,1);
+    }
+    else if(tipo_arma == 2)
     {
       atz += (0.02 * cos(PI * atgy / 180.0f));
       atx += (0.02 * sin(PI * atgy / 180.0f));
@@ -176,20 +196,25 @@ void Jugador::AtacarUpdate()
       fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
       motor->clearDebug2();
       motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
-
-      //Pasar por cada uno de los enemigos del nivel y comprobar colision
-      long unsigned int num = 0;
-      while(nivel->getEnemies().size() > num)
-      {
-        //Si colisiona algun enemigo
-        if(fisicas->IfCollision(fisicas->getAtack(),fisicas->getEnemies(num)))
-        {
-          cout << "Enemigo " << num << " danyado" << endl;
-          motor->colorearEnemigo(255,255,0,0,num);
-        }
-        num++;
-      }
     }
+
+    vector <unsigned int> atacados = fisicas->updateArma(atposX,atposY,atposZ);
+
+    if(!atacados.empty() && *danyo > 0)
+    {
+        for(unsigned int i = 0; i < atacados.size(); i++)
+        {
+          float variacion = rand() % 7 - 3;
+          *danyo += (int) variacion;
+          nivel->getEnemigos().at(i)->QuitarVida(*danyo);
+          cout<<"Daño "<<*danyo<<endl;
+          *danyo -= (int) variacion;
+          cout<<"variacion "<<variacion<<endl;
+          cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+          motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+        }
+    }
+
   }
   else{
       cout << "No supera las restricciones"<<endl;
@@ -284,10 +309,10 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     atespz = 6.5 * cos(PI * this->getRY() / 180.0f) + this->getZ();
     atespposX = atespx/2;
     atespposZ = atespz/2;
-    
+
     //lista de enteros que senyalan a los enemigos atacados
     vector <unsigned int> atacados = fisicas->updateArmaEspecial(atespposX,this->getY(),atespposZ);
-    
+
     //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
     //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
     if(!atacados.empty() && *danyo > 0)
