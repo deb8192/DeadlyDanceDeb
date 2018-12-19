@@ -74,6 +74,14 @@ using namespace idsEventos;
 
             void resetKey(int event);
 
+            // Eventos del raton
+            bool PulsadoClicDer();
+            bool PulsadoClicIzq();
+            bool SueltoClicDer();
+            bool SueltoClicIzq();
+            void resetEventoMoveRaton();
+            position2di GetPosicionRaton();
+
             //cargadores de objetos
             int CargarPlataformas(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
@@ -101,6 +109,22 @@ using namespace idsEventos;
             void colorearEnemigos(int a, int r, int g, int b, unsigned int seleccion);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
             IAnimatedMeshSceneNode* getArmaEspecial();
+
+            // Funciones para puzzles
+            void PosicionCamaraEnPuzzles();
+            void updateMotorPuzzles(short tipo);
+            void PuzzlesGui(short tipo, std::string enun, short opciones);
+            void TextoPasos(short pasos);
+            void CrearFichas(short posY, float tamanyo, 
+                  int r, int g, int b);
+            short GetZonaVentana();
+            bool SeleccionarNodo();
+            void DeseleccionarNodo();
+            short GetFichaY();
+            void MoverFichas(short pila);
+            void RecolocarFicha(short y, short z);
+            void ReiniciarHanoi();
+
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
@@ -128,6 +152,32 @@ using namespace idsEventos;
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
             bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
             IAnimatedMeshSceneNode* tmpobjt_en_scena;
+
+            // Objetos y funciones para puzzles
+            IGUIStaticText* myTextBox;
+            ISceneCollisionManager* collmgr;
+            const IGeometryCreator* geometryCreator;
+
+            IMesh* fichaMesh;                         // Malla
+            IMeshSceneNode* ficha;                    // Nodo
+            std::vector<IMeshSceneNode*> fichasMesh;  // Lista de nodos (fichas)
+
+            // Para seleccionar nodos
+            position2di initialCursorPosition;        // Posicion del clic raton
+            position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
+            ISceneNode* nodoSeleccionado = 0;
+
+            // Ventana
+            short WIDTH_AUX, WIDTH, HEIGHT;
+            short x_linea1, x_linea2;
+
+            IGUIImage* img;
+            vector<IGUIImage*> imagenes;
+
+            enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
+            enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
+
+            void CrearMeshFicha(float tamanyo, int r, int g, int b);
     };
 
 #endif /* MotorGrafico_HPP */
