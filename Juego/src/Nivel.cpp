@@ -258,7 +258,7 @@ void Nivel::updateIA()
 
     else if(atacktime > 0.0)
     {
-        jugador.AtacarUpdate();
+        jugador.AtacarUpdate(&danyo);
     }
 
     //En caso contrario se colorean los enemigos de color gris
