@@ -97,6 +97,7 @@ void Nivel::setThen()
 void Nivel::update()
 {
   MotorFisicas* fisicas = MotorFisicas::getInstance();
+  MotorAudioSystem* motora = MotorAudioSystem::getInstance();
     //actualizamos los enemigos
     if(enemigos.size() > 0)//posiciones interpolacion
     {
@@ -145,13 +146,11 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
-            this->updateIA();
-      // if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getEnemies(0)))
-      // {
-      //   motor->colorearEnemigo(255,255,0,0,0);
-      // }else{
-      //   motor->colorearEnemigo(255,255,255,255,0);
-      // }
+
+       this->updateIA();
+
+      //Posicion de escucha
+       motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
 
  	   acumulator -= dt;
     }

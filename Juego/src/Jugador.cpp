@@ -157,6 +157,7 @@ int Jugador::Atacar()
     {
       //Crear cuerpo de colision de ataque delante del jugador
       fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,0.5,1,4);
+      motora->getEvent("Bow")->setVolume(0.8f);
       motora->getEvent("Bow")->start();
       danyo = 10.0f;
     }
