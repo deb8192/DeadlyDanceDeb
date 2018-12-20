@@ -81,7 +81,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         //!PRUEBAS ATAQUE ESPECIAL
        //  core::vector3df dir;
         float danyo_arma = 10.0f;
-        float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz;
+        float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc;
         float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
         int tipo_arma = 2;
 };
