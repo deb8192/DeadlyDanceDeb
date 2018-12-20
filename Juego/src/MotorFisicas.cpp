@@ -75,7 +75,10 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     {
         armaAtEsp = cuerpo;
     }
-
+    else if(typeCreator == 6)//objetos
+    {
+        arma = cuerpo;
+    }
     // std::cout << "px: " << posiciones.x << std::endl;
     // std::cout << "py: " << posiciones.y << std::endl;
     // std::cout << "pz: " << posiciones.z << std::endl;
@@ -101,6 +104,19 @@ bool MotorFisicas::collidePlatform()
 
     return false;
     
+}
+
+int MotorFisicas::collideColectable()
+{ 
+    for(long unsigned int i = 0; i < obstaculos.size();i++)
+    {
+      if(space->testOverlap(jugador,obstaculos[i]))
+      {
+        return (int)i;
+      }
+    }
+
+    return -1;
 }
 
 bool MotorFisicas::collideObstacle()
@@ -168,12 +184,12 @@ void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, floa
 
 void MotorFisicas::llevarBox(int id, float x, float y, float z)
 {
-    if(recolectables[id] != nullptr)
+    if(arma != nullptr)
     {
-        rp3d::Vector3 posiciones(x,y+3,z);        
+        rp3d::Vector3 posiciones(x,y,z);        
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
-        recolectables[id]->setTransform(transformacion);
+        arma->setTransform(transformacion);
     }
 }
 

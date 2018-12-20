@@ -318,21 +318,25 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     }
 }
 
+void MotorGrafico::CargarArmaJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
+{
+    IAnimatedMesh* arma = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+    if (!arma)
+    {
+        //error
+    }
+    else
+    {
+        IAnimatedMeshSceneNode* arma_en_scena = smgr->addAnimatedMeshSceneNode(arma); //metemos el objeto en el escenario para eso lo pasamos al escenario
+        arma_en_scena->setPosition(core::vector3df(x,y,z));
+        Arma_Jugador = arma_en_scena;
+    }
+}
 
 void MotorGrafico::llevarObjeto(int id, float x, float y, float z, float rx, float ry, float rz)
-{
-    //este codigo te permite a partir del vector Accion_object obtener el objecto recolectable 
-    //numero id (primer recolectable, segundo recolectable... el que te interese) para llevarlo
-    int n = 0;
-    for(long unsigned int i = 0; i < Accion_Object.size();i++)
-    {
-       if(Accion_Object[i]==2 && n == id)
-       {
-            Objetos_Scena[i]->setPosition(core::vector3df(x,y+3,z));
-            Objetos_Scena[i]->setRotation(core::vector3df(rx,ry,rz));
-            n++;
-       } 
-    }
+{    
+     Arma_Jugador->setPosition(core::vector3df(x,y,z));
+     Arma_Jugador->setRotation(core::vector3df(rx,ry,rz));
 
 }
 
@@ -377,8 +381,11 @@ void MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int l
     {
         IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
         objeto_en_scena->setPosition(core::vector3df(x,y,z));
-        Objetos_Scena.push_back(objeto_en_scena);        
-        Accion_Object.push_back(accion);
+        
+        //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
+        accion == 2 ? 
+            Recolectables_Scena.push_back(objeto_en_scena) :
+            Objetos_Scena.push_back(objeto_en_scena); 
     }
 }
 

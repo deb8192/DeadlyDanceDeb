@@ -107,6 +107,7 @@ using namespace idsEventos;
             void colorearObjeto(int a, int r, int g, int b, int obj);
             void debugBox(int x,int y, int z,int ancho, int alto, int largo);
             void llevarObjeto(int id, float x, float y, float z, float rx, float ry, float rz);
+            void CargarArmaJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
 
 
             IAnimatedMeshSceneNode* getArmaEspecial();
@@ -130,10 +131,12 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
             std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
             std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
-            IAnimatedMesh *armaEsp;//Malla del arma del jugador
-            IAnimatedMeshSceneNode *ArmaEspecial_Jugador;//Malla del arma del jugador en escena
+            IAnimatedMesh *arma;//Malla del arma del jugador
+            IAnimatedMeshSceneNode *Arma_Jugador;//Malla del arma del jugador en escena
+            IAnimatedMesh *armaEsp;//Malla del arma especial del jugador
+            IAnimatedMeshSceneNode *ArmaEspecial_Jugador;//Malla del arma especial del jugador en escena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
-            std::vector<int> Accion_Object;//para saber que accion realiza objeto en motorgrafico            
+            std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena

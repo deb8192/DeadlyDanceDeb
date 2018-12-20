@@ -294,7 +294,7 @@ void Jugador::setArma(Arma * arma)
 
 void Jugador::setArmaEspecial(int ataque)
 {
-    armaEspecial = new Arma(ataque, nombreJugador);
+    armaEspecial = new Arma(ataque, nombreJugador,1,1,1,"assets/models/objeto.obj","");
 }
 
 void Jugador::setSuerte(int suer)

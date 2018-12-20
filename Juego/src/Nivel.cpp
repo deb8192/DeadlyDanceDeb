@@ -64,10 +64,16 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
 
 }
 
-void Nivel::CrearObjeto(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearObjeto(int accion, const char* nombre, int ataque, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
-
+    if(accion ==2 )
+    {
+        Recolectable* rec = new Recolectable(ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
+        rec->setID(recolectables.size());
+        rec->setPosiciones(x,y,z);
+        recolectables.push_back(rec);
+    }
     motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
@@ -142,26 +148,110 @@ void Nivel::update()
      
     //mejorar esto va muy mal
         
-    motor->estaPulsado(12) && fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getColectables(0)) ? cogerObjeto = !cogerObjeto, objetoCogido = 0 : false;
-    //motor->estaPulsado(9) && fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getColectables(1)) ? cogerObjeto = !cogerObjeto, objetoCogido = 1 : false;
-    cout << motor->estaPulsado(12) << fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getColectables(0)) << endl;
-    if(cogerObjeto && objetoCogido >= 0)
+    int rec_col = fisicas->collideColectable();
+    if(motor->estaPulsado(12) && rec_col >= 0) 
     {
-        //Si colisiona que coja el objeto   
+    //recolectable pasa a ser un arma, asi coger objeto puede estar en false, porque no lleva un recolectable sino un arma
+        cogerObjeto = !cogerObjeto;        
+        objetoCogido = rec_col;
+
+        if(jugador.getArma() == nullptr)
+        {            
+            Arma* nuArma = 
+            new Arma(recolectables[rec_col]->getAtaque(),
+                        recolectables[rec_col]->getNombre(),
+                        recolectables[rec_col]->getAncho(),
+                        recolectables[rec_col]->getLargo(),
+                        recolectables[rec_col]->getAlto(),
+                        recolectables[rec_col]->getObjeto(),                                    
+                        recolectables[rec_col]->getTextura()
+                    );
+
+            jugador.setArma(nuArma);
+
+            //lo cargamos por primera vez en el motor de graficos
+            motor->CargarArmaJugador(jugador.getX(),
+                                    jugador.getY(),
+                                    jugador.getZ(),
+                                    recolectables[rec_col]->getAncho(),
+                                    recolectables[rec_col]->getLargo(),
+                                    recolectables[rec_col]->getAlto(),
+                                    recolectables[rec_col]->getObjeto(),                                    
+                                    recolectables[rec_col]->getTextura()
+                                    );
+
+            //lo cargamos por primera vez en el motor de fisicas
+            fisicas->crearCuerpo(0,jugador.getX()/2,
+                                 jugador.getY()/2,
+                                 jugador.getZ()/2,
+                                 2,
+                                 recolectables[rec_col]->getAncho(),
+                                 recolectables[rec_col]->getLargo(),
+                                 recolectables[rec_col]->getAlto(),
+                                 6
+                                 );
+
+
+        }
+        else
+        {
+            //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
+            Recolectable* nuRec = 
+            new Recolectable(jugador.getArma()->getAtaque(),
+                                jugador.getArma()->getNombre(),
+                                jugador.getArma()->getAncho(),
+                                jugador.getArma()->getLargo(),
+                                jugador.getArma()->getAlto(),
+                                jugador.getArma()->getObjeto(),
+                                jugador.getArma()->getTextura()
+                            );
+
+            nuRec->setPosiciones(recolectables[rec_col]->getX(),
+                                recolectables[rec_col]->getY(),
+                                recolectables[rec_col]->getZ()
+                                );
+
+            Arma* nuArma = new Arma(recolectables[rec_col]->getAtaque(),
+                                    recolectables[rec_col]->getNombre(),
+                                    recolectables[rec_col]->getAncho(),
+                                    recolectables[rec_col]->getLargo(),
+                                    recolectables[rec_col]->getAlto(),
+                                    recolectables[rec_col]->getObjeto(),                                    
+                                    recolectables[rec_col]->getTextura()
+                                    );
+            jugador.setArma(nuArma);
+            recolectables[rec_col] = nuRec;
+            //en irrlich habria que actualizar el objeto (para que cambie de modelo 3d)
+            //tambien habra que intercambiar su ruta_objeto (modelo) y ruta_textura
+        }
+    }
+   
+    if(jugador.getArma() != nullptr)
+    {
+        //iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
+        //en los motores habra que crear sus propias variables armaJugador
+
+        jugador.getArma()->setPosiciones(jugador.getX(),
+                                        jugador.getY()+3,
+                                        jugador.getZ()
+                                        );
+
+        //vamos actualizando en fisicas y graficos su posicion mientras se mueve el jugador
         motor->llevarObjeto(objetoCogido,
-            jugador.getX(),
-            jugador.getY(),
-            jugador.getZ(),
+            jugador.getArma()->getX(),
+            jugador.getArma()->getY(),
+            jugador.getArma()->getZ(),
             jugador.getRX(),
             jugador.getRY(),
             jugador.getRZ()
         ); 
 
          fisicas->llevarBox(objetoCogido,
-            jugador.getX(),
-            jugador.getY(),
-            jugador.getZ()
+            jugador.getArma()->getX(),
+            jugador.getArma()->getY(),
+            jugador.getArma()->getZ()
         ); 
+        
     }
 
 
