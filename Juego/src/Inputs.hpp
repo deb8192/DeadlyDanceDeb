@@ -12,6 +12,23 @@ using namespace gui;
     class Inputs: public IEventReceiver
     {
         public:
+            // Eventos de raton
+            struct SMouseState
+            {
+                core::position2di Position;
+                bool LeftButtonDown, RightButtonDown, LeftButtonUp, RightButtonUp;
+                SMouseState() { LeftButtonDown=false; LeftButtonUp=false;
+                    RightButtonDown=false; RightButtonUp=false; }
+            } EstadosMouse;
+            SMouseState& GetMouseState();
+            void ResetClicDerecho();
+            void ResetClicIzquierdo();
+            void ResetEventoRaton(int);
+            bool PulsadoClicDer();
+            bool PulsadoClicIzq();
+            bool SueltoClicDer();
+            bool SueltoClicIzq();
+            
             virtual bool OnEvent(const SEvent& event);
             virtual bool IsKeyDown(EKEY_CODE keyCode);
             bool IsMouseClick(EMOUSE_INPUT_EVENT mouseEvent);

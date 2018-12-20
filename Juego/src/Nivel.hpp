@@ -3,6 +3,7 @@
 #include "Enemigo.hpp"
 #include "CargadorNiveles.hpp"
 #include "pollo.hpp"
+#include "MotorAudio.hpp"
 //#include "MotorGrafico.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
@@ -70,6 +71,7 @@ class Nivel
         clock_t newTime;
         clock_t currentTime;
         bool a,s,d,w,atEsp;
+        int danyo2 = 0;
 };
 
 #endif

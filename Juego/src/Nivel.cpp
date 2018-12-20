@@ -97,6 +97,7 @@ void Nivel::setThen()
 void Nivel::update()
 {
   MotorFisicas* fisicas = MotorFisicas::getInstance();
+  MotorAudioSystem* motora = MotorAudioSystem::getInstance();
     //actualizamos los enemigos
     if(enemigos.size() > 0)//posiciones interpolacion
     {
@@ -145,13 +146,11 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
-            this->updateIA();
-      // if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getEnemies(0)))
-      // {
-      //   motor->colorearEnemigo(255,255,0,0,0);
-      // }else{
-      //   motor->colorearEnemigo(255,255,255,255,0);
-      // }
+
+       this->updateIA();
+
+      //Posicion de escucha
+       motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
 
  	   acumulator -= dt;
     }
@@ -160,11 +159,11 @@ void Nivel::update()
 
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 {
-  if((motor->estaPulsado(5)/* || motor->estaPulsado(10)*/) && atacktime == 0.0f)
+  if((motor->estaPulsado(KEY_ESPACIO)/* || motor->estaPulsado(10)*/) && atacktime == 0.0f)
     {
         *danyo = jugador.Atacar();
         motor->colorearJugador(255, 55, 0, 255);
-        atacktime = 2000.0f;
+        atacktime = 1500.0f;
     }else{
         if(atacktime > 0.0f)
         {
@@ -172,7 +171,6 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
         }
         if(atacktime == 1000.0f) //Zona de pruebas
         {
-            motor->colorearEnemigo(255,255,255,255,0);
             motor->clearDebug2();
         }
         if(atacktime > 500.0f)
@@ -189,7 +187,7 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
 {
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((/*motor->estaPulsado(9)|| */motor->estaPulsado(11)) && atackEsptime == 0.0)
+    if((/*motor->estaPulsado(9)|| */motor->estaPulsado(KEY_Q)) && atackEsptime == 0.0)
     {
         *danyo = jugador.AtacarEspecial();
         motor->colorearJugador(255, 55, 0, 255);
@@ -221,9 +219,10 @@ void Nivel::updateIA()
 
     MotorGrafico * motor = MotorGrafico::getInstance();
     int danyo = 0;                      //Valor que indica si se ha podido realizar el ataque
+
     //Actualizar ataque especial
     this->updateAtEsp(&danyo, motor);
-    this->updateAt(&danyo, motor);
+    this->updateAt(&danyo2, motor);
 
     //Si se realiza el ataque se comprueban las colisiones
     if(atackEsptime > 0.0)
@@ -233,7 +232,7 @@ void Nivel::updateIA()
 
     else if(atacktime > 0.0)
     {
-        jugador.AtacarUpdate();
+        jugador.AtacarUpdate(danyo2);
     }
 
     //En caso contrario se colorean los enemigos de color gris
