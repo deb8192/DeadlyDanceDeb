@@ -218,6 +218,7 @@ int Jugador::AtacarEspecial()
         atgx = getRX();
         atgy = getRY();
         atgz = getRZ();
+        incrAtDisCirc = 0.0;
 
         MotorFisicas* fisicas = MotorFisicas::getInstance();
         MotorAudioSystem* motora = MotorAudioSystem::getInstance();
@@ -314,10 +315,24 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     }
     else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
     {
-        atespz += (0.02 * cos(PI * atgy / PIRADIAN));
-        atespx += (0.02 * sin(PI * atgy / PIRADIAN));
+        incrAtDisCirc += 0.02;
+        atespz = this->getZ();
+        atespz += (incrAtDisCirc * cos(PI * atgy / PIRADIAN));
+        atespx = this->getX();
+        atespx += (incrAtDisCirc * sin(PI * atgy / PIRADIAN));
         atespposZ = atespz/2;
         atespposX = atespx/2;
+
+        atgy += 0.75;
+
+        if(atgy >= 360.0)
+        {
+            atgy -= 360.0;
+        }
+        else if(atgy < 0.0)
+        {
+            atgy += 360;
+        }
 
         motor->mostrarArmaEspecial(
             atespx,
