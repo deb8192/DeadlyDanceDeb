@@ -26,9 +26,45 @@
 		{
 			KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
 		}
-		if (event.EventType == irr::EET_MOUSE_INPUT_EVENT)
-    {
+		/*if (event.EventType == irr::EET_MOUSE_INPUT_EVENT)
+    	{
 			MouseClick[event.MouseInput.Event] = event.MouseInput.ButtonStates;
+		}*/
+		// Remember the mouse state
+		if (event.EventType == irr::EET_MOUSE_INPUT_EVENT)
+		{
+			switch(event.MouseInput.Event)
+			{
+			case EMIE_LMOUSE_PRESSED_DOWN:
+				EstadosMouse.LeftButtonDown = true;
+				EstadosMouse.LeftButtonUp = false;
+				break;
+
+			case EMIE_LMOUSE_LEFT_UP:
+				EstadosMouse.LeftButtonDown = false;
+				EstadosMouse.LeftButtonUp = true;
+				break;
+
+			case EMIE_RMOUSE_PRESSED_DOWN:
+				EstadosMouse.RightButtonDown = true;
+				EstadosMouse.RightButtonUp = false;
+				break;
+
+			case EMIE_RMOUSE_LEFT_UP:
+				EstadosMouse.RightButtonDown = false;
+				EstadosMouse.RightButtonUp = true;
+				break;
+
+			case EMIE_MOUSE_MOVED:
+				MouseClick[event.MouseInput.Event] = event.MouseInput.ButtonStates;
+				EstadosMouse.Position.X = event.MouseInput.X;
+				EstadosMouse.Position.Y = event.MouseInput.Y;
+				break;
+
+			default:
+				// We won't use the wheel
+				break;
+			}
 		}
 		return false;
 	}
@@ -37,6 +73,46 @@
 	bool Inputs::IsKeyDown(EKEY_CODE keyCode)
 	{
 		return KeyIsDown[keyCode];
+	}
+
+	Inputs::SMouseState& Inputs::GetMouseState()
+	{
+		return EstadosMouse;
+	}
+
+	void Inputs::ResetClicDerecho()
+	{
+		EstadosMouse.RightButtonDown = false;
+	}
+
+    void Inputs::ResetClicIzquierdo()
+    {
+    	EstadosMouse.LeftButtonDown = false;
+    }
+
+    bool Inputs::PulsadoClicIzq()
+    {
+    	return EstadosMouse.LeftButtonDown;
+    }
+
+    bool Inputs::PulsadoClicDer()
+    {
+    	return EstadosMouse.RightButtonDown;
+    }
+
+    bool Inputs::SueltoClicIzq()
+    {
+    	return EstadosMouse.LeftButtonUp;
+    }
+
+    bool Inputs::SueltoClicDer()
+    {
+    	return EstadosMouse.RightButtonUp;
+    }
+
+    void Inputs::ResetEventoRaton(int event)
+    {
+		MouseClick[event]=false;
 	}
 	
 	// This is used to check whether a mouse key is being held down

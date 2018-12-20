@@ -18,9 +18,15 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
         //drawable metodos
         void setPosiciones(int nx,int ny,int nz);
         void setPosicionesArmaEsp(float nx,float ny,float nz, float ry);
+
+        //setters
+        void setNombre(const char*);
+        void setAtaque(int);
         //void getPosiciones();
-        int getAtaque();
+
+        //getters
         const char* getNombre();
+        int getAtaque();
         void setID(int);
         int getID();
 

@@ -72,7 +72,6 @@ class MotorAudioEvent
     void pause();                  //Pausar el evento, start() continuar reproduccion
     void setVolume(float vol);     //Modifica el volumen del evento (entre 0 y 1)
     void setPosition(float posx, float posy, float posz); //Posicion 3D del evento
-    bool isPlaying();              //Si el evento esta sonando
 
     //Comprobar errores en FMOD
     void ERRCHECK(FMOD_RESULT result)

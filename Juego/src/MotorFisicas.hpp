@@ -37,10 +37,15 @@ using namespace reactphysics3d;
             void llevarBox(float x, float y, float z, float anc, float lar, float alt);
 
             void updateJugador(float x, float y, float z, float rx, float ry, float rz);//actualizamos al jugador en el espacio de las fisicas
-            std::vector <unsigned int> updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
+            std::vector <unsigned int> updateArmaEspecial(float x, float y, float z);
+            std::vector<unsigned int> updateArma(float x, float y, float z);
             void updateAtaque(float x, float y, float z, float rx, float ry, float rz);
+
             void setFormaArma(float px, float py, float pz, int anc, int lar, int alt);
             void setFormaRecolectable(int id, float px, float py, float pz, int anc, int lar, int alt);
+            void updateAtaqueEspecial(float x, float y, float z, float rx, float ry, float rz);
+            void vaciarupdateArma();
+
             bool IfCollision(CollisionBody * body1, CollisionBody * body2);
             CollisionWorld* getWorld();
             CollisionBody* getJugador();

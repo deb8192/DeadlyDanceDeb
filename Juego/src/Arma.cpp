@@ -36,14 +36,26 @@ void Arma::setPosicionesArmaEsp(float nx,float ny,float nz, float ry)
     this->setPosiciones((int)mx,(int)my,(int)mz);
 }
 
-int Arma::getAtaque()
+void Arma::setNombre(const char* weaponName)
 {
-    return potenciaAtaque;
+    nombreArma = weaponName;
 }
+
+void Arma::setAtaque(int danyo)
+{
+    potenciaAtaque = danyo;
+}
+
 const char* Arma::getNombre()
 {
     return nombreArma;
 }
+
+int Arma::getAtaque()
+{
+    return potenciaAtaque;
+}
+
 float Arma::getX()
 {
     return x;
