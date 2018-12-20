@@ -6,6 +6,7 @@
 Nivel* Nivel::unica_instancia = 0;
 //fin indicador singleton
 
+#define PI 3.14159265358979323846
 
 Nivel::Nivel()
 {
@@ -59,8 +60,7 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
     motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
-    fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,1,1,1,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
-    fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,5,5,0.5,5);
+    fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
 
 }
 
@@ -123,6 +123,7 @@ void Nivel::update()
 
 
   MotorFisicas* fisicas = MotorFisicas::getInstance();
+  MotorAudioSystem* motora = MotorAudioSystem::getInstance();
     //actualizamos los enemigos
     if(enemigos.size() > 0)//posiciones interpolacion
     {
@@ -152,9 +153,9 @@ void Nivel::update()
         
     int rec_col = fisicas->collideColectable();
 
-        cout << motor->estaPulsado(12) << rec_col << endl;
+        cout << motor->estaPulsado(KEY_E) << rec_col << endl;
 
-    if(motor->estaPulsado(12) && rec_col >= 0){ 
+    if(motor->estaPulsado(KEY_E) && rec_col >= 0){ 
 
     //recolectable pasa a ser un arma, asi coger objeto puede estar en false, porque no lleva un recolectable sino un arma
         cogerObjeto = !cogerObjeto;        
@@ -198,7 +199,7 @@ void Nivel::update()
             //en irrlich habria que actualizar el objeto (para que cambie de modelo 3d)
             //abra que crear un set ancho y tal vez mesh en motor y fisicas
         }
-    }else if(motor->estaPulsado(12))
+    }else if(motor->estaPulsado(KEY_E))
     {   
         if(jugador.getArma() != nullptr)
         { 
@@ -286,18 +287,13 @@ void Nivel::update()
             jugador.getZ()
         );     
     }
-      
-        //Colorear rojo: motor->colorearJugador(255,255,0,0);
-        //Colorear gris: motor->colorearJugador(255,0,0,255);  
+        
 
-      this->updateIA(); 
+       this->updateIA();
 
-      // if(fisicas->getWorld()->testOverlap(fisicas->getJugador(),fisicas->getEnemies(0)))
-      // {
-      //   motor->colorearEnemigo(255,255,0,0,0);
-      // }else{
-      //   motor->colorearEnemigo(255,255,255,255,0);
-      // }
+      //Posicion de escucha
+       motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
+
 
  	   acumulator -= dt;
     }
@@ -306,11 +302,11 @@ void Nivel::update()
 
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 {
-  if((motor->estaPulsado(5)/* || motor->estaPulsado(10)*/) && atacktime == 0.0f)
+  if((motor->estaPulsado(KEY_ESPACIO)/* || motor->estaPulsado(10)*/) && atacktime == 0.0f)
     {
         *danyo = jugador.Atacar();
         motor->colorearJugador(255, 55, 0, 255);
-        atacktime = 2000.0f;
+        atacktime = 1500.0f;
     }else{
         if(atacktime > 0.0f)
         {
@@ -318,7 +314,6 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
         }
         if(atacktime == 1000.0f) //Zona de pruebas
         {
-            motor->colorearEnemigo(255,255,255,255,0);
             motor->clearDebug2();
         }
         if(atacktime > 500.0f)
@@ -335,29 +330,28 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
 {
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((motor->estaPulsado(9) || motor->estaPulsado(11)) && atackEsptime == 0.0)
+    if((/*motor->estaPulsado(9)|| */motor->estaPulsado(KEY_Q)) && atackEsptime == 0.0)
     {
         *danyo = jugador.AtacarEspecial();
         motor->colorearJugador(255, 55, 0, 255);
-        atackEsptime = 1500.0f;
+        if(*danyo > 0)
+        {
+            atackEsptime = 1500.0f;
+        }
     }
     else
     {
         if(atackEsptime > 0.f)
         {
             atackEsptime--;
-            motor->mostrarArmaEspecial(
-            jugador.getX(),
-            jugador.getY(),
-            jugador.getZ(),
-            jugador.getRX(),
-            jugador.getRY(),
-            jugador.getRZ());
+        }
+        if(atackEsptime == 1000.0f)
+        {
+            motor->colorearEnemigo(255,255,255,255,0);
         }
         if(atackEsptime <= 750.0f && motor->getArmaEspecial()) //Zona de pruebas
         {
             motor->borrarArmaEspecial();
-
             motor->colorearJugador(255, 150, 150, 150);
         }
     }
@@ -368,40 +362,20 @@ void Nivel::updateIA()
 
     MotorGrafico * motor = MotorGrafico::getInstance();
     int danyo = 0;                      //Valor que indica si se ha podido realizar el ataque
-    vector <unsigned int> atacados;     //lista de enteros que senyalan a los enemigos atacados
+
     //Actualizar ataque especial
     this->updateAtEsp(&danyo, motor);
-    this->updateAt(&danyo, motor);
+    this->updateAt(&danyo2, motor);
 
     //Si se realiza el ataque se comprueban las colisiones
     if(atackEsptime > 0.0)
     {
-
-        atacados = fisicas->updateArmaEspecial(jugador.getX(),jugador.getY(),jugador.getZ(),jugador.getRX(),jugador.getRY(),jugador.getRZ());
-
-        //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
-        //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
-        if(!atacados.empty() && (int) atackEsptime % 500 == 0)
-        {
-
-            cout<<"Funciona"<<endl;
-            for(unsigned int i = 0; i < atacados.size(); i++)
-            {
-                float variacion = rand() % 7 - 3;
-                danyo += (int) variacion;
-                enemigos.at(i)->QuitarVida(danyo);
-                cout<<"Daño "<<danyo<<endl;
-                danyo -= (int) variacion;
-                cout<<"variacion "<<variacion<<endl;
-                cout<<"Vida enemigo "<<enemigos.at(i)->getID()<<" "<<enemigos.at(i)->getVida()<<endl;
-                motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
-            }
-        }
+        jugador.AtacarEspecialUpdate(&danyo);
     }
 
     else if(atacktime > 0.0)
     {
-        jugador.AtacarUpdate();
+        jugador.AtacarUpdate(danyo2);
     }
 
     //En caso contrario se colorean los enemigos de color gris

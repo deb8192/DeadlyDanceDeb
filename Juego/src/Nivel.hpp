@@ -4,6 +4,7 @@
 #include "CargadorNiveles.hpp"
 #include "pollo.hpp"
 #include "Recolectable.hpp"
+#include "MotorAudio.hpp"
 //#include "MotorGrafico.hpp"
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
@@ -76,9 +77,7 @@ class Nivel
         bool a,s,d,w,atEsp;
         bool cogerObjeto = false;
         int objetoCogido = -1;
-
-        
-
+        int danyo2 = 0;
 };
 
 #endif

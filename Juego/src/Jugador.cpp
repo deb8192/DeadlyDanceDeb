@@ -5,8 +5,11 @@
 #include "math.h"
 
 #define PI 3.14159265358979323846
+#define PIRADIAN 180.0f
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
+#define NOMBREHEABY "Heavy"
+#define NOMBREBAILAORA "Bailaora"
 
 Jugador::Jugador()
 {
@@ -98,7 +101,7 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
 
     //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
     az < 0 ?
-        deg = 180 + (RADTODEG * atan(ax/az)) :
+        deg = PIRADIAN + (RADTODEG * atan(ax/az)) :
         deg =  RADTODEG * atan(ax/az) ;
 
     //ahora actualizas movimiento y rotacion
@@ -120,24 +123,31 @@ int Jugador::Atacar()
   int danyo = 0;
   if(vida > 0)
   {
-    //Calcular posiciones
-    atx = 5 * sin(PI * getRY() / 180.0f) + getX();
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+
+    //Calcular posiciones que no se modifican
+    int distance = 5;
+    if(tipo_arma == 0)distance= 3;
+    atx = distance * sin(PI * getRY() / 180.0f) + getX();
     aty = getY();
-    atz = 5 * cos(PI * getRY() / 180.0f) + getZ();
+    atz = distance * cos(PI * getRY() / 180.0f) + getZ();
     atgx = getRX();
     atgy = getRY();
     atgz = getRZ();
-
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
-    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
     //Posiciones en el mundo 3D
     atposX = (atx/2);
     atposY = (getY()/2);
     atposZ = (atz/2);
 
+    //ATAQUE SIN ARMA
+    if(tipo_arma == 0){
+      fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,1,1,4);
+      danyo = 5.0f;
+    }
     //ATAQUE CUERPO A CUERPO
-    if(tipo_arma == 1)
+    else if(tipo_arma == 1)
     {
       //Crear cuerpo de colision de ataque delante del jugador
 
@@ -148,11 +158,14 @@ int Jugador::Atacar()
     else if(tipo_arma == 2)
     {
       //Crear cuerpo de colision de ataque delante del jugador
+
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4);
-      motora->getEvent("Bow")->start();
+
       danyo = 10.0f;
     }
-    cout << "danyo: " << danyo << endl;
+    motora->getEvent("Bow")->setVolume(0.8f);
+    motora->getEvent("Bow")->start();
+    atacados_normal.clear(); //Riniciar vector con enemigos atacados
   }
   else{
       cout << "No supera las restricciones"<<endl;
@@ -160,38 +173,77 @@ int Jugador::Atacar()
   return danyo;
 }
 
-void Jugador::AtacarUpdate()
+void Jugador::AtacarUpdate(int danyo)
 {
   if(vida > 0)
   {
     Nivel* nivel = Nivel::getInstance();
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     MotorGrafico * motor = MotorGrafico::getInstance();
-    if(tipo_arma == 2)
+    if(tipo_arma == 0){
+      fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
+      motor->clearDebug2();
+      motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,2,1,1,2);
+    }
+    else if(tipo_arma == 1)
     {
+      fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
+      motor->clearDebug2();
+      motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,3,1,3,1);
+    }
+    else if(tipo_arma == 2)
+    {
+      atz += (0.02 * cos(PI * atgy / PIRADIAN));
+      atx += (0.02 * sin(PI * atgy / PIRADIAN));
+      atposZ += (0.02 * cos(PI * atgy / PIRADIAN));
+      atposX += (0.02 * sin(PI * atgy / PIRADIAN));
 
-      atz += (0.02 * cos(PI * atgy / 180.0f));
-      atx += (0.02 * sin(PI * atgy / 180.0f));
-      atposZ += (0.02 * cos(PI * atgy / 180.0f));
-      atposX += (0.02 * sin(PI * atgy / 180.0f));
 
       fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
       motor->clearDebug2();
       motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
-
-      //Pasar por cada uno de los enemigos del nivel y comprobar colision
-      long unsigned int num = 0;
-      while(nivel->getEnemies().size() > num)
-      {            
-        //Si colisiona algun enemigo
-        if(fisicas->IfCollision(fisicas->getAtack(),fisicas->getEnemies(num)))
-        {
-          cout << "Enemigo " << num << " danyado" << endl;
-          motor->colorearEnemigo(255,255,0,0,num);
-        }
-        num++;
-      }
     }
+
+    //Enteros con los enemigos colisionados (atacados)
+    vector <unsigned int> atacados = fisicas->updateArma(atposX,atposY,atposZ);
+
+    if(!atacados.empty())
+    {
+        //Pasar por cada uno de los atacados
+        for(unsigned int i = 0; i < atacados.size(); i++)
+
+        {
+          //Buscar si esta en el vector guardado
+          bool encontrado = false;
+          long unsigned int j = 0;
+          if(!atacados_normal.empty())
+          {
+            while(j < atacados_normal.size())
+            {
+              if(atacados.at(i) == atacados_normal.at(j))
+              {
+                encontrado = true; //Ya se le ha atacado antes
+              }
+              j++;
+            }
+          }
+          //Si no se ha encontrado es que no se le a atacado
+          if (encontrado == false)
+          {
+            float variacion = rand() % 7 - 3;
+            danyo += (int) variacion;
+            nivel->getEnemigos().at(i)->QuitarVida(danyo);
+            cout<<"Daño "<<danyo<<endl;
+            danyo -= (int) variacion;
+            cout<<"variacion "<<variacion<<endl;
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+            //guardar el atacado para no repetir
+            atacados_normal.push_back(atacados.at(i));
+          }
+        }
+    }
+
   }
   else{
       cout << "No supera las restricciones"<<endl;
@@ -211,9 +263,42 @@ int Jugador::AtacarEspecial()
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
     if(vida > 0 && barraAtEs == por100)
     {
+        cout << "Supera las restricciones, ATAQUE ESPECIAL"<<endl;
+
+        //Calcular posiciones
+        atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
+        atespy = getY();
+        atespz = 6.5 * cos(PI * getRY() / PIRADIAN) + getZ();
+        atgx = getRX();
+        atgy = getRY();
+        atgz = getRZ();
+        incrAtDisCirc = 0.0;
+
+        MotorFisicas* fisicas = MotorFisicas::getInstance();
+        MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+
+        //Posiciones en el mundo 3D
+        atespposX = (atespx/2);
+        atespposY = (getY()/2);
+        atespposZ = (atespz/2);
+
+        //ATAQUE ESPECIAL DEL HEAVY
+        if(strcmp(armaEspecial->getNombre(), NOMBREHEABY) == 0)
+        {
+            //Crear cuerpo de colision de ataque delante del jugador
+            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,1,8,5);
+            motora->getEvent("Bow")->setVolume(0.8f);
+            motora->getEvent("Bow")->start();
+        }
+        //ATAQUE ESPECIAL DE LA BAILAORA
+        else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
+        {
+            //Crear cuerpo de colision de ataque delante del jugador
+            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,8,8,5);
+            motora->getEvent("Bow")->start();
+        }
+
         //Se calcula el danyo del ataque
-        cout << "Supera las restricciones"<<endl;
-        //int variacion = rand() % 21 - 10;
         if(armaEquipada != NULL)
         {
             aumentosAtaque += por1 + (float) armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
@@ -222,28 +307,138 @@ int Jugador::AtacarEspecial()
         aumentosAtaque += por1 + (float) armaEspecial->getAtaque()/por100;
         aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
 
-        //cout << "aumentos " << aumentosAtaque <<endl;
-        int probabilidad = rand() % por100 + 1;
-
         //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
+        int probabilidad = rand() % por100 + 1;
         if(probabilidad <= proAtaCritico)
         {
             critico += (float) danyoCritico / por100;
             critico = roundf(critico * por10) / por10;
             cout<<"critico " << proAtaCritico << " " << critico <<endl;
         }
+
         //Se aplican todas las modificaciones en la variable danyo
         danyoF = ataque * critico * aumentosAtaque;
         danyo = roundf(danyoF * por10) / por10;
         cout << "daño" <<danyo<<endl;
-        //barraAtEs = 0;
+        barraAtEs = 0;
         return danyo;
     }
     else
     {
         cout << "No supera las restricciones"<<endl;
+        barraAtEs = por100;
     }
     return danyo;
+}
+
+//Actualiza la posicion y la colision del ataque especial
+void Jugador::AtacarEspecialUpdate(int *danyo)
+{
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorFisicas * fisicas = MotorFisicas::getInstance();
+    Nivel* nivel = Nivel::getInstance();
+    
+    //Si el ataque especial es el del Heavy, es cuerpo a cuerpo
+    if(strcmp(armaEspecial->getNombre(), NOMBREHEABY) == 0)
+    {
+      
+        //Calculo de la posicion del arma delante del jugador
+        atespx = 6.5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
+        atespz = 6.5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
+        atespposX = atespx/2;
+        atespposZ = atespz/2;
+        atgy = this->getY();
+
+
+        motor->mostrarArmaEspecial(
+            this->getX(),
+            this->getY(),
+            this->getZ(),
+            this->getRX(),
+            this->getRY(),
+            this->getRZ());
+
+        motor->clearDebug2();   //Pruebas debug
+
+        motor->dibujarObjetoTemporal(
+            atespx,
+            this->getY(),
+            atespz,
+            this->getRX(),
+            this->getRY(),
+            this->getRZ(),
+            8,
+            1,
+            8,
+            2);
+    }
+  
+    //Si el ataque especial es el de la Bailaora, es circular a distancia
+    else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
+    {
+        //Formula de ataque circular aumentando la distancia
+        incrAtDisCirc += 0.02;
+        atespz = this->getZ();
+        atespz += (incrAtDisCirc * cos(PI * atgy / PIRADIAN));
+        atespx = this->getX();
+        atespx += (incrAtDisCirc * sin(PI * atgy / PIRADIAN));
+        atespposZ = atespz/2;
+        atespposX = atespx/2;
+        
+        //Aumento de la rotacion hacia la izquierda.
+        atgy += 0.75;
+
+        if(atgy >= 360.0)
+        {
+            atgy -= 360.0;
+        }
+        else if(atgy < 0.0)
+        {
+            atgy += 360;
+        }
+
+        motor->mostrarArmaEspecial(
+            atespx,
+            atespy,
+            atespz,
+            atgx,
+            atgy,
+            atgz);
+
+        motor->clearDebug2(); //Pruebas debug
+
+        motor->dibujarObjetoTemporal(
+            atespx,
+            atespy,
+            atespz,
+            atgx,
+            atgy,
+            atgz,
+            8,
+            1,
+            8,
+            3);
+    }
+    //lista de enteros que senyalan a los enemigos atacados
+    vector <unsigned int> atacados = fisicas->updateArmaEspecial(atespposX,atgy,atespposZ);
+    
+    //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
+    //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
+    if(!atacados.empty())
+    {
+        cout<<"Funciona"<<endl;
+        for(unsigned int i = 0; i < atacados.size(); i++)
+        {
+            float variacion = rand() % 7 - 3;
+            *danyo += (int) variacion;
+            nivel->getEnemigos().at(i)->QuitarVida(*danyo);
+            cout<<"Daño "<<*danyo<<endl;
+            *danyo -= (int) variacion;
+            cout<<"variacion "<<variacion<<endl;
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+        }
+    }
 }
 
 void Jugador::QuitarVida(int can)
@@ -297,6 +492,11 @@ void Jugador::setArmaEspecial(int ataque)
     armaEspecial = new Arma(ataque, nombreJugador,1,1,1,"assets/models/objeto.obj","");
 }
 
+void Jugador::setNombre(const char * nombre)
+{
+    nombreJugador = nombre;
+}
+
 void Jugador::setSuerte(int suer)
 {
 
@@ -345,6 +545,11 @@ Arma * Jugador::getArma()
 Arma * Jugador::getArmaEspecial()
 {
     return armaEspecial;
+}
+
+const char* Jugador::getNombre()
+{
+    return nombreJugador;
 }
 
 int Jugador::getSuerte()

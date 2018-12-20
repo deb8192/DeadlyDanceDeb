@@ -28,7 +28,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
         //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
-        void AtacarUpdate();
+        void AtacarUpdate(int danyo);
+        void AtacarEspecialUpdate(int *danyo);
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
@@ -40,6 +41,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setAtaque(int ataq);
         void setArma(Arma *arma);
         void setArmaEspecial(int ataque);
+        void setNombre(const char * nombre);
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
@@ -51,6 +53,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int getAtaque();
         Arma* getArma();
         Arma* getArmaEspecial();
+        const char* getNombre();
         int getSuerte();
         int getDanyoCritico();
         int getProAtaCritico();
@@ -74,13 +77,14 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         Arma *armaEquipada;
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/Arma.obj";
-        const char * nombreJugador = "Heavy";
+        const char * nombreJugador = "Bailaora";
         //!PRUEBAS ATAQUE ESPECIAL
        //  core::vector3df dir;
         float danyo_arma = 10.0f;
-        float atx, aty, atz, atgx, atgy, atgz;
-        float atposX, atposY, atposZ;
+        float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc;
+        float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
         int tipo_arma = 2;
+        vector <unsigned int> atacados_normal;
 };
 
 #endif /* Jugador_HPP */

@@ -28,12 +28,12 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     rp3d::CollisionBody * cuerpo;
     cuerpo = space->createCollisionBody(transformacion);
 
-   if(type == 1)//circulo
+   if(type == 1)//esfera
    {
         SphereShape * forma = new SphereShape(ancho);
         cuerpo->addCollisionShape(forma,transformacion);
     }
-    else if(type == 2)//cuadrado (boundingbox)
+    else if(type == 2)//cubo (boundingbox)
     {
         rp3d::Vector3 medidas(ancho,alto,largo);
         BoxShape * forma = new BoxShape(medidas);
@@ -256,17 +256,12 @@ void MotorFisicas::updateJugador(float x, float y, float z)
     }
 }
 
-vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
+vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z)
 {
     vector<unsigned int> atacados;
     if(armaAtEsp != nullptr)
     {
-        float newx = x + 6.5*(sin(DEGTORAD*ry));
-        float newz = z + 6.5*(cos(DEGTORAD*ry));
-        float atposX = (newx/2);
-        float atposY = (y/2);
-        float atposZ = (newz/2);
-        rp3d::Vector3 posiciones(atposX,atposY,atposZ);
+        rp3d::Vector3 posiciones(x,y,z);
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         armaAtEsp->setTransform(transformacion);
@@ -281,10 +276,45 @@ vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z,
     return atacados;
 }
 
+vector<unsigned int> MotorFisicas::updateArma(float x, float y, float z)
+{
+    vector<unsigned int> atacados;
+    if(jugadorAtack != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        jugadorAtack->setTransform(transformacion);
+        for(unsigned int i = 0; i < enemigos.size(); i++)
+        {
+            if(space->testOverlap(jugadorAtack, enemigos.at(i)))
+            {
+                atacados.push_back(i);
+            }
+        }
+    }
+    return atacados;
+}
+
 
 void MotorFisicas::updateAtaque(float x, float y, float z, float rx, float ry, float rz)
 {
     if(jugadorAtack != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        jugadorAtack->setTransform(transformacion);
+        // std::cout << "jx: " << x << std::endl;
+        // std::cout << "jy: " << y << std::endl;
+        // std::cout << "jz: " << z << std::endl;
+
+    }
+}
+
+void MotorFisicas::updateAtaqueEspecial(float x, float y, float z, float rx, float ry, float rz)
+{
+    if(armaAtEsp != nullptr)
     {
         rp3d::Vector3 posiciones(x,y,z);
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
