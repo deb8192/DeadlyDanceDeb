@@ -23,43 +23,41 @@ MotorGrafico::~MotorGrafico()
 
 bool MotorGrafico::crearVentana(int tipo)
 {
-    if(tipo == 1)
+    std::string titulo = "";
+    switch(tipo)
     {
-        device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(640, 480), 16,false, false, false, &input);
-        device->setWindowCaption(L"DeadlyDance LowResolution");
-        device->setResizable(false);
-        PropiedadesDevice();
-        return true;
-    }
+        case 1:
+            WIDTH=640; HEIGHT=480;
+            titulo = "DeadlyDance LowResolution";
+            break;
 
-    if(tipo == 2)
-    {
-       device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(800, 600), 16,false, false, false, &input);
-       device->setWindowCaption(L"DeadlyDance MediumResolution");
-       device->setResizable(false);
-       PropiedadesDevice();
-       return true;
-    }
+        case 2:
+            WIDTH=800; HEIGHT=600;
+            titulo = "DeadlyDance MediumResolution";
+            break;
 
-    if(tipo == 3)
-    {
-       device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(1024, 768), 16,false, false, false, &input);
-       device->setWindowCaption(L"DeadlyDance NormalResolution");
-       device->setResizable(false);
-       PropiedadesDevice();
-       return true;
-    }
+        case 3:
+            WIDTH=1024; HEIGHT=768;
+            titulo = "DeadlyDance NormalResolution";
+            break;
 
-    if(tipo == 4)
-    {
-       device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(1280, 1024), 16,false, false, false, &input);
-       device->setWindowCaption(L"DeadlyDance HightResolution");
-       device->setResizable(false);
-       PropiedadesDevice();
-       return true;
-    }
+        case 4:
+            WIDTH=1280; HEIGHT=1024;
+            titulo = "DeadlyDance HightResolution";
+            break;
 
-    return false;
+        default:
+            return false;
+    }
+    device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(WIDTH, HEIGHT), 16,false, false, false, &input);
+    
+    std::wstring widestr = std::wstring(titulo.begin(), titulo.end());
+    const wchar_t* widecstr = widestr.c_str();
+    device->setWindowCaption(widecstr);
+
+    device->setResizable(false);
+    PropiedadesDevice();
+    return true;
 }
 
 void MotorGrafico::closeGame()
@@ -119,17 +117,20 @@ void MotorGrafico::PropiedadesDevice()
     driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
+    geometryCreator = smgr->getGeometryCreator();
+    collmgr = smgr->getSceneCollisionManager();
 
     cout << "\e[32m Propiedades aplicadas \e[0m" << endl;
 }
 
 void MotorGrafico::PintarBotonesMenu()
 {
-
-    guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_EMPEZAR_BUTTON,L"Iniciar Juego", L"Empieza a jugar");
-    guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_CONFIGURACION_BUTTON,L"Configuracion", L"Configuracion del juego");
-    guienv->addButton(rect<s32>(300,280,500,310), 0, GUI_ID_CREDITOS_BUTTON,L"Creditos", L"Creditos del juego");
-    guienv->addButton(rect<s32>(300,320,500,350), 0, GUI_ID_SALIR_BUTTON,L"Salir del juego", L"Sale del juego");
+	guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_EMPEZAR_BUTTON,L"Iniciar Juego", L"Empieza a jugar");
+    guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_PUZZLES_BUTTON,L"Puzzles", L"Minijuego");
+    guienv->addButton(rect<s32>(300,280,500,310), 0, GUI_ID_ARBOLES_BUTTON,L"Cargar Árbol", L"Carga un XML");
+    guienv->addButton(rect<s32>(300,320,500,350), 0, GUI_ID_CONFIGURACION_BUTTON,L"Configuracion", L"Configuracion del juego");
+    guienv->addButton(rect<s32>(300,360,500,390), 0, GUI_ID_CREDITOS_BUTTON,L"Creditos", L"Creditos del juego");
+    guienv->addButton(rect<s32>(300,400,500,430), 0, GUI_ID_SALIR_BUTTON,L"Salir del juego", L"Sale del juego"); 
 }
 
 void MotorGrafico::activarFuenteDefault()
@@ -159,37 +160,34 @@ bool MotorGrafico::estaPulsado(int boton)
 {
     switch(boton)
     {
-        case 1:
+        case KEY_A:     
             return input.IsKeyDown(irr::KEY_KEY_A);
 
-        case 2:
+        case KEY_S:
             return input.IsKeyDown(irr::KEY_KEY_S);
-
-        case 3:
+        
+        case KEY_D:
             return input.IsKeyDown(irr::KEY_KEY_D);
-
-        case 4:
+        
+        case KEY_W:
             return input.IsKeyDown(irr::KEY_KEY_W);
-
-        case 5:
+        
+        case KEY_ESPACIO:
             return input.IsKeyDown(irr::KEY_SPACE);
 
-        case 6:
+        case KEY_ACEPTAR:
             return input.IsKeyDown(irr::KEY_ACCEPT);
 
-        case 7:
+        case KEY_G_DEBUG:
             return input.IsKeyDown(irr::KEY_KEY_G);//para modo debug
 
-        case 8:
+        case KEY_P:
             return input.IsKeyDown(irr::KEY_KEY_P);
+
+        case MOUSE_MOVED:
+            return input.IsMouseClick(irr::EMIE_MOUSE_MOVED);
         
-        case 9:
-            return input.IsMouseClick(irr::EMIE_RMOUSE_PRESSED_DOWN);
-        
-        case 10:
-            return input.IsMouseClick(irr::EMIE_LMOUSE_PRESSED_DOWN);
-        
-        case 11:
+        case KEY_Q:
             return input.IsKeyDown(irr::KEY_KEY_Q);
     }
     return false;
@@ -209,31 +207,64 @@ void MotorGrafico::resetKey(int event)
 {
     switch(event)
     {
-        case 1:
+        case KEY_A:
             input.ResetKey(irr::KEY_KEY_A);
         break;
-        case 2:
+        case KEY_S:
             input.ResetKey(irr::KEY_KEY_S);
         break;
-        case 3:
+        case KEY_D:
             input.ResetKey(irr::KEY_KEY_D);
         break;
-        case 4:
+        case KEY_W:
             input.ResetKey(irr::KEY_KEY_W);
         break;
-        case 5:
+        case KEY_ESPACIO:
             input.ResetKey(irr::KEY_SPACE);
         break;
-        case 6:
+        case KEY_ACEPTAR:
             input.ResetKey(irr::KEY_ACCEPT);
         break;
-        case 7:
+        case KEY_G_DEBUG:
             input.ResetKey(irr::KEY_KEY_G);//para modo debug
         break;
-        case 8:
+        case KEY_P:
             input.ResetKey(irr::KEY_KEY_P);
         break;
+        case KEY_Q:
+            input.ResetKey(irr::KEY_KEY_Q);
+        break;
     }
+}
+
+void MotorGrafico::resetEventoMoveRaton()
+{
+    input.ResetEventoRaton(irr::EMIE_MOUSE_MOVED);
+}
+
+position2di MotorGrafico::GetPosicionRaton()
+{
+    return input.GetMouseState().Position;
+}
+
+bool MotorGrafico::PulsadoClicDer()
+{
+    return input.PulsadoClicDer();
+}
+
+bool MotorGrafico::PulsadoClicIzq()
+{
+    return input.PulsadoClicIzq();
+}
+
+bool MotorGrafico::SueltoClicDer()
+{
+    return input.SueltoClicDer();
+}
+
+bool MotorGrafico::SueltoClicIzq()
+{
+    return input.SueltoClicIzq();
 }
 
 int MotorGrafico::CargarPlataformas(int x,int y,int z, const char *ruta_objeto,const char *ruta_textura)
@@ -525,4 +556,261 @@ void MotorGrafico::colorearEnemigos(int a, int r, int g, int b, unsigned int sel
 IAnimatedMeshSceneNode* MotorGrafico::getArmaEspecial()
 {
     return ArmaEspecial_Jugador;
+}
+
+// Funciones para puzzles
+void MotorGrafico::PosicionCamaraEnPuzzles()
+{
+    camera->setPosition(vector3df(14, 2, 0)); // No cambiar la Y, si nos la seleccion tendra errores
+}
+
+void MotorGrafico::updateMotorPuzzles(short tipo)
+{
+    driver->beginScene(true, true, SColor(255,255,255,255));//fondo blanco
+    smgr->drawAll();
+    guienv->drawAll();
+
+    /* Probando a dibujar objetos 2D
+    //Rectangulo
+    driver->draw2DRectangle(SColor(255, 255, 128, 64), rect<s32>(40, 40, 200, 200));
+
+    //Poligono
+    driver->draw2DPolygon(position2d<s32>(100, 300), 50.f, SColor(128, 40, 80, 16), 6);*/
+
+    switch(tipo)
+    {
+        case P_OPCIONES:
+            // load the irrlicht engine logo
+            img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
+                core::position2d<s32>(WIDTH-200, 40));
+
+            // lock the logo's edges to the bottom left corner of the screen
+            /*img->setAlignment(EGUIA_UPPERLEFT, EGUIA_UPPERLEFT,
+                    EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT);*/
+            break;
+        case P_HANOI:
+            // Lineas para dividir la pantalla
+            driver->draw2DLine(position2d<s32>(x_linea1 , 200), 
+                position2d<s32>(x_linea1, 400 ) , SColor(255, 0, 0, 0));
+            driver->draw2DLine(position2d<s32>(x_linea2 , 200), 
+                position2d<s32>(x_linea2, 400 ) , SColor(255, 0, 0, 0));
+            break;
+    }
+
+    driver->endScene();
+}
+
+void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
+{
+    short height_aux = (HEIGHT/2)+100;
+    short anchoBtn = 40;
+    short altoBtn = 30;
+
+    // load the irrlicht engine logo
+    /*IGUIImage *img =
+        guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
+            core::position2d<s32>(10, driver->getScreenSize().Height - 128));
+
+    // lock the logo's edges to the bottom left corner of the screen
+    img->setAlignment(EGUIA_UPPERLEFT, EGUIA_UPPERLEFT,
+            EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT);*/
+
+
+    // Atras
+    guienv->addButton(rect<s32>(700,HEIGHT-60,750,HEIGHT-30), 0, 
+        GUI_ID_BACK_MENU_BUTTON,L"Atrás", L"Vuelve al menú");
+    
+    // Enunciado
+    std::wstring widestr = std::wstring(enun.begin(), enun.end());
+    const wchar_t* widecstr = widestr.c_str();
+    guienv->addStaticText(widecstr, rect<s32>(60,20,700,50), false);
+
+    switch(tipo)
+    {
+        case P_OPCIONES: // Opciones
+            guienv->addStaticText(L"Puzzle Opciones", rect<s32>(0,0,200,20), false);
+            guienv->addStaticText(L"Ejemplo", rect<s32>(WIDTH-200,20,
+                WIDTH-160,40), false);
+
+            switch(opciones) {
+                case 2:
+                    WIDTH_AUX = WIDTH/4;
+                    // x, y, x2, y2
+                    guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
+                        WIDTH_AUX+anchoBtn,height_aux+altoBtn), 
+                        0, GUI_ID_OP1,L"A", L"A");
+                    guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
+                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn), 
+                        0, GUI_ID_OP2,L"B", L"B");
+                    break;
+
+                case 3:
+                    WIDTH_AUX = (WIDTH-2)/6;
+                    // x, y, x2, y2
+                    guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
+                        WIDTH_AUX+anchoBtn,height_aux+altoBtn), 
+                        0, GUI_ID_OP1,L"A", L"A");
+                    guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
+                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn), 
+                        0, GUI_ID_OP2,L"B", L"B");
+                    guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
+                        WIDTH_AUX*5+anchoBtn,height_aux+altoBtn), 
+                        0, GUI_ID_OP3,L"C", L"C");
+                    break;
+
+                case 4:
+                    WIDTH_AUX = WIDTH/8;
+                    // x, y, x2, y2
+                    guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
+                        WIDTH_AUX+anchoBtn,height_aux+altoBtn), 
+                        0, GUI_ID_OP1,L"A", L"A");
+                    guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
+                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn), 
+                        0, GUI_ID_OP2,L"B", L"B");
+                    guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
+                        WIDTH_AUX*5+anchoBtn,height_aux+altoBtn), 
+                        0, GUI_ID_OP3,L"C", L"C");
+                    guienv->addButton(rect<s32>(WIDTH_AUX*7,height_aux,
+                        WIDTH_AUX*7+anchoBtn,height_aux+altoBtn), 
+                        0, GUI_ID_OP4,L"D", L"D");
+                    break;
+            }
+            break;
+
+        case P_HANOI: // Torres de Hanoi
+            guienv->addStaticText(L"Torres de Hanoi", rect<s32>(0,0,200,20), false);
+
+            // Reiniciar
+            guienv->addButton(rect<s32>(700,HEIGHT-90,750,HEIGHT-60), 0, 
+                GUI_ID_REINICIAR_HANOI,L"Reiniciar", L"Reinicia el juego");
+
+            myTextBox = guienv->addStaticText(L"Pasos: ", rect<s32>(60,(WIDTH/2)-10,100,(WIDTH/2)+30), false); 
+
+            WIDTH_AUX = (WIDTH-2)/6;
+            guienv->addStaticText(L"IZQ", rect<s32>(WIDTH_AUX,100,WIDTH_AUX+anchoBtn,130), false); 
+            guienv->addStaticText(L"CENTRO", rect<s32>(WIDTH_AUX*3,100,WIDTH_AUX*3+anchoBtn,130), false);
+            guienv->addStaticText(L"DER", rect<s32>(WIDTH_AUX*5,100,WIDTH_AUX*5+anchoBtn,130), false); 
+
+            // Para la ventana de 800, 600
+            // Width = 798, dejamos 1 punto a cada lado
+            WIDTH_AUX = (WIDTH-2)/3;    // Dividimos la pantalla en 3 zonas
+            x_linea1 = WIDTH_AUX;
+            x_linea2 = WIDTH_AUX*2;
+            break;
+    }
+}
+
+void MotorGrafico::TextoPasos(short pasos)
+{
+    stringw str = L"Pasos: ";
+    str += pasos;
+    myTextBox->setText(str.c_str());
+}
+
+void MotorGrafico::CrearMeshFicha(float tamanyo, int r, int g, int b)
+{
+    //fichaMesh = geometryCreator->createCubeMesh(vector3df(tamanyo));
+    fichaMesh = geometryCreator->createCylinderMesh(
+        tamanyo,    //radius
+        1,          //length
+        50,         //tesselation
+        SColor(0, r, g, b));
+
+    // insensible a la iluminacion
+    fichaMesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+}
+
+void MotorGrafico::CrearFichas(short posY, float tamanyo, 
+    int r, int g, int b)
+{
+    CrearMeshFicha(tamanyo, r, g, b);
+    ficha = smgr->addMeshSceneNode(fichaMesh);
+    ficha->setPosition(vector3df(0, posY, IZQ));
+    ficha->setID(tamanyo);
+
+    // La anyadimos a la lista
+    fichasMesh.push_back(ficha);
+}
+
+short MotorGrafico::GetZonaVentana()
+{
+    short posX = GetPosicionRaton().X;
+    if ((posX > 0) && (posX <= WIDTH)) {
+        if ((posX > 0) && (posX <= WIDTH_AUX)) {
+            return IZQ;
+        } else if ((posX > WIDTH_AUX) && (posX <= WIDTH_AUX*2)) {
+            return CENTRO;
+        } else {
+            return DER;
+        }
+    }
+    return NO_SELECT;// Fuera de ventana
+}
+
+bool MotorGrafico::SeleccionarNodo()
+{
+    // check for a node being selected 
+    // Posicion, idBitMask (0=deshabilitada), bNoDebugObjects (true=No tiene en cuenta los objetos de depuracion)
+    nodoSeleccionado = collmgr->getSceneNodeFromScreenCoordinatesBB(
+        device->getCursorControl()->getPosition(),0,true); 
+
+    // Si hay un nodo seleccionado
+    if(nodoSeleccionado) 
+    { 
+        // Remember where the node and cursor were when it was clicked on 
+        initialCursorPosition = device->getCursorControl()->getPosition();
+        // Calcula la posición de la pantalla 2d desde una posición 3d.
+        initialObjectPosition = collmgr->getScreenCoordinatesFrom3DPosition(
+            nodoSeleccionado->getAbsolutePosition(), camera); 
+
+        if (nodoSeleccionado->getID() != -1) { // Comprobamos que no sea el fondo
+            return true;
+        }
+    }
+    return false;
+}
+
+void MotorGrafico::DeseleccionarNodo()
+{
+    nodoSeleccionado = 0;
+}
+
+short MotorGrafico::GetFichaY()
+{
+    return nodoSeleccionado->getAbsolutePosition().Y;
+}
+
+void MotorGrafico::MoverFichas(short pila)
+{
+    if ((nodoSeleccionado) && (pila != NO_SELECT))
+    { 
+        plane3df const planeXZ(nodoSeleccionado->getAbsolutePosition(), vector3df(1.f, 0.f, 0.f)); 
+
+        position2di currentCursorPosition(device->getCursorControl()->getPosition()); 
+        position2di effectiveObjectPosition = initialObjectPosition + currentCursorPosition - initialCursorPosition; 
+        line3df ray(collmgr->getRayFromScreenCoordinates(effectiveObjectPosition, camera)); 
+        vector3df intersectWithPlane; 
+
+        if(planeXZ.getIntersectionWithLine(ray.start, ray.getVector(), intersectWithPlane)) 
+        {
+            nodoSeleccionado->setPosition(intersectWithPlane); 
+        }
+    }
+}
+
+void MotorGrafico::RecolocarFicha(short y, short z)
+{
+    short x = nodoSeleccionado->getAbsolutePosition().X;
+    nodoSeleccionado->setPosition(vector3df(x, y, z));
+}
+
+void MotorGrafico::ReiniciarHanoi()
+{
+	short tam = fichasMesh.size();
+    short posY=0;
+    for (int pos = 0; pos<tam; pos++)
+    {
+        fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
+        posY++;
+    }
 }

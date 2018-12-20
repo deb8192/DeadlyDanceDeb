@@ -27,8 +27,10 @@ using namespace reactphysics3d;
             void colisionRayoUnCuerpo(float x,float y,float z,float longitud);//colisiona solo con un cuerpo (el primero)
             void updateJugador(float x, float y, float z, float rx, float ry, float rz);//actualizamos al jugador en el espacio de las fisicas
             std::vector <unsigned int> updateArmaEspecial(float x, float y, float z);
+            std::vector<unsigned int> updateArma(float x, float y, float z);
             void updateAtaque(float x, float y, float z, float rx, float ry, float rz);
             void updateAtaqueEspecial(float x, float y, float z, float rx, float ry, float rz);
+            void vaciarupdateArma();
             bool IfCollision(CollisionBody * body1, CollisionBody * body2);
             CollisionWorld* getWorld();
             CollisionBody* getJugador();

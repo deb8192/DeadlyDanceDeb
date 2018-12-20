@@ -2,6 +2,10 @@
 #define ESTADO_HPP
 #include <iostream>
 
+#include "Puzzle.hpp" // Para pruebas puzzles
+#include "PilaFichas.hpp"
+#include <stack> // para la pila de fichas
+
 //aqui definimos la clase interfaz de los estados
 class Estado {
 private:
@@ -52,6 +56,50 @@ class Cinematica: public Estado{
         void Init();
 
         //MotorGrafico *motor = MotorGrafico::getInstance();
+};
+
+// Estado de pruebas para los puzzles
+class Puzzles: public Estado{
+    public:
+        void Iniciar();
+        void CrearFichasPila();
+        void AsignarPuzzle(Puzzle p);
+        short GetTipo();
+        std::string GetEnunciado();
+        short GetOpciones();
+        short GetSolucion();
+    private:
+        void Draw();
+        void Clean();
+        void Update();
+        int Esta();
+        void Init();
+
+
+        void ComprobarEventosOpciones();
+        void ComprobarEventosHanoi();
+        void DeseleccionarNodo();
+        bool ComprobarPilaVacia(short pila);
+        bool ComprobarTopPila(short fichaY);
+        bool ComprobarTamanyo();
+        short RecolocarFicha();
+        void SacarFicha();
+        short MeterFicha();
+        void ReiniciarPilas();
+        void ComprobarGanar();
+
+        //MotorGrafico *motor = MotorGrafico::getInstance();
+        Puzzle puzzle;
+        bool pulsado=false;
+        enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
+        enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
+
+        // Pilas de fichas
+        stack <PilaFichas*> pilaIzq;
+        stack <PilaFichas*> pilaCentro;
+        stack <PilaFichas*> pilaDer;
+        PilaFichas* ficha;
+        short pasos, pilaInicial, pilaFinal;
 };
 
 #endif /* ESTADO_HPP */
