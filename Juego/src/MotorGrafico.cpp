@@ -318,7 +318,8 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     }
 }
 
-void MotorGrafico::CargarArmaJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
+
+void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* arma = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
     if (!arma)
@@ -333,11 +334,29 @@ void MotorGrafico::CargarArmaJugador(int x,int y,int z, int ancho, int largo, in
     }
 }
 
+void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+    IAnimatedMesh* recol = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+    if (!recol)
+    {
+        //error
+    }
+    else
+    {
+        IAnimatedMeshSceneNode* recol_en_scena = smgr->addAnimatedMeshSceneNode(recol); //metemos el objeto en el escenario para eso lo pasamos al escenario
+        recol_en_scena->setPosition(core::vector3df(x,y,z));
+        Recolectables_Scena[id] = recol_en_scena;
+    }
+}
+
 void MotorGrafico::llevarObjeto(int id, float x, float y, float z, float rx, float ry, float rz)
 {    
+    if(Arma_Jugador)
+    {        
      Arma_Jugador->setPosition(core::vector3df(x,y,z));
      Arma_Jugador->setRotation(core::vector3df(rx,ry,rz));
 
+    }
 }
 
 void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
