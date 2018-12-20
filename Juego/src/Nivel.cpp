@@ -201,31 +201,6 @@ void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
         if(atackEsptime > 0.f)
         {
             atackEsptime--;
-            motor->mostrarArmaEspecial(
-            jugador.getX(),
-            jugador.getY(),
-            jugador.getZ(),
-            jugador.getRX(),
-            jugador.getRY(),
-            jugador.getRZ());
-
-
-            float atespx = 6.5 * sin(PI * jugador.getRY() / 180.0f) + jugador.getX();
-            float atespz = 6.5 * cos(PI * jugador.getRY() / 180.0f) + jugador.getZ();
-
-            motor->clearDebug2();
-
-            motor->dibujarObjetoTemporal(
-            atespx,
-            jugador.getY(),
-            atespz,
-            jugador.getRX(),
-            jugador.getRY(),
-            jugador.getRZ(),
-            8,
-            1,
-            8,
-            2);
         }
         if(atackEsptime == 1000.0f)
         {
