@@ -71,6 +71,7 @@ class Nivel
         clock_t newTime;
         clock_t currentTime;
         bool a,s,d,w,atEsp;
+        int danyo2 = 0;
 };
 
 #endif

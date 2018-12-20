@@ -30,6 +30,7 @@ using namespace reactphysics3d;
             std::vector<unsigned int> updateArma(float x, float y, float z);
             void updateAtaque(float x, float y, float z, float rx, float ry, float rz);
             void updateAtaqueEspecial(float x, float y, float z, float rx, float ry, float rz);
+            void vaciarupdateArma();
             bool IfCollision(CollisionBody * body1, CollisionBody * body2);
             CollisionWorld* getWorld();
             CollisionBody* getJugador();

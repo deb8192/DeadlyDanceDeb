@@ -141,8 +141,6 @@ int Jugador::Atacar()
     //ATAQUE SIN ARMA
     if(tipo_arma == 0){
       fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,1,1,4);
-
-      //Calculos de danyo
       danyo = 5.0f;
     }
     //ATAQUE CUERPO A CUERPO
@@ -157,11 +155,11 @@ int Jugador::Atacar()
     {
       //Crear cuerpo de colision de ataque delante del jugador
       fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,0.5,1,4);
-      motora->getEvent("Bow")->setVolume(0.8f);
-      motora->getEvent("Bow")->start();
       danyo = 10.0f;
     }
-    cout << "danyo: " << danyo << endl;
+    motora->getEvent("Bow")->setVolume(0.8f);
+    motora->getEvent("Bow")->start();
+    atacados_normal.clear(); //Riniciar vector con enemigos atacados
   }
   else{
       cout << "No supera las restricciones"<<endl;
@@ -169,7 +167,7 @@ int Jugador::Atacar()
   return danyo;
 }
 
-void Jugador::AtacarUpdate(int *danyo)
+void Jugador::AtacarUpdate(int danyo)
 {
   if(vida > 0)
   {
@@ -199,20 +197,42 @@ void Jugador::AtacarUpdate(int *danyo)
       motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
     }
 
+    //Enteros con los enemigos colisionados (atacados)
     vector <unsigned int> atacados = fisicas->updateArma(atposX,atposY,atposZ);
 
-    if(!atacados.empty() && *danyo > 0)
+    if(!atacados.empty())
     {
+        //Pasar por cada uno de los atacados
         for(unsigned int i = 0; i < atacados.size(); i++)
         {
-          float variacion = rand() % 7 - 3;
-          *danyo += (int) variacion;
-          nivel->getEnemigos().at(i)->QuitarVida(*danyo);
-          cout<<"Daño "<<*danyo<<endl;
-          *danyo -= (int) variacion;
-          cout<<"variacion "<<variacion<<endl;
-          cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
-          motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+          //Buscar si esta en el vector guardado
+          bool encontrado = false;
+          long unsigned int j = 0;
+          if(!atacados_normal.empty())
+          {
+            while(j < atacados_normal.size())
+            {
+              if(atacados.at(i) == atacados_normal.at(j))
+              {
+                encontrado = true; //Ya se le ha atacado antes
+              }
+              j++;
+            }
+          }
+          //Si no se ha encontrado es que no se le a atacado
+          if (encontrado == false)
+          {
+            float variacion = rand() % 7 - 3;
+            danyo += (int) variacion;
+            nivel->getEnemigos().at(i)->QuitarVida(danyo);
+            cout<<"Daño "<<danyo<<endl;
+            danyo -= (int) variacion;
+            cout<<"variacion "<<variacion<<endl;
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+            //guardar el atacado para no repetir
+            atacados_normal.push_back(atacados.at(i));
+          }
         }
     }
 
@@ -257,6 +277,7 @@ int Jugador::AtacarEspecial()
         {
             //Crear cuerpo de colision de ataque delante del jugador
             fisicas->crearCuerpo(atespposX,atespposY,atespposZ,2,8,1,8,5);
+            motora->getEvent("Bow")->setVolume(0.8f);
             motora->getEvent("Bow")->start();
         }
         //ATAQUE ESPECIAL DE LA BAILAORA
@@ -318,7 +339,6 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
     if(!atacados.empty() && *danyo > 0)
     {
-
         cout<<"Funciona"<<endl;
         for(unsigned int i = 0; i < atacados.size(); i++)
         {
