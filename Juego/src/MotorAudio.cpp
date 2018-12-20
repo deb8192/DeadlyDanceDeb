@@ -115,7 +115,6 @@ MotorAudioEvent::~MotorAudioEvent()
 void MotorAudioEvent::start()
 {
   ERRCHECK(soundInstance->start());
-  //ERRCHECK(soundInstance->setPaused(false));
 }
 
 //Detener el evento
@@ -146,16 +145,4 @@ void MotorAudioEvent::setPosition(float posx, float posy, float posz)
   attributes.position.y = posy;
   attributes.position.z = posz;
   ERRCHECK(soundInstance->set3DAttributes(&attributes));
-}
-
-//Si el evento esta sonando
-bool MotorAudioEvent::isPlaying()
-{
-  // FMOD_STUDIO_PLAYBACK_STATE* stateplay = NULL;
-  // ERRCHECK(soundInstance->getPlaybackState(stateplay));
-  // if(*stateplay == FMOD_STUDIO_PLAYBACK_PLAYING)
-  // {
-  //   return true;
-  // }
-   return false;
 }
