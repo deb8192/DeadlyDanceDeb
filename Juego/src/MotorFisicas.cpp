@@ -84,6 +84,42 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     // std::cout << "pz: " << posiciones.z << std::endl;
 }
 
+void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, int alt)
+{
+
+    rp3d::Vector3 posiciones(px,py,pz);
+    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+
+    Transform transformacion(posiciones,orientacion);
+
+    rp3d::CollisionBody * cuerpo;
+    cuerpo = space->createCollisionBody(transformacion);
+   
+    rp3d::Vector3 medidas(anc,alt,lar);
+    BoxShape * forma = new BoxShape(medidas);
+    cuerpo->addCollisionShape(forma,transformacion);
+
+    arma = cuerpo;
+}
+
+void MotorFisicas::setFormaRecolectable(int id, float px, float py, float pz, int anc, int lar, int alt)
+{
+
+    rp3d::Vector3 posiciones(px,py,pz);
+    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+
+    Transform transformacion(posiciones,orientacion);
+
+    rp3d::CollisionBody * cuerpo;
+    cuerpo = space->createCollisionBody(transformacion);
+   
+    rp3d::Vector3 medidas(anc,alt,lar);
+    BoxShape * forma = new BoxShape(medidas);
+    cuerpo->addCollisionShape(forma,transformacion);
+
+    recolectables[id] = cuerpo;
+}
+
 Ray * MotorFisicas::crearRayo(float x, float y, float z, float longitud)
 {
     rp3d::Vector3 inicio(x,y,z);
@@ -108,9 +144,9 @@ bool MotorFisicas::collidePlatform()
 
 int MotorFisicas::collideColectable()
 { 
-    for(long unsigned int i = 0; i < obstaculos.size();i++)
+    for(long unsigned int i = 0; i < recolectables.size();i++)
     {
-      if(space->testOverlap(jugador,obstaculos[i]))
+      if(space->testOverlap(jugador,recolectables[i]))
       {
         return (int)i;
       }
@@ -182,15 +218,22 @@ void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, floa
 
 }
 
-void MotorFisicas::llevarBox(int id, float x, float y, float z)
+void MotorFisicas::llevarBox(float x, float y, float z, float anc, float lar, float alt)
 {
-    if(arma != nullptr)
-    {
-        rp3d::Vector3 posiciones(x,y,z);        
-        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
-        Transform transformacion(posiciones,orientacion);
-        arma->setTransform(transformacion);
-    }
+    rp3d::Vector3 posiciones(x,y,z);
+    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+
+    Transform transformacion(posiciones,orientacion);
+
+    rp3d::CollisionBody * cuerpo;
+    cuerpo = space->createCollisionBody(transformacion);
+   
+    rp3d::Vector3 medidas(anc,alt,lar);
+    BoxShape * forma = new BoxShape(medidas);
+    cuerpo->addCollisionShape(forma,transformacion);
+    
+    arma = cuerpo;
+
 }
 
 void MotorFisicas::updateJugador(float x, float y, float z)

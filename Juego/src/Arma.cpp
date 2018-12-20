@@ -35,6 +35,7 @@ void Arma::setPosicionesArmaEsp(float nx,float ny,float nz, float ry)
 
     this->setPosiciones((int)mx,(int)my,(int)mz);
 }
+
 int Arma::getAtaque()
 {
     return potenciaAtaque;

@@ -7,13 +7,16 @@ Recolectable::Recolectable()
 }
 Recolectable::Recolectable(int ataque, const char *nombre, int anc, int lar, int alt, const char *objeto, const char *textura)
 {
+    cout << "creando recolectable" << endl;
+    
     potenciaAtaque = ataque;
-    nombreObjeto = nombre;
+    nombreObjeto = "nombre";
     ancho = anc;
     largo = lar;
     alto = alt;
-    ruta_objeto = objeto;
-    ruta_textura = textura;
+    ruta_objeto = "assets/models/objeto.obj"; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
+    ruta_textura = "textura";
+    cout << "objeto: " << ruta_objeto << endl;
 }
 void Recolectable::setPosiciones(int nx,int ny,int nz)
 {
@@ -29,6 +32,11 @@ int Recolectable::getAtaque()
 const char* Recolectable::getNombre()
 {
     return nombreObjeto;
+}
+
+const char* Recolectable::getObjeto()
+{
+    return ruta_objeto;
 }
 
 float Recolectable::getX()
@@ -53,10 +61,6 @@ int Recolectable::getID()
     return id;
 }
 
-const char* Recolectable::getObjeto()
-{
-    return ruta_objeto;
-}
  
 const char* Recolectable::getTextura()
 {
