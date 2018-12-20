@@ -28,7 +28,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
         //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
-        void AtacarUpdate(int *danyo);
+        void AtacarUpdate(int danyo);
         void AtacarEspecialUpdate(int *danyo);
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
@@ -81,7 +81,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float danyo_arma = 10.0f;
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz;
         float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
-        int tipo_arma = 1;
+        int tipo_arma = 2;
+        vector <unsigned int> atacados_normal;
 };
 
 #endif /* Jugador_HPP */
