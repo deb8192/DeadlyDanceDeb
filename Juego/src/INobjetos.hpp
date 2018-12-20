@@ -11,7 +11,11 @@ class INobjetos
 
 
     /*el protected es para que tenga acceso sus descendientes o parientes*/
-    protected:
+    protected:    	
+    	const char* nombreObjeto;
+        const char* ruta_objeto; 
+        const char* ruta_textura;
+        float ancho, largo, alto; 
 };
 
 #endif /* INobjetos_HPP */

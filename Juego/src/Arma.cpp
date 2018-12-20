@@ -9,11 +9,16 @@ Arma::Arma()
 {
 
 }
-Arma::Arma(int ataque, const char * nombre)
+Arma::Arma(int ataque, const char * nombre, int anc, int lar, int alt, const char *objeto, const char *textura)
 {
     //motor = MotorGrafico::getInstance();
     potenciaAtaque = ataque;
     nombreArma = nombre;
+    ancho = anc;
+    largo = lar;
+    alto = alt;
+    ruta_objeto = objeto;
+    ruta_textura = textura;
     //motor->CargarArmaEspecial(0,0,0,ruta,"");
 }
 void Arma::setPosiciones(int nx,int ny,int nz)
@@ -33,6 +38,10 @@ void Arma::setPosicionesArmaEsp(float nx,float ny,float nz, float ry)
 int Arma::getAtaque()
 {
     return potenciaAtaque;
+}
+const char* Arma::getNombre()
+{
+    return nombreArma;
 }
 float Arma::getX()
 {
@@ -54,4 +63,26 @@ void Arma::setID(int nid)
 int Arma::getID()
 {
     return id;
+}
+
+const char* Arma::getObjeto()
+{
+    return ruta_objeto;
+}
+ 
+const char* Arma::getTextura()
+{
+    return ruta_textura;
+}
+float Arma::getAncho()
+{
+    return ancho;
+}
+float Arma::getLargo()
+{
+    return largo;
+}
+float Arma::getAlto()
+{
+    return alto;
 }

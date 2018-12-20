@@ -32,6 +32,7 @@ using namespace reactphysics3d;
             CollisionBody* getObstacles(int n);
             bool collideObstacle();
             bool collidePlatform();
+            int collideColectable();
             void colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z);
             void llevarBox(int id, float x, float y, float z);
 
@@ -60,6 +61,8 @@ using namespace reactphysics3d;
 
             CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody* jugadorAtack; //contiene el ataque normal del jugador
+            CollisionBody * arma;//arma normal del jugador
+           
             std::vector<CollisionBody *> objetos;
 
     };
