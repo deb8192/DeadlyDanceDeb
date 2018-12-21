@@ -150,11 +150,12 @@ void Nivel::update()
        this->updateIA();
 
       //Posicion de escucha
-       motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
+        motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
 
- 	   acumulator -= dt;
-    }
-
+        motor->MuereJugador(acumulator);
+        motor->MuereEnemigo(acumulator, enemigos.size());
+ 	    acumulator -= dt;  
+    } 
 }
 
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
