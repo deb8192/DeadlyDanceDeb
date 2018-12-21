@@ -37,7 +37,8 @@ namespace idsEventos
         GUI_ID_ARBOLES_BUTTON,//110
         GUI_ID_BACK_MENU_BUTTON,
         GUI_ID_REINICIAR_HANOI,
-        
+        GUI_ID_MENU_BUTTON,
+        GUI_ID_REINICIAR_BUTTON,
         //fin de los nuevos eventos
         GUI_ID_CONFIGURACION_BUTTON,
         UltimoEvento = GUI_ID_CONFIGURACION_BUTTON

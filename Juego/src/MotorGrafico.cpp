@@ -123,6 +123,60 @@ void MotorGrafico::PropiedadesDevice()
     cout << "\e[32m Propiedades aplicadas \e[0m" << endl;
 }
 
+
+void MotorGrafico::MuereJugador(float tiempo){
+    if(input.IsKeyDown(irr::KEY_KEY_J) || pulsadoMuerte){//SI PULSO 'J' MUERE JUGADOR
+        pulsadoMuerte = true;
+        //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo y aparece pantalla
+        acumMuJug += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
+        //cout << "tiempo: " << acumMuJug << endl;
+        ////negro
+        if(acumMuJug <= 60){
+            colorearJugador(255,255,0,0);//rojo
+        }else if(acumMuJug > 60 && acumMuJug <= 120){
+            colorearJugador(255,0,0,0);//negro
+        }else{
+            colorearJugador(255,255,0,0);//rojo
+            //PINTAR BOTON 'REINICIAR JUEGO' Y 'IR A MENU'
+            guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_REINICIAR_BUTTON,L"Reiniciar Juego", L"Empieza a jugar");
+            guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_MENU_BUTTON,L"Menu", L"Menu del juego");
+            acumMuJug = 0;//reniciar variable una vez muerto
+            pulsadoMuerte = false;         
+        }
+    }
+}
+void MotorGrafico::MuereEnemigo(float tiempo, int numEne){
+    /*EL METODO MUERTE DEL JUGADOR Y ENEMIGO NO ES DEL MOTORGRAFICO ES DEL JUGADOR Y DE LOS ENEMIGOS
+        EN EL HANDLER, DONDE SE ACTUALIZA LAS TECLAS QUE SE ESTAN PULSANDO (YA QUE MATAMOS CON TECLAS)
+        SE DEBE LLAMAR AL METODO MATAR SI OCURRE EL EVENTO ASOCIADO A LA TECLA (PULSADO)
+        DEBERIA HABER OTRO METODO QUE DIBUJASE LA PANTALLA DE MUERTE, PODRIA ESTAR EN EL NIVEL O TENER
+        SU PROPIA CLASE, O EN LA CLASE DONDE SE DIBUJA LA PANTALLA PRINCIPAL
+        ¿donde actualizais los inputs? por ejemplo, cuando le das a boton del menu inicio juego donde se 
+        hace eso?
+
+    */
+    if(input.IsKeyDown(irr::KEY_KEY_K) || pulsadoMuerteEnemigos){//SI PULSO 'K' MUERE JUGADOR
+        pulsadoMuerteEnemigos = true;
+        //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo 
+        acumMuEne += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
+        //cout << "tiempo: " << acumMuJug << endl;
+        //negro
+        for(int i = 0; i < numEne; i++){
+            if(acumMuEne <= 60){
+                colorearEnemigos(255,255,0,0,i);//rojo
+            }else if(acumMuEne > 60 && acumMuEne <= 120){
+                colorearEnemigos(255,0,0,0,i);//negro
+            }else{
+                colorearEnemigos(255,255,0,0,i);//rojo
+                pulsadoMuerteEnemigos = false;
+                if(i ==  numEne - 1){
+                    acumMuEne = 0;
+                }
+            }
+        }
+    }
+}
+
 void MotorGrafico::PintarBotonesMenu()
 {
 	guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_EMPEZAR_BUTTON,L"Iniciar Juego", L"Empieza a jugar");
@@ -664,13 +718,6 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
     switch(tipo)
     {
         case P_OPCIONES:
-            // load the irrlicht engine logo
-            img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
-                core::position2d<s32>(WIDTH-200, 40));
-
-            // lock the logo's edges to the bottom left corner of the screen
-            /*img->setAlignment(EGUIA_UPPERLEFT, EGUIA_UPPERLEFT,
-                    EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT);*/
             break;
         case P_HANOI:
             // Lineas para dividir la pantalla
@@ -687,18 +734,10 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
 void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
 {
     short height_aux = (HEIGHT/2)+100;
+    short yIMG = height_aux-125;
+    short xIMG = 20;
     short anchoBtn = 40;
     short altoBtn = 30;
-
-    // load the irrlicht engine logo
-    /*IGUIImage *img =
-        guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
-            core::position2d<s32>(10, driver->getScreenSize().Height - 128));
-
-    // lock the logo's edges to the bottom left corner of the screen
-    img->setAlignment(EGUIA_UPPERLEFT, EGUIA_UPPERLEFT,
-            EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT);*/
-
 
     // Atras
     guienv->addButton(rect<s32>(700,HEIGHT-60,750,HEIGHT-30), 0, 
@@ -716,6 +755,9 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
             guienv->addStaticText(L"Ejemplo", rect<s32>(WIDTH-200,20,
                 WIDTH-160,40), false);
 
+            img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
+                core::position2d<s32>(WIDTH-200, 40));
+
             switch(opciones) {
                 case 2:
                     WIDTH_AUX = WIDTH/4;
@@ -726,6 +768,9 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
                         WIDTH_AUX*3+anchoBtn,height_aux+altoBtn), 
                         0, GUI_ID_OP2,L"B", L"B");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
                     break;
 
                 case 3:
@@ -740,6 +785,10 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
                         WIDTH_AUX*5+anchoBtn,height_aux+altoBtn), 
                         0, GUI_ID_OP3,L"C", L"C");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
                     break;
 
                 case 4:
@@ -757,6 +806,11 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     guienv->addButton(rect<s32>(WIDTH_AUX*7,height_aux,
                         WIDTH_AUX*7+anchoBtn,height_aux+altoBtn), 
                         0, GUI_ID_OP4,L"D", L"D");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*7-xIMG, yIMG);
                     break;
             }
             break;
@@ -910,4 +964,10 @@ void MotorGrafico::EraseArma()
 {   
     Arma_Jugador->setVisible(false);
     Arma_Jugador->remove();
+   } 
+// TO DO: Anyadir string img
+void MotorGrafico::CargarIMG(short x, short y)
+{
+	img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
+    	core::position2d<s32>(x, y));
 }

@@ -75,8 +75,7 @@ void Nivel::CrearObjeto(int accion, const char* nombre, int ataque, int x,int y,
         rec->setPosiciones(x,y,z);
         recolectables.push_back(rec);
     
-  cout << "recol1: " << recolectables[0]->getObjeto() << endl;
-    }
+  }
     motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
@@ -153,7 +152,6 @@ void Nivel::update()
         
     int rec_col = fisicas->collideColectable();
 
-        cout << motor->estaPulsado(KEY_E) << rec_col << endl;
 
     if(motor->estaPulsado(KEY_E)){              
         if(rec_col >= 0)//si colisiona con un recolectable
@@ -251,12 +249,12 @@ void Nivel::update()
        this->updateIA();
 
       //Posicion de escucha
-       motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
+        motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
 
-
- 	   acumulator -= dt;
-    }
-
+        motor->MuereJugador(acumulator);
+        motor->MuereEnemigo(acumulator, enemigos.size());
+ 	    acumulator -= dt;  
+    } 
 }
 
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
