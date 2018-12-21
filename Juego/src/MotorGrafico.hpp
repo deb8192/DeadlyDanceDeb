@@ -114,7 +114,7 @@ using namespace idsEventos;
 
             void colorearObjeto(int a, int r, int g, int b, int obj);
             void debugBox(int x,int y, int z,int ancho, int alto, int largo);
-            void llevarObjeto(int id, float x, float y, float z, float rx, float ry, float rz);
+            void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
             void CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarRecolectable(int id, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
 
@@ -134,6 +134,8 @@ using namespace idsEventos;
             void MoverFichas(short pila);
             void RecolocarFicha(short y, short z);
             void ReiniciarHanoi();
+            void EraseColectable(int idx);
+            void EraseArma();
 
         private: //clases solo accesibles por MotorGrafico
 
