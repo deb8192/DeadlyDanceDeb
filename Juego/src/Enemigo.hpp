@@ -54,8 +54,16 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         //propios
         Sala* getSala();
 
+        float getX();
+        float getY();
+        float getZ();
+        float getRX();
+        float getRY();
+        float getRZ();
+
     protected:
         Sala * estoy;//sala en la que esta el enemigo
+        float atx, aty, atz, atgx, atgy, atgz;
 };
 
 #endif

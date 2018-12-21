@@ -64,6 +64,10 @@ void MotorFisicas::crearCuerpo(float px, float py, float pz, int type, float anc
     {
         armaAtEsp = cuerpo;
     }
+    else if(typeCreator == 6)//ataque enemigos
+    {
+        enemigosAtack = cuerpo;
+    }
 
     // std::cout << "px: " << posiciones.x << std::endl;
     // std::cout << "py: " << posiciones.y << std::endl;
@@ -199,4 +203,9 @@ CollisionBody* MotorFisicas::getEnemies(int n)
 CollisionBody* MotorFisicas::getAtack()
 {
  return jugadorAtack;
+}
+
+CollisionBody* MotorFisicas::getEnemiesAtack()
+{
+ return enemigosAtack;
 }

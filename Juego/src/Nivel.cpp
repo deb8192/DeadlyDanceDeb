@@ -96,19 +96,8 @@ void Nivel::setThen()
 
 void Nivel::update()
 {
-  MotorFisicas* fisicas = MotorFisicas::getInstance();
-  MotorAudioSystem* motora = MotorAudioSystem::getInstance();
-    //actualizamos los enemigos
-    if(enemigos.size() > 0)//posiciones interpolacion
-    {
-        for(std::size_t i=0;i<enemigos.size();i++)
-        {
-            //cout << "Enemigo " << i << endl;
-            //enemigos[i]->Atacar();
-            //enemigos[i]->AtacarEspecial();
-            //enemigos[i]->queEscuchas();
-        }
-    }
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
     //actualizamos el jugador
      MotorGrafico * motor = MotorGrafico::getInstance();
@@ -151,6 +140,18 @@ void Nivel::update()
 
       //Posicion de escucha
        motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
+
+       //actualizamos los enemigos
+       if(enemigos.size() > 0)//posiciones interpolacion
+       {
+           for(std::size_t i=0;i<enemigos.size();i++)
+           {
+               //cout << "Enemigo " << i << endl;
+              enemigos[i]->Atacar();
+               //enemigos[i]->AtacarEspecial();
+               //enemigos[i]->queEscuchas();
+           }
+       }
 
  	   acumulator -= dt;
     }
