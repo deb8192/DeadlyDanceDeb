@@ -185,6 +185,7 @@ using namespace idsEventos;
             enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
 
             void CrearMeshFicha(float tamanyo, int r, int g, int b);
+            void CargarIMG(short x, short y);
     };
 
 #endif /* MotorGrafico_HPP */

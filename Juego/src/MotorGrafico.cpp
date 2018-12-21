@@ -634,13 +634,6 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
     switch(tipo)
     {
         case P_OPCIONES:
-            // load the irrlicht engine logo
-            img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
-                core::position2d<s32>(WIDTH-200, 40));
-
-            // lock the logo's edges to the bottom left corner of the screen
-            /*img->setAlignment(EGUIA_UPPERLEFT, EGUIA_UPPERLEFT,
-                    EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT);*/
             break;
         case P_HANOI:
             // Lineas para dividir la pantalla
@@ -657,18 +650,10 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
 void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
 {
     short height_aux = (HEIGHT/2)+100;
+    short yIMG = height_aux-125;
+    short xIMG = 20;
     short anchoBtn = 40;
     short altoBtn = 30;
-
-    // load the irrlicht engine logo
-    /*IGUIImage *img =
-        guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
-            core::position2d<s32>(10, driver->getScreenSize().Height - 128));
-
-    // lock the logo's edges to the bottom left corner of the screen
-    img->setAlignment(EGUIA_UPPERLEFT, EGUIA_UPPERLEFT,
-            EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT);*/
-
 
     // Atras
     guienv->addButton(rect<s32>(700,HEIGHT-60,750,HEIGHT-30), 0, 
@@ -686,6 +671,9 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
             guienv->addStaticText(L"Ejemplo", rect<s32>(WIDTH-200,20,
                 WIDTH-160,40), false);
 
+            img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
+                core::position2d<s32>(WIDTH-200, 40));
+
             switch(opciones) {
                 case 2:
                     WIDTH_AUX = WIDTH/4;
@@ -696,6 +684,9 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
                         WIDTH_AUX*3+anchoBtn,height_aux+altoBtn), 
                         0, GUI_ID_OP2,L"B", L"B");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
                     break;
 
                 case 3:
@@ -710,6 +701,10 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
                         WIDTH_AUX*5+anchoBtn,height_aux+altoBtn), 
                         0, GUI_ID_OP3,L"C", L"C");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
                     break;
 
                 case 4:
@@ -727,6 +722,11 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     guienv->addButton(rect<s32>(WIDTH_AUX*7,height_aux,
                         WIDTH_AUX*7+anchoBtn,height_aux+altoBtn), 
                         0, GUI_ID_OP4,L"D", L"D");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*7-xIMG, yIMG);
                     break;
             }
             break;
@@ -867,4 +867,11 @@ void MotorGrafico::ReiniciarHanoi()
         fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
         posY++;
     }
+}
+
+// TO DO: Anyadir string img
+void MotorGrafico::CargarIMG(short x, short y)
+{
+	img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
+    	core::position2d<s32>(x, y));
 }
