@@ -66,7 +66,7 @@ float Arma::getY()
 }
 float Arma::getZ()
 {
-    return x;
+    return z;
 }
 void Arma::setID(int nid)
 {

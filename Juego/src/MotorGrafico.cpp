@@ -383,11 +383,11 @@ void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *rut
     {
         IAnimatedMeshSceneNode* recol_en_scena = smgr->addAnimatedMeshSceneNode(recol); //metemos el objeto en el escenario para eso lo pasamos al escenario
         recol_en_scena->setPosition(core::vector3df(x,y,z));
-        Recolectables_Scena[id] = recol_en_scena;
+        Recolectables_Scena.push_back(recol_en_scena);
     }
 }
 
-void MotorGrafico::llevarObjeto(int id, float x, float y, float z, float rx, float ry, float rz)
+void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, float rz)
 {    
     if(Arma_Jugador)
     {        
@@ -897,4 +897,17 @@ void MotorGrafico::ReiniciarHanoi()
         fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
         posY++;
     }
+}
+
+void MotorGrafico::EraseColectable(int idx)
+{   
+    Recolectables_Scena[idx]->setVisible(false);
+    Recolectables_Scena[idx]->remove();
+     Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);  
+}
+
+void MotorGrafico::EraseArma()
+{   
+    Arma_Jugador->setVisible(false);
+    Arma_Jugador->remove();
 }

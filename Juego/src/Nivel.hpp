@@ -9,6 +9,7 @@
 #include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
 #include "Arma.hpp"
+#include <cstring>
 //#include "MotorFisicas.hpp"
 
 #ifndef Nivel_HPP

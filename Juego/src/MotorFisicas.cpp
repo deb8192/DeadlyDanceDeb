@@ -102,6 +102,16 @@ void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, 
     arma = cuerpo;
 }
 
+void MotorFisicas::EraseColectable(int idx)
+{
+    recolectables.erase(recolectables.begin() + idx); 
+}
+
+void MotorFisicas::EraseArma()
+{
+   // arma = NULL;
+}
+
 void MotorFisicas::setFormaRecolectable(int id, float px, float py, float pz, int anc, int lar, int alt)
 {
 
@@ -117,7 +127,7 @@ void MotorFisicas::setFormaRecolectable(int id, float px, float py, float pz, in
     BoxShape * forma = new BoxShape(medidas);
     cuerpo->addCollisionShape(forma,transformacion);
 
-    recolectables[id] = cuerpo;
+    recolectables.push_back(cuerpo);
 }
 
 Ray * MotorFisicas::crearRayo(float x, float y, float z, float longitud)

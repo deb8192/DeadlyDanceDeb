@@ -27,7 +27,8 @@ using namespace reactphysics3d;
             void colisionRayoUnCuerpo(float x,float y,float z,float longitud);//colisiona solo con un cuerpo (el primero)
 
             void updateJugador(float x, float y, float z);//actualizamos al jugador en el espacio de las fisicas
-         
+            void EraseColectable(int idx);
+            void EraseArma();
             CollisionBody* getColectables(int n);
             CollisionBody* getObstacles(int n);
             bool collideObstacle();
