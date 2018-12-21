@@ -114,8 +114,9 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
-
- 	   acumulator -= dt;  
+        motor->MuereJugador(acumulator);
+        motor->MuereEnemigo(acumulator, enemigos.size());
+ 	    acumulator -= dt;  
     } 
 
 }

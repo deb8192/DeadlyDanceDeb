@@ -8,7 +8,8 @@ namespace idsEventos
         GUI_ID_CREDITOS_BUTTON,
         GUI_ID_SUBIR_SONIDO,
         //meter aqui los nuevos eventos
-        
+        GUI_ID_MENU_BUTTON,
+        GUI_ID_REINICIAR_BUTTON,
         //fin de los nuevos eventos
         GUI_ID_CONFIGURACION_BUTTON,
         UltimoEvento = GUI_ID_CONFIGURACION_BUTTON
