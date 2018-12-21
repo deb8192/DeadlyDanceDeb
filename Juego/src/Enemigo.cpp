@@ -1,8 +1,41 @@
 #include "Enemigo.hpp"
+#include "Nivel.hpp"
+
+#define PI 3.14159265358979323846
 
 Enemigo::Enemigo()
 {
 
+}
+
+float Enemigo::getX()
+{
+    return x;
+}
+
+float Enemigo::getY()
+{
+    return y;
+}
+
+float Enemigo::getZ()
+{
+    return z;
+}
+
+float Enemigo::getRX()
+{
+    return rx;
+}
+
+float Enemigo::getRY()
+{
+    return ry;
+}
+
+float Enemigo::getRZ()
+{
+    return rz;
 }
 
 void Enemigo::definirSala(Sala * sala)
@@ -45,8 +78,35 @@ void Enemigo::setPosiciones(int nx,int ny,int nz)
 
 int Enemigo::Atacar()
 {
-    std::cout << "Ataque normal enemigo" << std::endl;
-    return 0;
+    int danyo = 0;
+    if(vida > 0)
+    {
+      MotorFisicas* fisicas = MotorFisicas::getInstance();
+      //MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+
+      //Calcular posiciones
+      int distance= 2;
+      atx = distance * sin(PI * getRY() / 180.0f) + getX();
+      aty = getY();
+      atz = distance * cos(PI * getRY() / 180.0f) + getZ();
+      atgx = getRX();
+      atgy = getRY();
+      atgz = getRZ();
+
+      danyo = 5.0f;
+      fisicas->crearCuerpo(atx/2,aty/2,atz/2,2,2,1,1,6);
+
+      //Colision
+      if(fisicas->IfCollision(fisicas->getEnemiesAtack(),fisicas->getJugador()))
+      {
+        cout << "jugador Atacado" << endl;
+      }
+    }
+    else
+    {
+        cout << "No supera las restricciones"<<endl;
+    }
+    return danyo;
 }
 
 int Enemigo::AtacarEspecial()
