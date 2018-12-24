@@ -19,6 +19,9 @@ Jugador::Jugador()
 Jugador::Jugador(int,int,int,int,int,int)
 {
     vida = 100;//esto lo hereda de la interfaz por el protected
+
+    x = 1;
+    z = 20;
     //armaEquipada = NULL;
 }
 
@@ -51,7 +54,6 @@ float Jugador::getRZ()
 {
     return rz;
 }
-
 
 void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
 {
@@ -118,7 +120,7 @@ void Jugador::setPosiciones(int nx,int ny,int nz)
 
 void Jugador::MuereJugador(float tiempo){
     MotorGrafico * motor = MotorGrafico::getInstance();
-    if(motor->estaPulsado(15) || pulsadoMuerte){//SI PULSO 'J' MUERE JUGADOR
+    if(motor->estaPulsado(16) || pulsadoMuerte){//SI PULSO 'J' MUERE JUGADOR
         pulsadoMuerte = true;
         //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo y aparece pantalla
         acumMuJug += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
@@ -143,7 +145,7 @@ void Jugador::MuereEnemigo(float tiempo, int numEne){
         los inputs los recoges siempre en un update y el valor lo utilizas también en update
     */
     MotorGrafico * motor = MotorGrafico::getInstance();
-    if(motor->estaPulsado(16) || pulsadoMuerteEnemigos){//SI PULSO 'K' MUERE JUGADOR
+    if(motor->estaPulsado(17) || pulsadoMuerteEnemigos){//SI PULSO 'K' MUERE JUGADOR
         pulsadoMuerteEnemigos = true;
         //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo 
         acumMuEne += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
@@ -190,21 +192,24 @@ int Jugador::Atacar()
 
     //ATAQUE SIN ARMA
     if(tipo_arma == 0){
-      fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,1,1,4);
+      fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,1,1,4);
       danyo = 5.0f;
     }
     //ATAQUE CUERPO A CUERPO
     else if(tipo_arma == 1)
     {
       //Crear cuerpo de colision de ataque delante del jugador
-      fisicas->crearCuerpo(atposX,atposY,atposZ,1,4,0,0,4);
+
+      fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,4,0,0,4);
       danyo = 20.0f;
     }
     //ATAQUE A DISTANCIA
     else if(tipo_arma == 2)
     {
       //Crear cuerpo de colision de ataque delante del jugador
-      fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,0.5,1,4);
+
+      fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4);
+
       danyo = 10.0f;
     }
     motora->getEvent("Bow")->setVolume(0.8f);
@@ -242,6 +247,7 @@ void Jugador::AtacarUpdate(int danyo)
       atposZ += (0.02 * cos(PI * atgy / PIRADIAN));
       atposX += (0.02 * sin(PI * atgy / PIRADIAN));
 
+
       fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
       motor->clearDebug2();
       motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
@@ -254,6 +260,7 @@ void Jugador::AtacarUpdate(int danyo)
     {
         //Pasar por cada uno de los atacados
         for(unsigned int i = 0; i < atacados.size(); i++)
+
         {
           //Buscar si esta en el vector guardado
           bool encontrado = false;
@@ -301,6 +308,7 @@ int Jugador::AtacarEspecial()
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
 
+    cout << vida << barraAtEs << por100 << endl;
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
     if(vida > 0 && barraAtEs == por100)
     {
@@ -327,7 +335,7 @@ int Jugador::AtacarEspecial()
         if(strcmp(armaEspecial->getNombre(), NOMBREHEABY) == 0)
         {
             //Crear cuerpo de colision de ataque delante del jugador
-            fisicas->crearCuerpo(atespposX,atespposY,atespposZ,2,8,1,8,5);
+            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,1,8,5);
             motora->getEvent("Bow")->setVolume(0.8f);
             motora->getEvent("Bow")->start();
         }
@@ -335,7 +343,7 @@ int Jugador::AtacarEspecial()
         else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
         {
             //Crear cuerpo de colision de ataque delante del jugador
-            fisicas->crearCuerpo(atespposX,atespposY,atespposZ,2,8,8,8,5);
+            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,8,8,5);
             motora->getEvent("Bow")->start();
         }
 
@@ -530,7 +538,7 @@ void Jugador::setArma(Arma * arma)
 
 void Jugador::setArmaEspecial(int ataque)
 {
-    armaEspecial = new Arma(ataque, nombreJugador);
+    armaEspecial = new Arma(ataque, nombreJugador,1,1,1,"assets/models/objeto.obj","");
 }
 
 void Jugador::setNombre(const char * nombre)

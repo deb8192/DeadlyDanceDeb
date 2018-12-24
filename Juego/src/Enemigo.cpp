@@ -52,6 +52,7 @@ int Enemigo::Atacar()
 int Enemigo::AtacarEspecial()
 {
     std::cout << "Ataque especial enemigo" << std::endl;
+
     return -1;
 }
 

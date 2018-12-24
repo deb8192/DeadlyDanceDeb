@@ -184,6 +184,12 @@ bool MotorGrafico::estaPulsado(int boton)
         case KEY_P:
             return input.IsKeyDown(irr::KEY_KEY_P);
 
+        case RMOUSE_PRESSED_DOWN:
+            return input.IsMouseClick(irr::EMIE_RMOUSE_PRESSED_DOWN);
+        
+        case LMOUSE_PRESSED_DOWN:
+            return input.IsMouseClick(irr::EMIE_LMOUSE_PRESSED_DOWN);
+        
         case MOUSE_MOVED:
             return input.IsMouseClick(irr::EMIE_MOUSE_MOVED);
         
@@ -195,6 +201,9 @@ bool MotorGrafico::estaPulsado(int boton)
         
         case KEY_K:
             return input.IsKeyDown(irr::KEY_KEY_K);//Para matar al jugador (16)
+
+        case KEY_E:
+            return input.IsKeyDown(irr::KEY_KEY_E);
     }
     return false;
 }
@@ -242,7 +251,6 @@ void MotorGrafico::resetKey(int event)
         break;
         case KEY_J:
             input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (15)
-        
         case KEY_K:
             input.IsKeyDown(irr::KEY_KEY_K);//Para matar al jugador (16)
         break;
@@ -284,7 +292,7 @@ bool MotorGrafico::SueltoClicIzq()
     return input.SueltoClicIzq();
 }
 
-int MotorGrafico::CargarPlataformas(int x,int y,int z, const char *ruta_objeto,const char *ruta_textura)
+int MotorGrafico::CargarPlataformas(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto,const char *ruta_textura)
 {
     IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!objeto)
@@ -296,6 +304,7 @@ int MotorGrafico::CargarPlataformas(int x,int y,int z, const char *ruta_objeto,c
     {
         IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
         objeto_en_scena->setPosition(core::vector3df(x,y,z));
+        objeto_en_scena->setMaterialTexture(0, driver->getTexture(ruta_textura));
         Plataformas_Scena.push_back(objeto_en_scena);
         return (Plataformas_Scena.size()-1);
     }
@@ -326,7 +335,7 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
     bill->setMaterialTexture(0, driver->getTexture("assets/models/particlegreen.jpg"));
 }
 
-void MotorGrafico::CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarEnemigos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* enemigo = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 
@@ -343,7 +352,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char *ruta_objeto, co
     }
 }
 
-void MotorGrafico::CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* jugador = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!jugador)
@@ -361,9 +370,51 @@ void MotorGrafico::CargarJugador(int x,int y,int z, const char *ruta_objeto, con
     }
 }
 
+
+void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+    IAnimatedMesh* arma = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+    if (!arma)
+    {
+        //error
+    }
+    else
+    {
+        IAnimatedMeshSceneNode* arma_en_scena = smgr->addAnimatedMeshSceneNode(arma); //metemos el objeto en el escenario para eso lo pasamos al escenario
+        arma_en_scena->setPosition(core::vector3df(x,y,z));
+        Arma_Jugador = arma_en_scena;
+    }
+}
+
+void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+    IAnimatedMesh* recol = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+    if (!recol)
+    {
+        //error
+    }
+    else
+    {
+        IAnimatedMeshSceneNode* recol_en_scena = smgr->addAnimatedMeshSceneNode(recol); //metemos el objeto en el escenario para eso lo pasamos al escenario
+        recol_en_scena->setPosition(core::vector3df(x,y,z));
+        Recolectables_Scena.push_back(recol_en_scena);
+    }
+}
+
+void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, float rz)
+{    
+    if(Arma_Jugador)
+    {        
+     Arma_Jugador->setPosition(core::vector3df(x,y,z));
+     Arma_Jugador->setRotation(core::vector3df(rx,ry,rz));
+
+    }
+}
+
 void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
 {
     armaEsp = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+
 }
 
 void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry, float rz)
@@ -387,9 +438,10 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
     Jugador_Scena->setPosition(core::vector3df(x,y,z));
     Jugador_Scena->setRotation(core::vector3df(rx,ry,rz));
+
 }
 
-void MotorGrafico::CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!objeto)
@@ -400,7 +452,11 @@ void MotorGrafico::CargarObjetos(int x,int y,int z, const char *ruta_objeto, con
     {
         IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
         objeto_en_scena->setPosition(core::vector3df(x,y,z));
-        Objetos_Scena.push_back(objeto_en_scena);
+        
+        //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
+        accion == 2 ? 
+            Recolectables_Scena.push_back(objeto_en_scena) :
+            Objetos_Scena.push_back(objeto_en_scena); 
     }
 }
 
@@ -531,6 +587,22 @@ bool MotorGrafico::colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int 
     return true;
 }
 
+//esta funcion es para ver la caja del bounding box creada en motor fisicas
+//abra que pasarle el numero de caja
+void MotorGrafico::debugBox(int x,int y, int z,int ancho, int alto, int largo)
+{
+    scene::ISceneNode *n = smgr->addCubeSceneNode();
+    cout << x << y << z << ancho << largo << alto << endl;
+    if(n)
+    {
+        n->setMaterialFlag(video::EMF_LIGHTING, false);
+        //n->setPosition(core::vector3df(x,y,z));
+        //n->setScale(core::vector3df(ancho/5,alto/5,largo/5));  
+        n->setPosition(core::vector3df(0,0,20));
+        n->setScale(core::vector3df(4,1,0.2));          
+    }
+}
+
 void MotorGrafico::dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension)
 {
     if(debugGrafico)
@@ -564,16 +636,25 @@ void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
   SColor COLOR  = SColor(a, r, g, b);
   smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena[enem]->getMesh(),COLOR);
 }
+
+void MotorGrafico::colorearObjeto(int a, int r, int g, int b, int obj)
+{
+  SColor COLOR  = SColor(a, r, g, b);
+  smgr->getMeshManipulator()->setVertexColors(Objetos_Scena[obj]->getMesh(),COLOR);
+}
+
   //SUSTITUIR POR LA DE ARRIBA
 void MotorGrafico::colorearEnemigos(int a, int r, int g, int b, unsigned int seleccion)
 {
     const SColor COLOR  = SColor(a, r, g, b);
     smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena.at(seleccion)->getMesh(),COLOR);
 }
+
 IAnimatedMeshSceneNode* MotorGrafico::getArmaEspecial()
 {
     return ArmaEspecial_Jugador;
 }
+
 
 // Funciones para puzzles
 void MotorGrafico::PosicionCamaraEnPuzzles()
@@ -597,13 +678,6 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
     switch(tipo)
     {
         case P_OPCIONES:
-            // load the irrlicht engine logo
-            img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
-                core::position2d<s32>(WIDTH-200, 40));
-
-            // lock the logo's edges to the bottom left corner of the screen
-            /*img->setAlignment(EGUIA_UPPERLEFT, EGUIA_UPPERLEFT,
-                    EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT);*/
             break;
         case P_HANOI:
             // Lineas para dividir la pantalla
@@ -620,18 +694,10 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
 void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
 {
     short height_aux = (HEIGHT/2)+100;
+    short yIMG = height_aux-125;
+    short xIMG = 20;
     short anchoBtn = 40;
     short altoBtn = 30;
-
-    // load the irrlicht engine logo
-    /*IGUIImage *img =
-        guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
-            core::position2d<s32>(10, driver->getScreenSize().Height - 128));
-
-    // lock the logo's edges to the bottom left corner of the screen
-    img->setAlignment(EGUIA_UPPERLEFT, EGUIA_UPPERLEFT,
-            EGUIA_LOWERRIGHT, EGUIA_LOWERRIGHT);*/
-
 
     // Atras
     guienv->addButton(rect<s32>(700,HEIGHT-60,750,HEIGHT-30), 0, 
@@ -649,6 +715,9 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
             guienv->addStaticText(L"Ejemplo", rect<s32>(WIDTH-200,20,
                 WIDTH-160,40), false);
 
+            img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
+                core::position2d<s32>(WIDTH-200, 40));
+
             switch(opciones) {
                 case 2:
                     WIDTH_AUX = WIDTH/4;
@@ -659,6 +728,9 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
                         WIDTH_AUX*3+anchoBtn,height_aux+altoBtn), 
                         0, GUI_ID_OP2,L"B", L"B");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
                     break;
 
                 case 3:
@@ -673,6 +745,10 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
                         WIDTH_AUX*5+anchoBtn,height_aux+altoBtn), 
                         0, GUI_ID_OP3,L"C", L"C");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
                     break;
 
                 case 4:
@@ -690,6 +766,11 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     guienv->addButton(rect<s32>(WIDTH_AUX*7,height_aux,
                         WIDTH_AUX*7+anchoBtn,height_aux+altoBtn), 
                         0, GUI_ID_OP4,L"D", L"D");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*7-xIMG, yIMG);
                     break;
             }
             break;
@@ -830,4 +911,23 @@ void MotorGrafico::ReiniciarHanoi()
         fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
         posY++;
     }
+}
+
+void MotorGrafico::EraseColectable(int idx)
+{   
+    Recolectables_Scena[idx]->setVisible(false);
+    Recolectables_Scena[idx]->remove();
+     Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);  
+}
+
+void MotorGrafico::EraseArma()
+{   
+    Arma_Jugador->setVisible(false);
+    Arma_Jugador->remove();
+   } 
+// TO DO: Anyadir string img
+void MotorGrafico::CargarIMG(short x, short y)
+{
+	img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
+    	core::position2d<s32>(x, y));
 }

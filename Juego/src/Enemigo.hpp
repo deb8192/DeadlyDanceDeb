@@ -5,7 +5,6 @@
 #include "INdrawable.hpp"
 #include "INsentidos.hpp"
 #include "Sala.hpp"
-
 #include <vector>
 
 class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple herencia a esto se le llama derivacion multiple
