@@ -124,8 +124,9 @@ using namespace idsEventos;
             void MoverFichas(short pila);
             void RecolocarFicha(short y, short z);
             void ReiniciarHanoi();
-            void MuereJugador(float tiempo);//muere jugador (el tiempo es para controlar los cambio de color del jugador)
-            void MuereEnemigo(float tiempo, int numEne);//muere enemigo (el tiempo es para controlar los cambio de color del enemigo y numEne para recorrelos)
+
+            //Cuando muere jugador aparecen 2 botones (Ir a menu o Reiniciar juego)
+            void botonesMuerteJugador();
 
         private: //clases solo accesibles por MotorGrafico
 
@@ -134,11 +135,6 @@ using namespace idsEventos;
             static MotorGrafico* unica_instancia;
             //fin clase singleton private
             void PropiedadesDevice();
-            //Variables para el metodo morir
-            float acumMuJug = 0; //variable para el tiempo de muerte del jugador
-            bool pulsadoMuerte = false;
-            bool pulsadoMuerteEnemigos=false;
-            float acumMuEne = 0;
             //variables privadas
             IrrlichtDevice *device; //puntero a dispositivo por defecto
             IVideoDriver *driver;

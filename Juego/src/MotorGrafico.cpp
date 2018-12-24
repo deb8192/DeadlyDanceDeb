@@ -123,60 +123,6 @@ void MotorGrafico::PropiedadesDevice()
     cout << "\e[32m Propiedades aplicadas \e[0m" << endl;
 }
 
-
-void MotorGrafico::MuereJugador(float tiempo){
-    if(input.IsKeyDown(irr::KEY_KEY_J) || pulsadoMuerte){//SI PULSO 'J' MUERE JUGADOR
-        pulsadoMuerte = true;
-        //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo y aparece pantalla
-        acumMuJug += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
-        //cout << "tiempo: " << acumMuJug << endl;
-        ////negro
-        if(acumMuJug <= 60){
-            colorearJugador(255,255,0,0);//rojo
-        }else if(acumMuJug > 60 && acumMuJug <= 120){
-            colorearJugador(255,0,0,0);//negro
-        }else{
-            colorearJugador(255,255,0,0);//rojo
-            //PINTAR BOTON 'REINICIAR JUEGO' Y 'IR A MENU'
-            guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_REINICIAR_BUTTON,L"Reiniciar Juego", L"Empieza a jugar");
-            guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_MENU_BUTTON,L"Menu", L"Menu del juego");
-            acumMuJug = 0;//reniciar variable una vez muerto
-            pulsadoMuerte = false;         
-        }
-    }
-}
-void MotorGrafico::MuereEnemigo(float tiempo, int numEne){
-    /*EL METODO MUERTE DEL JUGADOR Y ENEMIGO NO ES DEL MOTORGRAFICO ES DEL JUGADOR Y DE LOS ENEMIGOS
-        EN EL HANDLER, DONDE SE ACTUALIZA LAS TECLAS QUE SE ESTAN PULSANDO (YA QUE MATAMOS CON TECLAS)
-        SE DEBE LLAMAR AL METODO MATAR SI OCURRE EL EVENTO ASOCIADO A LA TECLA (PULSADO)
-        DEBERIA HABER OTRO METODO QUE DIBUJASE LA PANTALLA DE MUERTE, PODRIA ESTAR EN EL NIVEL O TENER
-        SU PROPIA CLASE, O EN LA CLASE DONDE SE DIBUJA LA PANTALLA PRINCIPAL
-        ¿donde actualizais los inputs? por ejemplo, cuando le das a boton del menu inicio juego donde se 
-        hace eso?
-
-    */
-    if(input.IsKeyDown(irr::KEY_KEY_K) || pulsadoMuerteEnemigos){//SI PULSO 'K' MUERE JUGADOR
-        pulsadoMuerteEnemigos = true;
-        //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo 
-        acumMuEne += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
-        //cout << "tiempo: " << acumMuJug << endl;
-        //negro
-        for(int i = 0; i < numEne; i++){
-            if(acumMuEne <= 60){
-                colorearEnemigos(255,255,0,0,i);//rojo
-            }else if(acumMuEne > 60 && acumMuEne <= 120){
-                colorearEnemigos(255,0,0,0,i);//negro
-            }else{
-                colorearEnemigos(255,255,0,0,i);//rojo
-                pulsadoMuerteEnemigos = false;
-                if(i ==  numEne - 1){
-                    acumMuEne = 0;
-                }
-            }
-        }
-    }
-}
-
 void MotorGrafico::PintarBotonesMenu()
 {
 	guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_EMPEZAR_BUTTON,L"Iniciar Juego", L"Empieza a jugar");
@@ -243,6 +189,12 @@ bool MotorGrafico::estaPulsado(int boton)
         
         case KEY_Q:
             return input.IsKeyDown(irr::KEY_KEY_Q);
+
+        case KEY_J:
+            return input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (15)
+        
+        case KEY_K:
+            return input.IsKeyDown(irr::KEY_KEY_K);//Para matar al jugador (16)
     }
     return false;
 }
@@ -288,7 +240,18 @@ void MotorGrafico::resetKey(int event)
         case KEY_Q:
             input.ResetKey(irr::KEY_KEY_Q);
         break;
+        case KEY_J:
+            input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (15)
+        
+        case KEY_K:
+            input.IsKeyDown(irr::KEY_KEY_K);//Para matar al jugador (16)
+        break;
     }
+}
+
+void MotorGrafico::botonesMuerteJugador(){
+    guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_REINICIAR_BUTTON,L"Reiniciar Juego", L"Empieza a jugar");
+    guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_MENU_BUTTON,L"Menu", L"Menu del juego");
 }
 
 void MotorGrafico::resetEventoMoveRaton()
