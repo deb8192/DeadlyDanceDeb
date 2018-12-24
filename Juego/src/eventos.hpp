@@ -13,6 +13,7 @@ namespace idsEventos
         KEY_G_DEBUG,
         KEY_P,
         KEY_Q,
+        KEY_E,
         RMOUSE_DOWN,
         LMOUSE_DOWN,
         RMOUSE_UP,
@@ -20,6 +21,8 @@ namespace idsEventos
         MOUSE_MOVED,
         KEY_J,
         KEY_K,
+        RMOUSE_PRESSED_DOWN,
+        LMOUSE_PRESSED_DOWN,
 
         // Botones
         GUI_ID_EMPEZAR_BUTTON = 101,
