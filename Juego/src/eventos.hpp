@@ -18,6 +18,8 @@ namespace idsEventos
         RMOUSE_UP,
         LMOUSE_UP,
         MOUSE_MOVED,
+        KEY_J,
+        KEY_K,
 
         // Botones
         GUI_ID_EMPEZAR_BUTTON = 101,

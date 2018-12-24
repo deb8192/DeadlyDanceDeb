@@ -116,6 +116,55 @@ void Jugador::setPosiciones(int nx,int ny,int nz)
     z = nz;
 }
 
+void Jugador::MuereJugador(float tiempo){
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    if(motor->estaPulsado(15) || pulsadoMuerte){//SI PULSO 'J' MUERE JUGADOR
+        pulsadoMuerte = true;
+        //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo y aparece pantalla
+        acumMuJug += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
+        //cout << "tiempo: " << acumMuJug << endl;
+        ////negro
+        if(acumMuJug <= 60){
+            motor->colorearJugador(255,255,0,0);//rojo
+        }else if(acumMuJug > 60 && acumMuJug <= 120){
+            motor->colorearJugador(255,0,0,0);//negro
+        }else{
+            motor->colorearJugador(255,255,0,0);//rojo
+            //PINTAR BOTON 'REINICIAR JUEGO' Y 'IR A MENU'
+            motor->botonesMuerteJugador();
+            acumMuJug = 0;//reniciar variable una vez muerto
+            pulsadoMuerte = false;         
+        }
+    }
+}
+
+void Jugador::MuereEnemigo(float tiempo, int numEne){
+    /*  
+        los inputs los recoges siempre en un update y el valor lo utilizas también en update
+    */
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    if(motor->estaPulsado(16) || pulsadoMuerteEnemigos){//SI PULSO 'K' MUERE JUGADOR
+        pulsadoMuerteEnemigos = true;
+        //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo 
+        acumMuEne += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
+        //cout << "tiempo: " << acumMuJug << endl;
+        //negro
+        for(int i = 0; i < numEne; i++){
+            if(acumMuEne <= 60){
+                motor->colorearEnemigos(255,255,0,0,i);//rojo
+            }else if(acumMuEne > 60 && acumMuEne <= 120){
+                motor->colorearEnemigos(255,0,0,0,i);//negro
+            }else{
+                motor->colorearEnemigos(255,255,0,0,i);//rojo
+                pulsadoMuerteEnemigos = false;
+                if(i ==  numEne - 1){
+                    acumMuEne = 0;
+                }
+            }
+        }
+    }
+}
+
 int Jugador::Atacar()
 {
   int danyo = 0;

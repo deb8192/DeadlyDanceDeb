@@ -111,7 +111,7 @@ void Nivel::update()
     }
 
     //actualizamos el jugador
-     MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorGrafico * motor = MotorGrafico::getInstance();
     //Interpolacion
     newTime = clock();
     frameTime = newTime - currentTime;
@@ -152,8 +152,8 @@ void Nivel::update()
       //Posicion de escucha
         motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
 
-        motor->MuereJugador(acumulator);
-        motor->MuereEnemigo(acumulator, enemigos.size());
+        jugador.MuereJugador(acumulator);
+        jugador.MuereEnemigo(acumulator, enemigos.size());
  	    acumulator -= dt;  
     } 
 }
