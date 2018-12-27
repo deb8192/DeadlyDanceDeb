@@ -122,7 +122,15 @@ float times::getTiempo(int modo)
 
 float times::calcularTiempoPasado(float antiguo)
 {
+
    unsigned tiempo_ahora = clock();
-   float tiempo_restante = (float(tiempo_ahora-antiguo)/(CLOCKS_PER_SEC/1000.0f)); 
+   float ahora = (float(tiempo_ahora/(CLOCKS_PER_SEC/1000.0f)));//antiguo - ahora
+   float tiempo_restante = (float(ahora-antiguo)); 
    return tiempo_restante;
 }
+/*
+    get tiempo el 1 lo da en milisegundos, con ese tiempo utilizar la funcion de calcular tiempo
+    pasado, le paso el tiempo que he conseguido antes, para saber cuanto tiempo ha pasado
+    , y ese tiempo se lo resto al tiempo de la animacion, 
+
+*/
