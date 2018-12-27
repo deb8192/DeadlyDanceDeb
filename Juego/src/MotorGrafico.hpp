@@ -137,8 +137,10 @@ using namespace idsEventos;
 
             //Cuando muere jugador aparecen 2 botones (Ir a menu o Reiniciar juego)
             void botonesMuerteJugador();
-
+            int getEnemigos_Scena();
             void EraseColectable(int idx);
+            void EraseEnemigo(int i);
+            void EraseJugador(int i);
             void EraseArma();
         private: //clases solo accesibles por MotorGrafico
 

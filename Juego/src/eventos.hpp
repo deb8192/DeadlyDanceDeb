@@ -20,7 +20,6 @@ namespace idsEventos
         LMOUSE_UP,
         MOUSE_MOVED,
         KEY_J,
-        KEY_K,
         RMOUSE_PRESSED_DOWN,
         LMOUSE_PRESSED_DOWN,
 

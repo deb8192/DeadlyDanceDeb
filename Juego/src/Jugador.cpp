@@ -117,52 +117,30 @@ void Jugador::setPosiciones(int nx,int ny,int nz)
     y = ny;
     z = nz;
 }
+bool Jugador::estasMuerto(){
+    //cout << "Muere jugador??: " << vida << endl; 
+    if(vida <= 0){
+        return true;
+    }
+    return false;
+}
 
 void Jugador::MuereJugador(float tiempo){
-    MotorGrafico * motor = MotorGrafico::getInstance();
-    if(motor->estaPulsado(16) || pulsadoMuerte){//SI PULSO 'J' MUERE JUGADOR
+    MotorGrafico* motor = MotorGrafico::getInstance();
+
+    if(motor->estaPulsado(16) || pulsadoMuerte || vida <= 0){//SI PULSO 'J' MUERE JUGADOR
         pulsadoMuerte = true;
         //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo y aparece pantalla
         acumMuJug += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
-        //cout << "tiempo: " << acumMuJug << endl;
-        ////negro
-        if(acumMuJug <= 60){
+        if(animacionMuerteTiem >= 180 && animacionMuerteTiem >= 120){
             motor->colorearJugador(255,255,0,0);//rojo
-        }else if(acumMuJug > 60 && acumMuJug <= 120){
+        }else if(animacionMuerteTiem <= 120 && animacionMuerteTiem >= 60){
             motor->colorearJugador(255,0,0,0);//negro
         }else{
             motor->colorearJugador(255,255,0,0);//rojo
-            //PINTAR BOTON 'REINICIAR JUEGO' Y 'IR A MENU'
-            motor->botonesMuerteJugador();
+            motor->botonesMuerteJugador();//PINTAR BOTON 'REINICIAR JUEGO' Y 'IR A MENU'
             acumMuJug = 0;//reniciar variable una vez muerto
-            pulsadoMuerte = false;         
-        }
-    }
-}
-
-void Jugador::MuereEnemigo(float tiempo, int numEne){
-    /*  
-        los inputs los recoges siempre en un update y el valor lo utilizas también en update
-    */
-    MotorGrafico * motor = MotorGrafico::getInstance();
-    if(motor->estaPulsado(17) || pulsadoMuerteEnemigos){//SI PULSO 'K' MUERE JUGADOR
-        pulsadoMuerteEnemigos = true;
-        //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo 
-        acumMuEne += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
-        //cout << "tiempo: " << acumMuJug << endl;
-        //negro
-        for(int i = 0; i < numEne; i++){
-            if(acumMuEne <= 60){
-                motor->colorearEnemigos(255,255,0,0,i);//rojo
-            }else if(acumMuEne > 60 && acumMuEne <= 120){
-                motor->colorearEnemigos(255,0,0,0,i);//negro
-            }else{
-                motor->colorearEnemigos(255,255,0,0,i);//rojo
-                pulsadoMuerteEnemigos = false;
-                if(i ==  numEne - 1){
-                    acumMuEne = 0;
-                }
-            }
+            pulsadoMuerte = false; 
         }
     }
 }
@@ -193,7 +171,7 @@ int Jugador::Atacar()
     //ATAQUE SIN ARMA
     if(tipo_arma == 0){
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,1,1,4);
-      danyo = 5.0f;
+      danyo = 100.0f;
     }
     //ATAQUE CUERPO A CUERPO
     else if(tipo_arma == 1)
@@ -201,7 +179,7 @@ int Jugador::Atacar()
       //Crear cuerpo de colision de ataque delante del jugador
 
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,4,0,0,4);
-      danyo = 20.0f;
+      danyo = 100.0f;
     }
     //ATAQUE A DISTANCIA
     else if(tipo_arma == 2)
@@ -210,11 +188,11 @@ int Jugador::Atacar()
 
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4);
 
-      danyo = 10.0f;
+      danyo = 100.0f;
     }
     motora->getEvent("Bow")->setVolume(0.8f);
     motora->getEvent("Bow")->start();
-    atacados_normal.clear(); //Riniciar vector con enemigos atacados
+    atacados_normal.clear(); //Reiniciar vector con enemigos atacados
   }
   else{
       cout << "No supera las restricciones"<<endl;

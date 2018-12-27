@@ -1,7 +1,12 @@
 #include "Enemigo.hpp"
+#include "Nivel.hpp"
 
 Enemigo::Enemigo()
 {
+
+}
+
+Enemigo::~Enemigo(){
 
 }
 
@@ -59,6 +64,40 @@ int Enemigo::AtacarEspecial()
 void Enemigo::QuitarVida(int can)
 {
     vida-=can;
+}
+
+bool Enemigo::estasMuerto(){
+    //cout << "Muere enemigo??: " << vida << endl; 
+    if(vida <= 0){
+        return true;
+    }
+    return false;
+}
+
+bool Enemigo::finalAnimMuerte(){
+    if(animacionMuerteTiem == 0){
+        return true;
+    }
+    return false;
+}
+
+void Enemigo::MuereEnemigo(float tiempo, int enemi){
+    // los inputs los recoges siempre en un update y el valor lo utilizas también en update
+    MotorGrafico* motor = MotorGrafico::getInstance();
+    bool seMuere = false;
+
+    if(seMuere || vida <= 0){
+        seMuere = true;
+        animacionMuerteTiem -= tiempo;
+        if(animacionMuerteTiem >= 180 && animacionMuerteTiem >= 120){
+            motor->colorearEnemigos(255,0,0,0,enemi);//negro
+        }else if(animacionMuerteTiem <= 120 && animacionMuerteTiem >= 60){
+            motor->colorearEnemigos(255,255,0,0,enemi);//rojo
+        }else if(animacionMuerteTiem <=60){
+            motor->colorearEnemigos(255,0,0,0,enemi);//negro
+            seMuere = false;
+        }
+    }
 }
 
 void Enemigo::RecuperarVida(int can)
