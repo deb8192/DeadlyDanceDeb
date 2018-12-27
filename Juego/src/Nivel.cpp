@@ -368,7 +368,7 @@ void Nivel::updateIA()
                 EraseEnemigo(i);
             }else{
                 if(enemigos[i]->estasMuerto()){
-                    enemigos[i]->MuereEnemigo(acumulator,i);
+                    enemigos[i]->MuereEnemigo(i);
                 }
             }
         }

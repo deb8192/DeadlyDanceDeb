@@ -33,7 +33,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void QuitarVida(int);//quita vida a la entidad
         bool estasMuerto();//llama desde Nivel
         bool finalAnimMuerte();// si la animacion de muerte acaba, entonces en nivel lo mataremos del todo
-        void MuereEnemigo(float tiempo, int enemi);//Animacion de muertes
+        void MuereEnemigo(int enemi);//Animacion de muertes
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar

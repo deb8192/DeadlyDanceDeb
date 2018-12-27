@@ -1,5 +1,6 @@
 #include "Enemigo.hpp"
 #include "Nivel.hpp"
+#include "times.hpp"
 
 Enemigo::Enemigo()
 {
@@ -75,27 +76,23 @@ bool Enemigo::estasMuerto(){
 }
 
 bool Enemigo::finalAnimMuerte(){
-    if(animacionMuerteTiem == 0){
+    times* tiempo = times::getInstance();
+    if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) >= animacionMuerteTiem && tiempoPasadoMuerte != 0){//sino se cumple no ha acabado
         return true;
     }
     return false;
 }
 
-void Enemigo::MuereEnemigo(float tiempo, int enemi){
-    // los inputs los recoges siempre en un update y el valor lo utilizas también en update
+void Enemigo::MuereEnemigo(int enemi){
+    times* tiempo = times::getInstance();
     MotorGrafico* motor = MotorGrafico::getInstance();
-    bool seMuere = false;
-
-    if(seMuere || vida <= 0){
-        seMuere = true;
-        animacionMuerteTiem -= tiempo;
-        if(animacionMuerteTiem >= 180 && animacionMuerteTiem >= 120){
-            motor->colorearEnemigos(255,0,0,0,enemi);//negro
-        }else if(animacionMuerteTiem <= 120 && animacionMuerteTiem >= 60){
+    if(tiempoPasadoMuerte == 0){
+        motor->colorearEnemigos(255,0,0,0,enemi);//negro
+        tiempoPasadoMuerte = tiempo->getTiempo(1);
+    }
+    if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) < animacionMuerteTiem){
+        if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) >= 1000.0f){
             motor->colorearEnemigos(255,255,0,0,enemi);//rojo
-        }else if(animacionMuerteTiem <=60){
-            motor->colorearEnemigos(255,0,0,0,enemi);//negro
-            seMuere = false;
         }
     }
 }

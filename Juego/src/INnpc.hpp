@@ -47,7 +47,8 @@ protected:
     int proAtaCritico;//valor que determina cuantas veces se hacen ataques criticos.
     int buffos[4];//1 aumento de vida, 2 aumento de ataque, 3 aumento de suerte, 4 aumento de pCritica.
     //Variables para el metodo morir
-    float animacionMuerteTiem = 180;//tiempo de animacion del estado muerte para cualquier NPC
+    float animacionMuerteTiem = 3000.0f;//tiempo de animacion del estado muerte para cualquier NPC
+    float tiempoPasadoMuerte = 0;
 };
 
 #endif /* INnpc_HPP */
