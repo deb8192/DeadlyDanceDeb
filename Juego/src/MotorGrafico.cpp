@@ -629,12 +629,16 @@ void MotorGrafico::colorearJugador(int a, int r, int g, int b)
 void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
 {
   SColor COLOR  = SColor(a, r, g, b);
+  long unsigned int valor = enem;
+  if(Enemigos_Scena.size() > 0 && valor < Enemigos_Scena.size())//para no salirnos si no existe en motorgrafico
   smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena[enem]->getMesh(),COLOR);
 }
 
 void MotorGrafico::colorearObjeto(int a, int r, int g, int b, int obj)
 {
   SColor COLOR  = SColor(a, r, g, b);
+  long unsigned int valor = obj;
+  if(Objetos_Scena.size() > 0 && valor < Objetos_Scena.size())//para no salirnos si no existe en motorgrafico
   smgr->getMeshManipulator()->setVertexColors(Objetos_Scena[obj]->getMesh(),COLOR);
 }
 
@@ -642,6 +646,8 @@ void MotorGrafico::colorearObjeto(int a, int r, int g, int b, int obj)
 void MotorGrafico::colorearEnemigos(int a, int r, int g, int b, unsigned int seleccion)
 {
     const SColor COLOR  = SColor(a, r, g, b);
+    long unsigned int valor = seleccion;
+    if(Enemigos_Scena.size() > 0 && valor < Enemigos_Scena.size())//para no salirnos si no existe en motorgrafico
     smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena.at(seleccion)->getMesh(),COLOR);
 }
 
