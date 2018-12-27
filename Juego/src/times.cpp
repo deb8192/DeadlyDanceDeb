@@ -103,3 +103,19 @@ float times::getMaximoTiempoFrame()
     float tiempo_restante = (float(tiempo_ahora-tiempoInicio)/(CLOCKS_PER_SEC/1000.0f));
     return (tiempo_frame-tiempo_restante);
 }
+
+float times::getTiempo(int modo)
+{
+    unsigned tiempo_ahora = clock();
+    
+    if(modo == 1)
+    {
+            return (float(tiempo_ahora/(CLOCKS_PER_SEC/1000.0f)));
+    }
+
+    if(modo == 2)
+    {
+            return (float(tiempo_ahora/CLOCKS_PER_SEC));
+    }
+
+}
