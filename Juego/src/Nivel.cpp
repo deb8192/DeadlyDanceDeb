@@ -117,6 +117,15 @@ void Nivel::setThen()
     dt =1.0f/60.0f;
 }
 
+void Nivel::EraseEnemigo(int i){
+    //elimniar el objeto en memoria(la onda)
+    enemigos[i]->~Enemigo();//el destructor de enemigo
+    enemigos[i]=nullptr;
+    enemigos.erase(enemigos.begin() + i);
+}
+void Nivel::EraseJugador(int i){
+    //jugador.erase(jugador.begin() + i);
+}
 void Nivel::update()
 {
 
@@ -252,7 +261,7 @@ void Nivel::update()
         motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
 
         jugador.MuereJugador(acumulator);
-        jugador.MuereEnemigo(acumulator, enemigos.size());
+        //enemigos->MuereEnemigo(acumulator);
  	    acumulator -= dt;  
     } 
 }
@@ -341,6 +350,27 @@ void Nivel::updateIA()
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
             motor->colorearEnemigos(255, 150, 150, 150, i);
+        }
+    }
+
+    //En esta parte mueren
+    if(jugador.estasMuerto()){
+        //motor->EraseJugador(jugador);
+    }
+    if(enemigos.size() > 0){
+        //comprobando los enemigos para saber si estan muertos
+        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor   
+
+            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
+                
+                motor->EraseEnemigo(i);
+                fisicas->EraseEnemigo(i);
+                EraseEnemigo(i);
+            }else{
+                if(enemigos[i]->estasMuerto()){
+                    enemigos[i]->MuereEnemigo(acumulator,i);
+                }
+            }
         }
     }
 }

@@ -197,10 +197,7 @@ bool MotorGrafico::estaPulsado(int boton)
             return input.IsKeyDown(irr::KEY_KEY_Q);
 
         case KEY_J:
-            return input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (15)
-        
-        case KEY_K:
-            return input.IsKeyDown(irr::KEY_KEY_K);//Para matar al jugador (16)
+            return input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
 
         case KEY_E:
             return input.IsKeyDown(irr::KEY_KEY_E);
@@ -250,9 +247,7 @@ void MotorGrafico::resetKey(int event)
             input.ResetKey(irr::KEY_KEY_Q);
         break;
         case KEY_J:
-            input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (15)
-        case KEY_K:
-            input.IsKeyDown(irr::KEY_KEY_K);//Para matar al jugador (16)
+            input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
         break;
     }
 }
@@ -917,7 +912,26 @@ void MotorGrafico::EraseColectable(int idx)
 {   
     Recolectables_Scena[idx]->setVisible(false);
     Recolectables_Scena[idx]->remove();
-     Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);  
+    Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);  
+}
+//Cuando enemigo muere lo borramos 
+void MotorGrafico::EraseEnemigo(int i){
+    if(i >= 0 && i < Enemigos_Scena.size()){
+        Enemigos_Scena[i]->setVisible(false);
+        Enemigos_Scena[i]->remove();
+        Enemigos_Scena.erase(Enemigos_Scena.begin() + i);  
+    }
+}
+//Cuando enemigo muere lo borramos 
+void MotorGrafico::EraseJugador(int i){
+    /*Jugador_Scena[i]->setVisible(false);
+    Jugador_Scena[i]->remove();
+    Jugador_Scena.erase(Jugador_Scena.begin() + i); */ 
+}
+
+//Devolver cantidad de enemigos en escena para recorrerlos en metodo muerteEnemigo
+int MotorGrafico::getEnemigos_Scena(){
+    return Enemigos_Scena.size();
 }
 
 void MotorGrafico::EraseArma()
