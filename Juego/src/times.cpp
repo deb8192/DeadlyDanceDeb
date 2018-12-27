@@ -118,6 +118,8 @@ float times::getTiempo(int modo)
             return (float(tiempo_ahora/(float(CLOCKS_PER_SEC))));
     }
 
+    return (float(tiempo_ahora/(CLOCKS_PER_SEC/1000.0f))); // se devuelve por defecto en ms el tiempo actual
+
 }
 
 float times::calcularTiempoPasado(float antiguo)

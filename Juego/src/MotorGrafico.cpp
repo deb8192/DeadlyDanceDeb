@@ -915,8 +915,12 @@ void MotorGrafico::EraseColectable(int idx)
     Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);  
 }
 //Cuando enemigo muere lo borramos 
-void MotorGrafico::EraseEnemigo(int i){
-    if(i >= 0 && i < Enemigos_Scena.size()){
+void MotorGrafico::EraseEnemigo(int i)
+{
+    long unsigned int valor = i;
+
+    if(valor >= 0 && valor < Enemigos_Scena.size())
+    {
         Enemigos_Scena[i]->setVisible(false);
         Enemigos_Scena[i]->remove();
         Enemigos_Scena.erase(Enemigos_Scena.begin() + i);  
