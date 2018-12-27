@@ -1,4 +1,5 @@
 #include "Nivel.hpp"
+#include "Pathfinder.hpp"
 #include <math.h>
 #include "reactphysics3d.h"
 
@@ -342,6 +343,16 @@ void Nivel::updateIA()
         {
             motor->colorearEnemigos(255, 150, 150, 150, i);
         }
+    }
+
+    //Pruebas pathfinding
+    if(motor->estaPulsado(KEY_P))
+    {
+        motor->resetKey(KEY_P);
+        Pathfinder path;
+        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(enemigos.at(1)->getSala(), primeraSala);
+
+        
     }
 }
 
