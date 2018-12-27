@@ -21,6 +21,7 @@
             bool EjecutoUpdate();//indica si se debe ejecutar las interpolaciones
             bool EjecutoIA();//indica si se debe ejecutar la logica del juego
             float getMaximoTiempoFrame();//devuelve el tiempo que queda en el frame actual
+            float getTiempo(int modo);//te devuelve el tiempo actual (modo = 1 -> milisegundos, modo = 2 -> segundos)
 
         private:
             //clase singleton 
