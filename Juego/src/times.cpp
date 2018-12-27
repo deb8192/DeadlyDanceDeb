@@ -107,7 +107,7 @@ float times::getMaximoTiempoFrame()
 float times::getTiempo(int modo)
 {
     unsigned tiempo_ahora = clock();
-    
+
     if(modo == 1)
     {
             return (float(tiempo_ahora/(CLOCKS_PER_SEC/1000.0f)));
@@ -115,7 +115,14 @@ float times::getTiempo(int modo)
 
     if(modo == 2)
     {
-            return (float(tiempo_ahora/CLOCKS_PER_SEC));
+            return (float(tiempo_ahora/(float(CLOCKS_PER_SEC))));
     }
 
+}
+
+float times::calcularTiempoPasado(float antiguo)
+{
+   unsigned tiempo_ahora = clock();
+   float tiempo_restante = (float(tiempo_ahora-antiguo)/(CLOCKS_PER_SEC/1000.0f)); 
+   return tiempo_restante;
 }

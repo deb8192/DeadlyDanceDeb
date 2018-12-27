@@ -22,6 +22,7 @@
             bool EjecutoIA();//indica si se debe ejecutar la logica del juego
             float getMaximoTiempoFrame();//devuelve el tiempo que queda en el frame actual
             float getTiempo(int modo);//te devuelve el tiempo actual (modo = 1 -> milisegundos, modo = 2 -> segundos)
+            float calcularTiempoPasado(float antiguo);//te devuelve el tiempo que ha pasado desde el valor antiguo (recogido con getTiempo modo 1)
 
         private:
             //clase singleton 
