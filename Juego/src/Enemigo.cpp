@@ -2,6 +2,9 @@
 #include "Nivel.hpp"
 #include "times.hpp"
 
+#define PI 3.14159265358979323846
+#define PIRADIAN 180.0f
+
 Enemigo::Enemigo()
 {
 
@@ -33,8 +36,24 @@ void Enemigo::queEscuchas()
 
 void Enemigo::queVes()
 {
-    SenseEventos * eventos = SenseEventos::getInstance();
-    eventos->listaObjetos(x,y);
+    //SenseEventos * eventos = SenseEventos::getInstance(); 
+    //esto es un ejemplo
+    
+    /*
+    int * loqueve = eventos->listaObjetos(x,y,z,rotation,20); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+
+    if(loqueve != nullptr)
+    {
+        if(loqueve[0] == 1)
+        {
+            std::cout << "ve al jugador" << std::endl;
+        }
+    }
+    delete loqueve;
+    */
+
+    //esto hay que editarlo para cada llamada segun el arbol de comportamientos puesto que a veces interesara ver ciertas cosas, si se le pasa 1 despues del 20 vera solo al jugador si esta, si es 2 se vera los objetos, si es 3 vera los enemigos(para socorrerlos)
+   
 }
 
 Sala* Enemigo::getSala()
@@ -197,3 +216,9 @@ int Enemigo::getID()
 {
     return id;
 }
+
+void Enemigo::setRotation(float rot)
+{
+    rotation = rot;
+}
+

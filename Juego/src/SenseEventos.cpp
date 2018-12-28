@@ -1,5 +1,6 @@
 #include "SenseEventos.hpp"
 #include "MotorGrafico.hpp"
+#include "MotorFisicas.hpp"
 
 SenseEventos* SenseEventos::unica_instancia = 0;
 
@@ -84,9 +85,30 @@ void SenseEventos::agregarEvento(eventoSonido * evento)
  }
 
 //para la vista devuelve los objetos que ve
-void SenseEventos::listaObjetos(int x, int y)
+int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista, int modo, bool perifericos)
 { 
-    MotorGrafico * motor = MotorGrafico::getInstance();
-    //mandamos los diferentes rayos 
-    motor->dibujarRayo(x,y,20,0,0,0,10);
+
+    MotorFisicas * fisicas = MotorFisicas::getInstance();
+    
+    if(perifericos)
+    {
+        int * perDer = fisicas->colisionRayoUnCuerpo(x,y,z,rot+30,vista/2,modo);//mira periferica derecha
+        int * perIzq = fisicas->colisionRayoUnCuerpo(x,y,z,rot-30,vista/2,modo);//mira periferica izquierda
+    }
+        
+    int * recto = fisicas->colisionRayoUnCuerpo(x,y,z,rot,vista,modo);//mira directa
+
+    if(perifericos)
+    {
+            //se aconseja girar hacia la izquierda para centrar al jugador
+            //std::cout << "gira izquierda" << std::endl;
+
+            //se aconseja girar hacia la derecha para centrar al jugador
+            //std::cout << "gira derecha" << std::endl;
+            
+            //por construir
+    }
+
+    //a continuacion devolvemos listado de las cosas que se ven
+    return recto;
 }
