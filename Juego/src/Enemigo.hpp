@@ -45,6 +45,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
+        void setRotation(float rot);
 
         int getVida();
         int getTipo();
