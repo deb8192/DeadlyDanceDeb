@@ -83,12 +83,15 @@ using namespace idsEventos;
             position2di GetPosicionRaton();
 
             //cargadores de objetos
-            int CargarPlataformas(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
+            int CargarPlataformas(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
-            void CargarEnemigos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
-            void CargarJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+
+            void CargarEnemigos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
+            void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
+            void CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
-            void CargarObjetos(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+           
+
 
             void closeGame();
 
@@ -108,6 +111,13 @@ using namespace idsEventos;
             void colorearJugador(int a, int r, int g, int b);
             void colorearEnemigos(int a, int r, int g, int b, unsigned int seleccion);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
+
+            void colorearObjeto(int a, int r, int g, int b, int obj);
+            void debugBox(int x,int y, int z,int ancho, int alto, int largo);
+            void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
+            void CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void CargarRecolectable(int id, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+
             IAnimatedMeshSceneNode* getArmaEspecial();
 
             // Funciones para puzzles
@@ -125,6 +135,13 @@ using namespace idsEventos;
             void RecolocarFicha(short y, short z);
             void ReiniciarHanoi();
 
+            //Cuando muere jugador aparecen 2 botones (Ir a menu o Reiniciar juego)
+            void botonesMuerteJugador();
+            int getEnemigos_Scena();
+            void EraseColectable(int idx);
+            void EraseEnemigo(int i);
+            void EraseJugador(int i);
+            void EraseArma();
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
@@ -132,7 +149,7 @@ using namespace idsEventos;
             static MotorGrafico* unica_instancia;
             //fin clase singleton private
             void PropiedadesDevice();
-            //variables privaddas
+            //variables privadas
             IrrlichtDevice *device; //puntero a dispositivo por defecto
             IVideoDriver *driver;
 	        ISceneManager *smgr;
@@ -144,13 +161,19 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
             std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
             std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
-            IAnimatedMesh *armaEsp;//Malla del arma del jugador
-            IAnimatedMeshSceneNode *ArmaEspecial_Jugador;//Malla del arma del jugador en escena
+            IAnimatedMesh *arma;//Malla del arma del jugador
+            IAnimatedMeshSceneNode *Arma_Jugador;//Malla del arma del jugador en escena
+            IAnimatedMesh *armaEsp;//Malla del arma especial del jugador
+            IAnimatedMeshSceneNode *ArmaEspecial_Jugador;//Malla del arma especial del jugador en escena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
+            std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
             bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
+
+            core::aabbox3d<f32> bounding_jugador;
+
             IAnimatedMeshSceneNode* tmpobjt_en_scena;
 
             // Objetos y funciones para puzzles
@@ -178,6 +201,7 @@ using namespace idsEventos;
             enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
 
             void CrearMeshFicha(float tamanyo, int r, int g, int b);
+            void CargarIMG(short x, short y);
     };
 
 #endif /* MotorGrafico_HPP */

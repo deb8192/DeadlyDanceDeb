@@ -21,6 +21,7 @@ protected:
     float rx = 0.0f;
     float ry = 0.0f;
     float rz = 0.0f; 
+    float rotation = 90.0f;//en grados por defecto
     int id = -1;
     //fin posiciones
 };

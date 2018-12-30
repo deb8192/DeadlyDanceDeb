@@ -5,7 +5,6 @@
 #include "INdrawable.hpp"
 #include "INsentidos.hpp"
 #include "Sala.hpp"
-
 #include <vector>
 
 class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple herencia a esto se le llama derivacion multiple
@@ -13,6 +12,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
     public:
         Enemigo();
+        ~Enemigo();
 
         void definirSala(Sala * sala);
 
@@ -31,6 +31,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         void QuitarVida(int);//quita vida a la entidad
+        bool estasMuerto();//llama desde Nivel
+        bool finalAnimMuerte();// si la animacion de muerte acaba, entonces en nivel lo mataremos del todo
+        void MuereEnemigo(int enemi);//Animacion de muertes
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
@@ -43,6 +46,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
         void setAtackTime(float t);
+        void setRotation(float rot);
 
         int getVida();
         int getTipo();

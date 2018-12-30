@@ -8,8 +8,10 @@
             "name": "Debug",
             "type": "gdb",
             "request": "launch",
+            "env": {"LD_LIBRARY_PATH":"librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib"},
             "target": "./Ejecutable",
-            "cwd": "${workspaceRoot}"
+            "cwd": "${workspaceRoot}",
+            
         }
     ]
 }

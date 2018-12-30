@@ -19,6 +19,9 @@ Jugador::Jugador()
 Jugador::Jugador(int,int,int,int,int,int)
 {
     vida = 100;//esto lo hereda de la interfaz por el protected
+
+    x = 1;
+    z = 20;
     //armaEquipada = NULL;
 }
 
@@ -51,7 +54,6 @@ float Jugador::getRZ()
 {
     return rz;
 }
-
 
 void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
 {
@@ -115,6 +117,33 @@ void Jugador::setPosiciones(int nx,int ny,int nz)
     y = ny;
     z = nz;
 }
+bool Jugador::estasMuerto(){
+    //cout << "Muere jugador??: " << vida << endl; 
+    if(vida <= 0){
+        return true;
+    }
+    return false;
+}
+
+void Jugador::MuereJugador(float tiempo){
+    MotorGrafico* motor = MotorGrafico::getInstance();
+
+    if(motor->estaPulsado(16) || pulsadoMuerte || vida <= 0){//SI PULSO 'J' MUERE JUGADOR
+        pulsadoMuerte = true;
+        //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo y aparece pantalla
+        acumMuJug += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
+        if(animacionMuerteTiem >= 180 && animacionMuerteTiem >= 120){
+            motor->colorearJugador(255,255,0,0);//rojo
+        }else if(animacionMuerteTiem <= 120 && animacionMuerteTiem >= 60){
+            motor->colorearJugador(255,0,0,0);//negro
+        }else{
+            motor->colorearJugador(255,255,0,0);//rojo
+            motor->botonesMuerteJugador();//PINTAR BOTON 'REINICIAR JUEGO' Y 'IR A MENU'
+            acumMuJug = 0;//reniciar variable una vez muerto
+            pulsadoMuerte = false; 
+        }
+    }
+}
 
 int Jugador::Atacar()
 {
@@ -141,26 +170,29 @@ int Jugador::Atacar()
 
     //ATAQUE SIN ARMA
     if(tipo_arma == 0){
-      fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,1,1,4);
-      danyo = 5.0f;
+      fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,1,1,4);
+      danyo = 100.0f;
     }
     //ATAQUE CUERPO A CUERPO
     else if(tipo_arma == 1)
     {
       //Crear cuerpo de colision de ataque delante del jugador
-      fisicas->crearCuerpo(atposX,atposY,atposZ,1,4,0,0,4);
-      danyo = 20.0f;
+
+      fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,4,0,0,4);
+      danyo = 100.0f;
     }
     //ATAQUE A DISTANCIA
     else if(tipo_arma == 2)
     {
       //Crear cuerpo de colision de ataque delante del jugador
-      fisicas->crearCuerpo(atposX,atposY,atposZ,2,2,0.5,1,4);
-      danyo = 10.0f;
+
+      fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4);
+
+      danyo = 100.0f;
     }
     motora->getEvent("Bow")->setVolume(0.8f);
     motora->getEvent("Bow")->start();
-    atacados_normal.clear(); //Riniciar vector con enemigos atacados
+    atacados_normal.clear(); //Reiniciar vector con enemigos atacados
   }
   else{
       cout << "No supera las restricciones"<<endl;
@@ -193,6 +225,7 @@ void Jugador::AtacarUpdate(int danyo)
       atposZ += (0.02 * cos(PI * atgy / PIRADIAN));
       atposX += (0.02 * sin(PI * atgy / PIRADIAN));
 
+
       fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
       motor->clearDebug2();
       motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
@@ -205,6 +238,7 @@ void Jugador::AtacarUpdate(int danyo)
     {
         //Pasar por cada uno de los atacados
         for(unsigned int i = 0; i < atacados.size(); i++)
+
         {
           //Buscar si esta en el vector guardado
           bool encontrado = false;
@@ -252,6 +286,7 @@ int Jugador::AtacarEspecial()
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
 
+    cout << vida << barraAtEs << por100 << endl;
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
     if(vida > 0 && barraAtEs == por100)
     {
@@ -278,7 +313,7 @@ int Jugador::AtacarEspecial()
         if(strcmp(armaEspecial->getNombre(), NOMBREHEABY) == 0)
         {
             //Crear cuerpo de colision de ataque delante del jugador
-            fisicas->crearCuerpo(atespposX,atespposY,atespposZ,2,8,1,8,5);
+            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,1,8,5);
             motora->getEvent("Bow")->setVolume(0.8f);
             motora->getEvent("Bow")->start();
         }
@@ -286,7 +321,7 @@ int Jugador::AtacarEspecial()
         else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
         {
             //Crear cuerpo de colision de ataque delante del jugador
-            fisicas->crearCuerpo(atespposX,atespposY,atespposZ,2,8,8,8,5);
+            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,8,8,5);
             motora->getEvent("Bow")->start();
         }
 
@@ -481,7 +516,7 @@ void Jugador::setArma(Arma * arma)
 
 void Jugador::setArmaEspecial(int ataque)
 {
-    armaEspecial = new Arma(ataque, nombreJugador);
+    armaEspecial = new Arma(ataque, nombreJugador,1,1,1,"assets/models/objeto.obj","");
 }
 
 void Jugador::setNombre(const char * nombre)

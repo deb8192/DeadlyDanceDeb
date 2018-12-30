@@ -13,11 +13,15 @@ namespace idsEventos
         KEY_G_DEBUG,
         KEY_P,
         KEY_Q,
+        KEY_E,
         RMOUSE_DOWN,
         LMOUSE_DOWN,
         RMOUSE_UP,
         LMOUSE_UP,
         MOUSE_MOVED,
+        KEY_J,
+        RMOUSE_PRESSED_DOWN,
+        LMOUSE_PRESSED_DOWN,
 
         // Botones
         GUI_ID_EMPEZAR_BUTTON = 101,
@@ -34,7 +38,8 @@ namespace idsEventos
         GUI_ID_ARBOLES_BUTTON,//110
         GUI_ID_BACK_MENU_BUTTON,
         GUI_ID_REINICIAR_HANOI,
-        
+        GUI_ID_MENU_BUTTON,
+        GUI_ID_REINICIAR_BUTTON,
         //fin de los nuevos eventos
         GUI_ID_CONFIGURACION_BUTTON,
         UltimoEvento = GUI_ID_CONFIGURACION_BUTTON
