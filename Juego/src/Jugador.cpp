@@ -118,7 +118,7 @@ void Jugador::setPosiciones(int nx,int ny,int nz)
     z = nz;
 }
 bool Jugador::estasMuerto(){
-    //cout << "Muere jugador??: " << vida << endl; 
+    //cout << "Muere jugador??: " << vida << endl;
     if(vida <= 0){
         return true;
     }
@@ -140,7 +140,7 @@ void Jugador::MuereJugador(float tiempo){
             motor->colorearJugador(255,255,0,0);//rojo
             motor->botonesMuerteJugador();//PINTAR BOTON 'REINICIAR JUEGO' Y 'IR A MENU'
             acumMuJug = 0;//reniciar variable una vez muerto
-            pulsadoMuerte = false; 
+            pulsadoMuerte = false;
         }
     }
 }
@@ -155,7 +155,7 @@ int Jugador::Atacar()
 
     //Calcular posiciones que no se modifican
     int distance = 5;
-    if(tipo_arma == 0)distance= 3;
+    if(this->getArma() == nullptr)distance= 3;
     atx = distance * sin(PI * getRY() / 180.0f) + getX();
     aty = getY();
     atz = distance * cos(PI * getRY() / 180.0f) + getZ();
@@ -169,12 +169,12 @@ int Jugador::Atacar()
     atposZ = (atz/2);
 
     //ATAQUE SIN ARMA
-    if(tipo_arma == 0){
+    if(this->getArma() == nullptr){
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,1,1,4);
       danyo = 100.0f;
     }
     //ATAQUE CUERPO A CUERPO
-    else if(tipo_arma == 1)
+    else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
     {
       //Crear cuerpo de colision de ataque delante del jugador
 
@@ -182,7 +182,7 @@ int Jugador::Atacar()
       danyo = 100.0f;
     }
     //ATAQUE A DISTANCIA
-    else if(tipo_arma == 2)
+    else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
     {
       //Crear cuerpo de colision de ataque delante del jugador
 
@@ -207,18 +207,18 @@ void Jugador::AtacarUpdate(int danyo)
     Nivel* nivel = Nivel::getInstance();
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     MotorGrafico * motor = MotorGrafico::getInstance();
-    if(tipo_arma == 0){
+    if(this->getArma() == nullptr){
       fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
       motor->clearDebug2();
       motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,2,1,1,2);
     }
-    else if(tipo_arma == 1)
+    else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
     {
       fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
       motor->clearDebug2();
       motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,3,1,3,1);
     }
-    else if(tipo_arma == 2)
+    else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
     {
       atz += (0.02 * cos(PI * atgy / PIRADIAN));
       atx += (0.02 * sin(PI * atgy / PIRADIAN));

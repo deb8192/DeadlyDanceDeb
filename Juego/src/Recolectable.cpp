@@ -8,9 +8,9 @@ Recolectable::Recolectable()
 Recolectable::Recolectable(int ataque, const char *nombre, int anc, int lar, int alt, const char *objeto, const char *textura)
 {
     cout << "creando recolectable" << endl;
-    
+
     potenciaAtaque = ataque;
-    nombreObjeto = "nombre";
+    nombreObjeto = nombre;
     ancho = anc;
     largo = lar;
     alto = alt;
@@ -60,7 +60,7 @@ int Recolectable::getID()
     return id;
 }
 
- 
+
 const char* Recolectable::getTextura()
 {
     return ruta_textura;
