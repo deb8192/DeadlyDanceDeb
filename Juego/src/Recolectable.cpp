@@ -50,6 +50,18 @@ float Recolectable::getZ()
 {
     return z;
 }
+float Recolectable::getRX()
+{
+    return rx;
+}
+float Recolectable::getRY()
+{
+    return ry;
+}
+float Recolectable::getRZ()
+{
+    return rz;
+}
 void Recolectable::setID(int nid)
 {
     id = nid;

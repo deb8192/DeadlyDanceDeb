@@ -240,6 +240,17 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
+        for(unsigned int i = 0; i < enemigos.size(); i++)
+        {
+            motor->mostrarEnemigos(enemigos.at(i)->getX(),
+                enemigos.at(i)->getY(),
+                enemigos.at(i)->getZ(),
+                enemigos.at(i)->getRX(),
+                enemigos.at(i)->getRY(),
+                enemigos.at(i)->getRZ(),
+                i
+            );
+        }
 
         fisicas->updateJugador(jugador.getX(),
             jugador.getY(),
@@ -285,23 +296,32 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
     }
 }
 
-void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
+void Nivel::updateAtEsp(MotorGrafico *motor)
 {
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
     if((/*motor->estaPulsado(9)|| */motor->estaPulsado(KEY_Q)) && atackEsptime == 0.0)
     {
-        *danyo = jugador.AtacarEspecial();
+        danyo = jugador.AtacarEspecial();
         motor->colorearJugador(255, 55, 0, 255);
-        if(*danyo > 0)
+        if(danyo > 0)
         {
             atackEsptime = 1500.0f;
         }
     }
     else
     {
+        if(danyo > 0)
+        {
+            danyo = 0;
+        }
         if(atackEsptime > 0.f)
         {
             atackEsptime--;
+            jugador.setTimeAtEsp(atackEsptime);
+        }
+        if(atackEsptime > 0.f && (int) atackEsptime % 250 == 0.f)
+        {
+            danyo = jugador.AtacarEspecial();
         }
         if(atackEsptime == 1000.0f)
         {
@@ -318,11 +338,11 @@ void Nivel::updateAtEsp(int *danyo, MotorGrafico *motor)
 void Nivel::updateIA()
 {
 
+    bool colorear = false;
     MotorGrafico * motor = MotorGrafico::getInstance();
-    int danyo = 0;                      //Valor que indica si se ha podido realizar el ataque
 
     //Actualizar ataque especial
-    this->updateAtEsp(&danyo, motor);
+    this->updateAtEsp(motor);
     this->updateAt(&danyo2, motor);
 
     //Si se realiza el ataque se comprueban las colisiones
@@ -345,14 +365,228 @@ void Nivel::updateIA()
         }
     }
 
-    //Pruebas pathfinding
-    if(motor->estaPulsado(KEY_P))
+    if(motor->estaPulsado(KEY_P) || !recorrido.empty())
     {
         motor->resetKey(KEY_P);
         Pathfinder path;
-        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(enemigos.at(1)->getSala(), primeraSala);
-
-        
+        if(!colorear)
+        {
+            motor->colorearEnemigo(255, 127, 0, 127, 1);
+            colorear = true;
+        }
+        if(recorrido.empty())
+        {
+            recorrido = path.encontrarCamino(enemigos.at(1)->getSala(), primeraSala);
+        }
+        //PRUEBAS PATHFINDER
+        if(!recorrido.empty())
+        {
+            //Se comprueba si el enemigo esta en la siguiente sala a la que debe ir
+            //comprobando las coordenadas del enmigo estan en la sala
+            if(enemigos.at(1)->getSala() != recorrido.front().nodo)
+            {
+                bool cambia = false, moveDer = false, moveIzq = false, moveArb = false, moveAbj = false;
+                int tipoCentro = recorrido.front().nodo->getType();
+                if(tipoCentro == 4)
+                {
+                    if(enemigos.at(1)->getX() >= recorrido.front().nodo->getSizes()[2])
+                    {
+                        if(enemigos.at(1)->getX() <= recorrido.front().nodo->getSizes()[2] + recorrido.front().nodo->getSizes()[0])
+                        {
+                            cambia = true;
+                        }
+                        else
+                        {
+                            moveIzq = true;
+                        }
+                    }
+                    else
+                    {
+                        moveDer = true;
+                    }
+                    if(enemigos.at(1)->getZ() >= recorrido.front().nodo->getSizes()[4])
+                    {
+                        if(enemigos.at(1)->getZ() <= recorrido.front().nodo->getSizes()[4] + recorrido.front().nodo->getSizes()[1])
+                        {
+                            if(cambia)
+                            {
+                                enemigos.at(1)->setSala(recorrido.front().nodo);
+                                recorrido.erase(recorrido.begin());
+                            }
+                        }
+                        else
+                        {
+                            moveArb = true;
+                        }
+                    }
+                    else moveAbj = true;
+                }
+                else if(tipoCentro == 3)
+                {
+                    if(enemigos.at(1)->getX() >= recorrido.front().nodo->getSizes()[2])
+                    {
+                        if(enemigos.at(1)->getX() <= recorrido.front().nodo->getSizes()[2] + recorrido.front().nodo->getSizes()[0])
+                        {
+                            cambia = true;
+                        }
+                        else
+                        {
+                            moveIzq = true;
+                        }
+                    }
+                    else
+                    {
+                        moveDer = true;
+                    }
+                    if(enemigos.at(1)->getZ() <= recorrido.front().nodo->getSizes()[4])
+                    {
+                        if(enemigos.at(1)->getZ() >= recorrido.front().nodo->getSizes()[4] - recorrido.front().nodo->getSizes()[1])
+                        {
+                            if(cambia)
+                            {
+                                enemigos.at(1)->setSala(recorrido.front().nodo);
+                                recorrido.erase(recorrido.begin());
+                            }
+                        }
+                        else
+                        {
+                            moveAbj = true;
+                        }
+                    }
+                    else moveArb = true;
+                }
+                else if(tipoCentro == 2)
+                {
+                    if(enemigos.at(1)->getX() <= recorrido.front().nodo->getSizes()[2])
+                    {
+                        if(enemigos.at(1)->getX() >= recorrido.front().nodo->getSizes()[2] - recorrido.front().nodo->getSizes()[0])
+                        {
+                            cambia = true;
+                        }
+                        else
+                        {
+                            moveDer = true;
+                        }
+                    }
+                    else
+                    {
+                        moveIzq = true;
+                    }
+                    if(enemigos.at(1)->getZ() >= recorrido.front().nodo->getSizes()[4])
+                    {
+                        if(enemigos.at(1)->getZ() <= recorrido.front().nodo->getSizes()[4] + recorrido.front().nodo->getSizes()[1])
+                        {
+                            if(cambia)
+                            {
+                                enemigos.at(1)->setSala(recorrido.front().nodo);
+                                recorrido.erase(recorrido.begin());
+                            }
+                        }
+                        else
+                        {
+                            moveArb = true;
+                        }
+                    }
+                    else moveAbj = true;
+                }
+                else if(tipoCentro == 1)
+                {
+                    if(enemigos.at(1)->getX() >= recorrido.front().nodo->getSizes()[2])
+                    {
+                        if(enemigos.at(1)->getX() <= recorrido.front().nodo->getSizes()[2] - recorrido.front().nodo->getSizes()[0])
+                        {
+                            cambia = true;
+                        }
+                        else
+                        {
+                            moveDer = true;
+                        }
+                    }
+                    else
+                    {
+                        moveIzq = true;
+                    }
+                    if(enemigos.at(1)->getZ() >= recorrido.front().nodo->getSizes()[4])
+                    {
+                        if(enemigos.at(1)->getZ() <= recorrido.front().nodo->getSizes()[4] - recorrido.front().nodo->getSizes()[1])
+                        {
+                            if(cambia)
+                            {
+                                enemigos.at(1)->setSala(recorrido.front().nodo);
+                                recorrido.erase(recorrido.begin());
+                            }
+                        }
+                        else
+                        {
+                            moveAbj = true;
+                        }
+                    }
+                    else moveArb = true;
+                }
+                else if(tipoCentro == 0)
+                {
+                    if(enemigos.at(1)->getX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0] / 2))
+                    {
+                        moveIzq = true;
+                    }
+                    else if(enemigos.at(1)->getX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0] / 2))
+                    {
+                        moveDer = true;
+                    }
+                    else
+                    {
+                        cambia = true;
+                    }
+                    if(enemigos.at(1)->getZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] / 2))
+                    {
+                        moveArb = true;
+                    }
+                    else if(enemigos.at(1)->getZ() > recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] / 2))
+                    {
+                        moveAbj = true;
+                    }
+                    else if(cambia)
+                    {
+                        enemigos.at(1)->setSala(recorrido.front().nodo);
+                        recorrido.erase(recorrido.begin());
+                    }
+                }
+                if(moveAbj)
+                {
+                    if(moveDer)
+                    {
+                        enemigos.at(1)->setPosiciones(enemigos.at(1)->getX() + 1.0 * 0.25, enemigos.at(1)->getY(), enemigos.at(1)->getZ() + 1.0 * 0.25);
+                    }
+                    else if(moveIzq)
+                    {
+                        enemigos.at(1)->setPosiciones(enemigos.at(1)->getX() - 1.0 * 0.25, enemigos.at(1)->getY(), enemigos.at(1)->getZ() + 1.0 * 0.25);
+                    }
+                    else
+                    {
+                        enemigos.at(1)->setPosiciones(enemigos.at(1)->getX(), enemigos.at(1)->getY(), enemigos.at(1)->getZ() + 1.0 * 0.25);
+                    }
+                }
+                else if(moveArb)
+                {
+                    if(moveDer)
+                    {
+                        enemigos.at(1)->setPosiciones(enemigos.at(1)->getX() + 1.0 * 0.25, enemigos.at(1)->getY(), enemigos.at(1)->getZ() - 1.0 * 0.25);
+                    }
+                    else if(moveIzq)
+                    {
+                        enemigos.at(1)->setPosiciones(enemigos.at(1)->getX() - 1.0 * 0.25, enemigos.at(1)->getY(), enemigos.at(1)->getZ() - 1.0 * 0.25);
+                    }
+                    else
+                    {
+                        enemigos.at(1)->setPosiciones(enemigos.at(1)->getX(), enemigos.at(1)->getY(), enemigos.at(1)->getZ() - 1.0 * 0.25);
+                    }
+                }
+            }
+            else
+            {
+                recorrido.erase(recorrido.begin());
+            }
+        }
     }
 }
 
