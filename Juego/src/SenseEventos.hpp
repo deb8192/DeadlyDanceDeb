@@ -28,7 +28,7 @@ class SenseEventos
 
         std::vector<eventoSonido *> listarSonidos(int x, int y);
 
-        void listaObjetos(int x, int y);//devuelve los punteros y objetos que vea
+        int * listaObjetos(float x, float y, float z,float rot, float vista = 20, int modo = 1, bool perifericos = false);//devuelve los punteros y objetos que vea
 
     private:
     

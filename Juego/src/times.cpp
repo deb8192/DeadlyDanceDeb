@@ -3,23 +3,22 @@
 times* times::unica_instancia = 0;
 //fin indicador singleton
 
+//inicialiciamos 
 times::times()
 {
-    pasado=false;//para que no cuente como pasado
-    frame_actual=1;//para que procese el primer frame
-    tiempoFinal = 0.0;
-    tiempoInicio = 0.0;
-    tiempoInicio2 = 0.0;
-    tiempo_pasado = 0.0;
+    inicializar();
 }
 
+//destructor de la clase
 times::~times(void)
 {
 
 }
 
+//modificas los valores de frames y de numero de calculas de ia por cada ciclo
 void times::setFrames(int valor, int ia)
 {
+    inicializar();
     numero_frames = valor;
     tiempo_frame = milisegundos/valor;
     numero_updateia = ia;
@@ -29,7 +28,7 @@ void times::setFrames(int valor, int ia)
     //std::cout << "Numero de actualizaciones ia por segundo: "<< numero_updateia << std::endl;
     //std::cout << "Tiempo hasta cada update ia: "<< tiempo_ia << std::endl;
 }
-
+//dice cuando se debe ejecutar el siguiente frame
 bool times::EjecutoUpdate()
 {
     if(tiempoInicio != 0.0)
@@ -70,7 +69,7 @@ bool times::EjecutoUpdate()
     //std::cout << "no se ejecuta" << std::endl;
     return false;
 }
-
+//dice cuando se debe ejecutar la ia
 bool times::EjecutoIA()
 {
     unsigned tiempo_ahora = clock();
@@ -96,10 +95,48 @@ bool times::EjecutoIA()
 
     return false;
 }
-
+//tiempo que queda en este frame
 float times::getMaximoTiempoFrame()
 {
     unsigned tiempo_ahora = clock();
     float tiempo_restante = (float(tiempo_ahora-tiempoInicio)/(CLOCKS_PER_SEC/1000.0f));
     return (tiempo_frame-tiempo_restante);
+}
+//sirve para recuperar el tiempo de ejecucion, si le pasas 1 te lo devolvera en milisegundos si le pasas 2 te lo devuelve en segundos
+float times::getTiempo(int modo)
+{
+    unsigned tiempo_ahora = clock();
+
+    if(modo == 1)
+    {
+            return (float(tiempo_ahora/(CLOCKS_PER_SEC/1000.0f)));
+    }
+
+    if(modo == 2)
+    {
+            return (float(tiempo_ahora/(float(CLOCKS_PER_SEC))));
+    }
+
+    return (float(tiempo_ahora/(CLOCKS_PER_SEC/1000.0f))); // se devuelve por defecto en ms el tiempo actual
+
+}
+//nos servira para devolver el tiempo pasado desde una marca de tiempo con getTiempo(modo 1)
+float times::calcularTiempoPasado(float antiguo)
+{
+
+   unsigned tiempo_ahora = clock();
+   float ahora = (float(tiempo_ahora/(CLOCKS_PER_SEC/1000.0f)));//antiguo - ahora
+   float tiempo_restante = (float(ahora-antiguo)); 
+   return tiempo_restante;
+}
+
+//inicializa los valores como si fuera la primera vez
+void times::inicializar()
+{
+    pasado=false;//para que no cuente como pasado
+    frame_actual=1;//para que procese el primer frame
+    tiempoFinal = 0.0;
+    tiempoInicio = 0.0;
+    tiempoInicio2 = 0.0;
+    tiempo_pasado = 0.0;
 }
