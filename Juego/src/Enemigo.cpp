@@ -111,7 +111,7 @@ int Enemigo::Atacar()
       atgy = getRY();
       atgz = getRZ();
 
-      fisicas->crearCuerpo(atx/2,aty/2,atz/2,2,1,1,1,6);
+      fisicas->crearCuerpo(0,atx/2,aty/2,atz/2,2,1,1,1,7);
 
       //Colision
       if(fisicas->IfCollision(fisicas->getEnemiesAtack(),fisicas->getJugador()))
