@@ -10,6 +10,10 @@ Enemigo::Enemigo()
 
 }
 
+Enemigo::~Enemigo(){
+
+}
+
 float Enemigo::getX()
 {
     return x;
