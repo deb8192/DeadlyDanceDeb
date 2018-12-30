@@ -329,11 +329,11 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     MotorGrafico * motor = MotorGrafico::getInstance();
     MotorFisicas * fisicas = MotorFisicas::getInstance();
     Nivel* nivel = Nivel::getInstance();
-    
+
     //Si el ataque especial es el del Heavy, es cuerpo a cuerpo
     if(strcmp(armaEspecial->getNombre(), NOMBREHEABY) == 0)
     {
-      
+
         //Calculo de la posicion del arma delante del jugador
         atespx = 6.5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
         atespz = 6.5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
@@ -364,7 +364,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
             8,
             2);
     }
-  
+
     //Si el ataque especial es el de la Bailaora, es circular a distancia
     else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
     {
@@ -376,7 +376,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
         atespx += (incrAtDisCirc * sin(PI * atgy / PIRADIAN));
         atespposZ = atespz/2;
         atespposX = atespx/2;
-        
+
         //Aumento de la rotacion hacia la izquierda.
         atgy += 0.75;
 
@@ -413,7 +413,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     }
     //lista de enteros que senyalan a los enemigos atacados
     vector <unsigned int> atacados = fisicas->updateArmaEspecial(atespposX,atgy,atespposZ);
-    
+
     //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
     //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
     if(!atacados.empty())
@@ -435,7 +435,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
 
 void Jugador::QuitarVida(int can)
 {
-
+  vida-=can;
 }
 
 void Jugador::RecuperarVida(int can)

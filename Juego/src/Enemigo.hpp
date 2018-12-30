@@ -42,6 +42,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
+        void setAtackTime(float t);
 
         int getVida();
         int getTipo();
@@ -51,6 +52,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getDanyoCritico();
         int getProAtaCritico();
         int* getBuffos();
+        float getAtackTime();
         //propios
         Sala* getSala();
 
@@ -64,6 +66,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
     protected:
         Sala * estoy;//sala en la que esta el enemigo
         float atx, aty, atz, atgx, atgy, atgz;
+        float atacktime = 0.0f;
 };
 
 #endif

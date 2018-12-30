@@ -79,7 +79,7 @@ void Enemigo::setPosiciones(int nx,int ny,int nz)
 int Enemigo::Atacar()
 {
     int danyo = 0;
-    if(vida > 0)
+    if(vida > 0 && atacktime == 0)
     {
       MotorFisicas* fisicas = MotorFisicas::getInstance();
       //MotorAudioSystem* motora = MotorAudioSystem::getInstance();
@@ -93,18 +93,19 @@ int Enemigo::Atacar()
       atgy = getRY();
       atgz = getRZ();
 
-      danyo = 5.0f;
-      fisicas->crearCuerpo(atx/2,aty/2,atz/2,2,2,1,1,6);
+      fisicas->crearCuerpo(atx/2,aty/2,atz/2,2,1,1,1,6);
 
       //Colision
       if(fisicas->IfCollision(fisicas->getEnemiesAtack(),fisicas->getJugador()))
       {
-        cout << "jugador Atacado" << endl;
+        cout << "Jugador Atacado" << endl;
+        danyo = 5.0f;
+        cout << "danyo del enemigo -> " << danyo << endl;
       }
     }
     else
     {
-        cout << "No supera las restricciones"<<endl;
+        //cout << "No supera las restricciones"<<endl;
     }
     return danyo;
 }
@@ -219,4 +220,14 @@ void Enemigo::setID(int nid)
 int Enemigo::getID()
 {
     return id;
+}
+
+void Enemigo::setAtackTime(float t)
+{
+  atacktime = t;
+}
+
+float Enemigo::getAtackTime()
+{
+  return atacktime;
 }
