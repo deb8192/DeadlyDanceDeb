@@ -8,7 +8,7 @@
 #define PIRADIAN 180.0f
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
-#define NOMBREHEABY "Heavy"
+#define NOMBREHEAVY "Heavy"
 #define NOMBREBAILAORA "Bailaora"
 
 Jugador::Jugador()
@@ -298,11 +298,14 @@ void Jugador::AtacarUpdate(int danyo)
       cout << "No supera las restricciones"<<endl;
   }
 }
-/*void Jugador::AtacarEspecial()
-{
-
-}*/
-
+/*************** AtacarEspecial *****************
+ *  Funcion que inicia la ejecucion del ataque
+ *  especial del jugador si la barra de ataque
+ *  especial esta completa y se pulsa el boton Q /
+ *  click derecho del raton.
+ *      Entradas:
+ *      Salidas: int danyo;
+ */
 int Jugador::AtacarEspecial()
 {
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
@@ -313,38 +316,41 @@ int Jugador::AtacarEspecial()
     if(vida > 0 && barraAtEs == por100)
     {
         cout << "Supera las restricciones, ATAQUE ESPECIAL"<<endl;
-
-        //Calcular posiciones
-        atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
-        atespy = getY();
-        atespz = 6.5 * cos(PI * getRY() / PIRADIAN) + getZ();
-        atgx = getRX();
-        atgy = getRY();
-        atgz = getRZ();
-        incrAtDisCirc = 0.0;
-
-        MotorFisicas* fisicas = MotorFisicas::getInstance();
-        MotorAudioSystem* motora = MotorAudioSystem::getInstance();
-
-        //Posiciones en el mundo 3D
-        atespposX = (atespx/2);
-        atespposY = (getY()/2);
-        atespposZ = (atespz/2);
-
-        //ATAQUE ESPECIAL DEL HEAVY
-        if(strcmp(armaEspecial->getNombre(), NOMBREHEABY) == 0)
+        
+        //Calcular posiciones si se inicia el ataque especial
+        if(timeAtEsp == 0)
         {
-            //Crear cuerpo de colision de ataque delante del jugador
-            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,1,8,5);
-            motora->getEvent("Bow")->setVolume(0.8f);
-            motora->getEvent("Bow")->start();
-        }
-        //ATAQUE ESPECIAL DE LA BAILAORA
-        else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
-        {
-            //Crear cuerpo de colision de ataque delante del jugador
-            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,8,8,5);
-            motora->getEvent("Bow")->start();
+            atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
+            atespy = getY();
+            atespz = 6.5 * cos(PI * getRY() / PIRADIAN) + getZ();
+            atgx = getRX();
+            atgy = getRY();
+            atgz = getRZ();
+            incrAtDisCirc = 0.0;
+
+            MotorFisicas* fisicas = MotorFisicas::getInstance();
+            MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+
+            //Posiciones en el mundo 3D
+            atespposX = (atespx/2);
+            atespposY = (getY()/2);
+            atespposZ = (atespz/2);
+
+            //ATAQUE ESPECIAL DEL HEAVY
+            if(strcmp(armaEspecial->getNombre(), NOMBREHEAVY) == 0)
+            {
+                //Crear cuerpo de colision de ataque delante del jugador
+                fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,1,8,5);
+                motora->getEvent("Bow")->setVolume(0.8f);
+                motora->getEvent("Bow")->start();
+            }
+            //ATAQUE ESPECIAL DE LA BAILAORA
+            else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
+            {
+                //Crear cuerpo de colision de ataque delante del jugador
+                fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,8,8,5);
+                motora->getEvent("Bow")->start();
+            }
         }
 
         //Se calcula el danyo del ataque
@@ -379,8 +385,12 @@ int Jugador::AtacarEspecial()
     }
     return danyo;
 }
-
-//Actualiza la posicion y la colision del ataque especial
+/*************** AtacarEspecialUpdate *****************
+ *  Funcion que actualiza la posicion y
+ *  la colision del ataque especial
+ *      Entradas: int danyo
+ *      Salidas:
+ */
 void Jugador::AtacarEspecialUpdate(int *danyo)
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
@@ -388,7 +398,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     Nivel* nivel = Nivel::getInstance();
     
     //Si el ataque especial es el del Heavy, es cuerpo a cuerpo
-    if(strcmp(armaEspecial->getNombre(), NOMBREHEABY) == 0)
+    if(strcmp(armaEspecial->getNombre(), NOMBREHEAVY) == 0)
     {
       
         //Calculo de la posicion del arma delante del jugador
@@ -473,7 +483,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     
     //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
     //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
-    if(!atacados.empty())
+    if(!atacados.empty() && *danyo > 0)
     {
         cout<<"Funciona"<<endl;
         for(unsigned int i = 0; i < atacados.size(); i++)

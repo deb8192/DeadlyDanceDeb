@@ -68,6 +68,18 @@ float Arma::getZ()
 {
     return z;
 }
+float Arma::getRX()
+{
+    return rx;
+}
+float Arma::getRY()
+{
+    return ry;
+}
+float Arma::getRZ()
+{
+    return rz;
+}
 void Arma::setID(int nid)
 {
     id = nid;

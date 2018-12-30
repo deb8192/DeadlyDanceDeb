@@ -110,6 +110,10 @@ void Enemigo::setProAtaCritico(int probabilidad)
 {
 
 }
+void Enemigo::setSala(Sala* sala)
+{
+    estoy = sala;
+}
 
 int Enemigo::getVida()
 {
@@ -160,4 +164,34 @@ void Enemigo::setID(int nid)
 int Enemigo::getID()
 {
     return id;
+}
+
+float Enemigo::getX()
+{
+    return x;
+}
+
+float Enemigo::getY()
+{
+    return y;
+}
+
+float Enemigo::getZ()
+{
+    return z;
+}
+
+float Enemigo::getRX()
+{
+    return rx;
+}
+
+float Enemigo::getRY()
+{
+    return ry;
+}
+
+float Enemigo::getRZ()
+{
+    return rz;
 }

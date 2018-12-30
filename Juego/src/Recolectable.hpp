@@ -23,11 +23,10 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         float getX();
         float getY();
         float getZ();
-        /*
         float getRX();
         float getRY();
         float getRZ();
-        */
+        
         int getAtaque();
         const char* getNombre();
         const char* getObjeto();
