@@ -66,21 +66,33 @@ void Enemigo::queEscuchas()
 
 void Enemigo::queVes()
 {
-    //SenseEventos * eventos = SenseEventos::getInstance();
+    /*SenseEventos * eventos = SenseEventos::getInstance();
     //esto es un ejemplo
 
-    /*
-    int * loqueve = eventos->listaObjetos(x,y,z,rotation,20); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+    
+    int * loqueve = eventos->listaObjetos(x,y,z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
 
     if(loqueve != nullptr)
     {
         if(loqueve[0] == 1)
         {
             std::cout << "ve al jugador" << std::endl;
+            std::cout << "" << std::endl;
+            std::cout << "" << std::endl;
+            std::cout << "" << std::endl;
         }
     }
     delete loqueve;
-    */
+    if(rotation < 360)
+    {
+        rotation += 0.1f;
+    }
+    else
+    {
+        rotation = 0.0f;
+    }*/
+
+
 
     //esto hay que editarlo para cada llamada segun el arbol de comportamientos puesto que a veces interesara ver ciertas cosas, si se le pasa 1 despues del 20 vera solo al jugador si esta, si es 2 se vera los objetos, si es 3 vera los enemigos(para socorrerlos)
 

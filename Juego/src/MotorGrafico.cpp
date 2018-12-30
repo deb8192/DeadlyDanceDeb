@@ -948,10 +948,43 @@ void MotorGrafico::EraseArma()
 {   
     Arma_Jugador->setVisible(false);
     Arma_Jugador->remove();
-   } 
+} 
+
 // TO DO: Anyadir string img
 void MotorGrafico::CargarIMG(short x, short y)
 {
 	img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
     	core::position2d<s32>(x, y));
+}
+
+void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float longitud)
+{
+    if(debugGrafico)
+    {        
+        if(!conovision)
+        {
+            
+            conovision = smgr->getMesh("assets/models/conovision.obj");
+        }
+
+        if(!conovision)
+        {
+            //no se ha podido cargar
+        }
+        else
+        {
+            IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(conovision); //metemos el objeto en el escenario para eso lo pasamos al escenario
+            objeto_en_scena->setPosition(core::vector3df(x,y+1,z));
+            SColor COLOR  = SColor(0, 255, 0, 0);
+            smgr->getMeshManipulator()->setVertexColors(objeto_en_scena->getMesh(),COLOR);
+            
+            core::vector3df rotation = objeto_en_scena->getRotation();
+            objeto_en_scena->setRotation(core::vector3df(rotation.X,(-1*(rotacion-180)),rotation.Z));
+
+            rotation = objeto_en_scena->getRotation();
+
+            objeto_en_scena->setScale(core::vector3df(longitud/2,1.0f,0.01f));
+            Objetos_Debug.push_back(objeto_en_scena);
+        }
+    }   
 }
