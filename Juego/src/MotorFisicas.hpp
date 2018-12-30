@@ -46,7 +46,7 @@ using namespace reactphysics3d;
             WorldSettings config;
             CollisionWorld * space; //espacio o mundo de fisicas
             std::vector<CollisionBody *> enemigos;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
-            CollisionBody * enemigosAtack; //ataque de enemigos
+            std::vector<CollisionBody *> enemigosAtack; //ataque de enemigos
             CollisionBody * jugador;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody* jugadorAtack; //contiene el ataque normal del jugador

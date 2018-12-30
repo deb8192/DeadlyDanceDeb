@@ -147,7 +147,19 @@ void Nivel::update()
            for(std::size_t i=0;i<enemigos.size();i++)
            {
                //cout << "Enemigo " << i << endl;
-              enemigos[i]->Atacar();
+               //Si el enemigo ha realizado danyo
+               int danyo_jug = enemigos[i]->Atacar();
+               if(danyo_jug > 0)
+               {
+                 jugador.QuitarVida(danyo_jug);
+                 cout<< "Vida jugador: "<< jugador.getVida() << endl;
+                 enemigos[i]->setAtackTime(1500.0f); //tiempo hasta el proximo ataque
+               }
+               //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
+               if(enemigos[i]->getAtackTime() > 0.0f)
+               {
+                 enemigos[i]->setAtackTime(enemigos[i]->getAtackTime() - 1.0f); //restar uno al tiempo de ataque
+               }
                //enemigos[i]->AtacarEspecial();
                //enemigos[i]->queEscuchas();
            }
