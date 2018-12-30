@@ -114,6 +114,7 @@ using namespace idsEventos;
 
             void colorearObjeto(int a, int r, int g, int b, int obj);
             void debugBox(int x,int y, int z,int ancho, int alto, int largo);
+            void debugVision(float x, float y, float z, float rotacion, float longitud);
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
             void CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarRecolectable(int id, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
@@ -170,6 +171,7 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
+            IAnimatedMesh * conovision;
             bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
 
             core::aabbox3d<f32> bounding_jugador;

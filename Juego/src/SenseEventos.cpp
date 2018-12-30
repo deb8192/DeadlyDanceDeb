@@ -89,24 +89,44 @@ int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista
 { 
 
     MotorFisicas * fisicas = MotorFisicas::getInstance();
-    
-    if(perifericos)
-    {
-        int * perDer = fisicas->colisionRayoUnCuerpo(x,y,z,rot+30,vista/2,modo);//mira periferica derecha
-        int * perIzq = fisicas->colisionRayoUnCuerpo(x,y,z,rot-30,vista/2,modo);//mira periferica izquierda
-    }
-        
+    MotorGrafico * motor = MotorGrafico::getInstance();
+
+    int * perDer;
+    int * perIzq;
     int * recto = fisicas->colisionRayoUnCuerpo(x,y,z,rot,vista,modo);//mira directa
+    motor->debugVision(x,y,z,rot,vista);
+    motor->debugVision(x,y,z,rot+30,vista/2);
+    motor->debugVision(x,y,z,rot-30,vista/2);
 
     if(perifericos)
     {
-            //se aconseja girar hacia la izquierda para centrar al jugador
-            //std::cout << "gira izquierda" << std::endl;
-
-            //se aconseja girar hacia la derecha para centrar al jugador
-            //std::cout << "gira derecha" << std::endl;
+            perDer = fisicas->colisionRayoUnCuerpo(x,y,z,rot+30,vista/2,modo);//mira periferica derecha
+            perIzq = fisicas->colisionRayoUnCuerpo(x,y,z,rot-30,vista/2,modo);//mira periferica izquierda
             
-            //por construir
+            //Si lo ve por uno de los perifericos lo pone a 1
+            if(modo == 1)//jugador
+            {
+                if(recto[0] != 1 && (perDer[0] == 1 || perIzq[0] == 1))
+                {
+                    recto[0] = 1;
+                }
+            }
+
+            if(modo == 2)//objetos
+            {
+                //for recorriendose cada valor comparando 
+                //indice 0 contiene el numero de valores
+            }
+
+            if(modo == 3)//enemigos
+            {
+                 //for recorriendose cada valor comparando 
+                 //indice 0 contiene el numero de valores
+            }
+
+            //eliminamos los punteros ya no son necesarios
+            delete [] perDer;
+            delete [] perIzq;
     }
 
     //a continuacion devolvemos listado de las cosas que se ven

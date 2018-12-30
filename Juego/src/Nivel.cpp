@@ -35,7 +35,7 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     ene->setVida(75);
     ene->definirSala(sala);//le pasamos la sala en donde esta
     ene->generarSonido(20,5);
-    ene->setRotation(180.0f);//le ponemos hacia donde mira cuando se carga
+    ene->setRotation(0.0f);//le ponemos hacia donde mira cuando se carga
     enemigos.push_back(ene);//guardamos el enemigo en el vector
     id++;//generamos id para la figura
     ene->setID(id);//le damos el id unico en esta partida al enemigo
@@ -268,7 +268,7 @@ void Nivel::update()
                  enemigos[i]->setAtackTime(enemigos[i]->getAtackTime() - 1.0f); //restar uno al tiempo de ataque
                }
                //enemigos[i]->AtacarEspecial();
-               //enemigos[i]->queEscuchas();
+               //enemigos[i]->queVes();
            }
        }
         jugador.MuereJugador(acumulator);
