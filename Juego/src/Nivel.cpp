@@ -241,7 +241,7 @@ void Nivel::update()
             jugador.getY(),
             jugador.getZ()
         );
-    }
+      }
 
        this->updateIA();
 
@@ -271,13 +271,9 @@ void Nivel::update()
                //enemigos[i]->queEscuchas();
            }
        }
-
- 	   acumulator -= dt;
-    }
-
         jugador.MuereJugador(acumulator);
         //enemigos->MuereEnemigo(acumulator);
- 	    acumulator -= dt;
+ 	      acumulator -= dt;
     }
 }
 
