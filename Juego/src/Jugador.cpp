@@ -111,7 +111,7 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     ry = deg;
 }
 
-void Jugador::setPosiciones(int nx,int ny,int nz)
+void Jugador::setPosiciones(float nx,float ny,float nz)
 {
     x = nx;
     y = ny;

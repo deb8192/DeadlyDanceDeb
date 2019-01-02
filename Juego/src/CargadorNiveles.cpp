@@ -159,7 +159,7 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             int alto = enem.attribute("ancho").as_int();//nos devuelve un int
             const char * textura = enem.attribute("Texture").value(); //nos da un char[] = string
             const char * modelo  =  enem.attribute("Model").value(); //nos da un char[] = string
-            nivel_instancia->CrearEnemigo(accion,x,z,y,ancho,largo,alto,modelo,textura,propiedades,padren); //cargamos el enemigo
+            nivel_instancia->CrearEnemigo(accion,x,y,z,ancho,largo,alto,modelo,textura,propiedades,padren); //cargamos el enemigo
         }
 
         for (pugi::xml_node obj = plat.child("Object"); obj; obj = obj.next_sibling("Object"))//esto nos devuelve todos los hijos que esten al nivel del anterior
