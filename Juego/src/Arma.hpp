@@ -16,7 +16,7 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
         ~Arma();
         
         //drawable metodos
-        void setPosiciones(int nx,int ny,int nz);
+        void setPosiciones(float nx,float ny,float nz);
         void setPosicionesArmaEsp(float nx,float ny,float nz, float ry);
 
         //setters

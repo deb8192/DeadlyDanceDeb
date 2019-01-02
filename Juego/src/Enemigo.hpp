@@ -22,7 +22,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         void queVes();//recupera informacion de los objetos,enemigos,jugador que ve.
         //drawables metodos
-        void setPosiciones(int nx,int ny,int nz);
+        void setPosiciones(float nx,float ny,float nz);
         void setID(int);
         int getID();
         //npc metodos

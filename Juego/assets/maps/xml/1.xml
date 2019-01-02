@@ -15,10 +15,7 @@
 			<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="0" Y="10" Z="0" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
 			<Object Type="1" nombre="guitarra" ataque="20"  accion="2" ancho="4" largo="4" alto="10" X="10" Y="0" Z="4" Texture="assets/texture/platform1.png" Model="assets/models/objeto.obj"></Object>
 
-			<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="90" Y="0" Z="0" Texture="assets/texture/platform1.png" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
-				<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="10" Y="10" Z="0" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
-				<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="12" Y="12" Z="0" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
-			</Platform>
+			
 		
 		</Platform>
 		
