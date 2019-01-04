@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbol de comportamiento del pollito-->
+<BehaviorTree><!--Al poner esto ya tenemos la cabeza-->
+            <!--bloque si ve al jugador-->
+            <!-- si fuera repetitivo = true habria que definir el numeroRepeticiones = "5" -->
+            <hoja action="1" name-action = "ver a jugador" repetitivo="false">
+                <hoja action="3" name-action = "esta cerca jugador" repetitivo="false">
+                    <hoja action="4" name-action = "atacar" repetitivo="false"></hoja>
+                </hoja>
+                <hoja action="5" name-action = "irhaciajugador" repetitivo="false"></hoja>
+            </hoja>
+            <!--bloque si oye al jugador-->
+            <hoja action="6" name-action = "oye a jugador" repetitivo="false"><!--en el caso del pollo es neutral a no ser que se moleste una primera vez por lo que esta funcion hay que modificarla en pollo-->
+                <hoja action="7" name-action="buscar jugador"></hoja>
+            </hoja>
+            <!--Estado tranquilo-->
+            <hoja action="2" name-action = "merodear" repetitivo="false"></hoja>
+</BehaviorTree>
