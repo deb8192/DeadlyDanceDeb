@@ -5,7 +5,7 @@
 
 CargadorBehaviorTrees::CargadorBehaviorTrees()
 {
-
+    behavior_tree = nullptr;
 }
 
 void CargadorBehaviorTrees::generarTarea(pugi::xml_node tool, const char ** atributos, int tarea, unsigned int i, int tipo)
@@ -156,6 +156,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                     raiz = nodo;
                }
                 behavior_tree = new Arbol(raiz, raiz->getNombre());
+                cout<<"Se crea arbol"<<"\n"<<endl;
                //Faltaria comprobar otro tipo de nodos raiz pero principalmente seran secuencias o selectores
             }
             //Se crean el resto de nodos del arbol
@@ -239,8 +240,11 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
             padre = (Nodo*)nodo->getPadre();
         }
     }
+    return tree;//PARA QUITAR WARNING
 }
-/*******Cargador de arboles de comportamiento*******
+
+/*
+******Cargador de arboles de comportamiento*******
  * Descripcion: Metodo que sirve par leer un xml de un
  * arbol de comportamiento y cargarlo en memoria
  * Entradas:
@@ -248,6 +252,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
  * Salidas:
  *      behavior_tree: estructura que contiene un arbol de comportamiento
  */
+
 Arbol* CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
 {
     int level = 0;
@@ -296,4 +301,82 @@ void CargadorBehaviorTrees::guardarBehaviorTreeXml(string arbol)
     //Se transforma el string a un char array
     char cadena[sizeof(ruta_completa)];
     strcpy(cadena, ruta_completa.c_str()); 
+}
+
+Arbol2 * CargadorBehaviorTrees::cargarArbol(string nombre)
+{
+    //primero creamos el arbol
+        Arbol2 * arbol = new Arbol2();
+    //ahora creamos raiz
+    
+    //ahora nos recorremos las primeras hojas y llamamos recursivamente a agregarHoja si estas hojas tienen otras.
+        //definimos los strings
+        string extension = ".xml";
+        string ruta = "assets/trees/xml/";
+        string ruta_completa = "";
+
+        //Se crea la ruta completa hacia el arbol de comportamiento
+        ruta_completa = ruta+nombre+extension;
+        cout<<ruta_completa<<endl;  
+
+        //Se transforma el string a un char array
+        char cadena[sizeof(ruta_completa)];
+        strcpy(cadena, ruta_completa.c_str()); 
+
+        // Cargar el documento
+        pugi::xml_document doc;
+        //if (!doc.load_file(ruta_completa)) { // <- caca de linux q no lo acepta
+        if (!doc.load_file(cadena)) 
+        {
+            //cout<<"No existe el documento"<<"\n"<<endl;
+        }
+        else
+        {
+            //cout<<"Hay documento"<<"\n"<<endl;
+           // cout << "Inicio construccion arbol" << "\n" <<endl;
+            pugi::xml_node tree = doc.child("BehaviorTree");
+            agregarHoja(tree,arbol->getCabeza(),arbol);
+        }
+        //Se pasa a la lectura del archivo .xml
+        //Prueba de lectura de nodos
+        
+    //cout << "Fin construccion arbol" << "\n" <<endl;
+    //finalmente devolvemos el arbol
+    return arbol;
+}
+
+void CargadorBehaviorTrees::agregarHoja(pugi::xml_node rutapadre,hoja2 * padre,Arbol2 * arb)
+{
+    //nos vamos a recorrer todas las hojas de este nivel 
+    hoja2 * padre2;//lo utilizamos para no tener que crear otra funcion donde se crea la raiz
+    if(arb != nullptr)
+    {
+        //esto significa que es la primera hoja por lo que es la raiz
+        padre2 = arb->crearHoja();
+        padre2->definirComportamientoHoja(0);//esto significa que es la raiz
+        //cout << "Creamos raiz" << "\n" <<endl;
+    }
+    else
+    {
+        //esto significa que el padre es la hoja que han pasado porque no es la raiz
+        padre2 = padre;
+        //cout << "no es raiz" << "\n" <<endl;
+    }
+    for (pugi::xml_node plat = rutapadre.child("hoja"); plat; plat = plat.next_sibling("hoja"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        //cout << "Creamos hoja" << "\n" <<endl;
+        //creamos nueva hoja
+        hoja2 * nueva = arb->crearHoja();
+        //le damos valores
+        nueva->setPadre(padre2);//agregamos a su padre sea raiz o la hoja pasado como parametro
+        nueva->definirComportamientoHoja(plat.attribute("action").as_int());//nos devuelve un int
+        if(plat.attribute("repetitivo").as_bool())//si es true agregara que es repetitiva la accion y cuantas repeticiones tiene
+        {
+            nueva->definirRepiticion(plat.attribute("repetitivo").as_bool());
+            nueva->definirNumeroRepeticiones(plat.attribute("numeroRepeticiones").as_int());
+        }
+        //vamos a llamarnos recursivamente a ver si hay alguna hoja mas
+        agregarHoja(plat,nueva,nullptr);
+        //final se pasa a la siguiente hoja si existe
+    }
 }

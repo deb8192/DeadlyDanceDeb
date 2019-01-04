@@ -117,4 +117,6 @@ Nodo* Arbol::anyadirHijo(Nodo * nod)
             }
         }
     }
+
+    return nullptr;
 }
