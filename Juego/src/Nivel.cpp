@@ -436,8 +436,8 @@ void Nivel::updateIA()
             {
                 enemigoSeleccionado = 0;
             }
-            bool salaEncontrada = false;
-            Sala* actual = primeraSala;
+            //bool salaEncontrada = false;
+            //Sala* actual = primeraSala;
             //Se comparan las coordenadas del jugador con las de cada
             //sala hasta que se encuentre la sala en la que se hallan
             //dichas coordenadas del jugador
