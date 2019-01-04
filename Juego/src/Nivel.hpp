@@ -1,12 +1,13 @@
-#include "Sala.hpp"
+//#include "Sala.hpp"
 #include "Jugador.hpp"
 #include "Enemigo.hpp"
 #include "CargadorNiveles.hpp"
 #include "pollo.hpp"
 #include "Recolectable.hpp"
 #include "MotorAudio.hpp"
+#include "Pathfinder.hpp"
 //#include "MotorGrafico.hpp"
-#include <vector>//para tener los diferentes objetos,enemigos, jugadores.
+//#include <vector>//para tener los diferentes objetos,enemigos, jugadores.
 #include <ctime>
 #include "Arma.hpp"
 #include <cstring>
@@ -41,7 +42,7 @@ class Nivel
         void EraseEnemigo(int i);
         void EraseJugador(int i);
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
-        void updateAtEsp(int *, MotorGrafico *);//se actualiza la ejecucion de los ataques
+        void updateAtEsp(MotorGrafico *);//se actualiza la ejecucion de los ataques
         void updateAt(int *, MotorGrafico *);
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
         std::vector<Enemigo*> getEnemies();
@@ -63,6 +64,7 @@ class Nivel
         //std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena //crear clase objetos
 
         std::vector<Enemigo*> enemigos;//Enemigos en scena
+        std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
         std::vector<Recolectable*> recolectables;
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
@@ -80,7 +82,8 @@ class Nivel
         bool a,s,d,w,atEsp;
         bool cogerObjeto = false;
         int objetoCogido = -1;
-        int danyo2 = 0;
+        int danyo = 0, danyo2 = 0;
+        unsigned int enemigoSeleccionado = 0;
 };
 
 #endif

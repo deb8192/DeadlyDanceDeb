@@ -21,7 +21,7 @@ Arma::Arma(int ataque, const char * nombre, int anc, int lar, int alt, const cha
     ruta_textura = textura;
     //motor->CargarArmaEspecial(0,0,0,ruta,"");
 }
-void Arma::setPosiciones(int nx,int ny,int nz)
+void Arma::setPosiciones(float nx,float ny,float nz)
 {
     x = nx;
     y = ny;
@@ -67,6 +67,18 @@ float Arma::getY()
 float Arma::getZ()
 {
     return z;
+}
+float Arma::getRX()
+{
+    return rx;
+}
+float Arma::getRY()
+{
+    return ry;
+}
+float Arma::getRZ()
+{
+    return rz;
 }
 void Arma::setID(int nid)
 {
