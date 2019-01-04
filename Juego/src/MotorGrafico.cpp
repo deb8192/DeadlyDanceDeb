@@ -197,10 +197,7 @@ bool MotorGrafico::estaPulsado(int boton)
             return input.IsKeyDown(irr::KEY_KEY_Q);
 
         case KEY_J:
-            return input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (15)
-        
-        case KEY_K:
-            return input.IsKeyDown(irr::KEY_KEY_K);//Para matar al jugador (16)
+            return input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
 
         case KEY_E:
             return input.IsKeyDown(irr::KEY_KEY_E);
@@ -250,9 +247,7 @@ void MotorGrafico::resetKey(int event)
             input.ResetKey(irr::KEY_KEY_Q);
         break;
         case KEY_J:
-            input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (15)
-        case KEY_K:
-            input.IsKeyDown(irr::KEY_KEY_K);//Para matar al jugador (16)
+            input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
         break;
     }
 }
@@ -641,12 +636,16 @@ void MotorGrafico::colorearJugador(int a, int r, int g, int b)
 void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
 {
   SColor COLOR  = SColor(a, r, g, b);
+  long unsigned int valor = enem;
+  if(Enemigos_Scena.size() > 0 && valor < Enemigos_Scena.size())//para no salirnos si no existe en motorgrafico
   smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena[enem]->getMesh(),COLOR);
 }
 
 void MotorGrafico::colorearObjeto(int a, int r, int g, int b, int obj)
 {
   SColor COLOR  = SColor(a, r, g, b);
+  long unsigned int valor = obj;
+  if(Objetos_Scena.size() > 0 && valor < Objetos_Scena.size())//para no salirnos si no existe en motorgrafico
   smgr->getMeshManipulator()->setVertexColors(Objetos_Scena[obj]->getMesh(),COLOR);
 }
 
@@ -654,6 +653,8 @@ void MotorGrafico::colorearObjeto(int a, int r, int g, int b, int obj)
 void MotorGrafico::colorearEnemigos(int a, int r, int g, int b, unsigned int seleccion)
 {
     const SColor COLOR  = SColor(a, r, g, b);
+    long unsigned int valor = seleccion;
+    if(Enemigos_Scena.size() > 0 && valor < Enemigos_Scena.size())//para no salirnos si no existe en motorgrafico
     smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena.at(seleccion)->getMesh(),COLOR);
 }
 
@@ -924,17 +925,73 @@ void MotorGrafico::EraseColectable(int idx)
 {   
     Recolectables_Scena[idx]->setVisible(false);
     Recolectables_Scena[idx]->remove();
-     Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);  
+    Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);  
+}
+//Cuando enemigo muere lo borramos 
+void MotorGrafico::EraseEnemigo(int i)
+{
+    long unsigned int valor = i;
+
+    if(valor >= 0 && valor < Enemigos_Scena.size())
+    {
+        Enemigos_Scena[i]->setVisible(false);
+        Enemigos_Scena[i]->remove();
+        Enemigos_Scena.erase(Enemigos_Scena.begin() + i);  
+    }
+}
+//Cuando enemigo muere lo borramos 
+void MotorGrafico::EraseJugador(int i){
+    /*Jugador_Scena[i]->setVisible(false);
+    Jugador_Scena[i]->remove();
+    Jugador_Scena.erase(Jugador_Scena.begin() + i); */ 
+}
+
+//Devolver cantidad de enemigos en escena para recorrerlos en metodo muerteEnemigo
+int MotorGrafico::getEnemigos_Scena(){
+    return Enemigos_Scena.size();
 }
 
 void MotorGrafico::EraseArma()
 {   
     Arma_Jugador->setVisible(false);
     Arma_Jugador->remove();
-   } 
+} 
+
 // TO DO: Anyadir string img
 void MotorGrafico::CargarIMG(short x, short y)
 {
 	img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
     	core::position2d<s32>(x, y));
+}
+
+void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float longitud)
+{
+    if(debugGrafico)
+    {        
+        if(!conovision)
+        {
+            
+            conovision = smgr->getMesh("assets/models/conovision.obj");
+        }
+
+        if(!conovision)
+        {
+            //no se ha podido cargar
+        }
+        else
+        {
+            IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(conovision); //metemos el objeto en el escenario para eso lo pasamos al escenario
+            objeto_en_scena->setPosition(core::vector3df(x,y+1,z));
+            SColor COLOR  = SColor(0, 255, 0, 0);
+            smgr->getMeshManipulator()->setVertexColors(objeto_en_scena->getMesh(),COLOR);
+            
+            core::vector3df rotation = objeto_en_scena->getRotation();
+            objeto_en_scena->setRotation(core::vector3df(rotation.X,(-1*(rotacion-180)),rotation.Z));
+
+            rotation = objeto_en_scena->getRotation();
+
+            objeto_en_scena->setScale(core::vector3df(longitud/2,1.0f,0.01f));
+            Objetos_Debug.push_back(objeto_en_scena);
+        }
+    }   
 }

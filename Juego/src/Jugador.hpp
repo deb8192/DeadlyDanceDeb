@@ -25,8 +25,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setID(int);
         int getID();
         //Metodos Muere jugador y enemigo
-        void MuereJugador(float tiempo);//muere jugador (el tiempo es para controlar los cambio de color del jugador)
-        void MuereEnemigo(float tiempo, int numEne);//muere enemigo (el tiempo es para controlar los cambio de color del enemigo y numEne para recorrelos)
+        bool estasMuerto();
+        void MuereJugador(float tiempo);//muere jugador (el tiempo controla los cambio de color del jugador)
         //npc metodos
         int Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
         //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
