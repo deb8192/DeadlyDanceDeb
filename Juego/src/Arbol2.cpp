@@ -99,6 +99,10 @@ int Arbol2::siguiente(bool valor)
     else
     {
         //estamos en la primera ejecucion 
+        
+        if(cabeza == nullptr) //si es nula la cabeza no se ha definido arbol
+            return 0;
+
         ejecucionDirecta = cabeza->siguiente(ejecucionDirecta);//siguiente hijo(primero)
         if(ejecucionDirecta == nullptr)
         {
@@ -124,4 +128,11 @@ int Arbol2::siguiente(bool valor)
      {
          return true;
      }
+ }
+
+ void Arbol2::setCabeza(hoja2 * hoj)
+ {
+     //para asignar la cabeza del arbol
+     //no se recomienda cambiarla cuando ya esta definida
+     cabeza = hoj;
  }

@@ -11,6 +11,7 @@
             hoja2 * getCabeza();//nos devuelve la raiz que da acceso a todas las demas
             hoja2 * getEjecucionDirecta();//nos devuelve la hoja que tenga en ejecucion directa
             void setEjecucionDirecta(hoja2 * hoj);//nos sirve para poner una hoja como ejecucion directa para la proxima ejecucion
+            void setCabeza(hoja2 * hoj);
             hoja2 * crearHoja();//nos sirve para crear hojas vacias
             void crearRaiz();//crea la raiz que contendra todas las hojas hijas
             int siguiente(bool);//nos da el siguiente comportamiento segun la entrada y la hoja pueden haber hojas que sean negativas como la raiz, si hay algo en ejecucion directa se ejecuta sea lo que sea

@@ -66,11 +66,48 @@ int hoja2::conseguirComportamiento()
 
 hoja2 * hoja2::siguiente(hoja2 * yo)
 {
-    return nullptr;
+    hoja2 * nueva = nullptr;
+
+    if(hijos.size() > 0)
+    {
+        for(std::size_t i=0;i<hijos.size();i++)
+        {
+            if(nueva == nullptr && yo != hijos[i])//para el primero si no coincide con el que nos han pasado lo ponemos como el primero
+            {
+                nueva = hijos[i];
+            }
+            else //si coincide alguna vez lo ponemos como nullptr
+            {
+                if(yo == hijos[i])
+                {
+                    nueva = nullptr; //si bay un proximo hijo lo pasara
+                }
+            }
+        }
+    }
+
+    return nueva;
 }
 
 hoja2 * hoja2::siguienteRama(hoja2 * yo)
 {
+    if(getPadre() != nullptr)
+    {
+        hoja2 * nueva = nullptr; //asignamos nulo
+        hoja2 * padre_yo = getPadre(); //esto nos da el padre de la hoja donde estamos para comprobar los hijos
+        nueva = padre_yo->siguiente(yo);//nos da el siguiente hijo de la rama padre (la hermana de esta rama)
+        
+        if(nueva != nullptr)
+        {
+            return nueva; 
+        }
+        else
+        {
+            nueva = padre_yo->siguienteRama(padre_yo); //hacemos llamada recursiva entre hojas para encontrar una rama
+            return nueva;
+        }
+        //buscamos de nuevo el padre esta si tiene hijos
+    }
     return nullptr;
 }
 
@@ -92,4 +129,9 @@ void hoja2::setRepeticionActual(int valor)
 int hoja2::getRepeticionActual()
 {
     return repeticionActual;
+}
+
+hoja2 * hoja2::getPadre()
+{
+    return padre;
 }
