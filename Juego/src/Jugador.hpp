@@ -21,7 +21,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void movimiento(float dt,bool a, bool s, bool d, bool w);
 
         //drawable metodos
-        void setPosiciones(int nx,int ny,int nz);
+        void setPosiciones(float nx,float ny,float nz);
         void setID(int);
         int getID();
         //Metodos Muere jugador y enemigo

@@ -103,7 +103,7 @@ Sala* Enemigo::getSala()
     return estoy;
 }
 
-void Enemigo::setPosiciones(int nx,int ny,int nz)
+void Enemigo::setPosiciones(float nx,float ny,float nz)
 {
     x = nx;
     y = ny;
@@ -234,6 +234,10 @@ void Enemigo::setDanyoCritico(int danyoC)
 void Enemigo::setProAtaCritico(int probabilidad)
 {
 
+}
+void Enemigo::setSala(Sala* sala)
+{
+    estoy = sala;
 }
 
 int Enemigo::getVida()

@@ -23,7 +23,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         void queVes();//recupera informacion de los objetos,enemigos,jugador que ve.
         //drawables metodos
-        void setPosiciones(int nx,int ny,int nz);
+        void setPosiciones(float nx,float ny,float nz);
         void setID(int);
         int getID();
         //npc metodos
@@ -38,6 +38,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
 
+        //getters y setters
         void setVida(int vid);
         void setTipo(int tip);
         void setBarraAtEs(int bar);
@@ -45,9 +46,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
+        void setSala(Sala* sala);
         void setAtackTime(float t);
         void setRotation(float rot);
-
         int getVida();
         int getTipo();
         int getBarraAtEs();
@@ -56,10 +57,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getDanyoCritico();
         int getProAtaCritico();
         int* getBuffos();
-        float getAtackTime();
-        //propios
         Sala* getSala();
-
+        float getAtackTime();
         float getX();
         float getY();
         float getZ();
