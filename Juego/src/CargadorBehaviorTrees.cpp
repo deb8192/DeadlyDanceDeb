@@ -354,6 +354,7 @@ void CargadorBehaviorTrees::agregarHoja(pugi::xml_node rutapadre,hoja2 * padre,A
         //esto significa que es la primera hoja por lo que es la raiz
         padre2 = arb->crearHoja();
         padre2->definirComportamientoHoja(0);//esto significa que es la raiz
+        arb->setCabeza(padre2);
         //cout << "Creamos raiz" << "\n" <<endl;
     }
     else
@@ -366,16 +367,17 @@ void CargadorBehaviorTrees::agregarHoja(pugi::xml_node rutapadre,hoja2 * padre,A
     {
         //cout << "Creamos hoja" << "\n" <<endl;
         //creamos nueva hoja
+        //cout << "agrego hijo" << "\n" <<endl;
         hoja2 * nueva = arb->crearHoja();
         //le damos valores
         nueva->setPadre(padre2);//agregamos a su padre sea raiz o la hoja pasado como parametro
+        padre2->agregarHijo(nueva);//agregamos el hijo
         nueva->definirComportamientoHoja(plat.attribute("action").as_int());//nos devuelve un int
         if(plat.attribute("repetitivo").as_bool())//si es true agregara que es repetitiva la accion y cuantas repeticiones tiene
         {
             nueva->definirRepiticion(plat.attribute("repetitivo").as_bool());
             nueva->definirNumeroRepeticiones(plat.attribute("numeroRepeticiones").as_int());
         }
-        //vamos a llamarnos recursivamente a ver si hay alguna hoja mas
         agregarHoja(plat,nueva,nullptr);
         //final se pasa a la siguiente hoja si existe
     }

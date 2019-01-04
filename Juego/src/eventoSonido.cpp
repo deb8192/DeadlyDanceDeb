@@ -8,8 +8,8 @@ eventoSonido::eventoSonido(int inten,double durac,int nx,int ny,int nz,int prop,
     x = nx;
     y = ny;
     z = nz;
-    propietario = prop;
-    tipo = tip;
+    propietario = prop; //2 enemigo, 1 jugador (quien crea el sonido)
+    tipo = tip; //1 jugador, 2 pedir ayuda
     multiplicador = ((float)intensidad)/((float)duracion);
 }
 
@@ -52,4 +52,9 @@ float eventoSonido::getIntensidad()
 {
     float result = ((float)duracionOriginal)-((float)duracion);
     return (multiplicador*result);
+}
+
+int eventoSonido::getTipo()
+{
+    return tipo;
 }

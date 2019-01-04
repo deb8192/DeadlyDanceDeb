@@ -17,7 +17,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void definirSala(Sala * sala);
 
         //sentidos metodos
-        void generarSonido(int intensidad, double duracion);
+        void generarSonido(int intensidad,double duracion,int tipo);//la intensidad es el alcance y la duracion es cuanto dura el sonido, el tipo 1 son sonidos del jugador, 2 es pedir ayuda de los enemigos
 
         void queEscuchas();//recupera la informacion de los sonidos que escucha
 
@@ -68,11 +68,12 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getRZ();
 
         //comportamientos bases
-            bool ver();
-            bool oir();
+            bool ver(int tipo);//1 si ve al jugador
+            bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
             bool buscar();//por defecto devuelve true
             bool perseguir();//por defecto devuelve true
-            bool Acciones(int);
+            bool Acciones(int);//esto es para recorrer el arbol
+            bool pedirAyuda();//pide ayuda
         //fin comportamientos bases
         
         //activar ia

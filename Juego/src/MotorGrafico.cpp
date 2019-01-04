@@ -558,6 +558,8 @@ void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensi
             //vamos a cargar el circulo en su posicion con su intensidad
             //cout << "\e[36m Generamos Circulo \e[0m" << endl;
             IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(circulo); //metemos el objeto en el escenario para eso lo pasamos al escenario
+            SColor COLOR  = SColor(127, 255, 0, 0);
+            smgr->getMeshManipulator()->setVertexColors(objeto_en_scena->getMesh(),COLOR);
             objeto_en_scena->setPosition(core::vector3df(x,y,z));
             objeto_en_scena->setScale(core::vector3df(intensidad,1,intensidad));
             Objetos_Debug.push_back(objeto_en_scena);

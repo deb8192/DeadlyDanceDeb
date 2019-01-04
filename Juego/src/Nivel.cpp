@@ -38,7 +38,6 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->setVida(75);
     ene->definirSala(sala);//le pasamos la sala en donde esta
-    ene->generarSonido(20,5);
     ene->setRotation(0.0f);//le ponemos hacia donde mira cuando se carga
     enemigos.push_back(ene);//guardamos el enemigo en el vector
     id++;//generamos id para la figura
@@ -392,6 +391,7 @@ void Nivel::updateIA()
                 {
                     //si no esta muerto ni piensa morirse XD ejecutamos ia
                     //cout<< "Ejecuto ia: " << i << endl;
+                    if(i == 1)
                     enemigos[i]->runIA();
                 }
             }

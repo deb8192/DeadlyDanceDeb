@@ -49,9 +49,9 @@ void Enemigo::definirSala(Sala * sala)
     estoy = sala;
 }
 
-void Enemigo::generarSonido(int intensidad, double duracion)
+void Enemigo::generarSonido(int intensidad,double duracion,int tipo)
 {
-    eventoSonido * sonid = new eventoSonido(intensidad,duracion,x,y,z,1,1);
+    eventoSonido * sonid = new eventoSonido(intensidad,duracion,x,y,z,2,tipo);
     SenseEventos * eventos = SenseEventos::getInstance();
     eventos->agregarEvento(sonid);
 }
@@ -322,7 +322,7 @@ void Enemigo::runIA()
     while(!salir)
     {
         bool es = Acciones(accion);
-        arbol->siguiente(es);//cambiamos de rama(false) o de hoja(true)
+        accion = arbol->siguiente(es);//cambiamos de rama(false) o de hoja(true)
         salir = arbol->estadoActual();//ultima rama o entras en bucle
     }
 }
@@ -338,24 +338,67 @@ void Enemigo::runIA()
                 return false;
             break;
             case 1://ve al jugador
-                return ver();
+                return ver(1);
             case 3://esta cerca del jugador
                 return true;
             case 4://atacar
                 return true;
             case 6://oir al jugador
-                return oir();
+                return oir(1);
+            case 8://pedir ayuda
+                return pedirAyuda();
+            case 9://oye pedir ayuda enemigo ?
+                return oir(2);
         }
 
         return false;//cambiamos de rama si no se encuentra la tarea
     }
-    bool Enemigo::ver()
+
+    bool Enemigo::ver(int tipo)
     {
+        //vamosa  ver si vemos al jugador
+        SenseEventos * eventos = SenseEventos::getInstance();
+        if(tipo == 1)//ves al jugador ?
+        {
+            int * loqueve = eventos->listaObjetos(x,y,z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+  
+            if(loqueve != nullptr)
+            {
+                if(loqueve[0] == 1)
+                {
+                    cout << " lo ve "<< endl;
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
-    bool Enemigo::oir()
+    bool Enemigo::oir(int tipo)//tipo 1 oir al jugador si lo oye true, tipo 2 si oye al enemigo pedir ayuda si lo oye true si no false
     {
+        SenseEventos * eventos = SenseEventos::getInstance();
+        std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(x,y);//le pasamos nuestra x e y
+        
+        if(listaSonidos.size() > 0)
+        {
+            for(std::size_t i=0;i<listaSonidos.size();i++)
+            {
+                if(tipo == listaSonidos[i]->getTipo())
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool Enemigo::pedirAyuda()
+    {
+        //vamos a generar un sonido de ayuda
+        generarSonido(20,0.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+        cout << " grita pidiendo ayuda "<< endl;
         return true;
     }
 //fin comportamientos bases
