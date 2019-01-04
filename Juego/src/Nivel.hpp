@@ -81,6 +81,7 @@ class Nivel
         bool cogerObjeto = false;
         int objetoCogido = -1;
         int danyo = 0, danyo2 = 0;
+        unsigned int enemigoSeleccionado = 0;
 };
 
 #endif

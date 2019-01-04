@@ -266,6 +266,17 @@ void MotorFisicas::updateJugador(float x, float y, float z)
     }
 }
 
+void MotorFisicas::updateEnemigos(float x, float y, float z, unsigned int i)
+{
+    if(enemigos.at(i) != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);        
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        enemigos.at(i)->setTransform(transformacion);
+    }
+}
+
 vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z)
 {
     vector<unsigned int> atacados;
