@@ -1,8 +1,47 @@
 #include "Enemigo.hpp"
+#include "Nivel.hpp"
+#include "times.hpp"
+
+#define PI 3.14159265358979323846
+#define PIRADIAN 180.0f
 
 Enemigo::Enemigo()
 {
 
+}
+
+Enemigo::~Enemigo(){
+
+}
+
+float Enemigo::getX()
+{
+    return x;
+}
+
+float Enemigo::getY()
+{
+    return y;
+}
+
+float Enemigo::getZ()
+{
+    return z;
+}
+
+float Enemigo::getRX()
+{
+    return rx;
+}
+
+float Enemigo::getRY()
+{
+    return ry;
+}
+
+float Enemigo::getRZ()
+{
+    return rz;
 }
 
 void Enemigo::definirSala(Sala * sala)
@@ -27,8 +66,36 @@ void Enemigo::queEscuchas()
 
 void Enemigo::queVes()
 {
-    SenseEventos * eventos = SenseEventos::getInstance();
-    eventos->listaObjetos(x,y);
+    /*SenseEventos * eventos = SenseEventos::getInstance();
+    //esto es un ejemplo
+
+    
+    int * loqueve = eventos->listaObjetos(x,y,z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+
+    if(loqueve != nullptr)
+    {
+        if(loqueve[0] == 1)
+        {
+            std::cout << "ve al jugador" << std::endl;
+            std::cout << "" << std::endl;
+            std::cout << "" << std::endl;
+            std::cout << "" << std::endl;
+        }
+    }
+    delete loqueve;
+    if(rotation < 360)
+    {
+        rotation += 0.1f;
+    }
+    else
+    {
+        rotation = 0.0f;
+    }*/
+
+
+
+    //esto hay que editarlo para cada llamada segun el arbol de comportamientos puesto que a veces interesara ver ciertas cosas, si se le pasa 1 despues del 20 vera solo al jugador si esta, si es 2 se vera los objetos, si es 3 vera los enemigos(para socorrerlos)
+
 }
 
 Sala* Enemigo::getSala()
@@ -45,8 +112,36 @@ void Enemigo::setPosiciones(float nx,float ny,float nz)
 
 int Enemigo::Atacar()
 {
-    std::cout << "Ataque normal enemigo" << std::endl;
-    return 0;
+    int danyo = 0;
+    if(vida > 0 && atacktime == 0)
+    {
+      MotorFisicas* fisicas = MotorFisicas::getInstance();
+      //MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+
+      //Calcular posiciones
+      int distance= 2;
+      atx = distance * sin(PI * getRY() / 180.0f) + getX();
+      aty = getY();
+      atz = distance * cos(PI * getRY() / 180.0f) + getZ();
+      atgx = getRX();
+      atgy = getRY();
+      atgz = getRZ();
+
+      fisicas->crearCuerpo(0,atx/2,aty/2,atz/2,2,1,1,1,7);
+
+      //Colision
+      if(fisicas->IfCollision(fisicas->getEnemiesAtack(),fisicas->getJugador()))
+      {
+        cout << "Jugador Atacado" << endl;
+        danyo = 5.0f;
+        cout << "danyo del enemigo -> " << danyo << endl;
+      }
+    }
+    else
+    {
+        //cout << "No supera las restricciones"<<endl;
+    }
+    return danyo;
 }
 
 int Enemigo::AtacarEspecial()
@@ -59,6 +154,36 @@ int Enemigo::AtacarEspecial()
 void Enemigo::QuitarVida(int can)
 {
     vida-=can;
+}
+
+bool Enemigo::estasMuerto(){
+    //cout << "Muere enemigo??: " << vida << endl;
+    if(vida <= 0){
+        return true;
+    }
+    return false;
+}
+
+bool Enemigo::finalAnimMuerte(){
+    times* tiempo = times::getInstance();
+    if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) >= animacionMuerteTiem && tiempoPasadoMuerte != 0){//sino se cumple no ha acabado
+        return true;
+    }
+    return false;
+}
+
+void Enemigo::MuereEnemigo(int enemi){
+    times* tiempo = times::getInstance();
+    MotorGrafico* motor = MotorGrafico::getInstance();
+    if(tiempoPasadoMuerte == 0){
+        motor->colorearEnemigos(255,0,0,0,enemi);//negro
+        tiempoPasadoMuerte = tiempo->getTiempo(1);
+    }
+    if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) < animacionMuerteTiem){
+        if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) >= 1000.0f){
+            motor->colorearEnemigos(255,255,0,0,enemi);//rojo
+        }
+    }
 }
 
 void Enemigo::RecuperarVida(int can)
@@ -166,32 +291,17 @@ int Enemigo::getID()
     return id;
 }
 
-float Enemigo::getX()
+void Enemigo::setRotation(float rot)
 {
-    return x;
+    rotation = rot;
 }
 
-float Enemigo::getY()
+void Enemigo::setAtackTime(float t)
 {
-    return y;
+  atacktime = t;
 }
 
-float Enemigo::getZ()
+float Enemigo::getAtackTime()
 {
-    return z;
-}
-
-float Enemigo::getRX()
-{
-    return rx;
-}
-
-float Enemigo::getRY()
-{
-    return ry;
-}
-
-float Enemigo::getRZ()
-{
-    return rz;
+  return atacktime;
 }

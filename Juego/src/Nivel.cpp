@@ -36,6 +36,7 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     ene->setVida(75);
     ene->definirSala(sala);//le pasamos la sala en donde esta
     ene->generarSonido(20,5);
+    ene->setRotation(0.0f);//le ponemos hacia donde mira cuando se carga
     enemigos.push_back(ene);//guardamos el enemigo en el vector
     id++;//generamos id para la figura
     ene->setID(id);//le damos el id unico en esta partida al enemigo
@@ -70,17 +71,17 @@ void Nivel::CrearObjeto(int accion, const char* nombre, int ataque, int x,int y,
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     if(accion == 2)
-    {        
+    {
         Recolectable* rec = new Recolectable(ataque,nombre,ancho,largo,alto,"assets/models/objeto.obj",ruta_textura);
         rec->setID(recolectables.size());
         rec->setPosiciones(x,y,z);
         recolectables.push_back(rec);
-    
+
   }
     motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
-    //motor->debugBox(x,y,z,ancho,alto,largo); 
+    //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
 
 }
@@ -118,23 +119,19 @@ void Nivel::setThen()
     dt =1.0f/60.0f;
 }
 
+void Nivel::EraseEnemigo(int i){
+    //elimniar el objeto en memoria(la onda)
+    enemigos[i]->~Enemigo();//el destructor de enemigo
+    enemigos[i]=nullptr;
+    enemigos.erase(enemigos.begin() + i);
+}
+void Nivel::EraseJugador(int i){
+    //jugador.erase(jugador.begin() + i);
+}
 void Nivel::update()
 {
-
-
-  MotorFisicas* fisicas = MotorFisicas::getInstance();
-  MotorAudioSystem* motora = MotorAudioSystem::getInstance();
-    //actualizamos los enemigos
-    if(enemigos.size() > 0)//posiciones interpolacion
-    {
-        for(std::size_t i=0;i<enemigos.size();i++)
-        {
-            //cout << "Enemigo " << i << endl;
-            //enemigos[i]->Atacar();
-            //enemigos[i]->AtacarEspecial();
-            //enemigos[i]->queEscuchas();
-        }
-    }
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
     //actualizamos el jugador
     MotorGrafico * motor = MotorGrafico::getInstance();
@@ -150,13 +147,13 @@ void Nivel::update()
     while(acumulator >= dt)
     {
     //lo siguiente es para coger objeto, creamos objetos de la clase arma y recolectable segun convenga
-        
+
     int rec_col = fisicas->collideColectable();
 
 
-    if(motor->estaPulsado(KEY_E)){              
+    if(motor->estaPulsado(KEY_E)){
         if(rec_col >= 0)//si colisiona con un recolectable
-        { 
+        {
             if(jugador.getArma() == nullptr)//si no tiene arma equipada
             {
                 Arma* nuArma = new Arma(recolectables[rec_col]->getAtaque(),recolectables[rec_col]->getNombre(),recolectables[rec_col]->getAncho(),recolectables[rec_col]->getLargo(),recolectables[rec_col]->getAlto(),recolectables[rec_col]->getObjeto(),recolectables[rec_col]->getTextura());
@@ -184,25 +181,25 @@ void Nivel::update()
                 //borramos el recolectable anterior
                 recolectables.erase(recolectables.begin() + rec_col);
                 motor->EraseColectable(rec_col);
-                fisicas->EraseColectable(rec_col);                
-                //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas                
-                recolectables.push_back(nuRec);              
+                fisicas->EraseColectable(rec_col);
+                //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
+                recolectables.push_back(nuRec);
                 fisicas->setFormaRecolectable(recolectables.size(),recolectables[recolectables.size()]->getX(), recolectables[recolectables.size()]->getY(),recolectables[recolectables.size()]->getZ(),recolectables[recolectables.size()]->getAncho(), recolectables[recolectables.size()]->getLargo(),recolectables[recolectables.size()]->getAlto());
                 motor->CargarRecolectable(recolectables.size(),recolectables[recolectables.size()]->getX(), recolectables[recolectables.size()]->getY(),recolectables[recolectables.size()]->getZ(),recolectables[recolectables.size()]->getObjeto(), recolectables[recolectables.size()]->getTextura() );
             }
 
         }
-       
-    } 
 
-    //dejar objeto no se ha implementado por bugs y por tiempo    
-   
+    }
+
+    //dejar objeto no se ha implementado por bugs y por tiempo
+
     if(jugador.getArma() != nullptr)
     {
-        //iguala la posicion del arma a la del jugador y pasa a los motores las posiciones        
+        //iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
         jugador.getArma()->setPosiciones(jugador.getX(), jugador.getY(), jugador.getZ());
-        motor->llevarObjeto(jugador.getX(), jugador.getY()+3,jugador.getZ(), jugador.getRX(), jugador.getRY(), jugador.getRZ() ); 
-        fisicas->llevarBox(jugador.getX(), jugador.getY()+3,jugador.getZ(), jugador.getArma()->getAncho(), jugador.getArma()->getLargo(), jugador.getArma()->getAlto()); 
+        motor->llevarObjeto(jugador.getX(), jugador.getY()+3,jugador.getZ(), jugador.getRX(), jugador.getRY(), jugador.getRZ() );
+        fisicas->llevarBox(jugador.getX(), jugador.getY()+3,jugador.getZ(), jugador.getArma()->getAncho(), jugador.getArma()->getLargo(), jugador.getArma()->getAlto());
     }
 
 
@@ -212,11 +209,11 @@ void Nivel::update()
           motor->estaPulsado(3),
           motor->estaPulsado(4),
           jugador.getX(),
-          jugador.getY(),            
+          jugador.getY(),
           jugador.getZ()
       );
 
-      //colisiones con todos los objetos y enemigos que no se traspasan     
+      //colisiones con todos los objetos y enemigos que no se traspasan
       if(fisicas->collideObstacle())
       {
         //colisiona
@@ -230,7 +227,7 @@ void Nivel::update()
             motor->estaPulsado(1),
             motor->estaPulsado(2),
             motor->estaPulsado(3),
-            motor->estaPulsado(4)            
+            motor->estaPulsado(4)
         );
 
         motor->mostrarJugador(jugador.getX(),
@@ -265,9 +262,9 @@ void Nivel::update()
         fisicas->updateJugador(jugador.getX(),
             jugador.getY(),
             jugador.getZ()
-        );     
-    }
-        
+        );
+      }
+
        this->updateIA();
        //Actualizar ataque especial
         this->updateAtEsp(motor);
@@ -293,12 +290,35 @@ void Nivel::update()
         }
 
       //Posicion de escucha
-        motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
+       motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
 
+       //actualizamos los enemigos
+       if(enemigos.size() > 0)//posiciones interpolacion
+       {
+           for(std::size_t i=0;i<enemigos.size();i++)
+           {
+               //cout << "Enemigo " << i << endl;
+               //Si el enemigo ha realizado danyo
+               int danyo_jug = enemigos[i]->Atacar();
+               if(danyo_jug > 0)
+               {
+                 jugador.QuitarVida(danyo_jug);
+                 cout<< "Vida jugador: "<< jugador.getVida() << endl;
+                 enemigos[i]->setAtackTime(1500.0f); //tiempo hasta el proximo ataque
+               }
+               //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
+               if(enemigos[i]->getAtackTime() > 0.0f)
+               {
+                 enemigos[i]->setAtackTime(enemigos[i]->getAtackTime() - 1.0f); //restar uno al tiempo de ataque
+               }
+               //enemigos[i]->AtacarEspecial();
+               //enemigos[i]->queVes();
+           }
+       }
         jugador.MuereJugador(acumulator);
-        jugador.MuereEnemigo(acumulator, enemigos.size());
- 	    acumulator -= dt;  
-    } 
+        //enemigos->MuereEnemigo(acumulator);
+ 	      acumulator -= dt;
+    }
 }
 
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
@@ -653,6 +673,27 @@ void Nivel::updateIA()
                 cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
                         
                 recorrido.erase(recorrido.begin());
+            }
+        }
+    }
+
+    //En esta parte mueren
+    if(jugador.estasMuerto()){
+        //motor->EraseJugador(jugador);
+    }
+    if(enemigos.size() > 0){
+        //comprobando los enemigos para saber si estan muertos
+        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+
+            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
+
+                motor->EraseEnemigo(i);
+                fisicas->EraseEnemigo(i);
+                EraseEnemigo(i);
+            }else{
+                if(enemigos[i]->estasMuerto()){
+                    enemigos[i]->MuereEnemigo(i);
+                }
             }
         }
     }

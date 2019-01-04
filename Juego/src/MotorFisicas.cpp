@@ -6,6 +6,8 @@ using namespace std;
 
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
+#define PI 3.14159265358979323846
+#define PIRADIAN 180.0f
 
 MotorFisicas* MotorFisicas::unica_instancia = 0;
 //fin indicador singleton
@@ -79,6 +81,10 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     {
         arma = cuerpo;
     }
+    else if(typeCreator == 7)//ataque enemigos
+    {
+        enemigosAtack.push_back(cuerpo);
+    }
     // std::cout << "px: " << posiciones.x << std::endl;
     // std::cout << "py: " << posiciones.y << std::endl;
     // std::cout << "pz: " << posiciones.z << std::endl;
@@ -94,7 +100,7 @@ void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, 
 
     rp3d::CollisionBody * cuerpo;
     cuerpo = space->createCollisionBody(transformacion);
-   
+
     rp3d::Vector3 medidas(anc,alt,lar);
     BoxShape * forma = new BoxShape(medidas);
     cuerpo->addCollisionShape(forma,transformacion);
@@ -104,7 +110,18 @@ void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, 
 
 void MotorFisicas::EraseColectable(int idx)
 {
-    recolectables.erase(recolectables.begin() + idx); 
+    recolectables.erase(recolectables.begin() + idx);
+}
+
+void MotorFisicas::EraseEnemigo(int i)
+{
+    space->destroyCollisionBody(enemigos[i]);//nos cargamos el contenido
+    enemigos[i]=nullptr;
+    enemigos.erase(enemigos.begin() + i);
+}
+
+void MotorFisicas::EraseJugador(int i){
+    //jugador.erase(jugador.begin() + i);
 }
 
 void MotorFisicas::EraseArma()
@@ -122,7 +139,7 @@ void MotorFisicas::setFormaRecolectable(int id, float px, float py, float pz, in
 
     rp3d::CollisionBody * cuerpo;
     cuerpo = space->createCollisionBody(transformacion);
-   
+
     rp3d::Vector3 medidas(anc,alt,lar);
     BoxShape * forma = new BoxShape(medidas);
     cuerpo->addCollisionShape(forma,transformacion);
@@ -130,16 +147,27 @@ void MotorFisicas::setFormaRecolectable(int id, float px, float py, float pz, in
     recolectables.push_back(cuerpo);
 }
 
-Ray * MotorFisicas::crearRayo(float x, float y, float z, float longitud)
+Ray * MotorFisicas::crearRayo(float x, float y, float z, float rotation, float longitud)
 {
-    rp3d::Vector3 inicio(x,y,z);
-    rp3d::Vector3 final(x,y,z*longitud);
+    rp3d::Vector3 inicio(x,y,z);//posicion inicial desde donde sale el rayo(desde el centro de la entidad o objeto)
+
+    //calculamos segun la magnitud y la direccion donde debe apuntar el rayo
+
+    float nx,ny,nz;
+    float rad = PI/180*(rotation);
+
+    ny = y;
+    nx = (cos(rad)*longitud)+x;//calculamos cuanto hay que sumarle a la posicion x
+    nz = (sin(rad)*longitud)+z;//calculamos cuanto hay que sumarle a la posicion z
+    rp3d::Vector3 final(nx,ny,nz);
+
     Ray * rayo = new Ray(inicio,final);
+
     return rayo;
 }
 
 bool MotorFisicas::collidePlatform()
-{   
+{
     for(long unsigned int i = 0; i < plataformas.size();i++)
     {
       if(space->testOverlap(jugador,plataformas[i]))
@@ -149,11 +177,11 @@ bool MotorFisicas::collidePlatform()
     }
 
     return false;
-    
+
 }
 
 int MotorFisicas::collideColectable()
-{ 
+{
     for(long unsigned int i = 0; i < recolectables.size();i++)
     {
       if(space->testOverlap(jugador,recolectables[i]))
@@ -166,7 +194,7 @@ int MotorFisicas::collideColectable()
 }
 
 bool MotorFisicas::collideObstacle()
-{   
+{
     //abra que indicar tipo de objeto de alguna manera (que sean obstaculos)
     for(long unsigned int i = 0; i < obstaculos.size();i++)
     {
@@ -186,19 +214,120 @@ bool MotorFisicas::collideObstacle()
     }
 
     return false;
-    
 }
 
-void MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float longitud)
+int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,float longitud,int modo)
 {
-    //Ray * rayo = crearRayo(x,y,z,longitud);
 
-    //RaycastInfo intersecion;
+    //se recomiendan usar modos especificos para ahorrar costes.
+    Ray * rayo = crearRayo(x,y,z,rotation,longitud);
 
-    //bool colision = true;
+    RaycastInfo intersection;
+
+    int * jug;
+    int * ene;
+    int * obj;
+
+    //creamos un puntero para saber si colisiona con el jugador (si es el jugador devolvera que no colisiona con el)
+    if(modo == 1)
+    {
+        jug = new int[1];
+        jug[0] = 0;//false - no lo ve
+    }
+
+    //creamos un puntero que devuelve solamente los objetos con los que colisiona
+    if(modo == 2)
+    {
+        obj = new int[objetos.size()+1];
+        obj[0] = (objetos.size()+1);//dimension
+        for(std::size_t a = 0; a < (objetos.size()+1);a++)
+        {
+            if(a != 0)
+            {
+                obj[a] = 0;
+            }
+        }
+    }
+
+    //creamos un puntero que devuelve solo los enemigos con los que colisiona por defecto si este rayo sale de un enemigo no lo detecta como colision
+    if(modo == 3)
+    {
+        ene = new int[enemigos.size()+1];
+        ene[0] = (enemigos.size()+1);//dimension
+
+        for(std::size_t a = 0; a < (enemigos.size()+1);a++)
+        {
+            if(a != 0)
+            {
+                ene[a] = 0;
+            }
+        }
+    }
+
+    if(modo == 0 || modo == 1)
+    {
+        bool colision = jugador->raycast(*rayo,intersection);
+
+        if(colision)
+        {
+            if(jugador == intersection.body)
+            {
+                //cout << "colisiona" << endl;
+                jug[0] = 1;
+            }
+        }
+    }
+    //if(intersection.body != jugador)
+    //   std::cout << "CuerpoColisionado: " << " Jugador" << std::endl;
+    if(modo == 0 || modo == 3)
+    {
+        if(enemigos.size() > 0)//posiciones interpolacion
+        {
+            for(std::size_t i=0;i<enemigos.size();i++)
+            {
+                bool colision = enemigos[i]->raycast(*rayo,intersection);
+
+                if(intersection.body != enemigos[i])
+                    if(colision)
+                        ene[i+1] = 1;
+            }
+        }
+    }
+
+    if(modo == 0 || modo == 2)
+    {
+        if(objetos.size() > 0)//posiciones interpolacion
+        {
+            for(std::size_t i=0;i<objetos.size();i++)
+            {
+                bool colision = objetos[i]->raycast(*rayo,intersection);
+
+                if(intersection.body != objetos[i])
+                    if(colision)
+                        obj[i+1] = 1;
+            }
+        }
+    }
+
+    //por ultimo destruimos el objeto
+    delete rayo;
+
+    //devolvemos colisiones
+    switch(modo)
+    {
+        case 1:
+            return jug;
+        case 2:
+            return obj;
+        case 3:
+            return ene;
+    }
+
+    return nullptr;
+
 }
 void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z)
-{    
+{
     float px = x,
           pz = z;
     if(a)
@@ -212,7 +341,7 @@ void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, floa
 
     if(jugador != nullptr)
     {
-        rp3d::Vector3 posiciones(px,y,pz); 
+        rp3d::Vector3 posiciones(px,y,pz);
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         jugador->setTransform(transformacion);
@@ -237,11 +366,11 @@ void MotorFisicas::llevarBox(float x, float y, float z, float anc, float lar, fl
 
     rp3d::CollisionBody * cuerpo;
     cuerpo = space->createCollisionBody(transformacion);
-   
+
     rp3d::Vector3 medidas(anc,alt,lar);
     BoxShape * forma = new BoxShape(medidas);
     cuerpo->addCollisionShape(forma,transformacion);
-    
+
     arma = cuerpo;
 
 }
@@ -250,7 +379,7 @@ void MotorFisicas::updateJugador(float x, float y, float z)
 {
     if(jugador != nullptr)
     {
-        rp3d::Vector3 posiciones(x,y,z);        
+        rp3d::Vector3 posiciones(x,y,z);
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         jugador->setTransform(transformacion);
@@ -387,3 +516,7 @@ CollisionBody* MotorFisicas::getAtack()
  return jugadorAtack;
 }
 
+CollisionBody* MotorFisicas::getEnemiesAtack()
+{
+ return enemigosAtack.back();
+}

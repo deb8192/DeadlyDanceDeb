@@ -101,7 +101,7 @@ CargadorXML::CargadorXML() { }
         }
     }
 }
-/*******Cargador de arboles de comportamiento*******
+//Cargador de arboles de comportamiento
  * Descripcion: Metodo que sirve par leer un xml de un
  * arbol de comportamiento y cargarlo en memoria
  * Entradas:
@@ -139,7 +139,7 @@ CargadorXML::CargadorXML() { }
     sacarNodo(tree, nodo, padre);
     cout << "FIN" << "\n" <<endl;
 
-    /*string nombre = raiz.name();
+    //string nombre = raiz.name();
     //string selector = "selector";
     int id = raiz.attribute("id").as_int();
     int tipo;
