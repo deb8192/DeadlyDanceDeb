@@ -240,6 +240,16 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
+
+        for(unsigned int i = 0; i < enemigos.size(); i++)
+        {
+            fisicas->updateEnemigos(enemigos.at(i)->getX(),
+                enemigos.at(i)->getY(),
+                enemigos.at(i)->getZ(),
+                i
+            );
+        }
+
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
             motor->mostrarEnemigos(enemigos.at(i)->getX(),
@@ -259,6 +269,28 @@ void Nivel::update()
     }
         
        this->updateIA();
+       //Actualizar ataque especial
+        this->updateAtEsp(motor);
+        this->updateAt(&danyo2, motor);
+
+        //Si se realiza el ataque se comprueban las colisiones
+        if(atackEsptime > 0.0)
+        {
+            jugador.AtacarEspecialUpdate(&danyo);
+        }
+
+        else if(atacktime > 0.0)
+        {
+            jugador.AtacarUpdate(danyo2);
+        }
+        //En caso contrario se colorean los enemigos de color gris
+        else
+        {
+            for(unsigned int i = 0; i < enemigos.size(); i++)
+            {
+                motor->colorearEnemigos(255, 150, 150, 150, i);
+            }
+        }
 
       //Posicion de escucha
         motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
@@ -342,7 +374,7 @@ void Nivel::updateIA()
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     //Actualizar ataque especial
-    this->updateAtEsp(motor);
+    /*this->updateAtEsp(motor);
     this->updateAt(&danyo2, motor);
 
     //Si se realiza el ataque se comprueban las colisiones
@@ -363,7 +395,7 @@ void Nivel::updateIA()
         {
             motor->colorearEnemigos(255, 150, 150, 150, i);
         }
-    }
+    }*/
 
     //Ejecucion del pathfinding buscando al jugador
     if(motor->estaPulsado(KEY_P) || !recorrido.empty())
@@ -379,6 +411,11 @@ void Nivel::updateIA()
         //Se inicia el recorrido hacia el jugador
         if(recorrido.empty())
         {
+            enemigoSeleccionado++;
+            if(enemigoSeleccionado == enemigos.size())
+            {
+                enemigoSeleccionado = 0;
+            }
             bool salaEncontrada = false;
             Sala* actual = primeraSala;
             //Se comparan las coordenadas del jugador con las de cada
@@ -403,179 +440,167 @@ void Nivel::updateIA()
                     }
                 }
             }*/
-            recorrido = path.encontrarCamino(enemigos.at(3)->getSala(), primeraSala);
+            recorrido = path.encontrarCamino(enemigos.at(enemigoSeleccionado)->getSala(), primeraSala);
         }
         //PRUEBAS PATHFINDER
         if(!recorrido.empty())
         {
             //Se comprueba si el enemigo esta en la siguiente sala a la que debe ir
             //comprobando las coordenadas del enmigo estan en la sala
-            if(enemigos.at(3)->getSala() != recorrido.front().nodo)
+            if(enemigos.at(enemigoSeleccionado)->getSala() != recorrido.front().nodo)
             {
                 bool cambia = false, moveDer = false, moveIzq = false, moveArb = false, moveAbj = false;
                 tipoCentro = recorrido.front().nodo->getType();
+                //Centro arriba a la izquierda
                 if(tipoCentro == 4)
                 {
-                    if(enemigos.at(3)->getX() >= recorrido.front().nodo->getSizes()[2])
-                    {
-                        if(enemigos.at(3)->getX() <= recorrido.front().nodo->getSizes()[2] + recorrido.front().nodo->getSizes()[0])
-                        {
-                            cambia = true;
-                        }
-                        else
-                        {
-                            moveIzq = true;
-                        }
-                    }
-                    else
-                    {
-                        moveDer = true;
-                    }
-                    if(enemigos.at(3)->getZ() >= recorrido.front().nodo->getSizes()[4])
-                    {
-                        if(enemigos.at(3)->getZ() <= recorrido.front().nodo->getSizes()[4] + recorrido.front().nodo->getSizes()[1])
-                        {
-                            if(cambia)
-                            {
-                                enemigos.at(3)->setSala(recorrido.front().nodo);
-                                recorrido.erase(recorrido.begin());
-                            }
-                        }
-                        else
-                        {
-                            moveArb = true;
-                        }
-                    }
-                    else moveAbj = true;
-                }
-                else if(tipoCentro == 3)
-                {
-                    if(enemigos.at(3)->getX() >= recorrido.front().nodo->getSizes()[2])
-                    {
-                        if(enemigos.at(3)->getX() <= recorrido.front().nodo->getSizes()[2] + recorrido.front().nodo->getSizes()[0])
-                        {
-                            cambia = true;
-                        }
-                        else
-                        {
-                            moveIzq = true;
-                        }
-                    }
-                    else
-                    {
-                        moveDer = true;
-                    }
-                    if(enemigos.at(3)->getZ() <= recorrido.front().nodo->getSizes()[4])
-                    {
-                        if(enemigos.at(3)->getZ() >= recorrido.front().nodo->getSizes()[4] - recorrido.front().nodo->getSizes()[1])
-                        {
-                            if(cambia)
-                            {
-                                enemigos.at(3)->setSala(recorrido.front().nodo);
-                                recorrido.erase(recorrido.begin());
-                            }
-                        }
-                        else
-                        {
-                            moveAbj = true;
-                        }
-                    }
-                    else moveArb = true;
-                }
-                else if(tipoCentro == 2)
-                {
-                    if(enemigos.at(3)->getX() <= recorrido.front().nodo->getSizes()[2])
-                    {
-                        if(enemigos.at(3)->getX() >= recorrido.front().nodo->getSizes()[2] - recorrido.front().nodo->getSizes()[0])
-                        {
-                            cambia = true;
-                        }
-                        else
-                        {
-                            moveDer = true;
-                        }
-                    }
-                    else
-                    {
-                        moveIzq = true;
-                    }
-                    if(enemigos.at(3)->getZ() >= recorrido.front().nodo->getSizes()[4])
-                    {
-                        if(enemigos.at(3)->getZ() <= recorrido.front().nodo->getSizes()[4] + recorrido.front().nodo->getSizes()[1])
-                        {
-                            if(cambia)
-                            {
-                                enemigos.at(3)->setSala(recorrido.front().nodo);
-                                recorrido.erase(recorrido.begin());
-                            }
-                        }
-                        else
-                        {
-                            moveArb = true;
-                        }
-                    }
-                    else moveAbj = true;
-                }
-                else if(tipoCentro == 1)
-                {
-                    if(enemigos.at(3)->getX() >= recorrido.front().nodo->getSizes()[2])
-                    {
-                        if(enemigos.at(3)->getX() <= recorrido.front().nodo->getSizes()[2] - recorrido.front().nodo->getSizes()[0])
-                        {
-                            cambia = true;
-                        }
-                        else
-                        {
-                            moveDer = true;
-                        }
-                    }
-                    else
-                    {
-                        moveIzq = true;
-                    }
-                    if(enemigos.at(3)->getZ() >= recorrido.front().nodo->getSizes()[4])
-                    {
-                        if(enemigos.at(3)->getZ() <= recorrido.front().nodo->getSizes()[4] - recorrido.front().nodo->getSizes()[1])
-                        {
-                            if(cambia)
-                            {
-                                enemigos.at(3)->setSala(recorrido.front().nodo);
-                                recorrido.erase(recorrido.begin());
-                            }
-                        }
-                        else
-                        {
-                            moveAbj = true;
-                        }
-                    }
-                    else moveArb = true;
-                }
-                else if(tipoCentro == 0)
-                {
-                    if(enemigos.at(3)->getX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0] / 2) && enemigos.at(3)->getX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0] / 2))
+                    if(enemigos.at(enemigoSeleccionado)->getX() >= recorrido.front().nodo->getSizes()[2] && enemigos.at(enemigoSeleccionado)->getX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
                     {
                         cambia = true;
                     }
-                    else if(enemigos.at(3)->getX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0] / 2))
+                    else if(enemigos.at(enemigoSeleccionado)->getX() > recorrido.front().nodo->getSizes()[2])
+                    {
+                        moveDer = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getX() < recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
                     {
                         moveIzq = true;
                     }
-                    else if(enemigos.at(3)->getX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0] / 2))
+                    if(cambia && (enemigos.at(enemigoSeleccionado)->getZ() >= recorrido.front().nodo->getSizes()[4] && enemigos.at(enemigoSeleccionado)->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
+                    {
+                        enemigos.at(enemigoSeleccionado)->setSala(recorrido.front().nodo);
+                        cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
+                        recorrido.erase(recorrido.begin());
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getZ() < recorrido.front().nodo->getSizes()[4])
+                    {
+                        moveAbj = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1]))
+                    {
+                        moveArb = true;
+                    }
+                }
+                //Centro abajo a la izquierda
+                else if(tipoCentro == 3)
+                {
+                    if(enemigos.at(enemigoSeleccionado)->getX() >= recorrido.front().nodo->getSizes()[2] && enemigos.at(enemigoSeleccionado)->getX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
+                    {
+                        cambia = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getX() > recorrido.front().nodo->getSizes()[2])
+                    {
+                        moveDer = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getX() < recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
+                    {
+                        moveIzq = true;
+                    }
+
+                    if(cambia && (enemigos.at(enemigoSeleccionado)->getZ() >= recorrido.front().nodo->getSizes()[4] && enemigos.at(enemigoSeleccionado)->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
+                    {
+                        enemigos.at(enemigoSeleccionado)->setSala(recorrido.front().nodo);
+                        cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
+                        recorrido.erase(recorrido.begin());
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getZ() < recorrido.front().nodo->getSizes()[4])
+                    {
+                        moveArb = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getZ() > recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1]))
+                    {
+                        moveAbj = true;
+                    }
+                }
+                //Centro arriba a la derecha
+                else if(tipoCentro == 2)
+                {
+                    if(enemigos.at(enemigoSeleccionado)->getX() <= recorrido.front().nodo->getSizes()[2] && enemigos.at(enemigoSeleccionado)->getX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
+                    {
+                        cambia = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getX() > recorrido.front().nodo->getSizes()[2])
+                    {
+                        moveIzq = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
                     {
                         moveDer = true;
                     }
 
-                    if(cambia && (enemigos.at(3)->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] / 2) && enemigos.at(3)->getZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] / 2)))
+                    if(cambia && (enemigos.at(enemigoSeleccionado)->getZ() >= recorrido.front().nodo->getSizes()[4] && enemigos.at(enemigoSeleccionado)->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
                     {
-                        enemigos.at(3)->setSala(recorrido.front().nodo);
-                        cout<<"nodo actual: "<<enemigos.at(3)->getSala()->getPosicionEnGrafica()<<endl;
+                        enemigos.at(enemigoSeleccionado)->setSala(recorrido.front().nodo);
+                        cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
                         recorrido.erase(recorrido.begin());
                     }
-                    else if(enemigos.at(3)->getZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] / 2))
+                    else if(enemigos.at(enemigoSeleccionado)->getZ() < recorrido.front().nodo->getSizes()[4])
+                    {
+                        moveAbj = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1]))
                     {
                         moveArb = true;
                     }
-                    else if(enemigos.at(3)->getZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] / 2))
+                }
+                //Centro abajo a la derecha
+                else if(tipoCentro == 1)
+                {
+                    if(enemigos.at(enemigoSeleccionado)->getX() <= recorrido.front().nodo->getSizes()[2] && enemigos.at(enemigoSeleccionado)->getX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
+                    {
+                        cambia = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getX() > recorrido.front().nodo->getSizes()[2])
+                    {
+                        moveIzq = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
+                    {
+                        moveDer = true;
+                    }
+
+                    if(cambia && (enemigos.at(enemigoSeleccionado)->getZ() <= recorrido.front().nodo->getSizes()[4] && enemigos.at(enemigoSeleccionado)->getZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] )))
+                    {
+                        enemigos.at(enemigoSeleccionado)->setSala(recorrido.front().nodo);
+                        cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
+                        recorrido.erase(recorrido.begin());
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getZ() > recorrido.front().nodo->getSizes()[4])
+                    {
+                        moveArb = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1]))
+                    {
+                        moveAbj = true;
+                    }
+                }
+                //Centro en el centro
+                else if(tipoCentro == 0)
+                {
+                    if(enemigos.at(enemigoSeleccionado)->getX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0] / 2) && enemigos.at(enemigoSeleccionado)->getX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0] / 2))
+                    {
+                        cambia = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0] / 2))
+                    {
+                        moveIzq = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0] / 2))
+                    {
+                        moveDer = true;
+                    }
+
+                    if(cambia && (enemigos.at(enemigoSeleccionado)->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] / 2) && enemigos.at(enemigoSeleccionado)->getZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] / 2)))
+                    {
+                        enemigos.at(enemigoSeleccionado)->setSala(recorrido.front().nodo);
+                        cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
+                        recorrido.erase(recorrido.begin());
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] / 2))
+                    {
+                        moveArb = true;
+                    }
+                    else if(enemigos.at(enemigoSeleccionado)->getZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] / 2))
                     {
                         moveAbj = true;
                     }
@@ -584,48 +609,48 @@ void Nivel::updateIA()
                 {
                     if(moveDer)
                     {
-                        enemigos.at(3)->setPosiciones(enemigos.at(3)->getX() + 1.0 * 0.25, enemigos.at(3)->getY(), enemigos.at(3)->getZ() + 1.0 * 0.25);
-                        cout<<"Posicion del enemigo: x="<<enemigos.at(3)->getX()<<" z=" << enemigos.at(3)->getY();
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + 1.0 * 0.25);
+                        cout<<"Posicion del enemigo: x="<<enemigos.at(enemigoSeleccionado)->getX()<<" z=" << enemigos.at(enemigoSeleccionado)->getY();
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(3)->setPosiciones(enemigos.at(3)->getX() - 1.0 * 0.25, enemigos.at(3)->getY(), enemigos.at(3)->getZ() + 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + 1.0 * 0.25);
                     }
                     else
                     {
-                        enemigos.at(3)->setPosiciones(enemigos.at(3)->getX(), enemigos.at(3)->getY(), enemigos.at(3)->getZ() + 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + 1.0 * 0.25);
                     }
                 }
                 else if(moveArb)
                 {
                     if(moveDer)
                     {
-                        enemigos.at(3)->setPosiciones(enemigos.at(3)->getX() + 1.0 * 0.25, enemigos.at(3)->getY(), enemigos.at(3)->getZ() - 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - 1.0 * 0.25);
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(3)->setPosiciones(enemigos.at(3)->getX() - 1.0 * 0.25, enemigos.at(3)->getY(), enemigos.at(3)->getZ() - 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - 1.0 * 0.25);
                     }
                     else
                     {
-                        enemigos.at(3)->setPosiciones(enemigos.at(3)->getX(), enemigos.at(3)->getY(), enemigos.at(3)->getZ() - 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - 1.0 * 0.25);
                     }
                 }
                 else
                 {
                     if(moveDer)
                     {
-                        enemigos.at(3)->setPosiciones(enemigos.at(3)->getX() + 1.0 * 0.25, enemigos.at(3)->getY(), enemigos.at(3)->getZ());
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(3)->setPosiciones(enemigos.at(3)->getX() - 1.0 * 0.25, enemigos.at(3)->getY(), enemigos.at(3)->getZ());
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
                     }
                 }
             }
             else
             {
-                cout<<"nodo actual: "<<enemigos.at(3)->getSala()->getPosicionEnGrafica()<<endl;
+                cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
                         
                 recorrido.erase(recorrido.begin());
             }
