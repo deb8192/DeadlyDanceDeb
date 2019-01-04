@@ -241,14 +241,14 @@ void Nivel::update()
             jugador.getRZ()
         );
 
-        for(unsigned int i = 0; i < enemigos.size(); i++)
+        /*for(unsigned int i = 0; i < enemigos.size(); i++)
         {
             fisicas->updateEnemigos(enemigos.at(i)->getX(),
                 enemigos.at(i)->getY(),
                 enemigos.at(i)->getZ(),
                 i
             );
-        }
+        }*/
 
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
