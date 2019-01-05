@@ -6,4 +6,8 @@
             <hoja action="1" name-action = "ver a jugador" repetitivo="false">
                 <hoja action="8" name-action = "pedirayuda" repetitivo="false"></hoja>
             </hoja>
+            <hoja action="9" name-action = "oye pedir ayuda" repetitivo="false">
+                 <hoja action="10" name-action = "hago algo repetitivamente" repetitivo="true" numeroRepeticiones="10"></hoja>
+            </hoja>
+            <hoja action="2" name-action = "merodear" repetitivo="false"></hoja>
 </BehaviorTree>

@@ -74,6 +74,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             bool perseguir();//por defecto devuelve true
             bool Acciones(int);//esto es para recorrer el arbol
             bool pedirAyuda();//pide ayuda
+            bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
+            bool Merodear(int tipo);//para dar vueltas por una zona, segun el enemigo tendra diferentes merodeos
         //fin comportamientos bases
         
         //activar ia
