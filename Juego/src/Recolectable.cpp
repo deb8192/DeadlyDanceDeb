@@ -17,7 +17,7 @@ Recolectable::Recolectable(int ataque, const char *nombre, int anc, int lar, int
     ruta_objeto = objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
     ruta_textura = "textura";
 }
-void Recolectable::setPosiciones(int nx,int ny,int nz)
+void Recolectable::setPosiciones(float nx,float ny,float nz)
 {
     x = nx;
     y = ny;
@@ -49,6 +49,18 @@ float Recolectable::getY()
 float Recolectable::getZ()
 {
     return z;
+}
+float Recolectable::getRX()
+{
+    return rx;
+}
+float Recolectable::getRY()
+{
+    return ry;
+}
+float Recolectable::getRZ()
+{
+    return rz;
 }
 void Recolectable::setID(int nid)
 {

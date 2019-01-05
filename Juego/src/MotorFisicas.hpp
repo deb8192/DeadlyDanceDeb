@@ -28,6 +28,7 @@ using namespace reactphysics3d;
             int * colisionRayoUnCuerpo(float x,float y,float z,float rotation, float longitud,int modo = 1);//colisiona con multiples objetos (modo 1 detecta colision con jugador solo, 2 detecta con objetos solo, 3 detecta con enemigos solo)
 
             void updateJugador(float x, float y, float z);//actualizamos al jugador en el espacio de las fisicas
+            void updateEnemigos(float x, float y, float z, unsigned int i);//actualizamos al enemigo en el espacio de las fisicas
             void EraseColectable(int idx);
             void EraseEnemigo(int i);
             void EraseJugador(int i);

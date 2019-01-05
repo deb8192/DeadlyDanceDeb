@@ -1,4 +1,8 @@
 #include "Pathfinder.hpp"
+#include <string>
+#include <cstring>
+#include <iostream>
+#include <cmath>
 
 /********************* ComprobarListas ************************
  * Descripcion: Metodo que indica si una sala se encuentra en

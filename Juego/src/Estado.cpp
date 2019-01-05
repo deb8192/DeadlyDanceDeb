@@ -1,8 +1,7 @@
 #include "Estado.hpp"
-#include "Pathfinder.hpp"
 //#include "MotorGrafico.hpp"
 #include "SenseEventos.hpp"
-//#include "Nivel.hpp"
+#include "Nivel.hpp"
 #include "Enemigo.hpp"
 #include "MotorAudio.hpp"
 
@@ -68,15 +67,7 @@ void Jugando::Update()
     //Actualiza el motor de audio
     MotorAudioSystem *motora = MotorAudioSystem::getInstance();
     motora->update(false);
-
-    //Prueba de Patfinder y ataque especial
-    std::vector <Enemigo*> enemigos = nivel->getEnemigos();
-    if(motor->estaPulsado(KEY_P))
-    {
-        motor->resetKey(KEY_P);
-        Pathfinder path;
-        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(enemigos.at(1)->getSala(), nivel->getPrimeraSala());
-    }
+  
 }
 
 int Jugando::Esta()
