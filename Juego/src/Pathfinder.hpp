@@ -1,12 +1,7 @@
 #ifndef Pathfinder_HPP
 #define Pathfinder_HPP
-#include <string>
-#include <cstring>
 #include <vector>
-#include <iostream>
-#include <cmath>
 #include<bits/stdc++.h> 
-#include "Nivel.hpp"
 #include "Sala.hpp"
 
 using namespace std;
