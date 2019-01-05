@@ -46,6 +46,7 @@ class Nivel
         void updateAtEsp(MotorGrafico *);//se actualiza la ejecucion de los ataques
         void updateAt(int *, MotorGrafico *);
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
+        void updateRecorridoPathfinding();
         std::vector<Enemigo*> getEnemies();
 
         Sala * getPrimeraSala();
