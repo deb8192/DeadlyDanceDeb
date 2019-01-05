@@ -8,7 +8,8 @@
 #include "Pathfinder.hpp"
 //#include "MotorGrafico.hpp"
 //#include <vector>//para tener los diferentes objetos,enemigos, jugadores.
-#include <ctime>
+//#include <ctime>
+#include "times.hpp"
 #include "Arma.hpp"
 #include <cstring>
 //#include "MotorFisicas.hpp"
@@ -76,8 +77,10 @@ class Nivel
         float acumulator;
         float atacktime = 0.0f;
         float atackEsptime = 0.0f;
+        float lastAtackEsptime = 0.0f;
         clock_t newTime;
         clock_t currentTime;
+        times * controladorTiempo;
 
         bool a,s,d,w,atEsp;
         bool cogerObjeto = false;
