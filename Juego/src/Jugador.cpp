@@ -296,7 +296,7 @@ int Jugador::AtacarEspecial()
         cout << "Supera las restricciones, ATAQUE ESPECIAL"<<endl;
         
         //Calcular posiciones si se inicia el ataque especial
-        if(timeAtEsp == 0)
+        if(timeAtEsp <= 0)
         {
             atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
             atespy = getY();

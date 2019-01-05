@@ -14,6 +14,7 @@ Nivel::Nivel()
     primeraSala = nullptr;
     fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     id = 0;
+    controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
 }
 
 bool Nivel::CargarNivel(int level)
@@ -150,8 +151,8 @@ void Nivel::update()
 
     int rec_col = fisicas->collideColectable();
 
-
-    if(motor->estaPulsado(KEY_E)){
+    if(motor->estaPulsado(KEY_E))
+    {
         if(rec_col >= 0)//si colisiona con un recolectable
         {
             if(jugador.getArma() == nullptr)//si no tiene arma equipada
@@ -264,8 +265,8 @@ void Nivel::update()
             jugador.getZ()
         );
       }
-
-       this->updateIA();
+        if(acumulator == 0.25)
+           this->updateIA();
        //Actualizar ataque especial
         this->updateAtEsp(motor);
         this->updateAt(&danyo2, motor);
@@ -350,14 +351,17 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 
 void Nivel::updateAtEsp(MotorGrafico *motor)
 {
+    float tiempoActual = 0.0f;
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((/*motor->estaPulsado(9)|| */motor->estaPulsado(KEY_Q)) && atackEsptime == 0.0)
+    if((/*motor->estaPulsado(9)|| */motor->estaPulsado(KEY_Q)) && atackEsptime <= 0.0)
     {
         danyo = jugador.AtacarEspecial();
         motor->colorearJugador(255, 55, 0, 255);
         if(danyo > 0)
         {
-            atackEsptime = 1500.0f;
+            atackEsptime = 1.5f;
+            lastAtackEsptime = controladorTiempo->getTiempo(2);
+            jugador.setTimeAtEsp(atackEsptime);
         }
     }
     else
@@ -368,18 +372,20 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
         }
         if(atackEsptime > 0.f)
         {
-            atackEsptime--;
+            tiempoActual = controladorTiempo->getTiempo(2);
+            atackEsptime -= (tiempoActual - lastAtackEsptime);
+            lastAtackEsptime = tiempoActual;
             jugador.setTimeAtEsp(atackEsptime);
         }
-        if(atackEsptime > 0.f && (int) atackEsptime % 250 == 0.f)
+        if(atackEsptime > 0.f && (int) (atackEsptime * 100) % 25 == 0.f)
         {
             danyo = jugador.AtacarEspecial();
         }
-        if(atackEsptime == 1000.0f)
+        if(atackEsptime == 1.0f)
         {
             motor->colorearEnemigo(255,255,255,255,0);
         }
-        if(atackEsptime <= 750.0f && motor->getArmaEspecial()) //Zona de pruebas
+        if(atackEsptime <= 0.5f && motor->getArmaEspecial()) //Zona de pruebas
         {
             motor->borrarArmaEspecial();
             motor->colorearJugador(255, 150, 150, 150);
@@ -465,8 +471,9 @@ void Nivel::updateIA()
         //PRUEBAS PATHFINDER
         if(!recorrido.empty())
         {
-            //Se comprueba si el enemigo esta en la siguiente sala a la que debe ir
-            //comprobando las coordenadas del enmigo estan en la sala
+            //Se comprueban las coordenadas del enemigo y si ha llegado a la siguiente
+            //sala del camino a la que debe ir o no. Se tienen en cuenta los tipos de centros
+            //para realizar las comprobaciones de coordenadas adecuadas con el ancho y alto de las salas
             if(enemigos.at(enemigoSeleccionado)->getSala() != recorrido.front().nodo)
             {
                 bool cambia = false, moveDer = false, moveIzq = false, moveArb = false, moveAbj = false;

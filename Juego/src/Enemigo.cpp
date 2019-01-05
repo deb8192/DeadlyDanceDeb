@@ -1,5 +1,7 @@
 #include "Enemigo.hpp"
-#include "Nivel.hpp"
+//#include "Nivel.hpp"
+#include "MotorGrafico.hpp"
+#include "MotorFisicas.hpp"
 #include "times.hpp"
 
 #define PI 3.14159265358979323846
