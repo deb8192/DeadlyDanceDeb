@@ -339,6 +339,8 @@ void Enemigo::runIA()
             break;
             case 1://ve al jugador
                 return ver(1);
+            case 2://merodeo
+                return Merodear(1);//merodeo pollo
             case 3://esta cerca del jugador
                 return true;
             case 4://atacar
@@ -349,6 +351,8 @@ void Enemigo::runIA()
                 return pedirAyuda();
             case 9://oye pedir ayuda enemigo ?
                 return oir(2);
+            case 10://contestacion a auxilio
+                return ContestarAyuda();
         }
 
         return false;//cambiamos de rama si no se encuentra la tarea
@@ -366,7 +370,6 @@ void Enemigo::runIA()
             {
                 if(loqueve[0] == 1)
                 {
-                    cout << " lo ve "<< endl;
                     return true;
                 }
             }
@@ -397,8 +400,26 @@ void Enemigo::runIA()
     bool Enemigo::pedirAyuda()
     {
         //vamos a generar un sonido de ayuda
-        generarSonido(20,0.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
-        cout << " grita pidiendo ayuda "<< endl;
+        generarSonido(20,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+        //cout << " grita pidiendo ayuda "<< endl;
         return true;
     }
+
+    bool Enemigo::ContestarAyuda()
+    {
+        //vamos a generar un sonido de ayuda
+        generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+        //cout << " contesta a la llamada de auxilio "<< endl;
+        return true;
+    }
+
+    bool Enemigo::Merodear(int tipo)
+    {
+        if(tipo == 1)//pollo
+        {
+           //cout << " pollo merodeando " << endl; 
+           return true;
+        }
+    }
+
 //fin comportamientos bases

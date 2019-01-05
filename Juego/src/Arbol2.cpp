@@ -39,62 +39,40 @@ int Arbol2::siguiente(bool valor)
 {
     if(ejecucionDirecta != nullptr)//esto significa que este arbol se esta ejecutando o entrado en una tarea repetitiva
     {
-        if(ejecucionDirecta->getEsRepetitivo())
+        if(valor)
         {
-            //esto es que se repite le enviamos la tarea y le sumamos 1 al numero de repeticiones si llega al final se pasa a la siguiente rama
-            
-            if(ejecucionDirecta->getRepeticionActual() != 0)
+            hoja2 * hoja = ejecucionDirecta->siguiente(ejecucionDirecta);
+            ejecucionDirecta = hoja;
+            if(ejecucionDirecta == nullptr)
             {
-                ejecucionDirecta->setRepeticionActual(ejecucionDirecta->getRepeticionActual() - 1);  
-                return ejecucionDirecta->conseguirComportamiento();
+                //esto significa que no hay mas tareas en esta rama por lo que reiniciamos 
+                estado = false;
+                return 0;//esto significa que no hay mas tareas en esta rama por lo que reiniciamos 
             }
             else
             {
-                //reiniciamos estado arbol y finalizamos la ejecucion
-                ejecucionDirecta = nullptr;
-                ejecucionDirecta->setRepeticionActual(ejecucionDirecta->getNumeroRepeticiones());
-                estado = false;
-                return 0;
+                //esto significa que hay una siguiente tarea que comprobar
+                estado = true;
+                return ejecucionDirecta->conseguirComportamiento();
             }
         }
         else
         {
-            //no es repetitivo por lo que nos estamos recorriendo el arbol normalmente
-            
-            if(valor)
+            //es false por lo que pasamos a la siguiente rama por arriba o hermana vamos al padre y le preguntamos si tiene otro hijo despues que este, si lo tiene se lo pedimos
+            hoja2 * hoja =ejecucionDirecta->siguienteRama(ejecucionDirecta);
+            ejecucionDirecta = hoja;
+            if(ejecucionDirecta == nullptr)//no hay mas ramas no se cumple nada (se puede decir que se queda parado)
             {
-                hoja2 * hoja = ejecucionDirecta->siguiente(ejecucionDirecta);
-                ejecucionDirecta = hoja;
-                if(ejecucionDirecta == nullptr)
-                {
-                    //esto significa que no hay mas tareas en esta rama por lo que reiniciamos 
-                    estado = false;
-                    return 0;//esto significa que no hay mas tareas en esta rama por lo que reiniciamos 
-                }
-                else
-                {
-                   //esto significa que hay una siguiente tarea que comprobar
-                   estado = true;
-                   return ejecucionDirecta->conseguirComportamiento();
-                }
+                estado = false;
+                return 0;
             }
             else
             {
-                //es false por lo que pasamos a la siguiente rama por arriba o hermana vamos al padre y le preguntamos si tiene otro hijo despues que este, si lo tiene se lo pedimos
-                hoja2 * hoja =ejecucionDirecta->siguienteRama(ejecucionDirecta);
-                ejecucionDirecta = hoja;
-                if(ejecucionDirecta == nullptr)//no hay mas ramas no se cumple nada (se puede decir que se queda parado)
-                {
-                    estado = false;
-                    return 0;
-                }
-                else
-                {
-                    //si que hay rama a comprobar
-                    
-                }
+                //si que hay rama a comprobar
+                estado = true;
+                return ejecucionDirecta->conseguirComportamiento();
             }
-        }
+        } 
     }
     else
     {
@@ -115,7 +93,9 @@ int Arbol2::siguiente(bool valor)
             return ejecucionDirecta->conseguirComportamiento();
         }
     }
-    return 0;
+
+    estado = true;//sale arbol
+    return 0;//no hace nada
 }
 
  bool Arbol2::estadoActual()
