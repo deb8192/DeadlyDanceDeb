@@ -265,11 +265,11 @@ void Nivel::update()
             jugador.getZ()
         );
       }
-        if(acumulator == 0.25)
-           this->updateIA();
+        this->updateIA();
        //Actualizar ataque especial
         this->updateAtEsp(motor);
         this->updateAt(&danyo2, motor);
+        this->updateRecorridoPathfinding();
 
         //Si se realiza el ataque se comprueban las colisiones
         if(atackEsptime > 0.0)
@@ -324,9 +324,11 @@ void Nivel::update()
 
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 {
-  if((motor->estaPulsado(KEY_ESPACIO)/* || motor->estaPulsado(10)*/) && atacktime == 0.0f)
+  if((motor->estaPulsado(KEY_ESPACIO) || motor->estaPulsado(LMOUSE_DOWN)) && atacktime == 0.0f)
     {
         *danyo = jugador.Atacar();
+        motor->resetKey(KEY_ESPACIO);
+        motor->resetEvento(LMOUSE_DOWN);
         motor->colorearJugador(255, 55, 0, 255);
         atacktime = 1500.0f;
     }else{
@@ -342,9 +344,9 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
         {
             //Colorear rojo
             motor->colorearJugador(255,255,0,0);
-        }else{
+        }else if(atacktime > 0.0f){
             //Colorear gris
-            motor->colorearJugador(255,0,0,255);
+            motor->colorearJugador(255,150,150,150);
         }
     }
 }
@@ -353,9 +355,11 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
 {
     float tiempoActual = 0.0f;
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((/*motor->estaPulsado(9)|| */motor->estaPulsado(KEY_Q)) && atackEsptime <= 0.0)
+    if((motor->estaPulsado(RMOUSE_DOWN)||motor->estaPulsado(KEY_Q)) && atackEsptime <= 0.0)
     {
         danyo = jugador.AtacarEspecial();
+        motor->resetKey(KEY_Q);
+        motor->resetEvento(RMOUSE_DOWN);
         motor->colorearJugador(255, 55, 0, 255);
         if(danyo > 0)
         {
@@ -396,7 +400,6 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
 void Nivel::updateIA()
 {
 
-    bool colorear = false;
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     //Actualizar ataque especial
@@ -423,9 +426,36 @@ void Nivel::updateIA()
         }
     }*/
 
-    //Ejecucion del pathfinding buscando al jugador
+    //En esta parte mueren
+    if(jugador.estasMuerto()){
+        //motor->EraseJugador(jugador);
+    }
+    if(enemigos.size() > 0){
+        //comprobando los enemigos para saber si estan muertos
+        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+
+            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
+
+                motor->EraseEnemigo(i);
+                fisicas->EraseEnemigo(i);
+                EraseEnemigo(i);
+            }else{
+                if(enemigos[i]->estasMuerto()){
+                    enemigos[i]->MuereEnemigo(i);
+                }
+            }
+        }
+    }
+}
+
+
+void Nivel::updateRecorridoPathfinding()
+{
+    MotorGrafico *motor = MotorGrafico::getInstance();
+    //Ejecucion del pathfinding buscando de momento la primera sala
     if(motor->estaPulsado(KEY_P) || !recorrido.empty())
     {
+        bool colorear = false;
         motor->resetKey(KEY_P);
         Pathfinder path;
         int tipoCentro;
@@ -434,41 +464,18 @@ void Nivel::updateIA()
             motor->colorearEnemigo(255, 127, 0, 127, 1);
             colorear = true;
         }
-        //Se inicia el recorrido hacia el jugador
-        if(recorrido.empty())
+        //Se inicia el recorrido hacia la primera sala del arbol de salas
+        //Se cambiara para buscar al enemigo que pide ayuda.
+        if(recorrido.empty() && !enemigos.empty())
         {
             enemigoSeleccionado++;
             if(enemigoSeleccionado == enemigos.size())
             {
                 enemigoSeleccionado = 0;
             }
-            //bool salaEncontrada = false;
-            //Sala* actual = primeraSala;
-            //Se comparan las coordenadas del jugador con las de cada
-            //sala hasta que se encuentre la sala en la que se hallan
-            //dichas coordenadas del jugador
-            /*while(!salaEncontrada)
-            {
-                tipoCentro = actual->getType();
-                if(tipoCentro == 0)
-                {
-                    if(jugador.getX() <= actual->getSizes()[2] + (actual->getSizes()[0] / 2) && jugador.getX() >= actual->getSizes()[2] - (actual->getSizes()[0] / 2))
-                    {
-                        if(jugador.getZ() <= actual->getSizes()[4] + (actual->getSizes()[1] / 2) && jugador.getZ() >= actual->getSizes()[4] - (actual->getSizes()[1] / 2))
-                        {
-                            salaEncontrada = true;
-                        }
-                    }
-                    else
-                    {
-                        actual = actual->getSalidas().at(0);
-                        cout<<"Entradas: "<< actual->getSalidas().size();
-                    }
-                }
-            }*/
             recorrido = path.encontrarCamino(enemigos.at(enemigoSeleccionado)->getSala(), primeraSala);
         }
-        //PRUEBAS PATHFINDER
+        //Desplazamiento del enemigo hacia su destino
         if(!recorrido.empty())
         {
             //Se comprueban las coordenadas del enemigo y si ha llegado a la siguiente
@@ -636,42 +643,42 @@ void Nivel::updateIA()
                 {
                     if(moveDer)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + frameTime);
                         cout<<"Posicion del enemigo: x="<<enemigos.at(enemigoSeleccionado)->getX()<<" z=" << enemigos.at(enemigoSeleccionado)->getY();
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + frameTime);
                     }
                     else
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + frameTime);
                     }
                 }
                 else if(moveArb)
                 {
                     if(moveDer)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - frameTime);
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - frameTime);
                     }
                     else
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - frameTime);
                     }
                 }
                 else
                 {
                     if(moveDer)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
                     }
                 }
             }
@@ -680,27 +687,6 @@ void Nivel::updateIA()
                 cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
                         
                 recorrido.erase(recorrido.begin());
-            }
-        }
-    }
-
-    //En esta parte mueren
-    if(jugador.estasMuerto()){
-        //motor->EraseJugador(jugador);
-    }
-    if(enemigos.size() > 0){
-        //comprobando los enemigos para saber si estan muertos
-        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
-
-            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
-
-                motor->EraseEnemigo(i);
-                fisicas->EraseEnemigo(i);
-                EraseEnemigo(i);
-            }else{
-                if(enemigos[i]->estasMuerto()){
-                    enemigos[i]->MuereEnemigo(i);
-                }
             }
         }
     }
