@@ -77,7 +77,6 @@ class Nivel
         float frameTime;
         float acumulator;
         float atacktime = 0.0f;
-        float atackEsptime = 0.0f;
         float lastAtackEsptime = 0.0f;
         clock_t newTime;
         clock_t currentTime;

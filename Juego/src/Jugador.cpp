@@ -289,14 +289,14 @@ int Jugador::AtacarEspecial()
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
 
-    cout << vida << barraAtEs << por100 << endl;
+    cout << vida << " " << barraAtEs << " " << por100 << endl;
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
     if(vida > 0 && barraAtEs == por100)
     {
         cout << "Supera las restricciones, ATAQUE ESPECIAL"<<endl;
         
         //Calcular posiciones si se inicia el ataque especial
-        if(timeAtEsp <= 0)
+        if(atackEspTime <= 0)
         {
             atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
             atespy = getY();
@@ -551,7 +551,12 @@ void Jugador::setProAtaCritico(int probabilidad)
 }
 void Jugador::setTimeAtEsp(float time)
 {
-    timeAtEsp = time;
+    atackEspTime = time;
+}
+
+void Jugador::setLastTimeAtEsp(float time)
+{
+    lastAtackEspTime = time;
 }
 
 int Jugador::getVida()
@@ -612,7 +617,12 @@ int * Jugador::getBuffos()
 }
 float Jugador::getTimeAtEsp()
 {
-    return timeAtEsp;
+    return atackEspTime;
+}
+
+float Jugador::getLastTimeAtEsp()
+{
+    return lastAtackEspTime;
 }
 
 const char *Jugador::getRutaArmaEsp()

@@ -159,15 +159,17 @@ int Enemigo::AtacarEspecial()
 {
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
-    cout << vida << barraAtEs << por100 << endl;
+    cout << vida << " " << barraAtEs << " " << por100 << endl;
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
     if(vida > 0 && barraAtEs == por100)
     {
         cout << "ATAQUE ESPECIAL ENEMIGO"<<endl;
         
         //Calcular posiciones si se inicia el ataque especial
-        if(timeAtEsp <= 0)
+        if(atackEspTime <= 0)
         {
             atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
             atespy = getY();
@@ -176,9 +178,6 @@ int Enemigo::AtacarEspecial()
             atgy = getRY();
             atgz = getRZ();
             incrAtDisCirc = 0.0;
-
-            MotorFisicas* fisicas = MotorFisicas::getInstance();
-            MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
             //Posiciones en el mundo 3D
             atespposX = (atespx/2);
@@ -206,14 +205,21 @@ int Enemigo::AtacarEspecial()
 
         //Se aplican todas las modificaciones en la variable danyo
         danyoF = ataque * critico * aumentosAtaque;
-        danyo = roundf(danyoF * por10) / por10;
         cout << "daño: " <<danyo<<endl;
+      
+        //Colision
+        if(fisicas->IfCollision(fisicas->getEnemiesAtack(),fisicas->getJugador()))
+        {
+            cout << "Jugador Atacado" << endl;
+            danyo = roundf(danyoF * por10) / por10;
+        }
         barraAtEs = 0;
         return danyo;
     }
     else
     {
         cout << "No supera las restricciones"<<endl;
+        barraAtEs += 1;
     }
     return danyo;
 }
@@ -307,6 +313,17 @@ void Enemigo::setProAtaCritico(int probabilidad)
 {
     proAtaCritico = probabilidad;
 }
+
+void Enemigo::setTimeAtEsp(float time)
+{
+    atackEspTime = time;
+}
+
+void Enemigo::setLastTimeAtEsp(float time)
+{
+    lastAtackEspTime = time;
+}
+
 void Enemigo::setSala(Sala* sala)
 {
     estoy = sala;
@@ -376,4 +393,14 @@ void Enemigo::setAtackTime(float t)
 float Enemigo::getAtackTime()
 {
   return atacktime;
+}
+
+float Enemigo::getTimeAtEsp()
+{
+    return atackEspTime;
+}
+
+float Enemigo::getLastTimeAtEsp()
+{
+    return lastAtackEspTime;
 }

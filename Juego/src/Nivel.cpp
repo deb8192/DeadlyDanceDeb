@@ -38,6 +38,7 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     ene->definirSala(sala);//le pasamos la sala en donde esta
     ene->setAtaque(10);
     ene->setArmaEspecial(100);
+    ene->setTimeAtEsp(0.0f);
     ene->setDanyoCritico(50);
     ene->setProAtaCritico(10);
     ene->generarSonido(20,5);
@@ -59,6 +60,7 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
     jugador.setAtaque(15);
     jugador.setArma(NULL);
     jugador.setArmaEspecial(100);
+    jugador.setTimeAtEsp(0.0f);
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
     jugador.setVida(100);
@@ -276,7 +278,7 @@ void Nivel::update()
         this->updateRecorridoPathfinding();
 
         //Si se realiza el ataque se comprueban las colisiones
-        if(atackEsptime > 0.0)
+        if(jugador.getTimeAtEsp() > 0.0)
         {
             jugador.AtacarEspecialUpdate(&danyo);
         }
@@ -300,23 +302,56 @@ void Nivel::update()
        //actualizamos los enemigos
        if(enemigos.size() > 0)//posiciones interpolacion
        {
+           float tiempoActual = 0.0f, tiempoAtaqueEsp = 0.0f;
            for(std::size_t i=0;i<enemigos.size();i++)
            {
-               //cout << "Enemigo " << i << endl;
-               //Si el enemigo ha realizado danyo
-               int danyo_jug = enemigos[i]->Atacar();
-               if(danyo_jug > 0)
-               {
-                 jugador.QuitarVida(danyo_jug);
-                 cout<< "Vida jugador: "<< jugador.getVida() << endl;
-                 enemigos[i]->setAtackTime(1500.0f); //tiempo hasta el proximo ataque
-               }
-               //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
-               if(enemigos[i]->getAtackTime() > 0.0f)
-               {
-                 enemigos[i]->setAtackTime(enemigos[i]->getAtackTime() - 1.0f); //restar uno al tiempo de ataque
-               }
-               //enemigos[i]->AtacarEspecial();
+                int danyo_jug = 0;
+                //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
+                if(enemigos[i]->getTimeAtEsp() > 0.0f)
+                {
+                    tiempoActual = controladorTiempo->getTiempo(2);
+                    tiempoAtaqueEsp = enemigos[i]->getTimeAtEsp();
+                    tiempoAtaqueEsp -= (tiempoActual - enemigos[i]->getLastTimeAtEsp());
+                    enemigos[i]->setLastTimeAtEsp(tiempoActual);
+                    enemigos[i]->setTimeAtEsp(tiempoAtaqueEsp); //restar uno al tiempo de ataque
+                }
+                if(enemigos[i]->getTimeAtEsp() <= 0.0f)
+                {
+                    danyo_jug = enemigos[i]->AtacarEspecial();
+                }
+                else if(enemigos[i]->getBarraAtEs() < 100)
+                {
+                    enemigos[i]->AumentarBarraAtEs(1);
+                }
+                if(danyo_jug == 0)
+                {
+                    //cout << "Enemigo " << i << endl;
+                    //Si el enemigo ha realizado danyo
+                    danyo_jug = enemigos[i]->Atacar();
+                    if(danyo_jug > 0)
+                    {
+                        jugador.QuitarVida(danyo_jug);
+                        cout<< "Vida jugador: "<< jugador.getVida() << endl;
+                        enemigos[i]->setAtackTime(1500.0f); //tiempo hasta el proximo ataque
+                    }
+                    //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
+                    if(enemigos[i]->getAtackTime() > 0.0f)
+                    {
+                        enemigos[i]->setAtackTime(enemigos[i]->getAtackTime() - 1.0f); //restar uno al tiempo de ataque
+                    }
+                }
+                //Se le quita vida con el danyo del ataque especial
+                else
+                {
+                    if(danyo_jug > 0)
+                    {
+                        jugador.QuitarVida(danyo_jug);
+                        cout<< "Vida jugador tras ataque especial: "<< jugador.getVida() << endl;
+                        enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
+                        enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
+            
+                    }
+                }
                //enemigos[i]->queVes();
            }
        }
@@ -333,7 +368,6 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
         *danyo = jugador.Atacar();
         motor->resetKey(KEY_ESPACIO);
         motor->resetEvento(LMOUSE_DOWN);
-        motor->colorearJugador(255, 55, 0, 255);
         atacktime = 1500.0f;
     }else{
         if(atacktime > 0.0f)
@@ -358,8 +392,9 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 void Nivel::updateAtEsp(MotorGrafico *motor)
 {
     float tiempoActual = 0.0f;
+    float tiempoAtaqueEsp = 0.0f;
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((motor->estaPulsado(RMOUSE_DOWN)||motor->estaPulsado(KEY_Q)) && atackEsptime <= 0.0)
+    if((motor->estaPulsado(RMOUSE_DOWN)||motor->estaPulsado(KEY_Q)) && jugador.getTimeAtEsp() <= 0.0)
     {
         danyo = jugador.AtacarEspecial();
         motor->resetKey(KEY_Q);
@@ -367,9 +402,9 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
         motor->colorearJugador(255, 55, 0, 255);
         if(danyo > 0)
         {
-            atackEsptime = 1.5f;
-            lastAtackEsptime = controladorTiempo->getTiempo(2);
-            jugador.setTimeAtEsp(atackEsptime);
+            jugador.setTimeAtEsp(1.5f);
+            jugador.setLastTimeAtEsp(controladorTiempo->getTiempo(2));
+            
         }
     }
     else
@@ -378,22 +413,23 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
         {
             danyo = 0;
         }
-        if(atackEsptime > 0.f)
+        if(jugador.getTimeAtEsp() > 0.f)
         {
             tiempoActual = controladorTiempo->getTiempo(2);
-            atackEsptime -= (tiempoActual - lastAtackEsptime);
-            lastAtackEsptime = tiempoActual;
-            jugador.setTimeAtEsp(atackEsptime);
+            tiempoAtaqueEsp = jugador.getTimeAtEsp();
+            tiempoAtaqueEsp -= (tiempoActual - jugador.getLastTimeAtEsp());
+            jugador.setLastTimeAtEsp(tiempoActual);
+            jugador.setTimeAtEsp(tiempoAtaqueEsp);
         }
-        if(atackEsptime > 0.f && (int) (atackEsptime * 100) % 25 == 0.f)
+        if(jugador.getTimeAtEsp() > 0.f && (int) (jugador.getTimeAtEsp() * 100) % 25 == 0.f)
         {
             danyo = jugador.AtacarEspecial();
         }
-        if(atackEsptime == 1.0f)
+        if(jugador.getTimeAtEsp() == 1.0f)
         {
             motor->colorearEnemigo(255,255,255,255,0);
         }
-        if(atackEsptime <= 0.5f && motor->getArmaEspecial()) //Zona de pruebas
+        if(jugador.getTimeAtEsp() <= 0.5f && motor->getArmaEspecial()) //Zona de pruebas
         {
             motor->borrarArmaEspecial();
             motor->colorearJugador(255, 150, 150, 150);

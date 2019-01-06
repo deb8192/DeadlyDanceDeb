@@ -50,6 +50,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setProAtaCritico(int probabilidad);
         void setSala(Sala* sala);
         void setAtackTime(float t);
+        void setTimeAtEsp(float time);
+        void setLastTimeAtEsp(float time);
         void setRotation(float rot);
         int getVida();
         int getTipo();
@@ -61,6 +63,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int* getBuffos();
         Sala* getSala();
         float getAtackTime();
+        float getTimeAtEsp();
+        float getLastTimeAtEsp();
         float getX();
         float getY();
         float getZ();
@@ -71,7 +75,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
     protected:
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
-        float atacktime = 0.0f, timeAtEsp = 0.0f;
+        float atacktime = 0.0f;
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";
 };
