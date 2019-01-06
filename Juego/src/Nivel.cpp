@@ -452,7 +452,7 @@ void Nivel::updateIA()
 void Nivel::updateRecorridoPathfinding()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
-    //Ejecucion del pathfinding buscando de momento la primera sala
+    //Ejecucion del pathfinding de momento al pulsar P
     if(motor->estaPulsado(KEY_P) || !recorrido.empty())
     {
         bool colorear = false;
@@ -692,7 +692,6 @@ void Nivel::updateRecorridoPathfinding()
     }
 }
 
-//Pruebas pathfinding
 Sala * Nivel::getPrimeraSala()
 {
     return primeraSala;
