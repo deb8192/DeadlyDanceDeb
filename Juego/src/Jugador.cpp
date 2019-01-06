@@ -264,7 +264,7 @@ void Jugador::AtacarUpdate(int danyo)
             danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
             cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
-            motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+            motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
             //guardar el atacado para no repetir
             atacados_normal.push_back(atacados.at(i));
           }
@@ -473,8 +473,8 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
             cout<<"Daño "<<*danyo<<endl;
             *danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
-            motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }
 }
@@ -527,7 +527,7 @@ void Jugador::setArma(Arma * arma)
 
 void Jugador::setArmaEspecial(int ataque)
 {
-    armaEspecial = new Arma(ataque, nombreJugador,1,1,1,rutaArmaEspecial,"");
+    armaEspecial = new Arma(ataque, nombreJugador,3,3,3,rutaArmaEspecial,"");
 }
 
 void Jugador::setNombre(const char * nombre)

@@ -110,7 +110,6 @@ using namespace idsEventos;
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
             void borrarArmaEspecial();
             void colorearJugador(int a, int r, int g, int b);
-            void colorearEnemigos(int a, int r, int g, int b, unsigned int seleccion);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
 
             void colorearObjeto(int a, int r, int g, int b, int obj);

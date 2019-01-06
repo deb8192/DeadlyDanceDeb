@@ -243,12 +243,12 @@ void Enemigo::MuereEnemigo(int enemi){
     times* tiempo = times::getInstance();
     MotorGrafico* motor = MotorGrafico::getInstance();
     if(tiempoPasadoMuerte == 0){
-        motor->colorearEnemigos(255,0,0,0,enemi);//negro
+        motor->colorearEnemigo(255,0,0,0,enemi);//negro
         tiempoPasadoMuerte = tiempo->getTiempo(1);
     }
     if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) < animacionMuerteTiem){
         if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) >= 1000.0f){
-            motor->colorearEnemigos(255,255,0,0,enemi);//rojo
+            motor->colorearEnemigo(255,255,0,0,enemi);//rojo
         }
     }
 }
@@ -288,6 +288,11 @@ void Enemigo::setAtaque(int ataq)
     ataque = ataq;
 }
 
+void Enemigo::setArmaEspecial(int ataque)
+{
+    armaEspecial = new Arma(ataque, "",2,2,2,rutaArmaEspecial,"");
+}
+
 void Enemigo::setSuerte(int suer)
 {
 
@@ -300,7 +305,7 @@ void Enemigo::setDanyoCritico(int danyoC)
 
 void Enemigo::setProAtaCritico(int probabilidad)
 {
-
+    proAtaCritico = probabilidad;
 }
 void Enemigo::setSala(Sala* sala)
 {
