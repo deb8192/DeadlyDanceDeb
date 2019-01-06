@@ -85,7 +85,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         Arma *armaEquipada;
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/Arma.obj";
-        const char * nombreJugador = "Bailaora";
+        const char * nombreJugador = "Heavy";
         //!PRUEBAS ATAQUE ESPECIAL
        //  core::vector3df dir;
         float danyo_arma = 10.0f;

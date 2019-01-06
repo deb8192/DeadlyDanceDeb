@@ -36,6 +36,10 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->setVida(75);
     ene->definirSala(sala);//le pasamos la sala en donde esta
+    ene->setAtaque(10);
+    ene->setArmaEspecial(100);
+    ene->setDanyoCritico(50);
+    ene->setProAtaCritico(10);
     ene->generarSonido(20,5);
     ene->setRotation(0.0f);//le ponemos hacia donde mira cuando se carga
     enemigos.push_back(ene);//guardamos el enemigo en el vector
@@ -286,7 +290,7 @@ void Nivel::update()
         {
             for(unsigned int i = 0; i < enemigos.size(); i++)
             {
-                motor->colorearEnemigos(255, 150, 150, 150, i);
+                motor->colorearEnemigo(255, 150, 150, 150, i);
             }
         }
 
@@ -422,7 +426,7 @@ void Nivel::updateIA()
     {
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            motor->colorearEnemigos(255, 150, 150, 150, i);
+            motor->colorearEnemigo(255, 150, 150, 150, i);
         }
     }*/
 

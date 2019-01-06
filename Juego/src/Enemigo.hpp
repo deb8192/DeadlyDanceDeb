@@ -44,6 +44,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setTipo(int tip);
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
+        void setArmaEspecial(int ataque);
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
@@ -71,7 +72,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
         float atacktime = 0.0f, timeAtEsp = 0.0f;
-        Arma *armaEspecial = new Arma(ataque, "",1,1,1,"assets/models/objeto.obj","");
+        Arma *armaEspecial;
+        const char * rutaArmaEspecial = "assets/models/objeto.obj";
 };
 
 #endif
