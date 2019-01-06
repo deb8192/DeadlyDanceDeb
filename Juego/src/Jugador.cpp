@@ -332,12 +332,13 @@ int Jugador::AtacarEspecial()
         }
 
         //Se calcula el danyo del ataque
+        aumentosAtaque += por1;
         if(armaEquipada != NULL)
         {
-            aumentosAtaque += por1 + (float) armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
-            aumentosAtaque = roundf(aumentosAtaque * por10) / por10;  //FUNCION ROUND SEPARADA
+            aumentosAtaque += (float) armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
+            //aumentosAtaque = roundf(aumentosAtaque * por10) / por10;  //FUNCION ROUND SEPARADA
         }
-        aumentosAtaque += por1 + (float) armaEspecial->getAtaque()/por100;
+        aumentosAtaque *= 2;
         aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
 
         //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
@@ -352,7 +353,7 @@ int Jugador::AtacarEspecial()
         //Se aplican todas las modificaciones en la variable danyo
         danyoF = ataque * critico * aumentosAtaque;
         danyo = roundf(danyoF * por10) / por10;
-        cout << "daño" <<danyo<<endl;
+        cout << "daño: " <<danyo<<endl;
         barraAtEs = 0;
         return danyo;
     }
@@ -490,7 +491,7 @@ void Jugador::RecuperarVida(int can)
 
 void Jugador::AumentarBarraAtEs(int can)
 {
-
+    barraAtEs += can;
 }
 
 void Jugador::Interactuar(int id, int id2)
@@ -526,7 +527,7 @@ void Jugador::setArma(Arma * arma)
 
 void Jugador::setArmaEspecial(int ataque)
 {
-    armaEspecial = new Arma(ataque, nombreJugador,1,1,1,"assets/models/objeto.obj","");
+    armaEspecial = new Arma(ataque, nombreJugador,1,1,1,rutaArmaEspecial,"");
 }
 
 void Jugador::setNombre(const char * nombre)
@@ -596,12 +597,12 @@ int Jugador::getSuerte()
 
 int Jugador::getDanyoCritico()
 {
-    return -1;
+    return danyoCritico;
 }
 
 int Jugador::getProAtaCritico()
 {
-    return -1;
+    return proAtaCritico;
 }
 
 int * Jugador::getBuffos()

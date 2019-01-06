@@ -4,6 +4,7 @@
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
 #include "INsentidos.hpp"
+#include "Arma.hpp"
 #include "Sala.hpp"
 #include <vector>
 
@@ -68,8 +69,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
     protected:
         Sala * estoy;//sala en la que esta el enemigo
-        float atx, aty, atz, atgx, atgy, atgz;
-        float atacktime = 0.0f;
+        float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
+        float atacktime = 0.0f, timeAtEsp = 0.0f;
+        Arma *armaEspecial = new Arma(ataque, "",1,1,1,"assets/models/objeto.obj","");
 };
 
 #endif
