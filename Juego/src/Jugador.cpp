@@ -2,7 +2,6 @@
 #include "Nivel.hpp"
 #include <stdlib.h>
 #include "MotorAudio.hpp"
-#include "math.h"
 
 #define PI 3.14159265358979323846
 #define PIRADIAN 180.0f
@@ -16,9 +15,12 @@ Jugador::Jugador()
 
 }
 
-Jugador::Jugador(int,int,int,int,int,int)
+Jugador::Jugador(int,int,int,int,int,int,std::string malla)
 {
+    
     vida = 100;//esto lo hereda de la interfaz por el protected
+    MotorGrafico *motor = MotorGrafico::getInstance();
+    motor->crearJugador(malla);
 
     x = 1;
     z = 20;

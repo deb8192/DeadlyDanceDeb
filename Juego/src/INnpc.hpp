@@ -46,6 +46,7 @@ protected:
     int danyoCritico;//valor base del danyo anyadido a un golpe critico;
     int proAtaCritico;//valor que determina cuantas veces se hacen ataques criticos.
     int buffos[4];//1 aumento de vida, 2 aumento de ataque, 3 aumento de suerte, 4 aumento de pCritica.
+    std::string malla; //malla 3d del personaje
     //Variables para el metodo morir
     float atackEspTime;//Tiempo actual del ataque especial
     float lastAtackEspTime;//Tiempo antiguo del ataque especial

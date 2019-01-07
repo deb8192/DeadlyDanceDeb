@@ -8,7 +8,7 @@ class INsentidos
 {
     public:
     
-        virtual void generarSonido(int intensidad,double duracion)=0;//genera un sonido
+        virtual void generarSonido(int intensidad,double duracion,int tipo)=0;//genera un sonido
 
         virtual void queEscuchas()=0;//segun lo que oiga se implementa una cosa o otra
 

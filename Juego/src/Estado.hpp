@@ -13,6 +13,7 @@ private:
     virtual void Draw() = 0;
     virtual void Clean() = 0;
     virtual void Update() = 0;
+    virtual void UpdateIA() = 0;
     virtual int Esta() = 0;
     virtual void Init() = 0;
 
@@ -20,6 +21,7 @@ public:
     void Pintar(){ Draw(); };
     void Borrar(){ Clean(); };
     void Actualizar(){ Update(); };
+    void ActualizarIA(){ UpdateIA(); };
     int QueEstado(){ return Esta(); };
     void Ini(){Init();};
 };
@@ -32,6 +34,7 @@ class Menu: public Estado{
         void Draw();
         void Clean();
         void Update();
+        void UpdateIA();
         int Esta();
         void Init();
         //MotorGrafico *motor = MotorGrafico::getInstance();
@@ -42,6 +45,7 @@ class Jugando: public Estado{
         void Draw();
         void Clean();
         void Update();
+        void UpdateIA();
         int Esta();
         void Init();
         //MotorGrafico *motor = MotorGrafico::getInstance();
@@ -52,6 +56,7 @@ class Cinematica: public Estado{
         void Draw();
         void Clean();
         void Update();
+        void UpdateIA();
         int Esta();
         void Init();
 
@@ -72,6 +77,7 @@ class Puzzles: public Estado{
         void Draw();
         void Clean();
         void Update();
+        void UpdateIA();
         int Esta();
         void Init();
 

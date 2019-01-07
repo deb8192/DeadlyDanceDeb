@@ -1,12 +1,12 @@
 #ifndef Enemigo_HPP
 #define Enemigo_HPP
-
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
 #include "INsentidos.hpp"
 #include "Arma.hpp"
 #include "Sala.hpp"
 #include <vector>
+#include "Arbol2.hpp"
 
 class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple herencia a esto se le llama derivacion multiple
 {
@@ -18,7 +18,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void definirSala(Sala * sala);
 
         //sentidos metodos
-        void generarSonido(int intensidad, double duracion);
+        void generarSonido(int intensidad,double duracion,int tipo);//la intensidad es el alcance y la duracion es cuanto dura el sonido, el tipo 1 son sonidos del jugador, 2 es pedir ayuda de los enemigos
 
         void queEscuchas();//recupera la informacion de los sonidos que escucha
 
@@ -72,12 +72,31 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getRY();
         float getRZ();
 
+        //comportamientos bases
+            bool ver(int tipo);//1 si ve al jugador
+            bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
+            bool buscar();//por defecto devuelve true
+            bool perseguir();//por defecto devuelve true
+            bool Acciones(int);//esto es para recorrer el arbol
+            bool pedirAyuda();//pide ayuda
+            bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
+            bool Merodear(int tipo);//para dar vueltas por una zona, segun el enemigo tendra diferentes merodeos
+        //fin comportamientos bases
+        
+        //activar ia
+        void setArbol(Arbol2 *);//asigna un arbol de ia al enemigo
+        Arbol2 * getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
+        void runIA();//corre la ia del enemigo
+        //fin ia
+        
     protected:
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
         float atacktime = 0.0f;
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";
+        Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
+
 };
 
 #endif

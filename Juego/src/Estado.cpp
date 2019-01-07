@@ -566,3 +566,24 @@ void Puzzles::ComprobarGanar()
         cout << "Salta la araña" << endl;
     }
 }
+
+void Puzzles::UpdateIA()
+{
+
+}
+
+void Cinematica::UpdateIA()
+{
+
+}
+
+void Jugando::UpdateIA()
+{
+    Nivel *nivel = Nivel::getInstance();
+    nivel->updateIA();
+}
+
+void Menu::UpdateIA()
+{
+
+}
