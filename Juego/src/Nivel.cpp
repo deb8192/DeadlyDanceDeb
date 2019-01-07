@@ -27,7 +27,7 @@ bool Nivel::CargarNivel(int level)
 
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->cargarInterfaz();
-    
+
     return false;
 }
 
@@ -340,10 +340,6 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
         {
             atacktime--;
         }
-        if(atacktime == 1000.0f) //Zona de pruebas
-        {
-            motor->clearDebug2();
-        }
         if(atacktime > 500.0f)
         {
             //Colorear rojo
@@ -352,6 +348,11 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
             //Colorear gris
             motor->colorearJugador(255,0,0,255);
         }
+    }
+
+    //clear
+    if(atacktime == 0.0f){
+      motor->clearDebug2();
     }
 }
 
@@ -682,7 +683,7 @@ void Nivel::updateIA()
             else
             {
                 cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
-                        
+
                 recorrido.erase(recorrido.begin());
             }
         }
