@@ -1009,3 +1009,41 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
         }
     }   
 }
+
+
+void MotorGrafico::cargarInterfaz()
+{
+    vidaI = guienv->addImage(driver->getTexture("assets/images/51.png"),position2d<int>(10,10));
+    energiaI = guienv->addImage(driver->getTexture("assets/images/21.png"),position2d<int>(10,58));
+    dineroI = guienv->addImage(driver->getTexture("assets/images/61.png"),position2d<int>(680,10));
+    armaI = guienv->addImage(driver->getTexture("assets/images/11.png"),position2d<int>(730,530));
+    //guienv->addStaticText(L"100",rect<s32>(100,20,150,50),false); falta ver los cambios de fuente y ponerlo correctamente
+    //vidaI->setVisible(false);
+    //energiaI->setVisible(false);
+    //dineroI->setVisible(false);
+    //armaI->setVisible(false);
+}
+
+void MotorGrafico::destruirInterfaz()
+{
+    if(vidaI)
+    {
+        vidaI->remove();
+    }
+
+    if(energiaI)
+    {
+        energiaI->remove();
+    }
+
+    if(dineroI)
+    {
+        dineroI->remove();
+    }
+
+    if(armaI)
+    {
+         armaI->remove();
+    }
+}
+
