@@ -8,7 +8,8 @@
 #include "Pathfinder.hpp"
 //#include "MotorGrafico.hpp"
 //#include <vector>//para tener los diferentes objetos,enemigos, jugadores.
-#include <ctime>
+//#include <ctime>
+#include "times.hpp"
 #include "Arma.hpp"
 #include <cstring>
 //#include "MotorFisicas.hpp"
@@ -50,6 +51,7 @@ class Nivel
         void updateAtEsp(MotorGrafico *);//se actualiza la ejecucion de los ataques
         void updateAt(int *, MotorGrafico *);
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
+        void updateRecorridoPathfinding();
         std::vector<Enemigo*> getEnemies();
 
         Sala * getPrimeraSala();
@@ -80,9 +82,10 @@ class Nivel
         float frameTime;
         float acumulator;
         float atacktime = 0.0f;
-        float atackEsptime = 0.0f;
+        float lastAtackEsptime = 0.0f;
         clock_t newTime;
         clock_t currentTime;
+        times * controladorTiempo;
 
         bool a,s,d,w,atEsp;
         bool cogerObjeto = false;

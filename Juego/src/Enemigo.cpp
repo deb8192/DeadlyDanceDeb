@@ -1,5 +1,8 @@
 #include "Enemigo.hpp"
-#include "Nivel.hpp"
+//#include "Nivel.hpp"
+#include "MotorGrafico.hpp"
+#include "MotorFisicas.hpp"
+#include "MotorAudio.hpp"
 #include "times.hpp"
 
 #define PI 3.14159265358979323846
@@ -144,11 +147,83 @@ int Enemigo::Atacar()
     return danyo;
 }
 
+/*************** AtacarEspecial *****************
+ *  Funcion que inicia la ejecucion del ataque
+ *  especial del enemigo si la barra de ataque
+ *  especial esta completa y se pulsa el boton Q /
+ *  click derecho del raton.
+ *      Entradas:
+ *      Salidas: int danyo;
+ */
 int Enemigo::AtacarEspecial()
 {
-    std::cout << "Ataque especial enemigo" << std::endl;
+    float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
+    int danyo = 0, por10 = 10, por100 = 100;
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+    MotorGrafico* motor = MotorGrafico::getInstance();
 
-    return -1;
+    cout << vida << " " << barraAtEs << " " << por100 << endl;
+    //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
+    if(vida > 0 && barraAtEs == por100)
+    {
+        cout << "ATAQUE ESPECIAL ENEMIGO"<<endl;
+        
+        //Calcular posiciones si se inicia el ataque especial
+        if(atackEspTime <= 0)
+        {
+            atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
+            atespy = getY();
+            atespz = 6.5 * cos(PI * getRY() / PIRADIAN) + getZ();
+            atgx = getRX();
+            atgy = getRY();
+            atgz = getRZ();
+            incrAtDisCirc = 0.0;
+
+            //Posiciones en el mundo 3D
+            atespposX = (atespx/2);
+            atespposY = (getY()/2);
+            atespposZ = (atespz/2);
+
+            //Crear cuerpo de colision de ataque delante del jugador
+            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,4,4,4,8);
+            motora->getEvent("Bow")->setVolume(0.8f);
+            motora->getEvent("Bow")->start();
+            motor->dibujarObjetoTemporal(atespx, atespy, atespz, atgx, atgy, atgz, 4, 4, 4, 2);
+        }
+
+        //Se calcula el danyo del ataque
+        aumentosAtaque += (por1 * 2);
+        aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
+
+        //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
+        int probabilidad = rand() % por100 + 1;
+        if(probabilidad <= proAtaCritico)
+        {
+            critico += (float) danyoCritico / por100;
+            critico = roundf(critico * por10) / por10;
+            cout<<"critico " << proAtaCritico << " " << critico <<endl;
+        }
+
+        //Se aplican todas las modificaciones en la variable danyo
+        danyoF = ataque * critico * aumentosAtaque;
+        cout << "daño: " <<danyoF<<endl;
+      
+        //Colision
+        if(fisicas->IfCollision(fisicas->getEnemiesAtEsp(),fisicas->getJugador()))
+        {
+            cout << "Jugador Atacado por ataque especial" << endl;
+            danyo = roundf(danyoF * por10) / por10;
+        }
+        barraAtEs = 0;
+        return danyo;
+    }
+    else
+    {
+        cout << "No supera las restricciones"<<endl;
+        barraAtEs += 1;
+    }
+    return danyo;
 }
 
 void Enemigo::QuitarVida(int can)
@@ -176,12 +251,12 @@ void Enemigo::MuereEnemigo(int enemi){
     times* tiempo = times::getInstance();
     MotorGrafico* motor = MotorGrafico::getInstance();
     if(tiempoPasadoMuerte == 0){
-        motor->colorearEnemigos(255,0,0,0,enemi);//negro
+        motor->colorearEnemigo(255,0,0,0,enemi);//negro
         tiempoPasadoMuerte = tiempo->getTiempo(1);
     }
     if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) < animacionMuerteTiem){
         if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) >= 1000.0f){
-            motor->colorearEnemigos(255,255,0,0,enemi);//rojo
+            motor->colorearEnemigo(255,255,0,0,enemi);//rojo
         }
     }
 }
@@ -193,7 +268,7 @@ void Enemigo::RecuperarVida(int can)
 
 void Enemigo::AumentarBarraAtEs(int can)
 {
-
+    barraAtEs += can;
 }
 
 void Enemigo::Interactuar(int id, int id2)
@@ -213,12 +288,17 @@ void Enemigo::setTipo(int tip)
 
 void Enemigo::setBarraAtEs(int bar)
 {
-
+    barraAtEs = bar;
 }
 
 void Enemigo::setAtaque(int ataq)
 {
     ataque = ataq;
+}
+
+void Enemigo::setArmaEspecial(int ataque)
+{
+    armaEspecial = new Arma(ataque, "",2,2,2,rutaArmaEspecial,"");
 }
 
 void Enemigo::setSuerte(int suer)
@@ -228,13 +308,24 @@ void Enemigo::setSuerte(int suer)
 
 void Enemigo::setDanyoCritico(int danyoC)
 {
-
+    danyoCritico = danyoC;
 }
 
 void Enemigo::setProAtaCritico(int probabilidad)
 {
-
+    proAtaCritico = probabilidad;
 }
+
+void Enemigo::setTimeAtEsp(float time)
+{
+    atackEspTime = time;
+}
+
+void Enemigo::setLastTimeAtEsp(float time)
+{
+    lastAtackEspTime = time;
+}
+
 void Enemigo::setSala(Sala* sala)
 {
     estoy = sala;
@@ -252,7 +343,7 @@ int Enemigo::getTipo()
 
 int Enemigo::getBarraAtEs()
 {
-    return -1;
+    return barraAtEs;
 }
 
 int Enemigo::getAtaque()
@@ -306,6 +397,16 @@ float Enemigo::getAtackTime()
   return atacktime;
 }
 
+
+float Enemigo::getTimeAtEsp()
+{
+    return atackEspTime;
+}
+
+float Enemigo::getLastTimeAtEsp()
+{
+    return lastAtackEspTime;
+}
 //ia
 
 void Enemigo::setArbol(Arbol2 * ia)

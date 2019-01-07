@@ -52,6 +52,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
         void setTimeAtEsp(float time);
+        void setLastTimeAtEsp(float time);
 
         int getVida();
         int getTipo();
@@ -65,6 +66,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int getProAtaCritico();
         int* getBuffos();
         float getTimeAtEsp();
+        float getLastTimeAtEsp();
         const char *getRutaArmaEsp();
 
         float getX();
@@ -87,11 +89,10 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         bool pulsadoMuerteEnemigos=false;
         float acumMuEne = 0;
         //PRUEBAS ATAQUE ESPECIAL
-        float timeAtEsp = 0.0;
         Arma *armaEquipada;
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/Arma.obj";
-        const char * nombreJugador = "Bailaora";
+        const char * nombreJugador = "Heavy";
         //!PRUEBAS ATAQUE ESPECIAL
        //  core::vector3df dir;
         float danyo_arma = 10.0f;

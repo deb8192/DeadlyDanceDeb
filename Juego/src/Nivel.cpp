@@ -14,6 +14,7 @@ Nivel::Nivel()
     primeraSala = nullptr;
     fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     id = 0;
+    controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
 }
 
 bool Nivel::CargarNivel(int level)
@@ -42,7 +43,14 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     //fin ia
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->setVida(75);
+    ene->setBarraAtEs(0);
     ene->definirSala(sala);//le pasamos la sala en donde esta
+    ene->setAtaque(10);
+    ene->setArmaEspecial(100);
+    ene->setTimeAtEsp(0.0f);
+    ene->setDanyoCritico(50);
+    ene->setProAtaCritico(10);
+    ene->generarSonido(20,5);
     ene->setRotation(0.0f);//le ponemos hacia donde mira cuando se carga
     enemigos.push_back(ene);//guardamos el enemigo en el vector
     id++;//generamos id para la figura
@@ -61,6 +69,7 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
     jugador.setAtaque(15);
     jugador.setArma(NULL);
     jugador.setArmaEspecial(100);
+    jugador.setTimeAtEsp(0.0f);
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
     jugador.setVida(100);
@@ -157,8 +166,8 @@ void Nivel::update()
 
     int rec_col = fisicas->collideColectable();
 
-
-    if(motor->estaPulsado(KEY_E)){
+    if(motor->estaPulsado(KEY_E))
+    {
         if(rec_col >= 0)//si colisiona con un recolectable
         {
             if(jugador.getArma() == nullptr)//si no tiene arma equipada
@@ -271,14 +280,14 @@ void Nivel::update()
             jugador.getZ()
         );
       }
-
-        //this->updateIA(); esto no se fuerza desde el update normal se llama desde main 4 veces por segundo
+       //this->updateIA(); esto no se fuerza desde el update normal se llama desde main 4 veces por segundo
        //Actualizar ataque especial
         this->updateAtEsp(motor);
         this->updateAt(&danyo2, motor);
+        this->updateRecorridoPathfinding();
 
         //Si se realiza el ataque se comprueban las colisiones
-        if(atackEsptime > 0.0)
+        if(jugador.getTimeAtEsp() > 0.0)
         {
             jugador.AtacarEspecialUpdate(&danyo);
         }
@@ -292,7 +301,7 @@ void Nivel::update()
         {
             for(unsigned int i = 0; i < enemigos.size(); i++)
             {
-                motor->colorearEnemigos(255, 150, 150, 150, i);
+                motor->colorearEnemigo(255, 150, 150, 150, i);
             }
         }
 
@@ -302,23 +311,56 @@ void Nivel::update()
        //actualizamos los enemigos
        if(enemigos.size() > 0)//posiciones interpolacion
        {
+           float tiempoActual = 0.0f, tiempoAtaqueEsp = 0.0f;
            for(std::size_t i=0;i<enemigos.size();i++)
            {
-               //cout << "Enemigo " << i << endl;
-               //Si el enemigo ha realizado danyo
-               int danyo_jug = enemigos[i]->Atacar();
-               if(danyo_jug > 0)
-               {
-                 jugador.QuitarVida(danyo_jug);
-                 cout<< "Vida jugador: "<< jugador.getVida() << endl;
-                 enemigos[i]->setAtackTime(1500.0f); //tiempo hasta el proximo ataque
-               }
-               //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
-               if(enemigos[i]->getAtackTime() > 0.0f)
-               {
-                 enemigos[i]->setAtackTime(enemigos[i]->getAtackTime() - 1.0f); //restar uno al tiempo de ataque
-               }
-               //enemigos[i]->AtacarEspecial();
+                int danyo_jug = 0;
+                //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
+                if(enemigos[i]->getTimeAtEsp() > 0.0f)
+                {
+                    tiempoActual = controladorTiempo->getTiempo(2);
+                    tiempoAtaqueEsp = enemigos[i]->getTimeAtEsp();
+                    tiempoAtaqueEsp -= (tiempoActual - enemigos[i]->getLastTimeAtEsp());
+                    enemigos[i]->setLastTimeAtEsp(tiempoActual);
+                    enemigos[i]->setTimeAtEsp(tiempoAtaqueEsp); //restar uno al tiempo de ataque
+                }
+                if(enemigos[i]->getTimeAtEsp() <= 0.0f)
+                {
+                    danyo_jug = enemigos[i]->AtacarEspecial();
+                    enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
+                    enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
+            
+                }
+                else if(enemigos[i]->getBarraAtEs() < 100)
+                {
+                    enemigos[i]->AumentarBarraAtEs(1);
+                }
+                if(danyo_jug == 0)
+                {
+                    //cout << "Enemigo " << i << endl;
+                    //Si el enemigo ha realizado danyo
+                    danyo_jug = enemigos[i]->Atacar();
+                    if(danyo_jug > 0)
+                    {
+                        jugador.QuitarVida(danyo_jug);
+                        cout<< "Vida jugador: "<< jugador.getVida() << endl;
+                        enemigos[i]->setAtackTime(1500.0f); //tiempo hasta el proximo ataque
+                    }
+                    //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
+                    if(enemigos[i]->getAtackTime() > 0.0f)
+                    {
+                        enemigos[i]->setAtackTime(enemigos[i]->getAtackTime() - 1.0f); //restar uno al tiempo de ataque
+                    }
+                }
+                //Se le quita vida con el danyo del ataque especial
+                else
+                {
+                    if(danyo_jug > 0)
+                    {
+                        jugador.QuitarVida(danyo_jug);
+                        cout<< "Vida jugador tras ataque especial: "<< jugador.getVida() << endl;
+                    }
+                }
                //enemigos[i]->queVes();
            }
        }
@@ -335,10 +377,11 @@ void Nivel::update()
 
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 {
-  if((motor->estaPulsado(KEY_ESPACIO)/* || motor->estaPulsado(10)*/) && atacktime == 0.0f)
+  if((motor->estaPulsado(KEY_ESPACIO) || motor->estaPulsado(LMOUSE_DOWN)) && atacktime == 0.0f)
     {
         *danyo = jugador.Atacar();
-        motor->colorearJugador(255, 55, 0, 255);
+        motor->resetKey(KEY_ESPACIO);
+        motor->resetEvento(LMOUSE_DOWN);
         atacktime = 1500.0f;
     }else{
         if(atacktime > 0.0f)
@@ -349,9 +392,9 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
         {
             //Colorear rojo
             motor->colorearJugador(255,255,0,0);
-        }else{
+        }else if(atacktime > 0.0f){
             //Colorear gris
-            motor->colorearJugador(255,0,0,255);
+            motor->colorearJugador(255,150,150,150);
         }
     }
 
@@ -363,14 +406,20 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 
 void Nivel::updateAtEsp(MotorGrafico *motor)
 {
+    float tiempoActual = 0.0f;
+    float tiempoAtaqueEsp = 0.0f;
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((/*motor->estaPulsado(9)|| */motor->estaPulsado(KEY_Q)) && atackEsptime == 0.0)
+    if((motor->estaPulsado(RMOUSE_DOWN)||motor->estaPulsado(KEY_Q)) && jugador.getTimeAtEsp() <= 0.0)
     {
         danyo = jugador.AtacarEspecial();
+        motor->resetKey(KEY_Q);
+        motor->resetEvento(RMOUSE_DOWN);
         motor->colorearJugador(255, 55, 0, 255);
         if(danyo > 0)
         {
-            atackEsptime = 1500.0f;
+            jugador.setTimeAtEsp(1.5f);
+            jugador.setLastTimeAtEsp(controladorTiempo->getTiempo(2));
+            
         }
     }
     else
@@ -379,20 +428,23 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
         {
             danyo = 0;
         }
-        if(atackEsptime > 0.f)
+        if(jugador.getTimeAtEsp() > 0.f)
         {
-            atackEsptime--;
-            jugador.setTimeAtEsp(atackEsptime);
+            tiempoActual = controladorTiempo->getTiempo(2);
+            tiempoAtaqueEsp = jugador.getTimeAtEsp();
+            tiempoAtaqueEsp -= (tiempoActual - jugador.getLastTimeAtEsp());
+            jugador.setLastTimeAtEsp(tiempoActual);
+            jugador.setTimeAtEsp(tiempoAtaqueEsp);
         }
-        if(atackEsptime > 0.f && (int) atackEsptime % 250 == 0.f)
+        if(jugador.getTimeAtEsp() > 0.f && (int) (jugador.getTimeAtEsp() * 100) % 25 == 0.f)
         {
             danyo = jugador.AtacarEspecial();
         }
-        if(atackEsptime == 1000.0f)
+        if(jugador.getTimeAtEsp() == 1.0f)
         {
             motor->colorearEnemigo(255,255,255,255,0);
         }
-        if(atackEsptime <= 750.0f && motor->getArmaEspecial()) //Zona de pruebas
+        if(jugador.getTimeAtEsp() <= 0.5f && motor->getArmaEspecial()) //Zona de pruebas
         {
             motor->borrarArmaEspecial();
             motor->colorearJugador(255, 150, 150, 150);
@@ -403,9 +455,6 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
 void Nivel::updateIA()
 {
     //cout<< "Ejecuto ia " << endl;
-
-    bool colorear = false;
-
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     //Actualizar ataque especial
@@ -428,13 +477,40 @@ void Nivel::updateIA()
     {
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            motor->colorearEnemigos(255, 150, 150, 150, i);
+            motor->colorearEnemigo(255, 150, 150, 150, i);
         }
     }*/
 
-    //Ejecucion del pathfinding buscando al jugador
+    //En esta parte mueren
+    if(jugador.estasMuerto()){
+        //motor->EraseJugador(jugador);
+    }
+    if(enemigos.size() > 0){
+        //comprobando los enemigos para saber si estan muertos
+        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+
+            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
+
+                motor->EraseEnemigo(i);
+                fisicas->EraseEnemigo(i);
+                EraseEnemigo(i);
+            }else{
+                if(enemigos[i]->estasMuerto()){
+                    enemigos[i]->MuereEnemigo(i);
+                }
+            }
+        }
+    }
+}
+
+
+void Nivel::updateRecorridoPathfinding()
+{
+    MotorGrafico *motor = MotorGrafico::getInstance();
+    //Ejecucion del pathfinding de momento al pulsar P
     if(motor->estaPulsado(KEY_P) || !recorrido.empty())
     {
+        bool colorear = false;
         motor->resetKey(KEY_P);
         Pathfinder path;
         int tipoCentro;
@@ -443,45 +519,23 @@ void Nivel::updateIA()
             motor->colorearEnemigo(255, 127, 0, 127, 1);
             colorear = true;
         }
-        //Se inicia el recorrido hacia el jugador
-        if(recorrido.empty())
+        //Se inicia el recorrido hacia la primera sala del arbol de salas
+        //Se cambiara para buscar al enemigo que pide ayuda.
+        if(recorrido.empty() && !enemigos.empty())
         {
             enemigoSeleccionado++;
             if(enemigoSeleccionado == enemigos.size())
             {
                 enemigoSeleccionado = 0;
             }
-            //bool salaEncontrada = false;
-            //Sala* actual = primeraSala;
-            //Se comparan las coordenadas del jugador con las de cada
-            //sala hasta que se encuentre la sala en la que se hallan
-            //dichas coordenadas del jugador
-            /*while(!salaEncontrada)
-            {
-                tipoCentro = actual->getType();
-                if(tipoCentro == 0)
-                {
-                    if(jugador.getX() <= actual->getSizes()[2] + (actual->getSizes()[0] / 2) && jugador.getX() >= actual->getSizes()[2] - (actual->getSizes()[0] / 2))
-                    {
-                        if(jugador.getZ() <= actual->getSizes()[4] + (actual->getSizes()[1] / 2) && jugador.getZ() >= actual->getSizes()[4] - (actual->getSizes()[1] / 2))
-                        {
-                            salaEncontrada = true;
-                        }
-                    }
-                    else
-                    {
-                        actual = actual->getSalidas().at(0);
-                        cout<<"Entradas: "<< actual->getSalidas().size();
-                    }
-                }
-            }*/
             recorrido = path.encontrarCamino(enemigos.at(enemigoSeleccionado)->getSala(), primeraSala);
         }
-        //PRUEBAS PATHFINDER
+        //Desplazamiento del enemigo hacia su destino
         if(!recorrido.empty())
         {
-            //Se comprueba si el enemigo esta en la siguiente sala a la que debe ir
-            //comprobando las coordenadas del enmigo estan en la sala
+            //Se comprueban las coordenadas del enemigo y si ha llegado a la siguiente
+            //sala del camino a la que debe ir o no. Se tienen en cuenta los tipos de centros
+            //para realizar las comprobaciones de coordenadas adecuadas con el ancho y alto de las salas
             if(enemigos.at(enemigoSeleccionado)->getSala() != recorrido.front().nodo)
             {
                 bool cambia = false, moveDer = false, moveIzq = false, moveArb = false, moveAbj = false;
@@ -644,42 +698,42 @@ void Nivel::updateIA()
                 {
                     if(moveDer)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + frameTime);
                         cout<<"Posicion del enemigo: x="<<enemigos.at(enemigoSeleccionado)->getX()<<" z=" << enemigos.at(enemigoSeleccionado)->getY();
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + frameTime);
                     }
                     else
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + frameTime);
                     }
                 }
                 else if(moveArb)
                 {
                     if(moveDer)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - frameTime);
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - frameTime);
                     }
                     else
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - 1.0 * 0.25);
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - frameTime);
                     }
                 }
                 else
                 {
                     if(moveDer)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
+                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
                     }
                 }
             }
@@ -691,7 +745,6 @@ void Nivel::updateIA()
             }
         }
     }
-
     //En esta parte mueren
     if(jugador.estasMuerto()){
         //motor->EraseJugador(jugador);
@@ -721,7 +774,6 @@ void Nivel::updateIA()
     }
 }
 
-//Pruebas pathfinding
 Sala * Nivel::getPrimeraSala()
 {
     return primeraSala;
