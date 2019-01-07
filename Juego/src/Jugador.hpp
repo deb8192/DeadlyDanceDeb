@@ -9,6 +9,8 @@
 #include "MotorFisicas.hpp"
 #include "MotorGrafico.hpp"
 #include <ctime>
+#include "InterfazJugador.hpp"
+#include <cstring>
 
 using namespace std;
 
@@ -74,6 +76,9 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getRY();
         float getRZ();
 
+        //interfaz
+        void updateInterfaz();//nos sirve para actualizar la info de la interfaz
+        
     private:
         float ax = 1.0f,
               az = 20.0f,

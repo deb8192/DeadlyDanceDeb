@@ -368,6 +368,11 @@ void Nivel::update()
         //enemigos->MuereEnemigo(acumulator);
  	      acumulator -= dt;
     }
+    
+    //actualizamos la interfaz de jugador
+    jugador.updateInterfaz();
+    //actualizamos la interfaz en motor grafico
+    motor->updateInterfaz();
 }
 
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
@@ -449,6 +454,7 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
 
 void Nivel::updateIA()
 {
+    //cout<< "Ejecuto ia " << endl;
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     //Actualizar ataque especial
