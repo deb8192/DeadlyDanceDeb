@@ -106,6 +106,7 @@ void Juego::Jugar()
     motora->getEvent("Level03")->start(); //Reproducir musica juego
 
     estado = &jugando;//se cambia a estado jugando
+    
     estado->Ini();
 }
 
@@ -125,4 +126,9 @@ void Juego::CargarPuzzlesXML()
     // Cargamos el puzzle: 3=HANOI / 0 al 2=OPCIONES
     haciendo_puzzles.AsignarPuzzle(cargadorXML.GetPuzzles().at(3));
     haciendo_puzzles.Iniciar();
+}
+
+void Juego::UpdateIA()
+{
+    estado->ActualizarIA();
 }

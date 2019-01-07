@@ -50,7 +50,7 @@ bool MotorGrafico::crearVentana(int tipo)
             return false;
     }
     device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(WIDTH, HEIGHT), 16,false, false, false, &input);
-    
+
     std::wstring widestr = std::wstring(titulo.begin(), titulo.end());
     const wchar_t* widecstr = widestr.c_str();
     device->setWindowCaption(widecstr);
@@ -110,6 +110,18 @@ void MotorGrafico::CrearCamara()
   //  smgr->addCameraSceneNode(0, vector3df(0,0,90), vector3df(0,0,0));
   camera = smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,0,0));
 }
+/******----------------Crear Jugador------------------******
+ * Metodo que sirve para generar la malla 3D de un jugador
+ * al iniciar estado Juego.
+ * Entradas:
+ *      malla: string con la direccion del modelo 3D
+ */
+
+void MotorGrafico::crearJugador(std::string malla)
+{
+    ninja = smgr->addAnimatedMeshSceneNode(smgr->getMesh(malla.c_str()));
+    ninja->setScale(core::vector3df(0.1,0.1,0.1));
+}
 
 void MotorGrafico::PropiedadesDevice()
 {
@@ -130,7 +142,7 @@ void MotorGrafico::PintarBotonesMenu()
     guienv->addButton(rect<s32>(300,280,500,310), 0, GUI_ID_ARBOLES_BUTTON,L"Cargar Árbol", L"Carga un XML");
     guienv->addButton(rect<s32>(300,320,500,350), 0, GUI_ID_CONFIGURACION_BUTTON,L"Configuracion", L"Configuracion del juego");
     guienv->addButton(rect<s32>(300,360,500,390), 0, GUI_ID_CREDITOS_BUTTON,L"Creditos", L"Creditos del juego");
-    guienv->addButton(rect<s32>(300,400,500,430), 0, GUI_ID_SALIR_BUTTON,L"Salir del juego", L"Sale del juego"); 
+    guienv->addButton(rect<s32>(300,400,500,430), 0, GUI_ID_SALIR_BUTTON,L"Salir del juego", L"Sale del juego");
 }
 
 void MotorGrafico::activarFuenteDefault()
@@ -160,18 +172,18 @@ bool MotorGrafico::estaPulsado(int boton)
 {
     switch(boton)
     {
-        case KEY_A:     
+        case KEY_A:
             return input.IsKeyDown(irr::KEY_KEY_A);
 
         case KEY_S:
             return input.IsKeyDown(irr::KEY_KEY_S);
-        
+
         case KEY_D:
             return input.IsKeyDown(irr::KEY_KEY_D);
-        
+
         case KEY_W:
             return input.IsKeyDown(irr::KEY_KEY_W);
-        
+
         case KEY_ESPACIO:
             return input.IsKeyDown(irr::KEY_SPACE);
 
@@ -186,13 +198,13 @@ bool MotorGrafico::estaPulsado(int boton)
 
         case RMOUSE_PRESSED_DOWN:
             return input.IsMouseClick(irr::EMIE_RMOUSE_PRESSED_DOWN);
-        
+
         case LMOUSE_PRESSED_DOWN:
             return input.IsMouseClick(irr::EMIE_LMOUSE_PRESSED_DOWN);
-        
+
         case MOUSE_MOVED:
             return input.IsMouseClick(irr::EMIE_MOUSE_MOVED);
-        
+
         case KEY_Q:
             return input.IsKeyDown(irr::KEY_KEY_Q);
 
@@ -397,9 +409,9 @@ void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *rut
 }
 
 void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, float rz)
-{    
+{
     if(Arma_Jugador)
-    {        
+    {
      Arma_Jugador->setPosition(core::vector3df(x,y,z));
      Arma_Jugador->setRotation(core::vector3df(rx,ry,rz));
 
@@ -454,11 +466,11 @@ void MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int l
     {
         IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
         objeto_en_scena->setPosition(core::vector3df(x,y,z));
-        
+
         //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
-        accion == 2 ? 
+        accion == 2 ?
             Recolectables_Scena.push_back(objeto_en_scena) :
-            Objetos_Scena.push_back(objeto_en_scena); 
+            Objetos_Scena.push_back(objeto_en_scena);
     }
 }
 
@@ -474,7 +486,7 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
         {
             this->borrarArmaEspecial();
         }
-        ArmaEspecial_Jugador = smgr->addAnimatedMeshSceneNode(armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario   
+        ArmaEspecial_Jugador = smgr->addAnimatedMeshSceneNode(armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario
         ArmaEspecial_Jugador->setPosition(core::vector3df(x + 6.5*(sin(DEGTORAD*ry)),y,z + 6.5*(cos(DEGTORAD*ry))));
         ArmaEspecial_Jugador->setRotation(core::vector3df(rx,ry -180,rz));
         ArmaEspecial_Jugador->setScale(core::vector3df(0.25,0.25,0.25));
@@ -554,6 +566,8 @@ void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensi
             //vamos a cargar el circulo en su posicion con su intensidad
             //cout << "\e[36m Generamos Circulo \e[0m" << endl;
             IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(circulo); //metemos el objeto en el escenario para eso lo pasamos al escenario
+            SColor COLOR  = SColor(127, 255, 0, 0);
+            smgr->getMeshManipulator()->setVertexColors(objeto_en_scena->getMesh(),COLOR);
             objeto_en_scena->setPosition(core::vector3df(x,y,z));
             objeto_en_scena->setScale(core::vector3df(intensidad,1,intensidad));
             Objetos_Debug.push_back(objeto_en_scena);
@@ -581,7 +595,8 @@ void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, in
     tmpobjt_en_scena->setPosition(core::vector3df(x,y,z));
     tmpobjt_en_scena->setRotation(core::vector3df(rx,ry,rz));
     tmpobjt_en_scena->setScale(core::vector3df(ancho,alto,profund));
-    smgr->getMeshManipulator()->setVertexColors(tmpobjt_en_scena->getMesh(),SColor(255, 70, 70, 70));
+    SColor COLOR  = SColor(255,255,0,255);
+    smgr->getMeshManipulator()->setVertexColors(tmpobjt_en_scena->getMesh(),COLOR);
     Objetos_Debug2.push_back(tmpobjt_en_scena);
   }
 }
@@ -601,9 +616,9 @@ void MotorGrafico::debugBox(int x,int y, int z,int ancho, int alto, int largo)
     {
         n->setMaterialFlag(video::EMF_LIGHTING, false);
         //n->setPosition(core::vector3df(x,y,z));
-        //n->setScale(core::vector3df(ancho/5,alto/5,largo/5));  
+        //n->setScale(core::vector3df(ancho/5,alto/5,largo/5));
         n->setPosition(core::vector3df(0,0,20));
-        n->setScale(core::vector3df(4,1,0.2));          
+        n->setScale(core::vector3df(4,1,0.2));
     }
 }
 
@@ -682,9 +697,9 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
             break;
         case P_HANOI:
             // Lineas para dividir la pantalla
-            driver->draw2DLine(position2d<s32>(x_linea1 , 200), 
+            driver->draw2DLine(position2d<s32>(x_linea1 , 200),
                 position2d<s32>(x_linea1, 400 ) , SColor(255, 0, 0, 0));
-            driver->draw2DLine(position2d<s32>(x_linea2 , 200), 
+            driver->draw2DLine(position2d<s32>(x_linea2 , 200),
                 position2d<s32>(x_linea2, 400 ) , SColor(255, 0, 0, 0));
             break;
     }
@@ -701,9 +716,9 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
     short altoBtn = 30;
 
     // Atras
-    guienv->addButton(rect<s32>(700,HEIGHT-60,750,HEIGHT-30), 0, 
+    guienv->addButton(rect<s32>(700,HEIGHT-60,750,HEIGHT-30), 0,
         GUI_ID_BACK_MENU_BUTTON,L"Atrás", L"Vuelve al menú");
-    
+
     // Enunciado
     std::wstring widestr = std::wstring(enun.begin(), enun.end());
     const wchar_t* widecstr = widestr.c_str();
@@ -724,10 +739,10 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     WIDTH_AUX = WIDTH/4;
                     // x, y, x2, y2
                     guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
-                        WIDTH_AUX+anchoBtn,height_aux+altoBtn), 
+                        WIDTH_AUX+anchoBtn,height_aux+altoBtn),
                         0, GUI_ID_OP1,L"A", L"A");
                     guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
-                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn), 
+                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
                         0, GUI_ID_OP2,L"B", L"B");
 
                     CargarIMG(WIDTH_AUX-xIMG, yIMG);
@@ -738,13 +753,13 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     WIDTH_AUX = (WIDTH-2)/6;
                     // x, y, x2, y2
                     guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
-                        WIDTH_AUX+anchoBtn,height_aux+altoBtn), 
+                        WIDTH_AUX+anchoBtn,height_aux+altoBtn),
                         0, GUI_ID_OP1,L"A", L"A");
                     guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
-                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn), 
+                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
                         0, GUI_ID_OP2,L"B", L"B");
                     guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
-                        WIDTH_AUX*5+anchoBtn,height_aux+altoBtn), 
+                        WIDTH_AUX*5+anchoBtn,height_aux+altoBtn),
                         0, GUI_ID_OP3,L"C", L"C");
 
                     CargarIMG(WIDTH_AUX-xIMG, yIMG);
@@ -756,16 +771,16 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                     WIDTH_AUX = WIDTH/8;
                     // x, y, x2, y2
                     guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
-                        WIDTH_AUX+anchoBtn,height_aux+altoBtn), 
+                        WIDTH_AUX+anchoBtn,height_aux+altoBtn),
                         0, GUI_ID_OP1,L"A", L"A");
                     guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
-                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn), 
+                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
                         0, GUI_ID_OP2,L"B", L"B");
                     guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
-                        WIDTH_AUX*5+anchoBtn,height_aux+altoBtn), 
+                        WIDTH_AUX*5+anchoBtn,height_aux+altoBtn),
                         0, GUI_ID_OP3,L"C", L"C");
                     guienv->addButton(rect<s32>(WIDTH_AUX*7,height_aux,
-                        WIDTH_AUX*7+anchoBtn,height_aux+altoBtn), 
+                        WIDTH_AUX*7+anchoBtn,height_aux+altoBtn),
                         0, GUI_ID_OP4,L"D", L"D");
 
                     CargarIMG(WIDTH_AUX-xIMG, yIMG);
@@ -780,15 +795,15 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
             guienv->addStaticText(L"Torres de Hanoi", rect<s32>(0,0,200,20), false);
 
             // Reiniciar
-            guienv->addButton(rect<s32>(700,HEIGHT-90,750,HEIGHT-60), 0, 
+            guienv->addButton(rect<s32>(700,HEIGHT-90,750,HEIGHT-60), 0,
                 GUI_ID_REINICIAR_HANOI,L"Reiniciar", L"Reinicia el juego");
 
-            myTextBox = guienv->addStaticText(L"Pasos: ", rect<s32>(60,(WIDTH/2)-10,100,(WIDTH/2)+30), false); 
+            myTextBox = guienv->addStaticText(L"Pasos: ", rect<s32>(60,(WIDTH/2)-10,100,(WIDTH/2)+30), false);
 
             WIDTH_AUX = (WIDTH-2)/6;
-            guienv->addStaticText(L"IZQ", rect<s32>(WIDTH_AUX,100,WIDTH_AUX+anchoBtn,130), false); 
+            guienv->addStaticText(L"IZQ", rect<s32>(WIDTH_AUX,100,WIDTH_AUX+anchoBtn,130), false);
             guienv->addStaticText(L"CENTRO", rect<s32>(WIDTH_AUX*3,100,WIDTH_AUX*3+anchoBtn,130), false);
-            guienv->addStaticText(L"DER", rect<s32>(WIDTH_AUX*5,100,WIDTH_AUX*5+anchoBtn,130), false); 
+            guienv->addStaticText(L"DER", rect<s32>(WIDTH_AUX*5,100,WIDTH_AUX*5+anchoBtn,130), false);
 
             // Para la ventana de 800, 600
             // Width = 798, dejamos 1 punto a cada lado
@@ -819,7 +834,7 @@ void MotorGrafico::CrearMeshFicha(float tamanyo, int r, int g, int b)
     fichaMesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
 }
 
-void MotorGrafico::CrearFichas(short posY, float tamanyo, 
+void MotorGrafico::CrearFichas(short posY, float tamanyo,
     int r, int g, int b)
 {
     CrearMeshFicha(tamanyo, r, g, b);
@@ -848,19 +863,19 @@ short MotorGrafico::GetZonaVentana()
 
 bool MotorGrafico::SeleccionarNodo()
 {
-    // check for a node being selected 
+    // check for a node being selected
     // Posicion, idBitMask (0=deshabilitada), bNoDebugObjects (true=No tiene en cuenta los objetos de depuracion)
     nodoSeleccionado = collmgr->getSceneNodeFromScreenCoordinatesBB(
-        device->getCursorControl()->getPosition(),0,true); 
+        device->getCursorControl()->getPosition(),0,true);
 
     // Si hay un nodo seleccionado
-    if(nodoSeleccionado) 
-    { 
-        // Remember where the node and cursor were when it was clicked on 
+    if(nodoSeleccionado)
+    {
+        // Remember where the node and cursor were when it was clicked on
         initialCursorPosition = device->getCursorControl()->getPosition();
         // Calcula la posición de la pantalla 2d desde una posición 3d.
         initialObjectPosition = collmgr->getScreenCoordinatesFrom3DPosition(
-            nodoSeleccionado->getAbsolutePosition(), camera); 
+            nodoSeleccionado->getAbsolutePosition(), camera);
 
         if (nodoSeleccionado->getID() != -1) { // Comprobamos que no sea el fondo
             return true;
@@ -882,17 +897,17 @@ short MotorGrafico::GetFichaY()
 void MotorGrafico::MoverFichas(short pila)
 {
     if ((nodoSeleccionado) && (pila != NO_SELECT))
-    { 
-        plane3df const planeXZ(nodoSeleccionado->getAbsolutePosition(), vector3df(1.f, 0.f, 0.f)); 
+    {
+        plane3df const planeXZ(nodoSeleccionado->getAbsolutePosition(), vector3df(1.f, 0.f, 0.f));
 
-        position2di currentCursorPosition(device->getCursorControl()->getPosition()); 
-        position2di effectiveObjectPosition = initialObjectPosition + currentCursorPosition - initialCursorPosition; 
-        line3df ray(collmgr->getRayFromScreenCoordinates(effectiveObjectPosition, camera)); 
-        vector3df intersectWithPlane; 
+        position2di currentCursorPosition(device->getCursorControl()->getPosition());
+        position2di effectiveObjectPosition = initialObjectPosition + currentCursorPosition - initialCursorPosition;
+        line3df ray(collmgr->getRayFromScreenCoordinates(effectiveObjectPosition, camera));
+        vector3df intersectWithPlane;
 
-        if(planeXZ.getIntersectionWithLine(ray.start, ray.getVector(), intersectWithPlane)) 
+        if(planeXZ.getIntersectionWithLine(ray.start, ray.getVector(), intersectWithPlane))
         {
-            nodoSeleccionado->setPosition(intersectWithPlane); 
+            nodoSeleccionado->setPosition(intersectWithPlane);
         }
     }
 }
@@ -915,12 +930,12 @@ void MotorGrafico::ReiniciarHanoi()
 }
 
 void MotorGrafico::EraseColectable(int idx)
-{   
+{
     Recolectables_Scena[idx]->setVisible(false);
     Recolectables_Scena[idx]->remove();
-    Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);  
+    Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
 }
-//Cuando enemigo muere lo borramos 
+//Cuando enemigo muere lo borramos
 void MotorGrafico::EraseEnemigo(int i)
 {
     long unsigned int valor = i;
@@ -929,14 +944,14 @@ void MotorGrafico::EraseEnemigo(int i)
     {
         Enemigos_Scena[i]->setVisible(false);
         Enemigos_Scena[i]->remove();
-        Enemigos_Scena.erase(Enemigos_Scena.begin() + i);  
+        Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
     }
 }
-//Cuando enemigo muere lo borramos 
+//Cuando enemigo muere lo borramos
 void MotorGrafico::EraseJugador(int i){
     /*Jugador_Scena[i]->setVisible(false);
     Jugador_Scena[i]->remove();
-    Jugador_Scena.erase(Jugador_Scena.begin() + i); */ 
+    Jugador_Scena.erase(Jugador_Scena.begin() + i); */
 }
 
 //Devolver cantidad de enemigos en escena para recorrerlos en metodo muerteEnemigo
@@ -945,10 +960,10 @@ int MotorGrafico::getEnemigos_Scena(){
 }
 
 void MotorGrafico::EraseArma()
-{   
+{
     Arma_Jugador->setVisible(false);
     Arma_Jugador->remove();
-} 
+}
 
 // TO DO: Anyadir string img
 void MotorGrafico::CargarIMG(short x, short y)
@@ -960,10 +975,10 @@ void MotorGrafico::CargarIMG(short x, short y)
 void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float longitud)
 {
     if(debugGrafico)
-    {        
+    {
         if(!conovision)
         {
-            
+
             conovision = smgr->getMesh("assets/models/conovision.obj");
         }
 
@@ -977,7 +992,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
             objeto_en_scena->setPosition(core::vector3df(x,y+1,z));
             SColor COLOR  = SColor(0, 255, 0, 0);
             smgr->getMeshManipulator()->setVertexColors(objeto_en_scena->getMesh(),COLOR);
-            
+
             core::vector3df rotation = objeto_en_scena->getRotation();
             objeto_en_scena->setRotation(core::vector3df(rotation.X,(-1*(rotacion-180)),rotation.Z));
 
@@ -986,5 +1001,42 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
             objeto_en_scena->setScale(core::vector3df(longitud/2,1.0f,0.01f));
             Objetos_Debug.push_back(objeto_en_scena);
         }
-    }   
+    }
+}
+
+
+void MotorGrafico::cargarInterfaz()
+{
+    vidaI = guienv->addImage(driver->getTexture("assets/images/51.png"),position2d<int>(10,10));
+    energiaI = guienv->addImage(driver->getTexture("assets/images/21.png"),position2d<int>(10,58));
+    dineroI = guienv->addImage(driver->getTexture("assets/images/61.png"),position2d<int>(680,10));
+    armaI = guienv->addImage(driver->getTexture("assets/images/11.png"),position2d<int>(730,530));
+    //guienv->addStaticText(L"100",rect<s32>(100,20,150,50),false); falta ver los cambios de fuente y ponerlo correctamente
+    //vidaI->setVisible(false);
+    //energiaI->setVisible(false);
+    //dineroI->setVisible(false);
+    //armaI->setVisible(false);
+}
+
+void MotorGrafico::destruirInterfaz()
+{
+    if(vidaI)
+    {
+        vidaI->remove();
+    }
+
+    if(energiaI)
+    {
+        energiaI->remove();
+    }
+
+    if(dineroI)
+    {
+        dineroI->remove();
+    }
+
+    if(armaI)
+    {
+         armaI->remove();
+    }
 }

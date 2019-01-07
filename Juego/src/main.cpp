@@ -17,7 +17,7 @@ int main()
 		{
 			if(tiempo->EjecutoIA())
 			{
-
+				juego->UpdateIA();
 			}
 			juego->Update();//si lo esta actualizamos la escena
 		}

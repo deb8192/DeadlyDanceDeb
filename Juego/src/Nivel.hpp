@@ -14,6 +14,11 @@
 #include <cstring>
 //#include "MotorFisicas.hpp"
 
+//cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA() 
+#include "CargadorBehaviorTrees.hpp"
+#include "Arbol2.hpp"
+//librerias necesarias
+
 #ifndef Nivel_HPP
 #define Nivel_HPP
 

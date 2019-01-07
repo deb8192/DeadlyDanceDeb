@@ -52,9 +52,9 @@ void Enemigo::definirSala(Sala * sala)
     estoy = sala;
 }
 
-void Enemigo::generarSonido(int intensidad, double duracion)
+void Enemigo::generarSonido(int intensidad,double duracion,int tipo)
 {
-    eventoSonido * sonid = new eventoSonido(intensidad,duracion,x,y,z,1,1);
+    eventoSonido * sonid = new eventoSonido(intensidad,duracion,x,y,z,2,tipo);
     SenseEventos * eventos = SenseEventos::getInstance();
     eventos->agregarEvento(sonid);
 }
@@ -397,6 +397,7 @@ float Enemigo::getAtackTime()
   return atacktime;
 }
 
+
 float Enemigo::getTimeAtEsp()
 {
     return atackEspTime;
@@ -406,3 +407,126 @@ float Enemigo::getLastTimeAtEsp()
 {
     return lastAtackEspTime;
 }
+//ia
+
+void Enemigo::setArbol(Arbol2 * ia)
+{
+    arbol = ia;
+}
+
+Arbol2 * Enemigo::getArbol()
+{
+    return arbol;
+}
+
+void Enemigo::runIA()
+{
+    //aun por determinar primero definir bien la carga de arboles
+    int accion = arbol->siguiente(false);//el false lo ponemos para evitar problemas
+    bool salir = false;//cuando terminemos el arbol salimos
+    while(!salir)
+    {
+        bool es = Acciones(accion);
+        accion = arbol->siguiente(es);//cambiamos de rama(false) o de hoja(true)
+        salir = arbol->estadoActual();//ultima rama o entras en bucle
+    }
+}
+
+//fin ia
+
+//comportamientos bases
+    bool Enemigo::Acciones(int accion)
+    {
+        switch(accion)
+        {
+            case 0://es raiz
+                return false;
+            break;
+            case 1://ve al jugador
+                return ver(1);
+            case 2://merodeo
+                return Merodear(1);//merodeo pollo
+            case 3://esta cerca del jugador
+                return true;
+            case 4://atacar
+                return true;
+            case 6://oir al jugador
+                return oir(1);
+            case 8://pedir ayuda
+                return pedirAyuda();
+            case 9://oye pedir ayuda enemigo ?
+                return oir(2);
+            case 10://contestacion a auxilio
+                return ContestarAyuda();
+        }
+
+        return false;//cambiamos de rama si no se encuentra la tarea
+    }
+
+    bool Enemigo::ver(int tipo)
+    {
+        //vamosa  ver si vemos al jugador
+        SenseEventos * eventos = SenseEventos::getInstance();
+        if(tipo == 1)//ves al jugador ?
+        {
+            int * loqueve = eventos->listaObjetos(x,y,z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+  
+            if(loqueve != nullptr)
+            {
+                if(loqueve[0] == 1)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool Enemigo::oir(int tipo)//tipo 1 oir al jugador si lo oye true, tipo 2 si oye al enemigo pedir ayuda si lo oye true si no false
+    {
+        SenseEventos * eventos = SenseEventos::getInstance();
+        std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(x,y);//le pasamos nuestra x e y
+        
+        if(listaSonidos.size() > 0)
+        {
+            for(std::size_t i=0;i<listaSonidos.size();i++)
+            {
+                if(tipo == listaSonidos[i]->getTipo())
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool Enemigo::pedirAyuda()
+    {
+        //vamos a generar un sonido de ayuda
+        generarSonido(20,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+        //cout << " grita pidiendo ayuda "<< endl;
+        return true;
+    }
+
+    bool Enemigo::ContestarAyuda()
+    {
+        //vamos a generar un sonido de ayuda
+        generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+        //cout << " contesta a la llamada de auxilio "<< endl;
+        return true;
+    }
+
+    bool Enemigo::Merodear(int tipo)
+    {
+        if(tipo == 1)//pollo
+        {
+           //cout << " pollo merodeando " << endl; 
+           return true;
+        }
+
+	return false;
+    }
+
+//fin comportamientos bases

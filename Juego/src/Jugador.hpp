@@ -17,6 +17,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
 {
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
+        Jugador(int,int,int,int,int,int,std::string malla);//defines tu la informacion del jugador
         Jugador(int,int,int,int,int,int);//defines tu la informacion del jugador
         void movimiento(float dt,bool a, bool s, bool d, bool w);
 
@@ -78,8 +79,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
               az = 20.0f,
               deg;
         //Variables para el metodo morir
-        float acumMuJug = 0; //variable para el tiempo de muerte del jugador
-        bool pulsadoMuerte = false;
+        float acumMuJug = 0; //variable para e    //Totalmente provisionall tiempo de muerte del jugador
+        bool pulsadoMuerte = false;    //Totalmente provisional
         bool pulsadoMuerteEnemigos=false;
         float acumMuEne = 0;
         //PRUEBAS ATAQUE ESPECIAL

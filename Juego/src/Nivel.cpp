@@ -25,6 +25,10 @@ bool Nivel::CargarNivel(int level)
         primeraSala = nullptr;
     }
     cargador.CargarNivelXml(level);
+
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    motor->cargarInterfaz();
+
     return false;
 }
 
@@ -33,6 +37,10 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     //accion indicara futuramente que tipo de enemigo sera (herencia)
     MotorGrafico * motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
     pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
+    //ia
+        CargadorBehaviorTrees cargadorIA;
+        ene->setArbol(cargadorIA.cargarArbol("Prueba1"));
+    //fin ia
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->setVida(75);
     ene->setBarraAtEs(0);
@@ -272,7 +280,7 @@ void Nivel::update()
             jugador.getZ()
         );
       }
-        this->updateIA();
+       //this->updateIA(); esto no se fuerza desde el update normal se llama desde main 4 veces por segundo
        //Actualizar ataque especial
         this->updateAtEsp(motor);
         this->updateAt(&danyo2, motor);
@@ -375,10 +383,6 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
         {
             atacktime--;
         }
-        if(atacktime == 1000.0f) //Zona de pruebas
-        {
-            motor->clearDebug2();
-        }
         if(atacktime > 500.0f)
         {
             //Colorear rojo
@@ -387,6 +391,11 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
             //Colorear gris
             motor->colorearJugador(255,150,150,150);
         }
+    }
+
+    //clear
+    if(atacktime == 0.0f){
+      motor->clearDebug2();
     }
 }
 
@@ -440,7 +449,6 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
 
 void Nivel::updateIA()
 {
-
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     //Actualizar ataque especial
@@ -726,8 +734,35 @@ void Nivel::updateRecorridoPathfinding()
             else
             {
                 cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
-                        
+
                 recorrido.erase(recorrido.begin());
+            }
+        }
+    }
+    //En esta parte mueren
+    if(jugador.estasMuerto()){
+        //motor->EraseJugador(jugador);
+    }
+    if(enemigos.size() > 0){
+        //comprobando los enemigos para saber si estan muertos
+        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+
+            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
+
+                motor->EraseEnemigo(i);
+                fisicas->EraseEnemigo(i);
+                EraseEnemigo(i);
+            }else
+            {
+                if(enemigos[i]->estasMuerto()){
+                    enemigos[i]->MuereEnemigo(i);
+                }
+                else
+                {
+                    //si no esta muerto ni piensa morirse XD ejecutamos ia
+                    //cout<< "Ejecuto ia: " << i << endl;
+                    enemigos[i]->runIA();
+                }
             }
         }
     }

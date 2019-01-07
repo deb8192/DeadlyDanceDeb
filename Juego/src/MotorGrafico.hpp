@@ -48,6 +48,8 @@ using namespace idsEventos;
             void updateMotorCinematica();
             //crea una camara para ver el escenario
             void CrearCamara();
+            //crea al jugador
+            void crearJugador(std::string malla);
             //crea los botones del menu
             void PintarBotonesMenu();
             //define fuente por defecto
@@ -143,6 +145,11 @@ using namespace idsEventos;
             void EraseEnemigo(int i);
             void EraseJugador(int i);
             void EraseArma();
+
+            //interfaz
+            void cargarInterfaz();
+            void destruirInterfaz();
+            
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
@@ -159,6 +166,7 @@ using namespace idsEventos;
             IGUIFont *font;
             IGUISkin *skin;
             Inputs input;
+            IAnimatedMeshSceneNode* ninja;
             std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
             std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
             std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
@@ -204,6 +212,13 @@ using namespace idsEventos;
 
             void CrearMeshFicha(float tamanyo, int r, int g, int b);
             void CargarIMG(short x, short y);
+
+            //interfaz
+            IGUIImage* vidaI;
+            IGUIImage* energiaI;
+            IGUIImage* dineroI;
+            IGUIImage* armaI;
+
     };
 
 #endif /* MotorGrafico_HPP */
