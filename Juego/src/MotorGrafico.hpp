@@ -146,6 +146,11 @@ using namespace idsEventos;
             void EraseEnemigo(int i);
             void EraseJugador(int i);
             void EraseArma();
+
+            //interfaz
+            void cargarInterfaz();
+            void destruirInterfaz();
+            
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
@@ -208,6 +213,13 @@ using namespace idsEventos;
 
             void CrearMeshFicha(float tamanyo, int r, int g, int b);
             void CargarIMG(short x, short y);
+
+            //interfaz
+            IGUIImage* vidaI;
+            IGUIImage* energiaI;
+            IGUIImage* dineroI;
+            IGUIImage* armaI;
+
     };
 
 #endif /* MotorGrafico_HPP */

@@ -24,6 +24,10 @@ bool Nivel::CargarNivel(int level)
         primeraSala = nullptr;
     }
     cargador.CargarNivelXml(level);
+
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    motor->cargarInterfaz();
+    
     return false;
 }
 
