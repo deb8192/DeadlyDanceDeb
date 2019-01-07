@@ -266,7 +266,7 @@ void Jugador::AtacarUpdate(int danyo)
             danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
             cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
-            motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+            motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
             //guardar el atacado para no repetir
             atacados_normal.push_back(atacados.at(i));
           }
@@ -291,14 +291,14 @@ int Jugador::AtacarEspecial()
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
 
-    cout << vida << barraAtEs << por100 << endl;
+    cout << vida << " " << barraAtEs << " " << por100 << endl;
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
     if(vida > 0 && barraAtEs == por100)
     {
         cout << "Supera las restricciones, ATAQUE ESPECIAL"<<endl;
         
         //Calcular posiciones si se inicia el ataque especial
-        if(timeAtEsp == 0)
+        if(atackEspTime <= 0)
         {
             atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
             atespy = getY();
@@ -334,12 +334,13 @@ int Jugador::AtacarEspecial()
         }
 
         //Se calcula el danyo del ataque
+        aumentosAtaque += por1;
         if(armaEquipada != NULL)
         {
-            aumentosAtaque += por1 + (float) armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
-            aumentosAtaque = roundf(aumentosAtaque * por10) / por10;  //FUNCION ROUND SEPARADA
+            aumentosAtaque += (float) armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
+            //aumentosAtaque = roundf(aumentosAtaque * por10) / por10;  //FUNCION ROUND SEPARADA
         }
-        aumentosAtaque += por1 + (float) armaEspecial->getAtaque()/por100;
+        aumentosAtaque *= 2;
         aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
 
         //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
@@ -354,7 +355,7 @@ int Jugador::AtacarEspecial()
         //Se aplican todas las modificaciones en la variable danyo
         danyoF = ataque * critico * aumentosAtaque;
         danyo = roundf(danyoF * por10) / por10;
-        cout << "daño" <<danyo<<endl;
+        cout << "daño: " <<danyo<<endl;
         barraAtEs = 0;
         return danyo;
     }
@@ -474,8 +475,8 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
             cout<<"Daño "<<*danyo<<endl;
             *danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
-            motor->colorearEnemigos(255, 0, 255, 55, atacados.at(i));
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }
 }
@@ -492,7 +493,7 @@ void Jugador::RecuperarVida(int can)
 
 void Jugador::AumentarBarraAtEs(int can)
 {
-
+    barraAtEs += can;
 }
 
 void Jugador::Interactuar(int id, int id2)
@@ -551,7 +552,7 @@ void Jugador::setArma(Arma * arma)
 
 void Jugador::setArmaEspecial(int ataque)
 {
-    armaEspecial = new Arma(ataque, nombreJugador,1,1,1,"assets/models/objeto.obj","");
+    armaEspecial = new Arma(ataque, nombreJugador,3,3,3,rutaArmaEspecial,"");
 }
 
 void Jugador::setNombre(const char * nombre)
@@ -575,7 +576,12 @@ void Jugador::setProAtaCritico(int probabilidad)
 }
 void Jugador::setTimeAtEsp(float time)
 {
-    timeAtEsp = time;
+    atackEspTime = time;
+}
+
+void Jugador::setLastTimeAtEsp(float time)
+{
+    lastAtackEspTime = time;
 }
 
 int Jugador::getVida()
@@ -633,12 +639,12 @@ int Jugador::getSuerte()
 
 int Jugador::getDanyoCritico()
 {
-    return -1;
+    return danyoCritico;
 }
 
 int Jugador::getProAtaCritico()
 {
-    return -1;
+    return proAtaCritico;
 }
 
 int * Jugador::getBuffos()
@@ -648,7 +654,12 @@ int * Jugador::getBuffos()
 }
 float Jugador::getTimeAtEsp()
 {
-    return timeAtEsp;
+    return atackEspTime;
+}
+
+float Jugador::getLastTimeAtEsp()
+{
+    return lastAtackEspTime;
 }
 
 const char *Jugador::getRutaArmaEsp()

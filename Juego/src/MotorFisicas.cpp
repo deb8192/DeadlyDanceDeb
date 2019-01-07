@@ -85,6 +85,10 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     {
         enemigosAtack.push_back(cuerpo);
     }
+    else if(typeCreator == 8)//objetos
+    {
+        armaAtEspEne.push_back(cuerpo);
+    }
     // std::cout << "px: " << posiciones.x << std::endl;
     // std::cout << "py: " << posiciones.y << std::endl;
     // std::cout << "pz: " << posiciones.z << std::endl;
@@ -469,7 +473,7 @@ void MotorFisicas::updateAtaqueEspecial(float x, float y, float z, float rx, flo
         rp3d::Vector3 posiciones(x,y,z);
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
-        jugadorAtack->setTransform(transformacion);
+        armaAtEsp->setTransform(transformacion);
         // std::cout << "jx: " << x << std::endl;
         // std::cout << "jy: " << y << std::endl;
         // std::cout << "jz: " << z << std::endl;
@@ -520,3 +524,9 @@ CollisionBody* MotorFisicas::getEnemiesAtack()
 {
  return enemigosAtack.back();
 }
+
+CollisionBody* MotorFisicas::getEnemiesAtEsp()
+{
+ return armaAtEspEne.back();
+}
+

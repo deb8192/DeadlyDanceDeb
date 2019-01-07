@@ -490,6 +490,7 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
         ArmaEspecial_Jugador->setPosition(core::vector3df(x + 6.5*(sin(DEGTORAD*ry)),y,z + 6.5*(cos(DEGTORAD*ry))));
         ArmaEspecial_Jugador->setRotation(core::vector3df(rx,ry -180,rz));
         ArmaEspecial_Jugador->setScale(core::vector3df(0.25,0.25,0.25));
+        smgr->getMeshManipulator()->setVertexColors(ArmaEspecial_Jugador->getMesh(),SColor(255, 125, 150, 160));
     }
 }
 
@@ -663,15 +664,6 @@ void MotorGrafico::colorearObjeto(int a, int r, int g, int b, int obj)
   long unsigned int valor = obj;
   if(Objetos_Scena.size() > 0 && valor < Objetos_Scena.size())//para no salirnos si no existe en motorgrafico
   smgr->getMeshManipulator()->setVertexColors(Objetos_Scena[obj]->getMesh(),COLOR);
-}
-
-  //SUSTITUIR POR LA DE ARRIBA
-void MotorGrafico::colorearEnemigos(int a, int r, int g, int b, unsigned int seleccion)
-{
-    const SColor COLOR  = SColor(a, r, g, b);
-    long unsigned int valor = seleccion;
-    if(Enemigos_Scena.size() > 0 && valor < Enemigos_Scena.size())//para no salirnos si no existe en motorgrafico
-    smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena.at(seleccion)->getMesh(),COLOR);
 }
 
 IAnimatedMeshSceneNode* MotorGrafico::getArmaEspecial()

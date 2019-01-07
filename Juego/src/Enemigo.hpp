@@ -3,6 +3,7 @@
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
 #include "INsentidos.hpp"
+#include "Arma.hpp"
 #include "Sala.hpp"
 #include <vector>
 #include "Arbol2.hpp"
@@ -43,11 +44,14 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setTipo(int tip);
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
+        void setArmaEspecial(int ataque);
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
         void setSala(Sala* sala);
         void setAtackTime(float t);
+        void setTimeAtEsp(float time);
+        void setLastTimeAtEsp(float time);
         void setRotation(float rot);
         int getVida();
         int getTipo();
@@ -59,6 +63,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int* getBuffos();
         Sala* getSala();
         float getAtackTime();
+        float getTimeAtEsp();
+        float getLastTimeAtEsp();
         float getX();
         float getY();
         float getZ();
@@ -85,9 +91,12 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         
     protected:
         Sala * estoy;//sala en la que esta el enemigo
-        float atx, aty, atz, atgx, atgy, atgz;
+        float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
         float atacktime = 0.0f;
+        Arma *armaEspecial;
+        const char * rutaArmaEspecial = "assets/models/objeto.obj";
         Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
+
 };
 
 #endif
