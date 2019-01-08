@@ -7,6 +7,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
 #include <vector>//para los objetos en escena
+#include "InterfazJugador.hpp"//para la interfaz
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;
@@ -150,6 +151,7 @@ using namespace idsEventos;
             //interfaz
             void cargarInterfaz();
             void destruirInterfaz();
+            void updateInterfaz();
             
         private: //clases solo accesibles por MotorGrafico
 
@@ -165,6 +167,7 @@ using namespace idsEventos;
 	        IGUIEnvironment *guienv;
             scene::ICameraSceneNode* camera;
             IGUIFont *font;
+            IGUIFont *font2;
             IGUISkin *skin;
             Inputs input;
             IAnimatedMeshSceneNode* ninja;
@@ -219,7 +222,13 @@ using namespace idsEventos;
             IGUIImage* energiaI;
             IGUIImage* dineroI;
             IGUIImage* armaI;
-
+            IGUIImage* BarraVidaI;
+            IGUIImage* BarraEnergiaI;
+            IGUIImage* manosI;
+            IGUIImage* llaveI;
+            IGUIImage* espadaI;
+            IGUIImage* dagaI;
+            IGUIStaticText* moneyI;           
     };
 
 #endif /* MotorGrafico_HPP */

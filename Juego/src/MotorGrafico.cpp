@@ -1015,15 +1015,36 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
 
 void MotorGrafico::cargarInterfaz()
 {
+    //activamos la interfaz
+    InterfazJugador * interfaz = InterfazJugador::getInstance();
+    interfaz->activar();//activamos la interfaz por defecto
+
     vidaI = guienv->addImage(driver->getTexture("assets/images/51.png"),position2d<int>(10,10));
     energiaI = guienv->addImage(driver->getTexture("assets/images/21.png"),position2d<int>(10,58));
     dineroI = guienv->addImage(driver->getTexture("assets/images/61.png"),position2d<int>(680,10));
     armaI = guienv->addImage(driver->getTexture("assets/images/11.png"),position2d<int>(730,530));
-    //guienv->addStaticText(L"100",rect<s32>(100,20,150,50),false); falta ver los cambios de fuente y ponerlo correctamente
-    //vidaI->setVisible(false);
-    //energiaI->setVisible(false);
-    //dineroI->setVisible(false);
-    //armaI->setVisible(false);
+    BarraVidaI = guienv->addImage(driver->getTexture("assets/images/4.png"),position2d<int>(50,15));
+    BarraEnergiaI = guienv->addImage(driver->getTexture("assets/images/3.png"),position2d<int>(48,65));
+    
+    //imagenes tipo objeto que se lleva por defecto manos
+    manosI = guienv->addImage(driver->getTexture("assets/images/manos.png"),position2d<int>(738,534));
+    llaveI = guienv->addImage(driver->getTexture("assets/images/llave.png"),position2d<int>(738,534));
+    espadaI = guienv->addImage(driver->getTexture("assets/images/espada.png"),position2d<int>(738,534));
+    dagaI = guienv->addImage(driver->getTexture("assets/images/daga.png"),position2d<int>(738,534));
+
+    BarraVidaI->setMaxSize(dimension2du(121,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
+    BarraEnergiaI->setMaxSize(dimension2du(63,27));//maximo 63/100 y esto multiplicado por la cantidad de energia
+    
+    font2 = guienv->getFont("assets/fonts/myfont.xml");
+
+    moneyI = guienv->addStaticText(L"1000 M",rect<s32>(710,21,750,40),false); //falta ver los cambios de fuente y ponerlo correctamente
+
+    SColor COLOR  = SColor(255, 255, 255, 0);
+    moneyI->enableOverrideColor(true);
+    moneyI->setOverrideColor(COLOR);
+    if(font2)
+    moneyI->setOverrideFont(font2);
+
 }
 
 void MotorGrafico::destruirInterfaz()
@@ -1047,4 +1068,140 @@ void MotorGrafico::destruirInterfaz()
     {
          armaI->remove();
     }
+
+    if(manosI)
+        manosI->remove();
+
+    if(dagaI)
+        dagaI->remove();
+
+    if(espadaI)
+        espadaI->remove();
+
+    if(llaveI)
+        llaveI->remove();
+
+    if(BarraEnergiaI)
+        BarraEnergiaI->remove();
+
+    if(BarraVidaI)
+        BarraVidaI->remove();
+
+    if(moneyI)
+        moneyI->remove();
+}
+
+void MotorGrafico::updateInterfaz()
+{
+    //vamos a conseguir los datos de la interfaz
+    InterfazJugador * interfaz = InterfazJugador::getInstance();
+    
+    if(interfaz->getEstado())
+    {
+        
+        if(vidaI)
+        vidaI->setVisible(true);
+        if(energiaI)
+        energiaI->setVisible(true);
+        if(dineroI)
+        dineroI->setVisible(true);
+        if(armaI)
+        armaI->setVisible(true);
+        if(BarraEnergiaI)
+        BarraEnergiaI->setVisible(true);
+        if(BarraVidaI)
+        BarraVidaI->setVisible(true);
+        if(moneyI)
+        moneyI->setVisible(true);
+
+        int * datos = interfaz->getUpdate();
+        //vamos a calcular vida
+        if(BarraVidaI)
+        {
+            float unidad = ((float)121/100);
+            float resultado = unidad*(float)datos[1];
+            if(resultado <= 0)
+            {
+                BarraVidaI->setMaxSize(dimension2du(1,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
+            }
+            else
+            {
+                BarraVidaI->setMaxSize(dimension2du(resultado,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
+            }
+        }
+
+        if(BarraEnergiaI)
+        {
+            float unidad = ((float)63/100);
+            float resultado = unidad*(float)datos[2];
+            //cout << datos[2] << " " << unidad << " " << resultado << endl ;
+            if(resultado <= 0)
+            {
+                BarraEnergiaI->setMaxSize(dimension2du(1,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
+            }
+            else
+            {
+                BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
+            }
+        }
+
+        switch(datos[4])
+        {
+            case 0:
+            //son las manos
+            manosI->setVisible(true);
+            dagaI->setVisible(false);
+            espadaI->setVisible(false);
+            llaveI->setVisible(false);
+            break;
+            case 1:
+            //es una llave
+            manosI->setVisible(false);
+            dagaI->setVisible(false);
+            espadaI->setVisible(false);
+            llaveI->setVisible(true);
+            break;
+            case 2:
+            //objeto ataque directo
+            manosI->setVisible(false);
+            dagaI->setVisible(false);
+            espadaI->setVisible(true);
+            llaveI->setVisible(false);
+            break;
+            case 3:
+            //objeto ataque a distancia
+            manosI->setVisible(false);
+            dagaI->setVisible(true);
+            espadaI->setVisible(false);
+            llaveI->setVisible(false);
+            break;
+        }   
+
+    }
+    else
+    {
+        if(vidaI)
+        vidaI->setVisible(false);
+        if(energiaI)
+        energiaI->setVisible(false);
+        if(dineroI)
+        dineroI->setVisible(false);
+        if(armaI)
+        armaI->setVisible(false);
+        if(BarraEnergiaI)
+        BarraEnergiaI->setVisible(false);
+        if(BarraVidaI)
+        BarraVidaI->setVisible(false);
+        if(manosI)
+        manosI->setVisible(false);
+        if(dagaI)
+        dagaI->setVisible(false);
+        if(espadaI)
+        espadaI->setVisible(false);
+        if(llaveI)
+        llaveI->setVisible(false);
+        if(moneyI)
+        moneyI->setVisible(false);
+    }
+
 }
