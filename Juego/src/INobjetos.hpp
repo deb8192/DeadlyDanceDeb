@@ -18,6 +18,7 @@ class INobjetos
         const char* ruta_textura;
         char* cadena_objeto; 
         char* cadena_textura;
+        char* cadena_nombre;
         float ancho, largo, alto; 
 };
 

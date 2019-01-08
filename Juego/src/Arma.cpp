@@ -18,9 +18,13 @@ Arma::Arma(int ataque, const char * nombre, int anc, int lar, int alt, const cha
     std::string name_textura(textura);
     cadena_textura = new char[sizeof(name_textura)];
     strcpy(cadena_textura, name_textura.c_str());
+
+    std::string name_nombre(nombre);
+    cadena_nombre = new char[sizeof(name_nombre)];
+    strcpy(cadena_nombre, name_nombre.c_str());
     
     potenciaAtaque = ataque;
-    nombreArma = nombre;
+    nombreArma = cadena_nombre;
     ancho = anc;
     largo = lar;
     alto = alt;
