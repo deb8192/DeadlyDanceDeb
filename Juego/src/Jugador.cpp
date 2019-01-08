@@ -85,20 +85,28 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
 
     //Esto es para que az y ax no aumente de valores excesivamente
     //valores de muchas cifras hace que tarde mas en hacer el giro y que le cueste
-    if(az < -1000 || az > 1000)
+    if(az < -10000 || az > 10000)
     {
         az = 10;
+<<<<<<< HEAD
     }
     if(ax < -1000 || ax > 1000)
     {
         ax = 10;
     }
+=======
+    } 
+    if(ax < -10000 || ax > 10000)
+    {
+        ax = 0;
+    } 
+>>>>>>> 3fb4f5b17eb535923c99e5f9e4c2708198355697
 
     //Para giro: obtienes el maximo comun divisor y lo divides entre x, z
     //asi tambien evitas que ambas variables aumenten excesivamente de valor
         float div = (float)__gcd((int)abs(ax),(int)abs(az));
 
-        if(div != 1.0)
+        if(div != 1.0 && div != 0.0)
         {
             ax /= div;
             az /= div;
