@@ -501,6 +501,33 @@ void Nivel::updateIA()
             }
         }
     }
+    //En esta parte mueren
+    if(jugador.estasMuerto()){
+        //motor->EraseJugador(jugador);
+    }
+    if(enemigos.size() > 0){
+        //comprobando los enemigos para saber si estan muertos
+        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+
+            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
+
+                motor->EraseEnemigo(i);
+                fisicas->EraseEnemigo(i);
+                EraseEnemigo(i);
+            }else
+            {
+                if(enemigos[i]->estasMuerto()){
+                    enemigos[i]->MuereEnemigo(i);
+                }
+                else
+                {
+                    //si no esta muerto ni piensa morirse XD ejecutamos ia
+                    //cout<< "Ejecuto ia: " << i << endl;
+                    enemigos[i]->runIA();
+                }
+            }
+        }
+    }
 }
 
 
@@ -742,33 +769,6 @@ void Nivel::updateRecorridoPathfinding()
                 cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
 
                 recorrido.erase(recorrido.begin());
-            }
-        }
-    }
-    //En esta parte mueren
-    if(jugador.estasMuerto()){
-        //motor->EraseJugador(jugador);
-    }
-    if(enemigos.size() > 0){
-        //comprobando los enemigos para saber si estan muertos
-        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
-
-            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
-
-                motor->EraseEnemigo(i);
-                fisicas->EraseEnemigo(i);
-                EraseEnemigo(i);
-            }else
-            {
-                if(enemigos[i]->estasMuerto()){
-                    enemigos[i]->MuereEnemigo(i);
-                }
-                else
-                {
-                    //si no esta muerto ni piensa morirse XD ejecutamos ia
-                    //cout<< "Ejecuto ia: " << i << endl;
-                    enemigos[i]->runIA();
-                }
             }
         }
     }
