@@ -68,27 +68,22 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
         //globales usadas para calcular giro, como vector director (x,z)
         az += 50.0; //cuando mas alto mejor es el efecto de giro
         az < -1000 ? az = 0 : false;
-        //dir es un vector director usado para incrementar el movimiento
-        pz += 1.0*dt;
     }
     if(s)
     {
         az += -50.0;
         az > 1000 ? az = 0 : false;
-        pz += -1.0*dt;
     }
     if(a)
     {
         ax += -50.0;
         ax > 1000 ? ax = 0 : false;
-        px += -1.0*dt;
 
     }
     if(d)
     {
         ax += 50.0;
         ax < -1000 ? ax = 0 : false;
-        px += 1.0*dt;
     }
 
     //Para giro: obtienes el maximo comun divisor y lo divides entre x, z
@@ -101,11 +96,27 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
             az /= div;
         }
 
+    //cout << "ax: " << ax << ", az: " << az << endl;
+
     //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
     az < 0 ?
         deg = PIRADIAN + (RADTODEG * atan(ax/az)) :
         deg =  RADTODEG * atan(ax/az) ;
 
+    float componente;
+    if(w || s || a || d)
+    {
+        componente = 1.0;
+    }
+    else
+    {
+        componente = 0.0;
+    }
+    px += componente*sin(deg*DEGTORAD)*dt;
+    pz += componente*cos(deg*DEGTORAD)*dt;
+
+
+    //cout << "deg: " << deg << ", px:" << px << ", pz:" << pz << endl;
     //ahora actualizas movimiento y rotacion
     //has obtenido la arcotangente que te da el angulo de giro en grados
     x = px;
