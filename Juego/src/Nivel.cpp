@@ -50,7 +50,7 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     ene->setTimeAtEsp(0.0f);
     ene->setDanyoCritico(50);
     ene->setProAtaCritico(10);
-    ene->generarSonido(20,5);
+    //ene->generarSonido(20,5);
     ene->setRotation(0.0f);//le ponemos hacia donde mira cuando se carga
     enemigos.push_back(ene);//guardamos el enemigo en el vector
     id++;//generamos id para la figura
