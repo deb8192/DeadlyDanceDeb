@@ -61,6 +61,13 @@ void Juego::Update()
     {
         motor->closeGame();
     }
+    // vamos a menu el jugador a muerto
+    if(motor->ocurreEvento(GUI_ID_MENU_BUTTON))
+    {
+        
+        motor->resetEvento(GUI_ID_MENU_BUTTON);
+        estado = &menu;
+    }
     //para modo debug
     if(motor->estaPulsado(KEY_G_DEBUG))
     {

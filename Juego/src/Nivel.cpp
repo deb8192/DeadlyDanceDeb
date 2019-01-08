@@ -15,6 +15,15 @@ Nivel::Nivel()
     id = 0;
 }
 
+void Nivel::LimpiarNivel(){
+    id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
+    //me cargo al jugador pero (Jugador = Jugador();) si da problemas ir a jugador y limpiar variables
+    //primeraSala.;
+    //jugador en todos eliminar, enemigos, objetos, armas, salas, 
+    primeraSala->~Sala();//llamo al puntero para que se destruya
+    primeraSala=nullptr;
+}
+
 bool Nivel::CargarNivel(int level)
 {
     if(primeraSala != nullptr)
@@ -117,14 +126,17 @@ void Nivel::setThen()
     dt =1.0f/60.0f;
 }
 
-void Nivel::EraseEnemigo(int i){
+void Nivel::EraseEnemigo(std::size_t i){
     //elimniar el objeto en memoria(la onda)
     enemigos[i]->~Enemigo();//el destructor de enemigo
     enemigos[i]=nullptr;
-    enemigos.erase(enemigos.begin() + i);
+    enemigos.erase(enemigos.begin() + i);//begin le suma las posiciones
+
+    cout <<"que eres?" << i <<endl;
 }
-void Nivel::EraseJugador(int i){
-    //jugador.erase(jugador.begin() + i);
+void Nivel::EraseJugador(){
+    jugador.~Jugador();//el destructor de jugador
+    //jugador=NULL;
 }
 void Nivel::update()
 {
@@ -260,8 +272,7 @@ void Nivel::update()
       //Posicion de escucha
         motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
 
-        jugador.MuereJugador(acumulator);
-        //enemigos->MuereEnemigo(acumulator);
+        //jugador.MuereJugador(acumulator);
  	    acumulator -= dt;  
     } 
 }
@@ -353,25 +364,43 @@ void Nivel::updateIA()
         }
     }
 
-    //En esta parte mueren
-    if(jugador.estasMuerto()){
-        //motor->EraseJugador(jugador);
+    //En esta parte muere jugador
+    if(motor->estaPulsado(16)){//SI PULSO 'J' MUERE JUGADOR
+        jugador.MuereJugador();
     }
+    if(jugador.estasMuerto()){
+        if(jugador.estasMuerto() && jugador.finalAnimMuerte()){
+            motor->EraseJugador();//borrar del motor (escena) 
+            fisicas->EraseJugador();//borrar de motorfisicas
+            EraseJugador();//borrar de nivel
+        }else{
+            if(jugador.estasMuerto()){
+                jugador.MuereJugador();
+            }
+        }
+    }
+    
+    //En esta parte muere enemigo
     if(enemigos.size() > 0){
         //comprobando los enemigos para saber si estan muertos
-        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor   
 
+        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor   
+             cout<< "estas i = "<< i <<endl;
+             cout<< "VIda = "<< enemigos[i]->getVida() <<endl;
             if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
                 
                 motor->EraseEnemigo(i);
                 fisicas->EraseEnemigo(i);
                 EraseEnemigo(i);
+                cout<< "estas matando i = "<< i <<endl;
             }else{
                 if(enemigos[i]->estasMuerto()){
                     enemigos[i]->MuereEnemigo(i);
                 }
             }
+            
         }
+
     }
 }
 
