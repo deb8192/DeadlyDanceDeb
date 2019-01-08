@@ -62,32 +62,40 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     float px = x,
           pz = z;
 
-    // Comprobar teclas para mover el personaje y la camara
+    
+    // Comprobar teclas para mover el personaje y la camara    
     if(w)
     {
-        //globales usadas para calcular giro, como vector director (x,z)
-        az += 50.0; //cuando mas alto mejor es el efecto de giro
-        az < -1000 ? az = 0 : false;
+        //ax y az son las componentes del vector director (x,z), para calcular el angulo posteriormente.
+        az += 50.0; //cuando mas alto mejor es el efecto de giro        
     }
     if(s)
     {
         az += -50.0;
-        az > 1000 ? az = 0 : false;
     }
     if(a)
     {
         ax += -50.0;
-        ax > 1000 ? ax = 0 : false;
 
     }
     if(d)
     {
         ax += 50.0;
-        ax < -1000 ? ax = 0 : false;
     }
 
+    //Esto es para que az y ax no aumente de valores excesivamente
+    //valores de muchas cifras hace que tarde mas en hacer el giro y que le cueste
+    if(az < -1000 || az > 1000)
+    {
+        az = 10;
+    } 
+    if(ax < -1000 || ax > 1000)
+    {
+        ax = 10;
+    } 
+
     //Para giro: obtienes el maximo comun divisor y lo divides entre x, z
-    //asi evitas que ambas variables aumenten excesivamente de valor
+    //asi tambien evitas que ambas variables aumenten excesivamente de valor
         float div = (float)__gcd((int)abs(ax),(int)abs(az));
 
         if(div != 1.0)
