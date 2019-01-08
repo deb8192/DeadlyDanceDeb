@@ -17,6 +17,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
 {
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
+        ~Jugador();
         Jugador(int,int,int,int,int,int);//defines tu la informacion del jugador
         void movimiento(float dt,bool a, bool s, bool d, bool w);
 
@@ -26,7 +27,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int getID();
         //Metodos Muere jugador y enemigo
         bool estasMuerto();
-        void MuereJugador(float tiempo);//muere jugador (el tiempo controla los cambio de color del jugador)
+        bool finalAnimMuerte();
+        void MuereJugador();//muere jugador (el tiempo controla los cambio de color del jugador)
         //npc metodos
         int Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
         //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
@@ -75,11 +77,6 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float ax = 1.0f,
               az = 20.0f,
               deg;
-        //Variables para el metodo morir
-        float acumMuJug = 0; //variable para el tiempo de muerte del jugador
-        bool pulsadoMuerte = false;
-        bool pulsadoMuerteEnemigos=false;
-        float acumMuEne = 0;
         //PRUEBAS ATAQUE ESPECIAL
         float timeAtEsp = 0.0;
         Arma *armaEquipada;

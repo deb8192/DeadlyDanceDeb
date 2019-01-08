@@ -139,8 +139,8 @@ using namespace idsEventos;
             void botonesMuerteJugador();
             int getEnemigos_Scena();
             void EraseColectable(int idx);
-            void EraseEnemigo(int i);
-            void EraseJugador(int i);
+            void EraseEnemigo(std::size_t i);
+            void EraseJugador();
             void EraseArma();
         private: //clases solo accesibles por MotorGrafico
 

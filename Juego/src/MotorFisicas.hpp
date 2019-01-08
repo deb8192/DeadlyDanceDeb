@@ -28,8 +28,8 @@ using namespace reactphysics3d;
 
             void updateJugador(float x, float y, float z);//actualizamos al jugador en el espacio de las fisicas
             void EraseColectable(int idx);
-            void EraseEnemigo(int i);
-            void EraseJugador(int i);
+            void EraseEnemigo(std::size_t i);
+            void EraseJugador();
             void EraseArma();
             CollisionBody* getColectables(int n);
             CollisionBody* getObstacles(int n);
