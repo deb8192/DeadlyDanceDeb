@@ -38,6 +38,11 @@ int Menu::Esta()
     return 1;
 }
 
+void Menu::Input()
+{
+    
+}
+
 void Jugando::Draw()
 {
     //se llaman a los draw de los diferentes objetos
@@ -52,6 +57,12 @@ void Jugando::Init()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->CrearCamara();
+}
+
+void Jugando::Input()
+{
+    Nivel *nivel = Nivel::getInstance();
+    nivel->pulsarE();
 }
 
 void Jugando::Update()
@@ -85,6 +96,11 @@ void Cinematica::Clean()
     //em
 }
 
+void Cinematica::Input()
+{
+    
+}
+
 void Cinematica::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
@@ -110,6 +126,8 @@ void Puzzles::AsignarPuzzle(Puzzle p)
 void Puzzles::Draw(){}
 
 void Puzzles::Clean(){}
+
+void Puzzles::Input(){}
 
 void Puzzles::Update()
 {
