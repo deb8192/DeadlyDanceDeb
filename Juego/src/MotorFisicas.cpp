@@ -331,7 +331,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
 
 }
 void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z)
-{   
+{
     //cout << "arma: " << arma << endl;
 
     float px = x,
@@ -361,9 +361,9 @@ void MotorFisicas::llevarBox(float x, float y, float z, float anc, float lar, fl
     rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
 
     Transform transformacion(posiciones,orientacion);
-      
+
     //arma->setTransform(transformacion);
-    
+
     rp3d::CollisionBody * cuerpo;
     cuerpo = space->createCollisionBody(transformacion);
 
@@ -399,7 +399,7 @@ void MotorFisicas::updateEnemigos(float x, float y, float z, unsigned int i)
 {
     if(enemigos.at(i) != nullptr)
     {
-        rp3d::Vector3 posiciones(x,y,z);        
+        rp3d::Vector3 posiciones(x,y,z);
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         enemigos.at(i)->setTransform(transformacion);
@@ -525,4 +525,3 @@ CollisionBody* MotorFisicas::getEnemiesAtEsp()
 {
  return armaAtEspEne.back();
 }
-

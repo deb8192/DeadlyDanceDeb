@@ -70,12 +70,12 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     float px = x,
           pz = z;
 
-    
-    // Comprobar teclas para mover el personaje y la camara    
+
+    // Comprobar teclas para mover el personaje y la camara
     if(w)
     {
         //ax y az son las componentes del vector director (x,z), para calcular el angulo posteriormente.
-        az += 50.0; //cuando mas alto mejor es el efecto de giro        
+        az += 50.0; //cuando mas alto mejor es el efecto de giro
     }
     if(s)
     {
@@ -96,11 +96,11 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     if(az < -10000 || az > 10000)
     {
         az = 10;
-    } 
+    }
     if(ax < -10000 || ax > 10000)
     {
         ax = 0;
-    } 
+    }
 
     //Para giro: obtienes el maximo comun divisor y lo divides entre x, z
     //asi tambien evitas que ambas variables aumenten excesivamente de valor
@@ -291,7 +291,6 @@ void Jugador::AtacarUpdate(int danyo)
     {
         //Pasar por cada uno de los atacados
         for(unsigned int i = 0; i < atacados.size(); i++)
-
         {
           //Buscar si esta en el vector guardado
           bool encontrado = false;
@@ -303,6 +302,7 @@ void Jugador::AtacarUpdate(int danyo)
               if(atacados.at(i) == atacados_normal.at(j))
               {
                 encontrado = true; //Ya se le ha atacado antes
+                break;
               }
               j++;
             }
@@ -312,11 +312,12 @@ void Jugador::AtacarUpdate(int danyo)
           {
             float variacion = rand() % 7 - 3;
             danyo += (int) variacion;
-            nivel->getEnemigos().at(i)->QuitarVida(danyo);
+            nivel->getEnemigos().at(atacados.at(i))->QuitarVida(danyo);
+            cout<<"Enemigo: "<< nivel->getEnemigos().at(atacados.at(i))->getID() << endl;
             cout<<"Daño "<<danyo<<endl;
             danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
             motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
             //guardar el atacado para no repetir
             atacados_normal.push_back(atacados.at(i));
@@ -522,11 +523,11 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
         {
             float variacion = rand() % 7 - 3;
             *danyo += (int) variacion;
-            nivel->getEnemigos().at(i)->QuitarVida(*danyo);
+            nivel->getEnemigos().at(atacados.at(i))->QuitarVida(*danyo);
             cout<<"Daño "<<*danyo<<endl;
             *danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
             motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }
