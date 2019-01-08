@@ -142,6 +142,10 @@ void Nivel::setThen()
 }
 
 void Nivel::EraseEnemigo(int i){
+    //Eliminar sonido
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+    std::string nameid = std::to_string(enemigos[i]->getID()); //pasar id a string
+    motora->getEvent(nameid)->stop();
     //elimniar el objeto en memoria(la onda)
     enemigos[i]->~Enemigo();//el destructor de enemigo
     enemigos[i]=nullptr;
