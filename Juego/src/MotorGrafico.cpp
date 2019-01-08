@@ -212,7 +212,7 @@ bool MotorGrafico::estaPulsado(int boton)
             return input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
 
         case KEY_E:
-            return input.IsKeyDown(irr::KEY_KEY_E);
+            return input.IsKeyPressed(irr::KEY_KEY_E);//actua una sola vez aunque se mantenga pulsado
     }
     return false;
 }
@@ -260,6 +260,9 @@ void MotorGrafico::resetKey(int event)
         break;
         case KEY_J:
             input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
+        break; 
+        case KEY_E:
+            input.ResetKey(irr::KEY_KEY_E);
         break;
     }
 }

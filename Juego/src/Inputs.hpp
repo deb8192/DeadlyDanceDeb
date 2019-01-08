@@ -31,6 +31,7 @@ using namespace gui;
             
             virtual bool OnEvent(const SEvent& event);
             virtual bool IsKeyDown(EKEY_CODE keyCode);
+            virtual bool IsKeyPressed(EKEY_CODE keyCode);
             bool IsMouseClick(EMOUSE_INPUT_EVENT mouseEvent);
             void ResetKey(int);//pone el evento a false
             void ResetEvento(int);//pone el evento a false
@@ -39,9 +40,11 @@ using namespace gui;
             void setDevice(IrrlichtDevice *devi);
         private:
 	        bool KeyIsDown[KEY_KEY_CODES_COUNT];//almacena si esta pulsado o no de todo el array de botones normales (no entran los especiales)
+	       bool KeyIsPressed[KEY_KEY_CODES_COUNT];//almacena si esta pulsado o no de todo el array de botones normales (no entran los especiales)          
 	        bool MouseClick[EMIE_COUNT];//almacena si esta pulsado o no de todo el array de botones del raton
 	        bool *EventosActivos;
             IrrlichtDevice *device;
+            bool EKeyIsDown;
     };
 
 #endif /*Inputs_HPP */
