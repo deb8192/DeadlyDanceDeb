@@ -85,6 +85,10 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     {
         enemigosAtack.push_back(cuerpo);
     }
+    else if(typeCreator == 8)//objetos
+    {
+        armaAtEspEne.push_back(cuerpo);
+    }
     // std::cout << "px: " << posiciones.x << std::endl;
     // std::cout << "py: " << posiciones.y << std::endl;
     // std::cout << "pz: " << posiciones.z << std::endl;
@@ -520,3 +524,9 @@ CollisionBody* MotorFisicas::getEnemiesAtack()
 {
  return enemigosAtack.back();
 }
+
+CollisionBody* MotorFisicas::getEnemiesAtEsp()
+{
+ return armaAtEspEne.back();
+}
+

@@ -56,6 +56,7 @@ using namespace reactphysics3d;
             CollisionBody* getJugador();
             CollisionBody* getEnemies(int n);
             CollisionBody* getEnemiesAtack();
+            CollisionBody* getEnemiesAtEsp();
             CollisionBody* getAtack();
 
         private:
@@ -67,6 +68,7 @@ using namespace reactphysics3d;
             CollisionWorld * space; //espacio o mundo de fisicas
             std::vector<CollisionBody *> enemigos;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             std::vector<CollisionBody *> enemigosAtack; //ataque de enemigos
+            std::vector<CollisionBody *> armaAtEspEne;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody * jugador;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
 
             std::vector<CollisionBody *> recolectables;
