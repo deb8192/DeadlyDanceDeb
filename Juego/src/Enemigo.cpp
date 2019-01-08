@@ -259,6 +259,10 @@ void Enemigo::MuereEnemigo(int enemi){
             motor->colorearEnemigo(255,255,0,0,enemi);//rojo
         }
     }
+    //Sonido de muerte
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+    motora->getEvent("Chicken2")->setPosition(x,y,z);
+    motora->getEvent("Chicken2")->start();
 }
 
 void Enemigo::RecuperarVida(int can)
