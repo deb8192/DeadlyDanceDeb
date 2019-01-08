@@ -7,15 +7,25 @@ Recolectable::Recolectable()
 }
 Recolectable::Recolectable(int ataque, const char *nombre, int anc, int lar, int alt, const char *objeto, const char *textura)
 {
-    cout << "creando recolectable" << endl;
+    std::string name_objeto(objeto);
+    cadena_objeto = new char[sizeof(name_objeto)];
+    strcpy(cadena_objeto, name_objeto.c_str());
+     
+    std::string name_textura(textura);
+    cadena_textura = new char[sizeof(name_textura)];
+    strcpy(cadena_textura, name_textura.c_str());
+
+    std::string name_nombre(nombre);
+    cadena_nombre = new char[sizeof(name_nombre)];
+    strcpy(cadena_nombre, name_nombre.c_str());
 
     potenciaAtaque = ataque;
-    nombreObjeto = nombre;
+    nombreObjeto = cadena_nombre;
     ancho = anc;
     largo = lar;
     alto = alt;
-    ruta_objeto = objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
-    ruta_textura = "textura";
+    ruta_objeto = cadena_objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
+    ruta_textura = cadena_textura;
 }
 void Recolectable::setPosiciones(float nx,float ny,float nz)
 {

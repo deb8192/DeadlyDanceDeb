@@ -26,6 +26,23 @@
 		{
 			KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
 		}
+
+		//tecla E solo debe suceder una vez cuando se pulse y no en bucle mientras se mantenga pulsado
+		KeyIsPressed[KEY_KEY_E] = false;
+		if (event.EventType == irr::EET_KEY_INPUT_EVENT && event.KeyInput.Key == KEY_KEY_E)
+		{
+			if(!EKeyIsDown)
+			{
+					KeyIsPressed[KEY_KEY_E] = true;				
+			}
+			else
+			{
+				KeyIsPressed[KEY_KEY_E] = false;
+			}
+
+			EKeyIsDown = event.KeyInput.PressedDown && event.KeyInput.Key == KEY_KEY_E;				
+		}
+
 		/*if (event.EventType == irr::EET_MOUSE_INPUT_EVENT)
     	{
 			MouseClick[event.MouseInput.Event] = event.MouseInput.ButtonStates;
@@ -74,6 +91,12 @@
 	{
 		return KeyIsDown[keyCode];
 	}
+
+	bool Inputs::IsKeyPressed(EKEY_CODE keyCode)
+	{
+		return KeyIsPressed[keyCode];
+	}
+
 
 	Inputs::SMouseState& Inputs::GetMouseState()
 	{
@@ -137,6 +160,7 @@
 	void Inputs::ResetKey(int keyCode)
 	{
 		KeyIsDown[keyCode]=false;
+		KeyIsPressed[keyCode]=false;
 	}
 
 	Inputs::Inputs()
