@@ -152,10 +152,10 @@ void Nivel::CogerObjeto()
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     int rec_col = fisicas->collideColectable();
-         
+
         if(jugador.getArma() == nullptr)//si no tiene arma equipada
         {
-            //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)recolectables[rec_col];            
+            //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)recolectables[rec_col];
             Arma* nuArma = new Arma(recolectables[rec_col]->getAtaque(),recolectables[rec_col]->getNombre(),recolectables[rec_col]->getAncho(),recolectables[rec_col]->getLargo(),recolectables[rec_col]->getAlto(),recolectables[rec_col]->getObjeto(),recolectables[rec_col]->getTextura());
             jugador.setArma(nuArma);
             //lo cargamos por primera vez en el motor de graficos
@@ -166,6 +166,7 @@ void Nivel::CogerObjeto()
             recolectables.erase(recolectables.begin() + rec_col);
             motor->EraseColectable(rec_col);
             fisicas->EraseColectable(rec_col);
+            atacktime = 0.0f; //Reiniciar tiempo de ataques
         }
         else if(jugador.getArma() != nullptr)//si tiene arma equipada
         {
@@ -187,8 +188,9 @@ void Nivel::CogerObjeto()
             recolectables.push_back(nuRec);
             fisicas->setFormaRecolectable(recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
             motor->CargarRecolectable(recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
+            atacktime = 0.0f; //Reiniciar tiempo de ataques
         }
- 
+
 }
 
 void Nivel::DejarObjeto()
@@ -202,15 +204,15 @@ void Nivel::DejarObjeto()
             Recolectable* nuRec = new Recolectable(jugador.getArma()->getAtaque(),jugador.getArma()->getNombre(),jugador.getArma()->getAncho(),jugador.getArma()->getLargo(), jugador.getArma()->getAlto(),jugador.getArma()->getObjeto(),jugador.getArma()->getTextura());
             nuRec->setPosiciones(jugador.getX(),jugador.getY(), jugador.getZ());
             motor->EraseArma();
-            fisicas->EraseArma();            
+            fisicas->EraseArma();
             jugador.setArma(NULL);
-            
+
             //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
             recolectables.push_back(nuRec);
             fisicas->setFormaRecolectable(recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
             motor->CargarRecolectable(recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
         }
-    
+
 }
 
 void Nivel::pulsarE()
@@ -218,12 +220,12 @@ void Nivel::pulsarE()
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     MotorGrafico * motor = MotorGrafico::getInstance();
     //lo siguiente es para saber que objeto colisiona con jugador
-    int rec_col = fisicas->collideColectable();    
-    
-    //cambia se utiliza porque coge y suelta el objeto sucesivamente varias veces, la causa de este error 
+    int rec_col = fisicas->collideColectable();
+
+    //cambia se utiliza porque coge y suelta el objeto sucesivamente varias veces, la causa de este error
     //era porque ocurren varias iteraciones del bucle tal vez porque la interpolacion crea mas iteraciones en el bucle
     if(motor->estaPulsado(KEY_E))
-    {  
+    {
         if(rec_col < 0)
         {
             if(cambia <= 0)
@@ -240,7 +242,7 @@ void Nivel::pulsarE()
             }
             cambia++;
         }
-    } 
+    }
     else{
         cambia = 0;
     }
@@ -267,7 +269,7 @@ void Nivel::update()
     acumulator += frameTime;
     while(acumulator >= dt)
     {
-    
+
     if(jugador.getArma() != nullptr)
     {
         //iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
@@ -387,7 +389,7 @@ void Nivel::update()
                     danyo_jug = enemigos[i]->AtacarEspecial();
                     enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
                     enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
-            
+
                 }
                 else if(enemigos[i]->getBarraAtEs() < 100)
                 {
@@ -426,7 +428,7 @@ void Nivel::update()
         //enemigos->MuereEnemigo(acumulator);
  	      acumulator -= dt;
     }
-    
+
     //actualizamos la interfaz de jugador
     jugador.updateInterfaz();
     //actualizamos la interfaz en motor grafico
@@ -477,7 +479,7 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
         {
             jugador.setTimeAtEsp(1.5f);
             jugador.setLastTimeAtEsp(controladorTiempo->getTiempo(2));
-            
+
         }
     }
     else
