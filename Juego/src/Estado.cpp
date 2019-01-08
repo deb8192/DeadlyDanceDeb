@@ -1,8 +1,7 @@
 #include "Estado.hpp"
-#include "Pathfinder.hpp"
 //#include "MotorGrafico.hpp"
 #include "SenseEventos.hpp"
-//#include "Nivel.hpp"
+#include "Nivel.hpp"
 #include "Enemigo.hpp"
 #include "MotorAudio.hpp"
 
@@ -39,6 +38,11 @@ int Menu::Esta()
     return 1;
 }
 
+void Menu::Input()
+{
+    
+}
+
 void Jugando::Draw()
 {
     //se llaman a los draw de los diferentes objetos
@@ -55,6 +59,12 @@ void Jugando::Init()
     motor->CrearCamara();
 }
 
+void Jugando::Input()
+{
+    Nivel *nivel = Nivel::getInstance();
+    nivel->pulsarE();
+}
+
 void Jugando::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
@@ -69,6 +79,7 @@ void Jugando::Update()
     //Actualiza el motor de audio
     MotorAudioSystem *motora = MotorAudioSystem::getInstance();
     motora->update(false);
+
     //vuelve al menu
     if(motor->ocurreEvento(GUI_ID_MENU_BUTTON)){
         // Se resetea en el Update de Juego
@@ -102,8 +113,6 @@ void Jugando::Update()
         Pathfinder path;
         vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(enemigos.at(1)->getSala(), nivel->getPrimeraSala());
     }
-
-
 }
 int Jugando::Esta()
 {
@@ -118,6 +127,11 @@ void Cinematica::Draw()
 void Cinematica::Clean()
 {
     //em
+}
+
+void Cinematica::Input()
+{
+    
 }
 
 void Cinematica::Update()
@@ -145,6 +159,8 @@ void Puzzles::AsignarPuzzle(Puzzle p)
 void Puzzles::Draw(){}
 
 void Puzzles::Clean(){}
+
+void Puzzles::Input(){}
 
 void Puzzles::Update()
 {
@@ -600,4 +616,25 @@ void Puzzles::ComprobarGanar()
     } else {
         cout << "Salta la araña" << endl;
     }
+}
+
+void Puzzles::UpdateIA()
+{
+
+}
+
+void Cinematica::UpdateIA()
+{
+
+}
+
+void Jugando::UpdateIA()
+{
+    Nivel *nivel = Nivel::getInstance();
+    nivel->updateIA();
+}
+
+void Menu::UpdateIA()
+{
+
 }

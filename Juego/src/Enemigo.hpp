@@ -1,11 +1,12 @@
 #ifndef Enemigo_HPP
 #define Enemigo_HPP
-
 #include "INnpc.hpp"
 #include "INdrawable.hpp"
 #include "INsentidos.hpp"
+#include "Arma.hpp"
 #include "Sala.hpp"
 #include <vector>
+#include "Arbol2.hpp"
 
 class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple herencia a esto se le llama derivacion multiple
 {
@@ -17,13 +18,13 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void definirSala(Sala * sala);
 
         //sentidos metodos
-        void generarSonido(int intensidad, double duracion);
+        void generarSonido(int intensidad,double duracion,int tipo);//la intensidad es el alcance y la duracion es cuanto dura el sonido, el tipo 1 son sonidos del jugador, 2 es pedir ayuda de los enemigos
 
         void queEscuchas();//recupera la informacion de los sonidos que escucha
 
         void queVes();//recupera informacion de los objetos,enemigos,jugador que ve.
         //drawables metodos
-        void setPosiciones(int nx,int ny,int nz);
+        void setPosiciones(float nx,float ny,float nz);
         void setID(int);
         int getID();
         //npc metodos
@@ -38,14 +39,20 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
 
+        //getters y setters
         void setVida(int vid);
         void setTipo(int tip);
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
+        void setArmaEspecial(int ataque);
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
-
+        void setSala(Sala* sala);
+        void setAtackTime(float t);
+        void setTimeAtEsp(float time);
+        void setLastTimeAtEsp(float time);
+        void setRotation(float rot);
         int getVida();
         int getTipo();
         int getBarraAtEs();
@@ -54,12 +61,42 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getDanyoCritico();
         int getProAtaCritico();
         int* getBuffos();
-        //propios
         Sala* getSala();
+        float getAtackTime();
+        float getTimeAtEsp();
+        float getLastTimeAtEsp();
+        float getX();
+        float getY();
+        float getZ();
+        float getRX();
+        float getRY();
+        float getRZ();
 
+        //comportamientos bases
+            bool ver(int tipo);//1 si ve al jugador
+            bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
+            bool buscar();//por defecto devuelve true
+            bool perseguir();//por defecto devuelve true
+            bool Acciones(int);//esto es para recorrer el arbol
+            bool pedirAyuda();//pide ayuda
+            bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
+            bool Merodear(int tipo);//para dar vueltas por una zona, segun el enemigo tendra diferentes merodeos
+        //fin comportamientos bases
+        
+        //activar ia
+        void setArbol(Arbol2 *);//asigna un arbol de ia al enemigo
+        Arbol2 * getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
+        void runIA();//corre la ia del enemigo
+        //fin ia
+        
     protected:
         Sala * estoy;//sala en la que esta el enemigo
-        
+        float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
+        float atacktime = 0.0f;
+        Arma *armaEspecial;
+        const char * rutaArmaEspecial = "assets/models/objeto.obj";
+        Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
+
 };
 
 #endif

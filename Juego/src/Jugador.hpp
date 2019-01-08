@@ -9,6 +9,8 @@
 #include "MotorFisicas.hpp"
 #include "MotorGrafico.hpp"
 #include <ctime>
+#include "InterfazJugador.hpp"
+#include <cstring>
 
 using namespace std;
 
@@ -18,11 +20,11 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
         ~Jugador();
-        Jugador(int,int,int,int,int,int);//defines tu la informacion del jugador
+        Jugador(int,int,int,int,int,int,std::string malla);//defines tu la informacion del jugador
         void movimiento(float dt,bool a, bool s, bool d, bool w);
 
         //drawable metodos
-        void setPosiciones(int nx,int ny,int nz);
+        void setPosiciones(float nx,float ny,float nz);
         void setID(int);
         int getID();
         //Metodos Muere jugador y enemigo
@@ -51,6 +53,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
         void setTimeAtEsp(float time);
+        void setLastTimeAtEsp(float time);
 
         int getVida();
         int getTipo();
@@ -64,6 +67,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int getProAtaCritico();
         int* getBuffos();
         float getTimeAtEsp();
+        float getLastTimeAtEsp();
         const char *getRutaArmaEsp();
 
         float getX();
@@ -73,16 +77,18 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getRY();
         float getRZ();
 
+        //interfaz
+        void updateInterfaz();//nos sirve para actualizar la info de la interfaz
+        
     private:
         float ax = 1.0f,
               az = 20.0f,
               deg;
         //PRUEBAS ATAQUE ESPECIAL
-        float timeAtEsp = 0.0;
         Arma *armaEquipada;
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/Arma.obj";
-        const char * nombreJugador = "Bailaora";
+        const char * nombreJugador = "Heavy";
         //!PRUEBAS ATAQUE ESPECIAL
        //  core::vector3df dir;
         float danyo_arma = 10.0f;

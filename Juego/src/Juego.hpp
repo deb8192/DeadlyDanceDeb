@@ -2,6 +2,7 @@
 #include "MotorAudio.hpp"
 #include "Estado.hpp"
 #include "Nivel.hpp"
+#include "CargadorBehaviorTrees.hpp" //prueba
 #include "CargadorXML.hpp"
 
 #ifndef Juego_HPP
@@ -23,7 +24,8 @@
 
             bool Running();//te devuelve true si esta en funcionamiento la ventana del juego, te devuelve false si se ha cerrado la ventana
             void InicializarVentana();//te inicializa la ventana en la que se va a mostrar el juego
-            void Update(); //actualiza las ia, renderizados, control de teclas
+            void Update(); //actualiza renderizados, control de teclas
+            void UpdateIA(); //ejecuta la ia
             void LimpiarVentana();//borra de la memoria la ventana del juego.
             void Salir();//sale del juego
             void Jugar();//cambia de estado y cargar mapa //aqui saldra el selector de nivel cuando se implemente
@@ -45,7 +47,7 @@
             Menu menu;//contiene la clase menu (estado)
             Jugando jugando;//contiene la clase Jugando (estado)
             Nivel *nivel;
-
+            
             // Probando puzzles
             Puzzles haciendo_puzzles;//contiene la clase Puzzles (estado)
             CargadorXML cargadorXML;

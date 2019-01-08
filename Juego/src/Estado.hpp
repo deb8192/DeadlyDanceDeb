@@ -13,15 +13,19 @@ private:
     virtual void Draw() = 0;
     virtual void Clean() = 0;
     virtual void Update() = 0;
+    virtual void UpdateIA() = 0;
     virtual int Esta() = 0;
     virtual void Init() = 0;
+    virtual void Input() = 0;
 
 public:
     void Pintar(){ Draw(); };
     void Borrar(){ Clean(); };
     void Actualizar(){ Update(); };
+    void ActualizarIA(){ UpdateIA(); };
     int QueEstado(){ return Esta(); };
     void Ini(){Init();};
+    void Eventos(){Input();};
 };
 
 //diferentes clases de estado
@@ -32,8 +36,10 @@ class Menu: public Estado{
         void Draw();
         void Clean();
         void Update();
+        void UpdateIA();
         int Esta();
         void Init();
+         void Input();
         //MotorGrafico *motor = MotorGrafico::getInstance();
 };
 
@@ -42,8 +48,10 @@ class Jugando: public Estado{
         void Draw();
         void Clean();
         void Update();
+        void UpdateIA();
         int Esta();
         void Init();
+         void Input();
         //MotorGrafico *motor = MotorGrafico::getInstance();
 };
 
@@ -52,8 +60,10 @@ class Cinematica: public Estado{
         void Draw();
         void Clean();
         void Update();
+        void UpdateIA();
         int Esta();
         void Init();
+         void Input();
 
         //MotorGrafico *motor = MotorGrafico::getInstance();
 };
@@ -72,8 +82,10 @@ class Puzzles: public Estado{
         void Draw();
         void Clean();
         void Update();
+        void UpdateIA();
         int Esta();
         void Init();
+         void Input() ;
 
 
         void ComprobarEventosOpciones();
