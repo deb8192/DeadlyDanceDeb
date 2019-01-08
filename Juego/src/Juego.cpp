@@ -11,7 +11,7 @@ Juego::Juego()
     //Motor de audio inicializar
     motora = MotorAudioSystem::getInstance();
     motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    motora->getEvent("Level01")->start(); //Reproducir musica Menu
+    motora->getEvent("Menu")->start(); //Reproducir musica Menu
 
     nivel = Nivel::getInstance();//se recoge la instancia de nivel
     estado = &menu;//se empieza en el estado menu
@@ -63,7 +63,7 @@ void Juego::Update()
     }
 
     estado->Eventos();
-    
+
     //para modo debug
     if(motor->estaPulsado(KEY_G_DEBUG))
     {
@@ -75,7 +75,7 @@ void Juego::Update()
     if(motor->ocurreEvento(GUI_ID_ARBOLES_BUTTON))
     {
         motor->resetEvento(GUI_ID_ARBOLES_BUTTON);
-        CargarArbolesXML();   
+        CargarArbolesXML();
     }
 
     // Puzzles
@@ -86,7 +86,7 @@ void Juego::Update()
         motor->borrarGui();
         CargarPuzzlesXML();
     }
-    
+
     // Ocurre despues de pulsar Atras en Puzzles
     if(motor->ocurreEvento(GUI_ID_BACK_MENU_BUTTON))
     {
@@ -104,12 +104,12 @@ void Juego::Salir()
 //cuando se presiona boton de jugar
 void Juego::Jugar()
 {
-    motora->getEvent("Level01")->stop(); //Detener musica Menu
+    motora->getEvent("Menu")->stop(); //Detener musica Menu
     motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    motora->getEvent("Level03")->start(); //Reproducir musica juego
+    motora->getEvent("Nivel1")->start(); //Reproducir musica juego
 
     estado = &jugando;//se cambia a estado jugando
-    
+
     estado->Ini();
 }
 

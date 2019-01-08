@@ -35,6 +35,7 @@ struct MotorAudioSystem
 
     MotorAudioEvent* getEvent(std::string name);                   //Devuelve el evento con un nombre
     void setListenerPosition(float posx, float posy, float posz);  //posicion del punto de escucha
+    void LoadEvent(const char *path, std::string name);            //cargar evento
     void update(bool paused);                                      //Actualizar motor
 
     //Comprobar errores en FMOD
