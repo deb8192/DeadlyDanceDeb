@@ -512,7 +512,17 @@ void Jugador::setTipo(int tip)
 
 void Jugador::setBarraAtEs(int bar)
 {
-    barraAtEs = bar;
+    if(bar >= 0 && bar <= 100)
+    {
+        barraAtEs = bar;
+    }
+    else
+    {
+        if(bar < 0)
+         barraAtEs = 0;
+        if(bar > 100)
+         barraAtEs = 100;
+    }
 }
 
 void Jugador::setAtaque(int ataq)
@@ -523,6 +533,19 @@ void Jugador::setAtaque(int ataq)
 void Jugador::setArma(Arma * arma)
 {
     armaEquipada = arma;
+    /*char arm [] = "guitarra";
+    char arm2 [] = "arpa";
+    if(strcmp(arma->getNombre(),arm) == 0)//entonces es la guitarra cuerpo a cuerpo
+    {
+        InterfazJugador * interfaz = InterfazJugador::getInstance();
+        interfaz->setArma(2);
+    }
+
+    if(strcmp(arma->getNombre(),arm2) == 0)//entonces es la guitarra cuerpo a cuerpo
+    {
+        InterfazJugador * interfaz = InterfazJugador::getInstance();
+        interfaz->setArma(3);  
+    }*/
 }
 
 
@@ -567,7 +590,19 @@ int Jugador::getTipo()
 
 int Jugador::getBarraAtEs()
 {
-    return barraAtEs;
+    if(barraAtEs >= 0 && barraAtEs <= 100)
+    {
+        return barraAtEs;
+    }
+    else
+    {
+        if(barraAtEs < 0)
+            return 0;
+        if(barraAtEs > 100)
+            return 100;
+    }
+
+    return 1;
 }
 
 int Jugador::getAtaque()
@@ -629,4 +664,11 @@ void Jugador::setID(int nid)
 int Jugador::getID()
 {
     return id;
+}
+
+void Jugador::updateInterfaz()
+{
+    InterfazJugador * interfaz = InterfazJugador::getInstance();
+    interfaz->setVida(vida);
+    interfaz->setAtaqueEspecial(getBarraAtEs());
 }
