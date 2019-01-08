@@ -161,6 +161,7 @@ int Enemigo::AtacarEspecial()
     int danyo = 0, por10 = 10, por100 = 100;
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+    MotorGrafico* motor = MotorGrafico::getInstance();
 
     cout << vida << " " << barraAtEs << " " << por100 << endl;
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
@@ -185,9 +186,10 @@ int Enemigo::AtacarEspecial()
             atespposZ = (atespz/2);
 
             //Crear cuerpo de colision de ataque delante del jugador
-            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,1,8,5);
+            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,4,4,4,8);
             motora->getEvent("Bow")->setVolume(0.8f);
             motora->getEvent("Bow")->start();
+            motor->dibujarObjetoTemporal(atespx, atespy, atespz, atgx, atgy, atgz, 4, 4, 4, 2);
         }
 
         //Se calcula el danyo del ataque
@@ -205,12 +207,12 @@ int Enemigo::AtacarEspecial()
 
         //Se aplican todas las modificaciones en la variable danyo
         danyoF = ataque * critico * aumentosAtaque;
-        cout << "daño: " <<danyo<<endl;
+        cout << "daño: " <<danyoF<<endl;
       
         //Colision
-        if(fisicas->IfCollision(fisicas->getEnemiesAtack(),fisicas->getJugador()))
+        if(fisicas->IfCollision(fisicas->getEnemiesAtEsp(),fisicas->getJugador()))
         {
-            cout << "Jugador Atacado" << endl;
+            cout << "Jugador Atacado por ataque especial" << endl;
             danyo = roundf(danyoF * por10) / por10;
         }
         barraAtEs = 0;
@@ -306,7 +308,7 @@ void Enemigo::setSuerte(int suer)
 
 void Enemigo::setDanyoCritico(int danyoC)
 {
-
+    danyoCritico = danyoC;
 }
 
 void Enemigo::setProAtaCritico(int probabilidad)

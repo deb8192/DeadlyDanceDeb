@@ -35,6 +35,7 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->setVida(75);
+    ene->setBarraAtEs(0);
     ene->definirSala(sala);//le pasamos la sala en donde esta
     ene->setAtaque(10);
     ene->setArmaEspecial(100);
@@ -318,6 +319,9 @@ void Nivel::update()
                 if(enemigos[i]->getTimeAtEsp() <= 0.0f)
                 {
                     danyo_jug = enemigos[i]->AtacarEspecial();
+                    enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
+                    enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
+            
                 }
                 else if(enemigos[i]->getBarraAtEs() < 100)
                 {
@@ -347,9 +351,6 @@ void Nivel::update()
                     {
                         jugador.QuitarVida(danyo_jug);
                         cout<< "Vida jugador tras ataque especial: "<< jugador.getVida() << endl;
-                        enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
-                        enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
-            
                     }
                 }
                //enemigos[i]->queVes();
