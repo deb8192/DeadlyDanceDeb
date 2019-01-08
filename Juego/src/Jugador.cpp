@@ -17,7 +17,7 @@ Jugador::Jugador()
 
 Jugador::Jugador(int,int,int,int,int,int,std::string malla)
 {
-    
+
     vida = 100;//esto lo hereda de la interfaz por el protected
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->crearJugador(malla);
@@ -192,8 +192,8 @@ int Jugador::Atacar()
 
       danyo = 100.0f;
     }
-    motora->getEvent("Bow")->setVolume(0.8f);
-    motora->getEvent("Bow")->start();
+    motora->getEvent("Arpa")->setVolume(0.8f);
+    motora->getEvent("Arpa")->start();
     atacados_normal.clear(); //Reiniciar vector con enemigos atacados
   }
   else{
@@ -296,7 +296,7 @@ int Jugador::AtacarEspecial()
     if(vida > 0 && barraAtEs == por100)
     {
         cout << "Supera las restricciones, ATAQUE ESPECIAL"<<endl;
-        
+
         //Calcular posiciones si se inicia el ataque especial
         if(atackEspTime <= 0)
         {
@@ -321,15 +321,15 @@ int Jugador::AtacarEspecial()
             {
                 //Crear cuerpo de colision de ataque delante del jugador
                 fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,1,8,5);
-                motora->getEvent("Bow")->setVolume(0.8f);
-                motora->getEvent("Bow")->start();
+                motora->getEvent("Arpa")->setVolume(0.8f);
+                motora->getEvent("Arpa")->start();
             }
             //ATAQUE ESPECIAL DE LA BAILAORA
             else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
                 fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,8,8,5);
-                motora->getEvent("Bow")->start();
+                motora->getEvent("Arpa")->start();
             }
         }
 
@@ -545,7 +545,7 @@ void Jugador::setArma(Arma * arma)
     if(strcmp(arma->getNombre(),arm2) == 0)//entonces es la guitarra cuerpo a cuerpo
     {
         InterfazJugador * interfaz = InterfazJugador::getInstance();
-        interfaz->setArma(3);  
+        interfaz->setArma(3);
     }*/
 }
 

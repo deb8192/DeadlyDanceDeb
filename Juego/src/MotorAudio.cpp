@@ -24,36 +24,15 @@ MotorAudioSystem::MotorAudioSystem()
   FMOD::Studio::Bank* pBank;
   ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/Music.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
   if(pBank)banks["Music"] = pBank; //Insertar en el mapa de Bancos
-  ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/SFX.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
-  if(pBank)banks["SFX"] = pBank; //Insertar en el mapa de Bancos
+  ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/HardFX.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
+  if(pBank)banks["HardFX"] = pBank; //Insertar en el mapa de Bancos
 
   //Cargar eventos
-  FMOD::Studio::EventDescription* pEventInstance;
-  ERRCHECK(pstudioSystem->getEvent("event:/Level 01", &pEventInstance));
-
-  if(pEventInstance)
-  {
-    eventDescriptions["Level01"] = pEventInstance; //Insertar en el mapa de descripcion de eventos
-    MotorAudioEvents.insert(pair<std::string, MotorAudioEvent*>("Level01",new MotorAudioEvent(pEventInstance)));
-  }
-  ERRCHECK(pstudioSystem->getEvent("event:/Level 02", &pEventInstance));
-  if(pEventInstance)
-  {
-    eventDescriptions["Level02"] = pEventInstance; //Insertar en el mapa de descripcion de eventos
-    MotorAudioEvents.insert(pair<std::string, MotorAudioEvent*>("Level02",new MotorAudioEvent(pEventInstance)));
-  }
-  ERRCHECK(pstudioSystem->getEvent("event:/Level 03", &pEventInstance));
-  if(pEventInstance)
-  {
-    eventDescriptions["Level03"] = pEventInstance; //Insertar en el mapa de descripcion de eventos
-    MotorAudioEvents.insert(pair<std::string, MotorAudioEvent*>("Level03",new MotorAudioEvent(pEventInstance)));
-  }
-  ERRCHECK(pstudioSystem->getEvent("event:/Bow", &pEventInstance));
-  if(pEventInstance)
-  {
-    eventDescriptions["Bow"] = pEventInstance; //Insertar en el mapa de descripcion de eventos
-    MotorAudioEvents.insert(pair<std::string, MotorAudioEvent*>("Bow",new MotorAudioEvent(pEventInstance)));
-  }
+  LoadEvent("event:/Nivel 1","Nivel1");
+  LoadEvent("event:/Nivel 2","Nivel2");
+  LoadEvent("event:/Menu","Menu");
+  LoadEvent("event:/Arpa","Arpa");
+  //LoadEvent("event:/Chicken1","Chicken1");
 
  //***********EJEMPLO DE EJECUCION MUSICA*****************
   // FMOD::Studio::EventInstance* eventInstance;
@@ -88,6 +67,18 @@ void MotorAudioSystem::setListenerPosition(float posx, float posy, float posz)
   ERRCHECK(pstudioSystem->setListenerAttributes(0, &attributes));
 }
 
+//Crear intancia de un evento
+void MotorAudioSystem::LoadEvent(const char *path,std::string name)
+{
+  FMOD::Studio::EventDescription* pEventInstance;
+  ERRCHECK(pstudioSystem->getEvent(path, &pEventInstance));
+  if(pEventInstance)
+  {
+    eventDescriptions[name] = pEventInstance; //Insertar en el mapa de descripcion de eventos
+    MotorAudioEvents.insert(pair<std::string, MotorAudioEvent*>(name,new MotorAudioEvent(pEventInstance)));
+  }
+}
+
 //Actualizar
 void MotorAudioSystem::update(bool paused)
 {
@@ -111,31 +102,31 @@ MotorAudioEvent::~MotorAudioEvent()
 
 }
 
-//Reproducir el evento
+//Reproducir instancia del evento
 void MotorAudioEvent::start()
 {
   ERRCHECK(soundInstance->start());
 }
 
-//Detener el evento
+//Detener instancia del evento
 void MotorAudioEvent::stop()
 {
     ERRCHECK(soundInstance->stop(FMOD_STUDIO_STOP_IMMEDIATE));
 }
 
-//Pausar el evento
+//Pausar instancia del evento
 void MotorAudioEvent::pause()
 {
   ERRCHECK(soundInstance->setPaused(true));
 }
 
-//Modifica el volumen del evento (entre 0 y 1)
+//Modifica el volumen instancia del evento (entre 0 y 1)
 void MotorAudioEvent::setVolume(float vol)
 {
   ERRCHECK(soundInstance->setVolume(vol));
 }
 
-//Posicion 3D del evento
+//Posicion 3D instancia del evento
 void MotorAudioEvent::setPosition(float posx, float posy, float posz)
 {
   FMOD_3D_ATTRIBUTES attributes = {{0}};

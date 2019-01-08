@@ -72,7 +72,7 @@ void Enemigo::queVes()
     /*SenseEventos * eventos = SenseEventos::getInstance();
     //esto es un ejemplo
 
-    
+
     int * loqueve = eventos->listaObjetos(x,y,z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
 
     if(loqueve != nullptr)
@@ -168,7 +168,7 @@ int Enemigo::AtacarEspecial()
     if(vida > 0 && barraAtEs == por100)
     {
         cout << "ATAQUE ESPECIAL ENEMIGO"<<endl;
-        
+
         //Calcular posiciones si se inicia el ataque especial
         if(atackEspTime <= 0)
         {
@@ -187,8 +187,8 @@ int Enemigo::AtacarEspecial()
 
             //Crear cuerpo de colision de ataque delante del jugador
             fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,4,4,4,8);
-            motora->getEvent("Bow")->setVolume(0.8f);
-            motora->getEvent("Bow")->start();
+            motora->getEvent("Arpa")->setVolume(0.8f);
+            motora->getEvent("Arpa")->start();
             motor->dibujarObjetoTemporal(atespx, atespy, atespz, atgx, atgy, atgz, 4, 4, 4, 2);
         }
 
@@ -208,7 +208,7 @@ int Enemigo::AtacarEspecial()
         //Se aplican todas las modificaciones en la variable danyo
         danyoF = ataque * critico * aumentosAtaque;
         cout << "daño: " <<danyoF<<endl;
-      
+
         //Colision
         if(fisicas->IfCollision(fisicas->getEnemiesAtEsp(),fisicas->getJugador()))
         {
@@ -470,7 +470,7 @@ void Enemigo::runIA()
         if(tipo == 1)//ves al jugador ?
         {
             int * loqueve = eventos->listaObjetos(x,y,z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
-  
+
             if(loqueve != nullptr)
             {
                 if(loqueve[0] == 1)
@@ -487,7 +487,7 @@ void Enemigo::runIA()
     {
         SenseEventos * eventos = SenseEventos::getInstance();
         std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(x,y);//le pasamos nuestra x e y
-        
+
         if(listaSonidos.size() > 0)
         {
             for(std::size_t i=0;i<listaSonidos.size();i++)
@@ -522,7 +522,7 @@ void Enemigo::runIA()
     {
         if(tipo == 1)//pollo
         {
-           //cout << " pollo merodeando " << endl; 
+           //cout << " pollo merodeando " << endl;
            return true;
         }
 

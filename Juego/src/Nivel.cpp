@@ -60,6 +60,12 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2);
 
+    //Cargar sonido evento en una instancia con la id del enemigo como nombre
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+    std::string nameid = std::to_string(id); //pasar id a string
+    motora->LoadEvent("event:/Chicken1",nameid);
+    motora->getEvent(nameid)->setPosition(x,y,z);
+    motora->getEvent(nameid)->start();
 }
 
 void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -392,7 +398,7 @@ void Nivel::update()
                     danyo_jug = enemigos[i]->AtacarEspecial();
                     enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
                     enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
-            
+
                 }
                 else if(enemigos[i]->getBarraAtEs() < 100)
                 {
@@ -431,7 +437,7 @@ void Nivel::update()
         //enemigos->MuereEnemigo(acumulator);
  	      acumulator -= dt;
     }
-    
+
     //actualizamos la interfaz de jugador
     jugador.updateInterfaz();
     //actualizamos la interfaz en motor grafico
@@ -482,7 +488,7 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
         {
             jugador.setTimeAtEsp(1.5f);
             jugador.setLastTimeAtEsp(controladorTiempo->getTiempo(2));
-            
+
         }
     }
     else
