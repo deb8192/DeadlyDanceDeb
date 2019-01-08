@@ -88,19 +88,11 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     if(az < -10000 || az > 10000)
     {
         az = 10;
-<<<<<<< HEAD
     }
-    if(ax < -1000 || ax > 1000)
-    {
-        ax = 10;
-    }
-=======
-    } 
     if(ax < -10000 || ax > 10000)
     {
         ax = 0;
-    } 
->>>>>>> 3fb4f5b17eb535923c99e5f9e4c2708198355697
+    }
 
     //Para giro: obtienes el maximo comun divisor y lo divides entre x, z
     //asi tambien evitas que ambas variables aumenten excesivamente de valor
@@ -200,7 +192,7 @@ int Jugador::Atacar()
     //ATAQUE SIN ARMA
     if(this->getArma() == nullptr){
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,1,1,4);
-      danyo = 25.0f;
+      danyo = 100.0f;
     }
     //ATAQUE CUERPO A CUERPO
     else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
