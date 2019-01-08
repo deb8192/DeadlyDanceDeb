@@ -21,7 +21,7 @@ using namespace idsEventos;
 //fin de acortes
 
 #ifndef MotorGrafico_HPP
-#define MotorGrafico_CPP
+#define MotorGrafico_HPP
 
     class MotorGrafico
     {
