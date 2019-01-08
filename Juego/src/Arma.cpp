@@ -11,14 +11,21 @@ Arma::Arma()
 }
 Arma::Arma(int ataque, const char * nombre, int anc, int lar, int alt, const char *objeto, const char *textura)
 {
-    //motor = MotorGrafico::getInstance();
+    std::string name_objeto(objeto);
+    cadena_objeto = new char[sizeof(name_objeto)];
+    strcpy(cadena_objeto, name_objeto.c_str());
+     
+    std::string name_textura(textura);
+    cadena_textura = new char[sizeof(name_textura)];
+    strcpy(cadena_textura, name_textura.c_str());
+    
     potenciaAtaque = ataque;
     nombreArma = nombre;
     ancho = anc;
     largo = lar;
     alto = alt;
-    ruta_objeto = objeto;
-    ruta_textura = textura;
+    ruta_objeto = cadena_objeto; 
+    ruta_textura = cadena_textura;
     //motor->CargarArmaEspecial(0,0,0,ruta,"");
 }
 void Arma::setPosiciones(float nx,float ny,float nz)

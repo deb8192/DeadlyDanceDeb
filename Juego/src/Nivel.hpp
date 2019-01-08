@@ -62,6 +62,10 @@ class Nivel
         Jugador getJugador();
         void setThen();
 
+        void CogerObjeto();
+        void DejarObjeto();
+        void pulsarE();
+
     private:
 
         //clase singleton
@@ -92,6 +96,7 @@ class Nivel
         int objetoCogido = -1;
         int danyo = 0, danyo2 = 0;
         unsigned int enemigoSeleccionado = 0;
+        int cambia;
 };
 
 #endif

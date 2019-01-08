@@ -61,6 +61,9 @@ void Juego::Update()
     {
         motor->closeGame();
     }
+
+    estado->Eventos();
+    
     //para modo debug
     if(motor->estaPulsado(KEY_G_DEBUG))
     {
