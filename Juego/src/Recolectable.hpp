@@ -16,18 +16,17 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         ~Recolectable();
         
         //drawable metodos
-        void setPosiciones(int nx,int ny,int nz);
+        void setPosiciones(float nx,float ny,float nz);
         void setID(int);
         int getID();
 
         float getX();
         float getY();
         float getZ();
-        /*
         float getRX();
         float getRY();
         float getRZ();
-        */
+
         int getAtaque();
         const char* getNombre();
         const char* getObjeto();

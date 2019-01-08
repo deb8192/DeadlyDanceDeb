@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Juego.hpp"
-#include "times.hpp"
+//#include "times.hpp"
 
 int main()
 {
@@ -17,7 +17,7 @@ int main()
 		{
 			if(tiempo->EjecutoIA())
 			{
-
+				juego->UpdateIA();
 			}
 			juego->Update();//si lo esta actualizamos la escena
 		}

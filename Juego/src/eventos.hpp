@@ -22,6 +22,7 @@ namespace idsEventos
         KEY_J,
         RMOUSE_PRESSED_DOWN,
         LMOUSE_PRESSED_DOWN,
+        KEY_I,
 
         // Botones
         GUI_ID_EMPEZAR_BUTTON = 101,

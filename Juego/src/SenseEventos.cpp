@@ -1,5 +1,6 @@
 #include "SenseEventos.hpp"
 #include "MotorGrafico.hpp"
+#include "MotorFisicas.hpp"
 
 SenseEventos* SenseEventos::unica_instancia = 0;
 
@@ -84,9 +85,50 @@ void SenseEventos::agregarEvento(eventoSonido * evento)
  }
 
 //para la vista devuelve los objetos que ve
-void SenseEventos::listaObjetos(int x, int y)
+int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista, int modo, bool perifericos)
 { 
+
+    MotorFisicas * fisicas = MotorFisicas::getInstance();
     MotorGrafico * motor = MotorGrafico::getInstance();
-    //mandamos los diferentes rayos 
-    motor->dibujarRayo(x,y,20,0,0,0,10);
+
+    int * perDer;
+    int * perIzq;
+    int * recto = fisicas->colisionRayoUnCuerpo(x,y,z,rot,vista,modo);//mira directa
+    motor->debugVision(x,y,z,rot,vista);
+    motor->debugVision(x,y,z,rot+30,vista/2);
+    motor->debugVision(x,y,z,rot-30,vista/2);
+
+    if(perifericos)
+    {
+            perDer = fisicas->colisionRayoUnCuerpo(x,y,z,rot+30,vista/2,modo);//mira periferica derecha
+            perIzq = fisicas->colisionRayoUnCuerpo(x,y,z,rot-30,vista/2,modo);//mira periferica izquierda
+            
+            //Si lo ve por uno de los perifericos lo pone a 1
+            if(modo == 1)//jugador
+            {
+                if(recto[0] != 1 && (perDer[0] == 1 || perIzq[0] == 1))
+                {
+                    recto[0] = 1;
+                }
+            }
+
+            if(modo == 2)//objetos
+            {
+                //for recorriendose cada valor comparando 
+                //indice 0 contiene el numero de valores
+            }
+
+            if(modo == 3)//enemigos
+            {
+                 //for recorriendose cada valor comparando 
+                 //indice 0 contiene el numero de valores
+            }
+
+            //eliminamos los punteros ya no son necesarios
+            delete [] perDer;
+            delete [] perIzq;
+    }
+
+    //a continuacion devolvemos listado de las cosas que se ven
+    return recto;
 }

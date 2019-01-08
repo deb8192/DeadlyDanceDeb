@@ -12,6 +12,7 @@ class eventoSonido
         void restarTiempo(double tiempo);
         double getDuracion();
         float getIntensidad();
+        int getTipo();
 
     private:
         double duracion;

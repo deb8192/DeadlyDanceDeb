@@ -1,6 +1,7 @@
 #ifndef INobjetos_HPP
 #define INobjetos_HPP
 #include <iostream>
+#include <cstring>
 
 using namespace std;
 
@@ -15,6 +16,9 @@ class INobjetos
     	const char* nombreObjeto;
         const char* ruta_objeto; 
         const char* ruta_textura;
+        char* cadena_objeto; 
+        char* cadena_textura;
+        char* cadena_nombre;
         float ancho, largo, alto; 
 };
 

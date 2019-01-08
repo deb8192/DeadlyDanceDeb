@@ -1,5 +1,5 @@
-#ifndef MotorGrafico_HPP
-#define MotorGrafico_CPP
+#ifndef times_HPP
+#define times_HPP
 
 #include <ctime>//nos sirve para saber los tiempos de ejecucion
 //#include <iostream>
@@ -17,6 +17,7 @@
                 return unica_instancia;  
             }
             //fin singleton public
+            void inicializar();//inicializa los valores por defecto
             void setFrames(int,int);//primer valor frames maximos, segundo  valor ejecucios de la ia por frame maximo numero de frames
             bool EjecutoUpdate();//indica si se debe ejecutar las interpolaciones
             bool EjecutoIA();//indica si se debe ejecutar la logica del juego

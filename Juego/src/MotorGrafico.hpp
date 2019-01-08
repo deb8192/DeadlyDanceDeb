@@ -7,6 +7,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
 #include <vector>//para los objetos en escena
+#include "InterfazJugador.hpp"//para la interfaz
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;
@@ -48,6 +49,8 @@ using namespace idsEventos;
             void updateMotorCinematica();
             //crea una camara para ver el escenario
             void CrearCamara();
+            //crea al jugador
+            void crearJugador(std::string malla);
             //crea los botones del menu
             void PintarBotonesMenu();
             //define fuente por defecto
@@ -106,14 +109,15 @@ using namespace idsEventos;
             void clearDebug2();
             void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
+            void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
             void borrarArmaEspecial();
             void colorearJugador(int a, int r, int g, int b);
-            void colorearEnemigos(int a, int r, int g, int b, unsigned int seleccion);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
 
             void colorearObjeto(int a, int r, int g, int b, int obj);
             void debugBox(int x,int y, int z,int ancho, int alto, int largo);
+            void debugVision(float x, float y, float z, float rotacion, float longitud);
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
             void CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarRecolectable(int id, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
@@ -142,6 +146,12 @@ using namespace idsEventos;
             void EraseEnemigo(std::size_t i);
             void EraseJugador();
             void EraseArma();
+
+            //interfaz
+            void cargarInterfaz();
+            void destruirInterfaz();
+            void updateInterfaz();
+            
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
@@ -156,8 +166,10 @@ using namespace idsEventos;
 	        IGUIEnvironment *guienv;
             scene::ICameraSceneNode* camera;
             IGUIFont *font;
+            IGUIFont *font2;
             IGUISkin *skin;
             Inputs input;
+            IAnimatedMeshSceneNode* ninja;
             std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
             std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
             std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
@@ -170,6 +182,7 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
+            IAnimatedMesh * conovision;
             bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
 
             core::aabbox3d<f32> bounding_jugador;
@@ -202,6 +215,19 @@ using namespace idsEventos;
 
             void CrearMeshFicha(float tamanyo, int r, int g, int b);
             void CargarIMG(short x, short y);
+
+            //interfaz
+            IGUIImage* vidaI;
+            IGUIImage* energiaI;
+            IGUIImage* dineroI;
+            IGUIImage* armaI;
+            IGUIImage* BarraVidaI;
+            IGUIImage* BarraEnergiaI;
+            IGUIImage* manosI;
+            IGUIImage* llaveI;
+            IGUIImage* espadaI;
+            IGUIImage* dagaI;
+            IGUIStaticText* moneyI;           
     };
 
 #endif /* MotorGrafico_HPP */
