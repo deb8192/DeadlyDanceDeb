@@ -14,7 +14,7 @@ Juego::Juego()
     motora->getEvent("Menu")->start(); //Reproducir musica Menu
 
     nivel = Nivel::getInstance();//se recoge la instancia de nivel
-    estado = &menu;//se empieza en el estado menu
+    estado = &cinematica;//se empieza en el estado menu
 
     // Cargamos los puzzles 1 vez
     cargadorXML.CargarPuzzlesXml();
@@ -32,11 +32,21 @@ void Juego::LimpiarVentana()
 
 void Juego::InicializarVentana()
 {
-    motor->crearVentana(2);//crea ventana
-    motor->CrearCamara();//creamos la camara
-	motor->crearTextoDePrueba();//crea un texto
-    motor->activarFuenteDefault();//activa la fuente por defecto que trae irrlicht
-    motor->PintarBotonesMenu();//pinta los botones del menu -> esto mover a menu
+    if(estado->QueEstado() == 3)
+    {
+        motor->crearVentana(2);//crea ventana
+        motor->CrearCamara();//creamos la camara
+        //le ponemos la marca de tiempo, cuando pasen 16 segundos lo pasamos
+        times * tiempo = times::getInstance();
+        marcaTiempo=tiempo->getTiempo(1);
+    }
+    else
+    {
+        motor->borrarGui();//para borrar cinematicas
+	    motor->crearTextoDePrueba();//crea un texto
+        motor->activarFuenteDefault();//activa la fuente por defecto que trae irrlicht
+        motor->PintarBotonesMenu();//pinta los botones del menu -> esto mover a menu
+    }
 }
 
 void Juego::setNivelThen()
@@ -46,52 +56,68 @@ void Juego::setNivelThen()
 
 void Juego::Update()
 {
-    estado->Actualizar();//con esto se llama al update adecuado
-    //cout << "\e[24m Aqui \e[0m" << endl;
-    if(motor->ocurreEvento(GUI_ID_EMPEZAR_BUTTON))//cambiamos de estado porque han pulsado boton jugar
+    if(estado->QueEstado() == 3)
     {
-        //limpiamos el gui y la scena
-        motor->borrarScena();
-        motor->borrarGui();
-        nivel->CargarNivel(3);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-        motor->resetEvento(GUI_ID_EMPEZAR_BUTTON);//reseteamos el evento
-        Jugar();
-    }
-    if(motor->ocurreEvento(GUI_ID_SALIR_BUTTON))//salimos del juego
-    {
-        motor->closeGame();
-    }
+        times * tiempo = times::getInstance();
+        
+        if(tiempo->calcularTiempoPasado(marcaTiempo) >= tiempoTotal)
+        {
+            estado = &menu;
+            InicializarVentana();
+        }
 
-    estado->Eventos();
-
-    //para modo debug
-    if(motor->estaPulsado(KEY_G_DEBUG))
-    {
-        motor->activarDebugGrafico();
-        motor->resetKey(KEY_G_DEBUG);
+        estado->Actualizar();
     }
-
-    // Cargar XML arboles
-    if(motor->ocurreEvento(GUI_ID_ARBOLES_BUTTON))
+    else
     {
-        motor->resetEvento(GUI_ID_ARBOLES_BUTTON);
-        CargarArbolesXML();
-    }
+        estado->Actualizar();
+        //con esto se llama al update adecuado
+        //cout << "\e[24m Aqui \e[0m" << endl;
+        if(motor->ocurreEvento(GUI_ID_EMPEZAR_BUTTON))//cambiamos de estado porque han pulsado boton jugar
+        {
+            //limpiamos el gui y la scena
+            motor->borrarScena();
+            motor->borrarGui();
+            nivel->CargarNivel(3);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
+            motor->resetEvento(GUI_ID_EMPEZAR_BUTTON);//reseteamos el evento
+            Jugar();
+        }
+        if(motor->ocurreEvento(GUI_ID_SALIR_BUTTON))//salimos del juego
+        {
+            motor->closeGame();
+        }
 
-    // Puzzles
-    if(motor->ocurreEvento(GUI_ID_PUZZLES_BUTTON))
-    {
-        motor->resetEvento(GUI_ID_PUZZLES_BUTTON);
-        motor->borrarScena();
-        motor->borrarGui();
-        CargarPuzzlesXML();
-    }
+        estado->Eventos();
 
-    // Ocurre despues de pulsar Atras en Puzzles
-    if(motor->ocurreEvento(GUI_ID_BACK_MENU_BUTTON))
-    {
-        motor->resetEvento(GUI_ID_BACK_MENU_BUTTON);
-        estado = &menu;
+        //para modo debug
+        if(motor->estaPulsado(KEY_G_DEBUG))
+        {
+            motor->activarDebugGrafico();
+            motor->resetKey(KEY_G_DEBUG);
+        }
+
+        // Cargar XML arboles
+        if(motor->ocurreEvento(GUI_ID_ARBOLES_BUTTON))
+        {
+            motor->resetEvento(GUI_ID_ARBOLES_BUTTON);
+            CargarArbolesXML();
+        }
+
+        // Puzzles
+        if(motor->ocurreEvento(GUI_ID_PUZZLES_BUTTON))
+        {
+            motor->resetEvento(GUI_ID_PUZZLES_BUTTON);
+            motor->borrarScena();
+            motor->borrarGui();
+            CargarPuzzlesXML();
+        }
+
+        // Ocurre despues de pulsar Atras en Puzzles
+        if(motor->ocurreEvento(GUI_ID_BACK_MENU_BUTTON))
+        {
+            motor->resetEvento(GUI_ID_BACK_MENU_BUTTON);
+            estado = &menu;
+        }
     }
 }
 
