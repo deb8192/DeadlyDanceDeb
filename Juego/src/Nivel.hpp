@@ -36,7 +36,7 @@ class Nivel
             return unica_instancia;
         }
         //fin singleton public
-        void LimpiarNivel();
+        //void LimpiarNivel();
         bool CargarNivel(int);//carga eñ nivel siempre que exista dicho nivel en assets/maps/xml/
 
         //cargar objetos
@@ -91,7 +91,7 @@ class Nivel
         clock_t currentTime;
         times * controladorTiempo;
 
-        bool a,s,d,w,atEsp;
+        //bool a,s,d,w;
         bool cogerObjeto = false;
         int objetoCogido = -1;
         int danyo = 0, danyo2 = 0;

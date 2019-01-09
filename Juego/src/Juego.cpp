@@ -64,7 +64,6 @@ void Juego::Update()
     // vamos a menu el jugador a muerto
     if(motor->ocurreEvento(GUI_ID_MENU_BUTTON))
     {
-        
         motor->resetEvento(GUI_ID_MENU_BUTTON);
         estado = &menu;
     }
