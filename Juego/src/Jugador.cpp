@@ -98,7 +98,7 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     {
         //ax y az son las componentes del vector director (x,z), para calcular el angulo posteriormente.
         az += 50.0; //cuando mas alto mejor es el efecto de giro
-    }   
+    }
     if(s)
     {
         az += -50.0;
@@ -225,27 +225,28 @@ int Jugador::Atacar()
     if(this->getArma() == nullptr){
       setAnimacion(2);
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,1,1,4);
-      danyo = 100.0f;
+      danyo = 20.0f;
+      motora->getEvent("SinArma")->setVolume(0.8f);
+      motora->getEvent("SinArma")->start();
     }
     //ATAQUE CUERPO A CUERPO
     else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
     {
       //Crear cuerpo de colision de ataque delante del jugador
-
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,4,0,0,4);
-      danyo = 100.0f;
+      danyo = 60.0f;
+      motora->getEvent("GolpeGuitarra")->setVolume(0.8f);
+      motora->getEvent("GolpeGuitarra")->start();
     }
     //ATAQUE A DISTANCIA
     else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
     {
       //Crear cuerpo de colision de ataque delante del jugador
-
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4);
-
-      danyo = 100.0f;
+      danyo = 45.0f;
+      motora->getEvent("Arpa")->setVolume(0.8f);
+      motora->getEvent("Arpa")->start();
     }
-    motora->getEvent("Arpa")->setVolume(0.8f);
-    motora->getEvent("Arpa")->start();
     atacados_normal.clear(); //Reiniciar vector con enemigos atacados
   }
   else{
