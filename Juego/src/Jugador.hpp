@@ -11,6 +11,7 @@
 #include <ctime>
 #include "InterfazJugador.hpp"
 #include <cstring>
+#include "times.hpp"
 
 using namespace std;
 
