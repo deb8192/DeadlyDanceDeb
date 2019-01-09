@@ -1,9 +1,9 @@
 #include "Enemigo.hpp"
-//#include "Nivel.hpp"
-#include "MotorGrafico.hpp"
-#include "MotorFisicas.hpp"
-#include "MotorAudio.hpp"
-#include "times.hpp"
+#include "Nivel.hpp"
+//#include "MotorGrafico.hpp"
+//#include "MotorFisicas.hpp"
+//#include "MotorAudio.hpp"
+//#include "times.hpp"
 
 #define PI 3.14159265358979323846
 #define PIRADIAN 180.0f
@@ -504,8 +504,14 @@ void Enemigo::runIA()
 
     bool Enemigo::pedirAyuda()
     {
-        //vamos a generar un sonido de ayuda
-        generarSonido(20,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+        Nivel * nivel = Nivel::getInstance();
+        //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
+        if(nivel->getEnemigoPideAyuda() == nullptr)
+        {
+            //vamos a generar un sonido de ayuda
+            generarSonido(50,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+            nivel->setEnemigoPideAyuda(this); //En caso de no estar buscando a ningun aliado se anade este como peticionario
+        }
         //cout << " grita pidiendo ayuda "<< endl;
         return true;
     }
@@ -514,7 +520,10 @@ void Enemigo::runIA()
     {
         //vamos a generar un sonido de ayuda
         generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+        Nivel * nivel = Nivel::getInstance();
+        nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
         //cout << " contesta a la llamada de auxilio "<< endl;
+
         return true;
     }
 

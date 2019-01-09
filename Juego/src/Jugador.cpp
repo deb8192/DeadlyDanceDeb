@@ -261,11 +261,11 @@ void Jugador::AtacarUpdate(int danyo)
           {
             float variacion = rand() % 7 - 3;
             danyo += (int) variacion;
-            nivel->getEnemigos().at(i)->QuitarVida(danyo);
+            nivel->getEnemigos().at(atacados.at(i))->QuitarVida(danyo);
             cout<<"Daño "<<danyo<<endl;
             danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<nivel->getEnemigos().at(i)->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
             motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
             //guardar el atacado para no repetir
             atacados_normal.push_back(atacados.at(i));
@@ -471,11 +471,11 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
         {
             float variacion = rand() % 7 - 3;
             *danyo += (int) variacion;
-            nivel->getEnemigos().at(i)->QuitarVida(*danyo);
+            nivel->getEnemigos().at(atacados.at(i))->QuitarVida(*danyo);
             cout<<"Daño "<<*danyo<<endl;
             *danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(atacados.at(i)))->getID()<<" "<<nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
             motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }
