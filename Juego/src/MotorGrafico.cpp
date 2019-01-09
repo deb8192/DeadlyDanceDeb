@@ -98,8 +98,31 @@ void MotorGrafico::updateMotorJuego()
 
 void MotorGrafico::updateMotorCinematica()
 {
-    driver->beginScene(true, true, SColor(255,100,255,140));
-	smgr->drawAll();
+    driver->beginScene(true, true, SColor(0,0,0,0));
+	
+    if(frame_actual == 0)
+    {
+        frame_actual = 1;
+    }
+    else
+    {
+        frame_actual = frame_actual+4;
+    }
+
+    if(frame_actual < 498)
+    {
+        //definimos los strings
+        std::string fram = "";  
+        std::string extension = ".jpg"; 
+        std::string ruta = "assets/cinematicas/frames/";
+        fram = std::to_string(frame_actual);
+        //creamos la ruta completa
+        std::string ruta_completa = ruta+fram+extension;
+        char buffer[100];
+        strcpy(buffer,ruta_completa.c_str());
+        actual = guienv->addImage(driver->getTexture(buffer),position2d<int>(0,0));
+    }
+    smgr->drawAll();
 	guienv->drawAll();
 	driver->endScene();
 }

@@ -230,7 +230,11 @@ using namespace idsEventos;
             IGUIImage* llaveI;
             IGUIImage* espadaI;
             IGUIImage* dagaI;
-            IGUIStaticText* moneyI;           
+            IGUIStaticText* moneyI;     
+
+            //cinematicas
+            int frame_actual = 0;
+            IGUIImage * actual;   
     };
 
 #endif /* MotorGrafico_HPP */
