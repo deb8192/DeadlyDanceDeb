@@ -65,11 +65,12 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     std::string nameid = std::to_string(id); //pasar id a string
     motora->LoadEvent("event:/Chicken1",nameid);
     motora->getEvent(nameid)->setPosition(x,y,z);
+    motora->getEvent(nameid)->setVolume(0.8f);
     motora->getEvent(nameid)->start();
 }
 
 void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
-{   
+{
     jugador.setVida(100);
     jugador.setID(id++);
     jugador.setBarraAtEs(100);

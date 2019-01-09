@@ -32,6 +32,8 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/Nivel 2","Nivel2");
   LoadEvent("event:/Menu","Menu");
   LoadEvent("event:/Arpa","Arpa");
+  LoadEvent("event:/SinArma","SinArma");
+  LoadEvent("event:/GolpeGuitarra","GolpeGuitarra");
   LoadEvent("event:/Chicken2","Chicken2");
   //LoadEvent("event:/Chicken1","Chicken1");
 
