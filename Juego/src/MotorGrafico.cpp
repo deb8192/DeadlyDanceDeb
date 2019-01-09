@@ -100,20 +100,25 @@ void MotorGrafico::updateMotorCinematica()
 {
     driver->beginScene(true, true, SColor(0,0,0,0));
 	
+    float mile = 1000.0f;
+    float ratio = 30.0f;
+    float tiempo_frame = mile/ratio;
+    int salto = ceil(tiempoUltimoFrame/tiempo_frame);
     if(frame_actual == 0)
     {
         frame_actual = 1;
     }
     else
     {
-        frame_actual = frame_actual+4;
+        frame_actual = frame_actual+(1+salto);
     }
 
     if(frame_actual < 498)
     {
         //definimos los strings
         std::string fram = "";  
-        std::string extension = ".jpg"; 
+        std::string extension = ".jpg";
+        float marcaTiempo = times::getInstance()->getTiempo(1); 
         std::string ruta = "assets/cinematicas/frames/";
         fram = std::to_string(frame_actual);
         //creamos la ruta completa
@@ -121,6 +126,8 @@ void MotorGrafico::updateMotorCinematica()
         char buffer[100];
         strcpy(buffer,ruta_completa.c_str());
         actual = guienv->addImage(driver->getTexture(buffer),position2d<int>(0,0));
+        tiempoUltimoFrame = times::getInstance()->calcularTiempoPasado(marcaTiempo);
+        cout << tiempoUltimoFrame << " " << salto << endl;
     }
     smgr->drawAll();
 	guienv->drawAll();

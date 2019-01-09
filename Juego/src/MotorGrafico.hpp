@@ -8,6 +8,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include <math.h>
 #include <vector>//para los objetos en escena
 #include "InterfazJugador.hpp"//para la interfaz
+#include "times.hpp"
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;
@@ -233,8 +234,9 @@ using namespace idsEventos;
             IGUIStaticText* moneyI;     
 
             //cinematicas
-            int frame_actual = 0;
-            IGUIImage * actual;   
+            int frame_actual = 0;//numero de frame actual
+            IGUIImage * actual;//frame actual   
+            float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
     };
 
 #endif /* MotorGrafico_HPP */
