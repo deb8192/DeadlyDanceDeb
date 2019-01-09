@@ -110,7 +110,16 @@ void MotorGrafico::updateMotorCinematica()
     }
     else
     {
-        frame_actual = frame_actual+(1+salto);
+        if(tiempoUltimoFrame > tiempo_frame)
+        {
+            //es mayor (va lento) 
+            frame_actual = frame_actual+(1+salto);
+        }
+        else
+        {
+            //es menor (va mas rapido)
+            frame_actual = frame_actual+1;
+        }
     }
 
     if(frame_actual < 498)
