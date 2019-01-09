@@ -86,22 +86,9 @@ void Jugando::Update()
         // Borrar escena y GUI 
         motor->borrarScena();
         motor->borrarGui();
-        //Borramos enemigos
-        /*for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor   
-                
-            motor->EraseEnemigo(i);
-            fisicas->EraseEnemigo(i);
-            EraseEnemigo(i);
-        }*/
-        //Borramos jugador
-        motor->EraseJugador();
-    
-        //Borramos objeto
-
+        //nivel->LimpiarNivel();
         // Cargar GUI de menu
         motor->PintarBotonesMenu();
-        
-        //QUIERO BORRA AL JUGADOR DE LA ESCENA PERO DA ERROR
         
         return;
     }

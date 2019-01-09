@@ -16,15 +16,42 @@ Nivel::Nivel()
     id = 0;
     controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
 }
-
+/*
 void Nivel::LimpiarNivel(){
-    id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
-    //me cargo al jugador pero (Jugador = Jugador();) si da problemas ir a jugador y limpiar variables
-    //primeraSala.;
+    
+    //Jugador = Jugador();//me cargo al jugador pero si da problemas ir a jugador y limpiar variables
     //jugador en todos eliminar, enemigos, objetos, armas, salas, 
+    unica_instancia->~Nivel();
+    unica_instancia=nullptr;
+
     primeraSala->~Sala();//llamo al puntero para que se destruya
     primeraSala=nullptr;
-}
+    /*fisicas->~MotorFisicas();
+    fisicas=nullptr;
+    controladorTiempo->~times();
+    controladorTiempo=nullptr;
+/*******************************
+    std::vector<Enemigo*> enemigos;//Enemigos en scena
+    std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
+    std::vector<Recolectable*> recolectables;
+    Jugador jugador;//objeto del jugador en el nivel
+    CargadorNiveles cargador;//nos ayuda a cargar los niveles
+******************************
+
+    /*id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
+    dt = 0.0f;
+    frameTime = 0.0f;
+    acumulator = 0.0f;
+    atacktime = 0.0f;
+    lastAtackEsptime = 0.0f;
+    newTime = 0;
+    currentTime = 0;
+    cogerObjeto = false;
+    objetoCogido = -1;
+    danyo = 0, danyo2 = 0;
+    enemigoSeleccionado = 0;
+    cambia = 0;
+}*/
 
 bool Nivel::CargarNivel(int level)
 {
@@ -585,30 +612,6 @@ void Nivel::updateIA()
     //En esta parte muere enemigo
     if(enemigos.size() > 0){
         //comprobando los enemigos para saber si estan muertos
-        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor   
-             //cout<< "estas i = "<< i <<endl;
-             //cout<< "VIda = "<< enemigos[i]->getVida() <<endl;
-            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
-
-                motor->EraseEnemigo(i);
-                fisicas->EraseEnemigo(i);
-                EraseEnemigo(i);
-                //cout<< "estas matando i = "<< i <<endl;
-            }else{
-                if(enemigos[i]->estasMuerto()){
-                    enemigos[i]->MuereEnemigo(i);
-                }
-            }
-            
-        }
-
-    }
-    //En esta parte mueren
-    if(jugador.estasMuerto()){
-        //motor->EraseJugador(jugador);
-    }
-    if(enemigos.size() > 0){
-        //comprobando los enemigos para saber si estan muertos
         for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
 
             if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
@@ -616,8 +619,7 @@ void Nivel::updateIA()
                 motor->EraseEnemigo(i);
                 fisicas->EraseEnemigo(i);
                 EraseEnemigo(i);
-            }else
-            {
+            }else{
                 if(enemigos[i]->estasMuerto()){
                     enemigos[i]->MuereEnemigo(i);
                 }
