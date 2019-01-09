@@ -60,7 +60,7 @@ void Juego::Update()
     {
         times * tiempo = times::getInstance();
         
-        if(tiempo->calcularTiempoPasado(marcaTiempo) >= tiempoTotal)
+        if(tiempo->calcularTiempoPasado(marcaTiempo) >= tiempoTotal || motor->finalCinematica())
         {
             estado = &menu;
             InicializarVentana();
