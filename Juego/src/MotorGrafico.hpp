@@ -8,6 +8,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include <math.h>
 #include <vector>//para los objetos en escena
 #include "InterfazJugador.hpp"//para la interfaz
+#include "times.hpp"
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;
@@ -47,6 +48,7 @@ using namespace idsEventos;
             void updateMotorJuego();
             //esto es provisional cuando tengamos diferentes pintados se llamara pero para llamar a todos los pintados
             void updateMotorCinematica();
+            bool finalCinematica();
             //crea una camara para ver el escenario
             void CrearCamara();
             //crea al jugador
@@ -151,6 +153,9 @@ using namespace idsEventos;
             void cargarInterfaz();
             void destruirInterfaz();
             void updateInterfaz();
+
+            //animaciones
+            void cambiarAnimacionJugador(int);//nos sirve para cambiar de animacion al jugador
             
         private: //clases solo accesibles por MotorGrafico
 
@@ -227,7 +232,12 @@ using namespace idsEventos;
             IGUIImage* llaveI;
             IGUIImage* espadaI;
             IGUIImage* dagaI;
-            IGUIStaticText* moneyI;           
+            IGUIStaticText* moneyI;     
+
+            //cinematicas
+            int frame_actual = 0;//numero de frame actual
+            IGUIImage * actual;//frame actual   
+            float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
     };
 
 #endif /* MotorGrafico_HPP */
