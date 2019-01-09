@@ -11,6 +11,7 @@
 #include <ctime>
 #include "InterfazJugador.hpp"
 #include <cstring>
+#include "times.hpp"
 
 using namespace std;
 
@@ -79,6 +80,11 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
 
         //interfaz
         void updateInterfaz();//nos sirve para actualizar la info de la interfaz
+
+        //Animacion
+        int getAnimacion();
+        void setAnimacion(int);
+        bool terminaAnimacion();
         
     private:
         float ax = 1.0f,

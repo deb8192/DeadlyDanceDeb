@@ -101,11 +101,13 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     std::string nameid = std::to_string(id); //pasar id a string
     motora->LoadEvent("event:/Chicken1",nameid);
     motora->getEvent(nameid)->setPosition(x,y,z);
+    motora->getEvent(nameid)->setVolume(0.8f);
     motora->getEvent(nameid)->start();
 }
 
 void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
-{   jugador.setVida(100);
+{
+    jugador.setVida(100);
     jugador.setID(id++);
     jugador.setBarraAtEs(100);
     jugador.setAtaque(15);
@@ -115,10 +117,12 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
     jugador.setVida(100);
+    jugador.setPosiciones(x,y,z);
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     MotorFisicas* fisicas = MotorFisicas::getInstance();
+    cout << x << " " << y << " " << z << " " << endl;
     motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
 
@@ -203,7 +207,7 @@ void Nivel::CogerObjeto()
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     int rec_col = fisicas->collideColectable();
-
+        jugador.setAnimacion(4);
         if(jugador.getArma() == nullptr)//si no tiene arma equipada
         {
             //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)recolectables[rec_col];
@@ -311,6 +315,10 @@ void Nivel::update()
 
     //actualizamos el jugador
     MotorGrafico * motor = MotorGrafico::getInstance();
+
+    //animacion
+        motor->cambiarAnimacionJugador(jugador.getAnimacion());
+        
     //Interpolacion
     newTime = clock();
     frameTime = newTime - currentTime;

@@ -337,13 +337,13 @@ void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, floa
     float px = x,
           pz = z;
     if(a)
-     px -= 1;
+     px -= 2;
     if(s)
-     pz -= 1;
+     pz -= 2;
     if(d)
-     px += 1;
+     px += 2;
     if(w)
-     pz += 1;
+     pz += 2;
 
     if(jugador != nullptr)
     {

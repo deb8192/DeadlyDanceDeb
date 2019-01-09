@@ -4,6 +4,7 @@
 #include "Nivel.hpp"
 #include "CargadorBehaviorTrees.hpp" //prueba
 #include "CargadorXML.hpp"
+#include "times.hpp"
 
 #ifndef Juego_HPP
 #define Juego_CPP
@@ -51,6 +52,10 @@
             // Probando puzzles
             Puzzles haciendo_puzzles;//contiene la clase Puzzles (estado)
             CargadorXML cargadorXML;
+
+            //cinematicas
+            float tiempoTotal = 20000.0f;//esto indica el tiempo de las cinematicas total en segundos
+            float marcaTiempo = 0;//llamaremos a getiempo cuando se inicialice la ventana luego simplemente comprobamos que el tiempo sea mayor que el total para cambiar a menu
     };
 
 #endif /* MotorGrafico_HPP */
