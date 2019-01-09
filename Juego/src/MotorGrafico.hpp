@@ -48,6 +48,7 @@ using namespace idsEventos;
             void updateMotorJuego();
             //esto es provisional cuando tengamos diferentes pintados se llamara pero para llamar a todos los pintados
             void updateMotorCinematica();
+            bool finalCinematica();
             //crea una camara para ver el escenario
             void CrearCamara();
             //crea al jugador

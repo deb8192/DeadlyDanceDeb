@@ -1309,3 +1309,13 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
         }
     }
 }
+
+bool MotorGrafico::finalCinematica()
+{
+    if(frame_actual >= 498)
+    {
+        return true;
+    }
+    
+    return false;
+}
