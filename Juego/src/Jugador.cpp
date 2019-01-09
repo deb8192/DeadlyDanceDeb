@@ -68,7 +68,7 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     {
         //ax y az son las componentes del vector director (x,z), para calcular el angulo posteriormente.
         az += 50.0; //cuando mas alto mejor es el efecto de giro
-    }
+    }   
     if(s)
     {
         az += -50.0;

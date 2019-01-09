@@ -372,11 +372,12 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     else
     {
         IAnimatedMeshSceneNode* jugador_en_scena = smgr->addAnimatedMeshSceneNode(jugador); //metemos el objeto en el escenario para eso lo pasamos al escenario
+        cout << x << " " << y << " " << z << " " << endl;
         jugador_en_scena->setPosition(core::vector3df(x,y,z));
         Jugador_Scena = jugador_en_scena;
-
-        const SColor COLOR  = SColor(255,0,0,255);
-        smgr->getMeshManipulator()->setVertexColors(Jugador_Scena->getMesh(),COLOR);
+        Jugador_Scena->setScale(core::vector3df(3,3,3));
+        //const SColor COLOR  = SColor(255,0,0,255);
+        //smgr->getMeshManipulator()->setVertexColors(Jugador_Scena->getMesh(),COLOR);
     }
 }
 
@@ -447,7 +448,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
 
     Jugador_Scena->setPosition(core::vector3df(x,y,z));
-    Jugador_Scena->setRotation(core::vector3df(rx,ry,rz));
+    Jugador_Scena->setRotation(core::vector3df(rx,ry-180,rz));
 
 }
 
@@ -1028,8 +1029,7 @@ void MotorGrafico::cargarInterfaz()
     dagaI = guienv->addImage(driver->getTexture("assets/images/daga.png"),position2d<int>(738,534));
 
     BarraVidaI->setMaxSize(dimension2du(121,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
-    BarraEnergiaI->setMaxSize(dimension2du(63,27));//maximo 63/100 y esto multiplicado por la cantidad de energia
-    
+    BarraEnergiaI->setMaxSize(dimension2du(63,27));//maximo 63/100 y esto multiplicado por la cantidad de energia 
     font2 = guienv->getFont("assets/fonts/myfont.xml");
 
     moneyI = guienv->addStaticText(L"1000 M",rect<s32>(710,21,750,40),false); //falta ver los cambios de fuente y ponerlo correctamente

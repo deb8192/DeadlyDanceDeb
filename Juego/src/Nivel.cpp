@@ -69,7 +69,8 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
 }
 
 void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
-{   jugador.setVida(100);
+{   
+    jugador.setVida(100);
     jugador.setID(id++);
     jugador.setBarraAtEs(100);
     jugador.setAtaque(15);
@@ -79,10 +80,12 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
     jugador.setVida(100);
+    jugador.setPosiciones(x,y,z);
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     MotorFisicas* fisicas = MotorFisicas::getInstance();
+    cout << x << " " << y << " " << z << " " << endl;
     motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
 
