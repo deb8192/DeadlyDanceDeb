@@ -151,6 +151,9 @@ using namespace idsEventos;
             void cargarInterfaz();
             void destruirInterfaz();
             void updateInterfaz();
+
+            //animaciones
+            void cambiarAnimacionJugador(int);//nos sirve para cambiar de animacion al jugador
             
         private: //clases solo accesibles por MotorGrafico
 

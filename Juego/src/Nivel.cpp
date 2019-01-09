@@ -166,7 +166,7 @@ void Nivel::CogerObjeto()
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     int rec_col = fisicas->collideColectable();
-
+        jugador.setAnimacion(4);
         if(jugador.getArma() == nullptr)//si no tiene arma equipada
         {
             //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)recolectables[rec_col];
@@ -274,6 +274,10 @@ void Nivel::update()
 
     //actualizamos el jugador
     MotorGrafico * motor = MotorGrafico::getInstance();
+
+    //animacion
+        motor->cambiarAnimacionJugador(jugador.getAnimacion());
+        
     //Interpolacion
     newTime = clock();
     frameTime = newTime - currentTime;

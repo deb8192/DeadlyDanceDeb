@@ -12,6 +12,17 @@
 
 Jugador::Jugador()
 {
+    animacion = 0;
+
+    //tiempos de animacion
+    tiempoAtaque=2000.0f;//tiempo en milisegundos
+    tiempoPasadoAtaque=0;
+    tiempoAtaEsp=2000.0f;//tiempo en milisegundos
+    tiempoPasadoAtaEsp=0;
+    tiempoCogerObjeto=1000.0f;//tiempo en milisegundos
+    tiempoPasadoCogerObjeto=0;
+    tiempoEnMorir=2000.0f;//tiempo en milisegundos
+    tiempoPasadoEnMorir=0;
 
 }
 
@@ -24,7 +35,18 @@ Jugador::Jugador(int,int,int,int,int,int,std::string malla)
 
     x = 1;
     z = 20;
+    animacion = 0;
     //armaEquipada = NULL;
+
+    //tiempos de animacion
+    tiempoAtaque=2000.0f;//tiempo en milisegundos
+    tiempoPasadoAtaque=0;
+    tiempoAtaEsp=2000.0f;//tiempo en milisegundos
+    tiempoPasadoAtaEsp=0;
+    tiempoCogerObjeto=2000.0f;//tiempo en milisegundos
+    tiempoPasadoCogerObjeto=0;
+    tiempoEnMorir=2000.0f;//tiempo en milisegundos
+    tiempoPasadoEnMorir=0;
 }
 
 float Jugador::getX()
@@ -62,6 +84,14 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     float px = x,
           pz = z;
 
+    if(w || s || a || d)
+    {
+        setAnimacion(1);
+    }
+    else
+    {
+        setAnimacion(0);//no se mueve
+    }
 
     // Comprobar teclas para mover el personaje y la camara
     if(w)
@@ -149,8 +179,10 @@ bool Jugador::estasMuerto(){
 void Jugador::MuereJugador(float tiempo){
     MotorGrafico* motor = MotorGrafico::getInstance();
 
-    if(motor->estaPulsado(16) || pulsadoMuerte || vida <= 0){//SI PULSO 'J' MUERE JUGADOR
+    if(motor->estaPulsado(16) || pulsadoMuerte || vida <= 0)
+    {//SI PULSO 'J' MUERE JUGADOR
         pulsadoMuerte = true;
+        animacion = 5;
         //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo y aparece pantalla
         acumMuJug += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
         if(animacionMuerteTiem >= 180 && animacionMuerteTiem >= 120){
@@ -191,6 +223,7 @@ int Jugador::Atacar()
 
     //ATAQUE SIN ARMA
     if(this->getArma() == nullptr){
+      setAnimacion(2);
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,1,1,4);
       danyo = 100.0f;
     }
@@ -316,10 +349,11 @@ int Jugador::AtacarEspecial()
     if(vida > 0 && barraAtEs == por100)
     {
         cout << "Supera las restricciones, ATAQUE ESPECIAL"<<endl;
-
         //Calcular posiciones si se inicia el ataque especial
+        setAnimacion(3);
         if(atackEspTime <= 0)
         {
+            animacion = 3;
             atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
             atespy = getY();
             atespz = 6.5 * cos(PI * getRY() / PIRADIAN) + getZ();
@@ -402,7 +436,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     if(strcmp(armaEspecial->getNombre(), NOMBREHEAVY) == 0)
     {
 
-        //Calculo de la posicion del arma delante del jugador
+        //Calculo de la posicion del arma delante  int getAnimacion();del jugador
         atespx = 6.5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
         atespz = 6.5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
         atespposX = atespx/2;
@@ -702,4 +736,89 @@ void Jugador::updateInterfaz()
     InterfazJugador * interfaz = InterfazJugador::getInstance();
     interfaz->setVida(vida);
     interfaz->setAtaqueEspecial(getBarraAtEs());
+}
+
+int Jugador::getAnimacion()
+{
+    return animacion;
+}
+
+void Jugador::setAnimacion(int est)
+{
+    times * tiempo = times::getInstance();
+
+    if(est != animacion)
+    {
+        //es una nueva animacion
+        if(terminaAnimacion())
+        {
+            animacion = est; //cambiamos la animacion
+            switch(animacion)
+            {
+                case 2:
+                    tiempoPasadoAtaque = tiempo->getTiempo(1);
+                break;
+                case 3:
+                    tiempoPasadoAtaEsp = tiempo->getTiempo(1);
+                break;
+                case 4:
+                    tiempoPasadoCogerObjeto = tiempo->getTiempo(1);
+                break;
+            }
+        }
+    }
+    else
+    {
+        //es la misma comprobamos si ha terminado si lo a echo nos ponemos en modo reposo o corriendo
+        if(terminaAnimacion() && animacion != 0 && animacion != 1)
+        {
+            animacion = 0;//pasamos a modo reposo si no esta corriendo o en modo reposo
+        }
+    }
+}
+
+bool Jugador::terminaAnimacion()
+{
+        times * tiempo = times::getInstance();
+
+        switch(animacion)//comprobamos que la animacion haya terminado
+        {
+            case 0://andar
+                return true;
+            case 1://quieto
+                return true;
+            case 2://ataque
+                if(tiempo->calcularTiempoPasado(tiempoPasadoAtaque) >= tiempoAtaque || tiempoPasadoAtaque == 0)
+                {
+                    tiempoPasadoAtaque = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case 3://ataque especial
+                if(tiempo->calcularTiempoPasado(tiempoPasadoAtaEsp) >=  tiempoAtaEsp || tiempoPasadoAtaEsp == 0)
+                {
+                    tiempoPasadoAtaEsp = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case 4://coger objeto
+                if(tiempo->calcularTiempoPasado(tiempoPasadoCogerObjeto) >= tiempoCogerObjeto || tiempoPasadoCogerObjeto == 0)
+                {
+                    tiempoPasadoCogerObjeto = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case 5://muerto
+                return false;
+        }
+    return true;
 }

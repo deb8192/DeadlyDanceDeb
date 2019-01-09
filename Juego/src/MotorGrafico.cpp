@@ -376,6 +376,8 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         jugador_en_scena->setPosition(core::vector3df(x,y,z));
         Jugador_Scena = jugador_en_scena;
         Jugador_Scena->setScale(core::vector3df(3,3,3));
+        Jugador_Scena->setFrameLoop(30, 44);
+		Jugador_Scena->setAnimationSpeed(10);
         //const SColor COLOR  = SColor(255,0,0,255);
         //smgr->getMeshManipulator()->setVertexColors(Jugador_Scena->getMesh(),COLOR);
     }
@@ -1199,4 +1201,72 @@ void MotorGrafico::updateInterfaz()
         moneyI->setVisible(false);
     }
 
+}
+
+void MotorGrafico::cambiarAnimacionJugador(int estado)
+{
+    int frame = Jugador_Scena->getStartFrame();
+    int frame_actual = Jugador_Scena->getFrameNr();
+    //animaciones para heavy
+    if(estado == 0 && frame != 30 && frame != 120) //esta quieto
+    {
+        if(Jugador_Scena)
+        {
+            Jugador_Scena->setFrameLoop(30, 44);
+		    Jugador_Scena->setAnimationSpeed(10);
+        }
+    }
+
+    if(estado == 1 && frame != 0 && frame != 120) //se mueve
+    {
+        if(Jugador_Scena)
+        {
+            Jugador_Scena->setFrameLoop(0, 30);
+		    Jugador_Scena->setAnimationSpeed(20);
+        }
+    }
+
+    if(estado == 2 && frame != 48  && frame != 120) //ataca
+    {
+        if(Jugador_Scena)
+        {
+            Jugador_Scena->setFrameLoop(48, 70);
+		    Jugador_Scena->setAnimationSpeed(15);
+        }
+    }
+
+    if(estado == 3 && frame != 72  && frame != 120) //ataque especial
+    {
+        if(Jugador_Scena)
+        {
+            Jugador_Scena->setFrameLoop(72, 98);
+		    Jugador_Scena->setAnimationSpeed(10);
+        }
+    }
+
+    if(estado == 4  && frame != 99  && frame != 120) //coger objeto
+    {
+        if(Jugador_Scena)
+        {
+            Jugador_Scena->setFrameLoop(99, 112);
+		    Jugador_Scena->setAnimationSpeed(10);
+        }
+    }    
+
+    if(estado == 5 && frame != 120) //muere
+    {
+        if(frame_actual == 119)
+        {
+            Jugador_Scena->setFrameLoop(120, 128); //lo dejamos definitivamente muerto
+		    Jugador_Scena->setAnimationSpeed(10);
+        }
+        else
+        {
+            if(Jugador_Scena && frame != 112)
+            {
+                Jugador_Scena->setFrameLoop(112, 120);
+                Jugador_Scena->setAnimationSpeed(10);
+            }
+        }
+    }
 }
