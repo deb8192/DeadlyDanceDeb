@@ -54,7 +54,7 @@
             CargadorXML cargadorXML;
 
             //cinematicas
-            float tiempoTotal = 16000.5f;//esto indica el tiempo de las cinematicas total en segundos
+            float tiempoTotal = 15000.0f;//esto indica el tiempo de las cinematicas total en segundos
             float marcaTiempo = 0;//llamaremos a getiempo cuando se inicialice la ventana luego simplemente comprobamos que el tiempo sea mayor que el total para cambiar a menu
     };
 
