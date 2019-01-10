@@ -1166,6 +1166,15 @@ void MotorGrafico::updateInterfaz()
             }
         }
 
+        if(moneyI)
+        {
+            //std::string conver = std::to_string(datos[3]);
+            //char buffer[100];
+            //wchar_t * cantidad = L"'conver'";
+            //strcpy(buffer,conver.c_str());
+            //moneyI = guienv->addStaticText(cantidad,rect<s32>(710,21,750,40),false);
+        }
+
         if(BarraEnergiaI)
         {
             float unidad = ((float)63/100);

@@ -106,6 +106,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
         int tipo_arma = 2;
         vector <unsigned int> atacados_normal;
+        int dinero = 0;
 };
 
 #endif /* Jugador_HPP */

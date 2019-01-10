@@ -589,19 +589,38 @@ void Jugador::setAtaque(int ataq)
 void Jugador::setArma(Arma * arma)
 {
     armaEquipada = arma;
-    /*char arm [] = "guitarra";
-    char arm2 [] = "arpa";
-    if(strcmp(arma->getNombre(),arm) == 0)//entonces es la guitarra cuerpo a cuerpo
+    if(this->getArma() != nullptr)
     {
-        InterfazJugador * interfaz = InterfazJugador::getInstance();
-        interfaz->setArma(2);
-    }
+        if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)//entonces es la guitarra cuerpo a cuerpo
+        {
+            InterfazJugador * interfaz = InterfazJugador::getInstance();
+            interfaz->setArma(2);
+        }
 
-    if(strcmp(arma->getNombre(),arm2) == 0)//entonces es la guitarra cuerpo a cuerpo
+        if(strcmp(this->getArma()->getNombre(),"arpa") == 0)//entonces es la guitarra cuerpo a cuerpo
+        {
+            InterfazJugador * interfaz = InterfazJugador::getInstance();
+            interfaz->setArma(3);
+        }
+
+        if(strcmp(this->getArma()->getNombre(),"llave") == 0)//entonces es la guitarra cuerpo a cuerpo
+        {
+            InterfazJugador * interfaz = InterfazJugador::getInstance();
+            interfaz->setArma(1);
+        }
+
+        if(strcmp(this->getArma()->getNombre(),"dinero") == 0)//entonces es la guitarra cuerpo a cuerpo
+        {
+            InterfazJugador * interfaz = InterfazJugador::getInstance();
+            dinero = dinero+1;
+            interfaz->setArma(0);
+        }
+    }
+    else
     {
         InterfazJugador * interfaz = InterfazJugador::getInstance();
-        interfaz->setArma(3);
-    }*/
+        interfaz->setArma(0);
+    }
 }
 
 
@@ -737,6 +756,7 @@ void Jugador::updateInterfaz()
     InterfazJugador * interfaz = InterfazJugador::getInstance();
     interfaz->setVida(vida);
     interfaz->setAtaqueEspecial(getBarraAtEs());
+    interfaz->setDinero(dinero);
 }
 
 int Jugador::getAnimacion()
