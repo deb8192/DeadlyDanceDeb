@@ -117,15 +117,15 @@ void MotorFisicas::EraseColectable(int idx)
     recolectables.erase(recolectables.begin() + idx);
 }
 
-void MotorFisicas::EraseEnemigo(int i)
+void MotorFisicas::EraseEnemigo(std::size_t i)
 {
     space->destroyCollisionBody(enemigos[i]);//nos cargamos el contenido
     enemigos[i]=nullptr;
     enemigos.erase(enemigos.begin() + i);
 }
 
-void MotorFisicas::EraseJugador(int i){
-    //jugador.erase(jugador.begin() + i);
+void MotorFisicas::EraseJugador(){
+    jugador = NULL;
 }
 
 void MotorFisicas::EraseArma()

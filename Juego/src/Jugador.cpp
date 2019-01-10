@@ -2,6 +2,8 @@
 #include "Nivel.hpp"
 #include <stdlib.h>
 #include "MotorAudio.hpp"
+#include "math.h"
+#include "times.hpp"
 
 #define PI 3.14159265358979323846
 #define PIRADIAN 180.0f
@@ -24,6 +26,12 @@ Jugador::Jugador()
     tiempoEnMorir=2000.0f;//tiempo en milisegundos
     tiempoPasadoEnMorir=0;
 
+}
+
+Jugador::~Jugador()
+{
+    armaEquipada=nullptr;
+    armaEspecial=nullptr;
 }
 
 Jugador::Jugador(int,int,int,int,int,int,std::string malla)
@@ -176,24 +184,27 @@ bool Jugador::estasMuerto(){
     return false;
 }
 
-void Jugador::MuereJugador(float tiempo){
+bool Jugador::finalAnimMuerte(){
+
+    times* tiempo = times::getInstance();
+    if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) >= animacionMuerteTiem && tiempoPasadoMuerte != 0){//sino se cumple no ha acabado
+        return true;
+    }
+    return false;
+}
+
+void Jugador::MuereJugador(){
+    times* tiempo = times::getInstance();
     MotorGrafico* motor = MotorGrafico::getInstance();
 
-    if(motor->estaPulsado(16) || pulsadoMuerte || vida <= 0)
-    {//SI PULSO 'J' MUERE JUGADOR
-        pulsadoMuerte = true;
-        animacion = 5;
-        //1r segundo en rojo, 2n segundo en negro, 3r segundo en rojo y aparece pantalla
-        acumMuJug += tiempo;//en nivel.cpp llamo al metodo en update en la ultima linea
-        if(animacionMuerteTiem >= 180 && animacionMuerteTiem >= 120){
+    if(tiempoPasadoMuerte == 0){
+        motor->colorearJugador(255,0,0,0);//negro
+        tiempoPasadoMuerte = tiempo->getTiempo(1);
+        motor->botonesMuerteJugador();//PINTAR BOTON 'REINICIAR JUEGO' Y 'IR A MENU'
+    }
+    if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) < animacionMuerteTiem){
+        if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) >= 1000.0f){
             motor->colorearJugador(255,255,0,0);//rojo
-        }else if(animacionMuerteTiem <= 120 && animacionMuerteTiem >= 60){
-            motor->colorearJugador(255,0,0,0);//negro
-        }else{
-            motor->colorearJugador(255,255,0,0);//rojo
-            motor->botonesMuerteJugador();//PINTAR BOTON 'REINICIAR JUEGO' Y 'IR A MENU'
-            acumMuJug = 0;//reniciar variable una vez muerto
-            pulsadoMuerte = false;
         }
     }
 }

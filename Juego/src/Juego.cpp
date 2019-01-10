@@ -82,6 +82,12 @@ void Juego::Update()
             motor->resetEvento(GUI_ID_EMPEZAR_BUTTON);//reseteamos el evento
             Jugar();
         }
+        // vamos a menu el jugador a muerto
+        if(motor->ocurreEvento(GUI_ID_MENU_BUTTON))
+        {
+            motor->resetEvento(GUI_ID_MENU_BUTTON);
+            estado = &menu;
+        }
         if(motor->ocurreEvento(GUI_ID_SALIR_BUTTON))//salimos del juego
         {
             motor->closeGame();

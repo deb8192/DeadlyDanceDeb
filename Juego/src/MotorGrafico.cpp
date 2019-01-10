@@ -308,7 +308,9 @@ void MotorGrafico::resetKey(int event)
 
 void MotorGrafico::botonesMuerteJugador(){
     guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_REINICIAR_BUTTON,L"Reiniciar Juego", L"Empieza a jugar");
-    guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_MENU_BUTTON,L"Menu", L"Menu del juego");
+    //guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_REINICIAR_HANOI,L"Reiniciar", L"Reinicia el juego");
+    guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_MENU_BUTTON,L"Menu", L"Vuelve al menú");
+    //guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_MENU_BUTTON,L"Menu", L"Menu del juego");
 }
 
 void MotorGrafico::resetEventoMoveRaton()
@@ -980,9 +982,9 @@ void MotorGrafico::EraseColectable(int idx)
     Recolectables_Scena[idx]->remove();
     Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
 }
-//Cuando enemigo muere lo borramos
-void MotorGrafico::EraseEnemigo(int i)
-{
+
+//Cuando enemigo muere lo borramos 
+void MotorGrafico::EraseEnemigo(std::size_t i){
     long unsigned int valor = i;
 
     if(valor >= 0 && valor < Enemigos_Scena.size())
@@ -992,11 +994,11 @@ void MotorGrafico::EraseEnemigo(int i)
         Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
     }
 }
-//Cuando enemigo muere lo borramos
-void MotorGrafico::EraseJugador(int i){
-    /*Jugador_Scena[i]->setVisible(false);
-    Jugador_Scena[i]->remove();
-    Jugador_Scena.erase(Jugador_Scena.begin() + i); */
+
+//Cuando enemigo muere lo borramos 
+void MotorGrafico::EraseJugador(){
+    Jugador_Scena->setVisible(false);
+    Jugador_Scena->remove();
 }
 
 //Devolver cantidad de enemigos en escena para recorrerlos en metodo muerteEnemigo
