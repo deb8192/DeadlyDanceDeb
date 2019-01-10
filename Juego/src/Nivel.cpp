@@ -43,6 +43,7 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
         ene->setArbol(cargadorIA.cargarArbol("Prueba1"));
     //fin ia
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    ene->Enemigo::initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     ene->setVida(75);
     ene->setBarraAtEs(0);
     ene->definirSala(sala);//le pasamos la sala en donde esta
@@ -330,13 +331,17 @@ void Nivel::update()
             );
         }
 
+
+        motor->clearDebug2();   //Pruebas debug
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            fisicas->updateEnemigos(enemigos.at(i)->getX()/2,
-                enemigos.at(i)->getY()/2,
-                enemigos.at(i)->getZ()/2,
+            fisicas->updateEnemigos(enemigos.at(i)->getFisX(),
+                enemigos.at(i)->getFisY(),
+                enemigos.at(i)->getFisZ(),
                 i
             );
+            motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),5, 5, 5, 2);
+
         }
 
         fisicas->updateJugador(jugador.getX(),
@@ -774,15 +779,18 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
                     if(moveDer)
                     {
                         auxiliadores.front()->setPosiciones(auxiliadores.front()->getX() + desplazamiento / frameTime, auxiliadores.front()->getY(), auxiliadores.front()->getZ() + desplazamiento / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(desplazamiento / frameTime, 0.0, desplazamiento / frameTime);
                         cout<<"Posicion del enemigo: x="<<auxiliadores.front()->getX()<<" z=" << auxiliadores.front()->getY();
                     }
                     else if(moveIzq)
                     {
                         auxiliadores.front()->setPosiciones(auxiliadores.front()->getX() - desplazamiento / frameTime, auxiliadores.front()->getY(), auxiliadores.front()->getZ() + desplazamiento / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(- (desplazamiento / frameTime), 0.0, desplazamiento / frameTime);
                     }
                     else
                     {
                         auxiliadores.front()->setPosiciones(auxiliadores.front()->getX(), auxiliadores.front()->getY(), auxiliadores.front()->getZ() + desplazamiento / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, desplazamiento / frameTime);
                     }
                 }
                 else if(moveArb)
@@ -790,14 +798,17 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
                     if(moveDer)
                     {
                         auxiliadores.front()->setPosiciones(auxiliadores.front()->getX() + desplazamiento / frameTime, auxiliadores.front()->getY(), auxiliadores.front()->getZ() - desplazamiento / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(desplazamiento / frameTime, 0.0, -(desplazamiento / frameTime));
                     }
                     else if(moveIzq)
                     {
                         auxiliadores.front()->setPosiciones(auxiliadores.front()->getX() - desplazamiento / frameTime, auxiliadores.front()->getY(), auxiliadores.front()->getZ() - desplazamiento / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(- (desplazamiento / frameTime), 0.0, -(desplazamiento / frameTime));
                     }
                     else
                     {
                         auxiliadores.front()->setPosiciones(auxiliadores.front()->getX(), auxiliadores.front()->getY(), auxiliadores.front()->getZ() - desplazamiento / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, -(desplazamiento / frameTime));
                     }
                 }
                 else
@@ -805,17 +816,14 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
                     if(moveDer)
                     {
                         auxiliadores.front()->setPosiciones(auxiliadores.front()->getX() + desplazamiento / frameTime, auxiliadores.front()->getY(), auxiliadores.front()->getZ());
+                        auxiliadores.front()->setPosicionesFisicas(desplazamiento / frameTime, 0.0, 0.0);
                     }
                     else if(moveIzq)
                     {
                         auxiliadores.front()->setPosiciones(auxiliadores.front()->getX() - desplazamiento / frameTime, auxiliadores.front()->getY(), auxiliadores.front()->getZ());
+                        auxiliadores.front()->setPosicionesFisicas(- (desplazamiento / frameTime), 0.0, 0.0);
                     }
                 }
-                fisicas->updateEnemigos(auxiliadores.front()->getX() / 2,
-                    auxiliadores.front()->getY() / 2,
-                    auxiliadores.front()->getZ() / 2,
-                    auxiliadores.front()->getID() - 1
-                );
             }
             else
             {
