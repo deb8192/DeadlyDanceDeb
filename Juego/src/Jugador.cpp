@@ -179,6 +179,7 @@ void Jugador::setPosiciones(float nx,float ny,float nz)
 bool Jugador::estasMuerto(){
     //cout << "Muere jugador??: " << vida << endl;
     if(vida <= 0){
+        setAnimacion(5);
         return true;
     }
     return false;
