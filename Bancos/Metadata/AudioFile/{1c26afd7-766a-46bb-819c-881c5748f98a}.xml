@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.01.10.00">
-    <object class="AudioFile" id="{cc974700-8657-4d2b-94a2-c0382e119649}">
+    <object class="AudioFile" id="{1c26afd7-766a-46bb-819c-881c5748f98a}">
         <property name="assetPath">
-            <value>SFX/mordeduraMurcielago1.wav</value>
+            <value>SFX/AtaqueGritoF2.mp3</value>
         </property>
         <property name="frequencyInKHz">
-            <value>22.0499992</value>
+            <value>16</value>
         </property>
         <property name="channelCount">
             <value>1</value>
         </property>
         <property name="length">
-            <value>0.38571428571428573</value>
+            <value>1.6200000000000001</value>
         </property>
         <relationship name="masterAssetFolder">
             <destination>{a3dec2ad-2df2-4dd6-8baa-312f2925055e}</destination>

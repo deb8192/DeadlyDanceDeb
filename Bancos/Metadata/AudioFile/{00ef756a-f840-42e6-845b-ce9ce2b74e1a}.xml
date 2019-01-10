@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="AudioFile" id="{00ef756a-f840-42e6-845b-ce9ce2b74e1a}">
         <property name="assetPath">
-            <value>mordeduraMurcielago2.wav</value>
+            <value>SFX/mordeduraMurcielago2.wav</value>
         </property>
         <property name="frequencyInKHz">
             <value>22.0499992</value>
