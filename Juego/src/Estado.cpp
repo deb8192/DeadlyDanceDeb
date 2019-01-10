@@ -68,6 +68,7 @@ void Jugando::Input()
 void Jugando::Update()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();
+    //MotorFisicas *fisicas = MotorFisicas::getInstance();
     motor->clearDebug();
     Nivel *nivel = Nivel::getInstance();
     SenseEventos *sense = SenseEventos::getInstance();
@@ -78,9 +79,28 @@ void Jugando::Update()
     //Actualiza el motor de audio
     MotorAudioSystem *motora = MotorAudioSystem::getInstance();
     motora->update(false);
-  
-}
 
+    //vuelve al menu
+    if(motor->ocurreEvento(GUI_ID_MENU_BUTTON)){
+        // Se resetea en el Update de Juego
+        // Borrar escena y GUI 
+        motor->borrarScena();
+        motor->borrarGui();
+        //nivel->LimpiarNivel();
+        // Cargar GUI de menu
+        motor->PintarBotonesMenu();
+        
+        return;
+    }
+    //Prueba de Patfinder y ataque especial
+    std::vector <Enemigo*> enemigos = nivel->getEnemigos();
+    if(motor->estaPulsado(KEY_P))
+    {
+        motor->resetKey(KEY_P);
+        Pathfinder path;
+        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(enemigos.at(1)->getSala(), nivel->getPrimeraSala());
+    }
+}
 int Jugando::Esta()
 {
     return 2;

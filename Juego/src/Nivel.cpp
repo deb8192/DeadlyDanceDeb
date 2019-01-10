@@ -16,6 +16,42 @@ Nivel::Nivel()
     id = 0;
     controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
 }
+/*
+void Nivel::LimpiarNivel(){
+    
+    //Jugador = Jugador();//me cargo al jugador pero si da problemas ir a jugador y limpiar variables
+    //jugador en todos eliminar, enemigos, objetos, armas, salas, 
+    unica_instancia->~Nivel();
+    unica_instancia=nullptr;
+
+    primeraSala->~Sala();//llamo al puntero para que se destruya
+    primeraSala=nullptr;
+    /*fisicas->~MotorFisicas();
+    fisicas=nullptr;
+    controladorTiempo->~times();
+    controladorTiempo=nullptr;
+/*******************************
+    std::vector<Enemigo*> enemigos;//Enemigos en scena
+    std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
+    std::vector<Recolectable*> recolectables;
+    Jugador jugador;//objeto del jugador en el nivel
+    CargadorNiveles cargador;//nos ayuda a cargar los niveles
+******************************
+
+    /*id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
+    dt = 0.0f;
+    frameTime = 0.0f;
+    acumulator = 0.0f;
+    atacktime = 0.0f;
+    lastAtackEsptime = 0.0f;
+    newTime = 0;
+    currentTime = 0;
+    cogerObjeto = false;
+    objetoCogido = -1;
+    danyo = 0, danyo2 = 0;
+    enemigoSeleccionado = 0;
+    cambia = 0;
+}*/
 
 bool Nivel::CargarNivel(int level)
 {
@@ -145,18 +181,22 @@ void Nivel::setThen()
     dt =1.0f/60.0f;
 }
 
-void Nivel::EraseEnemigo(int i){
+void Nivel::EraseEnemigo(std::size_t i){
     //Eliminar sonido
     MotorAudioSystem* motora = MotorAudioSystem::getInstance();
     std::string nameid = std::to_string(enemigos[i]->getID()); //pasar id a string
     motora->getEvent(nameid)->stop();
+
     //elimniar el objeto en memoria(la onda)
     enemigos[i]->~Enemigo();//el destructor de enemigo
     enemigos[i]=nullptr;
-    enemigos.erase(enemigos.begin() + i);
+    enemigos.erase(enemigos.begin() + i);//begin le suma las posiciones
+
+    //cout <<"que eres?" << i <<endl;
 }
-void Nivel::EraseJugador(int i){
-    //jugador.erase(jugador.begin() + i);
+void Nivel::EraseJugador(){
+    jugador.~Jugador();//el destructor de jugador
+    //jugador=NULL;
 }
 
 
@@ -410,7 +450,6 @@ void Nivel::update()
                     danyo_jug = enemigos[i]->AtacarEspecial();
                     enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
                     enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
-
                 }
                 else if(enemigos[i]->getBarraAtEs() < 100)
                 {
@@ -445,7 +484,7 @@ void Nivel::update()
                //enemigos[i]->queVes();
            }
        }
-        jugador.MuereJugador(acumulator);
+        //jugador.MuereJugador(acumulator);
         //enemigos->MuereEnemigo(acumulator);
  	      acumulator -= dt;
     }
@@ -562,10 +601,23 @@ void Nivel::updateIA()
         }
     }*/
 
-    //En esta parte mueren
-    if(jugador.estasMuerto()){
-        //motor->EraseJugador(jugador);
+    //En esta parte muere jugador
+    if(motor->estaPulsado(16)){//SI PULSO 'J' MUERE JUGADOR
+        jugador.MuereJugador();
     }
+    if(jugador.estasMuerto()){
+        if(jugador.estasMuerto() && jugador.finalAnimMuerte()){
+            motor->EraseJugador();//borrar del motor (escena) 
+            fisicas->EraseJugador();//borrar de motorfisicas
+            EraseJugador();//borrar de nivel
+        }else{
+            if(jugador.estasMuerto()){
+                jugador.MuereJugador();
+            }
+        }
+    }
+    
+    //En esta parte muere enemigo
     if(enemigos.size() > 0){
         //comprobando los enemigos para saber si estan muertos
         for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
@@ -576,27 +628,6 @@ void Nivel::updateIA()
                 fisicas->EraseEnemigo(i);
                 EraseEnemigo(i);
             }else{
-                if(enemigos[i]->estasMuerto()){
-                    enemigos[i]->MuereEnemigo(i);
-                }
-            }
-        }
-    }
-    //En esta parte mueren
-    if(jugador.estasMuerto()){
-        //motor->EraseJugador(jugador);
-    }
-    if(enemigos.size() > 0){
-        //comprobando los enemigos para saber si estan muertos
-        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
-
-            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
-
-                motor->EraseEnemigo(i);
-                fisicas->EraseEnemigo(i);
-                EraseEnemigo(i);
-            }else
-            {
                 if(enemigos[i]->estasMuerto()){
                     enemigos[i]->MuereEnemigo(i);
                 }
