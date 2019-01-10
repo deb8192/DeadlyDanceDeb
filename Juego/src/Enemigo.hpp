@@ -25,6 +25,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void queVes();//recupera informacion de los objetos,enemigos,jugador que ve.
         //drawables metodos
         void setPosiciones(float nx,float ny,float nz);
+        void setPosicionesFisicas(float nx,float ny,float nz);
+        void initPosicionesFisicas(float nx,float ny,float nz);
         void setID(int);
         int getID();
         //npc metodos
@@ -68,6 +70,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getX();
         float getY();
         float getZ();
+        float getFisX();
+        float getFisY();
+        float getFisZ();
         float getRX();
         float getRY();
         float getRZ();
@@ -92,6 +97,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
     protected:
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
+        float fisX, fisY, fisZ;
         float atacktime = 0.0f;
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";

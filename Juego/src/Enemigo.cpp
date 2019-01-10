@@ -31,6 +31,20 @@ float Enemigo::getZ()
 {
     return z;
 }
+float Enemigo::getFisX()
+{
+    return fisX;
+}
+
+float Enemigo::getFisY()
+{
+    return fisY;
+}
+
+float Enemigo::getFisZ()
+{
+    return fisZ;
+}
 
 float Enemigo::getRX()
 {
@@ -111,6 +125,20 @@ void Enemigo::setPosiciones(float nx,float ny,float nz)
     x = nx;
     y = ny;
     z = nz;
+}
+
+void Enemigo::initPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX = nx;
+    fisY = ny;
+    fisZ = nz;
+}
+
+void Enemigo::setPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX += nx;
+    fisY += ny;
+    fisZ += nz;
 }
 
 int Enemigo::Atacar()
