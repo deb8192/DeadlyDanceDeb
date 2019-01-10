@@ -103,7 +103,7 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     std::string nameid = std::to_string(id); //pasar id a string
     motora->LoadEvent("event:/Chicken1",nameid);
     motora->getEvent(nameid)->setPosition(x,y,z);
-    motora->getEvent(nameid)->setVolume(0.8f);
+    motora->getEvent(nameid)->setVolume(0.4f);
     motora->getEvent(nameid)->start();
 }
 
