@@ -406,6 +406,30 @@ void MotorFisicas::updateEnemigos(float x, float y, float z, unsigned int i)
     }
 }
 
+void MotorFisicas::updateAtaqueEnemigos(float x, float y, float z, unsigned int i)
+{
+    if(enemigos.at(i) != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        enemigosAtack.at(i)->setTransform(transformacion);
+    }
+}
+
+void MotorFisicas::updateAtaquEspecEnemigos(float x, float y, float z, unsigned int i)
+{
+    if(enemigos.at(i) != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        armaAtEspEne.at(i)->setTransform(transformacion);
+    }
+}
+
+
+
 vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z)
 {
     vector<unsigned int> atacados;
@@ -516,12 +540,12 @@ CollisionBody* MotorFisicas::getAtack()
  return jugadorAtack;
 }
 
-CollisionBody* MotorFisicas::getEnemiesAtack()
+CollisionBody* MotorFisicas::getEnemiesAtack(int n)
 {
- return enemigosAtack.back();
+ return enemigosAtack[n];
 }
 
-CollisionBody* MotorFisicas::getEnemiesAtEsp()
+CollisionBody* MotorFisicas::getEnemiesAtEsp(int n)
 {
- return armaAtEspEne.back();
+ return armaAtEspEne[n];
 }
