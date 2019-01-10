@@ -237,7 +237,7 @@ int Jugador::Atacar()
     if(this->getArma() == nullptr){
       setAnimacion(2);
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,1,1,4);
-      danyo = 20.0f;
+      danyo = 50.0f;
       motora->getEvent("SinArma")->setVolume(0.8f);
       motora->getEvent("SinArma")->start();
     }
@@ -246,7 +246,7 @@ int Jugador::Atacar()
     {
       //Crear cuerpo de colision de ataque delante del jugador
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,4,0,0,4);
-      danyo = 60.0f;
+      danyo = 70.0f;
       motora->getEvent("GolpeGuitarra")->setVolume(0.8f);
       motora->getEvent("GolpeGuitarra")->start();
     }
@@ -255,7 +255,7 @@ int Jugador::Atacar()
     {
       //Crear cuerpo de colision de ataque delante del jugador
       fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4);
-      danyo = 45.0f;
+      danyo = 55.0f;
       motora->getEvent("Arpa")->setVolume(0.8f);
       motora->getEvent("Arpa")->start();
     }

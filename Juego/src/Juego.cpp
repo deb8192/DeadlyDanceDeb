@@ -59,7 +59,7 @@ void Juego::Update()
     if(estado->QueEstado() == 3)
     {
         times * tiempo = times::getInstance();
-        
+
         if(tiempo->calcularTiempoPasado(marcaTiempo) >= tiempoTotal || motor->finalCinematica())
         {
             estado = &menu;
@@ -85,6 +85,9 @@ void Juego::Update()
         // vamos a menu el jugador a muerto
         if(motor->ocurreEvento(GUI_ID_MENU_BUTTON))
         {
+            motora->getEvent("Nivel1")->stop(); //Detener musica Menu
+            motora->getEvent("Menu")->start(); //Reproducir musica juego
+
             motor->resetEvento(GUI_ID_MENU_BUTTON);
             estado = &menu;
         }
