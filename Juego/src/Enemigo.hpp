@@ -53,10 +53,13 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
         void setRotation(float rot);
+        void setPosAtaques(int p);
+
         int getVida();
         int getTipo();
         int getBarraAtEs();
         int getAtaque();
+        int getPosAtaques();
         int getSuerte();
         int getDanyoCritico();
         int getProAtaCritico();
@@ -82,13 +85,13 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
             bool Merodear(int tipo);//para dar vueltas por una zona, segun el enemigo tendra diferentes merodeos
         //fin comportamientos bases
-        
+
         //activar ia
         void setArbol(Arbol2 *);//asigna un arbol de ia al enemigo
         Arbol2 * getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         void runIA();//corre la ia del enemigo
         //fin ia
-        
+
     protected:
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
@@ -96,7 +99,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";
         Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
-
+        int pos_ataques; //para controlar el array de ataques en colisiones
 };
 
 #endif

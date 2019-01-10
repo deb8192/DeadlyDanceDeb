@@ -45,6 +45,8 @@ using namespace reactphysics3d;
             std::vector <unsigned int> updateArmaEspecial(float x, float y, float z);
             std::vector<unsigned int> updateArma(float x, float y, float z);
             void updateAtaque(float x, float y, float z, float rx, float ry, float rz);
+            void updateAtaqueEnemigos(float x, float y, float z, unsigned int i);
+            void updateAtaquEspecEnemigos(float x, float y, float z, unsigned int i);
 
             void setFormaArma(float px, float py, float pz, int anc, int lar, int alt);
             void setFormaRecolectable(int id, float px, float py, float pz, int anc, int lar, int alt);
@@ -55,8 +57,8 @@ using namespace reactphysics3d;
             CollisionWorld* getWorld();
             CollisionBody* getJugador();
             CollisionBody* getEnemies(int n);
-            CollisionBody* getEnemiesAtack();
-            CollisionBody* getEnemiesAtEsp();
+            CollisionBody* getEnemiesAtack(int n);
+            CollisionBody* getEnemiesAtEsp(int n);
             CollisionBody* getAtack();
 
         private:
@@ -78,7 +80,7 @@ using namespace reactphysics3d;
             CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody* jugadorAtack; //contiene el ataque normal del jugador
             CollisionBody * arma;//arma normal del jugador
-           
+
             std::vector<CollisionBody *> objetos;
 
     };
