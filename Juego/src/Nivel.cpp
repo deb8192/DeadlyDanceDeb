@@ -318,15 +318,6 @@ void Nivel::update()
             jugador.getRZ()
         );
 
-        /*for(unsigned int i = 0; i < enemigos.size(); i++)
-        {
-            fisicas->updateEnemigos(enemigos.at(i)->getX(),
-                enemigos.at(i)->getY(),
-                enemigos.at(i)->getZ(),
-                i
-            );
-        }*/
-
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
             motor->mostrarEnemigos(enemigos.at(i)->getX(),
@@ -335,6 +326,15 @@ void Nivel::update()
                 enemigos.at(i)->getRX(),
                 enemigos.at(i)->getRY(),
                 enemigos.at(i)->getRZ(),
+                i
+            );
+        }
+
+        for(unsigned int i = 0; i < enemigos.size(); i++)
+        {
+            fisicas->updateEnemigos(enemigos.at(i)->getX()/2,
+                enemigos.at(i)->getY()/2,
+                enemigos.at(i)->getZ()/2,
                 i
             );
         }
@@ -519,7 +519,7 @@ void Nivel::updateIA()
 {
     //cout<< "Ejecuto ia " << endl;
     MotorGrafico * motor = MotorGrafico::getInstance();
-    if(enemPideAyuda != nullptr && !auxiliadores.empty())   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
+    if(enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
     {
         this->updateRecorridoPathfinding(nullptr);
     }
@@ -576,11 +576,17 @@ void Nivel::updateIA()
 
 void Nivel::updateRecorridoPathfinding(Enemigo * enem)
 {
-
     //Si enem no es nulo se anade a la cola de enemigos auxiliadores
     if(enem != nullptr && enem != enemPideAyuda )
     {
         auxiliadores.push_back(enem);
+        contadorEnem--;
+    }
+    else if(contadorEnem > 0 && enem == enemPideAyuda)
+    {
+        this->setEnemigoPideAyuda(nullptr);
+        destinoPathFinding = nullptr;
+        contadorEnem = 0;
     }
     //Si no hay sala de destino guardada, se guarda en este momento
     else if(destinoPathFinding == nullptr)
@@ -655,17 +661,17 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
                         moveIzq = true;
                     }
 
-                    if(cambia && (auxiliadores.front()->getZ() >= recorrido.front().nodo->getSizes()[4] && auxiliadores.front()->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
+                    if(cambia && (auxiliadores.front()->getZ() <= recorrido.front().nodo->getSizes()[4] && auxiliadores.front()->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
                     {
                         auxiliadores.front()->setSala(recorrido.front().nodo);
                         cout<<"nodo actual: "<<auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
                         recorrido.erase(recorrido.begin());
                     }
-                    else if(auxiliadores.front()->getZ() < recorrido.front().nodo->getSizes()[4])
+                    else if(auxiliadores.front()->getZ() > recorrido.front().nodo->getSizes()[4])
                     {
                         moveArb = true;
                     }
-                    else if(auxiliadores.front()->getZ() > recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1]))
+                    else if(auxiliadores.front()->getZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1]))
                     {
                         moveAbj = true;
                     }
@@ -805,6 +811,11 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
                         auxiliadores.front()->setPosiciones(auxiliadores.front()->getX() - desplazamiento / frameTime, auxiliadores.front()->getY(), auxiliadores.front()->getZ());
                     }
                 }
+                fisicas->updateEnemigos(auxiliadores.front()->getX() / 2,
+                    auxiliadores.front()->getY() / 2,
+                    auxiliadores.front()->getZ() / 2,
+                    auxiliadores.front()->getID() - 1
+                );
             }
             else
             {
@@ -815,10 +826,12 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
                 {
                     destinoPathFinding = nullptr;
                     this->setEnemigoPideAyuda(nullptr);
+                    contadorEnem = 0;
                 }
             }
         }
     }
+    contadorEnem++;
 }
 void Nivel::setEnemigoPideAyuda(Enemigo *ene)
 {

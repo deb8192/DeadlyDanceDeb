@@ -88,9 +88,9 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         bool pulsadoMuerte = false;    //Totalmente provisional
         bool pulsadoMuerteEnemigos=false;
         float acumMuEne = 0;
-        //PRUEBAS ATAQUE ESPECIAL
         Arma *armaEquipada;
         Arma *armaEspecial;
+        //PRUEBAS ATAQUE ESPECIAL
         const char * rutaArmaEspecial = "assets/models/Arma.obj";
         const char * nombreJugador = "Heavy";
         //!PRUEBAS ATAQUE ESPECIAL
