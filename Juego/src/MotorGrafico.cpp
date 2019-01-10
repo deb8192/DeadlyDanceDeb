@@ -1264,7 +1264,7 @@ void MotorGrafico::updateInterfaz()
             llaveI->setVisible(false);
             break;
         }   
-
+        delete [] datos;
     }
     else
     {
