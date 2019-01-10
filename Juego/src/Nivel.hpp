@@ -85,7 +85,7 @@ class Nivel
         MotorFisicas *fisicas;//motor de fisicas (hace falta mas descripcion ?)
         int id;//id para las figuras
         float dt;
-        float frameTime, desplazamiento = 4.0f; //desplazamiento se utiliza en el desplazamiento de los enemigos en pathfinding/ frameTime: tiempo por fotograma
+        float frameTime, desplazamiento = 2.0f; //desplazamiento se utiliza en el desplazamiento de los enemigos en pathfinding/ frameTime: tiempo por fotograma
         float acumulator;
         float atacktime = 0.0f; //tiempo de ejecucion del ataque
         float lastAtackEsptime = 0.0f; //registro antiguo del tiempo de ataque especial para su animacion
@@ -96,6 +96,7 @@ class Nivel
         bool cogerObjeto = false;
         int objetoCogido = -1;
         int danyo = 0, danyo2 = 0;
+        int contadorEnem = 0;
         int cambia;
 };
 

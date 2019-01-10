@@ -153,7 +153,14 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *st
         else
         {
             cout << "No devuelve el camino" << endl;
-            salas = actualNodo.nodo->getSalidas();
+            for(i = 0; i < actualNodo.nodo->getSalidas().size(); i++)
+            {
+                salas.push_back(actualNodo.nodo->getSalidas().at(i));
+            }
+            for(i = 0; i < actualNodo.nodo->getEntradas().size(); i++)
+            {
+                salas.push_back(actualNodo.nodo->getEntradas().at(i));
+            }
             for(i = 0; i < salas.size(); i++)
             {
                 Sala * sala = salas.at(i);
