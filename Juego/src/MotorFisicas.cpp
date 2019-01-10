@@ -122,6 +122,14 @@ void MotorFisicas::EraseEnemigo(std::size_t i)
     space->destroyCollisionBody(enemigos[i]);//nos cargamos el contenido
     enemigos[i]=nullptr;
     enemigos.erase(enemigos.begin() + i);
+
+    space->destroyCollisionBody(enemigosAtack[i]);//nos cargamos el contenido
+    enemigosAtack[i]=nullptr;
+    enemigosAtack.erase(enemigosAtack.begin() + i);
+
+    space->destroyCollisionBody(armaAtEspEne[i]);//nos cargamos el contenido
+    armaAtEspEne[i]=nullptr;
+    armaAtEspEne.erase(armaAtEspEne.begin() + i);
 }
 
 void MotorFisicas::EraseJugador(){
