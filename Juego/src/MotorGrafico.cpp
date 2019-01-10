@@ -136,7 +136,7 @@ void MotorGrafico::updateMotorCinematica()
         strcpy(buffer,ruta_completa.c_str());
         actual = guienv->addImage(driver->getTexture(buffer),position2d<int>(0,0));
         tiempoUltimoFrame = times::getInstance()->calcularTiempoPasado(marcaTiempo);
-        cout << tiempoUltimoFrame << " " << salto << endl;
+        //cout << tiempoUltimoFrame << " " << salto << endl;
     }
     smgr->drawAll();
 	guienv->drawAll();
@@ -148,6 +148,8 @@ void MotorGrafico::CrearCamara()
   //primer vector traslacion, segundo rotacion
   //  smgr->addCameraSceneNode(0, vector3df(0,0,90), vector3df(0,0,0));
   camera = smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,0,0));
+  //camera->setNearValue(0.5f);
+  //camera->setFarValue(100.0f);
 }
 /******----------------Crear Jugador------------------******
  * Metodo que sirve para generar la malla 3D de un jugador
@@ -164,14 +166,14 @@ void MotorGrafico::crearJugador(std::string malla)
 
 void MotorGrafico::PropiedadesDevice()
 {
-    cout << "\e[32m Aplicando propiedades a device \e[0m" << endl;
+    //cout << "\e[32m Aplicando propiedades a device \e[0m" << endl;
     driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
     geometryCreator = smgr->getGeometryCreator();
     collmgr = smgr->getSceneCollisionManager();
 
-    cout << "\e[32m Propiedades aplicadas \e[0m" << endl;
+    //cout << "\e[32m Propiedades aplicadas \e[0m" << endl;
 }
 
 void MotorGrafico::PintarBotonesMenu()
@@ -191,7 +193,7 @@ void MotorGrafico::activarFuenteDefault()
     if (font)
     {
         skin->setFont(font);
-        cout << "\e[36m Se encuentra fuente \e[0m" << endl;
+        //cout << "\e[36m Se encuentra fuente \e[0m" << endl;
     }
 
     skin->setFont(guienv->getBuiltInFont(), EGDF_TOOLTIP);
@@ -413,7 +415,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     else
     {
         IAnimatedMeshSceneNode* jugador_en_scena = smgr->addAnimatedMeshSceneNode(jugador); //metemos el objeto en el escenario para eso lo pasamos al escenario
-        cout << x << " " << y << " " << z << " " << endl;
+        //cout << x << " " << y << " " << z << " " << endl;
         jugador_en_scena->setPosition(core::vector3df(x,y,z));
         Jugador_Scena = jugador_en_scena;
         Jugador_Scena->setScale(core::vector3df(3,3,3));
@@ -658,7 +660,7 @@ bool MotorGrafico::colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int 
 void MotorGrafico::debugBox(int x,int y, int z,int ancho, int alto, int largo)
 {
     scene::ISceneNode *n = smgr->addCubeSceneNode();
-    cout << x << y << z << ancho << largo << alto << endl;
+    //cout << x << y << z << ancho << largo << alto << endl;
     if(n)
     {
         n->setMaterialFlag(video::EMF_LIGHTING, false);
