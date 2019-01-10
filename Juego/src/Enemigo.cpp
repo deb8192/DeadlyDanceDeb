@@ -130,10 +130,11 @@ int Enemigo::Atacar()
       atgy = getRY();
       atgz = getRZ();
 
-      fisicas->crearCuerpo(0,atx/2,aty/2,atz/2,2,1,1,1,7);
+      //Acutualizar posicion del ataque
+      fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,getPosAtaques());
 
       //Colision
-      if(fisicas->IfCollision(fisicas->getEnemiesAtack(),fisicas->getJugador()))
+      if(fisicas->IfCollision(fisicas->getEnemiesAtack(getPosAtaques()),fisicas->getJugador()))
       {
         cout << "Jugador Atacado" << endl;
         danyo = 5.0f;
@@ -185,8 +186,10 @@ int Enemigo::AtacarEspecial()
             atespposY = (getY()/2);
             atespposZ = (atespz/2);
 
+            //Acutualizar posicion del ataque especial
+            fisicas->updateAtaquEspecEnemigos(atespposX,atespposY,atespposZ,getPosAtaques());
+
             //Crear cuerpo de colision de ataque delante del jugador
-            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,4,4,4,8);
             motora->getEvent("Arpa")->setVolume(0.8f);
             motora->getEvent("Arpa")->start();
             motor->dibujarObjetoTemporal(atespx, atespy, atespz, atgx, atgy, atgz, 4, 4, 4, 2);
@@ -210,7 +213,7 @@ int Enemigo::AtacarEspecial()
         cout << "daño: " <<danyoF<<endl;
 
         //Colision
-        if(fisicas->IfCollision(fisicas->getEnemiesAtEsp(),fisicas->getJugador()))
+        if(fisicas->IfCollision(fisicas->getEnemiesAtEsp(getPosAtaques()),fisicas->getJugador()))
         {
             cout << "Jugador Atacado por ataque especial" << endl;
             danyo = roundf(danyoF * por10) / por10;
@@ -308,6 +311,16 @@ void Enemigo::setArmaEspecial(int ataque)
 void Enemigo::setSuerte(int suer)
 {
 
+}
+
+void Enemigo::setPosAtaques(int p)
+{
+ pos_ataques = p;
+}
+
+int Enemigo::getPosAtaques()
+{
+  return pos_ataques;
 }
 
 void Enemigo::setDanyoCritico(int danyoC)

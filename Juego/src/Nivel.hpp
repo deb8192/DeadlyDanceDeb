@@ -14,7 +14,7 @@
 #include <cstring>
 //#include "MotorFisicas.hpp"
 
-//cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA() 
+//cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA()
 #include "CargadorBehaviorTrees.hpp"
 #include "Arbol2.hpp"
 //librerias necesarias
@@ -82,6 +82,7 @@ class Nivel
         Sala * primeraSala;// la primera sala del arbol
         MotorFisicas *fisicas;//motor de fisicas (hace falta mas descripcion ?)
         int id;//id para las figuras
+
         float dt;
         float frameTime;
         float acumulator;
