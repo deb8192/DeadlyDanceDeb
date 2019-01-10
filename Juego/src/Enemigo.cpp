@@ -131,10 +131,10 @@ int Enemigo::Atacar()
       atgz = getRZ();
 
       //Acutualizar posicion del ataque
-      fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,getID()-2);
+      fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,getPosAtaques());
 
       //Colision
-      if(fisicas->IfCollision(fisicas->getEnemiesAtack(getID()-2),fisicas->getJugador()))
+      if(fisicas->IfCollision(fisicas->getEnemiesAtack(getPosAtaques()),fisicas->getJugador()))
       {
         cout << "Jugador Atacado" << endl;
         danyo = 5.0f;
@@ -187,7 +187,7 @@ int Enemigo::AtacarEspecial()
             atespposZ = (atespz/2);
 
             //Acutualizar posicion del ataque especial
-            fisicas->updateAtaquEspecEnemigos(atespposX,atespposY,atespposZ,getID()-2);
+            fisicas->updateAtaquEspecEnemigos(atespposX,atespposY,atespposZ,getPosAtaques());
 
             //Crear cuerpo de colision de ataque delante del jugador
             motora->getEvent("Arpa")->setVolume(0.8f);
@@ -213,7 +213,7 @@ int Enemigo::AtacarEspecial()
         cout << "daño: " <<danyoF<<endl;
 
         //Colision
-        if(fisicas->IfCollision(fisicas->getEnemiesAtEsp(getID()-2),fisicas->getJugador()))
+        if(fisicas->IfCollision(fisicas->getEnemiesAtEsp(getPosAtaques()),fisicas->getJugador()))
         {
             cout << "Jugador Atacado por ataque especial" << endl;
             danyo = roundf(danyoF * por10) / por10;
@@ -311,6 +311,16 @@ void Enemigo::setArmaEspecial(int ataque)
 void Enemigo::setSuerte(int suer)
 {
 
+}
+
+void Enemigo::setPosAtaques(int p)
+{
+ pos_ataques = p;
+}
+
+int Enemigo::getPosAtaques()
+{
+  return pos_ataques;
 }
 
 void Enemigo::setDanyoCritico(int danyoC)
