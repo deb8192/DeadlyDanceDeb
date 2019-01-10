@@ -438,6 +438,7 @@ void Nivel::update()
            for(std::size_t i=0;i<enemigos.size();i++)
            {
                 int danyo_jug = 0;
+                enemigos[i]->setPosAtaques(i);
                 //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
                 if(enemigos[i]->getTimeAtEsp() > 0.0f)
                 {
@@ -459,7 +460,7 @@ void Nivel::update()
                 }
                 if(danyo_jug == 0)
                 {
-                    //cout << "Enemigo " << i << endl;
+                    //cout << "Enemigo " << i  << " pos: " << enemigos[i]->getPosAtaques() << endl;
                     //Si el enemigo ha realizado danyo
                     danyo_jug = enemigos[i]->Atacar();
                     if(danyo_jug > 0)
