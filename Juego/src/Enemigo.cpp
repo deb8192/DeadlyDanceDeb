@@ -479,11 +479,15 @@ void Enemigo::runIA()
             {
                 if(loqueve[0] == 1)
                 {
+                    delete loqueve;
                     return true;
                 }
             }
-        }
 
+            delete loqueve;
+
+        }
+        
         return false;
     }
 
