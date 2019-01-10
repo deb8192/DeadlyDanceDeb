@@ -475,7 +475,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
             cout<<"Daño "<<*danyo<<endl;
             *danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(atacados.at(i)))->getID()<<" "<<nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
             motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }

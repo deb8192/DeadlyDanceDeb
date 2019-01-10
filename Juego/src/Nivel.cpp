@@ -605,7 +605,7 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
         int tipoCentro;
         
         //Se inicia el recorrido hacia la primera sala del enemigo que pide ayuda.
-        if(recorrido.empty() && !auxiliadores.empty())
+        if(recorrido.empty() && !auxiliadores.empty() && !path.encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding).empty())
         {
             recorrido = path.encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding);      
             auxiliadores.erase(auxiliadores.begin());
@@ -616,7 +616,7 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
             //Se comprueban las coordenadas del enemigo y si ha llegado a la siguiente
             //sala del camino a la que debe ir o no. Se tienen en cuenta los tipos de centros
             //para realizar las comprobaciones de coordenadas adecuadas con el ancho y alto de las salas
-            if(auxiliadores.front()->getSala() != recorrido.front().nodo)
+            if(auxiliadores.front()!= nullptr && auxiliadores.front()->getSala() != recorrido.front().nodo)
             {
                 bool cambia = false, moveDer = false, moveIzq = false, moveArb = false, moveAbj = false;
                 tipoCentro = recorrido.front().nodo->getType();
