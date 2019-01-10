@@ -14,6 +14,8 @@ MotorGrafico::MotorGrafico()
 {
     input.setDevice(device);//lo  utilizamos para que los eventos puedan llamar a funciones de
     debugGrafico = false;
+    actual = nullptr;
+    actualTexture = nullptr;
 }
 
 MotorGrafico::~MotorGrafico()
@@ -134,7 +136,20 @@ void MotorGrafico::updateMotorCinematica()
         std::string ruta_completa = ruta+fram+extension;
         char buffer[100];
         strcpy(buffer,ruta_completa.c_str());
-        actual = guienv->addImage(driver->getTexture(buffer),position2d<int>(0,0));
+        
+        if(actual != nullptr && actualTexture != nullptr)
+        {
+            actual->remove();//remuevo imagen actual
+            driver->removeTexture(actualTexture);//borras textura
+            actualTexture = driver->getTexture(buffer);//creas la textura
+            actual = guienv->addImage(actualTexture,position2d<int>(0,0));//creo imagen actual
+        }
+        else
+        {
+            actualTexture = driver->getTexture(buffer);//creo textura
+            actual = guienv->addImage(driver->getTexture(buffer),position2d<int>(0,0));//creo imagen con textura
+        }
+
         tiempoUltimoFrame = times::getInstance()->calcularTiempoPasado(marcaTiempo);
         //cout << tiempoUltimoFrame << " " << salto << endl;
     }
@@ -659,15 +674,21 @@ bool MotorGrafico::colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int 
 //abra que pasarle el numero de caja
 void MotorGrafico::debugBox(int x,int y, int z,int ancho, int alto, int largo)
 {
-    scene::ISceneNode *n = smgr->addCubeSceneNode();
-    //cout << x << y << z << ancho << largo << alto << endl;
-    if(n)
+    if(debugGrafico)
     {
-        n->setMaterialFlag(video::EMF_LIGHTING, false);
-        //n->setPosition(core::vector3df(x,y,z));
-        //n->setScale(core::vector3df(ancho/5,alto/5,largo/5));
-        n->setPosition(core::vector3df(0,0,20));
-        n->setScale(core::vector3df(4,1,0.2));
+        //cout << x << y << z << ancho << largo << alto << endl;
+        if(n)
+        {
+            n->setMaterialFlag(video::EMF_LIGHTING, false);
+            //n->setPosition(core::vector3df(x,y,z));
+            //n->setScale(core::vector3df(ancho/5,alto/5,largo/5));
+            n->setPosition(core::vector3df(0,0,20));
+            n->setScale(core::vector3df(4,1,0.2));
+        }
+        else
+        {
+            n = smgr->addCubeSceneNode();
+        }
     }
 }
 
@@ -675,16 +696,13 @@ void MotorGrafico::dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int d
 {
     if(debugGrafico)
     {
-        IAnimatedMesh* linea = smgr->getMesh("assets/models/linea.obj");
         if(!linea)
         {
-            //no se ha podido cargar
+            linea = smgr->getMesh("assets/models/linea.obj");
         }
         else
         {
-            //vamos a cargar el circulo en su posicion con su intensidad
-            //cout << "\e[36m Generamos Circulo \e[0m" << endl;
-            IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(linea); //metemos el objeto en el escenario para eso lo pasamos al escenario
+            IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(linea);
             objeto_en_scena->setPosition(core::vector3df(x,y,z));
             objeto_en_scena->setRotation(core::vector3df(rx,ry,rz));
             objeto_en_scena->setScale(core::vector3df(dimension,0.2,0.5));
@@ -1327,6 +1345,12 @@ bool MotorGrafico::finalCinematica()
 {
     if(frame_actual >= 498)
     {
+        //borramos los datos
+        actual->remove();//remuevo imagen actual
+        driver->removeTexture(actualTexture);//borras textura
+        //borramos los punteros
+        actual = nullptr;
+        actualTexture = nullptr;
         return true;
     }
     

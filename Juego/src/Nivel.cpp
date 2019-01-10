@@ -18,9 +18,9 @@ Nivel::Nivel()
 }
 /*
 void Nivel::LimpiarNivel(){
-    
+
     //Jugador = Jugador();//me cargo al jugador pero si da problemas ir a jugador y limpiar variables
-    //jugador en todos eliminar, enemigos, objetos, armas, salas, 
+    //jugador en todos eliminar, enemigos, objetos, armas, salas,
     unica_instancia->~Nivel();
     unica_instancia=nullptr;
 
@@ -95,6 +95,8 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     motor->CargarEnemigos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2);
+    fisicas->crearCuerpo(0,x/2,y/2,z/2,2,1,1,1,7); //Para ataques
+    fisicas->crearCuerpo(0,x/2,y/2,z/2,2,4,4,4,8); //Para ataques especiales
 
     //Cargar sonido evento en una instancia con la id del enemigo como nombre
     MotorAudioSystem* motora = MotorAudioSystem::getInstance();
@@ -318,7 +320,7 @@ void Nivel::update()
 
     //animacion
         motor->cambiarAnimacionJugador(jugador.getAnimacion());
-        
+
     //Interpolacion
     newTime = clock();
     frameTime = newTime - currentTime;
@@ -607,7 +609,7 @@ void Nivel::updateIA()
     }
     if(jugador.estasMuerto()){
         if(jugador.estasMuerto() && jugador.finalAnimMuerte()){
-            motor->EraseJugador();//borrar del motor (escena) 
+            motor->EraseJugador();//borrar del motor (escena)
             fisicas->EraseJugador();//borrar de motorfisicas
             EraseJugador();//borrar de nivel
         }else{
@@ -616,7 +618,7 @@ void Nivel::updateIA()
             }
         }
     }
-    
+
     //En esta parte muere enemigo
     if(enemigos.size() > 0){
         //comprobando los enemigos para saber si estan muertos

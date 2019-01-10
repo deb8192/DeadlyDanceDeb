@@ -187,7 +187,9 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
+            IAnimatedMesh * linea;
             IAnimatedMesh * conovision;
+            scene::ISceneNode *n;//box
             bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
 
             core::aabbox3d<f32> bounding_jugador;
@@ -238,6 +240,7 @@ using namespace idsEventos;
             int frame_actual = 0;//numero de frame actual
             IGUIImage * actual;//frame actual   
             float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
+            ITexture * actualTexture;//textura actual
     };
 
 #endif /* MotorGrafico_HPP */
