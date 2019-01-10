@@ -187,6 +187,7 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
+            //debug
             IAnimatedMesh * linea;
             IAnimatedMesh * conovision;
             scene::ISceneNode *n;//box
@@ -195,7 +196,10 @@ using namespace idsEventos;
             core::aabbox3d<f32> bounding_jugador;
 
             IAnimatedMeshSceneNode* tmpobjt_en_scena;
-
+            IAnimatedMesh * sphere;
+            IAnimatedMesh * cube;
+            IAnimatedMesh * capsule;
+            
             // Objetos y funciones para puzzles
             IGUIStaticText* myTextBox;
             ISceneCollisionManager* collmgr;
@@ -215,6 +219,7 @@ using namespace idsEventos;
             short x_linea1, x_linea2;
 
             IGUIImage* img;
+            ITexture * puzzles_particle_texture;
             vector<IGUIImage*> imagenes;
 
             enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
@@ -234,8 +239,17 @@ using namespace idsEventos;
             IGUIImage* llaveI;
             IGUIImage* espadaI;
             IGUIImage* dagaI;
-            IGUIStaticText* moneyI;     
-
+            IGUIStaticText* moneyI;  
+            ITexture * vida_textura;
+            ITexture * energia_textura;
+            ITexture * dinero_textura;
+            ITexture * arma_textura;
+            ITexture * barraVida_textura;
+            ITexture * barraEnergia_textura;
+            ITexture * manos_textura;
+            ITexture * llave_textura;
+            ITexture * espada_textura;   
+            ITexture * daga_textura;
             //cinematicas
             int frame_actual = 0;//numero de frame actual
             IGUIImage * actual;//frame actual   

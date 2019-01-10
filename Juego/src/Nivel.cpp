@@ -26,11 +26,11 @@ void Nivel::LimpiarNivel(){
 
     primeraSala->~Sala();//llamo al puntero para que se destruya
     primeraSala=nullptr;
-    /*fisicas->~MotorFisicas();
+    fisicas->~MotorFisicas();
     fisicas=nullptr;
     controladorTiempo->~times();
     controladorTiempo=nullptr;
-/*******************************
+*******************************
     std::vector<Enemigo*> enemigos;//Enemigos en scena
     std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
     std::vector<Recolectable*> recolectables;
@@ -38,7 +38,7 @@ void Nivel::LimpiarNivel(){
     CargadorNiveles cargador;//nos ayuda a cargar los niveles
 ******************************
 
-    /*id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
+    id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
     dt = 0.0f;
     frameTime = 0.0f;
     acumulator = 0.0f;

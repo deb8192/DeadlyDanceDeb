@@ -1035,8 +1035,8 @@ void MotorGrafico::EraseArma()
 // TO DO: Anyadir string img
 void MotorGrafico::CargarIMG(short x, short y)
 {
-	img = guienv->addImage(driver->getTexture("assets/puzzles/particle.bmp"),
-    	core::position2d<s32>(x, y));
+    puzzles_particle_texture = driver->getTexture("assets/puzzles/particle.bmp");
+	img = guienv->addImage(puzzles_particle_texture,core::position2d<s32>(x, y));
 }
 
 void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float longitud)
@@ -1077,19 +1077,30 @@ void MotorGrafico::cargarInterfaz()
     //activamos la interfaz
     InterfazJugador * interfaz = InterfazJugador::getInstance();
     interfaz->activar();//activamos la interfaz por defecto
-
-    vidaI = guienv->addImage(driver->getTexture("assets/images/51.png"),position2d<int>(10,10));
-    energiaI = guienv->addImage(driver->getTexture("assets/images/21.png"),position2d<int>(10,58));
-    dineroI = guienv->addImage(driver->getTexture("assets/images/61.png"),position2d<int>(680,10));
-    armaI = guienv->addImage(driver->getTexture("assets/images/11.png"),position2d<int>(730,530));
-    BarraVidaI = guienv->addImage(driver->getTexture("assets/images/4.png"),position2d<int>(50,15));
-    BarraEnergiaI = guienv->addImage(driver->getTexture("assets/images/3.png"),position2d<int>(48,65));
+    //creamos texturas
+    vida_textura = driver->getTexture("assets/images/51.png");
+    energia_textura = driver->getTexture("assets/images/21.png");
+    dinero_textura = driver->getTexture("assets/images/61.png");
+    arma_textura = driver->getTexture("assets/images/11.png");
+    barraVida_textura = driver->getTexture("assets/images/4.png");
+    barraEnergia_textura = driver->getTexture("assets/images/3.png");
+    manos_textura = driver->getTexture("assets/images/manos.png");
+    llave_textura = driver->getTexture("assets/images/llave.png");
+    espada_textura = driver->getTexture("assets/images/espada.png");
+    daga_textura = driver->getTexture("assets/images/daga.png");
+    //aplicamos texturas
+    vidaI = guienv->addImage(vida_textura,position2d<int>(10,10));
+    energiaI = guienv->addImage(energia_textura,position2d<int>(10,58));
+    dineroI = guienv->addImage(dinero_textura,position2d<int>(680,10));
+    armaI = guienv->addImage(arma_textura,position2d<int>(730,530));
+    BarraVidaI = guienv->addImage(barraVida_textura,position2d<int>(50,15));
+    BarraEnergiaI = guienv->addImage(barraEnergia_textura,position2d<int>(48,65));
     
     //imagenes tipo objeto que se lleva por defecto manos
-    manosI = guienv->addImage(driver->getTexture("assets/images/manos.png"),position2d<int>(738,534));
-    llaveI = guienv->addImage(driver->getTexture("assets/images/llave.png"),position2d<int>(738,534));
-    espadaI = guienv->addImage(driver->getTexture("assets/images/espada.png"),position2d<int>(738,534));
-    dagaI = guienv->addImage(driver->getTexture("assets/images/daga.png"),position2d<int>(738,534));
+    manosI = guienv->addImage(manos_textura,position2d<int>(738,534));
+    llaveI = guienv->addImage(llave_textura,position2d<int>(738,534));
+    espadaI = guienv->addImage(espada_textura,position2d<int>(738,534));
+    dagaI = guienv->addImage(daga_textura,position2d<int>(738,534));
 
     BarraVidaI->setMaxSize(dimension2du(121,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
     BarraEnergiaI->setMaxSize(dimension2du(63,27));//maximo 63/100 y esto multiplicado por la cantidad de energia 
@@ -1147,6 +1158,18 @@ void MotorGrafico::destruirInterfaz()
 
     if(moneyI)
         moneyI->remove();
+
+    driver->removeTexture(vida_textura);
+    driver->removeTexture(energia_textura);
+    driver->removeTexture(dinero_textura);
+    driver->removeTexture(arma_textura);
+    driver->removeTexture(barraVida_textura);
+    driver->removeTexture(barraEnergia_textura);
+    driver->removeTexture(manos_textura);
+    driver->removeTexture(llave_textura);
+    driver->removeTexture(espada_textura);
+    driver->removeTexture(daga_textura); 
+
 }
 
 void MotorGrafico::updateInterfaz()
@@ -1190,11 +1213,9 @@ void MotorGrafico::updateInterfaz()
 
         if(moneyI)
         {
-            //std::string conver = std::to_string(datos[3]);
-            //char buffer[100];
-            //wchar_t * cantidad = L"'conver'";
-            //strcpy(buffer,conver.c_str());
-            //moneyI = guienv->addStaticText(cantidad,rect<s32>(710,21,750,40),false);
+            stringw str = L"";
+            str += datos[3];
+            moneyI->setText(str.c_str());
         }
 
         if(BarraEnergiaI)
