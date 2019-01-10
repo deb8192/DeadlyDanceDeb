@@ -137,7 +137,7 @@ int Enemigo::Atacar()
       if(fisicas->IfCollision(fisicas->getEnemiesAtack(getPosAtaques()),fisicas->getJugador()))
       {
         cout << "Jugador Atacado" << endl;
-        danyo = 5.0f;
+        danyo = 10.0f;
         cout << "danyo del enemigo -> " << danyo << endl;
       }
     }
@@ -500,7 +500,7 @@ void Enemigo::runIA()
             delete loqueve;
 
         }
-        
+
         return false;
     }
 
