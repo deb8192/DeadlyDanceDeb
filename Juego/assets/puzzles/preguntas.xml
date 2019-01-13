@@ -10,12 +10,11 @@
 		</Respuestas>
     </Puzzle>
     
-    <Puzzle tipo="1" solucion="1" opciones="3">
+    <Puzzle tipo="1" solucion="1" opciones="2">
         <Descripcion>Elige la figura que coincida con el hueco:</Descripcion>
 		<Respuestas>
 			<Respuesta opcion="1" img="particle.bmp"></Respuesta>
 			<Respuesta opcion="2" img="particle.bmp"></Respuesta>
-			<Respuesta opcion="3" img="particle.bmp"></Respuesta>
 		</Respuestas>
     </Puzzle>
 	
