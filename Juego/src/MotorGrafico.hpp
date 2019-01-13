@@ -8,6 +8,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include <math.h>
 #include <vector>//para los objetos en escena
 #include "InterfazJugador.hpp"//para la interfaz
+#include "times.hpp"
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;
@@ -21,7 +22,7 @@ using namespace idsEventos;
 //fin de acortes
 
 #ifndef MotorGrafico_HPP
-#define MotorGrafico_CPP
+#define MotorGrafico_HPP
 
     class MotorGrafico
     {
@@ -47,6 +48,7 @@ using namespace idsEventos;
             void updateMotorJuego();
             //esto es provisional cuando tengamos diferentes pintados se llamara pero para llamar a todos los pintados
             void updateMotorCinematica();
+            bool finalCinematica();
             //crea una camara para ver el escenario
             void CrearCamara();
             //crea al jugador
@@ -144,8 +146,8 @@ using namespace idsEventos;
             void botonesMuerteJugador();
             int getEnemigos_Scena();
             void EraseColectable(int idx);
-            void EraseEnemigo(int i);
-            void EraseJugador(int i);
+            void EraseEnemigo(std::size_t i);
+            void EraseJugador();
             void EraseArma();
 
             //interfaz
@@ -153,8 +155,10 @@ using namespace idsEventos;
             void destruirInterfaz();
             void updateInterfaz();
 
+            //animaciones
+            void cambiarAnimacionJugador(int);//nos sirve para cambiar de animacion al jugador
+     
             //getters & setters
-
             bool getPathfindingActivado();
             
         private: //clases solo accesibles por MotorGrafico
@@ -187,13 +191,19 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
+            //debug
+            IAnimatedMesh * linea;
             IAnimatedMesh * conovision;
             bool debugGrafico, pathfinding;//nos sirven para saber si tenemos activado el debug grafico y el pathfinding
+            scene::ISceneNode *n;//box
 
             core::aabbox3d<f32> bounding_jugador;
 
             IAnimatedMeshSceneNode* tmpobjt_en_scena;
-
+            IAnimatedMesh * sphere;
+            IAnimatedMesh * cube;
+            IAnimatedMesh * capsule;
+            
             // Objetos y funciones para puzzles
             IGUIStaticText* myTextBox;
             ISceneCollisionManager* collmgr;
@@ -213,6 +223,7 @@ using namespace idsEventos;
             short x_linea1, x_linea2;
 
             IGUIImage* img;
+            ITexture * puzzles_particle_texture;
             vector<IGUIImage*> imagenes;
 
             enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
@@ -232,7 +243,22 @@ using namespace idsEventos;
             IGUIImage* llaveI;
             IGUIImage* espadaI;
             IGUIImage* dagaI;
-            IGUIStaticText* moneyI;           
+            IGUIStaticText* moneyI;  
+            ITexture * vida_textura;
+            ITexture * energia_textura;
+            ITexture * dinero_textura;
+            ITexture * arma_textura;
+            ITexture * barraVida_textura;
+            ITexture * barraEnergia_textura;
+            ITexture * manos_textura;
+            ITexture * llave_textura;
+            ITexture * espada_textura;   
+            ITexture * daga_textura;
+            //cinematicas
+            int frame_actual = 0;//numero de frame actual
+            IGUIImage * actual;//frame actual   
+            float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
+            ITexture * actualTexture;//textura actual
     };
 
 #endif /* MotorGrafico_HPP */

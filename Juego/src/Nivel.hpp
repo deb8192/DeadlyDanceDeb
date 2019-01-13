@@ -14,7 +14,7 @@
 #include <cstring>
 //#include "MotorFisicas.hpp"
 
-//cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA() 
+//cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA()
 #include "CargadorBehaviorTrees.hpp"
 #include "Arbol2.hpp"
 //librerias necesarias
@@ -36,8 +36,9 @@ class Nivel
             return unica_instancia;
         }
         //fin singleton public
-
-        bool CargarNivel(int);//carga el nivel siempre que exista dicho nivel en assets/maps/xml/
+  
+        //void LimpiarNivel();
+        bool CargarNivel(int);//carga eñ nivel siempre que exista dicho nivel en assets/maps/xml/
 
         //cargar objetos
         void CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -45,8 +46,8 @@ class Nivel
         void CrearObjeto(int accion, const char* nombre, int ataque, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         Sala * CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
-        void EraseEnemigo(int i);
-        void EraseJugador(int i);
+        void EraseEnemigo(std::size_t i);
+        void EraseJugador();
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
         void updateAtEsp(MotorGrafico *);//se actualiza la ejecucion de los ataques
         void updateAt(int *, MotorGrafico *);
@@ -84,6 +85,7 @@ class Nivel
         Sala * destinoPathFinding; //sala que se rellena al llamar a pathfinding y se vacía al terminar el recorrido del enemigo
         MotorFisicas *fisicas;//motor de fisicas (hace falta mas descripcion ?)
         int id;//id para las figuras
+
         float dt;
         float frameTime, desplazamiento = 1.5f; //desplazamiento se utiliza en el desplazamiento de los enemigos en pathfinding/ frameTime: tiempo por fotograma
         float acumulator;
@@ -93,6 +95,7 @@ class Nivel
         clock_t currentTime;
         times * controladorTiempo; //objeto time para usar sus funciones
 
+        //bool a,s,d,w;
         bool cogerObjeto = false;
         int objetoCogido = -1;
         int danyo = 0, danyo2 = 0;

@@ -87,7 +87,7 @@ void Enemigo::queVes()
     /*SenseEventos * eventos = SenseEventos::getInstance();
     //esto es un ejemplo
 
-    
+
     int * loqueve = eventos->listaObjetos(x,y,z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
 
     if(loqueve != nullptr)
@@ -159,13 +159,14 @@ int Enemigo::Atacar()
       atgy = getRY();
       atgz = getRZ();
 
-      fisicas->crearCuerpo(0,atx/2,aty/2,atz/2,2,1,1,1,7);
+      //Acutualizar posicion del ataque
+      fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,getPosAtaques());
 
       //Colision
-      if(fisicas->IfCollision(fisicas->getEnemiesAtack(),fisicas->getJugador()))
+      if(fisicas->IfCollision(fisicas->getEnemiesAtack(getPosAtaques()),fisicas->getJugador()))
       {
         cout << "Jugador Atacado" << endl;
-        danyo = 5.0f;
+        danyo = 10.0f;
         cout << "danyo del enemigo -> " << danyo << endl;
       }
     }
@@ -197,7 +198,7 @@ int Enemigo::AtacarEspecial()
     if(vida > 0 && barraAtEs == por100)
     {
         cout << "ATAQUE ESPECIAL ENEMIGO"<<endl;
-        
+
         //Calcular posiciones si se inicia el ataque especial
         if(atackEspTime <= 0)
         {
@@ -214,10 +215,12 @@ int Enemigo::AtacarEspecial()
             atespposY = (getY()/2);
             atespposZ = (atespz/2);
 
+            //Acutualizar posicion del ataque especial
+            fisicas->updateAtaquEspecEnemigos(atespposX,atespposY,atespposZ,getPosAtaques());
+
             //Crear cuerpo de colision de ataque delante del jugador
-            fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,4,4,4,8);
-            motora->getEvent("Bow")->setVolume(0.8f);
-            motora->getEvent("Bow")->start();
+            motora->getEvent("Arpa")->setVolume(0.8f);
+            motora->getEvent("Arpa")->start();
             motor->dibujarObjetoTemporal(atespx, atespy, atespz, atgx, atgy, atgz, 4, 4, 4, 2);
         }
 
@@ -237,9 +240,9 @@ int Enemigo::AtacarEspecial()
         //Se aplican todas las modificaciones en la variable danyo
         danyoF = ataque * critico * aumentosAtaque;
         cout << "daño: " <<danyoF<<endl;
-      
+
         //Colision
-        if(fisicas->IfCollision(fisicas->getEnemiesAtEsp(),fisicas->getJugador()))
+        if(fisicas->IfCollision(fisicas->getEnemiesAtEsp(getPosAtaques()),fisicas->getJugador()))
         {
             cout << "Jugador Atacado por ataque especial" << endl;
             danyo = roundf(danyoF * por10) / por10;
@@ -288,6 +291,10 @@ void Enemigo::MuereEnemigo(int enemi){
             motor->colorearEnemigo(255,255,0,0,enemi);//rojo
         }
     }
+    //Sonido de muerte
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+    motora->getEvent("Chicken2")->setPosition(x,y,z);
+    motora->getEvent("Chicken2")->start();
 }
 
 void Enemigo::RecuperarVida(int can)
@@ -333,6 +340,16 @@ void Enemigo::setArmaEspecial(int ataque)
 void Enemigo::setSuerte(int suer)
 {
 
+}
+
+void Enemigo::setPosAtaques(int p)
+{
+ pos_ataques = p;
+}
+
+int Enemigo::getPosAtaques()
+{
+  return pos_ataques;
 }
 
 void Enemigo::setDanyoCritico(int danyoC)
@@ -499,14 +516,18 @@ void Enemigo::runIA()
         if(tipo == 1)//ves al jugador ?
         {
             int * loqueve = eventos->listaObjetos(x,y,z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
-  
+
             if(loqueve != nullptr)
             {
                 if(loqueve[0] == 1)
                 {
+                    delete loqueve;
                     return true;
                 }
             }
+
+            delete loqueve;
+
         }
 
         return false;
@@ -516,7 +537,7 @@ void Enemigo::runIA()
     {
         SenseEventos * eventos = SenseEventos::getInstance();
         std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(x,y);//le pasamos nuestra x e y
-        
+
         if(listaSonidos.size() > 0)
         {
             for(std::size_t i=0;i<listaSonidos.size();i++)
@@ -564,7 +585,7 @@ void Enemigo::runIA()
     {
         if(tipo == 1)//pollo
         {
-           //cout << " pollo merodeando " << endl; 
+           //cout << " pollo merodeando " << endl;
            return true;
         }
 
