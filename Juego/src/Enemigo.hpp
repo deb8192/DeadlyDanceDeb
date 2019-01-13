@@ -97,7 +97,6 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
     protected:
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
-        float fisX, fisY, fisZ;
         float atacktime = 0.0f;
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";

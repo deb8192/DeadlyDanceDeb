@@ -71,6 +71,13 @@ void Juego::Update()
         motor->resetKey(KEY_G_DEBUG);
     }
 
+    //para pathfinding activado
+    if(motor->estaPulsado(KEY_C))
+    {
+        motor->activarPathfinding();
+        motor->resetKey(KEY_C);
+    }
+
     // Cargar XML arboles
     if(motor->ocurreEvento(GUI_ID_ARBOLES_BUTTON))
     {

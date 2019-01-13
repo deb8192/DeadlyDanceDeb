@@ -31,6 +31,7 @@ float Enemigo::getZ()
 {
     return z;
 }
+
 float Enemigo::getFisX()
 {
     return fisX;
@@ -533,8 +534,9 @@ void Enemigo::runIA()
     bool Enemigo::pedirAyuda()
     {
         Nivel * nivel = Nivel::getInstance();
+        MotorGrafico * motor = MotorGrafico::getInstance();
         //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
-        if(nivel->getEnemigoPideAyuda() == nullptr)
+        if(nivel->getEnemigoPideAyuda() == nullptr && motor->getPathfindingActivado())
         {
             //vamos a generar un sonido de ayuda
             generarSonido(51,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
@@ -548,8 +550,11 @@ void Enemigo::runIA()
     {
         //vamos a generar un sonido de ayuda
         generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
-        Nivel * nivel = Nivel::getInstance();
-        nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
+        MotorGrafico * motor = MotorGrafico::getInstance();
+        if(motor->getPathfindingActivado()){
+            Nivel * nivel = Nivel::getInstance();
+            nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
+        }
         //cout << " contesta a la llamada de auxilio "<< endl;
 
         return true;

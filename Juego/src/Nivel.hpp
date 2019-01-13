@@ -37,7 +37,7 @@ class Nivel
         }
         //fin singleton public
 
-        bool CargarNivel(int);//carga eñ nivel siempre que exista dicho nivel en assets/maps/xml/
+        bool CargarNivel(int);//carga el nivel siempre que exista dicho nivel en assets/maps/xml/
 
         //cargar objetos
         void CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -85,7 +85,7 @@ class Nivel
         MotorFisicas *fisicas;//motor de fisicas (hace falta mas descripcion ?)
         int id;//id para las figuras
         float dt;
-        float frameTime, desplazamiento = 2.0f; //desplazamiento se utiliza en el desplazamiento de los enemigos en pathfinding/ frameTime: tiempo por fotograma
+        float frameTime, desplazamiento = 1.5f; //desplazamiento se utiliza en el desplazamiento de los enemigos en pathfinding/ frameTime: tiempo por fotograma
         float acumulator;
         float atacktime = 0.0f; //tiempo de ejecucion del ataque
         float lastAtackEsptime = 0.0f; //registro antiguo del tiempo de ataque especial para su animacion

@@ -601,13 +601,13 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
     //Ejecucion del pathfinding si hay una sala de destino guardada
     if(destinoPathFinding != nullptr)
     {
-        Pathfinder path;
+        Pathfinder *path = Pathfinder::getInstance();
         int tipoCentro;
         
         //Se inicia el recorrido hacia la primera sala del enemigo que pide ayuda.
-        if(recorrido.empty() && !auxiliadores.empty() && !path.encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding).empty())
+        if(recorrido.empty() && !auxiliadores.empty() && !path->encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding).empty())
         {
-            recorrido = path.encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding);      
+            recorrido = path->encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding);      
             auxiliadores.erase(auxiliadores.begin());
         }
         //Desplazamiento del enemigo hacia su destino
@@ -627,11 +627,11 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
                     {
                         cambia = true;
                     }
-                    else if(auxiliadores.front()->getX() > recorrido.front().nodo->getSizes()[2])
+                    else if(auxiliadores.front()->getX() < recorrido.front().nodo->getSizes()[2])
                     {
                         moveDer = true;
                     }
-                    else if(auxiliadores.front()->getX() < recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
+                    else if(auxiliadores.front()->getX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
                     {
                         moveIzq = true;
                     }
@@ -657,16 +657,16 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
                     {
                         cambia = true;
                     }
-                    else if(auxiliadores.front()->getX() > recorrido.front().nodo->getSizes()[2])
+                    else if(auxiliadores.front()->getX() < recorrido.front().nodo->getSizes()[2])
                     {
                         moveDer = true;
                     }
-                    else if(auxiliadores.front()->getX() < recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
+                    else if(auxiliadores.front()->getX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
                     {
                         moveIzq = true;
                     }
 
-                    if(cambia && (auxiliadores.front()->getZ() <= recorrido.front().nodo->getSizes()[4] && auxiliadores.front()->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
+                    if(cambia && (auxiliadores.front()->getZ() <= recorrido.front().nodo->getSizes()[4] && auxiliadores.front()->getZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] )))
                     {
                         auxiliadores.front()->setSala(recorrido.front().nodo);
                         cout<<"nodo actual: "<<auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
@@ -827,8 +827,7 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
             }
             else
             {
-                cout<<"nodo actual: "<<auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
-
+                cout<<"nodo actual donde puede que se atasque: "<<auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
                 recorrido.erase(recorrido.begin());
                 if(recorrido.empty() && auxiliadores.empty())
                 {

@@ -103,6 +103,7 @@ using namespace idsEventos;
 
             //debug grafico
             void activarDebugGrafico();//se activa o desactiva el modo debug grafico
+            void activarPathfinding(); //Temporal, se activa o desactiva el pathfinding
             void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
             void dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo);
             void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
@@ -151,6 +152,10 @@ using namespace idsEventos;
             void cargarInterfaz();
             void destruirInterfaz();
             void updateInterfaz();
+
+            //getters & setters
+
+            bool getPathfindingActivado();
             
         private: //clases solo accesibles por MotorGrafico
 
@@ -183,7 +188,7 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
             IAnimatedMesh * conovision;
-            bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
+            bool debugGrafico, pathfinding;//nos sirven para saber si tenemos activado el debug grafico y el pathfinding
 
             core::aabbox3d<f32> bounding_jugador;
 
