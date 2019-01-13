@@ -72,6 +72,22 @@ float Jugador::getZ()
     return z;
 }
 
+
+float Jugador::getFisX()
+{
+    return fisX;
+}
+
+float Jugador::getFisY()
+{
+    return fisY;
+}
+
+float Jugador::getFisZ()
+{
+    return fisZ;
+}
+
 float Jugador::getRX()
 {
     return rx;
@@ -331,7 +347,7 @@ void Jugador::AtacarUpdate(int danyo)
             cout<<"Daño "<<danyo<<endl;
             danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
             motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
             //guardar el atacado para no repetir
             atacados_normal.push_back(atacados.at(i));

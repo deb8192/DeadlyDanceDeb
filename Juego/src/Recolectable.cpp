@@ -52,26 +52,47 @@ float Recolectable::getX()
 {
     return x;
 }
+
 float Recolectable::getY()
 {
     return y;
 }
+
 float Recolectable::getZ()
 {
     return z;
 }
+
+float Recolectable::getFisX()
+{
+    return fisX;
+}
+
+float Recolectable::getFisY()
+{
+    return fisY;
+}
+
+float Recolectable::getFisZ()
+{
+    return fisZ;
+}
+
 float Recolectable::getRX()
 {
     return rx;
 }
+
 float Recolectable::getRY()
 {
     return ry;
 }
+
 float Recolectable::getRZ()
 {
     return rz;
 }
+
 void Recolectable::setID(int nid)
 {
     id = nid;

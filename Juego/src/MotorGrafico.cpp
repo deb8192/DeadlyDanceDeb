@@ -251,6 +251,9 @@ bool MotorGrafico::estaPulsado(int boton)
 
         case KEY_P:
             return input.IsKeyDown(irr::KEY_KEY_P);
+        
+        case KEY_C:
+            return input.IsKeyDown(irr::KEY_KEY_C);//activa pathdinding
 
         case RMOUSE_PRESSED_DOWN:
             return input.IsMouseClick(irr::EMIE_RMOUSE_PRESSED_DOWN);
@@ -310,6 +313,9 @@ void MotorGrafico::resetKey(int event)
         break;
         case KEY_P:
             input.ResetKey(irr::KEY_KEY_P);
+        break;
+        case KEY_C:
+            input.ResetKey(irr::KEY_KEY_C);
         break;
         case KEY_Q:
             input.ResetKey(irr::KEY_KEY_Q);
@@ -585,6 +591,20 @@ void MotorGrafico::activarDebugGrafico()
     {
         debugGrafico = true;
         cout << "\e[38m Modo Debug Activado \e[0m" << endl;
+    }
+}
+
+void MotorGrafico::activarPathfinding()
+{
+    if(pathfinding)
+    {
+        pathfinding = false;
+        cout << "\e[38m Pathfinding Desactivado \e[0m" << endl;
+    }
+    else
+    {
+        pathfinding = true;
+        cout << "\e[38m Pathfinding Activado \e[0m" << endl;
     }
 }
 
@@ -1292,6 +1312,11 @@ void MotorGrafico::updateInterfaz()
         moneyI->setVisible(false);
     }
 
+}
+
+bool MotorGrafico::getPathfindingActivado()
+{
+    return pathfinding;
 }
 
 void MotorGrafico::cambiarAnimacionJugador(int estado)

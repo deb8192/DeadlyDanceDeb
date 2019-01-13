@@ -74,6 +74,9 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getX();
         float getY();
         float getZ();
+        float getFisX();
+        float getFisY();
+        float getFisZ();
         float getRX();
         float getRY();
         float getRZ();
@@ -90,9 +93,9 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float ax = 1.0f,
               az = 20.0f,
               deg;
-        //PRUEBAS ATAQUE ESPECIAL
         Arma *armaEquipada;
         Arma *armaEspecial;
+        //PRUEBAS ATAQUE ESPECIAL
         const char * rutaArmaEspecial = "assets/models/Arma.obj";
         const char * nombreJugador = "Heavy";
         //!PRUEBAS ATAQUE ESPECIAL

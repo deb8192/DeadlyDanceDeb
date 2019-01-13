@@ -36,6 +36,7 @@ class Nivel
             return unica_instancia;
         }
         //fin singleton public
+  
         //void LimpiarNivel();
         bool CargarNivel(int);//carga eñ nivel siempre que exista dicho nivel en assets/maps/xml/
 
@@ -51,13 +52,12 @@ class Nivel
         void updateAtEsp(MotorGrafico *);//se actualiza la ejecucion de los ataques
         void updateAt(int *, MotorGrafico *);
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
-        void updateRecorridoPathfinding();
-        std::vector<Enemigo*> getEnemies();
-
+        void updateRecorridoPathfinding(Enemigo *);
+        
+        void setEnemigoPideAyuda(Enemigo *);
+        
+        Enemigo * getEnemigoPideAyuda();
         Sala * getPrimeraSala();
-
-
-        //Pruebas Pathfinding y ataque especial
         std::vector<Enemigo*>  getEnemigos();
         Jugador getJugador();
         void setThen();
@@ -75,28 +75,31 @@ class Nivel
         //std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena //crear clase objetos
 
         std::vector<Enemigo*> enemigos;//Enemigos en scena
+        std::vector<Enemigo*> auxiliadores;  //Enemigos que responden a la ayuda
+        Enemigo* enemPideAyuda = nullptr;  //Enemigos que pide ayuda
         std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
         std::vector<Recolectable*> recolectables;
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala * primeraSala;// la primera sala del arbol
+        Sala * destinoPathFinding; //sala que se rellena al llamar a pathfinding y se vacía al terminar el recorrido del enemigo
         MotorFisicas *fisicas;//motor de fisicas (hace falta mas descripcion ?)
         int id;//id para las figuras
 
         float dt;
-        float frameTime;
+        float frameTime, desplazamiento = 1.5f; //desplazamiento se utiliza en el desplazamiento de los enemigos en pathfinding/ frameTime: tiempo por fotograma
         float acumulator;
-        float atacktime = 0.0f;
-        float lastAtackEsptime = 0.0f;
+        float atacktime = 0.0f; //tiempo de ejecucion del ataque
+        float lastAtackEsptime = 0.0f; //registro antiguo del tiempo de ataque especial para su animacion
         clock_t newTime;
         clock_t currentTime;
-        times * controladorTiempo;
+        times * controladorTiempo; //objeto time para usar sus funciones
 
         //bool a,s,d,w;
         bool cogerObjeto = false;
         int objetoCogido = -1;
         int danyo = 0, danyo2 = 0;
-        unsigned int enemigoSeleccionado = 0;
+        int contadorEnem = 0;
         int cambia;
 };
 

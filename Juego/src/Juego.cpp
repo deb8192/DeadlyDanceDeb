@@ -66,6 +66,12 @@ void Juego::Update()
             InicializarVentana();
         }
 
+        //para pathfinding activado
+        if(motor->estaPulsado(KEY_C))
+        {
+            motor->activarPathfinding();
+            motor->resetKey(KEY_C);
+        }
         estado->Actualizar();
     }
     else
