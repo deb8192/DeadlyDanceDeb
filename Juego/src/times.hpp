@@ -1,5 +1,5 @@
-#ifndef MotorGrafico_HPP
-#define MotorGrafico_CPP
+#ifndef times_HPP
+#define times_HPP
 
 #include <ctime>//nos sirve para saber los tiempos de ejecucion
 //#include <iostream>

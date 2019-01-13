@@ -117,20 +117,28 @@ void MotorFisicas::EraseColectable(int idx)
     recolectables.erase(recolectables.begin() + idx);
 }
 
-void MotorFisicas::EraseEnemigo(int i)
+void MotorFisicas::EraseEnemigo(std::size_t i)
 {
     space->destroyCollisionBody(enemigos[i]);//nos cargamos el contenido
     enemigos[i]=nullptr;
     enemigos.erase(enemigos.begin() + i);
+
+    space->destroyCollisionBody(enemigosAtack[i]);//nos cargamos el contenido
+    enemigosAtack[i]=nullptr;
+    enemigosAtack.erase(enemigosAtack.begin() + i);
+
+    space->destroyCollisionBody(armaAtEspEne[i]);//nos cargamos el contenido
+    armaAtEspEne[i]=nullptr;
+    armaAtEspEne.erase(armaAtEspEne.begin() + i);
 }
 
-void MotorFisicas::EraseJugador(int i){
-    //jugador.erase(jugador.begin() + i);
+void MotorFisicas::EraseJugador(){
+    jugador = NULL;
 }
 
 void MotorFisicas::EraseArma()
 {
-   // arma = NULL;
+    arma = NULL;
 }
 
 void MotorFisicas::setFormaRecolectable(int id, float px, float py, float pz, int anc, int lar, int alt)
@@ -332,16 +340,18 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
 }
 void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z)
 {
+    //cout << "arma: " << arma << endl;
+
     float px = x,
           pz = z;
     if(a)
-     px -= 1;
+     px -= 2;
     if(s)
-     pz -= 1;
+     pz -= 2;
     if(d)
-     px += 1;
+     px += 2;
     if(w)
-     pz += 1;
+     pz += 2;
 
     if(jugador != nullptr)
     {
@@ -349,14 +359,6 @@ void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, floa
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         jugador->setTransform(transformacion);
-        /*
-        rp3d::Vector3 posiciones(ix,y,iz);
-        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
-        Transform transformacion(posiciones,orientacion);
-        rp3d::Vector3 medidas(ancho,alto,largo);
-        BoxShape * forma = new BoxShape(medidas);
-        jugador->addCollisionShape(forma,transformacion);
-        */
     }
 
 }
@@ -367,6 +369,8 @@ void MotorFisicas::llevarBox(float x, float y, float z, float anc, float lar, fl
     rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
 
     Transform transformacion(posiciones,orientacion);
+
+    //arma->setTransform(transformacion);
 
     rp3d::CollisionBody * cuerpo;
     cuerpo = space->createCollisionBody(transformacion);
@@ -403,12 +407,36 @@ void MotorFisicas::updateEnemigos(float x, float y, float z, unsigned int i)
 {
     if(enemigos.at(i) != nullptr)
     {
-        rp3d::Vector3 posiciones(x,y,z);        
+        rp3d::Vector3 posiciones(x,y,z);
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         enemigos.at(i)->setTransform(transformacion);
     }
 }
+
+void MotorFisicas::updateAtaqueEnemigos(float x, float y, float z, unsigned int i)
+{
+    if(enemigos.at(i) != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        enemigosAtack.at(i)->setTransform(transformacion);
+    }
+}
+
+void MotorFisicas::updateAtaquEspecEnemigos(float x, float y, float z, unsigned int i)
+{
+    if(enemigos.at(i) != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        armaAtEspEne.at(i)->setTransform(transformacion);
+    }
+}
+
+
 
 vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z)
 {
@@ -520,13 +548,12 @@ CollisionBody* MotorFisicas::getAtack()
  return jugadorAtack;
 }
 
-CollisionBody* MotorFisicas::getEnemiesAtack()
+CollisionBody* MotorFisicas::getEnemiesAtack(int n)
 {
- return enemigosAtack.back();
+ return enemigosAtack[n];
 }
 
-CollisionBody* MotorFisicas::getEnemiesAtEsp()
+CollisionBody* MotorFisicas::getEnemiesAtEsp(int n)
 {
- return armaAtEspEne.back();
+ return armaAtEspEne[n];
 }
-

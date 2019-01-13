@@ -17,6 +17,42 @@ Nivel::Nivel()
     id = 0;
     controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
 }
+/*
+void Nivel::LimpiarNivel(){
+
+    //Jugador = Jugador();//me cargo al jugador pero si da problemas ir a jugador y limpiar variables
+    //jugador en todos eliminar, enemigos, objetos, armas, salas,
+    unica_instancia->~Nivel();
+    unica_instancia=nullptr;
+
+    primeraSala->~Sala();//llamo al puntero para que se destruya
+    primeraSala=nullptr;
+    fisicas->~MotorFisicas();
+    fisicas=nullptr;
+    controladorTiempo->~times();
+    controladorTiempo=nullptr;
+*******************************
+    std::vector<Enemigo*> enemigos;//Enemigos en scena
+    std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
+    std::vector<Recolectable*> recolectables;
+    Jugador jugador;//objeto del jugador en el nivel
+    CargadorNiveles cargador;//nos ayuda a cargar los niveles
+******************************
+
+    id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
+    dt = 0.0f;
+    frameTime = 0.0f;
+    acumulator = 0.0f;
+    atacktime = 0.0f;
+    lastAtackEsptime = 0.0f;
+    newTime = 0;
+    currentTime = 0;
+    cogerObjeto = false;
+    objetoCogido = -1;
+    danyo = 0, danyo2 = 0;
+    enemigoSeleccionado = 0;
+    cambia = 0;
+}*/
 
 bool Nivel::CargarNivel(int level)
 {
@@ -61,11 +97,21 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     motor->CargarEnemigos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2);
+    fisicas->crearCuerpo(0,x/2,y/2,z/2,2,1,1,1,7); //Para ataques
+    fisicas->crearCuerpo(0,x/2,y/2,z/2,2,4,4,4,8); //Para ataques especiales
 
+    //Cargar sonido evento en una instancia con la id del enemigo como nombre
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+    std::string nameid = std::to_string(id); //pasar id a string
+    motora->LoadEvent("event:/Chicken1",nameid);
+    motora->getEvent(nameid)->setPosition(x,y,z);
+    motora->getEvent(nameid)->setVolume(0.4f);
+    motora->getEvent(nameid)->start();
 }
 
 void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
-{   jugador.setVida(100);
+{
+    jugador.setVida(100);
     jugador.setID(id++);
     jugador.setBarraAtEs(100);
     jugador.setAtaque(15);
@@ -75,10 +121,12 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
     jugador.setVida(100);
+    jugador.setPosiciones(x,y,z);
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     MotorFisicas* fisicas = MotorFisicas::getInstance();
+    cout << x << " " << y << " " << z << " " << endl;
     motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
 
@@ -137,14 +185,22 @@ void Nivel::setThen()
     dt =1.0f/60.0f;
 }
 
-void Nivel::EraseEnemigo(int i){
+void Nivel::EraseEnemigo(std::size_t i){
+    //Eliminar sonido
+    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+    std::string nameid = std::to_string(enemigos[i]->getID()); //pasar id a string
+    motora->getEvent(nameid)->stop();
+
     //elimniar el objeto en memoria(la onda)
     enemigos[i]->~Enemigo();//el destructor de enemigo
     enemigos[i]=nullptr;
-    enemigos.erase(enemigos.begin() + i);
+    enemigos.erase(enemigos.begin() + i);//begin le suma las posiciones
+
+    //cout <<"que eres?" << i <<endl;
 }
-void Nivel::EraseJugador(int i){
-    //jugador.erase(jugador.begin() + i);
+void Nivel::EraseJugador(){
+    jugador.~Jugador();//el destructor de jugador
+    //jugador=NULL;
 }
 
 
@@ -155,7 +211,7 @@ void Nivel::CogerObjeto()
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     int rec_col = fisicas->collideColectable();
-
+        jugador.setAnimacion(4);
         if(jugador.getArma() == nullptr)//si no tiene arma equipada
         {
             //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)recolectables[rec_col];
@@ -263,6 +319,10 @@ void Nivel::update()
 
     //actualizamos el jugador
     MotorGrafico * motor = MotorGrafico::getInstance();
+
+    //animacion
+        motor->cambiarAnimacionJugador(jugador.getAnimacion());
+
     //Interpolacion
     newTime = clock();
     frameTime = newTime - currentTime;
@@ -383,6 +443,7 @@ void Nivel::update()
            for(std::size_t i=0;i<enemigos.size();i++)
            {
                 int danyo_jug = 0;
+                enemigos[i]->setPosAtaques(i);
                 //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
                 if(enemigos[i]->getTimeAtEsp() > 0.0f)
                 {
@@ -397,7 +458,6 @@ void Nivel::update()
                     danyo_jug = enemigos[i]->AtacarEspecial();
                     enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
                     enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
-            
                 }
                 else if(enemigos[i]->getBarraAtEs() < 100)
                 {
@@ -405,7 +465,7 @@ void Nivel::update()
                 }
                 if(danyo_jug == 0)
                 {
-                    //cout << "Enemigo " << i << endl;
+                    //cout << "Enemigo " << i  << " pos: " << enemigos[i]->getPosAtaques() << endl;
                     //Si el enemigo ha realizado danyo
                     danyo_jug = enemigos[i]->Atacar();
                     if(danyo_jug > 0)
@@ -432,11 +492,11 @@ void Nivel::update()
                //enemigos[i]->queVes();
            }
        }
-        jugador.MuereJugador(acumulator);
+        //jugador.MuereJugador(acumulator);
         //enemigos->MuereEnemigo(acumulator);
  	      acumulator -= dt;
     }
-    
+
     //actualizamos la interfaz de jugador
     jugador.updateInterfaz();
     //actualizamos la interfaz en motor grafico
@@ -487,7 +547,7 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
         {
             jugador.setTimeAtEsp(1.5f);
             jugador.setLastTimeAtEsp(controladorTiempo->getTiempo(2));
-            
+
         }
     }
     else
@@ -529,10 +589,37 @@ void Nivel::updateIA()
         this->updateRecorridoPathfinding(nullptr);
     }
 
-    //En esta parte mueren
-    if(jugador.estasMuerto()){
-        //motor->EraseJugador(jugador);
+    else if(atacktime > 0.0)
+    {
+        jugador.AtacarUpdate(danyo2);
     }
+
+    //En caso contrario se colorean los enemigos de color gris
+    else
+    {
+        for(unsigned int i = 0; i < enemigos.size(); i++)
+        {
+            motor->colorearEnemigo(255, 150, 150, 150, i);
+        }
+    }*/
+
+    //En esta parte muere jugador
+    if(motor->estaPulsado(16)){//SI PULSO 'J' MUERE JUGADOR
+        jugador.MuereJugador();
+    }
+    if(jugador.estasMuerto()){
+        if(jugador.estasMuerto() && jugador.finalAnimMuerte()){
+            motor->EraseJugador();//borrar del motor (escena)
+            fisicas->EraseJugador();//borrar de motorfisicas
+            EraseJugador();//borrar de nivel
+        }else{
+            if(jugador.estasMuerto()){
+                jugador.MuereJugador();
+            }
+        }
+    }
+
+    //En esta parte muere enemigo
     if(enemigos.size() > 0){
         //comprobando los enemigos para saber si estan muertos
         for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
@@ -543,27 +630,6 @@ void Nivel::updateIA()
                 fisicas->EraseEnemigo(i);
                 EraseEnemigo(i);
             }else{
-                if(enemigos[i]->estasMuerto()){
-                    enemigos[i]->MuereEnemigo(i);
-                }
-            }
-        }
-    }
-    //En esta parte mueren
-    if(jugador.estasMuerto()){
-        //motor->EraseJugador(jugador);
-    }
-    if(enemigos.size() > 0){
-        //comprobando los enemigos para saber si estan muertos
-        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
-
-            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
-
-                motor->EraseEnemigo(i);
-                fisicas->EraseEnemigo(i);
-                EraseEnemigo(i);
-            }else
-            {
                 if(enemigos[i]->estasMuerto()){
                     enemigos[i]->MuereEnemigo(i);
                 }

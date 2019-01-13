@@ -52,6 +52,8 @@ protected:
     float lastAtackEspTime;//Tiempo antiguo del ataque especial
     float animacionMuerteTiem = 3000.0f;//tiempo de animacion del estado muerte para cualquier NPC
     float tiempoPasadoMuerte = 0;
+    //tiempos animaciones
+    float tiempoAtaque, tiempoPasadoAtaque, tiempoAtaEsp, tiempoPasadoAtaEsp,tiempoCogerObjeto,tiempoPasadoCogerObjeto,tiempoEnMorir,tiempoPasadoEnMorir;
 };
 
 #endif /* INnpc_HPP */
