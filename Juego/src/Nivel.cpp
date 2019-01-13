@@ -601,7 +601,7 @@ void Nivel::updateIA()
         {
             motor->colorearEnemigo(255, 150, 150, 150, i);
         }
-    }*/
+    }
 
     //En esta parte muere jugador
     if(motor->estaPulsado(16)){//SI PULSO 'J' MUERE JUGADOR

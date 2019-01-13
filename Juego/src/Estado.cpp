@@ -92,14 +92,6 @@ void Jugando::Update()
         
         return;
     }
-    //Prueba de Patfinder y ataque especial
-    std::vector <Enemigo*> enemigos = nivel->getEnemigos();
-    if(motor->estaPulsado(KEY_P))
-    {
-        motor->resetKey(KEY_P);
-        Pathfinder path;
-        vector <struct Pathfinder::NodeRecord> camino = path.encontrarCamino(enemigos.at(1)->getSala(), nivel->getPrimeraSala());
-    }
 }
 int Jugando::Esta()
 {
