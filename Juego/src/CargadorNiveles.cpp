@@ -107,7 +107,7 @@ void CargadorNiveles::GuardarNivelBin(int level)
 Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
 {
     Nivel * nivel_instancia = Nivel::getInstance();
-    Sala * padren;//sala padre
+    Sala * padren = nullptr;//sala padre
     for (pugi::xml_node plat = hijo.child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
@@ -182,7 +182,11 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
         }
 
         Sala * entrada = crearSala(plat,padren);
-        padren ->agregarEntrada(entrada); //esto se modificara
+        //CAMBIO PARA VER SI FUNCIONA EL PATFHFINDING
+        if(entrada != nullptr)
+        {
+            padren ->agregarEntrada(entrada); //esto se modificara
+        }
     }
 
     return padren;

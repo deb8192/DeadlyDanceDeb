@@ -12,6 +12,7 @@ namespace idsEventos
         KEY_ACEPTAR,
         KEY_G_DEBUG,
         KEY_P,
+        KEY_C,
         KEY_Q,
         KEY_E,
         RMOUSE_DOWN,

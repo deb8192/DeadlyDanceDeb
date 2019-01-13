@@ -25,6 +25,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void queVes();//recupera informacion de los objetos,enemigos,jugador que ve.
         //drawables metodos
         void setPosiciones(float nx,float ny,float nz);
+        void setPosicionesFisicas(float nx,float ny,float nz);
+        void initPosicionesFisicas(float nx,float ny,float nz);
         void setID(int);
         int getID();
         //npc metodos
@@ -71,6 +73,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getX();
         float getY();
         float getZ();
+        float getFisX();
+        float getFisY();
+        float getFisZ();
         float getRX();
         float getRY();
         float getRZ();

@@ -1,9 +1,9 @@
 #include "Enemigo.hpp"
-//#include "Nivel.hpp"
-#include "MotorGrafico.hpp"
-#include "MotorFisicas.hpp"
-#include "MotorAudio.hpp"
-#include "times.hpp"
+#include "Nivel.hpp"
+//#include "MotorGrafico.hpp"
+//#include "MotorFisicas.hpp"
+//#include "MotorAudio.hpp"
+//#include "times.hpp"
 
 #define PI 3.14159265358979323846
 #define PIRADIAN 180.0f
@@ -30,6 +30,21 @@ float Enemigo::getY()
 float Enemigo::getZ()
 {
     return z;
+}
+
+float Enemigo::getFisX()
+{
+    return fisX;
+}
+
+float Enemigo::getFisY()
+{
+    return fisY;
+}
+
+float Enemigo::getFisZ()
+{
+    return fisZ;
 }
 
 float Enemigo::getRX()
@@ -111,6 +126,20 @@ void Enemigo::setPosiciones(float nx,float ny,float nz)
     x = nx;
     y = ny;
     z = nz;
+}
+
+void Enemigo::initPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX = nx;
+    fisY = ny;
+    fisZ = nz;
+}
+
+void Enemigo::setPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX += nx;
+    fisY += ny;
+    fisZ += nz;
 }
 
 int Enemigo::Atacar()
@@ -525,8 +554,15 @@ void Enemigo::runIA()
 
     bool Enemigo::pedirAyuda()
     {
-        //vamos a generar un sonido de ayuda
-        generarSonido(20,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+        Nivel * nivel = Nivel::getInstance();
+        MotorGrafico * motor = MotorGrafico::getInstance();
+        //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
+        if(nivel->getEnemigoPideAyuda() == nullptr && motor->getPathfindingActivado())
+        {
+            //vamos a generar un sonido de ayuda
+            generarSonido(51,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+            nivel->setEnemigoPideAyuda(this); //En caso de no estar buscando a ningun aliado se anade este como peticionario
+        }
         //cout << " grita pidiendo ayuda "<< endl;
         return true;
     }
@@ -535,7 +571,13 @@ void Enemigo::runIA()
     {
         //vamos a generar un sonido de ayuda
         generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+        MotorGrafico * motor = MotorGrafico::getInstance();
+        if(motor->getPathfindingActivado()){
+            Nivel * nivel = Nivel::getInstance();
+            nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
+        }
         //cout << " contesta a la llamada de auxilio "<< endl;
+
         return true;
     }
 

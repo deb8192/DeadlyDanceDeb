@@ -16,6 +16,9 @@ public:
     virtual float getX()=0;
     virtual float getY()=0;
     virtual float getZ()=0;
+    virtual float getFisX()=0;
+    virtual float getFisY()=0;
+    virtual float getFisZ()=0;
     virtual float getRX()=0;
     virtual float getRY()=0;
     virtual float getRZ()=0;
@@ -29,7 +32,8 @@ protected:
     float z = 0.0f;
     float rx = 0.0f;
     float ry = 0.0f;
-    float rz = 0.0f; 
+    float rz = 0.0f;
+    float fisX, fisY, fisZ;
     float rotation = 90.0f;//en grados por defecto
     int id = -1;
     int animacion = 0;  //nos sirve para cambiar de animacion //por defecto en reposo
