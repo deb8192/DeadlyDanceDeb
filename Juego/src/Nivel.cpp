@@ -589,7 +589,7 @@ void Nivel::updateIA()
         this->updateRecorridoPathfinding(nullptr);
     }
 
-    else if(atacktime > 0.0)
+    /*else if(atacktime > 0.0)
     {
         jugador.AtacarUpdate(danyo2);
     }
@@ -601,7 +601,7 @@ void Nivel::updateIA()
         {
             motor->colorearEnemigo(255, 150, 150, 150, i);
         }
-    }
+    }*/
 
     //En esta parte muere jugador
     if(motor->estaPulsado(16)){//SI PULSO 'J' MUERE JUGADOR
