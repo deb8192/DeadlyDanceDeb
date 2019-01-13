@@ -42,6 +42,22 @@ float Jugador::getZ()
     return z;
 }
 
+
+float Jugador::getFisX()
+{
+    return fisX;
+}
+
+float Jugador::getFisY()
+{
+    return fisY;
+}
+
+float Jugador::getFisZ()
+{
+    return fisZ;
+}
+
 float Jugador::getRX()
 {
     return rx;

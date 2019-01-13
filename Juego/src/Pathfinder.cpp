@@ -4,6 +4,17 @@
 #include <iostream>
 #include <cmath>
 
+//para clases singleton deben tener un indicador de que se ha creado el unico objeto
+Pathfinder* Pathfinder::unica_instancia = 0;
+//fin indicador singleton
+
+Pathfinder::Pathfinder()
+{
+
+}
+
+
+
 /********************* ComprobarListas ************************
  * Descripcion: Metodo que indica si una sala se encuentra en
  * cualquiera de las listas de nodos que se pasen
@@ -100,6 +111,19 @@ bool Pathfinder::coincide(Sala *nodoA, Sala *nodoB)
  */
 std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *start, Sala *end)
 {
+    //Se inicializan todas las variables implicadas en el pathfiding
+    if(!camino.empty())
+    {
+        camino.clear();//Si tiene datos, se vacia
+    }
+    if(!listaAbierta.empty())
+    {
+        listaAbierta.clear();//Si tiene datos, se vacia
+    }
+    if(!listaCerrada.empty())
+    {
+        listaCerrada.clear();//Si tiene datos, se vacia
+    }
     contador = 0;
     cout << "Entra" << endl;
     startNodo.nodo = start;
