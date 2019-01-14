@@ -7,7 +7,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
 #include <vector>//para los objetos en escena
-#include "InterfazJugador.hpp"//para la interfaz
+#include "Jugando/InterfazJugador.hpp"//para la interfaz
 #include "times.hpp"
 
 //para acortar lineas de programacion se cogen espacios definidos directamente

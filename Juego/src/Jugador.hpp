@@ -9,7 +9,7 @@
 #include "MotorFisicas.hpp"
 #include "MotorGrafico.hpp"
 #include <ctime>
-#include "InterfazJugador.hpp"
+#include "Jugando/InterfazJugador.hpp"
 #include <cstring>
 #include "times.hpp"
 
