@@ -192,6 +192,21 @@ void Jugador::setPosiciones(float nx,float ny,float nz)
     y = ny;
     z = nz;
 }
+
+void Jugador::initPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX = nx;
+    fisY = ny;
+    fisZ = nz;
+}
+
+void Jugador::setPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX += nx;
+    fisY += ny;
+    fisZ += nz;
+}
+
 bool Jugador::estasMuerto(){
     //cout << "Muere jugador??: " << vida << endl;
     if(vida <= 0){
