@@ -128,6 +128,20 @@ void Enemigo::setPosiciones(float nx,float ny,float nz)
     z = nz;
 }
 
+void Enemigo::setNewPosiciones(float nx,float ny,float nz)
+{
+    newX = nx;
+    newY = ny;
+    newZ = nz;
+}
+
+void Enemigo::setLastPosiciones(float nx,float ny,float nz)
+{
+    lastX = nx;
+    lastY = ny;
+    lastZ = nz;
+}
+
 void Enemigo::initPosicionesFisicas(float nx,float ny,float nz)
 {
     fisX = nx;
@@ -310,6 +324,15 @@ void Enemigo::AumentarBarraAtEs(int can)
 void Enemigo::Interactuar(int id, int id2)
 {
 
+}
+
+void Enemigo::moverseEscenario(float time)
+{
+    //VARIABLE TERMPORAL
+    float pt = 1.0f / time * 100;
+
+    x = lastX * (1 - pt) + newX * pt;
+    z = lastZ * (1 - pt) + newZ * pt;
 }
 
 void Enemigo::setVida(int vid)

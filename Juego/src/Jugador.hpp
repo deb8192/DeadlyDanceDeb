@@ -26,6 +26,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
 
         //drawable metodos
         void setPosiciones(float nx,float ny,float nz);
+        void setNewPosiciones(float nx,float ny,float nz);//modifica las posiciones finales de la interpolacion de la figura
+        void setLastPosiciones(float nx,float ny,float nz);//modifica las posiciones antiguas de la interpolacion de la figura
         void setID(int);
         int getID();
         //Metodos Muere jugador y enemigo

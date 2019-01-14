@@ -24,11 +24,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         void queVes();//recupera informacion de los objetos,enemigos,jugador que ve.
         //drawables metodos
-        void setPosiciones(float nx,float ny,float nz);
-        void setPosicionesFisicas(float nx,float ny,float nz);
-        void initPosicionesFisicas(float nx,float ny,float nz);
-        void setID(int);
-        int getID();
+
         //npc metodos
         int Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
         //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
@@ -40,8 +36,16 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
+        void moverseEscenario(float);//Realiza el desplazamiento mediante la interpolacion
 
         //getters y setters
+
+        void setID(int);
+        void setPosiciones(float nx,float ny,float nz);
+        void setNewPosiciones(float nx,float ny,float nz);
+        void setLastPosiciones(float nx,float ny,float nz);
+        void setPosicionesFisicas(float nx,float ny,float nz);
+        void initPosicionesFisicas(float nx,float ny,float nz);
         void setVida(int vid);
         void setTipo(int tip);
         void setBarraAtEs(int bar);
@@ -57,6 +61,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setRotation(float rot);
         void setPosAtaques(int p);
 
+        int getID();
         int getVida();
         int getTipo();
         int getBarraAtEs();
