@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{30c026f3-39e7-412c-a710-a39aaf0558bf}">
         <property name="name">
-            <value>GolpeGuitarra</value>
+            <value>SFX-Personaje Guitarra golpea</value>
         </property>
         <property name="outputFormat">
             <value>1</value>
@@ -97,6 +97,9 @@
         </relationship>
     </object>
     <object class="EventMixerGroup" id="{4b4f3d5d-c3c7-4582-ba8e-2c2a503f5a1d}">
+        <property name="volume">
+            <value>-5.5</value>
+        </property>
         <property name="name">
             <value>Audio 1</value>
         </property>

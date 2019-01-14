@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{59e051a1-4983-4810-8d9d-419201224b99}">
         <property name="name">
-            <value>SinArma</value>
+            <value>SFX-Personaje cabezazo del heavy</value>
         </property>
         <property name="outputFormat">
             <value>1</value>

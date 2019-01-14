@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{3871c137-9117-48ee-8a42-1e57239885ac}">
         <property name="name">
-            <value>Arpa</value>
+            <value>SFX-Personaje Arpa golpea</value>
         </property>
         <property name="outputFormat">
             <value>1</value>
