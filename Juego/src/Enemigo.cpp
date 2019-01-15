@@ -363,11 +363,17 @@ void Enemigo::Interactuar(int id, int id2)
  */
 void Enemigo::moverseEscenario(float updTime, float dTime)
 {
-    //VARIABLE TERMPORAL
+    //pt es el porcentaje de tiempo pasado desde la posicion
+    //de update antigua hasta la nueva
     float pt = dTime / updTime;
 
     x = lastX * (1 - pt) + newX * pt;
     z = lastZ * (1 - pt) + newZ * pt;
+}
+
+void Enemigo::UpdateTimeMove(float updTime)
+{
+    moveTime += updTime;
 }
 
 void Enemigo::setVida(int vid)

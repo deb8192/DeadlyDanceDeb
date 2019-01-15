@@ -335,8 +335,8 @@ void Nivel::update()
     }
     currentTime = newTime;
     acumulator += frameTime;
-    while(acumulator >= dt)
-    {
+    //while(acumulator >= dt)
+    //{
 
     if(jugador.getArma() != nullptr)
     {
@@ -384,7 +384,8 @@ void Nivel::update()
 
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            //enemigos.at(i).moverseEscenario(0.0, 0.0);
+            float tiempoActual = 0.0f, tiempoAtaqueEsp = 0.0f;
+            //enemigos.at(i).moverseEscenario(1/4, 0.0);
             motor->mostrarEnemigos(enemigos.at(i)->getX(),
                 enemigos.at(i)->getY(),
                 enemigos.at(i)->getZ(),
@@ -437,7 +438,7 @@ void Nivel::update()
             }
         }
 
-      //Posicion de escucha
+       //Posicion de escucha
        motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
 
        //actualizamos los enemigos
@@ -498,8 +499,8 @@ void Nivel::update()
        }
         //jugador.MuereJugador(acumulator);
         //enemigos->MuereEnemigo(acumulator);
- 	      acumulator -= dt;
-    }
+ 	      //acumulator -= dt;
+    //}
 
     //actualizamos la interfaz de jugador
     jugador.updateInterfaz();

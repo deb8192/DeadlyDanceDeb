@@ -37,6 +37,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
         void moverseEscenario(float, float);//Realiza el desplazamiento mediante la interpolacion
+        void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
 
         //getters y setters
 
@@ -111,7 +112,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
     protected:
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
-        float atacktime = 0.0f;
+        float atacktime = 0.0f, moveTime = 0.0f;
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";
         Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
