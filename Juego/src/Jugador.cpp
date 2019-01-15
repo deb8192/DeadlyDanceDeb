@@ -72,6 +72,35 @@ float Jugador::getZ()
     return z;
 }
 
+float Jugador::getNewX()
+{
+    return newX;
+}
+
+float Jugador::getNewY()
+{
+    return newY;
+}
+
+float Jugador::getNewZ()
+{
+    return newZ;
+}
+
+float Jugador::getLastX()
+{
+    return lastX;
+}
+
+float Jugador::getLastY()
+{
+    return lastY;
+}
+
+float Jugador::getLastZ()
+{
+    return lastZ;
+}
 
 float Jugador::getFisX()
 {
@@ -191,6 +220,21 @@ void Jugador::setPosiciones(float nx,float ny,float nz)
     x = nx;
     y = ny;
     z = nz;
+}
+
+
+void Jugador::setLastPosiciones(float nx,float ny,float nz)
+{
+    lastX = nx;
+    lastY = ny;
+    lastZ = nz;
+}
+
+void Jugador::setNewPosiciones(float nx,float ny,float nz)
+{
+    newX = nx;
+    newY = ny;
+    newZ = nz;
 }
 
 void Jugador::initPosicionesFisicas(float nx,float ny,float nz)

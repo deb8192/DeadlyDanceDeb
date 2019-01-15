@@ -322,8 +322,11 @@ void Nivel::update()
 
     //animacion
         motor->cambiarAnimacionJugador(jugador.getAnimacion());
+    
+    //valores nuevos de interpolacion
 
-    //Interpolacion
+
+    //Interpolacion SE SUSTITUIRA
     newTime = clock();
     frameTime = newTime - currentTime;
     if(frameTime>0.25f)
@@ -381,6 +384,7 @@ void Nivel::update()
 
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
+            //enemigos.at(i).moverseEscenario(0.0, 0.0);
             motor->mostrarEnemigos(enemigos.at(i)->getX(),
                 enemigos.at(i)->getY(),
                 enemigos.at(i)->getZ(),

@@ -20,6 +20,12 @@ public:
     virtual float getX()=0;
     virtual float getY()=0;
     virtual float getZ()=0;
+    virtual float getNewX()=0;
+    virtual float getNewY()=0;
+    virtual float getNewZ()=0;
+    virtual float getLastX()=0;
+    virtual float getLastY()=0;
+    virtual float getLastZ()=0;
     virtual float getFisX()=0;
     virtual float getFisY()=0;
     virtual float getFisZ()=0;

@@ -36,7 +36,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
-        void moverseEscenario(float);//Realiza el desplazamiento mediante la interpolacion
+        void moverseEscenario(float, float);//Realiza el desplazamiento mediante la interpolacion
 
         //getters y setters
 
@@ -78,6 +78,12 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getX();
         float getY();
         float getZ();
+        float getNewX();
+        float getNewY();
+        float getNewZ();
+        float getLastX();
+        float getLastY();
+        float getLastZ();
         float getFisX();
         float getFisY();
         float getFisZ();

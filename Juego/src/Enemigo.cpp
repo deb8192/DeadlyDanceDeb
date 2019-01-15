@@ -32,6 +32,36 @@ float Enemigo::getZ()
     return z;
 }
 
+float Enemigo::getNewX()
+{
+    return newX;
+}
+
+float Enemigo::getNewY()
+{
+    return newY;
+}
+
+float Enemigo::getNewZ()
+{
+    return newZ;
+}
+
+float Enemigo::getLastX()
+{
+    return lastX;
+}
+
+float Enemigo::getLastY()
+{
+    return lastY;
+}
+
+float Enemigo::getLastZ()
+{
+    return lastZ;
+}
+
 float Enemigo::getFisX()
 {
     return fisX;
@@ -326,10 +356,15 @@ void Enemigo::Interactuar(int id, int id2)
 
 }
 
-void Enemigo::moverseEscenario(float time)
+/*************** moverseEscenario *****************
+ * Funcion con la que los enemigos se desplazaran
+ * por el escenario mediante una interpolacion desde
+ * el punto de origen al punto de destino
+ */
+void Enemigo::moverseEscenario(float updTime, float dTime)
 {
     //VARIABLE TERMPORAL
-    float pt = 1.0f / time * 100;
+    float pt = dTime / updTime;
 
     x = lastX * (1 - pt) + newX * pt;
     z = lastZ * (1 - pt) + newZ * pt;
