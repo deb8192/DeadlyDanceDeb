@@ -203,8 +203,8 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     {
         componente = 0.0;
     }
-    px += componente*sin(deg*DEGTORAD)*dt;
-    pz += componente*cos(deg*DEGTORAD)*dt;
+    px += componente*sin(deg*DEGTORAD)/**dt*/;
+    pz += componente*cos(deg*DEGTORAD)/**dt*/;
 
 
     //cout << "deg: " << deg << ", px:" << px << ", pz:" << pz << endl;

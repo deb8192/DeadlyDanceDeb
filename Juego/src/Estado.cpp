@@ -100,7 +100,8 @@ int Jugando::Esta()
 
 void Cinematica::Draw()
 {
-    //em
+    MotorGrafico *motor = MotorGrafico::getInstance();
+    motor->updateMotorCinematica();
 }
 
 void Cinematica::Clean()
@@ -115,8 +116,7 @@ void Cinematica::Input()
 
 void Cinematica::Update()
 {
-    MotorGrafico *motor = MotorGrafico::getInstance();
-    motor->updateMotorCinematica();
+    //em
 }
 void Cinematica::Init()
 {

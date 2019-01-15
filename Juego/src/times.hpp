@@ -18,7 +18,8 @@
             }
             //fin singleton public
             void inicializar();//inicializa los valores por defecto
-            bool EjecutoUpdate();//indica si se debe ejecutar las interpolaciones
+            bool EjecutoDraw();//indica si se debe ejecutar el dibujado
+            bool EjecutoUpdate();//indica si se debe ejecutar el update
             bool EjecutoIA();//indica si se debe ejecutar la logica del juego
             float getMaximoTiempoFrame();//devuelve el tiempo que queda en el frame actual
             float getTiempo(int modo);//te devuelve el tiempo actual (modo = 1 -> milisegundos, modo = 2 -> segundos)
@@ -27,8 +28,9 @@
             //getters & setters
             float getUpdateTime();          //devuelve el tiempo de actualizacion de la IA por segundo
             float getUpdateIATime();        //devuelve el tiempo de actualizacion del juego por segundo
+            float getUpdateFrame();         //devuelve el tiempo de dibujado del frame
             //float getDrawingTime();   devuelve la cantidad de frames/seg
-            void setFrames(int,int);//primer valor frames maximos, segundo  valor ejecucios de la ia por frame maximo numero de frames
+            void setFrames(int,int,int);//primer valor frames maximos, segundo  valor ejecucios de la ia por frame maximo numero de frames
             
         private:
             //clase singleton 
@@ -39,12 +41,14 @@
             float tiempo_frame;
             float frame_actual;
             float numero_frames;
+            float numero_update;
             float numero_updateia;
             float tiempo_ia;
+            float tiempo_update;
             const float milisegundos = 1000;
             bool pasado;
             float tiempo_pasado;//tiempo pasado desde la ultima comprobacion
-            unsigned tiempoInicio, tiempoInicio2, tiempoFinal;
+            unsigned tiempoInicio, tiempoInicio2, tiempoInicio3, tiempoFinal;
     };
 
 #endif
