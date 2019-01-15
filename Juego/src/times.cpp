@@ -140,3 +140,18 @@ void times::inicializar()
     tiempoInicio2 = 0.0;
     tiempo_pasado = 0.0;
 }
+
+float times::getUpdateIATime()
+{
+    return numero_updateia;   //Aquí se deberia devolver el tiempo de actualizacion, no el de dibujado
+}
+
+float times::getUpdateTime()
+{
+    return numero_frames;   //Aquí se deberia devolver el tiempo de actualizacion, no el de dibujado
+}
+
+/*float times::getDrawingTime()
+{
+
+}*/

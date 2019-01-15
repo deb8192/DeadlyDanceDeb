@@ -18,6 +18,10 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
         //drawable metodos
         void setPosiciones(float nx,float ny,float nz);
         void setPosicionesArmaEsp(float nx,float ny,float nz, float ry);
+        void setNewPosiciones(float nx,float ny,float nz);
+        void setLastPosiciones(float nx,float ny,float nz);
+        void setPosicionesFisicas(float nx,float ny,float nz);
+        void initPosicionesFisicas(float nx,float ny,float nz);
 
         //setters
         void setNombre(const char*);
@@ -33,6 +37,12 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
         float getX();
         float getY();
         float getZ();
+        float getNewX();
+        float getNewY();
+        float getNewZ();
+        float getLastX();
+        float getLastY();
+        float getLastZ();
         float getFisX();
         float getFisY();
         float getFisZ();
