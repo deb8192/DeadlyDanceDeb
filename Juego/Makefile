@@ -3,9 +3,9 @@ CC_FLAGS = -w #comandos extras para el compilador
 RUTACPP = src/ #variable donde iran las clases que utilizamos
 # $(CXX) - Es la variable de entorno del compilador si estas con g++ o gcc te lo detecta solo+
 CXXFLAGS = -g -Wall # lo que hace es que crea archivos debug para que se pueda comprobar la informacion
-CABECERAS =-I"/usr/include/irrlicht" -I"librerias/fmod/lowlevel/inc/" -I"librerias/fmod/studio/inc/" -I"librerias/reactphysics3d/src/" #nos dice donde estan los includes
-LIBRERIAS =-L"librerias/reactphysics3d/lib/" -L"librerimmas/fmod/lowlevel/lib/x86_64/" -L"librerias/fmod/studio/lib/x86_64/" #nos dice donde estan las librerias
-LIBRERIAS_ESPECIFICAS = librerias/fmod/studio/lib/x86_64/libfmodstudio.so librerias/fmod/lowlevel/lib/x86_64/libfmod.so librerias/reactphysics3d/lib/libreactphysics3d.a #librerias necesarias
+CABECERAS =-I"/usr/include/irrlicht" -I"librerias/fmod/lowlevel/inc/" -I"librerias/fmod/studio/inc/" -I"librerias/reactphysics3d/src/" -I"librerias/glfw/inc/" -I"librerias/glad/inc/"#nos dice donde estan los includes
+LIBRERIAS =-L"librerias/reactphysics3d/lib/" -L"librerimmas/fmod/lowlevel/lib/x86_64/" -L"librerias/fmod/studio/lib/x86_64/" -L"librerias/glfw/lib/" -L"librerias/glad/lib/"#nos dice donde estan las librerias
+LIBRERIAS_ESPECIFICAS = librerias/fmod/studio/lib/x86_64/libfmodstudio.so librerias/fmod/lowlevel/lib/x86_64/libfmod.so librerias/reactphysics3d/lib/libreactphysics3d.a librerias/glfw/lib/libglfw3.a librerias/glad/lib/libglad.a #librerias necesarias
 irrlichtN = -l Irrlicht #porque nombre llamarla
 SHELL = /bin/bash
 # ${CXXFLAGS} - Son las opciones del compilador
@@ -110,11 +110,11 @@ clean:
 # si ejecutas "make run" despues de compilar ejecutara automaticamente el ejecutable
 run: $(BEGIN)
 	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia
-	export LD_LIBRARY_PATH="librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib";\
+	export LD_LIBRARY_PATH="librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib:librerias/glfw/lib:librerias/glad/lib:";\
 	./$(EXEC)
 
 val: $(BEGIN)
 	#CUIDADO hay que tener valgrind para instalarlo "sudo pacman -S valgrind"
 	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia
-	export LD_LIBRARY_PATH="librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib";\
+	export LD_LIBRARY_PATH="librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib:librerias/glfw/lib:librerias/glad/lib:";\
 	valgrind ./$(EXEC)
