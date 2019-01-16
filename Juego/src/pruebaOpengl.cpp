@@ -11,13 +11,20 @@ void pruebaOpengl::crearVentana()
     
     
     /* Initialize the library */
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    //glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
     if (!glfwInit())
     {
         std::cout << "no se puede inicializar glfw" << std::endl;
     }   
+    else
+    {
+        std::cout << "glfw funciona" << std::endl;
+    }
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(800, 600, "Prueba", NULL, NULL);
+    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Prueba", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -25,6 +32,15 @@ void pruebaOpengl::crearVentana()
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+    }
+    else
+    {
+        std::cout << "glad funciona" << std::endl;
+    }
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))

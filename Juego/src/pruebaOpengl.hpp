@@ -1,4 +1,4 @@
-#include "GL/glew.h"
+#include "glad/glad.h"
 #include "glfw3.h"
 
 #include <iostream>
@@ -14,8 +14,8 @@ class pruebaOpengl
         void processInput(GLFWwindow*);
         void framebuffer_size_callback(GLFWwindow*, int,int);
     private:
-        const unsigned int SCR_WIDTH = 800;
-        const unsigned int SCR_HEIGHT = 600;        
+        unsigned int SCR_WIDTH = 800;
+        unsigned int SCR_HEIGHT = 600;        
 
 };
 
