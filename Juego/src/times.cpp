@@ -122,7 +122,7 @@ bool times::EjecutoIA()
     float tiempo_restante = (float(tiempo_ahora-tiempoInicio3)/(CLOCKS_PER_SEC/1000.0f));
     if(tiempoInicio3 != 0.0)
     {
-        if(tiempo_restante >= tiempo_ia && tiempo_restante < (tiempo_ia+tiempo_frame))
+        if(tiempo_restante >= tiempo_ia && tiempo_restante < (tiempo_ia+tiempo_update))
         {
             //std::cout << "Ejecuto ia" << std::endl;
             tiempoInicio3 = clock();

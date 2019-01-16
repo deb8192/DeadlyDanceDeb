@@ -93,6 +93,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getRX();
         float getRY();
         float getRZ();
+        float * GetDatosAtEsp();
 
         //interfaz
         void updateInterfaz();//nos sirve para actualizar la info de la interfaz
@@ -110,7 +111,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         Arma *armaEspecial;
         //PRUEBAS ATAQUE ESPECIAL
         const char * rutaArmaEspecial = "assets/models/Arma.obj";
-        const char * nombreJugador = "Heavy";
+        const char * nombreJugador = "Bailaora";
         //!PRUEBAS ATAQUE ESPECIAL
        //  core::vector3df dir;
         float danyo_arma = 10.0f;
