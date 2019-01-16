@@ -135,9 +135,9 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     //cout << "deg: " << deg << ", px:" << px << ", pz:" << pz << endl;
     //ahora actualizas movimiento y rotacion
     //has obtenido la arcotangente que te da el angulo de giro en grados
-    x = px;
-    z = pz;
-    //setNewPosiciones(px, y, pz);
+    /*x = px;
+    z = pz;*/
+    setNewPosiciones(px, y, pz);
     ry = deg;
 }
 
@@ -151,6 +151,11 @@ void Jugador::moverseEscenario(float updTime)
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
     float pt = moveTime / updTime;
+
+    if(pt > 1.0f)
+    {
+        pt = 1.0f;
+    }
 
     x = lastX * (1 - pt) + newX * pt;
     z = lastZ * (1 - pt) + newZ * pt;
@@ -794,6 +799,7 @@ void Jugador::setLastPosiciones(float nx,float ny,float nz)
 
 void Jugador::setNewPosiciones(float nx,float ny,float nz)
 {
+    moveTime = 0.0;
     this->setLastPosiciones(newX, newY, newZ);
     newX = nx;
     newY = ny;
