@@ -1,12 +1,17 @@
-#include <iostream>
+//#include <iostream>
+#include "pruebaOpengl.hpp"
+#include "times.hpp"
 #include "Juego.hpp"
-//#include "times.hpp"
 
 int main()
 {
+	pruebaOpengl prueba;
+	prueba.crearVentana();
+	
 	cout << "\e[42m Iniciando Juego \e[0m" << endl;
 	Juego *juego = Juego::getInstance();
 	times *tiempo = times::getInstance();
+	
 	juego->InicializarVentana();
 	// se debe dar valor a las variables de interpolacion antes del bucle
 	juego->setNivelThen();
