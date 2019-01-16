@@ -474,7 +474,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
     {
         //Formula de ataque circular aumentando la distancia
-        incrAtDisCirc += 0.02;
+        incrAtDisCirc += 1.5;
         atespz = this->getZ();
         atespz += (incrAtDisCirc * cos(PI * atgy / PIRADIAN));
         atespx = this->getX();
@@ -483,7 +483,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
         atespposX = atespx/2;
 
         //Aumento de la rotacion hacia la izquierda.
-        atgy += 0.75;
+        atgy += 30;
 
         if(atgy >= 360.0)
         {
@@ -494,7 +494,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
             atgy += 360;
         }
 
-        motor->mostrarArmaEspecial(
+        /*motor->mostrarArmaEspecial(
             atespx,
             atespy,
             atespz,
@@ -515,6 +515,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
             1,
             8,
             3);
+            */
     }
     //lista de enteros que senyalan a los enemigos atacados
     vector <unsigned int> atacados = fisicas->updateArmaEspecial(atespposX,atgy,atespposZ);
@@ -686,6 +687,19 @@ float Jugador::getRY()
 float Jugador::getRZ()
 {
     return rz;
+}
+
+float * Jugador::GetDatosAtEsp()
+{
+    float * atesp = new float [6];
+    atesp[0] = atespx;
+    atesp[1] = atespy;
+    atesp[2] = atespz;
+    atesp[3] = atgx;
+    atesp[4] = atgy;
+    atesp[5] = atgz;
+
+    return atesp;
 }
 
 int Jugador::getVida()

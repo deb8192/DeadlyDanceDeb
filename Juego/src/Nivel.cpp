@@ -956,6 +956,53 @@ void Nivel::Draw()
             i
         );
     }
+    //Dibujado del ataque especial
+    //Ataque especial Heavy
+    /*motor->mostrarArmaEspecial(
+            jugador.getX(),
+            jugador.getY(),
+            jugador.getZ(),
+            jugador.getRX(),
+            jugador.getRY(),
+            jugador.getRZ());
+
+    motor->clearDebug2();   //Pruebas debug
+
+    motor->dibujarObjetoTemporal(
+        jugador.GetAtEspPos()[0],
+        jugador.getY(),
+        jugador.GetAtEspPos()[2],
+        jugador.getRX(),
+        jugador.getRY(),
+        jugador.getRZ(),
+        8,
+        1,
+        8,
+        2);*/
+
+    //Ataque especial bailaora
+    motor->mostrarArmaEspecial(
+        jugador.GetDatosAtEsp()[0],
+        jugador.GetDatosAtEsp()[1],
+        jugador.GetDatosAtEsp()[2],
+        jugador.GetDatosAtEsp()[3],
+        jugador.GetDatosAtEsp()[4],
+        jugador.GetDatosAtEsp()[5]);
+
+    motor->clearDebug2(); //Pruebas debug
+
+    motor->dibujarObjetoTemporal(
+        jugador.GetDatosAtEsp()[0],
+        jugador.GetDatosAtEsp()[1],
+        jugador.GetDatosAtEsp()[2],
+        jugador.GetDatosAtEsp()[3],
+        jugador.GetDatosAtEsp()[4],
+        jugador.GetDatosAtEsp()[5],
+        8,
+        1,
+        8,
+        3);
+
 }
 
 void Nivel::setEnemigoPideAyuda(Enemigo *ene)
