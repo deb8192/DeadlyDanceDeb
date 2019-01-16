@@ -25,11 +25,11 @@ int main()
 		{
 			if(tiempo->EjecutoUpdate())
 			{
-				if(tiempo->EjecutoIA())
-				{
-					juego->UpdateIA();
-				}
 				juego->Update();//si lo esta actualizamos la escena
+			}
+			if(tiempo->EjecutoIA())
+			{
+				juego->UpdateIA();
 			}
 			juego->Draw();
 		}

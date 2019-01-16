@@ -68,6 +68,10 @@ void Juego::Draw()
 
         estado->Pintar();
     }
+    else
+    {
+        estado->Pintar();
+    }
 }
 
 void Juego::Update()

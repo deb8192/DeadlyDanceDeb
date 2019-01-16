@@ -160,6 +160,7 @@ void Enemigo::setPosiciones(float nx,float ny,float nz)
 
 void Enemigo::setNewPosiciones(float nx,float ny,float nz)
 {
+    this->setLastPosiciones(newX, newY, newZ);
     newX = nx;
     newY = ny;
     newZ = nz;
@@ -361,11 +362,11 @@ void Enemigo::Interactuar(int id, int id2)
  * por el escenario mediante una interpolacion desde
  * el punto de origen al punto de destino
  */
-void Enemigo::moverseEscenario(float updTime, float dTime)
+void Enemigo::moverseEscenario(float updTime)
 {
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
-    float pt = dTime / updTime;
+    float pt = moveTime / updTime;
 
     x = lastX * (1 - pt) + newX * pt;
     z = lastZ * (1 - pt) + newZ * pt;
