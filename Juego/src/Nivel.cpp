@@ -16,7 +16,8 @@ Nivel::Nivel()
     fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     id = 0;
     controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
-    drawTime = controladorTiempo->getTiempo(2);
+    drawTime = 0.0f;
+    lastDrawTime = drawTime;
 }
 /*
 void Nivel::LimpiarNivel(){
@@ -84,6 +85,7 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     ene->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->Enemigo::initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     ene->setVida(75);
+    ene->setVelocidad(0.25f);
     ene->setBarraAtEs(0);
     ene->definirSala(sala);//le pasamos la sala en donde esta
     ene->setAtaque(10);
@@ -418,6 +420,12 @@ void Nivel::update()
             jugador.getZ()
         );
       }
+
+        if(enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
+        {
+            this->updateRecorridoPathfinding(nullptr);
+        }
+
        //this->updateIA(); esto no se fuerza desde el update normal se llama desde main 4 veces por segundo
        //Actualizar ataque especial
         this->updateAtEsp(motor);
@@ -593,11 +601,6 @@ void Nivel::updateIA()
 {
     //cout<< "Ejecuto ia " << endl;
     MotorGrafico * motor = MotorGrafico::getInstance();
-    if(enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
-    {
-        this->updateRecorridoPathfinding(nullptr);
-    }
-
     /*else if(atacktime > 0.0)
     {
         jugador.AtacarUpdate(danyo2);
@@ -853,50 +856,50 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
                 {
                     if(moveDer)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + desplazamiento / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + desplazamiento / frameTime);
-                        auxiliadores.front()->setPosicionesFisicas(desplazamiento / frameTime, 0.0, desplazamiento / frameTime);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidad() / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidad() / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidad() / frameTime, 0.0, auxiliadores.front()->getVelocidad() / frameTime);
                         cout<<"Posicion del enemigo: x="<<auxiliadores.front()->getNewX()<<" z=" << auxiliadores.front()->getNewY();
                     }
                     else if(moveIzq)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - desplazamiento / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + desplazamiento / frameTime);
-                        auxiliadores.front()->setPosicionesFisicas(- (desplazamiento / frameTime), 0.0, desplazamiento / frameTime);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidad() / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidad() / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidad() / frameTime), 0.0, auxiliadores.front()->getVelocidad() / frameTime);
                     }
                     else
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + desplazamiento / frameTime);
-                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, desplazamiento / frameTime);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidad() / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, auxiliadores.front()->getVelocidad() / frameTime);
                     }
                 }
                 else if(moveArb)
                 {
                     if(moveDer)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + desplazamiento / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - desplazamiento / frameTime);
-                        auxiliadores.front()->setPosicionesFisicas(desplazamiento / frameTime, 0.0, -(desplazamiento / frameTime));
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidad() / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidad() / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidad() / frameTime, 0.0, -(auxiliadores.front()->getVelocidad() / frameTime));
                     }
                     else if(moveIzq)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - desplazamiento / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - desplazamiento / frameTime);
-                        auxiliadores.front()->setPosicionesFisicas(- (desplazamiento / frameTime), 0.0, -(desplazamiento / frameTime));
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidad() / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidad() / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidad() / frameTime), 0.0, -(auxiliadores.front()->getVelocidad() / frameTime));
                     }
                     else
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - desplazamiento / frameTime);
-                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, -(desplazamiento / frameTime));
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidad() / frameTime);
+                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, -(auxiliadores.front()->getVelocidad() / frameTime));
                     }
                 }
                 else
                 {
                     if(moveDer)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + desplazamiento / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ());
-                        auxiliadores.front()->setPosicionesFisicas(desplazamiento / frameTime, 0.0, 0.0);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidad() / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ());
+                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidad() / frameTime, 0.0, 0.0);
                     }
                     else if(moveIzq)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - desplazamiento / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ());
-                        auxiliadores.front()->setPosicionesFisicas(- (desplazamiento / frameTime), 0.0, 0.0);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidad() / frameTime, auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ());
+                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidad() / frameTime), 0.0, 0.0);
                     }
                 }
             }
@@ -920,6 +923,10 @@ void Nivel::Draw()
 {
 
     MotorGrafico * motor = MotorGrafico::getInstance();
+    if(drawTime == 0.0)
+    {
+        drawTime = controladorTiempo->getTiempo(2);
+    }
     lastDrawTime = drawTime;
     drawTime = controladorTiempo->getTiempo(2);
     for(unsigned int i = 0; i < enemigos.size(); i++)

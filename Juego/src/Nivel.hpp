@@ -88,7 +88,7 @@ class Nivel
         int id;//id para las figuras
 
         float dt, lastUpdateTime, updateTime, lastDrawTime, drawTime;
-        float frameTime, desplazamiento = 1.5f; //desplazamiento se utiliza en el desplazamiento de los enemigos en pathfinding/ frameTime: tiempo por fotograma
+        float frameTime; // frameTime: tiempo por fotograma
         float acumulator;
         float atacktime = 0.0f; //tiempo de ejecucion del ataque
         float lastAtackEsptime = 0.0f; //registro antiguo del tiempo de ataque especial para su animacion
