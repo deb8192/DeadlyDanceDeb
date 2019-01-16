@@ -16,6 +16,7 @@ Nivel::Nivel()
     fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     id = 0;
     controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
+    drawTime = controladorTiempo->getTiempo(2);
 }
 /*
 void Nivel::LimpiarNivel(){
@@ -79,6 +80,8 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
         ene->setArbol(cargadorIA.cargarArbol("Prueba1"));
     //fin ia
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    ene->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    ene->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->Enemigo::initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     ene->setVida(75);
     ene->setBarraAtEs(0);
@@ -381,11 +384,12 @@ void Nivel::update()
             jugador.getRY(),
             jugador.getRZ()
         );
-
-        for(unsigned int i = 0; i < enemigos.size(); i++)
+        //lastDrawTime = drawTime;
+        //drawTime = controladorTiempo->getTiempo(2);
+        /*for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            float tiempoActual = 0.0f, tiempoAtaqueEsp = 0.0f;
-            //enemigos.at(i).moverseEscenario(1/4, 0.0);
+           // enemigos.at(i)->moverseEscenario(1 / controladorTiempo->getUpdateTime());
+            //enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
             motor->mostrarEnemigos(enemigos.at(i)->getX(),
                 enemigos.at(i)->getY(),
                 enemigos.at(i)->getZ(),
@@ -394,7 +398,7 @@ void Nivel::update()
                 enemigos.at(i)->getRZ(),
                 i
             );
-        }
+        }*/
 
 
         motor->clearDebug2();   //Pruebas debug
@@ -911,6 +915,28 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
     }
     contadorEnem++;
 }
+
+void Nivel::Draw()
+{
+
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    lastDrawTime = drawTime;
+    drawTime = controladorTiempo->getTiempo(2);
+    for(unsigned int i = 0; i < enemigos.size(); i++)
+    {
+        enemigos.at(i)->moverseEscenario(1 / controladorTiempo->getUpdateTime());
+        enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
+        motor->mostrarEnemigos(enemigos.at(i)->getX(),
+            enemigos.at(i)->getY(),
+            enemigos.at(i)->getZ(),
+            enemigos.at(i)->getRX(),
+            enemigos.at(i)->getRY(),
+            enemigos.at(i)->getRZ(),
+            i
+        );
+    }
+}
+
 void Nivel::setEnemigoPideAyuda(Enemigo *ene)
 {
     enemPideAyuda = ene;

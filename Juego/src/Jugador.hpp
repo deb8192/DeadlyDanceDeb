@@ -23,6 +23,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         ~Jugador();
         Jugador(int,int,int,int,int,int,std::string malla);//defines tu la informacion del jugador
         void movimiento(float dt,bool a, bool s, bool d, bool w);
+        void moverseEscenario(float);//Realiza el desplazamiento mediante la interpolacion
+        void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
 
         //drawable metodos
         void setPosiciones(float nx,float ny,float nz);
@@ -114,6 +116,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float danyo_arma = 10.0f;
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc;
         float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
+        float moveTime;
         int tipo_arma = 2;
         vector <unsigned int> atacados_normal;
         int dinero = 0;

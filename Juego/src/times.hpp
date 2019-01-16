@@ -40,6 +40,7 @@
             float tiempo_actual;
             float tiempo_frame;
             float frame_actual;
+            float update_actual;
             float numero_frames;
             float numero_update;
             float numero_updateia;

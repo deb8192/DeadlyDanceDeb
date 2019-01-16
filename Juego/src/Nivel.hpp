@@ -51,8 +51,9 @@ class Nivel
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
         void updateAtEsp(MotorGrafico *);//se actualiza la ejecucion de los ataques
         void updateAt(int *, MotorGrafico *);
-        void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 60 frames
+        void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 15 veces
         void updateRecorridoPathfinding(Enemigo *);
+        void Draw();//dibuja y actualiza las posiciones del interpolado
         
         void setEnemigoPideAyuda(Enemigo *);
         
@@ -86,7 +87,7 @@ class Nivel
         MotorFisicas *fisicas;//motor de fisicas (hace falta mas descripcion ?)
         int id;//id para las figuras
 
-        float dt;
+        float dt, lastUpdateTime, updateTime, lastDrawTime, drawTime;
         float frameTime, desplazamiento = 1.5f; //desplazamiento se utiliza en el desplazamiento de los enemigos en pathfinding/ frameTime: tiempo por fotograma
         float acumulator;
         float atacktime = 0.0f; //tiempo de ejecucion del ataque

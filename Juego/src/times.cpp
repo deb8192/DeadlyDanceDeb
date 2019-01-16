@@ -78,12 +78,30 @@ bool times::EjecutoUpdate()
     float tiempo_restante = (float(tiempo_ahora-tiempoInicio2)/(CLOCKS_PER_SEC/1000.0f));
     if(tiempoInicio2 != 0.0)
     {
-        if(tiempo_restante >= tiempo_update && tiempo_restante < (tiempo_update+tiempo_frame))
+        /*if(tiempo_restante >= tiempo_update && tiempo_restante < (tiempo_update+tiempo_frame))
         {
             //std::cout << "Ejecuto ia" << std::endl;
             tiempoInicio2 = clock();
             return true;        
-        }
+        }*/
+        if(tiempo_restante >= tiempo_update)
+        {
+           //pasamos frame
+           int cuantos_sumar = (tiempo_restante/tiempo_update);
+           if((update_actual+cuantos_sumar)  < numero_update)
+           {
+               update_actual=update_actual+cuantos_sumar;   
+               //std::cout << frame_actual << std::endl;
+           }
+           else //si no se pasa al siguiente frame del nuevo ciclo 
+           { 
+               //std::cout << clock()/CLOCKS_PER_SEC << std::endl;
+               tiempoInicio3 = clock();
+               update_actual = 1;
+           }
+           tiempoInicio2 = clock();//cogemos el contador ahora de tiempo
+           return true;//ya se puede ejecutar
+       }
         else
         {
             return false;

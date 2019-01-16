@@ -212,7 +212,28 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     //has obtenido la arcotangente que te da el angulo de giro en grados
     x = px;
     z = pz;
+    //setNewPosiciones(px, y, pz);
     ry = deg;
+}
+
+/*************** moverseEscenario *****************
+ * Funcion con la que el enemigo se desplazaran
+ * por el escenario mediante una interpolacion desde
+ * el punto de origen al punto de destino
+ */
+void Jugador::moverseEscenario(float updTime)
+{
+    //pt es el porcentaje de tiempo pasado desde la posicion
+    //de update antigua hasta la nueva
+    float pt = moveTime / updTime;
+
+    x = lastX * (1 - pt) + newX * pt;
+    z = lastZ * (1 - pt) + newZ * pt;
+}
+
+void Jugador::UpdateTimeMove(float updTime)
+{
+    moveTime += updTime;
 }
 
 void Jugador::setPosiciones(float nx,float ny,float nz)
@@ -232,6 +253,7 @@ void Jugador::setLastPosiciones(float nx,float ny,float nz)
 
 void Jugador::setNewPosiciones(float nx,float ny,float nz)
 {
+    this->setLastPosiciones(newX, newY, newZ);
     newX = nx;
     newY = ny;
     newZ = nz;
