@@ -92,6 +92,11 @@ float Enemigo::getRZ()
     return rz;
 }
 
+float Enemigo::getVelocidad()
+{
+    return velocidad;
+}
+
 void Enemigo::definirSala(Sala * sala)
 {
     estoy = sala;
@@ -160,6 +165,7 @@ void Enemigo::setPosiciones(float nx,float ny,float nz)
 
 void Enemigo::setNewPosiciones(float nx,float ny,float nz)
 {
+    moveTime = 0.0;
     this->setLastPosiciones(newX, newY, newZ);
     newX = nx;
     newY = ny;
@@ -185,6 +191,12 @@ void Enemigo::setPosicionesFisicas(float nx,float ny,float nz)
     fisX += nx;
     fisY += ny;
     fisZ += nz;
+}
+
+
+void Enemigo::setVelocidad(float newVelocidad)
+{
+    velocidad = newVelocidad;
 }
 
 int Enemigo::Atacar()
@@ -367,6 +379,11 @@ void Enemigo::moverseEscenario(float updTime)
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
     float pt = moveTime / updTime;
+
+    if(pt > 1.0f)
+    {
+        pt = 1.0f;
+    }
 
     x = lastX * (1 - pt) + newX * pt;
     z = lastZ * (1 - pt) + newZ * pt;

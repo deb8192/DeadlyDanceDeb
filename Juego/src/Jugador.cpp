@@ -57,81 +57,6 @@ Jugador::Jugador(int,int,int,int,int,int,std::string malla)
     tiempoPasadoEnMorir=0;
 }
 
-float Jugador::getX()
-{
-    return x;
-}
-
-float Jugador::getY()
-{
-    return y;
-}
-
-float Jugador::getZ()
-{
-    return z;
-}
-
-float Jugador::getNewX()
-{
-    return newX;
-}
-
-float Jugador::getNewY()
-{
-    return newY;
-}
-
-float Jugador::getNewZ()
-{
-    return newZ;
-}
-
-float Jugador::getLastX()
-{
-    return lastX;
-}
-
-float Jugador::getLastY()
-{
-    return lastY;
-}
-
-float Jugador::getLastZ()
-{
-    return lastZ;
-}
-
-float Jugador::getFisX()
-{
-    return fisX;
-}
-
-float Jugador::getFisY()
-{
-    return fisY;
-}
-
-float Jugador::getFisZ()
-{
-    return fisZ;
-}
-
-float Jugador::getRX()
-{
-    return rx;
-}
-
-float Jugador::getRY()
-{
-    return ry;
-}
-
-float Jugador::getRZ()
-{
-    return rz;
-}
-
 void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
 {
     float px = x,
@@ -234,43 +159,6 @@ void Jugador::moverseEscenario(float updTime)
 void Jugador::UpdateTimeMove(float updTime)
 {
     moveTime += updTime;
-}
-
-void Jugador::setPosiciones(float nx,float ny,float nz)
-{
-    x = nx;
-    y = ny;
-    z = nz;
-}
-
-
-void Jugador::setLastPosiciones(float nx,float ny,float nz)
-{
-    lastX = nx;
-    lastY = ny;
-    lastZ = nz;
-}
-
-void Jugador::setNewPosiciones(float nx,float ny,float nz)
-{
-    this->setLastPosiciones(newX, newY, newZ);
-    newX = nx;
-    newY = ny;
-    newZ = nz;
-}
-
-void Jugador::initPosicionesFisicas(float nx,float ny,float nz)
-{
-    fisX = nx;
-    fisY = ny;
-    fisZ = nz;
-}
-
-void Jugador::setPosicionesFisicas(float nx,float ny,float nz)
-{
-    fisX += nx;
-    fisY += ny;
-    fisZ += nz;
 }
 
 bool Jugador::estasMuerto(){
@@ -666,6 +554,266 @@ void Jugador::Interactuar(int id, int id2)
 
 }
 
+void Jugador::updateInterfaz()
+{
+    InterfazJugador * interfaz = InterfazJugador::getInstance();
+    interfaz->setVida(vida);
+    interfaz->setAtaqueEspecial(getBarraAtEs());
+    interfaz->setDinero(dinero);
+}
+
+bool Jugador::terminaAnimacion()
+{
+        times * tiempo = times::getInstance();
+
+        switch(animacion)//comprobamos que la animacion haya terminado
+        {
+            case 0://andar
+                return true;
+            case 1://quieto
+                return true;
+            case 2://ataque
+                if(tiempo->calcularTiempoPasado(tiempoPasadoAtaque) >= tiempoAtaque || tiempoPasadoAtaque == 0)
+                {
+                    tiempoPasadoAtaque = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case 3://ataque especial
+                if(tiempo->calcularTiempoPasado(tiempoPasadoAtaEsp) >=  tiempoAtaEsp || tiempoPasadoAtaEsp == 0)
+                {
+                    tiempoPasadoAtaEsp = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case 4://coger objeto
+                if(tiempo->calcularTiempoPasado(tiempoPasadoCogerObjeto) >= tiempoCogerObjeto || tiempoPasadoCogerObjeto == 0)
+                {
+                    tiempoPasadoCogerObjeto = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case 5://muerto
+                return false;
+        }
+    return true;
+}
+
+float Jugador::getX()
+{
+    return x;
+}
+
+float Jugador::getY()
+{
+    return y;
+}
+
+float Jugador::getZ()
+{
+    return z;
+}
+
+float Jugador::getNewX()
+{
+    return newX;
+}
+
+float Jugador::getNewY()
+{
+    return newY;
+}
+
+float Jugador::getNewZ()
+{
+    return newZ;
+}
+
+float Jugador::getLastX()
+{
+    return lastX;
+}
+
+float Jugador::getLastY()
+{
+    return lastY;
+}
+
+float Jugador::getLastZ()
+{
+    return lastZ;
+}
+
+float Jugador::getFisX()
+{
+    return fisX;
+}
+
+float Jugador::getFisY()
+{
+    return fisY;
+}
+
+float Jugador::getFisZ()
+{
+    return fisZ;
+}
+
+float Jugador::getRX()
+{
+    return rx;
+}
+
+float Jugador::getRY()
+{
+    return ry;
+}
+
+float Jugador::getRZ()
+{
+    return rz;
+}
+
+int Jugador::getVida()
+{
+    return vida;
+}
+
+int Jugador::getTipo()
+{
+    return -1;
+}
+
+int Jugador::getBarraAtEs()
+{
+    if(barraAtEs >= 0 && barraAtEs <= 100)
+    {
+        return barraAtEs;
+    }
+    else
+    {
+        if(barraAtEs < 0)
+            return 0;
+        if(barraAtEs > 100)
+            return 100;
+    }
+
+    return 1;
+}
+
+int Jugador::getAtaque()
+{
+    return -1;
+}
+
+Arma * Jugador::getArma()
+{
+    return armaEquipada;
+}
+
+
+Arma * Jugador::getArmaEspecial()
+{
+    return armaEspecial;
+}
+
+const char* Jugador::getNombre()
+{
+    return nombreJugador;
+}
+
+int Jugador::getSuerte()
+{
+    return -1;
+}
+
+int Jugador::getDanyoCritico()
+{
+    return danyoCritico;
+}
+
+int Jugador::getProAtaCritico()
+{
+    return proAtaCritico;
+}
+
+int * Jugador::getBuffos()
+{
+    int * valores = new int[6];
+    return valores;
+}
+float Jugador::getTimeAtEsp()
+{
+    return atackEspTime;
+}
+
+float Jugador::getLastTimeAtEsp()
+{
+    return lastAtackEspTime;
+}
+
+const char *Jugador::getRutaArmaEsp()
+{
+    return rutaArmaEspecial;
+}
+
+int Jugador::getAnimacion()
+{
+    return animacion;
+}
+
+int Jugador::getID()
+{
+    return id;
+}
+
+
+void Jugador::setPosiciones(float nx,float ny,float nz)
+{
+    x = nx;
+    y = ny;
+    z = nz;
+}
+
+
+void Jugador::setLastPosiciones(float nx,float ny,float nz)
+{
+    lastX = nx;
+    lastY = ny;
+    lastZ = nz;
+}
+
+void Jugador::setNewPosiciones(float nx,float ny,float nz)
+{
+    this->setLastPosiciones(newX, newY, newZ);
+    newX = nx;
+    newY = ny;
+    newZ = nz;
+}
+
+void Jugador::initPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX = nx;
+    fisY = ny;
+    fisZ = nz;
+}
+
+void Jugador::setPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX += nx;
+    fisY += ny;
+    fisZ += nz;
+}
+
 void Jugador::setVida(int vid)
 {
     vida = vid;
@@ -768,111 +916,6 @@ void Jugador::setLastTimeAtEsp(float time)
     lastAtackEspTime = time;
 }
 
-int Jugador::getVida()
-{
-    return vida;
-}
-
-int Jugador::getTipo()
-{
-    return -1;
-}
-
-int Jugador::getBarraAtEs()
-{
-    if(barraAtEs >= 0 && barraAtEs <= 100)
-    {
-        return barraAtEs;
-    }
-    else
-    {
-        if(barraAtEs < 0)
-            return 0;
-        if(barraAtEs > 100)
-            return 100;
-    }
-
-    return 1;
-}
-
-int Jugador::getAtaque()
-{
-    return -1;
-}
-
-Arma * Jugador::getArma()
-{
-    return armaEquipada;
-}
-
-
-Arma * Jugador::getArmaEspecial()
-{
-    return armaEspecial;
-}
-
-const char* Jugador::getNombre()
-{
-    return nombreJugador;
-}
-
-int Jugador::getSuerte()
-{
-    return -1;
-}
-
-int Jugador::getDanyoCritico()
-{
-    return danyoCritico;
-}
-
-int Jugador::getProAtaCritico()
-{
-    return proAtaCritico;
-}
-
-int * Jugador::getBuffos()
-{
-    int * valores = new int[6];
-    return valores;
-}
-float Jugador::getTimeAtEsp()
-{
-    return atackEspTime;
-}
-
-float Jugador::getLastTimeAtEsp()
-{
-    return lastAtackEspTime;
-}
-
-const char *Jugador::getRutaArmaEsp()
-{
-    return rutaArmaEspecial;
-}
-
-void Jugador::setID(int nid)
-{
-    id = nid;
-}
-
-int Jugador::getID()
-{
-    return id;
-}
-
-void Jugador::updateInterfaz()
-{
-    InterfazJugador * interfaz = InterfazJugador::getInstance();
-    interfaz->setVida(vida);
-    interfaz->setAtaqueEspecial(getBarraAtEs());
-    interfaz->setDinero(dinero);
-}
-
-int Jugador::getAnimacion()
-{
-    return animacion;
-}
 
 void Jugador::setAnimacion(int est)
 {
@@ -908,48 +951,7 @@ void Jugador::setAnimacion(int est)
     }
 }
 
-bool Jugador::terminaAnimacion()
+void Jugador::setID(int nid)
 {
-        times * tiempo = times::getInstance();
-
-        switch(animacion)//comprobamos que la animacion haya terminado
-        {
-            case 0://andar
-                return true;
-            case 1://quieto
-                return true;
-            case 2://ataque
-                if(tiempo->calcularTiempoPasado(tiempoPasadoAtaque) >= tiempoAtaque || tiempoPasadoAtaque == 0)
-                {
-                    tiempoPasadoAtaque = 0;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            case 3://ataque especial
-                if(tiempo->calcularTiempoPasado(tiempoPasadoAtaEsp) >=  tiempoAtaEsp || tiempoPasadoAtaEsp == 0)
-                {
-                    tiempoPasadoAtaEsp = 0;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            case 4://coger objeto
-                if(tiempo->calcularTiempoPasado(tiempoPasadoCogerObjeto) >= tiempoCogerObjeto || tiempoPasadoCogerObjeto == 0)
-                {
-                    tiempoPasadoCogerObjeto = 0;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            case 5://muerto
-                return false;
-        }
-    return true;
+    id = nid;
 }

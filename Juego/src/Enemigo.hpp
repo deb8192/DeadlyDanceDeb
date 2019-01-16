@@ -61,6 +61,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setLastTimeAtEsp(float time);
         void setRotation(float rot);
         void setPosAtaques(int p);
+        void setVelocidad(float velocidad); //modifica la velocidad de desplazamiento
 
         int getID();
         int getVida();
@@ -91,6 +92,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getRX();
         float getRY();
         float getRZ();
+        float getVelocidad(); //modifica la velocidad de desplazamiento
 
         //comportamientos bases
             bool ver(int tipo);//1 si ve al jugador
@@ -112,7 +114,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
     protected:
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
-        float atacktime = 0.0f, moveTime = 0.0f;
+        float atacktime = 0.0f, moveTime;
+        float velocidad;  //Velocidad de desplazamiento del enemigo
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";
         Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
