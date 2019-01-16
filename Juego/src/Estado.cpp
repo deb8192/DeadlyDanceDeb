@@ -44,6 +44,7 @@ void Menu::Input()
     
 }
 
+//Funcion de dibujado
 void Jugando::Draw()
 {
     MotorGrafico *motor = MotorGrafico::getInstance();

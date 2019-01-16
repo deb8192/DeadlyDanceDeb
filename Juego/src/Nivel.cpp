@@ -379,13 +379,13 @@ void Nivel::update()
             motor->estaPulsado(4)
         );
 
-        motor->mostrarJugador(jugador.getX(),
+        /*motor->mostrarJugador(jugador.getX(),
             jugador.getY(),
             jugador.getZ(),
             jugador.getRX(),
             jugador.getRY(),
             jugador.getRZ()
-        );
+        );*/
         //lastDrawTime = drawTime;
         //drawTime = controladorTiempo->getTiempo(2);
         /*for(unsigned int i = 0; i < enemigos.size(); i++)
@@ -923,12 +923,26 @@ void Nivel::Draw()
 {
 
     MotorGrafico * motor = MotorGrafico::getInstance();
+    //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
     if(drawTime == 0.0)
     {
         drawTime = controladorTiempo->getTiempo(2);
     }
     lastDrawTime = drawTime;
     drawTime = controladorTiempo->getTiempo(2);
+
+    //Dibujado del personaje
+    jugador.moverseEscenario(1 / controladorTiempo->getUpdateTime());
+    jugador.UpdateTimeMove(drawTime - lastDrawTime);
+    motor->mostrarJugador(jugador.getX(),
+        jugador.getY(),
+        jugador.getZ(),
+        jugador.getRX(),
+        jugador.getRY(),
+        jugador.getRZ()
+    );
+    
+    //Dibujado de los enemigos
     for(unsigned int i = 0; i < enemigos.size(); i++)
     {
         enemigos.at(i)->moverseEscenario(1 / controladorTiempo->getUpdateTime());
