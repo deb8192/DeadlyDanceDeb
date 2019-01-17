@@ -9,10 +9,17 @@ class INdrawable
 {
 
 public:
+    virtual void moverseEntidad(float)=0;//Realiza el desplazamiento mediante la interpolacion
+    virtual void RotarEntidad(float)=0;//Realiza la rotacion mediante la interpolacion
+    virtual void UpdateTimeMove(float time)=0;//actualiza el tiempo del movimiento de la interpolacion
+
     virtual void setPosiciones(float nx,float ny,float nz)=0;//modifica las posiciones de la figura
     virtual void setNewPosiciones(float nx,float ny,float nz)=0;//modifica las posiciones finales de la interpolacion de la figura
     virtual void setLastPosiciones(float nx,float ny,float nz)=0;//modifica las posiciones antiguas de la interpolacion de la figura
     virtual void setPosicionesFisicas(float nx,float ny,float nz)=0;//modifica las posiciones de las fisicas
+    virtual void setRotacion(float nrx, float nry, float nrz)=0;//Modifica la rotacion de la figura
+    virtual void setNewRotacion(float nrx, float nry, float nrz)=0;//modifica la rotaciones finales de la interpolacion de la figura
+    virtual void setLastRotacion(float nrx, float nry, float nrz)=0;//modifica las rotaciones amtiguas de la interpolacion de la figura
     virtual void initPosicionesFisicas(float nx,float ny,float nz)=0;//inicializa las fisicas
     virtual void setID(int)=0;//nos sirve para definir el id que tiene esta figura
     virtual int getID()=0;//nos sirve para saber que id tiene esta figura
@@ -37,6 +44,7 @@ public:
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:
     //posiciones del objeto drawable
+    float moveTime, rotateTime; //variables para controlar la interpolacion del movimiento y la rotacion;
     float x = 0.0f;
     float y = 0.0f;
     float z = 0.0f;
@@ -49,6 +57,12 @@ protected:
     float rx = 0.0f;    //Rotacion
     float ry = 0.0f;
     float rz = 0.0f;
+    float newRx = 0.0f;
+    float newRy = 0.0f;
+    float newRz = 0.0f;
+    float lastRx = 0.0f;
+    float lastRy = 0.0f;
+    float lastRz = 0.0f;
     float fisX, fisY, fisZ; //Posicion para colocar las fisicas de los objetos
     float rotation = 90.0f; //en grados por defecto
     int id = -1;

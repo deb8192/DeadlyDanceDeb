@@ -369,12 +369,12 @@ void Enemigo::Interactuar(int id, int id2)
 
 }
 
-/*************** moverseEscenario *****************
+/*************** moverseEntidad *****************
  * Funcion con la que los enemigos se desplazaran
  * por el escenario mediante una interpolacion desde
  * el punto de origen al punto de destino
  */
-void Enemigo::moverseEscenario(float updTime)
+void Enemigo::moverseEntidad(float updTime)
 {
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
@@ -387,6 +387,27 @@ void Enemigo::moverseEscenario(float updTime)
 
     x = lastX * (1 - pt) + newX * pt;
     z = lastZ * (1 - pt) + newZ * pt;
+}
+
+/*************** rotarEntidad *****************
+ * Funcion con la que el enemigo rotara
+ * sobre si mismo mediante una interpolacion desde
+ * el punto de origen al punto de destino
+ */
+void Enemigo::RotarEntidad(float updTime)
+{
+    //pt es el porcentaje de tiempo pasado desde la posicion
+    //de update antigua hasta la nueva
+    float pt = moveTime / updTime;
+
+    if(pt > 1.0f)
+    {
+        pt = 1.0f;
+    }
+
+    rx = lastRx * (1 - pt) + newRx * pt;
+    ry = lastRy * (1 - pt) + newRy * pt;
+    rz = lastRz * (1 - pt) + newRz * pt;
 }
 
 void Enemigo::UpdateTimeMove(float updTime)
@@ -513,6 +534,29 @@ int Enemigo::getID()
 void Enemigo::setRotation(float rot)
 {
     rotation = rot;
+}
+
+void Enemigo::setRotacion(float nrx, float nry, float nrz)
+{
+    rx = nrx;
+    ry = nry;
+    rz = nrz;
+}
+
+void Enemigo::setNewRotacion(float nrx, float nry, float nrz)
+{
+    rotateTime = 0.0;
+    this->setLastRotacion(newRx, newRy, newRz);
+    newRx = nrx;
+    newRy = nry;
+    newRz = nrz;
+}
+
+void Enemigo::setLastRotacion(float nrx, float nry, float nrz)
+{
+    lastRx = nrx;
+    lastRy = nry;
+    lastRz = nrz;
 }
 
 void Enemigo::setAtackTime(float t)
