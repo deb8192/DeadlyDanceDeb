@@ -17,12 +17,22 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         
         //drawable metodos
         void setPosiciones(float nx,float ny,float nz);
+        void setNewPosiciones(float nx,float ny,float nz);//modifica las posiciones finales de la interpolacion de la figura
+        void setLastPosiciones(float nx,float ny,float nz);
+        void setPosicionesFisicas(float nx,float ny,float nz);
+        void initPosicionesFisicas(float nx,float ny,float nz);
         void setID(int);
         int getID();
 
         float getX();
         float getY();
         float getZ();
+        float getNewX();
+        float getNewY();
+        float getNewZ();
+        float getLastX();
+        float getLastY();
+        float getLastZ();
         float getFisX();
         float getFisY();
         float getFisZ();

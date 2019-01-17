@@ -33,6 +33,35 @@ void Recolectable::setPosiciones(float nx,float ny,float nz)
     y = ny;
     z = nz;
 }
+
+void Recolectable::setLastPosiciones(float nx,float ny,float nz)
+{
+    lastX = nx;
+    lastY = ny;
+    lastZ = nz;
+}
+
+void Recolectable::setNewPosiciones(float nx,float ny,float nz)
+{
+    newX = nx;
+    newY = ny;
+    newZ = nz;
+}
+
+void Recolectable::initPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX = nx;
+    fisY = ny;
+    fisZ = nz;
+}
+
+void Recolectable::setPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX += nx;
+    fisY += ny;
+    fisZ += nz;
+}
+
 int Recolectable::getAtaque()
 {
     return potenciaAtaque;
@@ -61,6 +90,36 @@ float Recolectable::getY()
 float Recolectable::getZ()
 {
     return z;
+}
+
+float Recolectable::getNewX()
+{
+    return newX;
+}
+
+float Recolectable::getNewY()
+{
+    return newY;
+}
+
+float Recolectable::getNewZ()
+{
+    return newZ;
+}
+
+float Recolectable::getLastX()
+{
+    return lastX;
+}
+
+float Recolectable::getLastY()
+{
+    return lastY;
+}
+
+float Recolectable::getLastZ()
+{
+    return lastZ;
 }
 
 float Recolectable::getFisX()
