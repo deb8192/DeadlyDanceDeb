@@ -16,9 +16,16 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         ~Recolectable();
         
         //drawable metodos
+        void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
+        void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
+        void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
+
         void setPosiciones(float nx,float ny,float nz);
         void setNewPosiciones(float nx,float ny,float nz);//modifica las posiciones finales de la interpolacion de la figura
         void setLastPosiciones(float nx,float ny,float nz);
+        void setRotacion(float nrx, float nry, float nrz);
+        void setNewRotacion(float nrx, float nry, float nrz);
+        void setLastRotacion(float nrx, float nry, float nrz);
         void setPosicionesFisicas(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
         void setID(int);

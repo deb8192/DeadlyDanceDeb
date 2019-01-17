@@ -390,7 +390,7 @@ void Nivel::update()
         //drawTime = controladorTiempo->getTiempo(2);
         /*for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-           // enemigos.at(i)->moverseEscenario(1 / controladorTiempo->getUpdateTime());
+           // enemigos.at(i)->moverseEntidad(1 / controladorTiempo->getUpdateTime());
             //enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
             motor->mostrarEnemigos(enemigos.at(i)->getX(),
                 enemigos.at(i)->getY(),
@@ -932,7 +932,8 @@ void Nivel::Draw()
     drawTime = controladorTiempo->getTiempo(2);
 
     //Dibujado del personaje
-    jugador.moverseEscenario(1 / controladorTiempo->getUpdateTime());
+    jugador.moverseEntidad(1 / controladorTiempo->getUpdateTime());
+    jugador.RotarEntidad(1 / controladorTiempo->getUpdateTime());
     jugador.UpdateTimeMove(drawTime - lastDrawTime);
     motor->mostrarJugador(jugador.getX(),
         jugador.getY(),
@@ -945,7 +946,7 @@ void Nivel::Draw()
     //Dibujado de los enemigos
     for(unsigned int i = 0; i < enemigos.size(); i++)
     {
-        enemigos.at(i)->moverseEscenario(1 / controladorTiempo->getUpdateTime());
+        enemigos.at(i)->moverseEntidad(1 / controladorTiempo->getUpdateTime());
         enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
         motor->mostrarEnemigos(enemigos.at(i)->getX(),
             enemigos.at(i)->getY(),
@@ -981,27 +982,35 @@ void Nivel::Draw()
         2);*/
 
     //Ataque especial bailaora
-    motor->mostrarArmaEspecial(
-        jugador.GetDatosAtEsp()[0],
-        jugador.GetDatosAtEsp()[1],
-        jugador.GetDatosAtEsp()[2],
-        jugador.GetDatosAtEsp()[3],
-        jugador.GetDatosAtEsp()[4],
-        jugador.GetDatosAtEsp()[5]);
+    if(jugador.getTimeAtEsp() > 0.0f)
+    {
+        jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+        jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+        jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
+        
+        motor->mostrarArmaEspecial(
+            jugador.GetDatosAtEsp()[0],
+            jugador.GetDatosAtEsp()[1],
+            jugador.GetDatosAtEsp()[2],
+            jugador.GetDatosAtEsp()[3],
+            jugador.GetDatosAtEsp()[4],
+            jugador.GetDatosAtEsp()[5]);
 
-    motor->clearDebug2(); //Pruebas debug
+        motor->clearDebug2(); //Pruebas debug
 
-    motor->dibujarObjetoTemporal(
-        jugador.GetDatosAtEsp()[0],
-        jugador.GetDatosAtEsp()[1],
-        jugador.GetDatosAtEsp()[2],
-        jugador.GetDatosAtEsp()[3],
-        jugador.GetDatosAtEsp()[4],
-        jugador.GetDatosAtEsp()[5],
-        8,
-        1,
-        8,
-        3);
+        motor->dibujarObjetoTemporal(
+            jugador.GetDatosAtEsp()[0],
+            jugador.GetDatosAtEsp()[1],
+            jugador.GetDatosAtEsp()[2],
+            jugador.GetDatosAtEsp()[3],
+            jugador.GetDatosAtEsp()[4],
+            jugador.GetDatosAtEsp()[5],
+            8,
+            1,
+            8,
+            3);
+    }
+    
 
 }
 

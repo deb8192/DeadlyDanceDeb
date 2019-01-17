@@ -23,13 +23,17 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         ~Jugador();
         Jugador(int,int,int,int,int,int,std::string malla);//defines tu la informacion del jugador
         void movimiento(float dt,bool a, bool s, bool d, bool w);
-        void moverseEscenario(float);//Realiza el desplazamiento mediante la interpolacion
+        void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
+        void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
         void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
 
         //drawable metodos
         void setPosiciones(float nx,float ny,float nz);
         void setNewPosiciones(float nx,float ny,float nz);//modifica las posiciones finales de la interpolacion de la figura
         void setLastPosiciones(float nx,float ny,float nz);
+        void setRotacion(float nrx, float nry, float nrz);
+        void setNewRotacion(float nrx, float nry, float nrz);
+        void setLastRotacion(float nrx, float nry, float nrz);
         void setPosicionesFisicas(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
 
@@ -117,7 +121,6 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float danyo_arma = 10.0f;
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc;
         float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
-        float moveTime;
         int tipo_arma = 2;
         vector <unsigned int> atacados_normal;
         int dinero = 0;

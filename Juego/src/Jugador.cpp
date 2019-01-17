@@ -138,15 +138,15 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     /*x = px;
     z = pz;*/
     setNewPosiciones(px, y, pz);
-    ry = deg;
+    setNewRotacion(rx, deg, rz);
 }
 
-/*************** moverseEscenario *****************
- * Funcion con la que el enemigo se desplazaran
+/*************** moverseEntidad *****************
+ * Funcion con la que el jugador se desplazaran
  * por el escenario mediante una interpolacion desde
  * el punto de origen al punto de destino
  */
-void Jugador::moverseEscenario(float updTime)
+void Jugador::moverseEntidad(float updTime)
 {
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
@@ -159,6 +159,27 @@ void Jugador::moverseEscenario(float updTime)
 
     x = lastX * (1 - pt) + newX * pt;
     z = lastZ * (1 - pt) + newZ * pt;
+}
+
+/*************** rotarEntidad *****************
+ * Funcion con la que el jugador rotara
+ * sobre si mismo mediante una interpolacion desde
+ * el punto de origen al punto de destino
+ */
+void Jugador::RotarEntidad(float updTime)
+{
+    //pt es el porcentaje de tiempo pasado desde la posicion
+    //de update antigua hasta la nueva
+    float pt = moveTime / updTime;
+
+    if(pt > 1.0f)
+    {
+        pt = 1.0f;
+    }
+
+    rx = lastRx * (1 - pt) + newRx * pt;
+    ry = lastRy * (1 - pt) + newRy * pt;
+    rz = lastRz * (1 - pt) + newRz * pt;
 }
 
 void Jugador::UpdateTimeMove(float updTime)
@@ -365,6 +386,9 @@ int Jugador::AtacarEspecial()
             atgz = getRZ();
             incrAtDisCirc = 0.0;
 
+            armaEspecial->setNewPosiciones(atespx, atespy, atespz);
+            armaEspecial->setNewRotacion(getRX(), getRY(), getRZ());
+
             MotorFisicas* fisicas = MotorFisicas::getInstance();
             MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
@@ -395,7 +419,6 @@ int Jugador::AtacarEspecial()
         if(armaEquipada != NULL)
         {
             aumentosAtaque += (float) armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
-            //aumentosAtaque = roundf(aumentosAtaque * por10) / por10;  //FUNCION ROUND SEPARADA
         }
         aumentosAtaque *= 2;
         aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
@@ -493,6 +516,9 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
         {
             atgy += 360;
         }
+
+        armaEspecial->setNewPosiciones(atespx, atespy, atespz);
+        armaEspecial->setNewRotacion(getRX(), atgy, getRZ());
 
         /*motor->mostrarArmaEspecial(
             atespx,
@@ -692,12 +718,12 @@ float Jugador::getRZ()
 float * Jugador::GetDatosAtEsp()
 {
     float * atesp = new float [6];
-    atesp[0] = atespx;
-    atesp[1] = atespy;
-    atesp[2] = atespz;
-    atesp[3] = atgx;
-    atesp[4] = atgy;
-    atesp[5] = atgz;
+    atesp[0] = armaEspecial->getX();
+    atesp[1] = armaEspecial->getY();
+    atesp[2] = armaEspecial->getZ();
+    atesp[3] = armaEspecial->getRX();;
+    atesp[4] = armaEspecial->getRY();;
+    atesp[5] = armaEspecial->getRZ();;
 
     return atesp;
 }
@@ -809,6 +835,29 @@ void Jugador::setLastPosiciones(float nx,float ny,float nz)
     lastX = nx;
     lastY = ny;
     lastZ = nz;
+}
+
+void Jugador::setRotacion(float nrx, float nry, float nrz)
+{
+    rx = nrx;
+    ry = nry;
+    rz = nrz;
+}
+
+void Jugador::setNewRotacion(float nrx, float nry, float nrz)
+{
+    rotateTime = 0.0;
+    this->setLastRotacion(newRx, newRy, newRz);
+    newRx = nrx;
+    newRy = nry;
+    newRz = nrz;
+}
+
+void Jugador::setLastRotacion(float nrx, float nry, float nrz)
+{
+    lastRx = nrx;
+    lastRy = nry;
+    lastRz = nrz;
 }
 
 void Jugador::setNewPosiciones(float nx,float ny,float nz)
