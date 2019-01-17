@@ -16,20 +16,22 @@ times::~times(void)
 }
 
 //modificas los valores de frames y de numero de calculas de ia por cada ciclo
-void times::setFrames(int valor, int ia)
+void times::setFrames(int valor, int update, int ia)
 {
     inicializar();
     numero_frames = valor;
     tiempo_frame = milisegundos/valor;
     numero_updateia = ia;
     tiempo_ia =1000/(ia+1);
+    numero_update = update;
+    tiempo_update = milisegundos/update;
     //std::cout << "Numero de frames: "<< numero_frames << std::endl;
     //std::cout << "Tiempo de cada frame: "<< tiempo_frame << std::endl;
     //std::cout << "Numero de actualizaciones ia por segundo: "<< numero_updateia << std::endl;
     //std::cout << "Tiempo hasta cada update ia: "<< tiempo_ia << std::endl;
 }
 //dice cuando se debe ejecutar el siguiente frame
-bool times::EjecutoUpdate()
+bool times::EjecutoDraw()
 {
     if(tiempoInicio != 0.0)
     {
@@ -69,19 +71,37 @@ bool times::EjecutoUpdate()
     //std::cout << "no se ejecuta" << std::endl;
     return false;
 }
-//dice cuando se debe ejecutar la ia
-bool times::EjecutoIA()
+//dice cuando se debe ejecutar update
+bool times::EjecutoUpdate()
 {
     unsigned tiempo_ahora = clock();
     float tiempo_restante = (float(tiempo_ahora-tiempoInicio2)/(CLOCKS_PER_SEC/1000.0f));
     if(tiempoInicio2 != 0.0)
     {
-        if(tiempo_restante >= tiempo_ia && tiempo_restante < (tiempo_ia+tiempo_frame))
+        /*if(tiempo_restante >= tiempo_update && tiempo_restante < (tiempo_update+tiempo_frame))
         {
             //std::cout << "Ejecuto ia" << std::endl;
             tiempoInicio2 = clock();
             return true;        
-        }
+        }*/
+        if(tiempo_restante >= tiempo_update)
+        {
+           //pasamos frame
+           int cuantos_sumar = (tiempo_restante/tiempo_update);
+           if((update_actual+cuantos_sumar)  < numero_update)
+           {
+               update_actual=update_actual+cuantos_sumar;   
+               //std::cout << frame_actual << std::endl;
+           }
+           else //si no se pasa al siguiente frame del nuevo ciclo 
+           { 
+               //std::cout << clock()/CLOCKS_PER_SEC << std::endl;
+               tiempoInicio3 = clock();
+               update_actual = 1;
+           }
+           tiempoInicio2 = clock();//cogemos el contador ahora de tiempo
+           return true;//ya se puede ejecutar
+       }
         else
         {
             return false;
@@ -91,6 +111,32 @@ bool times::EjecutoIA()
     if(tiempoInicio2 == 0.0)
     {
         tiempoInicio2 = clock();
+    }
+
+    return false;
+}
+//dice cuando se debe ejecutar la ia
+bool times::EjecutoIA()
+{
+    unsigned tiempo_ahora = clock();
+    float tiempo_restante = (float(tiempo_ahora-tiempoInicio3)/(CLOCKS_PER_SEC/1000.0f));
+    if(tiempoInicio3 != 0.0)
+    {
+        if(tiempo_restante >= tiempo_ia && tiempo_restante < (tiempo_ia+tiempo_update))
+        {
+            //std::cout << "Ejecuto ia" << std::endl;
+            tiempoInicio3 = clock();
+            return true;        
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    if(tiempoInicio3 == 0.0)
+    {
+        tiempoInicio3 = clock();
     }
 
     return false;
@@ -140,3 +186,23 @@ void times::inicializar()
     tiempoInicio2 = 0.0;
     tiempo_pasado = 0.0;
 }
+
+float times::getUpdateIATime()
+{
+    return numero_updateia;   //Aquí se deberia devolver el tiempo de actualizacion, no el de dibujado
+}
+
+float times::getUpdateTime()
+{
+    return numero_update;   //Aquí se deberia devolver el tiempo de actualizacion, no el de dibujado
+}
+
+float times::getUpdateFrame()
+{
+    return numero_frames;   //Aquí se deberia devolver el tiempo de dibujado
+}
+
+/*float times::getDrawingTime()
+{
+
+}*/

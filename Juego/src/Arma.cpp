@@ -38,6 +38,34 @@ void Arma::setPosiciones(float nx,float ny,float nz)
     y = ny;
     z = nz;
 }
+
+void Arma::setLastPosiciones(float nx,float ny,float nz)
+{
+    lastX = nx;
+    lastY = ny;
+    lastZ = nz;
+}
+
+void Arma::setNewPosiciones(float nx,float ny,float nz)
+{
+    newX = nx;
+    newY = ny;
+    newZ = nz;
+}
+
+void Arma::initPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX = nx;
+    fisY = ny;
+    fisZ = nz;
+}
+
+void Arma::setPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX += nx;
+    fisY += ny;
+    fisZ += nz;
+}
 void Arma::setPosicionesArmaEsp(float nx,float ny,float nz, float ry)
 {
     float mx = nx + 6.5*(sin(DEGTORAD*ry));
@@ -80,6 +108,36 @@ float Arma::getY()
 float Arma::getZ()
 {
     return z;
+}
+
+float Arma::getNewX()
+{
+    return newX;
+}
+
+float Arma::getNewY()
+{
+    return newY;
+}
+
+float Arma::getNewZ()
+{
+    return newZ;
+}
+
+float Arma::getLastX()
+{
+    return lastX;
+}
+
+float Arma::getLastY()
+{
+    return lastY;
+}
+
+float Arma::getLastZ()
+{
+    return lastZ;
 }
 
 float Arma::getFisX()

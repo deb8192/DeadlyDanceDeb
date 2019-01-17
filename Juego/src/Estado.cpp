@@ -20,6 +20,7 @@ void Menu::Clean()
 
 void Menu::Update()
 {
+
     MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorMenu();
 
@@ -43,9 +44,13 @@ void Menu::Input()
     
 }
 
+//Funcion de dibujado
 void Jugando::Draw()
 {
-    //se llaman a los draw de los diferentes objetos
+    MotorGrafico *motor = MotorGrafico::getInstance();
+    Nivel * nivel = Nivel::getInstance();
+    nivel->Draw();
+    motor->updateMotorJuego();// se actualiza lo que se ve por pantalla
 }
 
 void Jugando::Clean()
@@ -74,7 +79,7 @@ void Jugando::Update()
     SenseEventos *sense = SenseEventos::getInstance();
     sense->update();//se actualizan sentidos
     nivel->update();//se actualiza posiciones y interpolado
-    motor->updateMotorJuego();// se actualiza lo que se ve por pantalla
+    //motor->updateMotorJuego();// se actualiza lo que se ve por pantalla
 
     //Actualiza el motor de audio
     MotorAudioSystem *motora = MotorAudioSystem::getInstance();
@@ -100,7 +105,8 @@ int Jugando::Esta()
 
 void Cinematica::Draw()
 {
-    //em
+    MotorGrafico *motor = MotorGrafico::getInstance();
+    motor->updateMotorCinematica();
 }
 
 void Cinematica::Clean()
@@ -115,8 +121,7 @@ void Cinematica::Input()
 
 void Cinematica::Update()
 {
-    MotorGrafico *motor = MotorGrafico::getInstance();
-    motor->updateMotorCinematica();
+    //em
 }
 void Cinematica::Init()
 {
