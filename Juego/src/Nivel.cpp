@@ -462,13 +462,13 @@ void Nivel::update()
                 int danyo_jug = 0;
                 enemigos[i]->setPosAtaques(i);
                 tiempoActual = controladorTiempo->getTiempo(2);
-                //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
+                //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
                 if(enemigos[i]->getTimeAtEsp() > 0.0f)
                 {
                     tiempoAtaqueEsp = enemigos[i]->getTimeAtEsp();
                     tiempoAtaqueEsp -= (tiempoActual - enemigos[i]->getLastTimeAtEsp());
                     enemigos[i]->setLastTimeAtEsp(tiempoActual);
-                    enemigos[i]->setTimeAtEsp(tiempoAtaqueEsp); //restar uno al tiempo de ataque
+                    enemigos[i]->setTimeAtEsp(tiempoAtaqueEsp); //restar al tiempo de ataque
                 }
                 if(enemigos[i]->getTimeAtEsp() <= 0.0f)
                 {
@@ -483,18 +483,26 @@ void Nivel::update()
                 if(danyo_jug == 0)
                 {
                     //cout << "Enemigo " << i  << " pos: " << enemigos[i]->getPosAtaques() << endl;
+                    
+                    //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
+                    if(enemigos[i]->getTimeAt() > 0.0f)
+                    {
+                        tiempoAtaque = enemigos[i]->getTimeAt();
+                        tiempoAtaque -= (tiempoActual - enemigos[i]->getLastTimeAt());
+                        enemigos[i]->setLastTimeAt(tiempoActual);
+                        enemigos[i]->setTimeAt(tiempoAtaque); //restar al tiempo de ataque
+                    }
+                    if(enemigos[i]->getTimeAt() <= 0.0f)
+                    {
+                        danyo_jug = enemigos[i]->Atacar();
+                        enemigos[i]->setTimeAt(1.5f); //tiempo hasta el proximo ataque
+                        enemigos[i]->setLastTimeAt(controladorTiempo->getTiempo(2));
+                    }
                     //Si el enemigo ha realizado danyo
-                    danyo_jug = enemigos[i]->Atacar();
                     if(danyo_jug > 0)
                     {
                         jugador.QuitarVida(danyo_jug);
                         cout<< "Vida jugador: "<< jugador.getVida() << endl;
-                        enemigos[i]->setTimeAt(1.5f); //tiempo hasta el proximo ataque
-                    }
-                    //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
-                    if(enemigos[i]->getTimeAt() > 0.0f)
-                    {
-                        enemigos[i]->setTimeAt(enemigos[i]->getTimeAt() - 1.0f); //restar uno al tiempo de ataque
                     }
                 }
                 //Se le quita vida con el danyo del ataque especial
