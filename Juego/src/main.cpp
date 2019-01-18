@@ -14,7 +14,7 @@ int main()
 	
 	juego->InicializarVentana();
 	// se debe dar valor a las variables de interpolacion antes del bucle
-	juego->setNivelThen();
+	//juego->setNivelThen();
 	tiempo->setFrames(60,15,4);//definimos a cuanto queremos que vaya el programa
 	while(juego->Running())//comprobamos que esta activo el dispositivo
 	{

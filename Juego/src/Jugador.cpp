@@ -59,8 +59,8 @@ Jugador::Jugador(int,int,int,int,int,int,std::string malla)
 
 void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
 {
-    float px = x,
-          pz = z;
+    float px = newX,
+          pz = newZ;
 
     if(w || s || a || d)
     {
@@ -298,10 +298,10 @@ void Jugador::AtacarUpdate(int danyo)
     }
     else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
     {
-      atz += (0.02 * cos(PI * atgy / PIRADIAN));
-      atx += (0.02 * sin(PI * atgy / PIRADIAN));
-      atposZ += (0.02 * cos(PI * atgy / PIRADIAN));
-      atposX += (0.02 * sin(PI * atgy / PIRADIAN));
+      atz += (1.5 * cos(PI * atgy / PIRADIAN));
+      atx += (1.5 * sin(PI * atgy / PIRADIAN));
+      atposZ += (1.5 * cos(PI * atgy / PIRADIAN));
+      atposX += (1.5 * sin(PI * atgy / PIRADIAN));
 
 
       fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
@@ -393,15 +393,16 @@ int Jugador::AtacarEspecial()
             MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
             //Posiciones en el mundo 3D
-            atespposX = (atespx/2);
+            armaEspecial->initPosicionesFisicas(atespx/2, getY()/2, atespz/2);
+            /*atespposX = (atespx/2);
             atespposY = (getY()/2);
-            atespposZ = (atespz/2);
+            atespposZ = (atespz/2);*/
 
             //ATAQUE ESPECIAL DEL HEAVY
             if(strcmp(armaEspecial->getNombre(), NOMBREHEAVY) == 0)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,1,8,5);
+                fisicas->crearCuerpo(0,armaEspecial->getFisX(),armaEspecial->getFisY(),armaEspecial->getFisZ(),2,8,1,8,5);
                 motora->getEvent("Arpa")->setVolume(0.8f);
                 motora->getEvent("Arpa")->start();
             }
@@ -409,7 +410,7 @@ int Jugador::AtacarEspecial()
             else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,8,8,5);
+                fisicas->crearCuerpo(0,armaEspecial->getFisX(),armaEspecial->getFisY(),armaEspecial->getFisZ(),2,8,8,8,5);
                 motora->getEvent("Arpa")->start();
             }
         }
@@ -465,15 +466,14 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
         //Calculo de la posicion del arma delante  int getAnimacion();del jugador
         atespx = 6.5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
         atespz = 6.5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
-        atespposX = atespx/2;
-        atespposZ = atespz/2;
-        atgy = this->getY();
+        armaEspecial->initPosicionesFisicas(atespx/2, this->getY()/2, atespz/2);
+        armaEspecial->setNewPosiciones(atespx, this->getY(), atespz);
+        armaEspecial->setNewRotacion(getRX(), this->getRY(), getRZ());
 
-
-        motor->mostrarArmaEspecial(
-            this->getX(),
+        /*motor->mostrarArmaEspecial(
+            atespx,
             this->getY(),
-            this->getZ(),
+            atespz,
             this->getRX(),
             this->getRY(),
             this->getRZ());
@@ -490,7 +490,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
             8,
             1,
             8,
-            2);
+            2);*/
     }
 
     //Si el ataque especial es el de la Bailaora, es circular a distancia
@@ -502,8 +502,9 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
         atespz += (incrAtDisCirc * cos(PI * atgy / PIRADIAN));
         atespx = this->getX();
         atespx += (incrAtDisCirc * sin(PI * atgy / PIRADIAN));
-        atespposZ = atespz/2;
-        atespposX = atespx/2;
+        atespposZ = atespz - this->getZ();
+        atespposX = atespx - this->getX();
+        armaEspecial->setPosicionesFisicas(atespposZ, 0.0f, atespposZ);
 
         //Aumento de la rotacion hacia la izquierda.
         atgy += 30;
@@ -517,7 +518,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
             atgy += 360;
         }
 
-        armaEspecial->setNewPosiciones(atespx, atespy, atespz);
+        armaEspecial->setNewPosiciones(atespx, this->getY(), atespz);
         armaEspecial->setNewRotacion(getRX(), atgy, getRZ());
 
         /*motor->mostrarArmaEspecial(
@@ -544,7 +545,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
             */
     }
     //lista de enteros que senyalan a los enemigos atacados
-    vector <unsigned int> atacados = fisicas->updateArmaEspecial(atespposX,atgy,atespposZ);
+    vector <unsigned int> atacados = fisicas->updateArmaEspecial(armaEspecial->getFisX(),armaEspecial->getFisY(),armaEspecial->getFisZ());
 
     //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
     //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
@@ -796,6 +797,17 @@ int * Jugador::getBuffos()
     int * valores = new int[6];
     return valores;
 }
+
+float Jugador::getTimeAt()
+{
+    return atackTime;
+}
+
+float Jugador::getLastTimeAt()
+{
+    return lastAtackTime;
+}
+
 float Jugador::getTimeAtEsp()
 {
     return atackEspTime;
@@ -975,6 +987,18 @@ void Jugador::setProAtaCritico(int probabilidad)
 {
     proAtaCritico = probabilidad;
 }
+
+void Jugador::setTimeAt(float time)
+{
+    atackTime = time;
+}
+
+void Jugador::setLastTimeAt(float time)
+{
+    lastAtackTime = time;
+}
+
+
 void Jugador::setTimeAtEsp(float time)
 {
     atackEspTime = time;
