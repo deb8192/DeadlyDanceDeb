@@ -332,14 +332,14 @@ void Nivel::update()
 
 
     //Interpolacion SE SUSTITUIRA
-    newTime = clock();
+    /*newTime = clock();
     frameTime = newTime - currentTime;
     if(frameTime>0.25f)
     {
         frameTime=0.25f;
     }
     currentTime = newTime;
-    acumulator += frameTime;
+    acumulator += frameTime;*/
     //while(acumulator >= dt)
     //{
 
@@ -437,7 +437,7 @@ void Nivel::update()
             jugador.AtacarEspecialUpdate(&danyo);
         }
 
-        else if(atacktime > 0.0)
+        else if(jugador.getTimeAt() > 0.0)
         {
             jugador.AtacarUpdate(danyo2);
         }
@@ -456,15 +456,15 @@ void Nivel::update()
        //actualizamos los enemigos
        if(enemigos.size() > 0)//posiciones interpolacion
        {
-           float tiempoActual = 0.0f, tiempoAtaqueEsp = 0.0f;
+           float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
            for(std::size_t i=0;i<enemigos.size();i++)
            {
                 int danyo_jug = 0;
                 enemigos[i]->setPosAtaques(i);
+                tiempoActual = controladorTiempo->getTiempo(2);
                 //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
                 if(enemigos[i]->getTimeAtEsp() > 0.0f)
                 {
-                    tiempoActual = controladorTiempo->getTiempo(2);
                     tiempoAtaqueEsp = enemigos[i]->getTimeAtEsp();
                     tiempoAtaqueEsp -= (tiempoActual - enemigos[i]->getLastTimeAtEsp());
                     enemigos[i]->setLastTimeAtEsp(tiempoActual);
@@ -489,12 +489,12 @@ void Nivel::update()
                     {
                         jugador.QuitarVida(danyo_jug);
                         cout<< "Vida jugador: "<< jugador.getVida() << endl;
-                        enemigos[i]->setAtackTime(1500.0f); //tiempo hasta el proximo ataque
+                        enemigos[i]->setTimeAt(1.5f); //tiempo hasta el proximo ataque
                     }
                     //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
-                    if(enemigos[i]->getAtackTime() > 0.0f)
+                    if(enemigos[i]->getTimeAt() > 0.0f)
                     {
-                        enemigos[i]->setAtackTime(enemigos[i]->getAtackTime() - 1.0f); //restar uno al tiempo de ataque
+                        enemigos[i]->setTimeAt(enemigos[i]->getTimeAt() - 1.0f); //restar uno al tiempo de ataque
                     }
                 }
                 //Se le quita vida con el danyo del ataque especial
@@ -522,18 +522,27 @@ void Nivel::update()
 
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 {
-  if((motor->estaPulsado(KEY_ESPACIO) || motor->estaPulsado(LMOUSE_DOWN)) && atacktime == 0.0f)
+
+    float tiempoActual = 0.0f;
+    float tiempoAtaque = 0.0f;
+    if((motor->estaPulsado(KEY_ESPACIO) || motor->estaPulsado(LMOUSE_DOWN)) && jugador.getTimeAt() <= 0.0f)
     {
         *danyo = jugador.Atacar();
         motor->resetKey(KEY_ESPACIO);
         motor->resetEvento(LMOUSE_DOWN);
-        atacktime = 1500.0f;
+        //atacktime = 1.5f;
+        jugador.setTimeAt(1.5f);
+        jugador.setLastTimeAt(controladorTiempo->getTiempo(2));
     }else{
-        if(atacktime > 0.0f)
+        if(jugador.getTimeAt() > 0.0f)
         {
-            atacktime--;
+            tiempoActual = controladorTiempo->getTiempo(2);
+            tiempoAtaque = jugador.getTimeAt();
+            tiempoAtaque -= (tiempoActual - jugador.getLastTimeAt());
+            jugador.setLastTimeAt(tiempoActual);
+            jugador.setTimeAt(tiempoAtaque);
         }
-        if(atacktime > 500.0f)
+        if(atacktime > 0.5f)
         {
             //Colorear rojo
             motor->colorearJugador(255,255,0,0);
@@ -544,7 +553,7 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
     }
 
     //clear
-    if(atacktime == 0.0f){
+    if(jugador.getTimeAt() <= 0.0f){
       motor->clearDebug2();
     }
 }
@@ -580,11 +589,12 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
             tiempoAtaqueEsp -= (tiempoActual - jugador.getLastTimeAtEsp());
             jugador.setLastTimeAtEsp(tiempoActual);
             jugador.setTimeAtEsp(tiempoAtaqueEsp);
-        }
-        if(jugador.getTimeAtEsp() > 0.f && (int) (jugador.getTimeAtEsp() * 100) % 25 == 0.f)
-        {
             danyo = jugador.AtacarEspecial();
         }
+        /*if(jugador.getTimeAtEsp() > 0.f && ((int) (jugador.getTimeAtEsp() * 100) % 10 >= 4) && ((int) (jugador.getTimeAtEsp() * 100) % 10 <= 4))
+        {
+            danyo = jugador.AtacarEspecial();
+        }*/
         if(jugador.getTimeAtEsp() == 1.0f)
         {
             motor->colorearEnemigo(255,255,255,255,0);
@@ -959,56 +969,67 @@ void Nivel::Draw()
     }
     //Dibujado del ataque especial
     //Ataque especial Heavy
-    /*motor->mostrarArmaEspecial(
-            jugador.getX(),
-            jugador.getY(),
-            jugador.getZ(),
-            jugador.getRX(),
-            jugador.getRY(),
-            jugador.getRZ());
-
-    motor->clearDebug2();   //Pruebas debug
-
-    motor->dibujarObjetoTemporal(
-        jugador.GetAtEspPos()[0],
-        jugador.getY(),
-        jugador.GetAtEspPos()[2],
-        jugador.getRX(),
-        jugador.getRY(),
-        jugador.getRZ(),
-        8,
-        1,
-        8,
-        2);*/
-
+    
     //Ataque especial bailaora
     if(jugador.getTimeAtEsp() > 0.0f)
     {
-        jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
-        jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
-        jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
-        
-        motor->mostrarArmaEspecial(
-            jugador.GetDatosAtEsp()[0],
-            jugador.GetDatosAtEsp()[1],
-            jugador.GetDatosAtEsp()[2],
-            jugador.GetDatosAtEsp()[3],
-            jugador.GetDatosAtEsp()[4],
-            jugador.GetDatosAtEsp()[5]);
+        if(strcmp(jugador.getArmaEspecial()->getNombre(), "Heavy") == 0)
+        {
+            jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+            jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+            jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
+            
+            motor->mostrarArmaEspecial(
+                jugador.GetDatosAtEsp()[0],
+                jugador.getY(),
+                jugador.GetDatosAtEsp()[2],
+                jugador.getRX(),
+                jugador.getRY(),
+                jugador.getRZ());
 
-        motor->clearDebug2(); //Pruebas debug
+            motor->clearDebug2(); //Pruebas debug
 
-        motor->dibujarObjetoTemporal(
-            jugador.GetDatosAtEsp()[0],
-            jugador.GetDatosAtEsp()[1],
-            jugador.GetDatosAtEsp()[2],
-            jugador.GetDatosAtEsp()[3],
-            jugador.GetDatosAtEsp()[4],
-            jugador.GetDatosAtEsp()[5],
-            8,
-            1,
-            8,
-            3);
+            motor->dibujarObjetoTemporal(
+                jugador.getArmaEspecial()->getFisX()*2,
+                jugador.getY(),
+                jugador.getArmaEspecial()->getFisZ()*2,                
+                jugador.getRX(),
+                jugador.getRY(),
+                jugador.getRZ(),
+                8,
+                1,
+                8,
+                2);
+        }
+
+        else if(strcmp(jugador.getArmaEspecial()->getNombre(), "Bailaora") == 0)
+        {
+            jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+            jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+            jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
+            
+            motor->mostrarArmaEspecial(
+                jugador.GetDatosAtEsp()[0],
+                jugador.GetDatosAtEsp()[1],
+                jugador.GetDatosAtEsp()[2],
+                jugador.GetDatosAtEsp()[3],
+                jugador.GetDatosAtEsp()[4],
+                jugador.GetDatosAtEsp()[5]);
+
+            motor->clearDebug2(); //Pruebas debug
+
+            motor->dibujarObjetoTemporal(
+                jugador.getArmaEspecial()->getX(),
+                jugador.getArmaEspecial()->getY(),
+                jugador.getArmaEspecial()->getZ(),
+                jugador.GetDatosAtEsp()[3],
+                jugador.GetDatosAtEsp()[4],
+                jugador.GetDatosAtEsp()[5],
+                8,
+                1,
+                8,
+                3);
+        }
     }
     
 

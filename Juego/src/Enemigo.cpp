@@ -465,6 +465,16 @@ void Enemigo::setProAtaCritico(int probabilidad)
     proAtaCritico = probabilidad;
 }
 
+void Enemigo::setTimeAt(float time)
+{
+    atackTime = time;
+}
+
+void Enemigo::setLastTimeAt(float time)
+{
+    lastAtackTime = time;
+}
+
 void Enemigo::setTimeAtEsp(float time)
 {
     atackEspTime = time;
@@ -569,6 +579,15 @@ float Enemigo::getAtackTime()
   return atacktime;
 }
 
+float Enemigo::getTimeAt()
+{
+    return atackTime;
+}
+
+float Enemigo::getLastTimeAt()
+{
+    return lastAtackTime;
+}
 
 float Enemigo::getTimeAtEsp()
 {

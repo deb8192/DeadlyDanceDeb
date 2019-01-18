@@ -61,6 +61,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setProAtaCritico(int probabilidad);
         void setSala(Sala* sala);
         void setAtackTime(float t);
+        void setTimeAt(float time);
+        void setLastTimeAt(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
         void setRotation(float rot);
@@ -79,6 +81,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int* getBuffos();
         Sala* getSala();
         float getAtackTime();
+        float getTimeAt();
+        float getLastTimeAt();
         float getTimeAtEsp();
         float getLastTimeAtEsp();
         float getX();

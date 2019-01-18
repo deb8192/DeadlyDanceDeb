@@ -64,9 +64,12 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
+        void setTimeAt(float time);
+        void setLastTimeAt(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
 
+        //gets de npc
         int getVida();
         int getTipo();
         int getBarraAtEs();
@@ -80,8 +83,11 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int* getBuffos();
         float getTimeAtEsp();
         float getLastTimeAtEsp();
+        float getTimeAt();
+        float getLastTimeAt();
         const char *getRutaArmaEsp();
 
+        //gets de drawable
         float getX();
         float getY();
         float getZ();
@@ -115,7 +121,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         Arma *armaEspecial;
         //PRUEBAS ATAQUE ESPECIAL
         const char * rutaArmaEspecial = "assets/models/Arma.obj";
-        const char * nombreJugador = "Bailaora";
+        const char * nombreJugador = "Heavy";
         //!PRUEBAS ATAQUE ESPECIAL
        //  core::vector3df dir;
         float danyo_arma = 10.0f;
