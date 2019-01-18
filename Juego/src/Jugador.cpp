@@ -469,28 +469,6 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
         armaEspecial->initPosicionesFisicas(atespx/2, this->getY()/2, atespz/2);
         armaEspecial->setNewPosiciones(atespx, this->getY(), atespz);
         armaEspecial->setNewRotacion(getRX(), this->getRY(), getRZ());
-
-        /*motor->mostrarArmaEspecial(
-            atespx,
-            this->getY(),
-            atespz,
-            this->getRX(),
-            this->getRY(),
-            this->getRZ());
-
-        motor->clearDebug2();   //Pruebas debug
-
-        motor->dibujarObjetoTemporal(
-            atespx,
-            this->getY(),
-            atespz,
-            this->getRX(),
-            this->getRY(),
-            this->getRZ(),
-            8,
-            1,
-            8,
-            2);*/
     }
 
     //Si el ataque especial es el de la Bailaora, es circular a distancia
@@ -520,29 +498,6 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
 
         armaEspecial->setNewPosiciones(atespx, this->getY(), atespz);
         armaEspecial->setNewRotacion(getRX(), atgy, getRZ());
-
-        /*motor->mostrarArmaEspecial(
-            atespx,
-            atespy,
-            atespz,
-            atgx,
-            atgy,
-            atgz);
-
-        motor->clearDebug2(); //Pruebas debug
-
-        motor->dibujarObjetoTemporal(
-            atespx,
-            atespy,
-            atespz,
-            atgx,
-            atgy,
-            atgz,
-            8,
-            1,
-            8,
-            3);
-            */
     }
     //lista de enteros que senyalan a los enemigos atacados
     vector <unsigned int> atacados = fisicas->updateArmaEspecial(armaEspecial->getFisX(),armaEspecial->getFisY(),armaEspecial->getFisZ());

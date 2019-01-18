@@ -18,25 +18,17 @@ int main()
 	tiempo->setFrames(60,15,4);//definimos a cuanto queremos que vaya el programa
 	while(juego->Running())//comprobamos que esta activo el dispositivo
 	{
-		/*if(tiempo->EjecutoUpdate())
-		{
-			if(tiempo->EjecutoIA())
-			{
-				juego->UpdateIA();
-			}
-			juego->Update();//si lo esta actualizamos la escena
-		}*/
 		if(tiempo->EjecutoDraw())
 		{
 			if(tiempo->EjecutoUpdate())
 			{
-				juego->Update();//si lo esta actualizamos la escena	
 				if(tiempo->EjecutoIA())
 				{
-					juego->UpdateIA();
+					juego->UpdateIA();//si lo esta actualizamos la IA	
 				}
+				juego->Update();//si lo esta actualizamos la escena	
 			}
-			juego->Draw();
+			juego->Draw();//si lo esta dibujamos la escena	
 		}
 	}
 	juego->LimpiarVentana(); //si no lo esta borramos de memoria el dispositivo
