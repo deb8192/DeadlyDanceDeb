@@ -23,9 +23,20 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         ~Jugador();
         Jugador(int,int,int,int,int,int,std::string malla);//defines tu la informacion del jugador
         void movimiento(float dt,bool a, bool s, bool d, bool w);
+        void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
+        void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
+        void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
 
         //drawable metodos
         void setPosiciones(float nx,float ny,float nz);
+        void setNewPosiciones(float nx,float ny,float nz);//modifica las posiciones finales de la interpolacion de la figura
+        void setLastPosiciones(float nx,float ny,float nz);
+        void setRotacion(float nrx, float nry, float nrz);
+        void setNewRotacion(float nrx, float nry, float nrz);
+        void setLastRotacion(float nrx, float nry, float nrz);
+        void setPosicionesFisicas(float nx,float ny,float nz);
+        void initPosicionesFisicas(float nx,float ny,float nz);
+
         void setID(int);
         int getID();
         //Metodos Muere jugador y enemigo
@@ -53,9 +64,12 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
+        void setTimeAt(float time);
+        void setLastTimeAt(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
 
+        //gets de npc
         int getVida();
         int getTipo();
         int getBarraAtEs();
@@ -69,17 +83,27 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int* getBuffos();
         float getTimeAtEsp();
         float getLastTimeAtEsp();
+        float getTimeAt();
+        float getLastTimeAt();
         const char *getRutaArmaEsp();
 
+        //gets de drawable
         float getX();
         float getY();
         float getZ();
+        float getNewX();
+        float getNewY();
+        float getNewZ();
+        float getLastX();
+        float getLastY();
+        float getLastZ();
         float getFisX();
         float getFisY();
         float getFisZ();
         float getRX();
         float getRY();
         float getRZ();
+        float * GetDatosAtEsp();
 
         //interfaz
         void updateInterfaz();//nos sirve para actualizar la info de la interfaz

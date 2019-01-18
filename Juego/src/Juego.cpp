@@ -54,9 +54,29 @@ void Juego::setNivelThen()
     nivel->setThen();
 }
 
-void Juego::Update()
+void Juego::Draw()
 {
     if(estado->QueEstado() == 3)
+    {
+        times * tiempo = times::getInstance();
+
+        if(tiempo->calcularTiempoPasado(marcaTiempo) >= tiempoTotal || motor->finalCinematica())
+        {
+            estado = &menu;
+            InicializarVentana();
+        }
+
+        estado->Pintar();
+    }
+    else
+    {
+        estado->Pintar();
+    }
+}
+
+void Juego::Update()
+{
+    /*if(estado->QueEstado() == 3)
     {
         times * tiempo = times::getInstance();
 
@@ -69,7 +89,7 @@ void Juego::Update()
         estado->Actualizar();
     }
     else
-    {
+    {*/
         estado->Actualizar();
         //con esto se llama al update adecuado
         //cout << "\e[24m Aqui \e[0m" << endl;
@@ -134,7 +154,7 @@ void Juego::Update()
             motor->resetEvento(GUI_ID_BACK_MENU_BUTTON);
             estado = &menu;
         }
-    }
+    //}
 }
 
 //se llama cuando se presiona un boton de salir del juego.
