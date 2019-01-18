@@ -32,6 +32,36 @@ float Enemigo::getZ()
     return z;
 }
 
+float Enemigo::getNewX()
+{
+    return newX;
+}
+
+float Enemigo::getNewY()
+{
+    return newY;
+}
+
+float Enemigo::getNewZ()
+{
+    return newZ;
+}
+
+float Enemigo::getLastX()
+{
+    return lastX;
+}
+
+float Enemigo::getLastY()
+{
+    return lastY;
+}
+
+float Enemigo::getLastZ()
+{
+    return lastZ;
+}
+
 float Enemigo::getFisX()
 {
     return fisX;
@@ -60,6 +90,11 @@ float Enemigo::getRY()
 float Enemigo::getRZ()
 {
     return rz;
+}
+
+float Enemigo::getVelocidad()
+{
+    return velocidad;
 }
 
 void Enemigo::definirSala(Sala * sala)
@@ -128,6 +163,22 @@ void Enemigo::setPosiciones(float nx,float ny,float nz)
     z = nz;
 }
 
+void Enemigo::setNewPosiciones(float nx,float ny,float nz)
+{
+    moveTime = 0.0;
+    this->setLastPosiciones(newX, newY, newZ);
+    newX = nx;
+    newY = ny;
+    newZ = nz;
+}
+
+void Enemigo::setLastPosiciones(float nx,float ny,float nz)
+{
+    lastX = nx;
+    lastY = ny;
+    lastZ = nz;
+}
+
 void Enemigo::initPosicionesFisicas(float nx,float ny,float nz)
 {
     fisX = nx;
@@ -140,6 +191,12 @@ void Enemigo::setPosicionesFisicas(float nx,float ny,float nz)
     fisX += nx;
     fisY += ny;
     fisZ += nz;
+}
+
+
+void Enemigo::setVelocidad(float newVelocidad)
+{
+    velocidad = newVelocidad;
 }
 
 int Enemigo::Atacar()
@@ -312,6 +369,52 @@ void Enemigo::Interactuar(int id, int id2)
 
 }
 
+/*************** moverseEntidad *****************
+ * Funcion con la que los enemigos se desplazaran
+ * por el escenario mediante una interpolacion desde
+ * el punto de origen al punto de destino
+ */
+void Enemigo::moverseEntidad(float updTime)
+{
+    //pt es el porcentaje de tiempo pasado desde la posicion
+    //de update antigua hasta la nueva
+    float pt = moveTime / updTime;
+
+    if(pt > 1.0f)
+    {
+        pt = 1.0f;
+    }
+
+    x = lastX * (1 - pt) + newX * pt;
+    z = lastZ * (1 - pt) + newZ * pt;
+}
+
+/*************** rotarEntidad *****************
+ * Funcion con la que el enemigo rotara
+ * sobre si mismo mediante una interpolacion desde
+ * el punto de origen al punto de destino
+ */
+void Enemigo::RotarEntidad(float updTime)
+{
+    //pt es el porcentaje de tiempo pasado desde la posicion
+    //de update antigua hasta la nueva
+    float pt = moveTime / updTime;
+
+    if(pt > 1.0f)
+    {
+        pt = 1.0f;
+    }
+
+    rx = lastRx * (1 - pt) + newRx * pt;
+    ry = lastRy * (1 - pt) + newRy * pt;
+    rz = lastRz * (1 - pt) + newRz * pt;
+}
+
+void Enemigo::UpdateTimeMove(float updTime)
+{
+    moveTime += updTime;
+}
+
 void Enemigo::setVida(int vid)
 {
     vida = vid;
@@ -360,6 +463,16 @@ void Enemigo::setDanyoCritico(int danyoC)
 void Enemigo::setProAtaCritico(int probabilidad)
 {
     proAtaCritico = probabilidad;
+}
+
+void Enemigo::setTimeAt(float time)
+{
+    atackTime = time;
+}
+
+void Enemigo::setLastTimeAt(float time)
+{
+    lastAtackTime = time;
 }
 
 void Enemigo::setTimeAtEsp(float time)
@@ -433,6 +546,29 @@ void Enemigo::setRotation(float rot)
     rotation = rot;
 }
 
+void Enemigo::setRotacion(float nrx, float nry, float nrz)
+{
+    rx = nrx;
+    ry = nry;
+    rz = nrz;
+}
+
+void Enemigo::setNewRotacion(float nrx, float nry, float nrz)
+{
+    rotateTime = 0.0;
+    this->setLastRotacion(newRx, newRy, newRz);
+    newRx = nrx;
+    newRy = nry;
+    newRz = nrz;
+}
+
+void Enemigo::setLastRotacion(float nrx, float nry, float nrz)
+{
+    lastRx = nrx;
+    lastRy = nry;
+    lastRz = nrz;
+}
+
 void Enemigo::setAtackTime(float t)
 {
   atacktime = t;
@@ -443,6 +579,15 @@ float Enemigo::getAtackTime()
   return atacktime;
 }
 
+float Enemigo::getTimeAt()
+{
+    return atackTime;
+}
+
+float Enemigo::getLastTimeAt()
+{
+    return lastAtackTime;
+}
 
 float Enemigo::getTimeAtEsp()
 {
