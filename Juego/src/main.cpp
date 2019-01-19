@@ -5,8 +5,8 @@
 
 int main()
 {
-	pruebaOpengl prueba;
-	prueba.crearVentana();
+	//pruebaOpengl prueba;
+	//prueba.crearVentana();
 	
 	cout << "\e[42m Iniciando Juego \e[0m" << endl;
 	Juego *juego = Juego::getInstance();
