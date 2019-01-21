@@ -708,6 +708,7 @@ float Jugador::getRZ()
     return rz;
 }
 
+//Devuelve la posicion y rotacion del ataque especial
 float * Jugador::GetDatosAtEsp()
 {
     float * atesp = new float [6];
