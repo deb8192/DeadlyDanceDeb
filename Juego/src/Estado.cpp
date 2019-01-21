@@ -67,7 +67,7 @@ void Jugando::Init()
 void Jugando::Input()
 {
     Nivel *nivel = Nivel::getInstance();
-    nivel->pulsarE();
+    nivel->InteractuarNivel();
 }
 
 void Jugando::Update()
