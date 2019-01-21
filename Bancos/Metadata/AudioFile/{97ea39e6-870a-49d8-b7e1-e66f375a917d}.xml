@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objects serializationModel="Studio.01.10.00">
-    <object class="AudioFile" id="{40abfaff-4ad9-4d52-aed9-c5a305bb6c16}">
+    <object class="AudioFile" id="{97ea39e6-870a-49d8-b7e1-e66f375a917d}">
         <property name="assetPath">
-            <value>SFX/SFX-Personaje Movimientos de rapidez-sonido1.wav</value>
-        </property>
-        <property name="isStreaming">
-            <value>true</value>
+            <value>SFX/SFX-Objetos Romper pared-break wall down 2.wav</value>
         </property>
         <property name="frequencyInKHz">
             <value>22.0499992</value>
         </property>
         <property name="channelCount">
-            <value>1</value>
+            <value>2</value>
         </property>
         <property name="length">
-            <value>56.689070294784578</value>
+            <value>1.5275283446712018</value>
         </property>
         <relationship name="masterAssetFolder">
             <destination>{a3dec2ad-2df2-4dd6-8baa-312f2925055e}</destination>
