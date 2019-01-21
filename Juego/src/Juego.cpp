@@ -98,7 +98,7 @@ void Juego::Update()
             //limpiamos el gui y la scena
             motor->borrarScena();
             motor->borrarGui();
-            nivel->CargarNivel(4);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
+            nivel->CargarNivel(5);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
             motor->resetEvento(GUI_ID_EMPEZAR_BUTTON);//reseteamos el evento
             Jugar();
         }
