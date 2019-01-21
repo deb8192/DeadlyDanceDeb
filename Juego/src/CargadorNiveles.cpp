@@ -107,7 +107,7 @@ void CargadorNiveles::GuardarNivelBin(int level)
 Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
 {
     Nivel * nivel_instancia = Nivel::getInstance();
-    Sala * hijo = nullptr;//sala hijo
+    Sala * padren = nullptr;//sala padre
     for (pugi::xml_node plat = hijo.child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
@@ -121,11 +121,11 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
         bool jugadorEstasAqui = plat.attribute("UserStar").as_bool();//nos devuelve true si es donde empieza el jugador 
         const char * textura = plat.attribute("Texture").value(); //nos da un char[] = string
         const char * modelo  =  plat.attribute("Model").value(); //nos da un char[] = string
-        hijo = nivel_instancia->CrearPlataforma(accion,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
+        padren = nivel_instancia->CrearPlataforma(accion,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
 
         if(padre != nullptr)
         {
-            padre->agregarSalida(hijo);
+            padre->agregarSalida(padren);
         }
 
         if(jugadorEstasAqui)
@@ -159,7 +159,7 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             int alto = enem.attribute("ancho").as_int();//nos devuelve un int
             const char * textura = enem.attribute("Texture").value(); //nos da un char[] = string
             const char * modelo  =  enem.attribute("Model").value(); //nos da un char[] = string
-            nivel_instancia->CrearEnemigo(accion,x,y,z,ancho,largo,alto,modelo,textura,propiedades,hijo); //cargamos el enemigo
+            nivel_instancia->CrearEnemigo(accion,x,y,z,ancho,largo,alto,modelo,textura,propiedades,padren); //cargamos el enemigo
         }
 
         for (pugi::xml_node obj = plat.child("Object"); obj; obj = obj.next_sibling("Object"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -182,11 +182,11 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             nivel_instancia->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
         }
 
-        Sala * entrada = crearSala(plat,hijo);
+        Sala * entrada = crearSala(plat,padren);
         //CAMBIO PARA VER SI FUNCIONA EL PATFHFINDING
         if(entrada != nullptr)
         {
-            hijo ->agregarEntrada(entrada); //esto se modificara
+            padren ->agregarEntrada(entrada); //esto se modificara
         }
     }
 
