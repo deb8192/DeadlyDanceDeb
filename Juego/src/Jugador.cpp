@@ -542,6 +542,43 @@ void Jugador::Interactuar(int id, int id2)
 
 }
 
+/***********AnnadirLlave************
+ * Metodo que anade la llave pasada por
+ * parametro al vector de llaves que
+ * posee el jugador
+ * Entradas:
+ *          Llave * llave: llave a anadir
+ */
+void Jugador::AnnadirLlave(Llave * llave)
+{
+    llaves.push_back(llave);
+    cout<<"Llave añadida. Nº de llaves: "<<llaves.size()<<endl;
+}
+
+/***********EliminarLlave************
+ * Metodo que elimina la llave pasada por
+ * parametro del vector de llaves que 
+ * posee el jugador
+ * Entradas:
+ *          Llave * llave: llave a eliminar
+ */
+void Jugador::EliminarLlave(Llave * llave)
+{
+    unsigned int i = 0;
+    bool encontrado = false;
+    while(!encontrado)
+    { 
+        i++;   
+        //Se elimina la llave si coinide con el codigo de la puerta de la llave pasada por parametro
+        if(llave->GetCodigoPuerta() == llaves.at(i)->GetCodigoPuerta())
+        {
+            llaves.erase(llaves.begin() + i);
+            encontrado = true;
+        }
+    }
+    llaves.push_back(llave);
+}
+
 void Jugador::updateInterfaz()
 {
     InterfazJugador * interfaz = InterfazJugador::getInstance();

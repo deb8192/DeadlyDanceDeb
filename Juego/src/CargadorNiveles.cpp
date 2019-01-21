@@ -167,6 +167,7 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             //aqui va la carga de objetos
             int * propiedades;
             propiedades = new int [6];//hay que destruirlo en nivel
+            int codigo = obj.attribute("codigo").as_int(); //se utiliza para asociar palancas y/o llaves a puertas
             int accion = obj.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
             int x = obj.attribute("X").as_int();//nos devuelve un int
             int y = obj.attribute("Y").as_int();//nos devuelve un int
@@ -178,7 +179,7 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             const char * nombre = obj.attribute("nombre").value(); //nos da un char[] = string
             const char * textura = obj.attribute("Texture").value(); //nos da un char[] = string
             const char * modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
-            nivel_instancia->CrearObjeto(accion,nombre,ataque,x,y,z,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
+            nivel_instancia->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
         }
 
         Sala * entrada = crearSala(plat,padren);

@@ -3,6 +3,7 @@
 #include "Enemigo.hpp"
 #include "CargadorNiveles.hpp"
 #include "pollo.hpp"
+#include "Interactuable.hpp"
 #include "Recolectable.hpp"
 #include "MotorAudio.hpp"
 #include "Pathfinder.hpp"
@@ -43,7 +44,7 @@ class Nivel
         //cargar objetos
         void CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void CrearObjeto(int accion, const char* nombre, int ataque, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         Sala * CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void EraseEnemigo(std::size_t i);
@@ -65,7 +66,7 @@ class Nivel
 
         void CogerObjeto();
         void DejarObjeto();
-        void pulsarE();
+        void InteractuarNivel();
 
     private:
 
@@ -79,7 +80,8 @@ class Nivel
         std::vector<Enemigo*> auxiliadores;  //Enemigos que responden a la ayuda
         Enemigo* enemPideAyuda = nullptr;  //Enemigos que pide ayuda
         std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
-        std::vector<Recolectable*> recolectables;
+        std::vector<Recolectable*> recolectables;//Objetos recolectables del mapa
+        std::vector<Interactuable*> interactuables; //Objetos interactuables del mapa
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala * primeraSala;// la primera sala del arbol
