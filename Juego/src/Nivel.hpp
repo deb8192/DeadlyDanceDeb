@@ -36,10 +36,11 @@ class Nivel
             return unica_instancia;
         }
         //fin singleton public
-        //void LimpiarNivel();
+        void LimpiarNivel();
         bool CargarNivel(int);//carga eñ nivel siempre que exista dicho nivel en assets/maps/xml/
 
         //cargar objetos
+        void recargarJugador();
         void CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearObjeto(int accion, const char* nombre, int ataque, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -66,6 +67,13 @@ class Nivel
         void DejarObjeto();
         void pulsarE();
 
+        int getjix();
+        int getjiy();
+        int getjiz();
+        void setjix(int);
+        void setjiy(int);
+        void setjiz(int);
+
     private:
 
         //clase singleton
@@ -80,7 +88,7 @@ class Nivel
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala * primeraSala;// la primera sala del arbol
-        MotorFisicas *fisicas;//motor de fisicas (hace falta mas descripcion ?)
+        //MotorFisicas *fisicas;//motor de fisicas (hace falta mas descripcion ?)
         int id;//id para las figuras
 
         float dt;
@@ -98,6 +106,10 @@ class Nivel
         int danyo = 0, danyo2 = 0;
         unsigned int enemigoSeleccionado = 0;
         int cambia;
+        //para el metodo recargarjugador()
+        int jix = 0;
+        int jiy = 0;
+        int jiz = 0;
 };
 
 #endif

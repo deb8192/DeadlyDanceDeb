@@ -23,6 +23,38 @@ MotorGrafico::~MotorGrafico()
 
 }
 
+void MotorGrafico::LimpiarMotorGrafico()
+{
+    /*
+    std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
+    std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
+    std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena --OK
+    std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
+    std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
+    IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena --OK
+    */
+    /*if(Jugador_Scena)
+    {
+        Jugador_Scena->remove();
+    }*/
+    
+    for(std::size_t i=0;i<Enemigos_Scena.size();i++)
+    {
+        if(Enemigos_Scena[i] != nullptr && Enemigos_Scena[i])
+        {
+            Enemigos_Scena[i]->setVisible(false);
+            Enemigos_Scena[i]->remove();
+            Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
+        }
+    }
+    Enemigos_Scena.clear();
+
+    /*for (std::vector<Enemigos_Scena*>::iterator it = Enemigos_Scena.begin(); it!=Enemigos_Scena.end(); ++it){
+        delete *it;
+    }
+    Enemigos_Scena.clear();*/
+}
+
 bool MotorGrafico::crearVentana(int tipo)
 {
     std::string titulo = "";
@@ -514,8 +546,11 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
 void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
 {
-    Enemigos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
-    Enemigos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
+    if(Enemigos_Scena.size()>0 && Enemigos_Scena.size()>i && Enemigos_Scena[i] != nullptr){
+        Enemigos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
+        Enemigos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
+    }
+    
 
 }
 

@@ -14,7 +14,26 @@ Enemigo::Enemigo()
 }
 
 Enemigo::~Enemigo(){
-
+    //Inicializo variables y punteros
+    //Sala * estoy;//sala en la que esta el enemigo
+    atx=0.0;
+    atespx=0.0;
+    aty=0.0;
+    atespy=0.0;
+    atz=0.0;
+    atespz=0.0;
+    atgx=0.0;
+    atgy=0.0;
+    atgz=0.0;
+    incrAtDisCirc=0.0;
+    atespposX=0.0;
+    atespposY=0.0;
+    atespposZ=0.0;
+    atacktime = 0.0f;
+    //Arma *armaEspecial;
+    //const char * rutaArmaEspecial = "assets/models/objeto.obj";
+    //Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
+    pos_ataques=0; //para controlar el array de ataques en colisiones
 }
 
 float Enemigo::getX()

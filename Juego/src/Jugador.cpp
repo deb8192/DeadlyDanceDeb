@@ -25,13 +25,38 @@ Jugador::Jugador()
     tiempoPasadoCogerObjeto=0;
     tiempoEnMorir=2000.0f;//tiempo en milisegundos
     tiempoPasadoEnMorir=0;
-
 }
 
 Jugador::~Jugador()
 {
+    //Poner variables con los valores iniciales que tenían
+    ax = 1.0f;
+    az = 20.0f;
+    deg = 0.0f;
     armaEquipada=nullptr;
     armaEspecial=nullptr;
+    //const char * rutaArmaEspecial = "assets/models/Arma.obj";
+    //const char * nombreJugador = "Heavy";
+    danyo_arma = 10.0f;
+    atx=0.0;
+    atespx=0.0;
+    aty=0.0; 
+    atespy=0.0;
+    atz=0.0;
+    atespz=0.0;
+    atgx=0.0;
+    atgy=0.0;
+    atgz=0.0;
+    incrAtDisCirc=0.0;
+    atposX=0.0;
+    atespposX=0.0;
+    atposY=0.0;
+    atespposY=0.0;
+    atposZ=0.0;
+    atespposZ=0.0;
+    tipo_arma = 2;
+    //vector <unsigned int> atacados_normal;
+    dinero = 0;
 }
 
 Jugador::Jugador(int,int,int,int,int,int,std::string malla)

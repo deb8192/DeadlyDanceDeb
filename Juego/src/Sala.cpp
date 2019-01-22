@@ -20,20 +20,45 @@ Sala::Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type)
 
  Sala::~Sala(void)
  {
+    /*Sala *nula;
+    nula=(Sala*)0x100000000;
     if(entradas.size()>0)
     {
-        for(std::size_t i=0;i<entradas.size();i++)
+        for(std::size_t i = 0;i<entradas.size();i++)
         {
-            entradas[i]->~Sala();
+            if(entradas[i] != nullptr && entradas[i] != nula && entradas[i] != this)
+            {
+                std::cout <<"CUANTOS TIENES??: " << entradas.size() <<std::endl;
+                std::cout <<"SALA MUESTRATE: " << i <<std::endl;
+                std::cout <<"QUE TIENES?: " << entradas[i] <<std::endl;
+                entradas[i]->~Sala();
+                entradas[i]=nullptr;
+                entradas.erase(entradas.begin() + i);
+            }else{
+                if(entradas[i] == nula || entradas[i] != nullptr){
+                    entradas[i]=nullptr;
+                    entradas.erase(entradas.begin() + i);
+                }
+            }
         }
     }
     if(salidas.size()>0)
     {    
         for(std::size_t i=0;i<salidas.size();i++)
         {
-            salidas[i]->~Sala();
+            if(salidas[i] != nullptr && salidas[i] != nula && salidas[i] != this)
+            {
+                salidas[i]->~Sala();
+                salidas[i]=nullptr;
+                salidas.erase(salidas.begin() + i);
+            }else{
+                if(salidas[i] == nula || salidas[i] != nullptr){
+                    salidas[i]=nullptr;
+                    salidas.erase(salidas.begin() + i);
+                }
+            }
         }
-    }
+    }*/
  }
 
 void Sala::agregarEntrada(Sala * plataforma)
