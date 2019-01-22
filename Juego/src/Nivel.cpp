@@ -12,31 +12,16 @@ Nivel* Nivel::unica_instancia = 0;
 Nivel::Nivel()
 {
     primeraSala = nullptr;
-    fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
+    //fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     id = 0;
     controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
 }
-/*
+
 void Nivel::LimpiarNivel(){
 
-    //Jugador = Jugador();//me cargo al jugador pero si da problemas ir a jugador y limpiar variables
+    // = Jugador();//me cargo al jugador pero si da problemas ir a jugador y limpiar variables
     //jugador en todos eliminar, enemigos, objetos, armas, salas,
-    unica_instancia->~Nivel();
-    unica_instancia=nullptr;
-
-    primeraSala->~Sala();//llamo al puntero para que se destruya
-    primeraSala=nullptr;
-    fisicas->~MotorFisicas();
-    fisicas=nullptr;
-    controladorTiempo->~times();
-    controladorTiempo=nullptr;
-*******************************
-    std::vector<Enemigo*> enemigos;//Enemigos en scena
-    std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
-    std::vector<Recolectable*> recolectables;
-    Jugador jugador;//objeto del jugador en el nivel
-    CargadorNiveles cargador;//nos ayuda a cargar los niveles
-******************************
+    MotorGrafico * motor = MotorGrafico::getInstance();
 
     id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
     dt = 0.0f;
@@ -51,10 +36,39 @@ void Nivel::LimpiarNivel(){
     danyo = 0, danyo2 = 0;
     enemigoSeleccionado = 0;
     cambia = 0;
-}*/
 
-bool Nivel::CargarNivel(int level)
+    for (std::vector<Enemigo*>::iterator it = enemigos.begin(); it!=enemigos.end(); ++it){
+        delete *it;
+    }
+    enemigos.clear();
+    
+    motor->LimpiarMotorGrafico();
+
+    /* delete fisicas;
+    fisicas=nullptr;*/
+
+    recorrido.clear();
+
+    for (std::vector<Recolectable*>::iterator it = recolectables.begin(); it!=recolectables.end(); ++it){
+        delete *it;
+    }
+    recolectables.clear();
+
+    this->recargarJugador();
+
+    delete controladorTiempo;
+    controladorTiempo=nullptr;
+
+    delete primeraSala;//llamo al puntero para que se destruya
+    primeraSala=nullptr;
+
+
+
+}
+
+bool Nivel::CargarNivel(int level) 
 {
+    //LimpiarNivel();
     if(primeraSala != nullptr)
     {
         primeraSala->~Sala();
@@ -107,8 +121,44 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     motora->getEvent(nameid)->start();
 }
 
+void Nivel::recargarJugador(){
+    jugador.setVida(100);
+    jugador.setBarraAtEs(100);
+    jugador.setAtaque(15);
+    jugador.setArma(NULL);
+    jugador.setArmaEspecial(100);
+    jugador.setTimeAtEsp(0.0f);
+    jugador.setDanyoCritico(50);
+    jugador.setProAtaCritico(10);
+    jugador.setVida(100);
+    jugador.setPosiciones(getjix(),getjiy(),getjiz());
+}
+
+void Nivel::setjix(int x){
+    this->jix =x ;
+}
+void Nivel::setjiy(int y){
+    this->jiy = y;
+}
+void Nivel::setjiz(int z){
+    this->jiz = z;
+}
+
+int Nivel::getjix(){
+    return this->jix;
+}
+int Nivel::getjiy(){
+    return this->jiy;
+}
+int Nivel::getjiz(){
+    return this->jiz;
+}
+
 void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
+    this->setjix(x);
+    this->setjiy(y);
+    this->setjiz(z);
     jugador.setVida(100);
     jugador.setID(id++);
     jugador.setBarraAtEs(100);
@@ -388,14 +438,16 @@ void Nivel::update()
 
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            motor->mostrarEnemigos(enemigos.at(i)->getX(),
+            if(enemigos[i] != nullptr)
+            {
+                motor->mostrarEnemigos(enemigos.at(i)->getX(),
                 enemigos.at(i)->getY(),
                 enemigos.at(i)->getZ(),
                 enemigos.at(i)->getRX(),
                 enemigos.at(i)->getRY(),
                 enemigos.at(i)->getRZ(),
-                i
-            );
+                i);
+            }
         }
 
         fisicas->updateJugador(jugador.getX(),
@@ -579,6 +631,7 @@ void Nivel::updateIA()
 {
     //cout<< "Ejecuto ia " << endl;
     MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
 
     //Actualizar ataque especial
     /*this->updateAtEsp(motor);

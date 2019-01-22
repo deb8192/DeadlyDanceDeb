@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 
 #ifndef Salas_HPP
 #define Salas_HPP

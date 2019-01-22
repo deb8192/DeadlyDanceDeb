@@ -84,7 +84,8 @@ void Juego::Update()
         }
         // vamos a menu el jugador a muerto
         if(motor->ocurreEvento(GUI_ID_MENU_BUTTON))
-        {
+        {   
+            nivel->LimpiarNivel();
             motora->getEvent("Nivel1")->stop(); //Detener musica Menu
             motora->getEvent("Menu")->start(); //Reproducir musica juego
 

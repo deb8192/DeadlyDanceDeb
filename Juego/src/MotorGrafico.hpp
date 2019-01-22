@@ -30,6 +30,7 @@ using namespace idsEventos;
 
             //clase singleton en public
             ~MotorGrafico(void);
+            void LimpiarMotorGrafico();
             static MotorGrafico *getInstance() //esto se utiliza para crear el objeto una sola vez
             {
                 if(unica_instancia == 0)
