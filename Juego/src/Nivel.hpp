@@ -47,8 +47,11 @@ class Nivel
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         Sala * CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
+
         void EraseEnemigo(std::size_t i);
         void EraseJugador();
+        
+        //Bucle de actualizacion y dibujado de objetos
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
         void updateAtEsp(MotorGrafico *);//se actualiza la ejecucion de los ataques
         void updateAt(int *, MotorGrafico *);
@@ -64,9 +67,11 @@ class Nivel
         Jugador getJugador();
         void setThen();
 
+        //Funciones de interacciones
         void CogerObjeto();
         void DejarObjeto();
         void InteractuarNivel();
+        void AccionarMecanismo(int);    //Activa mecanismos y o puertas
 
     private:
 

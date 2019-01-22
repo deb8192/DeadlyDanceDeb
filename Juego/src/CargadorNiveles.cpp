@@ -107,7 +107,7 @@ void CargadorNiveles::GuardarNivelBin(int level)
 Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
 {
     Nivel * nivel_instancia = Nivel::getInstance();
-    Sala * padren = nullptr;//sala padre
+    Sala * padren = nullptr;//sala hijo
     for (pugi::xml_node plat = hijo.child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
@@ -123,9 +123,10 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
         const char * modelo  =  plat.attribute("Model").value(); //nos da un char[] = string
         padren = nivel_instancia->CrearPlataforma(accion,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
 
-        if(padre != nullptr)
+        if(padre != nullptr && padren != nullptr)
         {
             padre->agregarSalida(padren);
+            padren->agregarEntrada(padre);
         }
 
         if(jugadorEstasAqui)
@@ -174,7 +175,7 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             int z = obj.attribute("Z").as_int();//nos devuelve un int 
             int ancho = obj.attribute("ancho").as_int();//nos devuelve un int
             int largo = obj.attribute("largo").as_int();//nos devuelve un int 
-            int alto = obj.attribute("ancho").as_int();//nos devuelve un int  
+            int alto = obj.attribute("alto").as_int();//nos devuelve un int  
             int ataque = obj.attribute("ataque").as_int();//nos devuelve un int           
             const char * nombre = obj.attribute("nombre").value(); //nos da un char[] = string
             const char * textura = obj.attribute("Texture").value(); //nos da un char[] = string
@@ -184,11 +185,11 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
 
         Sala * entrada = crearSala(plat,padren);
         //CAMBIO PARA VER SI FUNCIONA EL PATFHFINDING
-        if(entrada != nullptr)
+        /*if(entrada != nullptr)
         {
             padren ->agregarEntrada(entrada); //esto se modificara
-        }
+        }*/
     }
 
-    return padre;
+    return padren;
 }

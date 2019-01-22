@@ -5,7 +5,7 @@ Interactuable::Interactuable()
 {
 
 }
-Interactuable::Interactuable(int codigo, int anc, int lar, int alt, const char *objeto, const char *textura)
+Interactuable::Interactuable(int codigo, int anc, int lar, int alt, const char *objeto, const char *textura, int posicion)
 {
     std::string name_objeto(objeto);
     cadena_objeto = new char[sizeof(name_objeto)];
@@ -21,6 +21,18 @@ Interactuable::Interactuable(int codigo, int anc, int lar, int alt, const char *
     alto = alt;
     ruta_objeto = cadena_objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
     ruta_textura = cadena_textura;
+    posicionObjeto = posicion;
+    accionado = false;
+}
+
+bool Interactuable::accionar()
+{
+    if(accionado)
+    {
+        accionado = false;
+    }
+    else accionado = true;
+    return accionado;
 }
 
 /*************** moverseEntidad *****************
@@ -240,4 +252,9 @@ float Interactuable::getLargo()
 float Interactuable::getAlto()
 {
     return alto;
+}
+
+int Interactuable::GetPosicionObjetos()
+{
+    return posicionObjeto;
 }

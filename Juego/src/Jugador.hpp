@@ -123,8 +123,9 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getLastTimeAt();
         const char *getRutaArmaEsp();
 
-        //Animacion
+        //Jugador
         int getAnimacion();
+        vector <Llave*> GetLlaves();
         
     private:
         float ax = 1.0f,
