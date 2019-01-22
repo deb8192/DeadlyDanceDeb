@@ -525,7 +525,13 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
 
 }
 
-void MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
+{
+    Objetos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
+    Objetos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
+}
+
+int MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!objeto)
@@ -542,6 +548,7 @@ void MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int l
             Recolectables_Scena.push_back(objeto_en_scena) :
             Objetos_Scena.push_back(objeto_en_scena);
     }
+    return Objetos_Scena.size() - 1;
 }
 
 void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz)

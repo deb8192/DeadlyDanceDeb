@@ -140,6 +140,7 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
 void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
+    int posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
 
     //Arma o power-up
     if(accion == 2)
@@ -152,13 +153,13 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
     //Puertas o interruptores
     if(accion == 3)
     {
-        Interactuable * inter = new Interactuable(codigo, ancho, largo, alto, ruta_objeto, ruta_textura);
+        Interactuable * inter = new Interactuable(codigo, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto);
         inter->setID(id++);
         inter->setPosiciones(x,y,z);
+        inter->setRotacion(0.0,0.0,0.0);
         interactuables.push_back(inter);
     }
     
-    motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
     //motor->debugBox(x,y,z,ancho,alto,largo);
@@ -302,18 +303,81 @@ void Nivel::DejarObjeto()
 
 }
 
+/*********** AccionarMecanismo ***********
+ * Funcion que, en funcion del valor codigo 
+ * del interactuable al que apunte int_col,
+ * si es -1 abre un cofre, si es 0 abre una puerta
+ * sin llave y si es mayor que 0 abrira la puerta
+ * indicada si el jugador tiene su llave.
+ *      Entradas:
+ *                  int_col: indicador del elemento en el vector de interactuables
+ *      Salidas:
+*/
+
+void Nivel::AccionarMecanismo(int int_col)
+{
+    //Si es una puerta sin llave o una palanca
+    if(interactuables.at(int_col)->getCodigo() == 0)
+    {
+        //Se acciona o desacciona el mecanismo segun su estado actual
+        bool abrir = interactuables.at(int_col)->accionar();
+        if(abrir)
+        {
+            //Se abre/acciona la puerta / el mecanismo
+            interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 90, interactuables.at(int_col)->getRZ());    
+            cout<<"Abre la puerta"<<endl;
+        }
+        else
+        {
+            //Se cierra/desacciona la puerta / el mecanismo
+            interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() - 90, interactuables.at(int_col)->getRZ());
+            cout<<"Cierra la puerta"<<endl;
+        }
+    }
+    else
+    {
+        if(interactuables.at(int_col)->getCodigo() == -1)
+        {
+            cout<<"Es un cofre"<<endl;
+        }
+        else
+        {
+            unsigned int i = 0;
+            bool coincide = false;
+            //PRUEBAS CON LLAVES
+            while(i < jugador.GetLlaves().size())
+            {
+                if(jugador.GetLlaves().at(i)->GetCodigoPuerta() == interactuables.at(int_col)->getCodigo())
+                {
+                    coincide = true;
+                }
+                i++;
+            }
+            if(coincide)
+            {
+                cout<<"Tiene la llave para abrir la puerta"<<endl;
+            }
+            else
+            {
+                cout<<"No tiene la llave para abrir la puerta"<<endl;
+            }
+        }
+    }
+}
+
 void Nivel::InteractuarNivel()
 {
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     MotorGrafico * motor = MotorGrafico::getInstance();
     //lo siguiente es para saber que objeto colisiona con jugador
     int rec_col = fisicas->collideColectable();
+    int int_col = fisicas->collideInteractuable();
 
     //cambia se utiliza porque coge y suelta el objeto sucesivamente varias veces, la causa de este error
     //era porque ocurren varias iteraciones del bucle tal vez porque la interpolacion crea mas iteraciones en el bucle
     if(motor->estaPulsado(KEY_E))
     {
-        if(rec_col < 0)
+        if(rec_col < 0 && int_col < 0)
         {
             if(cambia <= 0)
             {
@@ -326,6 +390,15 @@ void Nivel::InteractuarNivel()
             if(cambia <= 0)
             {
                 CogerObjeto();
+            }
+            cambia++;
+        }
+        else if(int_col >= 0)
+        {
+            if(cambia <= 0)
+            {
+                cout<<"Detecta el objeto"<<endl;
+                this->AccionarMecanismo(int_col);
             }
             cambia++;
         }
@@ -998,6 +1071,21 @@ void Nivel::Draw()
             i
         );
     }
+    //Dibujado de las puertas
+    for(unsigned int i = 0; i < interactuables.size(); i++)
+    {
+        interactuables.at(i)->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+        interactuables.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
+        motor->mostrarObjetos(interactuables.at(i)->getX(),
+            interactuables.at(i)->getY(),
+            interactuables.at(i)->getZ(),
+            interactuables.at(i)->getRX(),
+            interactuables.at(i)->getRY(),
+            interactuables.at(i)->getRZ(),
+            interactuables.at(i)->GetPosicionObjetos()
+        );
+    }
+
     //Dibujado del ataque especial
     //Ataque especial Heavy
     

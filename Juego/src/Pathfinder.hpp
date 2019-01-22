@@ -40,7 +40,6 @@ class Pathfinder
             int estimatedTotalCost;
         } startNodo, actualNodo, endNodo;
         
-        int contador;
         vector <struct NodeRecord> listaAbierta;
         vector <struct NodeRecord> listaCerrada;
         vector <struct NodeRecord> camino;

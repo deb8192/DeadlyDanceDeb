@@ -56,10 +56,23 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     }
     else if(typeCreator == 3)//objetos
     {
+        //Objetos con los que interactuar como puertas
+        if(accion == 3)
+        {
+            obstaculos.push_back(cuerpo);
+            //Se le anade una zona de deteccion mediante colision
+            rp3d::CollisionBody * deteccion;
+            SphereShape * detector = new SphereShape(alto);
+            deteccion = space->createCollisionBody(transformacion);
+            deteccion->addCollisionShape(detector,transformacion);
+            interactuables.push_back(deteccion);
+        }
+        //Objetos que recoger como armas y llaves
         if(accion == 2)
         {
             recolectables.push_back(cuerpo);
         }
+        //Obstaculos que se interponen ante el jugador
         if(accion == 1)
         {
             obstaculos.push_back(cuerpo);
@@ -197,6 +210,19 @@ int MotorFisicas::collideColectable()
     for(long unsigned int i = 0; i < recolectables.size();i++)
     {
       if(space->testOverlap(jugador,recolectables[i]))
+      {
+        return (int)i;
+      }
+    }
+
+    return -1;
+}
+
+int MotorFisicas::collideInteractuable()
+{
+    for(long unsigned int i = 0; i < interactuables.size();i++)
+    {
+      if(space->testOverlap(jugador,interactuables[i]))
       {
         return (int)i;
       }

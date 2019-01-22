@@ -576,7 +576,6 @@ void Jugador::EliminarLlave(Llave * llave)
             encontrado = true;
         }
     }
-    llaves.push_back(llave);
 }
 
 void Jugador::updateInterfaz()
@@ -819,6 +818,11 @@ const char *Jugador::getRutaArmaEsp()
 int Jugador::getAnimacion()
 {
     return animacion;
+}
+
+std::vector <Llave*> Jugador::GetLlaves()
+{
+    return llaves;
 }
 
 int Jugador::getID()

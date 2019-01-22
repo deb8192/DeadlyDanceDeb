@@ -10,8 +10,11 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
 {
     public:
         Interactuable();         //esto le deja a la entidad el constructor por defecto
-        Interactuable(int codigo, int anc, int lar, int alt, const char *objeto, const char *textura);
+        Interactuable(int codigo, int anc, int lar, int alt, const char *objeto, const char *textura, int posicion);
         ~Interactuable();
+
+        //metodos de interaccion
+        bool accionar();
         
         //drawable metodos
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
@@ -45,12 +48,14 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         float getRY();
         float getRZ();
 
+        //getters del propio objeto
         int getCodigo();
         const char* getObjeto();
         const char* getTextura();
         float getAncho();
         float getLargo();
         float getAlto();
+        int GetPosicionObjetos();
 
 
     private: 
@@ -58,6 +63,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         //Si codigoObjeto es > 0 es un numero comun entre dos objetos: una palanca con el mismo numero que una puerta abre dicha puerta
         int codigoObjeto;   //En caso de igualarse a 0 es una puerta sin llave, y si es -1 es un cofre
         bool accionado;     //Dado que son objetos accionables tendra dos estado segun este accionado o no
+        int posicionObjeto; //Posicion del elemento en el vector de objetos del motor grafico.
         
 };
 
