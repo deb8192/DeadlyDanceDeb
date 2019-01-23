@@ -7,11 +7,11 @@ int main()
 {
 	//pruebaOpengl prueba;
 	//prueba.crearVentana();
-	
+
 	cout << "\e[42m Iniciando Juego \e[0m" << endl;
 	Juego *juego = Juego::getInstance();
 	times *tiempo = times::getInstance();
-	
+
 	juego->InicializarVentana();
 	// se debe dar valor a las variables de interpolacion antes del bucle
 	//juego->setNivelThen();
@@ -24,11 +24,11 @@ int main()
 			{
 				if(tiempo->EjecutoIA())
 				{
-					juego->UpdateIA();//si lo esta actualizamos la IA	
+					juego->UpdateIA();//si lo esta actualizamos la IA
 				}
-				juego->Update();//si lo esta actualizamos la escena	
+				juego->Update();//si lo esta actualizamos la escena
 			}
-			juego->Draw();//si lo esta dibujamos la escena	
+			juego->Draw();//si lo esta dibujamos la escena
 		}
 	}
 	juego->LimpiarVentana(); //si no lo esta borramos de memoria el dispositivo
