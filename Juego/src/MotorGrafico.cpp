@@ -101,7 +101,7 @@ void MotorGrafico::updateMotorJuego()
 void MotorGrafico::updateMotorCinematica()
 {
     driver->beginScene(true, true, SColor(0,0,0,0));
-	
+
     float mile = 1000.0f;
     float ratio = 30.0f;
     float tiempo_frame = mile/ratio;
@@ -114,7 +114,7 @@ void MotorGrafico::updateMotorCinematica()
     {
         if(tiempoUltimoFrame > tiempo_frame)
         {
-            //es mayor (va lento) 
+            //es mayor (va lento)
             frame_actual = frame_actual+(1+salto);
         }
         else
@@ -127,16 +127,16 @@ void MotorGrafico::updateMotorCinematica()
     if(frame_actual < 498)
     {
         //definimos los strings
-        std::string fram = "";  
+        std::string fram = "";
         std::string extension = ".jpg";
-        float marcaTiempo = times::getInstance()->getTiempo(1); 
+        float marcaTiempo = times::getInstance()->getTiempo(1);
         std::string ruta = "assets/cinematicas/frames/";
         fram = std::to_string(frame_actual);
         //creamos la ruta completa
         std::string ruta_completa = ruta+fram+extension;
         char buffer[100];
         strcpy(buffer,ruta_completa.c_str());
-        
+
         if(actual != nullptr && actualTexture != nullptr)
         {
             actual->remove();//remuevo imagen actual
@@ -251,7 +251,7 @@ bool MotorGrafico::estaPulsado(int boton)
 
         case KEY_P:
             return input.IsKeyDown(irr::KEY_KEY_P);
-        
+
         case KEY_C:
             return input.IsKeyDown(irr::KEY_KEY_C);//activa pathdinding
 
@@ -322,7 +322,7 @@ void MotorGrafico::resetKey(int event)
         break;
         case KEY_J:
             input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
-        break; 
+        break;
         case KEY_E:
             input.ResetKey(irr::KEY_KEY_E);
         break;
@@ -657,6 +657,20 @@ void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensi
             Objetos_Debug.push_back(objeto_en_scena);
         }
     }
+}
+
+void MotorGrafico::dibujarZona(int x, int y, int z, float ancho, float alto, float profund)
+{
+  if(debugGrafico)
+  {
+    IAnimatedMesh* tmpobjt = smgr->getMesh("assets/models/zona.obj");
+    IAnimatedMeshSceneNode* tmpobjt_en_scena = smgr->addAnimatedMeshSceneNode(tmpobjt);
+    tmpobjt_en_scena->setPosition(core::vector3df(x,y,z));
+    tmpobjt_en_scena->setScale(core::vector3df(ancho,1.0f,profund));
+    SColor COLOR  = SColor(255,255,255,0);
+    smgr->getMeshManipulator()->setVertexColors(tmpobjt_en_scena->getMesh(),COLOR);
+    Objetos_Debug.push_back(tmpobjt_en_scena);
+  }
 }
 
 void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo)
@@ -1023,7 +1037,7 @@ void MotorGrafico::EraseColectable(int idx)
     Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
 }
 
-//Cuando enemigo muere lo borramos 
+//Cuando enemigo muere lo borramos
 void MotorGrafico::EraseEnemigo(std::size_t i){
     long unsigned int valor = i;
 
@@ -1035,7 +1049,7 @@ void MotorGrafico::EraseEnemigo(std::size_t i){
     }
 }
 
-//Cuando enemigo muere lo borramos 
+//Cuando enemigo muere lo borramos
 void MotorGrafico::EraseJugador(){
     Jugador_Scena->setVisible(false);
     Jugador_Scena->remove();
@@ -1115,7 +1129,7 @@ void MotorGrafico::cargarInterfaz()
     armaI = guienv->addImage(arma_textura,position2d<int>(730,530));
     BarraVidaI = guienv->addImage(barraVida_textura,position2d<int>(50,15));
     BarraEnergiaI = guienv->addImage(barraEnergia_textura,position2d<int>(48,65));
-    
+
     //imagenes tipo objeto que se lleva por defecto manos
     manosI = guienv->addImage(manos_textura,position2d<int>(738,534));
     llaveI = guienv->addImage(llave_textura,position2d<int>(738,534));
@@ -1123,7 +1137,7 @@ void MotorGrafico::cargarInterfaz()
     dagaI = guienv->addImage(daga_textura,position2d<int>(738,534));
 
     BarraVidaI->setMaxSize(dimension2du(121,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
-    BarraEnergiaI->setMaxSize(dimension2du(63,27));//maximo 63/100 y esto multiplicado por la cantidad de energia 
+    BarraEnergiaI->setMaxSize(dimension2du(63,27));//maximo 63/100 y esto multiplicado por la cantidad de energia
     font2 = guienv->getFont("assets/fonts/myfont.xml");
 
     moneyI = guienv->addStaticText(L"1000 M",rect<s32>(710,21,750,40),false); //falta ver los cambios de fuente y ponerlo correctamente
@@ -1188,7 +1202,7 @@ void MotorGrafico::destruirInterfaz()
     driver->removeTexture(manos_textura);
     driver->removeTexture(llave_textura);
     driver->removeTexture(espada_textura);
-    driver->removeTexture(daga_textura); 
+    driver->removeTexture(daga_textura);
 
 }
 
@@ -1196,10 +1210,10 @@ void MotorGrafico::updateInterfaz()
 {
     //vamos a conseguir los datos de la interfaz
     InterfazJugador * interfaz = InterfazJugador::getInstance();
-    
+
     if(interfaz->getEstado())
     {
-        
+
         if(vidaI)
         vidaI->setVisible(true);
         if(energiaI)
@@ -1283,7 +1297,7 @@ void MotorGrafico::updateInterfaz()
             espadaI->setVisible(false);
             llaveI->setVisible(false);
             break;
-        }   
+        }
         delete [] datos;
     }
     else
@@ -1367,7 +1381,7 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
             Jugador_Scena->setFrameLoop(99, 112);
 		    Jugador_Scena->setAnimationSpeed(10);
         }
-    }    
+    }
 
     if(estado == 5 && frame != 120) //muere
     {
@@ -1399,6 +1413,6 @@ bool MotorGrafico::finalCinematica()
         actualTexture = nullptr;
         return true;
     }
-    
+
     return false;
 }
