@@ -29,6 +29,7 @@ using namespace reactphysics3d;
 
             void updateJugador(float x, float y, float z);//actualizamos al jugador en el espacio de las fisicas
             void updateEnemigos(float x, float y, float z, unsigned int i);//actualizamos al enemigo en el espacio de las fisicas
+            void updatePuerta(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void EraseColectable(int idx);
             void EraseEnemigo(std::size_t i);
             void EraseJugador();
@@ -61,6 +62,7 @@ using namespace reactphysics3d;
             CollisionBody* getEnemiesAtack(int n);
             CollisionBody* getEnemiesAtEsp(int n);
             CollisionBody* getAtack();
+            unsigned int GetRelacionInteractuablesObstaculos(int n);
 
         private:
             //clase singleton
@@ -76,6 +78,7 @@ using namespace reactphysics3d;
 
             std::vector<CollisionBody *> recolectables;//Vector de elementos que se pueden coger
             std::vector<CollisionBody *> interactuables;//Vector de elementos con los que interactuar
+            std::vector<unsigned int> relacionInteractuablesObstaculos;//vector que contiene en la posicion correspondiente a un interactuable en su vector el valor de su posicion en el vector de obstaculos
             std::vector<CollisionBody *> obstaculos;//Vector de obstaculos que bloquean el movimiento
             std::vector<CollisionBody *> plataformas;//Vector de plataformas para caminar
 

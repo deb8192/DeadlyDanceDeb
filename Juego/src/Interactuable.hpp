@@ -20,6 +20,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
         void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
+        void UpdateTimeRotate(float time);//actualiza el tiempo de la rotacion de la interpolacion
 
         void setPosiciones(float nx,float ny,float nz);
         void setNewPosiciones(float nx,float ny,float nz);//modifica las posiciones finales de la interpolacion de la figura

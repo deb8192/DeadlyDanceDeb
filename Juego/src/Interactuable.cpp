@@ -64,7 +64,7 @@ void Interactuable::RotarEntidad(float updTime)
 {
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
-    float pt = moveTime / updTime;
+    float pt = rotateTime / updTime;
 
     if(pt > 1.0f)
     {
@@ -81,6 +81,10 @@ void Interactuable::UpdateTimeMove(float updTime)
     moveTime += updTime;
 }
 
+void Interactuable::UpdateTimeRotate(float updTime)
+{
+    rotateTime += updTime;
+}
 void Interactuable::setPosiciones(float nx,float ny,float nz)
 {
     x = nx;
