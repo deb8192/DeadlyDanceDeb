@@ -25,6 +25,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         void setPosiciones(float nx,float ny,float nz);
         void setNewPosiciones(float nx,float ny,float nz);//modifica las posiciones finales de la interpolacion de la figura
         void setLastPosiciones(float nx,float ny,float nz);
+        void setDesplazamientos(float despX, float despZ);
         void setRotacion(float nrx, float nry, float nrz);
         void setNewRotacion(float nrx, float nry, float nrz);
         void setLastRotacion(float nrx, float nry, float nrz);
@@ -45,6 +46,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         float getFisX();
         float getFisY();
         float getFisZ();
+        float * GetDesplazamientos();
         float getRX();
         float getRY();
         float getRZ();
@@ -65,6 +67,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         int codigoObjeto;   //En caso de igualarse a 0 es una puerta sin llave, y si es -1 es un cofre
         bool accionado;     //Dado que son objetos accionables tendra dos estado segun este accionado o no
         int posicionObjeto; //Posicion del elemento en el vector de objetos del motor grafico.
+        float * desplazamientos = new float [2];   //Desplazamientos en X y en Z para le giro de la puerta
         
 };
 

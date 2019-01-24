@@ -113,7 +113,7 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
         int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
         int x = plat.attribute("X").as_int();//nos devuelve un int
         int y = plat.attribute("Y").as_int();//nos devuelve un int
-        int z = plat.attribute("Z").as_int();//nos devuelve un int 
+        int z = plat.attribute("Z").as_int();//nos devuelve un int
         int ancho = plat.attribute("ancho").as_int();//nos devuelve un int
         int largo = plat.attribute("largo").as_int();//nos devuelve un int
         int alto = plat.attribute("alto").as_int();//nos devuelve un int 
@@ -138,9 +138,9 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             int Playerx = plat.attribute("StarX").as_int();//nos devuelve un int
             int Playery = plat.attribute("StarY").as_int();//nos devuelve un int
             int Playerz = plat.attribute("StarZ").as_int();//nos devuelve un int 
-            int ancho = plat.attribute("ancho").as_int();//nos devuelve un int
-            int largo = plat.attribute("largo").as_int();//nos devuelve un int 
-            int alto = plat.attribute("ancho").as_int();//nos devuelve un int
+            int ancho = 1;//nos devuelve un int
+            int largo = 1;//nos devuelve un int 
+            int alto = 5;//nos devuelve un int
             const char * Playertextura = plat.attribute("StarTexture").value(); //nos da un char[] = string
             const char * Playermodelo  =  plat.attribute("StarModel").value(); //nos da un char[] = string
             nivel_instancia->CrearJugador(accion,Playerx,Playerz,Playery,ancho,largo,alto,Playermodelo,Playertextura,propiedades);
@@ -172,7 +172,9 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             int accion = obj.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
             int x = obj.attribute("X").as_int();//nos devuelve un int
             int y = obj.attribute("Y").as_int();//nos devuelve un int
-            int z = obj.attribute("Z").as_int();//nos devuelve un int 
+            int z = obj.attribute("Z").as_int();//nos devuelve un int
+            int despX = obj.attribute("despX").as_int();//nos devuelve un int
+            int despZ = obj.attribute("despZ").as_int();//nos devuelve un int  
             int ancho = obj.attribute("ancho").as_int();//nos devuelve un int
             int largo = obj.attribute("largo").as_int();//nos devuelve un int 
             int alto = obj.attribute("alto").as_int();//nos devuelve un int  
@@ -180,7 +182,7 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             const char * nombre = obj.attribute("nombre").value(); //nos da un char[] = string
             const char * textura = obj.attribute("Texture").value(); //nos da un char[] = string
             const char * modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
-            nivel_instancia->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
+            nivel_instancia->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
         }
 
         crearSala(plat,padren);

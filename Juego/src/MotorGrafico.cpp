@@ -162,7 +162,7 @@ void MotorGrafico::CrearCamara()
 {
   //primer vector traslacion, segundo rotacion
   //  smgr->addCameraSceneNode(0, vector3df(0,0,90), vector3df(0,0,0));
-  camera = smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,0,0));
+  camera = smgr->addCameraSceneNode(0, vector3df(10,15,-20), vector3df(0,0,0));
   //camera->setNearValue(0.5f);
   //camera->setFarValue(100.0f);
 }
@@ -439,7 +439,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         //cout << x << " " << y << " " << z << " " << endl;
         jugador_en_scena->setPosition(core::vector3df(x,y,z));
         Jugador_Scena = jugador_en_scena;
-        Jugador_Scena->setScale(core::vector3df(3,3,3));
+        Jugador_Scena->setScale(core::vector3df(1.75,1.75,1.75));
         Jugador_Scena->setFrameLoop(30, 44);
 		Jugador_Scena->setAnimationSpeed(10);
         //const SColor COLOR  = SColor(255,0,0,255);
@@ -502,9 +502,9 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
     core::vector3df nodeCamTarget = camera->getTarget();
 
     // Centrar la camara
-    nodeCamPosition.X = x;
-    nodeCamPosition.Y = y+30;
-    nodeCamPosition.Z = z-40;
+    nodeCamPosition.X = x+10;
+    nodeCamPosition.Y = y+15;
+    nodeCamPosition.Z = z-20;
     nodeCamTarget.X = x;
     nodeCamTarget.Y = y;
     nodeCamTarget.Z = z;

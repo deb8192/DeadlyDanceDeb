@@ -25,7 +25,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         Jugador(int,int,int,int,int,int,std::string malla);//defines tu la informacion del jugador
 
         //Metodos de desplazamiento
-        void movimiento(float dt,bool a, bool s, bool d, bool w);
+        void movimiento(bool noMueve,bool a, bool s, bool d, bool w);
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
         void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
