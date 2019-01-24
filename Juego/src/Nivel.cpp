@@ -321,16 +321,19 @@ void Nivel::AccionarMecanismo(int int_col)
     {
         //Se acciona o desacciona el mecanismo segun su estado actual
         bool abrir = interactuables.at(int_col)->accionar();
+        unsigned int posicion = fisicas->GetRelacionInteractuablesObstaculos(int_col);
         if(abrir)
         {
             //Se abre/acciona la puerta / el mecanismo
-            interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 90, interactuables.at(int_col)->getRZ());    
+            interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());    
+            fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), posicion);
             cout<<"Abre la puerta"<<endl;
         }
         else
         {
             //Se cierra/desacciona la puerta / el mecanismo
-            interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() - 90, interactuables.at(int_col)->getRZ());
+            interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() - 135.0, interactuables.at(int_col)->getRZ());
+            fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), posicion);
             cout<<"Cierra la puerta"<<endl;
         }
     }
@@ -356,6 +359,23 @@ void Nivel::AccionarMecanismo(int int_col)
             if(coincide)
             {
                 cout<<"Tiene la llave para abrir la puerta"<<endl;
+                //Se acciona o desacciona el mecanismo segun su estado actual
+                bool abrir = interactuables.at(int_col)->accionar();
+                unsigned int posicion = fisicas->GetRelacionInteractuablesObstaculos(int_col);
+                if(abrir)
+                {
+                    //Se abre/acciona la puerta / el mecanismo
+                    interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());    
+                    fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), posicion);
+                    cout<<"Abre la puerta"<<endl;
+                }
+                else
+                {
+                    //Se cierra/desacciona la puerta / el mecanismo
+                    interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() - 135.0, interactuables.at(int_col)->getRZ());
+                    fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), posicion);
+                    cout<<"Cierra la puerta"<<endl;
+                }
             }
             else
             {
@@ -453,9 +473,9 @@ void Nivel::update()
           motor->estaPulsado(2),
           motor->estaPulsado(3),
           motor->estaPulsado(4),
-          jugador.getX(),
-          jugador.getY(),
-          jugador.getZ()
+          jugador.getNewX(),
+          jugador.getNewY(),
+          jugador.getNewZ()
       );
 
       //colisiones con todos los objetos y enemigos que no se traspasan
@@ -474,30 +494,6 @@ void Nivel::update()
             motor->estaPulsado(3),
             motor->estaPulsado(4)
         );
-
-        /*motor->mostrarJugador(jugador.getX(),
-            jugador.getY(),
-            jugador.getZ(),
-            jugador.getRX(),
-            jugador.getRY(),
-            jugador.getRZ()
-        );*/
-        //lastDrawTime = drawTime;
-        //drawTime = controladorTiempo->getTiempo(2);
-        /*for(unsigned int i = 0; i < enemigos.size(); i++)
-        {
-           // enemigos.at(i)->moverseEntidad(1 / controladorTiempo->getUpdateTime());
-            //enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
-            motor->mostrarEnemigos(enemigos.at(i)->getX(),
-                enemigos.at(i)->getY(),
-                enemigos.at(i)->getZ(),
-                enemigos.at(i)->getRX(),
-                enemigos.at(i)->getRY(),
-                enemigos.at(i)->getRZ(),
-                i
-            );
-        }*/
-
 
         motor->clearDebug2();   //Pruebas debug
         for(unsigned int i = 0; i < enemigos.size(); i++)
@@ -715,19 +711,6 @@ void Nivel::updateIA()
 {
     //cout<< "Ejecuto ia " << endl;
     MotorGrafico * motor = MotorGrafico::getInstance();
-    /*else if(atacktime > 0.0)
-    {
-        jugador.AtacarUpdate(danyo2);
-    }
-
-    //En caso contrario se colorean los enemigos de color gris
-    else
-    {
-        for(unsigned int i = 0; i < enemigos.size(); i++)
-        {
-            motor->colorearEnemigo(255, 150, 150, 150, i);
-        }
-    }*/
 
     //En esta parte muere jugador
     if(motor->estaPulsado(16)){//SI PULSO 'J' MUERE JUGADOR
@@ -1075,7 +1058,7 @@ void Nivel::Draw()
     for(unsigned int i = 0; i < interactuables.size(); i++)
     {
         interactuables.at(i)->RotarEntidad(1 / controladorTiempo->getUpdateTime());
-        interactuables.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
+        interactuables.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
         motor->mostrarObjetos(interactuables.at(i)->getX(),
             interactuables.at(i)->getY(),
             interactuables.at(i)->getZ(),
@@ -1088,8 +1071,6 @@ void Nivel::Draw()
 
     //Dibujado del ataque especial
     //Ataque especial Heavy
-    
-    //Ataque especial bailaora
     if(jugador.getTimeAtEsp() > 0.0f)
     {
         if(strcmp(jugador.getArmaEspecial()->getNombre(), "Heavy") == 0)
@@ -1120,7 +1101,8 @@ void Nivel::Draw()
                 8,
                 2);
         }
-
+    
+        //Ataque especial bailaora
         else if(strcmp(jugador.getArmaEspecial()->getNombre(), "Bailaora") == 0)
         {
             jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());

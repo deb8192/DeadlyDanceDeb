@@ -183,7 +183,7 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             nivel_instancia->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
         }
 
-        Sala * entrada = crearSala(plat,padren);
+        crearSala(plat,padren);
         //CAMBIO PARA VER SI FUNCIONA EL PATFHFINDING
         /*if(entrada != nullptr)
         {

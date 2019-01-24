@@ -59,6 +59,7 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
         //Objetos con los que interactuar como puertas
         if(accion == 3)
         {
+            relacionInteractuablesObstaculos.push_back(obstaculos.size());
             obstaculos.push_back(cuerpo);
             //Se le anade una zona de deteccion mediante colision
             rp3d::CollisionBody * deteccion;
@@ -371,13 +372,13 @@ void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, floa
     float px = x,
           pz = z;
     if(a)
-     px -= 2;
+     px -= 4;
     if(s)
-     pz -= 2;
+     pz -= 4;
     if(d)
-     px += 2;
+     px += 4;
     if(w)
-     pz += 2;
+     pz += 4;
 
     if(jugador != nullptr)
     {
@@ -437,6 +438,17 @@ void MotorFisicas::updateEnemigos(float x, float y, float z, unsigned int i)
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         enemigos.at(i)->setTransform(transformacion);
+    }
+}
+
+void MotorFisicas::updatePuerta(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
+{
+    if(obstaculos.at(i) != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Quaternion orientacion = rp3d::Quaternion(x * sin((rx * DEGTORAD) / 2.0), y * sin((ry * DEGTORAD) / 2.0), z * sin((rz * DEGTORAD) / 2.0), cos((ry * DEGTORAD) / 2.0));
+        Transform transformacion(posiciones,orientacion);
+        obstaculos.at(i)->setTransform(transformacion);
     }
 }
 
@@ -582,4 +594,10 @@ CollisionBody* MotorFisicas::getEnemiesAtack(int n)
 CollisionBody* MotorFisicas::getEnemiesAtEsp(int n)
 {
  return armaAtEspEne[n];
+}
+
+unsigned int MotorFisicas::GetRelacionInteractuablesObstaculos(int n)
+{
+    unsigned int m = n;
+    return relacionInteractuablesObstaculos.at(m);
 }
