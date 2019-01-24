@@ -372,13 +372,13 @@ void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, floa
     float px = x,
           pz = z;
     if(a)
-     px -= 4;
+     px -= 2;
     if(s)
-     pz -= 4;
+     pz -= 2;
     if(d)
-     px += 4;
+     px += 2;
     if(w)
-     pz += 4;
+     pz += 2;
 
     if(jugador != nullptr)
     {
@@ -441,12 +441,12 @@ void MotorFisicas::updateEnemigos(float x, float y, float z, unsigned int i)
     }
 }
 
-void MotorFisicas::updatePuerta(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
+void MotorFisicas::updatePuerta(float x, float y, float z, float rx, float ry, float rz, float * desplazamientos, unsigned int i)
 {
     if(obstaculos.at(i) != nullptr)
     {
-        rp3d::Vector3 posiciones(x,y,z);
-        rp3d::Quaternion orientacion = rp3d::Quaternion(x * sin((rx * DEGTORAD) / 2.0), y * sin((ry * DEGTORAD) / 2.0), z * sin((rz * DEGTORAD) / 2.0), cos((ry * DEGTORAD) / 2.0));
+        rp3d::Vector3 posiciones(x+(ry/abs(ry)*desplazamientos[0]),y,z-(ry/abs(ry))*desplazamientos[1]);
+        rp3d::Quaternion orientacion = rp3d::Quaternion(x * sin((rx * DEGTORAD) / 2.0), y * sin((ry * DEGTORAD) / 2.0), z * sin((rz * DEGTORAD) / 2.0), (cos(ry * DEGTORAD) / 2.0)*(ry/abs(ry)));
         Transform transformacion(posiciones,orientacion);
         obstaculos.at(i)->setTransform(transformacion);
     }

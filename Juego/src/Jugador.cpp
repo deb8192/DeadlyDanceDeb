@@ -57,7 +57,7 @@ Jugador::Jugador(int,int,int,int,int,int,std::string malla)
     tiempoPasadoEnMorir=0;
 }
 
-void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
+void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 {
     float px = newX,
           pz = newZ;
@@ -120,7 +120,7 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
         deg =  RADTODEG * atan(ax/az) ;
 
     float componente;
-    if(w || s || a || d)
+    if((w || s || a || d) && !noMueve)
     {
         componente = 1.0;
     }

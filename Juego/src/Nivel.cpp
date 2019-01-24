@@ -137,7 +137,7 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
 
 }
 
-void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
     int posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
@@ -156,6 +156,7 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
         Interactuable * inter = new Interactuable(codigo, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto);
         inter->setID(id++);
         inter->setPosiciones(x,y,z);
+        inter->setDesplazamientos(despX,despZ);
         inter->setRotacion(0.0,0.0,0.0);
         interactuables.push_back(inter);
     }
@@ -326,14 +327,14 @@ void Nivel::AccionarMecanismo(int int_col)
         {
             //Se abre/acciona la puerta / el mecanismo
             interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());    
-            fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), posicion);
+            fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos() , posicion);
             cout<<"Abre la puerta"<<endl;
         }
         else
         {
             //Se cierra/desacciona la puerta / el mecanismo
             interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() - 135.0, interactuables.at(int_col)->getRZ());
-            fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), posicion);
+            fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
             cout<<"Cierra la puerta"<<endl;
         }
     }
@@ -366,14 +367,14 @@ void Nivel::AccionarMecanismo(int int_col)
                 {
                     //Se abre/acciona la puerta / el mecanismo
                     interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());    
-                    fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), posicion);
+                    fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
                     cout<<"Abre la puerta"<<endl;
                 }
                 else
                 {
                     //Se cierra/desacciona la puerta / el mecanismo
                     interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() - 135.0, interactuables.at(int_col)->getRZ());
-                    fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), posicion);
+                    fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
                     cout<<"Cierra la puerta"<<endl;
                 }
             }
@@ -482,13 +483,20 @@ void Nivel::update()
       if(fisicas->collideObstacle())
       {
         //colisiona
+        jugadorInmovil = true;
       }
-      else if(fisicas->collidePlatform())//solo se mueve estando sobre una plataforma
+      else
+      {
+        //no colisiona
+        jugadorInmovil = false;
+      } 
+      
+      if(fisicas->collidePlatform())//solo se mueve estando sobre una plataforma
       {
 
         //actualizamos movimiento del jugador
 
-        jugador.movimiento(dt,
+        jugador.movimiento(jugadorInmovil,
             motor->estaPulsado(1),
             motor->estaPulsado(2),
             motor->estaPulsado(3),

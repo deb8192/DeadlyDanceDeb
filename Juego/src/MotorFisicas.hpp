@@ -29,7 +29,7 @@ using namespace reactphysics3d;
 
             void updateJugador(float x, float y, float z);//actualizamos al jugador en el espacio de las fisicas
             void updateEnemigos(float x, float y, float z, unsigned int i);//actualizamos al enemigo en el espacio de las fisicas
-            void updatePuerta(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
+            void updatePuerta(float x, float y, float z, float rx, float ry, float rz, float * desplazamientos, unsigned int i);
             void EraseColectable(int idx);
             void EraseEnemigo(std::size_t i);
             void EraseJugador();

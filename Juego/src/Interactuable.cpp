@@ -108,6 +108,12 @@ void Interactuable::setNewPosiciones(float nx,float ny,float nz)
     newZ = nz;
 }
 
+void Interactuable::setDesplazamientos(float despX, float despZ)
+{
+    desplazamientos[0] = despX;
+    desplazamientos[1] = despZ;
+}
+
 void Interactuable::setRotacion(float nrx, float nry, float nrz)
 {
     rx = nrx;
@@ -228,6 +234,11 @@ float Interactuable::getRY()
 float Interactuable::getRZ()
 {
     return rz;
+}
+
+float * Interactuable::GetDesplazamientos()
+{
+    return desplazamientos;
 }
 
 void Interactuable::setID(int nid)
