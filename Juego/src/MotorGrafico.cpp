@@ -162,7 +162,7 @@ void MotorGrafico::CrearCamara()
 {
   //primer vector traslacion, segundo rotacion
   //  smgr->addCameraSceneNode(0, vector3df(0,0,90), vector3df(0,0,0));
-  camera = smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,0,0));
+  camera = smgr->addCameraSceneNode(0, vector3df(0,20,-20), vector3df(0,0,0));
   //camera->setNearValue(0.5f);
   //camera->setFarValue(100.0f);
 }
@@ -439,7 +439,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         //cout << x << " " << y << " " << z << " " << endl;
         jugador_en_scena->setPosition(core::vector3df(x,y,z));
         Jugador_Scena = jugador_en_scena;
-        Jugador_Scena->setScale(core::vector3df(3,3,3));
+        Jugador_Scena->setScale(core::vector3df(1.75,1.75,1.75));
         Jugador_Scena->setFrameLoop(30, 44);
 		Jugador_Scena->setAnimationSpeed(10);
         //const SColor COLOR  = SColor(255,0,0,255);
@@ -503,8 +503,8 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
     // Centrar la camara
     nodeCamPosition.X = x;
-    nodeCamPosition.Y = y+30;
-    nodeCamPosition.Z = z-40;
+    nodeCamPosition.Y = y+20;
+    nodeCamPosition.Z = z-20;
     nodeCamTarget.X = x;
     nodeCamTarget.Y = y;
     nodeCamTarget.Z = z;
@@ -525,7 +525,13 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
 
 }
 
-void MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
+{
+    Objetos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
+    Objetos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
+}
+
+int MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!objeto)
@@ -542,6 +548,7 @@ void MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int l
             Recolectables_Scena.push_back(objeto_en_scena) :
             Objetos_Scena.push_back(objeto_en_scena);
     }
+    return Objetos_Scena.size() - 1;
 }
 
 void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
@@ -557,9 +564,8 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
             this->borrarArmaEspecial();
         }
         ArmaEspecial_Jugador = smgr->addAnimatedMeshSceneNode(armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario
-        ArmaEspecial_Jugador->setPosition(core::vector3df(x + 6.5*(sin(DEGTORAD*ry)),y,z + 6.5*(cos(DEGTORAD*ry))));
-        ArmaEspecial_Jugador->setRotation(core::vector3df(rx,ry -180,rz));
-        ArmaEspecial_Jugador->setScale(core::vector3df(0.25,0.25,0.25));
+        ArmaEspecial_Jugador->setPosition(core::vector3df(x + 5*(sin(DEGTORAD*ry)),y,z + 5*(cos(DEGTORAD*ry))));
+        ArmaEspecial_Jugador->setRotation(core::vector3df(rx,ry,rz));
         smgr->getMeshManipulator()->setVertexColors(ArmaEspecial_Jugador->getMesh(),SColor(255, 125, 150, 160));
     }
 }
@@ -1058,6 +1064,11 @@ void MotorGrafico::EraseJugador(){
 //Devolver cantidad de enemigos en escena para recorrerlos en metodo muerteEnemigo
 int MotorGrafico::getEnemigos_Scena(){
     return Enemigos_Scena.size();
+}
+
+//Devolver cantidad de objetos en escena para recorrerlos en metodo muerteEnemigo
+int MotorGrafico::getObjetos_Scena(){
+    return Objetos_Scena.size();
 }
 
 void MotorGrafico::EraseArma()

@@ -705,7 +705,7 @@ void Enemigo::runIA()
         if(nivel->getEnemigoPideAyuda() == nullptr && motor->getPathfindingActivado())
         {
             //vamos a generar un sonido de ayuda
-            generarSonido(51,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+            generarSonido(60,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
             nivel->setEnemigoPideAyuda(this); //En caso de no estar buscando a ningun aliado se anade este como peticionario
         }
         //cout << " grita pidiendo ayuda "<< endl;

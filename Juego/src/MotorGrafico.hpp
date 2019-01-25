@@ -93,7 +93,7 @@ using namespace idsEventos;
 
             void CargarEnemigos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
-            void CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
+            int CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
 
 
@@ -114,6 +114,7 @@ using namespace idsEventos;
             void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
+            void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
             void borrarArmaEspecial();
             void colorearJugador(int a, int r, int g, int b);
@@ -146,6 +147,7 @@ using namespace idsEventos;
             //Cuando muere jugador aparecen 2 botones (Ir a menu o Reiniciar juego)
             void botonesMuerteJugador();
             int getEnemigos_Scena();
+            int getObjetos_Scena();
             void EraseColectable(int idx);
             void EraseEnemigo(std::size_t i);
             void EraseJugador();
