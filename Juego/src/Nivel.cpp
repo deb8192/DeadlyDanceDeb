@@ -172,6 +172,20 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
 
 }
 
+void Nivel::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char *tipo, int * propiedades)//lo utilizamos para crear zonas
+{
+   //Crear zona
+   Zona* zon = new Zona(ancho,largo,alto,tipo);
+
+   //ID propia y posicion
+   int calcID = zonas.size();
+   zon->setID(calcID);
+   zon->setPosiciones(x,y,z);
+
+   //guardarla en el nivel
+   zonas.push_back(zon);
+}
+
 Sala * Nivel::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
@@ -503,7 +517,7 @@ void Nivel::update()
 
     //animacion
         motor->cambiarAnimacionJugador(jugador.getAnimacion());
-    
+
     //valores nuevos de interpolacion
 
 
@@ -641,7 +655,7 @@ void Nivel::update()
                 if(danyo_jug == 0)
                 {
                     //cout << "Enemigo " << i  << " pos: " << enemigos[i]->getPosAtaques() << endl;
-                    
+
                     //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
                     if(enemigos[i]->getTimeAt() > 0.0f)
                     {
@@ -844,11 +858,11 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
     {
         Pathfinder *path = Pathfinder::getInstance();
         int tipoCentro;
-        
+
         //Se inicia el recorrido hacia la primera sala del enemigo que pide ayuda.
         if(recorrido.empty() && !auxiliadores.empty() && !path->encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding).empty())
         {
-            recorrido = path->encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding);      
+            recorrido = path->encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding);
             auxiliadores.erase(auxiliadores.begin());
         }
         //Desplazamiento del enemigo hacia su destino
@@ -1105,7 +1119,7 @@ void Nivel::Draw()
         jugador.getRY(),
         jugador.getRZ()
     );
-    
+
     //Dibujado de los enemigos
     for(unsigned int i = 0; i < enemigos.size(); i++)
     {
@@ -1144,7 +1158,7 @@ void Nivel::Draw()
             jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
             jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
             jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
-            
+
             motor->mostrarArmaEspecial(
                 jugador.GetDatosAtEsp()[0],
                 jugador.getY(),
@@ -1158,7 +1172,7 @@ void Nivel::Draw()
             motor->dibujarObjetoTemporal(
                 jugador.getArmaEspecial()->getFisX()*2,
                 jugador.getY(),
-                jugador.getArmaEspecial()->getFisZ()*2,                
+                jugador.getArmaEspecial()->getFisZ()*2,
                 jugador.getRX(),
                 jugador.getRY(),
                 jugador.getRZ(),
@@ -1174,7 +1188,7 @@ void Nivel::Draw()
             jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
             jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
             jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
-            
+
             motor->mostrarArmaEspecial(
                 jugador.GetDatosAtEsp()[0],
                 jugador.GetDatosAtEsp()[1],
@@ -1198,8 +1212,18 @@ void Nivel::Draw()
                 3);
         }
     }
-    
 
+    //Dibujado zonas
+    for(unsigned int i = 0; i < zonas.size(); i++)
+    {
+        motor->dibujarZona(zonas.at(i)->getX(),
+            zonas.at(i)->getY(),
+            zonas.at(i)->getZ(),
+            zonas.at(i)->getAncho(),
+            zonas.at(i)->getAlto(),
+            zonas.at(i)->getLargo()
+        );
+    }
 }
 
 void Nivel::setEnemigoPideAyuda(Enemigo *ene)
@@ -1226,4 +1250,3 @@ Jugador Nivel::getJugador()
 {
     return jugador;
 }
-
