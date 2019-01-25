@@ -125,6 +125,7 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *st
         listaCerrada.clear();//Si tiene datos, se vacia
     }
     cout << "Entra" << endl;
+    contador = 0;
     startNodo.nodo = start;
     startNodo.costSoFar = 0;
     startNodo.estimatedTotalCost = calcularCostes(startNodo, end);
@@ -136,8 +137,9 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *st
     unsigned int i = 0;
 
     //Mientras que haya nodos visitados por procesar se busca el camino
-    while(listaAbierta.size() > 0)
+    while(listaAbierta.size() > 0 && contador < 25)
     {
+        contador++;
         int estaCerrado = -1, estaAbierto = -1;
         Pathfinder::getSmallest();                            //Se obtiene el nodo con menor coste estimado
         termina = coincide(actualNodo.nodo, end);             //SE comprueba si es el último (la primera vez solo comprueba la sala start).

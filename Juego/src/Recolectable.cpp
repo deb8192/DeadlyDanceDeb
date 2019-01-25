@@ -135,11 +135,20 @@ void Recolectable::setPosicionesFisicas(float nx,float ny,float nz)
     fisZ += nz;
 }
 
+void Recolectable::SetPosicionArrayObjetos(int posicionObjeto)
+{
+    posicionArrayObjetos = posicionObjeto;
+}
+
 int Recolectable::getAtaque()
 {
     return potenciaAtaque;
 }
 
+int Recolectable::GetPosicionArrayObjetos()
+{
+    return posicionArrayObjetos;
+}
 
 int Recolectable::getCodigo()
 {

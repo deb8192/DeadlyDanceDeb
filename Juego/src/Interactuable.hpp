@@ -10,7 +10,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
 {
     public:
         Interactuable();         //esto le deja a la entidad el constructor por defecto
-        Interactuable(int codigo, int anc, int lar, int alt, const char *objeto, const char *textura, int posicion);
+        Interactuable(int codigo, const char * nombre, int anc, int lar, int alt, const char *objeto, const char *textura, int posicion);
         ~Interactuable();
 
         //metodos de interaccion
@@ -31,6 +31,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         void setLastRotacion(float nrx, float nry, float nrz);
         void setPosicionesFisicas(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
+        void SetPosicionArrayObjetos(int posicionObjeto);
         void setID(int);
         int getID();
 
@@ -52,7 +53,9 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         float getRZ();
 
         //getters del propio objeto
+        int GetPosicionArrayObjetos();
         int getCodigo();
+        const char* getNombre();
         const char* getObjeto();
         const char* getTextura();
         float getAncho();
@@ -66,7 +69,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         //Si codigoObjeto es > 0 es un numero comun entre dos objetos: una palanca con el mismo numero que una puerta abre dicha puerta
         int codigoObjeto;   //En caso de igualarse a 0 es una puerta sin llave, y si es -1 es un cofre
         bool accionado;     //Dado que son objetos accionables tendra dos estado segun este accionado o no
-        int posicionObjeto; //Posicion del elemento en el vector de objetos del motor grafico.
+        int posicionArrayObjetos; //Posicion del elemento en el vector de objetos del motor grafico.
         float * desplazamientos = new float [2];   //Desplazamientos en X y en Z para le giro de la puerta
         
 };

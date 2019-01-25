@@ -108,6 +108,8 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
 {
     Nivel * nivel_instancia = Nivel::getInstance();
     Sala * padren = nullptr;//sala hijo
+    static const char* msg = "Ciclo";
+    cout << msg <<endl;
     for (pugi::xml_node plat = hijo.child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
@@ -185,7 +187,7 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             nivel_instancia->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
         }
 
-        crearSala(plat,padren);
+        return crearSala(plat,padren);
         //CAMBIO PARA VER SI FUNCIONA EL PATFHFINDING
         /*if(entrada != nullptr)
         {

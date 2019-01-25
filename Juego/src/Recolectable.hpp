@@ -19,7 +19,8 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
         void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
-
+        
+        //setters & getters
         void setPosiciones(float nx,float ny,float nz);
         void setNewPosiciones(float nx,float ny,float nz);//modifica las posiciones finales de la interpolacion de la figura
         void setLastPosiciones(float nx,float ny,float nz);
@@ -28,6 +29,8 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         void setLastRotacion(float nrx, float nry, float nrz);
         void setPosicionesFisicas(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
+        void SetPosicionArrayObjetos(int posicionObjeto);
+
         void setID(int);
         int getID();
 
@@ -47,6 +50,7 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         float getRY();
         float getRZ();
 
+        int GetPosicionArrayObjetos();
         int getCodigo();
         int getAtaque();
         const char* getNombre();
@@ -63,7 +67,7 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         int potenciaAtaque;
         //En caso de ser una llave, deberá tener un codigo mayor de 0
         int codigoObjeto;   //En caso de igualarse a 0 es un arma, si es -1 es diner y si es -2 es un power-up
-        
+        int posicionArrayObjetos;   //Posicion del recolectable en el array de objetos del nivel
 };
 
 #endif /* Recolectable_HPP */

@@ -5,7 +5,7 @@ Interactuable::Interactuable()
 {
 
 }
-Interactuable::Interactuable(int codigo, int anc, int lar, int alt, const char *objeto, const char *textura, int posicion)
+Interactuable::Interactuable(int codigo, const char *nombre, int anc, int lar, int alt, const char *objeto, const char *textura, int posicion)
 {
     std::string name_objeto(objeto);
     cadena_objeto = new char[sizeof(name_objeto)];
@@ -15,13 +15,18 @@ Interactuable::Interactuable(int codigo, int anc, int lar, int alt, const char *
     cadena_textura = new char[sizeof(name_textura)];
     strcpy(cadena_textura, name_textura.c_str());
 
+    std::string name_nombre(nombre);
+    cadena_nombre = new char[sizeof(name_nombre)];
+    strcpy(cadena_nombre, name_nombre.c_str());
+
+    nombreObjeto = cadena_nombre;
     codigoObjeto = codigo;
     ancho = anc;
     largo = lar;
     alto = alt;
     ruta_objeto = cadena_objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
     ruta_textura = cadena_textura;
-    posicionObjeto = posicion;
+    posicionArrayObjetos = posicion;
     accionado = false;
 }
 
@@ -151,9 +156,24 @@ void Interactuable::setPosicionesFisicas(float nx,float ny,float nz)
     fisZ += nz;
 }
 
+void Interactuable::SetPosicionArrayObjetos(int posicionObjeto)
+{
+    posicionArrayObjetos = posicionObjeto;
+}
+
+
+int Interactuable::GetPosicionArrayObjetos()
+{
+    return posicionArrayObjetos;
+}
 int Interactuable::getCodigo()
 {
     return codigoObjeto;
+}
+
+const char* Interactuable::getNombre()
+{
+    return nombreObjeto;
 }
 
 const char* Interactuable::getObjeto()
@@ -271,5 +291,5 @@ float Interactuable::getAlto()
 
 int Interactuable::GetPosicionObjetos()
 {
-    return posicionObjeto;
+    return posicionArrayObjetos;
 }

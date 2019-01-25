@@ -146,6 +146,7 @@ using namespace idsEventos;
             //Cuando muere jugador aparecen 2 botones (Ir a menu o Reiniciar juego)
             void botonesMuerteJugador();
             int getEnemigos_Scena();
+            int getObjetos_Scena();
             void EraseColectable(int idx);
             void EraseEnemigo(std::size_t i);
             void EraseJugador();
