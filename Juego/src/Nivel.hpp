@@ -5,6 +5,7 @@
 #include "pollo.hpp"
 #include "Interactuable.hpp"
 #include "Recolectable.hpp"
+#include "Zona.hpp"
 #include "MotorAudio.hpp"
 #include "Pathfinder.hpp"
 //#include "MotorGrafico.hpp"
@@ -37,14 +38,16 @@ class Nivel
             return unica_instancia;
         }
         //fin singleton public
-  
+
         //void LimpiarNivel();
         bool CargarNivel(int);//carga eñ nivel siempre que exista dicho nivel en assets/maps/xml/
 
         //cargar objetos
         void CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char *tipo, int * propiedades); //lo usamos para crear zonas
         Sala * CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
 
@@ -58,9 +61,9 @@ class Nivel
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 15 veces
         void updateRecorridoPathfinding(Enemigo *);
         void Draw();//dibuja y actualiza las posiciones del interpolado
-        
+
         void setEnemigoPideAyuda(Enemigo *);
-        
+
         Enemigo * getEnemigoPideAyuda();
         Sala * getPrimeraSala();
         std::vector<Enemigo*>  getEnemigos();
@@ -85,7 +88,8 @@ class Nivel
         std::vector<Enemigo*> auxiliadores;  //Enemigos que responden a la ayuda
         Enemigo* enemPideAyuda = nullptr;  //Enemigos que pide ayuda
         std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
-        std::vector<Recolectable*> recolectables;//Objetos recolectables del mapa
+        std::vector<Recolectable*> recolectables;
+        std::vector<Zona*> zonas; //Array de zonas
         std::vector<Interactuable*> interactuables; //Objetos interactuables del mapa
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
