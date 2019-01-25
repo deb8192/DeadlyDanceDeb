@@ -162,7 +162,7 @@ void MotorGrafico::CrearCamara()
 {
   //primer vector traslacion, segundo rotacion
   //  smgr->addCameraSceneNode(0, vector3df(0,0,90), vector3df(0,0,0));
-  camera = smgr->addCameraSceneNode(0, vector3df(10,15,-20), vector3df(0,0,0));
+  camera = smgr->addCameraSceneNode(0, vector3df(0,20,-20), vector3df(0,0,0));
   //camera->setNearValue(0.5f);
   //camera->setFarValue(100.0f);
 }
@@ -502,8 +502,8 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
     core::vector3df nodeCamTarget = camera->getTarget();
 
     // Centrar la camara
-    nodeCamPosition.X = x+10;
-    nodeCamPosition.Y = y+15;
+    nodeCamPosition.X = x;
+    nodeCamPosition.Y = y+20;
     nodeCamPosition.Z = z-20;
     nodeCamTarget.X = x;
     nodeCamTarget.Y = y;
@@ -564,9 +564,8 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
             this->borrarArmaEspecial();
         }
         ArmaEspecial_Jugador = smgr->addAnimatedMeshSceneNode(armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario
-        ArmaEspecial_Jugador->setPosition(core::vector3df(x + 6.5*(sin(DEGTORAD*ry)),y,z + 6.5*(cos(DEGTORAD*ry))));
-        ArmaEspecial_Jugador->setRotation(core::vector3df(rx,ry -180,rz));
-        ArmaEspecial_Jugador->setScale(core::vector3df(0.25,0.25,0.25));
+        ArmaEspecial_Jugador->setPosition(core::vector3df(x + 5*(sin(DEGTORAD*ry)),y,z + 5*(cos(DEGTORAD*ry))));
+        ArmaEspecial_Jugador->setRotation(core::vector3df(rx,ry,rz));
         smgr->getMeshManipulator()->setVertexColors(ArmaEspecial_Jugador->getMesh(),SColor(255, 125, 150, 160));
     }
 }
@@ -1051,6 +1050,11 @@ void MotorGrafico::EraseJugador(){
 //Devolver cantidad de enemigos en escena para recorrerlos en metodo muerteEnemigo
 int MotorGrafico::getEnemigos_Scena(){
     return Enemigos_Scena.size();
+}
+
+//Devolver cantidad de objetos en escena para recorrerlos en metodo muerteEnemigo
+int MotorGrafico::getObjetos_Scena(){
+    return Objetos_Scena.size();
 }
 
 void MotorGrafico::EraseArma()

@@ -378,9 +378,9 @@ int Jugador::AtacarEspecial()
         if(atackEspTime <= 0)
         {
             animacion = 3;
-            atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
+            atespx = 5 * sin(PI * getRY() / PIRADIAN) + getX();
             atespy = getY();
-            atespz = 6.5 * cos(PI * getRY() / PIRADIAN) + getZ();
+            atespz = 5 * cos(PI * getRY() / PIRADIAN) + getZ();
             atgx = getRX();
             atgy = getRY();
             atgz = getRZ();
@@ -464,8 +464,8 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     {
 
         //Calculo de la posicion del arma delante  int getAnimacion();del jugador
-        atespx = 6.5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
-        atespz = 6.5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
+        atespx = 5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
+        atespz = 5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
         armaEspecial->initPosicionesFisicas(atespx/2, this->getY()/2, atespz/2);
         armaEspecial->setNewPosiciones(atespx, this->getY(), atespz);
         armaEspecial->setNewRotacion(getRX(), this->getRY(), getRZ());
