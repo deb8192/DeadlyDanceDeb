@@ -1,0 +1,93 @@
+<Level><!--- Esto nos indica que estamos definiendo un nivel -->
+	
+	<Light Type="Ambiental" Intensity="50" Attenuation="0" Color="Red" X="0" Y="10" Z="0"> </Light>
+	
+	<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="0" Y="0" Z="0" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
+		<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="0" Y="0" Z="7" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>	
+		<Object Type="1" codigo="0" nombre="dinero" ataque="0" accion="5" ancho="2" largo="2" alto="10" X="0" Y="0" Z="-20" Texture="assets/texture/platform1.jpg" Model="assets/models/objeto.obj"></Object>
+		<Object Type="1" nombre="guitarra" ataque="15"  accion="2" ancho="4" largo="4" alto="10" X="10" Y="0" Z="4" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
+		<Object Type="1" accion="1" ancho="1" largo="7" alto="10" X="21" Y="0" Z="9" Texture="assets/texture/platform1.jpg" Model="assets/models/pared_der_1.obj"></Object>
+		<Object Type="1" codigo="0" accion="3" ancho="1.5" largo="4" alto="10" X="22" Y="0" Z="-3" despX="2" despZ="-4" Texture="assets/texture/platform1.jpg" Model="assets/models/puerta_der.obj"></Object>
+		<Object Type="1" accion="1" ancho="1" largo="7" alto="10" X="21" Y="0" Z="-14" Texture="assets/texture/platform1.jpg" Model="assets/models/pared_der_2.obj"></Object>
+		<Object Type="1" accion="1" ancho="23" largo="2" alto="1" X="0" Y="0" Z="20" Texture="assets/texture/platform1.jpg" Model="assets/models/paredes_del.obj"></Object>
+		<Object Type="1" accion="1" ancho="2" largo="23" alto="1" X="-20" Y="0" Z="0" Texture="assets/texture/platform1.jpg" Model="assets/models/paredes_izq.obj"></Object>
+	
+		<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="45" Y="0" Z="5" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
+			<Object Type="1" codigo="1" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="60" Y="0" Z="-10" Texture="assets/texture/platform1.jpg" Model="assets/models/llave.obj"></Object>
+			<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="50" Y="0" Z="10" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
+			<Object Type="1" accion="1" ancho="7" largo="2" alto="10" X="56" Y="0" Z="25" Texture="assets/texture/platform1.jpg" Model="assets/models/pared_del_1.obj"></Object>
+			<Object Type="1" codigo="1" accion="3" ancho="4" largo="2" alto="10" X="43.5" Y="0" Z="25" despX="-4" despZ="-2" Texture="assets/texture/platform1.jpg" Model="assets/models/puerta_del.obj"></Object>
+			<Object Type="1" accion="1" ancho="7" largo="2" alto="10" X="34" Y="0" Z="25" Texture="assets/texture/platform1.jpg" Model="assets/models/pared_del_2.obj"></Object>
+			<Object Type="1" accion="1" ancho="2" largo="23" alto="1" X="66" Y="0" Z="5" Texture="assets/texture/platform1.jpg" Model="assets/models/paredes_der.obj"></Object>
+			
+			<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="45" Y="0" Z="50" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
+				<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="55" Y="0" Z="60" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
+				<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="43" Y="0" Z="62" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
+				<Object Type="1" accion="1" ancho="7" largo="2" alto="10" X="56" Y="0" Z="70" Texture="assets/texture/platform1.jpg" Model="assets/models/pared_del_1.obj"></Object>
+				<Object Type="1" codigo="2" accion="3" ancho="4" largo="2" alto="10" X="43" Y="0" Z="70" despX="-4" despZ="-2" Texture="assets/texture/platform1.jpg" Model="assets/models/puerta_del.obj"></Object>
+				<Object Type="1" accion="1" ancho="7" largo="2" alto="10" X="34" Y="0" Z="70" Texture="assets/texture/platform1.jpg" Model="assets/models/pared_del_2.obj"></Object>
+				<Object Type="1" accion="1" ancho="2" largo="7" alto="10" X="70" Y="0" Z="61" Texture="assets/texture/platform1.jpg" Model="assets/models/pared_der_1.obj"></Object>
+				<Object Type="1" codigo="0" accion="3" ancho="1" largo="4" alto="10" X="70" Y="0" Z="48" despX="2" despZ="-4" Texture="assets/texture/platform1.jpg" Model="assets/models/puerta_der.obj"></Object>
+				<Object Type="1" accion="1" ancho="2" largo="7" alto="10" X="70" Y="0" Z="39" Texture="assets/texture/platform1.jpg" Model="assets/models/pared_der_2.obj"></Object>
+				<Object Type="1" accion="1" ancho="2" largo="23" alto="1" X="25" Y="0" Z="50" Texture="assets/texture/platform1.jpg" Model="assets/models/paredes_izq.obj"></Object>
+				
+				<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="90" Y="0" Z="50" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
+					<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="95" Y="0" Z="60" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>									
+					<Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="85" Y="0" Z="40" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>						
+					<Object Type="1" codigo="2" nombre="palanca" accion="3" ancho="3" largo="1" alto="10" X="100" Y="0" Z="38" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/combinados/interruptor/Palanca.obj"></Object>									
+					<Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="100" Y="0" Z="38" Texture="assets/texture/platform1.jpg" Model="assets/models/combinados/interruptor/Base.obj"></Object>
+					<Object Type="1" accion="1" ancho="23" largo="2" alto="1" X="90" Y="0" Z="70" Texture="assets/texture/platform1.jpg" Model="assets/models/paredes_del.obj"></Object>
+					<Object Type="1" accion="1" ancho="2" largo="23" alto="1" X="111" Y="0" Z="50" Texture="assets/texture/platform1.jpg" Model="assets/models/paredes_der.obj"></Object>
+					
+				</Platform>
+				
+				<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="45" Y="0" Z="95" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
+					<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="50" Y="0" Z="90" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
+					<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="40" Y="0" Z="105" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>									
+					<Object Type="1" nombre="arpa" ataque="12" accion="2" ancho="4" largo="4" alto="10" X="60" Y="0" Z="85" Texture="assets/texture/platform1.jpg" Model="assets/models/objeto2.obj"></Object>
+					<Object Type="1" accion="1" ancho="2" largo="7" alto="10" X="22" Y="0" Z="112" Texture="assets/texture/platform1.jpg" Model="assets/models/pared_izq_1.obj"></Object>
+					<Object Type="1" codigo="3" accion="3" ancho="1" largo="4" alto="10" X="22" Y="0" Z="103" despX="-2" despZ="4" Texture="assets/texture/platform1.jpg" Model="assets/models/puerta_izq.obj"></Object>
+					<Object Type="1" accion="1" ancho="2" largo="7" alto="10" X="22" Y="0" Z="90" Texture="assets/texture/platform1.jpg" Model="assets/models/pared_izq_2.obj"></Object>
+					
+					<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="90" Y="0" Z="115" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
+						<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="85" Y="0" Z="120" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
+						<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="100" Y="0" Z="125" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>									
+						<Object Type="1" codigo="3" nombre="palanca" accion="3" ancho="3" largo="1" alto="10" X="100" Y="0" Z="130" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/combinados/interruptor/Palanca.obj"></Object>									
+						<Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="100" Y="0" Z="130" Texture="assets/texture/platform1.jpg" Model="assets/models/combinados/interruptor/Base.obj"></Object>
+						<Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="60" Y="0" Z="85" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
+						
+					</Platform>
+					
+					<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="0" Y="0" Z="115" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
+						<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="-15" Y="0" Z="110" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
+						<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="5" Y="0" Z="100" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
+						<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="10" Y="0" Z="95" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>					
+						<Object Type="1" codigo="5" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="0" Y="0" Z="110" Texture="assets/texture/platform1.jpg" Model="assets/models/llave.obj"></Object>
+						<Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="60" Y="0" Z="85" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
+						
+						<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="0" Y="0" Z="155" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
+							<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="-10" Y="0" Z="150" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
+							<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="3" Y="0" Z="144" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
+							<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="12" Y="0" Z="164" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>					
+							<Object Type="1" nombre="guitarra" ataque="25"  accion="2" ancho="4" largo="4" alto="10" X="5" Y="0" Z="140" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
+			
+						</Platform>
+
+						<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="-45" Y="0" Z="155" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
+							<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="-45" Y="0" Z="150" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
+							<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="33" Y="0" Z="164" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>					
+							<Object Type="1" codigo="5" accion="3" ancho="4" largo="2" alto="10" X="-45" Y="0" Z="134" despX="-4" despZ="-2" Texture="assets/texture/platform1.jpg" Model="assets/models/puerta_del.obj"></Object>
+							<Object Type="1" nombre="arpa" ataque="18" accion="2" ancho="4" largo="4" alto="10" X="15" Y="0" Z="85" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
+						
+						</Platform>
+					</Platform>
+
+				</Platform>
+			
+			</Platform>
+		
+		</Platform>
+	
+	</Platform>
+
+</Level> <!-- Fin del nivel -->

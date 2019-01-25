@@ -57,7 +57,7 @@ Jugador::Jugador(int,int,int,int,int,int,std::string malla)
     tiempoPasadoEnMorir=0;
 }
 
-void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
+void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 {
     float px = newX,
           pz = newZ;
@@ -120,7 +120,7 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
         deg =  RADTODEG * atan(ax/az) ;
 
     float componente;
-    if(w || s || a || d)
+    if((w || s || a || d) && !noMueve)
     {
         componente = 1.0;
     }
@@ -378,9 +378,9 @@ int Jugador::AtacarEspecial()
         if(atackEspTime <= 0)
         {
             animacion = 3;
-            atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
+            atespx = 5 * sin(PI * getRY() / PIRADIAN) + getX();
             atespy = getY();
-            atespz = 6.5 * cos(PI * getRY() / PIRADIAN) + getZ();
+            atespz = 5 * cos(PI * getRY() / PIRADIAN) + getZ();
             atgx = getRX();
             atgy = getRY();
             atgz = getRZ();
@@ -464,8 +464,8 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     {
 
         //Calculo de la posicion del arma delante  int getAnimacion();del jugador
-        atespx = 6.5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
-        atespz = 6.5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
+        atespx = 5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
+        atespz = 5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
         armaEspecial->initPosicionesFisicas(atespx/2, this->getY()/2, atespz/2);
         armaEspecial->setNewPosiciones(atespx, this->getY(), atespz);
         armaEspecial->setNewRotacion(getRX(), this->getRY(), getRZ());
@@ -540,6 +540,42 @@ void Jugador::AumentarBarraAtEs(int can)
 void Jugador::Interactuar(int id, int id2)
 {
 
+}
+
+/***********AnnadirLlave************
+ * Metodo que anade la llave pasada por
+ * parametro al vector de llaves que
+ * posee el jugador
+ * Entradas:
+ *          Llave * llave: llave a anadir
+ */
+void Jugador::AnnadirLlave(Llave * llave)
+{
+    llaves.push_back(llave);
+    cout<<"Llave añadida. Nº de llaves: "<<llaves.size()<<endl;
+}
+
+/***********EliminarLlave************
+ * Metodo que elimina la llave pasada por
+ * parametro del vector de llaves que 
+ * posee el jugador
+ * Entradas:
+ *          Llave * llave: llave a eliminar
+ */
+void Jugador::EliminarLlave(Llave * llave)
+{
+    unsigned int i = 0;
+    bool encontrado = false;
+    while(!encontrado)
+    { 
+        i++;   
+        //Se elimina la llave si coinide con el codigo de la puerta de la llave pasada por parametro
+        if(llave->GetCodigoPuerta() == llaves.at(i)->GetCodigoPuerta())
+        {
+            llaves.erase(llaves.begin() + i);
+            encontrado = true;
+        }
+    }
 }
 
 void Jugador::updateInterfaz()
@@ -671,6 +707,7 @@ float Jugador::getRZ()
     return rz;
 }
 
+//Devuelve la posicion y rotacion del ataque especial
 float * Jugador::GetDatosAtEsp()
 {
     float * atesp = new float [6];
@@ -781,6 +818,11 @@ const char *Jugador::getRutaArmaEsp()
 int Jugador::getAnimacion()
 {
     return animacion;
+}
+
+std::vector <Llave*> Jugador::GetLlaves()
+{
+    return llaves;
 }
 
 int Jugador::getID()
