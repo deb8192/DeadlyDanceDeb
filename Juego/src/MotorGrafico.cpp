@@ -25,29 +25,22 @@ MotorGrafico::~MotorGrafico()
 
 void MotorGrafico::LimpiarMotorGrafico()
 {
-    /*
-    std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
-    std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
-    std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena --OK
-    std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
-    std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
-    IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena --OK
-    */
-    /*if(Jugador_Scena)
-    {
-        Jugador_Scena->remove();
-    }*/
+    //hay que tener  cuidado porque si se borra previamente los objetos apuntan a objetos con memoria no accesible
     
-    for(std::size_t i=0;i<Enemigos_Scena.size();i++)
+    if(Jugador_Scena)
     {
-        if(Enemigos_Scena[i] != nullptr && Enemigos_Scena[i])
-        {
-            Enemigos_Scena[i]->setVisible(false);
-            Enemigos_Scena[i]->remove();
-            Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
-        }
+        Jugador_Scena = nullptr;
     }
-    Enemigos_Scena.clear();
+    
+    if(Enemigos_Scena.size()>0)
+    {
+        for(std::size_t i=0;i<Enemigos_Scena.size();i++)
+        {
+            Enemigos_Scena[i] = nullptr;
+        }
+
+        Enemigos_Scena.resize(0);
+    }
 
     /*for (std::vector<Enemigos_Scena*>::iterator it = Enemigos_Scena.begin(); it!=Enemigos_Scena.end(); ++it){
         delete *it;
@@ -467,6 +460,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         Jugador_Scena = jugador_en_scena;
         Jugador_Scena->setScale(core::vector3df(3,3,3));
         Jugador_Scena->setFrameLoop(30, 44);
+        cout << "creo jugador" << endl;
 		Jugador_Scena->setAnimationSpeed(10);
         //const SColor COLOR  = SColor(255,0,0,255);
         //smgr->getMeshManipulator()->setVertexColors(Jugador_Scena->getMesh(),COLOR);
