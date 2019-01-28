@@ -73,7 +73,11 @@ class Nivel
         void setjix(int);
         void setjiy(int);
         void setjiz(int);
-
+        void Ejecutar();//activa ejecutar update y updateia
+        void NoEjecutar();//desactiva ejecutar update y updateia
+        void ActivarLimpieza();//se pone para limpiar el nivel
+        bool EstaLimpio();//devuelve si esta limpio el nivel
+        void borrarEnemigos();//borra todos los enemigos
     private:
 
         //clase singleton
@@ -110,6 +114,8 @@ class Nivel
         int jix = 0;
         int jiy = 0;
         int jiz = 0;
+        bool ejecutar;//nos servira para saber si tenemmos que ejecutar el update y el updateia
+        bool limpiar;//para saber si hay que limpar el nivel
+        bool limpio;//para saber si esta limpio el nivel
 };
-
 #endif
