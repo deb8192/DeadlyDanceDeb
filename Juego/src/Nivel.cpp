@@ -518,21 +518,6 @@ void Nivel::update()
     //animacion
         motor->cambiarAnimacionJugador(jugador.getAnimacion());
 
-    //valores nuevos de interpolacion
-
-
-    //Interpolacion SE SUSTITUIRA
-    /*newTime = clock();
-    frameTime = newTime - currentTime;
-    if(frameTime>0.25f)
-    {
-        frameTime=0.25f;
-    }
-    currentTime = newTime;
-    acumulator += frameTime;*/
-    //while(acumulator >= dt)
-    //{
-
     if(jugador.getArma() != nullptr)
     {
         float posArmaX = 5 * sin(PI * jugador.getRY() / PIRADIAN) + jugador.getX();
