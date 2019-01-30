@@ -36,8 +36,9 @@ void Nivel::LimpiarNivel()
     {
         for(std::size_t i=0 ; i < recolectables.size() ; i++)
         {
+            int numero = (int)i;
             cout << "se borra recolectable de nivel" << i << endl;
-            delete recolectables[i];   
+            delete recolectables[numero];   
             recolectables[i] = nullptr;
         }
 
@@ -1005,11 +1006,12 @@ void Nivel::borrarEnemigos()
     //actualizamos el jugador
     if(enemigos.size() > 0)
     {
-            for(std::size_t i=0;i<enemigos.size();i++)
-            {
-                    fisicas->EraseEnemigo(i);
-                    EraseEnemigo(i);
-            }
+        for(std::size_t i=0;i<enemigos.size();i++)
+        {
+                fisicas->EraseEnemigo(i);
+                EraseEnemigo(i);
+        }
+        enemigos.resize(0);//redimensionamos el vector a 0
     }
 }
 
