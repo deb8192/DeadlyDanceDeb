@@ -66,6 +66,11 @@ float Zona::getLargo()
   return largo;
 }
 
+bool Zona::getProposito()
+{
+  return proposito;
+}
+
 const char* Zona::getTipo()
 {
     return tipo;
