@@ -3,10 +3,10 @@ CC_FLAGS = -w #comandos extras para el compilador
 RUTACPP = src/ #variable donde iran las clases que utilizamos
 # $(CXX) - Es la variable de entorno del compilador si estas con g++ o gcc te lo detecta solo+
 CXXFLAGS = -g -Wall # lo que hace es que crea archivos debug para que se pueda comprobar la informacion
-CABECERAS =-I"/usr/include/irrlicht" -I"librerias/fmod/lowlevel/inc/" -I"librerias/fmod/studio/inc/" -I"librerias/reactphysics3d/src/" -I"librerias/glew/inc/" -I"librerias/glad/inc/" -I"librerias/glfw/inc/ -I"librerias/stb_image/inc/" -I"librerias/glm/" -I"librerias/assimp/inc/" #nos dice donde estan los includes
-LIBRERIAS =-L"librerias/reactphysics3d/lib/" -L"librerimmas/fmod/lowlevel/lib/x86_64/" -L"librerias/fmod/studio/lib/x86_64/" -L"librerias/glew/lib/" -L"librerias/glad/lib/" -L"librerias/glfw/lib/ -L"librerias/assimp/lib/" #nos dice donde estan las librerias
+CABECERAS =-I"/usr/include/irrlicht" -I"librerias/fmod/lowlevel/inc/" -I"librerias/fmod/studio/inc/" -I"librerias/reactphysics3d/src/" -I"librerias/glew/inc/" -I"librerias/glad/inc/" -I"librerias/glfw/inc/" -I"librerias/stb_image/inc/" -I"librerias/glm/" -I"librerias/assimp/inc/" #nos dice donde estan los includes
+LIBRERIAS =-L"librerias/reactphysics3d/lib/" -L"librerimmas/fmod/lowlevel/lib/x86_64/" -L"librerias/fmod/studio/lib/x86_64/" -L"librerias/glew/lib/" -L"librerias/glad/lib/" -L"librerias/glfw/lib/" -L"librerias/assimp/lib/" #nos dice donde estan las librerias
 LIBRERIAS_ESPECIFICAS = librerias/fmod/studio/lib/x86_64/libfmodstudio.so librerias/fmod/lowlevel/lib/x86_64/libfmod.so librerias/reactphysics3d/lib/libreactphysics3d.a librerias/glew/lib/libGLEW.a librerias/glad/lib/libglad.a librerias/glfw/lib/libglfw3.a librerias/assimp/lib/libIrrXML.a #librerias necesarias
-irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor -lGL -lIrrlicht -lassimp  #porque nombre llamarla
+irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor -lGL -lIrrlicht -lassimp   #porque nombre llamarla
 SHELL = /bin/bash
 # ${CXXFLAGS} - Son las opciones del compilador
 #pwd
