@@ -875,6 +875,7 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
 
 void Nivel::updateIA()
 {
+    bool quehay = ejecutar;
     if(ejecutar)
     {
         //cout<< "Ejecuto ia " << endl;
@@ -885,10 +886,10 @@ void Nivel::updateIA()
             jugador.MuereJugador();
         }
         if(jugador.estasMuerto()){
-            if(jugador.estasMuerto() && jugador.finalAnimMuerte()){
-                motor->EraseJugador();//borrar del motor (escena)
-                fisicas->EraseJugador();//borrar de motorfisicas
-                EraseJugador();//borrar de nivel
+            if(jugador.estasMuerto() && jugador.finalAnimMuerte())
+            {
+                NoEjecutar();//se dehsabilita ejecucion de updates 
+                return;
             }else{
                 if(jugador.estasMuerto()){
                     jugador.MuereJugador();
@@ -1187,131 +1188,133 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
 
 void Nivel::Draw()
 {
-
-    MotorGrafico * motor = MotorGrafico::getInstance();
-    //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
-    if(drawTime == 0.0)
+    if(ejecutar)
     {
+        MotorGrafico * motor = MotorGrafico::getInstance();
+        //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
+        if(drawTime == 0.0)
+        {
+            drawTime = controladorTiempo->getTiempo(2);
+        }
+        lastDrawTime = drawTime;
         drawTime = controladorTiempo->getTiempo(2);
-    }
-    lastDrawTime = drawTime;
-    drawTime = controladorTiempo->getTiempo(2);
 
-    //Dibujado del personaje
-    jugador.moverseEntidad(1 / controladorTiempo->getUpdateTime());
-    jugador.RotarEntidad(1 / controladorTiempo->getUpdateTime());
-    jugador.UpdateTimeMove(drawTime - lastDrawTime);
-    motor->mostrarJugador(jugador.getX(),
-        jugador.getY(),
-        jugador.getZ(),
-        jugador.getRX(),
-        jugador.getRY(),
-        jugador.getRZ()
-    );
-
-    //Dibujado de los enemigos
-    for(unsigned int i = 0; i < enemigos.size(); i++)
-    {
-        enemigos.at(i)->moverseEntidad(1 / controladorTiempo->getUpdateTime());
-        enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
-        motor->mostrarEnemigos(enemigos.at(i)->getX(),
-            enemigos.at(i)->getY(),
-            enemigos.at(i)->getZ(),
-            enemigos.at(i)->getRX(),
-            enemigos.at(i)->getRY(),
-            enemigos.at(i)->getRZ(),
-            i
+        //Dibujado del personaje
+        jugador.moverseEntidad(1 / controladorTiempo->getUpdateTime());
+        jugador.RotarEntidad(1 / controladorTiempo->getUpdateTime());
+        jugador.UpdateTimeMove(drawTime - lastDrawTime);
+        motor->mostrarJugador(jugador.getX(),
+            jugador.getY(),
+            jugador.getZ(),
+            jugador.getRX(),
+            jugador.getRY(),
+            jugador.getRZ()
         );
-    }
-    //Dibujado de las puertas
-    for(unsigned int i = 0; i < interactuables.size(); i++)
-    {
-        interactuables.at(i)->RotarEntidad(1 / controladorTiempo->getUpdateTime());
-        interactuables.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
-        motor->mostrarObjetos(interactuables.at(i)->getX(),
-            interactuables.at(i)->getY(),
-            interactuables.at(i)->getZ(),
-            interactuables.at(i)->getRX(),
-            interactuables.at(i)->getRY(),
-            interactuables.at(i)->getRZ(),
-            interactuables.at(i)->GetPosicionObjetos()
-        );
-    }
 
-    //Dibujado del ataque especial
-    //Ataque especial Heavy
-    if(jugador.getTimeAtEsp() > 0.0f)
-    {
-        if(strcmp(jugador.getArmaEspecial()->getNombre(), "Heavy") == 0)
+        //Dibujado de los enemigos
+        for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
-            jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
-            jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
-
-            motor->mostrarArmaEspecial(
-                jugador.GetDatosAtEsp()[0],
-                jugador.getY(),
-                jugador.GetDatosAtEsp()[2],
-                jugador.getRX(),
-                jugador.getRY(),
-                jugador.getRZ());
-
-            motor->clearDebug2(); //Pruebas debug
-
-            motor->dibujarObjetoTemporal(
-                jugador.getArmaEspecial()->getFisX()*2,
-                jugador.getY(),
-                jugador.getArmaEspecial()->getFisZ()*2,
-                jugador.getRX(),
-                jugador.getRY(),
-                jugador.getRZ(),
-                8,
-                1,
-                8,
-                2);
+            enemigos.at(i)->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+            enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
+            motor->mostrarEnemigos(enemigos.at(i)->getX(),
+                enemigos.at(i)->getY(),
+                enemigos.at(i)->getZ(),
+                enemigos.at(i)->getRX(),
+                enemigos.at(i)->getRY(),
+                enemigos.at(i)->getRZ(),
+                i
+            );
         }
-    
-        //Ataque especial bailaora
-        else if(strcmp(jugador.getArmaEspecial()->getNombre(), "Bailaora") == 0)
+        //Dibujado de las puertas
+        for(unsigned int i = 0; i < interactuables.size(); i++)
         {
-            jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
-            jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
-            jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
-
-            motor->mostrarArmaEspecial(
-                jugador.GetDatosAtEsp()[0],
-                jugador.GetDatosAtEsp()[1],
-                jugador.GetDatosAtEsp()[2],
-                jugador.GetDatosAtEsp()[3],
-                jugador.GetDatosAtEsp()[4],
-                jugador.GetDatosAtEsp()[5]);
-
-            motor->clearDebug2(); //Pruebas debug
-
-            motor->dibujarObjetoTemporal(
-                jugador.getArmaEspecial()->getX(),
-                jugador.getArmaEspecial()->getY(),
-                jugador.getArmaEspecial()->getZ(),
-                jugador.GetDatosAtEsp()[3],
-                jugador.GetDatosAtEsp()[4],
-                jugador.GetDatosAtEsp()[5],
-                8,
-                1,
-                8,
-                3);
+            interactuables.at(i)->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+            interactuables.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
+            motor->mostrarObjetos(interactuables.at(i)->getX(),
+                interactuables.at(i)->getY(),
+                interactuables.at(i)->getZ(),
+                interactuables.at(i)->getRX(),
+                interactuables.at(i)->getRY(),
+                interactuables.at(i)->getRZ(),
+                interactuables.at(i)->GetPosicionObjetos()
+            );
         }
-    }
 
-    //Dibujado zonas
-    for(unsigned int i = 0; i < zonas.size(); i++)
-    {
-        motor->dibujarZona(zonas.at(i)->getX(),
-            zonas.at(i)->getY(),
-            zonas.at(i)->getZ(),
-            zonas.at(i)->getAncho(),
-            zonas.at(i)->getAlto(),
-            zonas.at(i)->getLargo()
-        );
+        //Dibujado del ataque especial
+        //Ataque especial Heavy
+        if(jugador.getTimeAtEsp() > 0.0f)
+        {
+            if(strcmp(jugador.getArmaEspecial()->getNombre(), "Heavy") == 0)
+            {
+                jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+                jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+                jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
+
+                motor->mostrarArmaEspecial(
+                    jugador.GetDatosAtEsp()[0],
+                    jugador.getY(),
+                    jugador.GetDatosAtEsp()[2],
+                    jugador.getRX(),
+                    jugador.getRY(),
+                    jugador.getRZ());
+
+                motor->clearDebug2(); //Pruebas debug
+
+                motor->dibujarObjetoTemporal(
+                    jugador.getArmaEspecial()->getFisX()*2,
+                    jugador.getY(),
+                    jugador.getArmaEspecial()->getFisZ()*2,
+                    jugador.getRX(),
+                    jugador.getRY(),
+                    jugador.getRZ(),
+                    8,
+                    1,
+                    8,
+                    2);
+            }
+        
+            //Ataque especial bailaora
+            else if(strcmp(jugador.getArmaEspecial()->getNombre(), "Bailaora") == 0)
+            {
+                jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+                jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+                jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
+
+                motor->mostrarArmaEspecial(
+                    jugador.GetDatosAtEsp()[0],
+                    jugador.GetDatosAtEsp()[1],
+                    jugador.GetDatosAtEsp()[2],
+                    jugador.GetDatosAtEsp()[3],
+                    jugador.GetDatosAtEsp()[4],
+                    jugador.GetDatosAtEsp()[5]);
+
+                motor->clearDebug2(); //Pruebas debug
+
+                motor->dibujarObjetoTemporal(
+                    jugador.getArmaEspecial()->getX(),
+                    jugador.getArmaEspecial()->getY(),
+                    jugador.getArmaEspecial()->getZ(),
+                    jugador.GetDatosAtEsp()[3],
+                    jugador.GetDatosAtEsp()[4],
+                    jugador.GetDatosAtEsp()[5],
+                    8,
+                    1,
+                    8,
+                    3);
+            }
+        }
+
+        //Dibujado zonas
+        for(unsigned int i = 0; i < zonas.size(); i++)
+        {
+            motor->dibujarZona(zonas.at(i)->getX(),
+                zonas.at(i)->getY(),
+                zonas.at(i)->getZ(),
+                zonas.at(i)->getAncho(),
+                zonas.at(i)->getAlto(),
+                zonas.at(i)->getLargo()
+            );
+        }
     }
 }
 
