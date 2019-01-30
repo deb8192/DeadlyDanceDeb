@@ -208,27 +208,28 @@ void Nivel::cargarCofres(int num)
   {
     if(zonas_cofres.size() > num_cofres)
     {
-      //Buscar zonas sin proposito y guardarlos en un vector
-      std::vector<Zona*> Zsinprop;
+      //Buscar zonas sin proposito y guardar posicion en vector
+      std::vector<int> Zsinprop;
       for(int i = zonas_cofres.size(); i > 0; i--)
       {
-        if(zonas_cofres[i]->getProposito() == false)
+        if(zonas_cofres.at(i-1)->getProposito() == false)
         {
-          cout << "entra:" << i << endl;
-          Zsinprop.push_back(zonas_cofres[i]);
+          cout << "entra:" << i-1 << endl;
+          Zsinprop.push_back(i-1);
         }
       }
+
       //Mientra hay cofres sin colocar, colocar en una zona aleatoria
       while(num_cofres > 0)
       {
         srand(time(NULL));
         int numAlt = rand() % Zsinprop.size();
-        cout << "colocar en: " << numAlt;
+        cout << "colocar en: " << Zsinprop[numAlt] << endl;
 
         //Buscar zona donde colocar
-        float newx = zonas_cofres[numAlt]->getX();
-        float newy = zonas_cofres[numAlt]->getY();
-        float newz = zonas_cofres[numAlt]->getZ();
+        float newx = zonas_cofres[Zsinprop[numAlt]]->getX();
+        float newy = zonas_cofres[Zsinprop[numAlt]]->getY();
+        float newz = zonas_cofres[Zsinprop[numAlt]]->getZ();
 
         //Colocar cofre
         int posicionObjeto = motor->CargarObjetos(3,newx,newy,newz,2,2,2,"assets/models/ChestCartoon/ChestCartoon.obj", "assets/models/ChestCartoon/ChestCartoon.mtl");
