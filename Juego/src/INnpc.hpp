@@ -24,6 +24,10 @@ public:
     virtual void setBarraAtEs(int bar)=0;
     virtual void setAtaque(int ataq)=0;
     virtual void setSuerte(int suer)=0;
+    virtual void setTimeAt(float time)=0;
+    virtual void setLastTimeAt(float time)=0;
+    virtual void setTimeAtEsp(float time)=0;
+    virtual void setLastTimeAtEsp(float time)=0;
     virtual void setDanyoCritico(int danyoC)=0;
     virtual void setProAtaCritico(int probabilidad)=0;
 
@@ -32,6 +36,10 @@ public:
     virtual int getBarraAtEs()=0;
     virtual int getAtaque()=0;
     virtual int getSuerte()=0;
+    virtual float getTimeAtEsp()=0;
+    virtual float getLastTimeAtEsp()=0;
+    virtual float getTimeAt()=0;
+    virtual float getLastTimeAt()=0;
     virtual int getDanyoCritico()=0;
     virtual int getProAtaCritico()=0;
     virtual int* getBuffos()=0;
@@ -48,8 +56,8 @@ protected:
     int buffos[4];//1 aumento de vida, 2 aumento de ataque, 3 aumento de suerte, 4 aumento de pCritica.
     std::string malla; //malla 3d del personaje
     //Variables para el metodo morir
-    float atackEspTime;//Tiempo actual del ataque especial
-    float lastAtackEspTime;//Tiempo antiguo del ataque especial
+    float atackTime, atackEspTime;//Tiempo actual del ataque y del ataque especial
+    float lastAtackTime, lastAtackEspTime;//Tiempo antiguo del ataque y del ataque especial
     float animacionMuerteTiem = 3000.0f;//tiempo de animacion del estado muerte para cualquier NPC
     float tiempoPasadoMuerte = 0;
     //tiempos animaciones

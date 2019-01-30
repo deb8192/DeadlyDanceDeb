@@ -54,7 +54,7 @@ void Juego::setNivelThen()
     nivel->setThen();
 }
 
-void Juego::Update()
+void Juego::Draw()
 {
     if(estado->QueEstado() == 3)
     {
@@ -67,10 +67,30 @@ void Juego::Update()
             motor->resetKey(KEY_ESPACIO);
         }
 
-        estado->Actualizar();
+        estado->Pintar();
     }
     else
     {
+        estado->Pintar();
+    }
+}
+
+void Juego::Update()
+{
+    /*if(estado->QueEstado() == 3)
+    {
+        times * tiempo = times::getInstance();
+
+        if(tiempo->calcularTiempoPasado(marcaTiempo) >= tiempoTotal || motor->finalCinematica())
+        {
+            estado = &menu;
+            InicializarVentana();
+        }
+
+        estado->Actualizar();
+    }
+    else
+    {*/
         estado->Actualizar();
         //con esto se llama al update adecuado
         //cout << "\e[24m Aqui \e[0m" << endl;
@@ -79,7 +99,7 @@ void Juego::Update()
             //limpiamos el gui y la scena
             motor->borrarScena();
             motor->borrarGui();
-            nivel->CargarNivel(3);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
+            nivel->CargarNivel(5);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
             motor->resetEvento(GUI_ID_EMPEZAR_BUTTON);//reseteamos el evento
             Jugar();
         }
@@ -116,6 +136,13 @@ void Juego::Update()
             motor->resetKey(KEY_G_DEBUG);
         }
 
+        //para pathfinding activado
+        if(motor->estaPulsado(KEY_C))
+        {
+            motor->activarPathfinding();
+            motor->resetKey(KEY_C);
+        }
+
         // Cargar XML arboles
         if(motor->ocurreEvento(GUI_ID_ARBOLES_BUTTON))
         {
@@ -138,7 +165,7 @@ void Juego::Update()
             motor->resetEvento(GUI_ID_BACK_MENU_BUTTON);
             estado = &menu;
         }
-    }
+    //}
 }
 
 //se llama cuando se presiona un boton de salir del juego.

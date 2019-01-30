@@ -25,7 +25,8 @@
 
             bool Running();//te devuelve true si esta en funcionamiento la ventana del juego, te devuelve false si se ha cerrado la ventana
             void InicializarVentana();//te inicializa la ventana en la que se va a mostrar el juego
-            void Update(); //actualiza renderizados, control de teclas
+            void Draw(); //actualiza renderizados
+            void Update(); //actualiza logica
             void UpdateIA(); //ejecuta la ia
             void LimpiarVentana();//borra de la memoria la ventana del juego.
             void Salir();//sale del juego

@@ -7,7 +7,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
 #include <vector>//para los objetos en escena
-#include "InterfazJugador.hpp"//para la interfaz
+#include "Jugando/InterfazJugador.hpp"//para la interfaz
 #include "times.hpp"
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
@@ -94,9 +94,9 @@ using namespace idsEventos;
 
             void CargarEnemigos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
-            void CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
+            int CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
-           
+
 
 
             void closeGame();
@@ -106,13 +106,16 @@ using namespace idsEventos;
 
             //debug grafico
             void activarDebugGrafico();//se activa o desactiva el modo debug grafico
+            void activarPathfinding(); //Temporal, se activa o desactiva el pathfinding
             void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
             void dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo);
+            void dibujarZona(int x, int y, int z, float ancho, float alto, float profund);
             void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
             void clearDebug2();
             void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
+            void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
             void borrarArmaEspecial();
             void colorearJugador(int a, int r, int g, int b);
@@ -132,7 +135,7 @@ using namespace idsEventos;
             void updateMotorPuzzles(short tipo);
             void PuzzlesGui(short tipo, std::string enun, short opciones);
             void TextoPasos(short pasos);
-            void CrearFichas(short posY, float tamanyo, 
+            void CrearFichas(short posY, float tamanyo,
                   int r, int g, int b);
             short GetZonaVentana();
             bool SeleccionarNodo();
@@ -146,6 +149,7 @@ using namespace idsEventos;
             void botonesMuerteJugador();
             int getEnemigos_Scena();
             void EraseColectable(long unsigned int idx);
+            int getObjetos_Scena();
             void EraseEnemigo(std::size_t i);
             void EraseJugador();
             void EraseArma();
@@ -157,7 +161,10 @@ using namespace idsEventos;
 
             //animaciones
             void cambiarAnimacionJugador(int);//nos sirve para cambiar de animacion al jugador
-            
+
+            //getters & setters
+            bool getPathfindingActivado();
+
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
@@ -191,8 +198,8 @@ using namespace idsEventos;
             //debug
             IAnimatedMesh * linea;
             IAnimatedMesh * conovision;
+            bool debugGrafico, pathfinding;//nos sirven para saber si tenemos activado el debug grafico y el pathfinding
             scene::ISceneNode *n;//box
-            bool debugGrafico;//nos sirve para saber si tenemos activado el debug grafico
 
             core::aabbox3d<f32> bounding_jugador;
 
@@ -200,7 +207,7 @@ using namespace idsEventos;
             IAnimatedMesh * sphere;
             IAnimatedMesh * cube;
             IAnimatedMesh * capsule;
-            
+
             // Objetos y funciones para puzzles
             IGUIStaticText* myTextBox;
             ISceneCollisionManager* collmgr;
@@ -240,7 +247,7 @@ using namespace idsEventos;
             IGUIImage* llaveI;
             IGUIImage* espadaI;
             IGUIImage* dagaI;
-            IGUIStaticText* moneyI;  
+            IGUIStaticText* moneyI;
             ITexture * vida_textura;
             ITexture * energia_textura;
             ITexture * dinero_textura;
@@ -249,11 +256,11 @@ using namespace idsEventos;
             ITexture * barraEnergia_textura;
             ITexture * manos_textura;
             ITexture * llave_textura;
-            ITexture * espada_textura;   
+            ITexture * espada_textura;
             ITexture * daga_textura;
             //cinematicas
             int frame_actual = 0;//numero de frame actual
-            IGUIImage * actual;//frame actual   
+            IGUIImage * actual;//frame actual
             float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
             ITexture * actualTexture;//textura actual
     };

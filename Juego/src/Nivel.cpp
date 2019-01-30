@@ -7,15 +7,22 @@
 Nivel* Nivel::unica_instancia = 0;
 //fin indicador singleton
 
+#define PIRADIAN 180.0f
 #define PI 3.14159265358979323846
+#define PALANCA "palanca"
 
 Nivel::Nivel()
 {
     primeraSala = nullptr;
     //fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     id = 0;
-    controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
     ejecutar = false;
+    destinoPathFinding = nullptr;
+    fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
+    id = 0;
+    controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
+    drawTime = 0.0f;
+    lastDrawTime = drawTime;
 }
 
 void Nivel::LimpiarNivel()
@@ -40,6 +47,29 @@ void Nivel::LimpiarNivel()
 
         recolectables.resize(0);
     }
+
+    if(interactuables.size() > 0)
+    {
+        for(std::size_t i=0 ; i < interactuables.size() ; i++)
+        {
+            delete interactuables[i];   
+            interactuables[i] = nullptr;
+        }
+
+        interactuables.resize(0);
+    }
+
+    if(zonas.size() > 0)
+    {
+        for(std::size_t i=0 ; i < zonas.size() ; i++)
+        {
+            delete zonas[i];   
+            zonas[i] = nullptr;
+        }
+
+        zonas.resize(0);
+    }
+    
 
     //jugador.~Jugador();//limpiamos jugador
     jugador = Jugador();//volvemos a crear jugador
@@ -85,7 +115,11 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
         ene->setArbol(cargadorIA.cargarArbol("Prueba1"));
     //fin ia
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    ene->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    ene->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    ene->Enemigo::initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     ene->setVida(75);
+    ene->setVelocidad(2.0f);
     ene->setBarraAtEs(0);
     ene->definirSala(sala);//le pasamos la sala en donde esta
     ene->setAtaque(10);
@@ -173,24 +207,51 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
 
 }
 
-void Nivel::CrearObjeto(int accion, const char* nombre, int ataque, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
+    int posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
 
+    //Arma o power-up
     if(accion == 2)
     {
-        Recolectable* rec = new Recolectable(ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
+        Recolectable* rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
         rec->setID(recolectables.size());
         rec->setPosiciones(x,y,z);
+        rec->SetPosicionArrayObjetos(posicionObjeto);
         recolectables.push_back(rec);
-
-  }
-    motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+    }
+    //Puertas o interruptores
+    if(accion == 3)
+    {
+        Interactuable * inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto);
+        inter->setID(id++);
+        inter->setPosiciones(x,y,z);
+        inter->SetPosicionArrayObjetos(posicionObjeto);
+        inter->setDesplazamientos(despX,despZ);
+        inter->setRotacion(0.0,0.0,0.0);
+        interactuables.push_back(inter);
+    }
+    
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
 
+}
+
+void Nivel::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char *tipo, int * propiedades)//lo utilizamos para crear zonas
+{
+   //Crear zona
+   Zona* zon = new Zona(ancho,largo,alto,tipo);
+
+   //ID propia y posicion
+   int calcID = zonas.size();
+   zon->setID(calcID);
+   zon->setPosiciones(x,y,z);
+
+   //guardarla en el nivel
+   zonas.push_back(zon);
 }
 
 Sala * Nivel::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -253,42 +314,62 @@ void Nivel::CogerObjeto()
 
     long unsigned int rec_col = fisicas->collideColectable();
         jugador.setAnimacion(4);
-        if(jugador.getArma() == nullptr)//si no tiene arma equipada
+
+        //En caso de no ser llaves
+        if(recolectables.at(rec_col)->getCodigo() == 0)
         {
-            //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)recolectables[rec_col];
-            Arma* nuArma = new Arma(recolectables[rec_col]->getAtaque(),recolectables[rec_col]->getNombre(),recolectables[rec_col]->getAncho(),recolectables[rec_col]->getLargo(),recolectables[rec_col]->getAlto(),recolectables[rec_col]->getObjeto(),recolectables[rec_col]->getTextura());
-            jugador.setArma(nuArma);
-            //lo cargamos por primera vez en el motor de graficos
-            motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), recolectables[rec_col]->getObjeto(), recolectables[rec_col]->getTextura());
-            //lo cargamos por primera vez en el motor de fisicas
-            fisicas->crearCuerpo(0,jugador.getX()/2,jugador.getY()/2,jugador.getZ()/2,2,recolectables[rec_col]->getAncho(), recolectables[rec_col]->getLargo(), recolectables[rec_col]->getAlto(), 6);
-            //borramos el recolectable de nivel, motor grafico y motor fisicas
-            recolectables.erase(recolectables.begin() + rec_col);
-            motor->EraseColectable(rec_col);
-            fisicas->EraseColectable(rec_col);
-            atacktime = 0.0f; //Reiniciar tiempo de ataques
+            if(jugador.getArma() == nullptr)//si no tiene arma equipada
+            {
+                //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)recolectables[rec_col];
+                Arma* nuArma = new Arma(recolectables[rec_col]->getAtaque(),recolectables[rec_col]->getNombre(),recolectables[rec_col]->getAncho(),recolectables[rec_col]->getLargo(),recolectables[rec_col]->getAlto(),recolectables[rec_col]->getObjeto(),recolectables[rec_col]->getTextura());
+                jugador.setArma(nuArma);
+                //PROVISIONAL
+                jugador.getArma()->setRotacion(0.0, PIRADIAN, 0.0);
+                //!PROVISIONAL
+                //lo cargamos por primera vez en el motor de graficos
+                motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), recolectables[rec_col]->getObjeto(), recolectables[rec_col]->getTextura());
+                //lo cargamos por primera vez en el motor de fisicas
+                fisicas->crearCuerpo(0,jugador.getX()/2,jugador.getY()/2,jugador.getZ()/2,2,recolectables[rec_col]->getAncho(), recolectables[rec_col]->getLargo(), recolectables[rec_col]->getAlto(), 6);
+                //borramos el recolectable de nivel, motor grafico y motor fisicas
+                recolectables.erase(recolectables.begin() + rec_col);
+                motor->EraseColectable(rec_col);
+                fisicas->EraseColectable(rec_col);
+                atacktime = 0.0f; //Reiniciar tiempo de ataques
+            }
+            else if(jugador.getArma() != nullptr)//si tiene arma equipada
+            {
+                //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
+                Recolectable* nuRec = new Recolectable(0, jugador.getArma()->getAtaque(),jugador.getArma()->getNombre(),jugador.getArma()->getAncho(),jugador.getArma()->getLargo(), jugador.getArma()->getAlto(),jugador.getArma()->getObjeto(),jugador.getArma()->getTextura());
+                nuRec->setPosiciones(jugador.getX(),jugador.getY(), jugador.getZ());
+                Arma* nuArma = new Arma(recolectables[rec_col]->getAtaque(),recolectables[rec_col]->getNombre(),recolectables[rec_col]->getAncho(),recolectables[rec_col]->getLargo(),recolectables[rec_col]->getAlto(),recolectables[rec_col]->getObjeto(),recolectables[rec_col]->getTextura());
+                motor->EraseArma();
+                jugador.setArma(nuArma);
+                //PROVISIONAL
+                jugador.getArma()->setRotacion(0.0, PIRADIAN, 0.0);
+                //!PROVISIONAL
+                //lo cargamos por primera vez en el motor de graficos
+                motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), recolectables[rec_col]->getObjeto(), recolectables[rec_col]->getTextura());
+                //lo cargamos en el motor de fisicas
+                fisicas->setFormaArma(jugador.getX()/2, jugador.getY()/2, jugador.getZ()/2, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(),jugador.getArma()->getAlto());
+                //borramos el recolectable anterior de nivel, motor grafico y motor fisicas
+                recolectables.erase(recolectables.begin() + rec_col);
+                motor->EraseColectable(rec_col);
+                fisicas->EraseColectable(rec_col);
+                //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
+                recolectables.push_back(nuRec);
+                fisicas->setFormaRecolectable(recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
+                motor->CargarRecolectable(recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
+                atacktime = 0.0f; //Reiniciar tiempo de ataques
+            }
         }
-        else if(jugador.getArma() != nullptr)//si tiene arma equipada
+        else if(recolectables.at(rec_col)->getCodigo() > 0)
         {
-            //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-            Recolectable* nuRec = new Recolectable(jugador.getArma()->getAtaque(),jugador.getArma()->getNombre(),jugador.getArma()->getAncho(),jugador.getArma()->getLargo(), jugador.getArma()->getAlto(),jugador.getArma()->getObjeto(),jugador.getArma()->getTextura());
-            nuRec->setPosiciones(jugador.getX(),jugador.getY(), jugador.getZ());
-            Arma* nuArma = new Arma(recolectables[rec_col]->getAtaque(),recolectables[rec_col]->getNombre(),recolectables[rec_col]->getAncho(),recolectables[rec_col]->getLargo(),recolectables[rec_col]->getAlto(),recolectables[rec_col]->getObjeto(),recolectables[rec_col]->getTextura());
-            motor->EraseArma();
-            jugador.setArma(nuArma);
-            //lo cargamos por primera vez en el motor de graficos
-            motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), recolectables[rec_col]->getObjeto(), recolectables[rec_col]->getTextura());
-            //lo cargamos en el motor de fisicas
-            fisicas->setFormaArma(jugador.getX()/2, jugador.getY()/2, jugador.getZ()/2, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(),jugador.getArma()->getAlto());
-            //borramos el recolectable anterior de nivel, motor grafico y motor fisicas
-            recolectables.erase(recolectables.begin() + rec_col);
-            motor->EraseColectable(rec_col);
-            fisicas->EraseColectable(rec_col);
-            //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
-            recolectables.push_back(nuRec);
-            fisicas->setFormaRecolectable(recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
-            motor->CargarRecolectable(recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
-            atacktime = 0.0f; //Reiniciar tiempo de ataques
+            Llave *llave = new Llave(recolectables.at(rec_col)->getCodigo());
+            jugador.AnnadirLlave(llave);
+            //borramos el recolectable de nivel, motor grafico y motor fisicas
+                recolectables.erase(recolectables.begin() + rec_col);
+                motor->EraseColectable(rec_col);
+                fisicas->EraseColectable(rec_col);
         }
 
 }
@@ -301,7 +382,7 @@ void Nivel::DejarObjeto()
         if(jugador.getArma() != nullptr)//si tiene arma equipada
         {
             //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-            Recolectable* nuRec = new Recolectable(jugador.getArma()->getAtaque(),jugador.getArma()->getNombre(),jugador.getArma()->getAncho(),jugador.getArma()->getLargo(), jugador.getArma()->getAlto(),jugador.getArma()->getObjeto(),jugador.getArma()->getTextura());
+            Recolectable* nuRec = new Recolectable(0, jugador.getArma()->getAtaque(),jugador.getArma()->getNombre(),jugador.getArma()->getAncho(),jugador.getArma()->getLargo(), jugador.getArma()->getAlto(),jugador.getArma()->getObjeto(),jugador.getArma()->getTextura());
             nuRec->setPosiciones(jugador.getX(),jugador.getY(), jugador.getZ());
             motor->EraseArma();
             fisicas->EraseArma();
@@ -315,18 +396,150 @@ void Nivel::DejarObjeto()
 
 }
 
-void Nivel::pulsarE()
+/*********** AccionarMecanismo ***********
+ * Funcion que, en funcion del valor codigo 
+ * del interactuable al que apunte int_col,
+ * si es -1 abre un cofre, si es 0 abre una puerta
+ * sin llave y si es mayor que 0 abrira la puerta
+ * indicada si el jugador tiene su llave.
+ *      Entradas:
+ *                  int_col: indicador del elemento en el vector de interactuables
+ *      Salidas:
+*/
+
+void Nivel::AccionarMecanismo(int int_col)
+{
+    unsigned int i = 0;
+    bool coincide = false;
+    //Si es una puerta sin llave o palanca asociada
+    if(interactuables.at(int_col)->getCodigo() == 0)
+    {
+        //Se acciona o desacciona el mecanismo segun su estado actual
+        bool abrir = interactuables.at(int_col)->accionar();
+        unsigned int posicion = fisicas->GetRelacionInteractuablesObstaculos(int_col);
+        if(abrir)
+        {
+            //Se abre/acciona la puerta / el mecanismo
+            interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());    
+            fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos() , posicion);
+            cout<<"Abre la puerta"<<endl;
+        }
+        else
+        {
+            //Se cierra/desacciona la puerta / el mecanismo
+            interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() - 135.0, interactuables.at(int_col)->getRZ());
+            fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
+            cout<<"Cierra la puerta"<<endl;
+        }
+    }
+    else if(interactuables.at(int_col)->getCodigo() == -1)
+    {
+        cout<<"Es un cofre"<<endl;
+    }
+    else if(std::strcmp(interactuables.at(int_col)->getNombre(), PALANCA) == 0)
+    {
+        i = 0;
+        coincide = false;
+        //PRUEBAS CON PALANCAS
+        while(i < interactuables.size() && !coincide)
+        {
+            if(interactuables.at(i)->getCodigo() == interactuables.at(int_col)->getCodigo())
+            {
+                coincide = true;
+                i--;
+            }
+            i++;
+        }
+        if(coincide)
+        {
+            cout<<"La palanca acciona una puerta"<<endl;
+            //Se acciona o desacciona el mecanismo segun su estado actual
+            bool activar = interactuables.at(int_col)->accionar();
+            bool abrir = interactuables.at(i)->accionar();
+            unsigned int posicion = fisicas->GetRelacionInteractuablesObstaculos(i);
+            if(abrir)
+            {
+                //Se abre/acciona la puerta / el mecanismo
+                interactuables.at(i)->setNewRotacion(interactuables.at(i)->getRX(), interactuables.at(i)->getRY() + 135.0, interactuables.at(i)->getRZ());    
+                fisicas->updatePuerta(interactuables.at(i)->getX(), interactuables.at(i)->getY(), interactuables.at(i)->getZ(), interactuables.at(i)->getRX(), interactuables.at(i)->getRY() +135.0, interactuables.at(i)->getRZ(), interactuables.at(i)->GetDesplazamientos(), posicion);
+                cout<<"Abre la puerta"<<endl;
+            }
+            else
+            {
+                //Se cierra/desacciona la puerta / el mecanismo
+                interactuables.at(i)->setNewRotacion(interactuables.at(i)->getRX(), interactuables.at(i)->getRY() - 135.0, interactuables.at(i)->getRZ());
+                fisicas->updatePuerta(interactuables.at(i)->getX(), interactuables.at(i)->getY(), interactuables.at(i)->getZ(), interactuables.at(i)->getRX(), - interactuables.at(i)->getRY(), interactuables.at(i)->getRZ(), interactuables.at(i)->GetDesplazamientos(), posicion);
+                cout<<"Cierra la puerta"<<endl;
+            }
+            
+            if(activar)
+            {
+                //Se abre/acciona la puerta / el mecanismo
+                interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ()+50);    
+                cout<<"Acciona la palanca"<<endl;
+            }
+            else
+            {
+                //Se cierra/desacciona la puerta / el mecanismo
+                interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ()-50);    
+                cout<<"Desacciona la palanca"<<endl;
+            }
+        }
+    }
+    else
+    {
+        i = 0;
+        coincide = false;
+        //PRUEBAS CON LLAVES
+        while(i < jugador.GetLlaves().size() && !coincide)
+        {
+            if(jugador.GetLlaves().at(i)->GetCodigoPuerta() == interactuables.at(int_col)->getCodigo())
+            {
+                coincide = true;
+            }
+            i++;
+        }
+        if(coincide)
+        {
+            cout<<"Tiene la llave para abrir la puerta"<<endl;
+            //Se acciona o desacciona el mecanismo segun su estado actual
+            bool abrir = interactuables.at(int_col)->accionar();
+            unsigned int posicion = fisicas->GetRelacionInteractuablesObstaculos(int_col);
+            if(abrir)
+            {
+                //Se abre/acciona la puerta / el mecanismo
+                interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());    
+                fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
+                cout<<"Abre la puerta"<<endl;
+            }
+            else
+            {
+                //Se cierra/desacciona la puerta / el mecanismo
+                interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() - 135.0, interactuables.at(int_col)->getRZ());
+                fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
+                cout<<"Cierra la puerta"<<endl;
+            }
+        }
+    }
+    
+}
+/************************** InteractualNivel *************************
+* Detecta las posiciones de los objetos recolectables y de interaccion
+* y si está pulsado E interactua y si no lo pinta de color para destacarlo
+*/
+void Nivel::InteractuarNivel()
 {
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     MotorGrafico * motor = MotorGrafico::getInstance();
     //lo siguiente es para saber que objeto colisiona con jugador
     int rec_col = fisicas->collideColectable();
+    int int_col = fisicas->collideInteractuable();
 
     //cambia se utiliza porque coge y suelta el objeto sucesivamente varias veces, la causa de este error
     //era porque ocurren varias iteraciones del bucle tal vez porque la interpolacion crea mas iteraciones en el bucle
     if(motor->estaPulsado(KEY_E))
     {
-        if(rec_col < 0)
+        if(rec_col < 0 && int_col < 0)
         {
             if(cambia <= 0)
             {
@@ -342,11 +555,20 @@ void Nivel::pulsarE()
             }
             cambia++;
         }
+        else if(int_col >= 0)
+        {
+            if(cambia <= 0)
+            {
+                cout<<"Detecta el objeto"<<endl;
+                this->AccionarMecanismo(int_col);
+            }
+            cambia++;
+        }
+        motor->resetKey(KEY_E);
     }
     else{
         cambia = 0;
     }
-    motor->resetKey(KEY_E);
     //cout << "cambia: " << cambia << endl; //esto es para ver cuantas iteraciones de bucle pasan cuando coge objeto
 }
 
@@ -355,35 +577,46 @@ void Nivel::pulsarE()
 
 void Nivel::update()
 {
+    MotorGrafico * motor = MotorGrafico::getInstance();
+
+    if(motor->estaPulsado(KEY_J))
+    {
+        jugador.QuitarVida(20);
+        motor->resetKey(KEY_J);
+    }
+
     if(ejecutar)
     {
         MotorFisicas* fisicas = MotorFisicas::getInstance();
         MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
-        //actualizamos el jugador
-        MotorGrafico * motor = MotorGrafico::getInstance();
 
         //animacion
-            motor->cambiarAnimacionJugador(jugador.getAnimacion());
+        motor->cambiarAnimacionJugador(jugador.getAnimacion());
 
-        //Interpolacion
-        newTime = clock();
+        //valores nuevos de interpolacion
+
+
+        //Interpolacion SE SUSTITUIRA
+        /*newTime = clock();
         frameTime = newTime - currentTime;
         if(frameTime>0.25f)
         {
             frameTime=0.25f;
         }
         currentTime = newTime;
-        acumulator += frameTime;
-        while(acumulator >= dt)
-        {
+        acumulator += frameTime;*/
+        //while(acumulator >= dt)
+        //{
 
         if(jugador.getArma() != nullptr)
         {
+            float posArmaX = 5 * sin(PI * jugador.getRY() / PIRADIAN) + jugador.getX();
+            float posArmaZ = 5 * cos(PI * jugador.getRY() / PIRADIAN) + jugador.getZ();;
             //iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
-            jugador.getArma()->setPosiciones(jugador.getX(), jugador.getY(), jugador.getZ());
-            motor->llevarObjeto(jugador.getX(), jugador.getY()+3,jugador.getZ(), jugador.getRX(), jugador.getRY(), jugador.getRZ() );
-            fisicas->llevarBox(jugador.getX(), jugador.getY()+3,jugador.getZ(), jugador.getArma()->getAncho(), jugador.getArma()->getLargo(), jugador.getArma()->getAlto());
+            jugador.getArma()->setPosiciones(posArmaX, jugador.getY()+3, posArmaZ);
+            motor->llevarObjeto(posArmaX, jugador.getY()+3,posArmaZ, jugador.getRX(), jugador.getRY(), jugador.getRZ() );
+            fisicas->llevarBox(posArmaX, jugador.getY()+3,posArmaZ, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(), jugador.getArma()->getAlto());
         }
 
 
@@ -392,69 +625,59 @@ void Nivel::update()
             motor->estaPulsado(2),
             motor->estaPulsado(3),
             motor->estaPulsado(4),
-            jugador.getX(),
-            jugador.getY(),
-            jugador.getZ()
+            jugador.getNewX(),
+            jugador.getNewY(),
+            jugador.getNewZ()
         );
 
         //colisiones con todos los objetos y enemigos que no se traspasan
-        if(fisicas->collideObstacle())
+        if(fisicas->collideObstacle() || !fisicas->collidePlatform())
         {
             //colisiona
+            jugadorInmovil = true;
+            jugador.setNewPosiciones(jugador.getX(), jugador.getY(), jugador.getZ());
         }
-        else if(fisicas->collidePlatform())//solo se mueve estando sobre una plataforma
+        else
         {
+            //no colisiona
+            jugadorInmovil = false;
+        } 
+        
+        //actualizamos movimiento del jugador
 
-            //actualizamos movimiento del jugador
-
-            jugador.movimiento(dt,
+            jugador.movimiento(jugadorInmovil,
                 motor->estaPulsado(1),
                 motor->estaPulsado(2),
                 motor->estaPulsado(3),
                 motor->estaPulsado(4)
             );
 
-            motor->mostrarJugador(jugador.getX(),
-                jugador.getY(),
-                jugador.getZ(),
-                jugador.getRX(),
-                jugador.getRY(),
-                jugador.getRZ()
-            );
-
-            /*for(unsigned int i = 0; i < enemigos.size(); i++)
-            {
-                fisicas->updateEnemigos(enemigos.at(i)->getX(),
-                    enemigos.at(i)->getY(),
-                    enemigos.at(i)->getZ(),
-                    i
-                );
-            }*/
-
+            motor->clearDebug2();   //Pruebas debug
             for(unsigned int i = 0; i < enemigos.size(); i++)
             {
-                if(enemigos[i] != nullptr)
-                {
-                    motor->mostrarEnemigos(enemigos.at(i)->getX(),
-                    enemigos.at(i)->getY(),
-                    enemigos.at(i)->getZ(),
-                    enemigos.at(i)->getRX(),
-                    enemigos.at(i)->getRY(),
-                    enemigos.at(i)->getRZ(),
-                    i);
-                }
+                fisicas->updateEnemigos(enemigos.at(i)->getFisX(),
+                    enemigos.at(i)->getFisY(),
+                    enemigos.at(i)->getFisZ(),
+                    i
+                );
+                motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),5, 5, 5, 2);
+
             }
 
             fisicas->updateJugador(jugador.getX(),
                 jugador.getY(),
                 jugador.getZ()
             );
-        }
+
+            if(enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
+            {
+                this->updateRecorridoPathfinding(nullptr);
+            }
+
         //this->updateIA(); esto no se fuerza desde el update normal se llama desde main 4 veces por segundo
         //Actualizar ataque especial
             this->updateAtEsp(motor);
             this->updateAt(&danyo2, motor);
-            //this->updateRecorridoPathfinding();
 
             //Si se realiza el ataque se comprueban las colisiones
             if(jugador.getTimeAtEsp() > 0.0)
@@ -462,7 +685,7 @@ void Nivel::update()
                 jugador.AtacarEspecialUpdate(&danyo);
             }
 
-            else if(atacktime > 0.0)
+            else if(jugador.getTimeAt() > 0.0)
             {
                 jugador.AtacarUpdate(danyo2);
             }
@@ -481,19 +704,19 @@ void Nivel::update()
         //actualizamos los enemigos
         if(enemigos.size() > 0)//posiciones interpolacion
         {
-            float tiempoActual = 0.0f, tiempoAtaqueEsp = 0.0f;
+            float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
             for(std::size_t i=0;i<enemigos.size();i++)
             {
                     int danyo_jug = 0;
                     enemigos[i]->setPosAtaques(i);
-                    //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
+                    tiempoActual = controladorTiempo->getTiempo(2);
+                    //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
                     if(enemigos[i]->getTimeAtEsp() > 0.0f)
                     {
-                        tiempoActual = controladorTiempo->getTiempo(2);
                         tiempoAtaqueEsp = enemigos[i]->getTimeAtEsp();
                         tiempoAtaqueEsp -= (tiempoActual - enemigos[i]->getLastTimeAtEsp());
                         enemigos[i]->setLastTimeAtEsp(tiempoActual);
-                        enemigos[i]->setTimeAtEsp(tiempoAtaqueEsp); //restar uno al tiempo de ataque
+                        enemigos[i]->setTimeAtEsp(tiempoAtaqueEsp); //restar al tiempo de ataque
                     }
                     if(enemigos[i]->getTimeAtEsp() <= 0.0f)
                     {
@@ -508,18 +731,26 @@ void Nivel::update()
                     if(danyo_jug == 0)
                     {
                         //cout << "Enemigo " << i  << " pos: " << enemigos[i]->getPosAtaques() << endl;
+
+                        //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
+                        if(enemigos[i]->getTimeAt() > 0.0f)
+                        {
+                            tiempoAtaque = enemigos[i]->getTimeAt();
+                            tiempoAtaque -= (tiempoActual - enemigos[i]->getLastTimeAt());
+                            enemigos[i]->setLastTimeAt(tiempoActual);
+                            enemigos[i]->setTimeAt(tiempoAtaque); //restar al tiempo de ataque
+                        }
+                        if(enemigos[i]->getTimeAt() <= 0.0f)
+                        {
+                            danyo_jug = enemigos[i]->Atacar();
+                            enemigos[i]->setTimeAt(1.5f); //tiempo hasta el proximo ataque
+                            enemigos[i]->setLastTimeAt(controladorTiempo->getTiempo(2));
+                        }
                         //Si el enemigo ha realizado danyo
-                        danyo_jug = enemigos[i]->Atacar();
                         if(danyo_jug > 0)
                         {
                             jugador.QuitarVida(danyo_jug);
                             cout<< "Vida jugador: "<< jugador.getVida() << endl;
-                            enemigos[i]->setAtackTime(1500.0f); //tiempo hasta el proximo ataque
-                        }
-                        //si el tiempo de ataque es mayor que 0, ir restando 1 hasta 0
-                        if(enemigos[i]->getAtackTime() > 0.0f)
-                        {
-                            enemigos[i]->setAtackTime(enemigos[i]->getAtackTime() - 1.0f); //restar uno al tiempo de ataque
                         }
                     }
                     //Se le quita vida con el danyo del ataque especial
@@ -536,8 +767,8 @@ void Nivel::update()
         }
             //jugador.MuereJugador(acumulator);
             //enemigos->MuereEnemigo(acumulator);
-            acumulator -= dt;
-        }
+            //acumulator -= dt;
+        //}
 
         //actualizamos la interfaz de jugador
         jugador.updateInterfaz();
@@ -550,37 +781,49 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 {
     if(ejecutar)
     {
-        if((motor->estaPulsado(KEY_ESPACIO) || motor->estaPulsado(LMOUSE_DOWN)) && atacktime == 0.0f)
+        float tiempoActual = 0.0f;
+        float tiempoAtaque = 0.0f;
+        if((motor->estaPulsado(KEY_ESPACIO) || motor->estaPulsado(LMOUSE_DOWN)) && jugador.getTimeAt() <= 0.0f)
         {
-                *danyo = jugador.Atacar();
-                motor->resetKey(KEY_ESPACIO);
-                motor->resetEvento(LMOUSE_DOWN);
-                atacktime = 1500.0f;
-        }
-        else
-        {
-            if(atacktime > 0.0f)
+            *danyo = jugador.Atacar();
+            motor->resetKey(KEY_ESPACIO);
+            motor->resetEvento(LMOUSE_DOWN);
+            //atacktime = 1.5f;
+            jugador.setTimeAt(1.5f);
+            jugador.setLastTimeAt(controladorTiempo->getTiempo(2));
+        }else{
+            if(jugador.getTimeAt() > 0.0f)
             {
-                atacktime--;
+                tiempoActual = controladorTiempo->getTiempo(2);
+                tiempoAtaque = jugador.getTimeAt();
+                tiempoAtaque -= (tiempoActual - jugador.getLastTimeAt());
+                jugador.setLastTimeAt(tiempoActual);
+                jugador.setTimeAt(tiempoAtaque);
             }
-            if(atacktime > 500.0f)
+            if(atacktime > 0.5f)
             {
-                //Colorear rojo
-                motor->colorearJugador(255,255,0,0);
-            }else if(atacktime > 0.0f){
-                //Colorear gris
-                motor->colorearJugador(255,150,150,150);
+                if(atacktime > 0.0f)
+                {
+                    atacktime--;
+                }
+                if(atacktime > 500.0f)
+                {
+                    //Colorear rojo
+                    motor->colorearJugador(255,255,0,0);
+                }else if(atacktime > 0.0f){
+                    //Colorear gris
+                    motor->colorearJugador(255,150,150,150);
+                }
             }
-        }
 
         //clear
-        if(atacktime == 0.0f)
-        {
-            motor->clearDebug2();
+        if(jugador.getTimeAt() <= 0.0f){
+        motor->clearDebug2();
         }
+
+    }
     }
 }
-
 void Nivel::updateAtEsp(MotorGrafico *motor)
 {
     float tiempoActual = 0.0f;
@@ -612,11 +855,12 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
             tiempoAtaqueEsp -= (tiempoActual - jugador.getLastTimeAtEsp());
             jugador.setLastTimeAtEsp(tiempoActual);
             jugador.setTimeAtEsp(tiempoAtaqueEsp);
-        }
-        if(jugador.getTimeAtEsp() > 0.f && (int) (jugador.getTimeAtEsp() * 100) % 25 == 0.f)
-        {
             danyo = jugador.AtacarEspecial();
         }
+        /*if(jugador.getTimeAtEsp() > 0.f && ((int) (jugador.getTimeAtEsp() * 100) % 10 >= 4) && ((int) (jugador.getTimeAtEsp() * 100) % 10 <= 4))
+        {
+            danyo = jugador.AtacarEspecial();
+        }*/
         if(jugador.getTimeAtEsp() == 1.0f)
         {
             motor->colorearEnemigo(255,255,255,255,0);
@@ -631,42 +875,10 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
 
 void Nivel::updateIA()
 {
-    MotorGrafico * motor = MotorGrafico::getInstance();
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
-
-    if(motor->estaPulsado(KEY_J))
-    {
-        jugador.QuitarVida(20);
-        motor->resetKey(KEY_J);
-    }
-
     if(ejecutar)
     {
         //cout<< "Ejecuto ia " << endl;
-
-        //Actualizar ataque especial
-        /*this->updateAtEsp(motor);
-        this->updateAt(&danyo2, motor);
-
-        //Si se realiza el ataque se comprueban las colisiones
-        if(atackEsptime > 0.0)
-        {
-            jugador.AtacarEspecialUpdate(&danyo);
-        }
-
-        else if(atacktime > 0.0)
-        {
-            jugador.AtacarUpdate(danyo2);
-        }
-
-        //En caso contrario se colorean los enemigos de color gris
-        else
-        {
-            for(unsigned int i = 0; i < enemigos.size(); i++)
-            {
-                motor->colorearEnemigo(255, 150, 150, 150, i);
-            }
-        }*/
+        MotorGrafico * motor = MotorGrafico::getInstance();
 
         //En esta parte muere jugador
         if(motor->estaPulsado(16)){//SI PULSO 'J' MUERE JUGADOR
@@ -674,15 +886,11 @@ void Nivel::updateIA()
         }
         if(jugador.estasMuerto()){
             if(jugador.estasMuerto() && jugador.finalAnimMuerte()){
-                /*motor->EraseJugador();//borrar del motor (escena)
+                motor->EraseJugador();//borrar del motor (escena)
                 fisicas->EraseJugador();//borrar de motorfisicas
-                EraseJugador();//borrar de nivel*/
-                //paramos ejecucion de ia y interpolado
-                limpio = false;
-                NoEjecutar();
+                EraseJugador();//borrar de nivel
             }else{
-                if(jugador.estasMuerto())
-                {
+                if(jugador.estasMuerto()){
                     jugador.MuereJugador();
                 }
             }
@@ -712,44 +920,39 @@ void Nivel::updateIA()
             }
         }
     }
-    else
-    {
-        //para limpiar las variables miramos si limpiar esta a true si lo esta llamamos a limpiar nivel
-        if(limpiar)
-        {
-            LimpiarNivel();
-            limpiar = false;//volvemos a ponerlo a false asi se sabe que esta limpiado
-            limpio = true;//esta limpio
-        }
-    }
 }
 
 
-void Nivel::updateRecorridoPathfinding()
+void Nivel::updateRecorridoPathfinding(Enemigo * enem)
 {
-    MotorGrafico *motor = MotorGrafico::getInstance();
-    //Ejecucion del pathfinding de momento al pulsar P
-    if(motor->estaPulsado(KEY_P) || !recorrido.empty())
+    //Si enem no es nulo se anade a la cola de enemigos auxiliadores
+    if(enem != nullptr && enem != enemPideAyuda )
     {
-        bool colorear = false;
-        motor->resetKey(KEY_P);
-        Pathfinder path;
+        auxiliadores.push_back(enem);
+        contadorEnem--;
+    }
+    else if(contadorEnem > 0 && enem == enemPideAyuda)
+    {
+        this->setEnemigoPideAyuda(nullptr);
+        destinoPathFinding = nullptr;
+        contadorEnem = 0;
+    }
+    //Si no hay sala de destino guardada, se guarda en este momento
+    else if(destinoPathFinding == nullptr)
+    {
+        destinoPathFinding = enemPideAyuda->getSala();
+    }
+    //Ejecucion del pathfinding si hay una sala de destino guardada
+    if(destinoPathFinding != nullptr)
+    {
+        Pathfinder *path = Pathfinder::getInstance();
         int tipoCentro;
-        if(!colorear)
+
+        //Se inicia el recorrido hacia la primera sala del enemigo que pide ayuda.
+        if(recorrido.empty() && !auxiliadores.empty() && !path->encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding).empty())
         {
-            motor->colorearEnemigo(255, 127, 0, 127, 1);
-            colorear = true;
-        }
-        //Se inicia el recorrido hacia la primera sala del arbol de salas
-        //Se cambiara para buscar al enemigo que pide ayuda.
-        if(recorrido.empty() && !enemigos.empty())
-        {
-            enemigoSeleccionado++;
-            if(enemigoSeleccionado == enemigos.size())
-            {
-                enemigoSeleccionado = 0;
-            }
-            recorrido = path.encontrarCamino(enemigos.at(enemigoSeleccionado)->getSala(), primeraSala);
+            recorrido = path->encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding);
+            auxiliadores.erase(auxiliadores.begin());
         }
         //Desplazamiento del enemigo hacia su destino
         if(!recorrido.empty())
@@ -757,36 +960,36 @@ void Nivel::updateRecorridoPathfinding()
             //Se comprueban las coordenadas del enemigo y si ha llegado a la siguiente
             //sala del camino a la que debe ir o no. Se tienen en cuenta los tipos de centros
             //para realizar las comprobaciones de coordenadas adecuadas con el ancho y alto de las salas
-            if(enemigos.at(enemigoSeleccionado)->getSala() != recorrido.front().nodo)
+            if(auxiliadores.front()!= nullptr && auxiliadores.front()->getSala() != recorrido.front().nodo)
             {
                 bool cambia = false, moveDer = false, moveIzq = false, moveArb = false, moveAbj = false;
                 tipoCentro = recorrido.front().nodo->getType();
                 //Centro arriba a la izquierda
                 if(tipoCentro == 4)
                 {
-                    if(enemigos.at(enemigoSeleccionado)->getX() >= recorrido.front().nodo->getSizes()[2] && enemigos.at(enemigoSeleccionado)->getX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
+                    if(auxiliadores.front()->getNewX() >= recorrido.front().nodo->getSizes()[2] && auxiliadores.front()->getNewX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
                     {
                         cambia = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getX() > recorrido.front().nodo->getSizes()[2])
+                    else if(auxiliadores.front()->getNewX() < recorrido.front().nodo->getSizes()[2])
                     {
                         moveDer = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getX() < recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
+                    else if(auxiliadores.front()->getNewX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
                     {
                         moveIzq = true;
                     }
-                    if(cambia && (enemigos.at(enemigoSeleccionado)->getZ() >= recorrido.front().nodo->getSizes()[4] && enemigos.at(enemigoSeleccionado)->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
+                    if(cambia && (auxiliadores.front()->getNewZ() >= recorrido.front().nodo->getSizes()[4] && auxiliadores.front()->getNewZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
                     {
-                        enemigos.at(enemigoSeleccionado)->setSala(recorrido.front().nodo);
-                        cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
+                        auxiliadores.front()->setSala(recorrido.front().nodo);
+                        cout<<"nodo actual: "<<auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
                         recorrido.erase(recorrido.begin());
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getZ() < recorrido.front().nodo->getSizes()[4])
+                    else if(auxiliadores.front()->getNewZ() < recorrido.front().nodo->getSizes()[4])
                     {
                         moveAbj = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1]))
+                    else if(auxiliadores.front()->getNewZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1]))
                     {
                         moveArb = true;
                     }
@@ -794,30 +997,30 @@ void Nivel::updateRecorridoPathfinding()
                 //Centro abajo a la izquierda
                 else if(tipoCentro == 3)
                 {
-                    if(enemigos.at(enemigoSeleccionado)->getX() >= recorrido.front().nodo->getSizes()[2] && enemigos.at(enemigoSeleccionado)->getX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
+                    if(auxiliadores.front()->getNewX() >= recorrido.front().nodo->getSizes()[2] && auxiliadores.front()->getNewX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
                     {
                         cambia = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getX() > recorrido.front().nodo->getSizes()[2])
+                    else if(auxiliadores.front()->getNewX() < recorrido.front().nodo->getSizes()[2])
                     {
                         moveDer = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getX() < recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
+                    else if(auxiliadores.front()->getNewX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
                     {
                         moveIzq = true;
                     }
 
-                    if(cambia && (enemigos.at(enemigoSeleccionado)->getZ() >= recorrido.front().nodo->getSizes()[4] && enemigos.at(enemigoSeleccionado)->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
+                    if(cambia && (auxiliadores.front()->getNewZ() <= recorrido.front().nodo->getSizes()[4] && auxiliadores.front()->getNewZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] )))
                     {
-                        enemigos.at(enemigoSeleccionado)->setSala(recorrido.front().nodo);
-                        cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
+                        auxiliadores.front()->setSala(recorrido.front().nodo);
+                        cout<<"nodo actual: "<<auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
                         recorrido.erase(recorrido.begin());
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getZ() < recorrido.front().nodo->getSizes()[4])
+                    else if(auxiliadores.front()->getNewZ() > recorrido.front().nodo->getSizes()[4])
                     {
                         moveArb = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getZ() > recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1]))
+                    else if(auxiliadores.front()->getNewZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1]))
                     {
                         moveAbj = true;
                     }
@@ -825,30 +1028,30 @@ void Nivel::updateRecorridoPathfinding()
                 //Centro arriba a la derecha
                 else if(tipoCentro == 2)
                 {
-                    if(enemigos.at(enemigoSeleccionado)->getX() <= recorrido.front().nodo->getSizes()[2] && enemigos.at(enemigoSeleccionado)->getX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
+                    if(auxiliadores.front()->getNewX() <= recorrido.front().nodo->getSizes()[2] && auxiliadores.front()->getNewX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
                     {
                         cambia = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getX() > recorrido.front().nodo->getSizes()[2])
+                    else if(auxiliadores.front()->getNewX() > recorrido.front().nodo->getSizes()[2])
                     {
                         moveIzq = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
+                    else if(auxiliadores.front()->getNewX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
                     {
                         moveDer = true;
                     }
 
-                    if(cambia && (enemigos.at(enemigoSeleccionado)->getZ() >= recorrido.front().nodo->getSizes()[4] && enemigos.at(enemigoSeleccionado)->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
+                    if(cambia && (auxiliadores.front()->getNewZ() >= recorrido.front().nodo->getSizes()[4] && auxiliadores.front()->getNewZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
                     {
-                        enemigos.at(enemigoSeleccionado)->setSala(recorrido.front().nodo);
-                        cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
+                        auxiliadores.front()->setSala(recorrido.front().nodo);
+                        cout<<"nodo actual: "<<auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
                         recorrido.erase(recorrido.begin());
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getZ() < recorrido.front().nodo->getSizes()[4])
+                    else if(auxiliadores.front()->getNewZ() < recorrido.front().nodo->getSizes()[4])
                     {
                         moveAbj = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1]))
+                    else if(auxiliadores.front()->getNewZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1]))
                     {
                         moveArb = true;
                     }
@@ -856,30 +1059,30 @@ void Nivel::updateRecorridoPathfinding()
                 //Centro abajo a la derecha
                 else if(tipoCentro == 1)
                 {
-                    if(enemigos.at(enemigoSeleccionado)->getX() <= recorrido.front().nodo->getSizes()[2] && enemigos.at(enemigoSeleccionado)->getX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
+                    if(auxiliadores.front()->getNewX() <= recorrido.front().nodo->getSizes()[2] && auxiliadores.front()->getNewX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
                     {
                         cambia = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getX() > recorrido.front().nodo->getSizes()[2])
+                    else if(auxiliadores.front()->getNewX() > recorrido.front().nodo->getSizes()[2])
                     {
                         moveIzq = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
+                    else if(auxiliadores.front()->getNewX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
                     {
                         moveDer = true;
                     }
 
-                    if(cambia && (enemigos.at(enemigoSeleccionado)->getZ() <= recorrido.front().nodo->getSizes()[4] && enemigos.at(enemigoSeleccionado)->getZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] )))
+                    if(cambia && (auxiliadores.front()->getNewZ() <= recorrido.front().nodo->getSizes()[4] && auxiliadores.front()->getNewZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] )))
                     {
-                        enemigos.at(enemigoSeleccionado)->setSala(recorrido.front().nodo);
-                        cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
+                        auxiliadores.front()->setSala(recorrido.front().nodo);
+                        cout<<"nodo actual: "<<auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
                         recorrido.erase(recorrido.begin());
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getZ() > recorrido.front().nodo->getSizes()[4])
+                    else if(auxiliadores.front()->getNewZ() > recorrido.front().nodo->getSizes()[4])
                     {
                         moveArb = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1]))
+                    else if(auxiliadores.front()->getNewZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1]))
                     {
                         moveAbj = true;
                     }
@@ -887,30 +1090,30 @@ void Nivel::updateRecorridoPathfinding()
                 //Centro en el centro
                 else if(tipoCentro == 0)
                 {
-                    if(enemigos.at(enemigoSeleccionado)->getX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0] / 2) && enemigos.at(enemigoSeleccionado)->getX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0] / 2))
+                    if(auxiliadores.front()->getNewX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0] / 2) && auxiliadores.front()->getNewX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0] / 2))
                     {
                         cambia = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0] / 2))
+                    else if(auxiliadores.front()->getNewX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0] / 2))
                     {
                         moveIzq = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0] / 2))
+                    else if(auxiliadores.front()->getNewX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0] / 2))
                     {
                         moveDer = true;
                     }
 
-                    if(cambia && (enemigos.at(enemigoSeleccionado)->getZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] / 2) && enemigos.at(enemigoSeleccionado)->getZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] / 2)))
+                    if(cambia && (auxiliadores.front()->getNewZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] / 2) && auxiliadores.front()->getNewZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] / 2)))
                     {
-                        enemigos.at(enemigoSeleccionado)->setSala(recorrido.front().nodo);
-                        cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
+                        auxiliadores.front()->setSala(recorrido.front().nodo);
+                        cout<<"nodo actual: "<<auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
                         recorrido.erase(recorrido.begin());
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] / 2))
+                    else if(auxiliadores.front()->getNewZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] / 2))
                     {
                         moveArb = true;
                     }
-                    else if(enemigos.at(enemigoSeleccionado)->getZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] / 2))
+                    else if(auxiliadores.front()->getNewZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] / 2))
                     {
                         moveAbj = true;
                     }
@@ -919,53 +1122,207 @@ void Nivel::updateRecorridoPathfinding()
                 {
                     if(moveDer)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + frameTime);
-                        cout<<"Posicion del enemigo: x="<<enemigos.at(enemigoSeleccionado)->getX()<<" z=" << enemigos.at(enemigoSeleccionado)->getY();
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidad());
+                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidad(), 0.0, auxiliadores.front()->getVelocidad());
+                        cout<<"Posicion del enemigo: x="<<auxiliadores.front()->getNewX()<<" z=" << auxiliadores.front()->getNewY();
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - 1.0 * 0.25, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + frameTime);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidad());
+                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidad()), 0.0, auxiliadores.front()->getVelocidad());
                     }
                     else
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() + frameTime);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidad());
+                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, auxiliadores.front()->getVelocidad());
                     }
                 }
                 else if(moveArb)
                 {
                     if(moveDer)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - frameTime);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidad());
+                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidad(), 0.0, -(auxiliadores.front()->getVelocidad()));
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - frameTime);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidad());
+                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidad()), 0.0, -(auxiliadores.front()->getVelocidad()));
                     }
                     else
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX(), enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ() - frameTime);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidad());
+                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, -(auxiliadores.front()->getVelocidad()));
                     }
                 }
                 else
                 {
                     if(moveDer)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() + frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ());
+                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidad(), 0.0, 0.0);
                     }
                     else if(moveIzq)
                     {
-                        enemigos.at(enemigoSeleccionado)->setPosiciones(enemigos.at(enemigoSeleccionado)->getX() - frameTime, enemigos.at(enemigoSeleccionado)->getY(), enemigos.at(enemigoSeleccionado)->getZ());
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ());
+                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidad()), 0.0, 0.0);
                     }
                 }
             }
             else
             {
-                cout<<"nodo actual: "<<enemigos.at(enemigoSeleccionado)->getSala()->getPosicionEnGrafica()<<endl;
-
+                cout<<"nodo actual donde puede que se atasque: "<<auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
                 recorrido.erase(recorrido.begin());
+                if(recorrido.empty() && auxiliadores.empty())
+                {
+                    destinoPathFinding = nullptr;
+                    this->setEnemigoPideAyuda(nullptr);
+                    contadorEnem = 0;
+                }
             }
         }
     }
+    contadorEnem++;
+}
+
+void Nivel::Draw()
+{
+
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
+    if(drawTime == 0.0)
+    {
+        drawTime = controladorTiempo->getTiempo(2);
+    }
+    lastDrawTime = drawTime;
+    drawTime = controladorTiempo->getTiempo(2);
+
+    //Dibujado del personaje
+    jugador.moverseEntidad(1 / controladorTiempo->getUpdateTime());
+    jugador.RotarEntidad(1 / controladorTiempo->getUpdateTime());
+    jugador.UpdateTimeMove(drawTime - lastDrawTime);
+    motor->mostrarJugador(jugador.getX(),
+        jugador.getY(),
+        jugador.getZ(),
+        jugador.getRX(),
+        jugador.getRY(),
+        jugador.getRZ()
+    );
+
+    //Dibujado de los enemigos
+    for(unsigned int i = 0; i < enemigos.size(); i++)
+    {
+        enemigos.at(i)->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+        enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
+        motor->mostrarEnemigos(enemigos.at(i)->getX(),
+            enemigos.at(i)->getY(),
+            enemigos.at(i)->getZ(),
+            enemigos.at(i)->getRX(),
+            enemigos.at(i)->getRY(),
+            enemigos.at(i)->getRZ(),
+            i
+        );
+    }
+    //Dibujado de las puertas
+    for(unsigned int i = 0; i < interactuables.size(); i++)
+    {
+        interactuables.at(i)->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+        interactuables.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
+        motor->mostrarObjetos(interactuables.at(i)->getX(),
+            interactuables.at(i)->getY(),
+            interactuables.at(i)->getZ(),
+            interactuables.at(i)->getRX(),
+            interactuables.at(i)->getRY(),
+            interactuables.at(i)->getRZ(),
+            interactuables.at(i)->GetPosicionObjetos()
+        );
+    }
+
+    //Dibujado del ataque especial
+    //Ataque especial Heavy
+    if(jugador.getTimeAtEsp() > 0.0f)
+    {
+        if(strcmp(jugador.getArmaEspecial()->getNombre(), "Heavy") == 0)
+        {
+            jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+            jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+            jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
+
+            motor->mostrarArmaEspecial(
+                jugador.GetDatosAtEsp()[0],
+                jugador.getY(),
+                jugador.GetDatosAtEsp()[2],
+                jugador.getRX(),
+                jugador.getRY(),
+                jugador.getRZ());
+
+            motor->clearDebug2(); //Pruebas debug
+
+            motor->dibujarObjetoTemporal(
+                jugador.getArmaEspecial()->getFisX()*2,
+                jugador.getY(),
+                jugador.getArmaEspecial()->getFisZ()*2,
+                jugador.getRX(),
+                jugador.getRY(),
+                jugador.getRZ(),
+                8,
+                1,
+                8,
+                2);
+        }
+    
+        //Ataque especial bailaora
+        else if(strcmp(jugador.getArmaEspecial()->getNombre(), "Bailaora") == 0)
+        {
+            jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+            jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+            jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
+
+            motor->mostrarArmaEspecial(
+                jugador.GetDatosAtEsp()[0],
+                jugador.GetDatosAtEsp()[1],
+                jugador.GetDatosAtEsp()[2],
+                jugador.GetDatosAtEsp()[3],
+                jugador.GetDatosAtEsp()[4],
+                jugador.GetDatosAtEsp()[5]);
+
+            motor->clearDebug2(); //Pruebas debug
+
+            motor->dibujarObjetoTemporal(
+                jugador.getArmaEspecial()->getX(),
+                jugador.getArmaEspecial()->getY(),
+                jugador.getArmaEspecial()->getZ(),
+                jugador.GetDatosAtEsp()[3],
+                jugador.GetDatosAtEsp()[4],
+                jugador.GetDatosAtEsp()[5],
+                8,
+                1,
+                8,
+                3);
+        }
+    }
+
+    //Dibujado zonas
+    for(unsigned int i = 0; i < zonas.size(); i++)
+    {
+        motor->dibujarZona(zonas.at(i)->getX(),
+            zonas.at(i)->getY(),
+            zonas.at(i)->getZ(),
+            zonas.at(i)->getAncho(),
+            zonas.at(i)->getAlto(),
+            zonas.at(i)->getLargo()
+        );
+    }
+}
+
+void Nivel::setEnemigoPideAyuda(Enemigo *ene)
+{
+    enemPideAyuda = ene;
+}
+
+Enemigo * Nivel::getEnemigoPideAyuda()
+{
+    return enemPideAyuda;
 }
 
 Sala * Nivel::getPrimeraSala()
@@ -983,10 +1340,6 @@ Jugador Nivel::getJugador()
     return jugador;
 }
 
-std::vector<Enemigo*> Nivel::getEnemies()
-{
-  return enemigos;
-}
 
 void Nivel::Ejecutar()
 {

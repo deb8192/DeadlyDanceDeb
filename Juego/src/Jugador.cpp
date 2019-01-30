@@ -15,7 +15,6 @@
 Jugador::Jugador()
 {
     animacion = 0;
-
     //tiempos de animacion
     tiempoAtaque=2000.0f;//tiempo en milisegundos
     tiempoPasadoAtaque=0;
@@ -82,40 +81,10 @@ Jugador::Jugador(int,int,int,int,int,int,std::string malla)
     tiempoPasadoEnMorir=0;
 }
 
-float Jugador::getX()
+void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 {
-    return x;
-}
-
-float Jugador::getY()
-{
-    return y;
-}
-
-float Jugador::getZ()
-{
-    return z;
-}
-
-float Jugador::getRX()
-{
-    return rx;
-}
-
-float Jugador::getRY()
-{
-    return ry;
-}
-
-float Jugador::getRZ()
-{
-    return rz;
-}
-
-void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
-{
-    float px = x,
-          pz = z;
+    float px = newX,
+          pz = newZ;
 
     if(w || s || a || d)
     {
@@ -175,7 +144,7 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
         deg =  RADTODEG * atan(ax/az) ;
 
     float componente;
-    if(w || s || a || d)
+    if((w || s || a || d) && !noMueve)
     {
         componente = 1.0;
     }
@@ -183,24 +152,65 @@ void Jugador::movimiento(float dt,bool a, bool s, bool d, bool w)
     {
         componente = 0.0;
     }
-    px += componente*sin(deg*DEGTORAD)*dt;
-    pz += componente*cos(deg*DEGTORAD)*dt;
+    px += componente*sin(deg*DEGTORAD)/**dt*/;
+    pz += componente*cos(deg*DEGTORAD)/**dt*/;
 
 
     //cout << "deg: " << deg << ", px:" << px << ", pz:" << pz << endl;
     //ahora actualizas movimiento y rotacion
     //has obtenido la arcotangente que te da el angulo de giro en grados
-    x = px;
-    z = pz;
-    ry = deg;
+    /*x = px;
+    z = pz;*/
+    setNewPosiciones(px, y, pz);
+    setNewRotacion(rx, deg, rz);
 }
 
-void Jugador::setPosiciones(float nx,float ny,float nz)
+/*************** moverseEntidad *****************
+ * Funcion con la que el jugador se desplazaran
+ * por el escenario mediante una interpolacion desde
+ * el punto de origen al punto de destino
+ */
+void Jugador::moverseEntidad(float updTime)
 {
-    x = nx;
-    y = ny;
-    z = nz;
+    //pt es el porcentaje de tiempo pasado desde la posicion
+    //de update antigua hasta la nueva
+    float pt = moveTime / updTime;
+
+    if(pt > 1.0f)
+    {
+        pt = 1.0f;
+    }
+
+    x = lastX * (1 - pt) + newX * pt;
+    z = lastZ * (1 - pt) + newZ * pt;
 }
+
+/*************** rotarEntidad *****************
+ * Funcion con la que el jugador rotara
+ * sobre si mismo mediante una interpolacion desde
+ * el punto de origen al punto de destino
+ */
+void Jugador::RotarEntidad(float updTime)
+{
+    //pt es el porcentaje de tiempo pasado desde la posicion
+    //de update antigua hasta la nueva
+    float pt = moveTime / updTime;
+
+    if(pt > 1.0f)
+    {
+        pt = 1.0f;
+    }
+
+    rx = lastRx * (1 - pt) + newRx * pt;
+    ry = lastRy * (1 - pt) + newRy * pt;
+    rz = lastRz * (1 - pt) + newRz * pt;
+}
+
+void Jugador::UpdateTimeMove(float updTime)
+{
+    moveTime += updTime;
+}
+
 bool Jugador::estasMuerto(){
     //cout << "Muere jugador??: " << vida << endl;
     if(vida <= 0){
@@ -312,10 +322,10 @@ void Jugador::AtacarUpdate(int danyo)
     }
     else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
     {
-      atz += (0.02 * cos(PI * atgy / PIRADIAN));
-      atx += (0.02 * sin(PI * atgy / PIRADIAN));
-      atposZ += (0.02 * cos(PI * atgy / PIRADIAN));
-      atposX += (0.02 * sin(PI * atgy / PIRADIAN));
+      atz += (1.5 * cos(PI * atgy / PIRADIAN));
+      atx += (1.5 * sin(PI * atgy / PIRADIAN));
+      atposZ += (1.5 * cos(PI * atgy / PIRADIAN));
+      atposX += (1.5 * sin(PI * atgy / PIRADIAN));
 
 
       fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
@@ -356,7 +366,7 @@ void Jugador::AtacarUpdate(int danyo)
             cout<<"Daño "<<danyo<<endl;
             danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(i)->getVida()<<endl;
+            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
             motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
             //guardar el atacado para no repetir
             atacados_normal.push_back(atacados.at(i));
@@ -392,27 +402,31 @@ int Jugador::AtacarEspecial()
         if(atackEspTime <= 0)
         {
             animacion = 3;
-            atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
+            atespx = 5 * sin(PI * getRY() / PIRADIAN) + getX();
             atespy = getY();
-            atespz = 6.5 * cos(PI * getRY() / PIRADIAN) + getZ();
+            atespz = 5 * cos(PI * getRY() / PIRADIAN) + getZ();
             atgx = getRX();
             atgy = getRY();
             atgz = getRZ();
             incrAtDisCirc = 0.0;
 
+            armaEspecial->setNewPosiciones(atespx, atespy, atespz);
+            armaEspecial->setNewRotacion(getRX(), getRY(), getRZ());
+
             MotorFisicas* fisicas = MotorFisicas::getInstance();
             MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
             //Posiciones en el mundo 3D
-            atespposX = (atespx/2);
+            armaEspecial->initPosicionesFisicas(atespx/2, getY()/2, atespz/2);
+            /*atespposX = (atespx/2);
             atespposY = (getY()/2);
-            atespposZ = (atespz/2);
+            atespposZ = (atespz/2);*/
 
             //ATAQUE ESPECIAL DEL HEAVY
             if(strcmp(armaEspecial->getNombre(), NOMBREHEAVY) == 0)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,1,8,5);
+                fisicas->crearCuerpo(0,armaEspecial->getFisX(),armaEspecial->getFisY(),armaEspecial->getFisZ(),2,8,1,8,5);
                 motora->getEvent("Arpa")->setVolume(0.8f);
                 motora->getEvent("Arpa")->start();
             }
@@ -420,7 +434,7 @@ int Jugador::AtacarEspecial()
             else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                fisicas->crearCuerpo(0,atespposX,atespposY,atespposZ,2,8,8,8,5);
+                fisicas->crearCuerpo(0,armaEspecial->getFisX(),armaEspecial->getFisY(),armaEspecial->getFisZ(),2,8,8,8,5);
                 motora->getEvent("Arpa")->start();
             }
         }
@@ -430,7 +444,6 @@ int Jugador::AtacarEspecial()
         if(armaEquipada != NULL)
         {
             aumentosAtaque += (float) armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
-            //aumentosAtaque = roundf(aumentosAtaque * por10) / por10;  //FUNCION ROUND SEPARADA
         }
         aumentosAtaque *= 2;
         aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
@@ -475,50 +488,28 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
     {
 
         //Calculo de la posicion del arma delante  int getAnimacion();del jugador
-        atespx = 6.5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
-        atespz = 6.5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
-        atespposX = atespx/2;
-        atespposZ = atespz/2;
-        atgy = this->getY();
-
-
-        motor->mostrarArmaEspecial(
-            this->getX(),
-            this->getY(),
-            this->getZ(),
-            this->getRX(),
-            this->getRY(),
-            this->getRZ());
-
-        motor->clearDebug2();   //Pruebas debug
-
-        motor->dibujarObjetoTemporal(
-            atespx,
-            this->getY(),
-            atespz,
-            this->getRX(),
-            this->getRY(),
-            this->getRZ(),
-            8,
-            1,
-            8,
-            2);
+        atespx = 5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
+        atespz = 5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
+        armaEspecial->initPosicionesFisicas(atespx/2, this->getY()/2, atespz/2);
+        armaEspecial->setNewPosiciones(atespx, this->getY(), atespz);
+        armaEspecial->setNewRotacion(getRX(), this->getRY(), getRZ());
     }
 
     //Si el ataque especial es el de la Bailaora, es circular a distancia
     else if(strcmp(armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
     {
         //Formula de ataque circular aumentando la distancia
-        incrAtDisCirc += 0.02;
+        incrAtDisCirc += 1.5;
         atespz = this->getZ();
         atespz += (incrAtDisCirc * cos(PI * atgy / PIRADIAN));
         atespx = this->getX();
         atespx += (incrAtDisCirc * sin(PI * atgy / PIRADIAN));
-        atespposZ = atespz/2;
-        atespposX = atespx/2;
+        atespposZ = atespz - this->getZ();
+        atespposX = atespx - this->getX();
+        armaEspecial->setPosicionesFisicas(atespposZ, 0.0f, atespposZ);
 
         //Aumento de la rotacion hacia la izquierda.
-        atgy += 0.75;
+        atgy += 30;
 
         if(atgy >= 360.0)
         {
@@ -529,30 +520,11 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
             atgy += 360;
         }
 
-        motor->mostrarArmaEspecial(
-            atespx,
-            atespy,
-            atespz,
-            atgx,
-            atgy,
-            atgz);
-
-        motor->clearDebug2(); //Pruebas debug
-
-        motor->dibujarObjetoTemporal(
-            atespx,
-            atespy,
-            atespz,
-            atgx,
-            atgy,
-            atgz,
-            8,
-            1,
-            8,
-            3);
+        armaEspecial->setNewPosiciones(atespx, this->getY(), atespz);
+        armaEspecial->setNewRotacion(getRX(), atgy, getRZ());
     }
     //lista de enteros que senyalan a los enemigos atacados
-    vector <unsigned int> atacados = fisicas->updateArmaEspecial(atespposX,atgy,atespposZ);
+    vector <unsigned int> atacados = fisicas->updateArmaEspecial(armaEspecial->getFisX(),armaEspecial->getFisY(),armaEspecial->getFisZ());
 
     //Si hay colisiones se danya a los enemigos colisionados anyadiendole una variacion al danyo
     //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
@@ -576,6 +548,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
 void Jugador::QuitarVida(int can)
 {
   vida-=can;
+  this->AumentarBarraAtEs(can);
 }
 
 void Jugador::RecuperarVida(int can)
@@ -591,6 +564,356 @@ void Jugador::AumentarBarraAtEs(int can)
 void Jugador::Interactuar(int id, int id2)
 {
 
+}
+
+/***********AnnadirLlave************
+ * Metodo que anade la llave pasada por
+ * parametro al vector de llaves que
+ * posee el jugador
+ * Entradas:
+ *          Llave * llave: llave a anadir
+ */
+void Jugador::AnnadirLlave(Llave * llave)
+{
+    llaves.push_back(llave);
+    cout<<"Llave añadida. Nº de llaves: "<<llaves.size()<<endl;
+}
+
+/***********EliminarLlave************
+ * Metodo que elimina la llave pasada por
+ * parametro del vector de llaves que 
+ * posee el jugador
+ * Entradas:
+ *          Llave * llave: llave a eliminar
+ */
+void Jugador::EliminarLlave(Llave * llave)
+{
+    unsigned int i = 0;
+    bool encontrado = false;
+    while(!encontrado)
+    { 
+        i++;   
+        //Se elimina la llave si coinide con el codigo de la puerta de la llave pasada por parametro
+        if(llave->GetCodigoPuerta() == llaves.at(i)->GetCodigoPuerta())
+        {
+            llaves.erase(llaves.begin() + i);
+            encontrado = true;
+        }
+    }
+}
+
+void Jugador::updateInterfaz()
+{
+    InterfazJugador * interfaz = InterfazJugador::getInstance();
+    interfaz->setVida(vida);
+    interfaz->setAtaqueEspecial(getBarraAtEs());
+    interfaz->setDinero(dinero);
+}
+
+bool Jugador::terminaAnimacion()
+{
+        times * tiempo = times::getInstance();
+
+        switch(animacion)//comprobamos que la animacion haya terminado
+        {
+            case 0://andar
+                return true;
+            case 1://quieto
+                return true;
+            case 2://ataque
+                if(tiempo->calcularTiempoPasado(tiempoPasadoAtaque) >= tiempoAtaque || tiempoPasadoAtaque == 0)
+                {
+                    tiempoPasadoAtaque = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case 3://ataque especial
+                if(tiempo->calcularTiempoPasado(tiempoPasadoAtaEsp) >=  tiempoAtaEsp || tiempoPasadoAtaEsp == 0)
+                {
+                    tiempoPasadoAtaEsp = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case 4://coger objeto
+                if(tiempo->calcularTiempoPasado(tiempoPasadoCogerObjeto) >= tiempoCogerObjeto || tiempoPasadoCogerObjeto == 0)
+                {
+                    tiempoPasadoCogerObjeto = 0;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            case 5://muerto
+                return false;
+        }
+    return true;
+}
+
+float Jugador::getX()
+{
+    return x;
+}
+
+float Jugador::getY()
+{
+    return y;
+}
+
+float Jugador::getZ()
+{
+    return z;
+}
+
+float Jugador::getNewX()
+{
+    return newX;
+}
+
+float Jugador::getNewY()
+{
+    return newY;
+}
+
+float Jugador::getNewZ()
+{
+    return newZ;
+}
+
+float Jugador::getLastX()
+{
+    return lastX;
+}
+
+float Jugador::getLastY()
+{
+    return lastY;
+}
+
+float Jugador::getLastZ()
+{
+    return lastZ;
+}
+
+float Jugador::getFisX()
+{
+    return fisX;
+}
+
+float Jugador::getFisY()
+{
+    return fisY;
+}
+
+float Jugador::getFisZ()
+{
+    return fisZ;
+}
+
+float Jugador::getRX()
+{
+    return rx;
+}
+
+float Jugador::getRY()
+{
+    return ry;
+}
+
+float Jugador::getRZ()
+{
+    return rz;
+}
+
+//Devuelve la posicion y rotacion del ataque especial
+float * Jugador::GetDatosAtEsp()
+{
+    float * atesp = new float [6];
+    atesp[0] = armaEspecial->getX();
+    atesp[1] = armaEspecial->getY();
+    atesp[2] = armaEspecial->getZ();
+    atesp[3] = armaEspecial->getRX();;
+    atesp[4] = armaEspecial->getRY();;
+    atesp[5] = armaEspecial->getRZ();;
+
+    return atesp;
+}
+
+int Jugador::getVida()
+{
+    return vida;
+}
+
+int Jugador::getTipo()
+{
+    return -1;
+}
+
+int Jugador::getBarraAtEs()
+{
+    if(barraAtEs >= 0 && barraAtEs <= 100)
+    {
+        return barraAtEs;
+    }
+    else
+    {
+        if(barraAtEs < 0)
+            return 0;
+        if(barraAtEs > 100)
+            return 100;
+    }
+
+    return 1;
+}
+
+int Jugador::getAtaque()
+{
+    return -1;
+}
+
+Arma * Jugador::getArma()
+{
+    return armaEquipada;
+}
+
+
+Arma * Jugador::getArmaEspecial()
+{
+    return armaEspecial;
+}
+
+const char* Jugador::getNombre()
+{
+    return nombreJugador;
+}
+
+int Jugador::getSuerte()
+{
+    return -1;
+}
+
+int Jugador::getDanyoCritico()
+{
+    return danyoCritico;
+}
+
+int Jugador::getProAtaCritico()
+{
+    return proAtaCritico;
+}
+
+int * Jugador::getBuffos()
+{
+    int * valores = new int[6];
+    return valores;
+}
+
+float Jugador::getTimeAt()
+{
+    return atackTime;
+}
+
+float Jugador::getLastTimeAt()
+{
+    return lastAtackTime;
+}
+
+float Jugador::getTimeAtEsp()
+{
+    return atackEspTime;
+}
+
+float Jugador::getLastTimeAtEsp()
+{
+    return lastAtackEspTime;
+}
+
+const char *Jugador::getRutaArmaEsp()
+{
+    return rutaArmaEspecial;
+}
+
+int Jugador::getAnimacion()
+{
+    return animacion;
+}
+
+std::vector <Llave*> Jugador::GetLlaves()
+{
+    return llaves;
+}
+
+int Jugador::getID()
+{
+    return id;
+}
+
+
+void Jugador::setPosiciones(float nx,float ny,float nz)
+{
+    x = nx;
+    y = ny;
+    z = nz;
+}
+
+
+void Jugador::setLastPosiciones(float nx,float ny,float nz)
+{
+    lastX = nx;
+    lastY = ny;
+    lastZ = nz;
+}
+
+void Jugador::setRotacion(float nrx, float nry, float nrz)
+{
+    rx = nrx;
+    ry = nry;
+    rz = nrz;
+}
+
+void Jugador::setNewRotacion(float nrx, float nry, float nrz)
+{
+    rotateTime = 0.0;
+    this->setLastRotacion(newRx, newRy, newRz);
+    newRx = nrx;
+    newRy = nry;
+    newRz = nrz;
+}
+
+void Jugador::setLastRotacion(float nrx, float nry, float nrz)
+{
+    lastRx = nrx;
+    lastRy = nry;
+    lastRz = nrz;
+}
+
+void Jugador::setNewPosiciones(float nx,float ny,float nz)
+{
+    moveTime = 0.0;
+    this->setLastPosiciones(newX, newY, newZ);
+    newX = nx;
+    newY = ny;
+    newZ = nz;
+}
+
+void Jugador::initPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX = nx;
+    fisY = ny;
+    fisZ = nz;
+}
+
+void Jugador::setPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX += nx;
+    fisY += ny;
+    fisZ += nz;
 }
 
 void Jugador::setVida(int vid)
@@ -685,6 +1008,18 @@ void Jugador::setProAtaCritico(int probabilidad)
 {
     proAtaCritico = probabilidad;
 }
+
+void Jugador::setTimeAt(float time)
+{
+    atackTime = time;
+}
+
+void Jugador::setLastTimeAt(float time)
+{
+    lastAtackTime = time;
+}
+
+
 void Jugador::setTimeAtEsp(float time)
 {
     atackEspTime = time;
@@ -695,111 +1030,6 @@ void Jugador::setLastTimeAtEsp(float time)
     lastAtackEspTime = time;
 }
 
-int Jugador::getVida()
-{
-    return vida;
-}
-
-int Jugador::getTipo()
-{
-    return -1;
-}
-
-int Jugador::getBarraAtEs()
-{
-    if(barraAtEs >= 0 && barraAtEs <= 100)
-    {
-        return barraAtEs;
-    }
-    else
-    {
-        if(barraAtEs < 0)
-            return 0;
-        if(barraAtEs > 100)
-            return 100;
-    }
-
-    return 1;
-}
-
-int Jugador::getAtaque()
-{
-    return -1;
-}
-
-Arma * Jugador::getArma()
-{
-    return armaEquipada;
-}
-
-
-Arma * Jugador::getArmaEspecial()
-{
-    return armaEspecial;
-}
-
-const char* Jugador::getNombre()
-{
-    return nombreJugador;
-}
-
-int Jugador::getSuerte()
-{
-    return -1;
-}
-
-int Jugador::getDanyoCritico()
-{
-    return danyoCritico;
-}
-
-int Jugador::getProAtaCritico()
-{
-    return proAtaCritico;
-}
-
-int * Jugador::getBuffos()
-{
-    int * valores = new int[6];
-    return valores;
-}
-float Jugador::getTimeAtEsp()
-{
-    return atackEspTime;
-}
-
-float Jugador::getLastTimeAtEsp()
-{
-    return lastAtackEspTime;
-}
-
-const char *Jugador::getRutaArmaEsp()
-{
-    return rutaArmaEspecial;
-}
-
-void Jugador::setID(int nid)
-{
-    id = nid;
-}
-
-int Jugador::getID()
-{
-    return id;
-}
-
-void Jugador::updateInterfaz()
-{
-    InterfazJugador * interfaz = InterfazJugador::getInstance();
-    interfaz->setVida(vida);
-    interfaz->setAtaqueEspecial(getBarraAtEs());
-    interfaz->setDinero(dinero);
-}
-
-int Jugador::getAnimacion()
-{
-    return animacion;
-}
 
 void Jugador::setAnimacion(int est)
 {
@@ -835,48 +1065,7 @@ void Jugador::setAnimacion(int est)
     }
 }
 
-bool Jugador::terminaAnimacion()
+void Jugador::setID(int nid)
 {
-        times * tiempo = times::getInstance();
-
-        switch(animacion)//comprobamos que la animacion haya terminado
-        {
-            case 0://andar
-                return true;
-            case 1://quieto
-                return true;
-            case 2://ataque
-                if(tiempo->calcularTiempoPasado(tiempoPasadoAtaque) >= tiempoAtaque || tiempoPasadoAtaque == 0)
-                {
-                    tiempoPasadoAtaque = 0;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            case 3://ataque especial
-                if(tiempo->calcularTiempoPasado(tiempoPasadoAtaEsp) >=  tiempoAtaEsp || tiempoPasadoAtaEsp == 0)
-                {
-                    tiempoPasadoAtaEsp = 0;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            case 4://coger objeto
-                if(tiempo->calcularTiempoPasado(tiempoPasadoCogerObjeto) >= tiempoCogerObjeto || tiempoPasadoCogerObjeto == 0)
-                {
-                    tiempoPasadoCogerObjeto = 0;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            case 5://muerto
-                return false;
-        }
-    return true;
+    id = nid;
 }
