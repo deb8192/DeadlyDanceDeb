@@ -34,7 +34,7 @@ void CargadorNiveles::CargarNivelXml(int level)
     vector <pugi::xml_node> anterior;
     anterior.push_back(primera.child("Platform"));
     vector <Sala *> padre;
-    Sala * sala = crearSala(primera,nullptr);//pasamos la primera parte para que busque plataformas
+    Sala * sala = crearSala(anterior.back(),nullptr);//pasamos la primera parte para que busque plataformas
 
 
     for (pugi::xml_node hijo = doc.child("Level").child("Light"); hijo; hijo = hijo.next_sibling("Light"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -45,10 +45,24 @@ void CargadorNiveles::CargarNivelXml(int level)
         nivel_instancia->CrearLuz(x,y,z); //cargamos el objeto
     }
     
-    for (plat = anterior.back().child("Platform"); plat; anterior.push_back(anterior.back().child("Platform").child("Platform")))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    for (plat = anterior.back().child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         cout << "ciclo" <<endl;
-        if(anterior.back() != NULL)
+        while(plat != NULL)
+        {
+            padre.push_back(sala);
+            sala = crearSala(plat, padre.back());
+            anterior.push_back(plat);
+            plat = plat.child("Platform");
+        }
+        while(plat.next_sibling() == NULL && !anterior.empty())
+        {
+            plat = anterior.back();
+            anterior.pop_back();
+            sala = padre.back();
+            padre.pop_back();
+        }
+        /*if(anterior.back() != NULL)
         {
 
             padre.push_back(sala);
@@ -70,7 +84,7 @@ void CargadorNiveles::CargarNivelXml(int level)
                 padre.pop_back();
             }
             
-        }
+        }*/
         
     }
     cout << "se acaba" <<endl;
