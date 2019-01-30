@@ -64,6 +64,9 @@ using namespace reactphysics3d;
             CollisionBody* getAtack();
             unsigned int GetRelacionInteractuablesObstaculos(int n);
 
+            //para limpiar todas las fisicas
+            void limpiarFisicas();
+
         private:
             //clase singleton
             MotorFisicas();
@@ -83,7 +86,7 @@ using namespace reactphysics3d;
             std::vector<CollisionBody *> plataformas;//Vector de plataformas para caminar
 
             CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
-            CollisionBody* jugadorAtack; //contiene el ataque normal del jugador
+            CollisionBody * jugadorAtack; //contiene el ataque normal del jugador
             CollisionBody * arma;//arma normal del jugador
 
             std::vector<CollisionBody *> objetos;

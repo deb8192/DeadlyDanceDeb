@@ -84,9 +84,9 @@ void Jugando::Update()
     //Actualiza el motor de audio
     MotorAudioSystem *motora = MotorAudioSystem::getInstance();
     motora->update(false);
-
     //vuelve al menu
-    if(motor->ocurreEvento(GUI_ID_MENU_BUTTON)){
+    if(motor->ocurreEvento(GUI_ID_MENU_BUTTON))
+    {
         // Se resetea en el Update de Juego
         // Borrar escena y GUI
         motor->borrarScena();
@@ -94,7 +94,6 @@ void Jugando::Update()
         //nivel->LimpiarNivel();
         // Cargar GUI de menu
         motor->PintarBotonesMenu();
-
         return;
     }
 }
