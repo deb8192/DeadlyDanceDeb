@@ -504,7 +504,6 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         Jugador_Scena = jugador_en_scena;
         Jugador_Scena->setScale(core::vector3df(3,3,3));
         Jugador_Scena->setFrameLoop(30, 44);
-        cout << "creo jugador" << endl;
 		Jugador_Scena->setAnimationSpeed(10);
         colorearJugador(255, 255, 255, 255);
         //const SColor COLOR  = SColor(255,0,0,255);
