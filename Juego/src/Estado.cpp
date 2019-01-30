@@ -41,7 +41,7 @@ int Menu::Esta()
 
 void Menu::Input()
 {
-    
+
 }
 
 //Funcion de dibujado
@@ -88,13 +88,13 @@ void Jugando::Update()
     //vuelve al menu
     if(motor->ocurreEvento(GUI_ID_MENU_BUTTON)){
         // Se resetea en el Update de Juego
-        // Borrar escena y GUI 
+        // Borrar escena y GUI
         motor->borrarScena();
         motor->borrarGui();
         //nivel->LimpiarNivel();
         // Cargar GUI de menu
         motor->PintarBotonesMenu();
-        
+
         return;
     }
 }
@@ -116,7 +116,7 @@ void Cinematica::Clean()
 
 void Cinematica::Input()
 {
-    
+
 }
 
 void Cinematica::Update()
@@ -230,7 +230,7 @@ void Puzzles::CrearFichasPila()
     MotorGrafico *motor = MotorGrafico::getInstance();
     short posY = 0;
     for (int tam=GetOpciones(); tam>0; tam--) {
-        
+
         short r = rand() % (256 + 100); // +100 para que no salga blanco
         short g = rand() % (256 + 0);
         short b = rand() % (256 + 0);
@@ -355,7 +355,7 @@ void Puzzles::DeseleccionarNodo()
         {
             motor->RecolocarFicha(RecolocarFicha(), pilaInicial);
         } else {                            // Distinta zona
-                
+
             if (ComprobarTamanyo()) {
                 pasos++;
                 SacarFicha();
