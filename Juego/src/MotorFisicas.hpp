@@ -29,6 +29,7 @@ using namespace reactphysics3d;
 
             void updateJugador(float x, float y, float z);//actualizamos al jugador en el espacio de las fisicas
             void updateEnemigos(float x, float y, float z, unsigned int i);//actualizamos al enemigo en el espacio de las fisicas
+            void updatePuerta(float x, float y, float z, float rx, float ry, float rz, float * desplazamientos, unsigned int i);
             void EraseColectable(int idx);
             void EraseEnemigo(std::size_t i);
             void EraseJugador();
@@ -38,6 +39,7 @@ using namespace reactphysics3d;
             bool collideObstacle();
             bool collidePlatform();
             int collideColectable();
+            int collideInteractuable();
             void colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z);
             void llevarBox(float x, float y, float z, float anc, float lar, float alt);
 
@@ -60,6 +62,7 @@ using namespace reactphysics3d;
             CollisionBody* getEnemiesAtack(int n);
             CollisionBody* getEnemiesAtEsp(int n);
             CollisionBody* getAtack();
+            unsigned int GetRelacionInteractuablesObstaculos(int n);
 
             //para limpiar todas las fisicas
             void limpiarFisicas();
@@ -76,9 +79,11 @@ using namespace reactphysics3d;
             std::vector<CollisionBody *> armaAtEspEne;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody * jugador;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
 
-            std::vector<CollisionBody *> recolectables;
-            std::vector<CollisionBody *> obstaculos;
-            std::vector<CollisionBody *> plataformas;
+            std::vector<CollisionBody *> recolectables;//Vector de elementos que se pueden coger
+            std::vector<CollisionBody *> interactuables;//Vector de elementos con los que interactuar
+            std::vector<unsigned int> relacionInteractuablesObstaculos;//vector que contiene en la posicion correspondiente a un interactuable en su vector el valor de su posicion en el vector de obstaculos
+            std::vector<CollisionBody *> obstaculos;//Vector de obstaculos que bloquean el movimiento
+            std::vector<CollisionBody *> plataformas;//Vector de plataformas para caminar
 
             CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody * jugadorAtack; //contiene el ataque normal del jugador

@@ -1,9 +1,9 @@
 #include "Enemigo.hpp"
-//#include "Nivel.hpp"
-#include "MotorGrafico.hpp"
-#include "MotorFisicas.hpp"
-#include "MotorAudio.hpp"
-#include "times.hpp"
+#include "Nivel.hpp"
+//#include "MotorGrafico.hpp"
+//#include "MotorFisicas.hpp"
+//#include "MotorAudio.hpp"
+//#include "times.hpp"
 
 #define PI 3.14159265358979323846
 #define PIRADIAN 180.0f
@@ -51,6 +51,51 @@ float Enemigo::getZ()
     return z;
 }
 
+float Enemigo::getNewX()
+{
+    return newX;
+}
+
+float Enemigo::getNewY()
+{
+    return newY;
+}
+
+float Enemigo::getNewZ()
+{
+    return newZ;
+}
+
+float Enemigo::getLastX()
+{
+    return lastX;
+}
+
+float Enemigo::getLastY()
+{
+    return lastY;
+}
+
+float Enemigo::getLastZ()
+{
+    return lastZ;
+}
+
+float Enemigo::getFisX()
+{
+    return fisX;
+}
+
+float Enemigo::getFisY()
+{
+    return fisY;
+}
+
+float Enemigo::getFisZ()
+{
+    return fisZ;
+}
+
 float Enemigo::getRX()
 {
     return rx;
@@ -64,6 +109,11 @@ float Enemigo::getRY()
 float Enemigo::getRZ()
 {
     return rz;
+}
+
+float Enemigo::getVelocidad()
+{
+    return velocidad;
 }
 
 void Enemigo::definirSala(Sala * sala)
@@ -130,6 +180,42 @@ void Enemigo::setPosiciones(float nx,float ny,float nz)
     x = nx;
     y = ny;
     z = nz;
+}
+
+void Enemigo::setNewPosiciones(float nx,float ny,float nz)
+{
+    moveTime = 0.0;
+    this->setLastPosiciones(newX, newY, newZ);
+    newX = nx;
+    newY = ny;
+    newZ = nz;
+}
+
+void Enemigo::setLastPosiciones(float nx,float ny,float nz)
+{
+    lastX = nx;
+    lastY = ny;
+    lastZ = nz;
+}
+
+void Enemigo::initPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX = nx;
+    fisY = ny;
+    fisZ = nz;
+}
+
+void Enemigo::setPosicionesFisicas(float nx,float ny,float nz)
+{
+    fisX += nx;
+    fisY += ny;
+    fisZ += nz;
+}
+
+
+void Enemigo::setVelocidad(float newVelocidad)
+{
+    velocidad = newVelocidad;
 }
 
 int Enemigo::Atacar()
@@ -302,6 +388,52 @@ void Enemigo::Interactuar(int id, int id2)
 
 }
 
+/*************** moverseEntidad *****************
+ * Funcion con la que los enemigos se desplazaran
+ * por el escenario mediante una interpolacion desde
+ * el punto de origen al punto de destino
+ */
+void Enemigo::moverseEntidad(float updTime)
+{
+    //pt es el porcentaje de tiempo pasado desde la posicion
+    //de update antigua hasta la nueva
+    float pt = moveTime / updTime;
+
+    if(pt > 1.0f)
+    {
+        pt = 1.0f;
+    }
+
+    x = lastX * (1 - pt) + newX * pt;
+    z = lastZ * (1 - pt) + newZ * pt;
+}
+
+/*************** rotarEntidad *****************
+ * Funcion con la que el enemigo rotara
+ * sobre si mismo mediante una interpolacion desde
+ * el punto de origen al punto de destino
+ */
+void Enemigo::RotarEntidad(float updTime)
+{
+    //pt es el porcentaje de tiempo pasado desde la posicion
+    //de update antigua hasta la nueva
+    float pt = moveTime / updTime;
+
+    if(pt > 1.0f)
+    {
+        pt = 1.0f;
+    }
+
+    rx = lastRx * (1 - pt) + newRx * pt;
+    ry = lastRy * (1 - pt) + newRy * pt;
+    rz = lastRz * (1 - pt) + newRz * pt;
+}
+
+void Enemigo::UpdateTimeMove(float updTime)
+{
+    moveTime += updTime;
+}
+
 void Enemigo::setVida(int vid)
 {
     vida = vid;
@@ -350,6 +482,16 @@ void Enemigo::setDanyoCritico(int danyoC)
 void Enemigo::setProAtaCritico(int probabilidad)
 {
     proAtaCritico = probabilidad;
+}
+
+void Enemigo::setTimeAt(float time)
+{
+    atackTime = time;
+}
+
+void Enemigo::setLastTimeAt(float time)
+{
+    lastAtackTime = time;
 }
 
 void Enemigo::setTimeAtEsp(float time)
@@ -423,6 +565,29 @@ void Enemigo::setRotation(float rot)
     rotation = rot;
 }
 
+void Enemigo::setRotacion(float nrx, float nry, float nrz)
+{
+    rx = nrx;
+    ry = nry;
+    rz = nrz;
+}
+
+void Enemigo::setNewRotacion(float nrx, float nry, float nrz)
+{
+    rotateTime = 0.0;
+    this->setLastRotacion(newRx, newRy, newRz);
+    newRx = nrx;
+    newRy = nry;
+    newRz = nrz;
+}
+
+void Enemigo::setLastRotacion(float nrx, float nry, float nrz)
+{
+    lastRx = nrx;
+    lastRy = nry;
+    lastRz = nrz;
+}
+
 void Enemigo::setAtackTime(float t)
 {
   atacktime = t;
@@ -433,6 +598,15 @@ float Enemigo::getAtackTime()
   return atacktime;
 }
 
+float Enemigo::getTimeAt()
+{
+    return atackTime;
+}
+
+float Enemigo::getLastTimeAt()
+{
+    return lastAtackTime;
+}
 
 float Enemigo::getTimeAtEsp()
 {
@@ -544,8 +718,15 @@ void Enemigo::runIA()
 
     bool Enemigo::pedirAyuda()
     {
-        //vamos a generar un sonido de ayuda
-        generarSonido(20,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+        Nivel * nivel = Nivel::getInstance();
+        MotorGrafico * motor = MotorGrafico::getInstance();
+        //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
+        if(nivel->getEnemigoPideAyuda() == nullptr && motor->getPathfindingActivado())
+        {
+            //vamos a generar un sonido de ayuda
+            generarSonido(60,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+            nivel->setEnemigoPideAyuda(this); //En caso de no estar buscando a ningun aliado se anade este como peticionario
+        }
         //cout << " grita pidiendo ayuda "<< endl;
         return true;
     }
@@ -554,7 +735,13 @@ void Enemigo::runIA()
     {
         //vamos a generar un sonido de ayuda
         generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+        MotorGrafico * motor = MotorGrafico::getInstance();
+        if(motor->getPathfindingActivado()){
+            Nivel * nivel = Nivel::getInstance();
+            nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
+        }
         //cout << " contesta a la llamada de auxilio "<< endl;
+
         return true;
     }
 

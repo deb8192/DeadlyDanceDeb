@@ -16,8 +16,19 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
         ~Arma();
         
         //drawable metodos
+        void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
+        void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
+        void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
+
         void setPosiciones(float nx,float ny,float nz);
         void setPosicionesArmaEsp(float nx,float ny,float nz, float ry);
+        void setNewPosiciones(float nx,float ny,float nz);
+        void setLastPosiciones(float nx,float ny,float nz);
+        void setRotacion(float nrx, float nry, float nrz);
+        void setNewRotacion(float nrx, float nry, float nrz);
+        void setLastRotacion(float nrx, float nry, float nrz);
+        void setPosicionesFisicas(float nx,float ny,float nz);
+        void initPosicionesFisicas(float nx,float ny,float nz);
 
         //setters
         void setNombre(const char*);
@@ -33,6 +44,15 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
         float getX();
         float getY();
         float getZ();
+        float getNewX();
+        float getNewY();
+        float getNewZ();
+        float getLastX();
+        float getLastY();
+        float getLastZ();
+        float getFisX();
+        float getFisY();
+        float getFisZ();
         float getRX();
         float getRY();
         float getRZ();

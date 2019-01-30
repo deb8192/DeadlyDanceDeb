@@ -4,6 +4,17 @@
 #include <iostream>
 #include <cmath>
 
+//para clases singleton deben tener un indicador de que se ha creado el unico objeto
+Pathfinder* Pathfinder::unica_instancia = 0;
+//fin indicador singleton
+
+Pathfinder::Pathfinder()
+{
+
+}
+
+
+
 /********************* ComprobarListas ************************
  * Descripcion: Metodo que indica si una sala se encuentra en
  * cualquiera de las listas de nodos que se pasen
@@ -100,13 +111,24 @@ bool Pathfinder::coincide(Sala *nodoA, Sala *nodoB)
  */
 std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *start, Sala *end)
 {
-
+    //Se inicializan todas las variables implicadas en el pathfiding
+    if(!camino.empty())
+    {
+        camino.clear();//Si tiene datos, se vacia
+    }
+    if(!listaAbierta.empty())
+    {
+        listaAbierta.clear();//Si tiene datos, se vacia
+    }
+    if(!listaCerrada.empty())
+    {
+        listaCerrada.clear();//Si tiene datos, se vacia
+    }
     cout << "Entra" << endl;
+    contador = 0;
     startNodo.nodo = start;
     startNodo.costSoFar = 0;
     startNodo.estimatedTotalCost = calcularCostes(startNodo, end);
-
-    vector <Sala*> salas;
 
     listaAbierta.push_back(startNodo);
 
@@ -115,8 +137,9 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *st
     unsigned int i = 0;
 
     //Mientras que haya nodos visitados por procesar se busca el camino
-    while(listaAbierta.size() > 0)
+    while(listaAbierta.size() > 0 && contador < 25)
     {
+        contador++;
         int estaCerrado = -1, estaAbierto = -1;
         Pathfinder::getSmallest();                            //Se obtiene el nodo con menor coste estimado
         termina = coincide(actualNodo.nodo, end);             //SE comprueba si es el último (la primera vez solo comprueba la sala start).
@@ -152,8 +175,16 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *st
         //En caso contrario comprobamos las demas salas conectadas a la sala actual
         else
         {
+            vector <Sala*> salas;
             cout << "No devuelve el camino" << endl;
-            salas = actualNodo.nodo->getSalidas();
+            for(i = 0; i < actualNodo.nodo->getSalidas().size(); i++)
+            {
+                salas.push_back(actualNodo.nodo->getSalidas().at(i));
+            }
+            for(i = 0; i < actualNodo.nodo->getEntradas().size(); i++)
+            {
+                salas.push_back(actualNodo.nodo->getEntradas().at(i));
+            }
             for(i = 0; i < salas.size(); i++)
             {
                 Sala * sala = salas.at(i);
@@ -221,5 +252,6 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *st
             listaCerrada.push_back(actualNodo);
         }
     }
+    
     return camino;
 }

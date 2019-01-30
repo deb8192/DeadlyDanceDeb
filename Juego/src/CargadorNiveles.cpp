@@ -10,7 +10,7 @@ void CargadorNiveles::CargarNivelXml(int level)
 {
     Nivel * nivel_instancia = Nivel::getInstance();
     //definimos los strings
-    std::string nivel = ""; //donde se almacenara el nombre del nivel   
+    std::string nivel = ""; //donde se almacenara el nombre del nivel
     std::string extension = ".xml"; // extension del archivo a abrir
     std::string ruta = "assets/maps/xml/"; // ruta del archivo
     std::string ruta_completa = ""; // ruta del archivo
@@ -36,7 +36,7 @@ void CargadorNiveles::CargarNivelXml(int level)
     {
         int x = hijo.attribute("X").as_int();//nos devuelve un int
         int z = hijo.attribute("Y").as_int();//nos devuelve un int
-        int y = hijo.attribute("Z").as_int();//nos devuelve un int 
+        int y = hijo.attribute("Z").as_int();//nos devuelve un int
         nivel_instancia->CrearLuz(x,y,z); //cargamos el objeto
     }
 
@@ -46,7 +46,7 @@ void CargadorNiveles::CargarNivelXml(int level)
 void CargadorNiveles::GuardarNivelXml(int level)
 {
     //definimos los strings
-    std::string nivel = ""; //donde se almacenara el nombre del nivel   
+    std::string nivel = ""; //donde se almacenara el nombre del nivel
     std::string extension = ".xml"; // extension del archivo a abrir
     std::string ruta = "assets/maps/xml/"; // ruta del archivo
     std::string ruta_completa = ""; // ruta del archivo
@@ -67,14 +67,14 @@ void CargadorNiveles::GuardarNivelXml(int level)
 void CargadorNiveles::CargarNivelBin(int level)
 {
     //definimos los strings
-    std::string nivel = ""; //donde se almacenara el nombre del nivel   
+    std::string nivel = ""; //donde se almacenara el nombre del nivel
     std::string extension = ".bin"; // extension del archivo a abrir
     std::string ruta = "assets/maps/bin/"; // ruta del archivo
     std::string ruta_completa = ""; // ruta del archivo
     //ahora pasamos el nivel a texto
     nivel = std::to_string(level);
     //creamos la ruta completa
-    ruta_completa = ruta+nivel+extension; 
+    ruta_completa = ruta+nivel+extension;
 
     //esto transforma el string std 11 a char
     char cadena[sizeof(ruta_completa)];//le dice la longitud del char que sera igual a la longitud del string
@@ -87,45 +87,48 @@ void CargadorNiveles::CargarNivelBin(int level)
 void CargadorNiveles::GuardarNivelBin(int level)
 {
     //definimos los strings
-    std::string nivel = ""; //donde se almacenara el nombre del nivel   
+    std::string nivel = ""; //donde se almacenara el nombre del nivel
     std::string extension = ".bin"; // extension del archivo a abrir
     std::string ruta = "assets/maps/bin/"; // ruta del archivo
     std::string ruta_completa = ""; // ruta del archivo
     //ahora pasamos el nivel a texto
     nivel = std::to_string(level);
     //creamos la ruta completa
-    ruta_completa = ruta+nivel+extension; 
+    ruta_completa = ruta+nivel+extension;
 
     //esto transforma el string std 11 a char
     char cadena[sizeof(ruta_completa)];//le dice la longitud del char que sera igual a la longitud del string
     strcpy(cadena,ruta_completa.c_str()); //pasa el string a char
     //fin de la transformacion
 
-    //llamamos a las datos desde nivel para almacenarlos en formato binario 
+    //llamamos a las datos desde nivel para almacenarlos en formato binario
 }
 
 Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
 {
     Nivel * nivel_instancia = Nivel::getInstance();
-    Sala * padren;//sala padre
+    Sala * padren = nullptr;//sala hijo
+    static const char* msg = "Ciclo";
+    cout << msg <<endl;
     for (pugi::xml_node plat = hijo.child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
         int x = plat.attribute("X").as_int();//nos devuelve un int
         int y = plat.attribute("Y").as_int();//nos devuelve un int
-        int z = plat.attribute("Z").as_int();//nos devuelve un int 
+        int z = plat.attribute("Z").as_int();//nos devuelve un int
         int ancho = plat.attribute("ancho").as_int();//nos devuelve un int
         int largo = plat.attribute("largo").as_int();//nos devuelve un int
-        int alto = plat.attribute("alto").as_int();//nos devuelve un int 
+        int alto = plat.attribute("alto").as_int();//nos devuelve un int
         int centro = plat.attribute("TypeCenter").as_int();//nos devuelve el tipo de centro de masas del objeto
-        bool jugadorEstasAqui = plat.attribute("UserStar").as_bool();//nos devuelve true si es donde empieza el jugador 
+        bool jugadorEstasAqui = plat.attribute("UserStar").as_bool();//nos devuelve true si es donde empieza el jugador
         const char * textura = plat.attribute("Texture").value(); //nos da un char[] = string
         const char * modelo  =  plat.attribute("Model").value(); //nos da un char[] = string
         padren = nivel_instancia->CrearPlataforma(accion,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
 
-        if(padre != nullptr)
+        if(padre != nullptr && padren != nullptr)
         {
-            padren->agregarSalida(padre);
+            padre->agregarSalida(padren);
+            padren->agregarEntrada(padre);
         }
 
         if(jugadorEstasAqui)
@@ -137,9 +140,11 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             int Playerx = plat.attribute("StarX").as_int();//nos devuelve un int
             int Playery = plat.attribute("StarY").as_int();//nos devuelve un int
             int Playerz = plat.attribute("StarZ").as_int();//nos devuelve un int 
-            int ancho = plat.attribute("ancho").as_int();//nos devuelve un int
-            int largo = plat.attribute("largo").as_int();//nos devuelve un int 
-            int alto = plat.attribute("ancho").as_int();//nos devuelve un int
+            //TEMPORAL
+            int ancho = 1;//nos devuelve un int
+            int largo = 1;//nos devuelve un int 
+            int alto = 5;//nos devuelve un int
+            //!TEMPORAL
             const char * Playertextura = plat.attribute("StarTexture").value(); //nos da un char[] = string
             const char * Playermodelo  =  plat.attribute("StarModel").value(); //nos da un char[] = string
             nivel_instancia->CrearJugador(accion,Playerx,Playerz,Playery,ancho,largo,alto,Playermodelo,Playertextura,propiedades);
@@ -153,9 +158,9 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             int accion = enem.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
             int x = enem.attribute("X").as_int();//nos devuelve un int
             int y = enem.attribute("Y").as_int();//nos devuelve un int
-            int z = enem.attribute("Z").as_int();//nos devuelve un int 
+            int z = enem.attribute("Z").as_int();//nos devuelve un int
             int ancho = enem.attribute("ancho").as_int();//nos devuelve un int
-            int largo = enem.attribute("largo").as_int();//nos devuelve un int 
+            int largo = enem.attribute("largo").as_int();//nos devuelve un int
             int alto = enem.attribute("ancho").as_int();//nos devuelve un int
             const char * textura = enem.attribute("Texture").value(); //nos da un char[] = string
             const char * modelo  =  enem.attribute("Model").value(); //nos da un char[] = string
@@ -167,22 +172,44 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             //aqui va la carga de objetos
             int * propiedades;
             propiedades = new int [6];//hay que destruirlo en nivel
+            int codigo = obj.attribute("codigo").as_int(); //se utiliza para asociar palancas y/o llaves a puertas
             int accion = obj.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
             int x = obj.attribute("X").as_int();//nos devuelve un int
             int y = obj.attribute("Y").as_int();//nos devuelve un int
-            int z = obj.attribute("Z").as_int();//nos devuelve un int 
+            int z = obj.attribute("Z").as_int();//nos devuelve un int
+            int despX = obj.attribute("despX").as_int();//nos devuelve un int
+            int despZ = obj.attribute("despZ").as_int();//nos devuelve un int  
             int ancho = obj.attribute("ancho").as_int();//nos devuelve un int
             int largo = obj.attribute("largo").as_int();//nos devuelve un int 
-            int alto = obj.attribute("ancho").as_int();//nos devuelve un int  
-            int ataque = obj.attribute("ataque").as_int();//nos devuelve un int           
+            int alto = obj.attribute("alto").as_int();//nos devuelve un int  
+            int ataque = obj.attribute("ataque").as_int();//nos devuelve un int     
             const char * nombre = obj.attribute("nombre").value(); //nos da un char[] = string
             const char * textura = obj.attribute("Texture").value(); //nos da un char[] = string
             const char * modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
-            nivel_instancia->CrearObjeto(accion,nombre,ataque,x,y,z,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
+            nivel_instancia->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
+        }
+        for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+        {
+            //carga de las zonas
+            int * propiedades;
+            propiedades = new int [6];//hay que destruirlo en nivel
+            int accion = zon.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
+            int x = zon.attribute("X").as_int();//nos devuelve un int
+            int y = zon.attribute("Y").as_int();//nos devuelve un int
+            int z = zon.attribute("Z").as_int();//nos devuelve un int
+            int ancho = zon.attribute("ancho").as_int();//nos devuelve un int
+            int largo = zon.attribute("largo").as_int();//nos devuelve un int
+            int alto = zon.attribute("ancho").as_int();//nos devuelve un int
+            const char * tipo = zon.attribute("tipo").value(); //nos da un char[] = string
+            nivel_instancia->CrearZona(accion,x,y,z,ancho,largo,alto,tipo,propiedades); //cargamos el enemigo
         }
 
-        Sala * entrada = crearSala(plat,padren);
-        padren ->agregarEntrada(entrada); //esto se modificara
+        return crearSala(plat,padren);
+        //CAMBIO PARA VER SI FUNCIONA EL PATFHFINDING
+        /*if(entrada != nullptr)
+        {
+            padren ->agregarEntrada(entrada); //esto se modificara
+        }*/
     }
 
     return padren;

@@ -24,9 +24,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         void queVes();//recupera informacion de los objetos,enemigos,jugador que ve.
         //drawables metodos
-        void setPosiciones(float nx,float ny,float nz);
-        void setID(int);
-        int getID();
+
         //npc metodos
         int Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
         //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
@@ -38,8 +36,21 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
-
+        void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
+        void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
+        void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
+        
         //getters y setters
+
+        void setID(int);
+        void setPosiciones(float nx,float ny,float nz);
+        void setNewPosiciones(float nx,float ny,float nz);
+        void setLastPosiciones(float nx,float ny,float nz);
+        void setRotacion(float nrx, float nry, float nrz);
+        void setNewRotacion(float nrx, float nry, float nrz);
+        void setLastRotacion(float nrx, float nry, float nrz);
+        void setPosicionesFisicas(float nx,float ny,float nz);
+        void initPosicionesFisicas(float nx,float ny,float nz);
         void setVida(int vid);
         void setTipo(int tip);
         void setBarraAtEs(int bar);
@@ -50,11 +61,15 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setProAtaCritico(int probabilidad);
         void setSala(Sala* sala);
         void setAtackTime(float t);
+        void setTimeAt(float time);
+        void setLastTimeAt(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
         void setRotation(float rot);
         void setPosAtaques(int p);
+        void setVelocidad(float velocidad); //modifica la velocidad de desplazamiento
 
+        int getID();
         int getVida();
         int getTipo();
         int getBarraAtEs();
@@ -66,14 +81,26 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int* getBuffos();
         Sala* getSala();
         float getAtackTime();
+        float getTimeAt();
+        float getLastTimeAt();
         float getTimeAtEsp();
         float getLastTimeAtEsp();
         float getX();
         float getY();
         float getZ();
+        float getNewX();
+        float getNewY();
+        float getNewZ();
+        float getLastX();
+        float getLastY();
+        float getLastZ();
+        float getFisX();
+        float getFisY();
+        float getFisZ();
         float getRX();
         float getRY();
         float getRZ();
+        float getVelocidad(); //modifica la velocidad de desplazamiento
 
         //comportamientos bases
             bool ver(int tipo);//1 si ve al jugador
@@ -96,6 +123,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
         float atacktime = 0.0f;
+        float velocidad;  //Velocidad de desplazamiento del enemigo
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";
         Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
