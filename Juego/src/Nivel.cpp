@@ -22,7 +22,6 @@ void Nivel::LimpiarNivel()
 {
 
     //para ejecucion de la ia y interpolado
-    NoEjecutar();
 
     id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
 
@@ -30,14 +29,11 @@ void Nivel::LimpiarNivel()
 
     borrarEnemigos();
 
-    cout << "se entra en borrar recolectables" << endl;
-
     if(recolectables.size() > 0)
     {
         for(std::size_t i=0 ; i < recolectables.size() ; i++)
         {
             int numero = (int)i;
-            cout << "se borra recolectable de nivel" << i << endl;
             delete recolectables[numero];   
             recolectables[i] = nullptr;
         }
@@ -52,14 +48,16 @@ void Nivel::LimpiarNivel()
 
 bool Nivel::CargarNivel(int level) 
 {
+    NoEjecutar();//se impide entrar en bucles del juego
+
     MotorGrafico * motor = MotorGrafico::getInstance();
     MotorFisicas* fisicas = MotorFisicas::getInstance();
+    
+    motor->borrarScena();//borramos la scena
+
     //pre limpiamos todo
-    cout << "Limpiamos motor grafico" << endl;
     motor->LimpiarMotorGrafico();
-    cout << "Limpiamos nivel" << endl;
     LimpiarNivel();
-    cout << "Limpiamos fisicas" << endl;
     fisicas->limpiarFisicas();
     //limpiammos la sala
     if(primeraSala != nullptr)

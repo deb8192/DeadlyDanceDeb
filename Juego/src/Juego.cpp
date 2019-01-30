@@ -92,6 +92,16 @@ void Juego::Update()
             cambiarEstadoMenu();          
         }
 
+        if(motor->ocurreEvento(GUI_ID_REINICIAR_BUTTON))
+        {
+            motora->getEvent("Nivel1")->stop();
+            motor->resetEvento(GUI_ID_REINICIAR_BUTTON);
+            motor->borrarScena();
+            motor->borrarGui();
+            nivel->CargarNivel(3);
+            motor->CrearCamara();
+        }
+
         if(motor->ocurreEvento(GUI_ID_SALIR_BUTTON))//salimos del juego
         {
             motor->closeGame();
