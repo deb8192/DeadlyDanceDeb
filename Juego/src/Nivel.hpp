@@ -14,6 +14,8 @@
 #include "times.hpp"
 #include "Arma.hpp"
 #include <cstring>
+#include <stdlib.h>
+#include <time.h>
 //#include "MotorFisicas.hpp"
 
 //cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA()
@@ -50,10 +52,11 @@ class Nivel
         void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char *tipo, int * propiedades); //lo usamos para crear zonas
         Sala * CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
+        void cargarCofres(int num);
 
         void EraseEnemigo(std::size_t i);
         void EraseJugador();
-        
+
         //Bucle de actualizacion y dibujado de objetos
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
         void updateAtEsp(MotorGrafico *);//se actualiza la ejecucion de los ataques
@@ -90,6 +93,7 @@ class Nivel
         std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
         std::vector<Recolectable*> recolectables;
         std::vector<Zona*> zonas; //Array de zonas
+        std::vector<Zona*> zonas_cofres; //Array de zonas de cofres
         std::vector<Interactuable*> interactuables; //Objetos interactuables del mapa
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
