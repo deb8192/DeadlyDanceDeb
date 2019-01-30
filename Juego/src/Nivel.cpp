@@ -18,81 +18,62 @@ Nivel::Nivel()
     ejecutar = false;
 }
 
-void Nivel::LimpiarNivel(){
-
-    // = Jugador();//me cargo al jugador pero si da problemas ir a jugador y limpiar variables
-    //jugador en todos eliminar, enemigos, objetos, armas, salas,
-    MotorGrafico * motor = MotorGrafico::getInstance();
+void Nivel::LimpiarNivel()
+{
 
     //para ejecucion de la ia y interpolado
     NoEjecutar();
 
-    /*id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
-    dt = 0.0f;
-    frameTime = 0.0f;
-    acumulator = 0.0f;
-    atacktime = 0.0f;
-    lastAtackEsptime = 0.0f;
-    newTime = 0;
-    currentTime = 0;
-    cogerObjeto = false;
-    objetoCogido = -1;
-    danyo = 0, danyo2 = 0;
-    enemigoSeleccionado = 0;
-    cambia = 0;
+    id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
 
-    for (std::vector<Enemigo*>::iterator it = enemigos.begin(); it!=enemigos.end(); ++it){
-        delete *it;
-    }
-    enemigos.clear();*/
-    
-    //motor->LimpiarMotorGrafico();
+    cout << "se entra en borrar enemigos" << endl;
+
     borrarEnemigos();
 
-    /* delete fisicas;
-    fisicas=nullptr;*/
+    cout << "se entra en borrar recolectables" << endl;
 
-   /* recorrido.clear();
+    if(recolectables.size() > 0)
+    {
+        for(std::size_t i=0 ; i < recolectables.size() ; i++)
+        {
+            cout << "se borra recolectable de nivel" << i << endl;
+            delete recolectables[i];   
+            recolectables[i] = nullptr;
+        }
 
-   for (std::vector<Recolectable*>::iterator it = recolectables.begin(); it!=recolectables.end(); ++it){
-        delete *it;
+        recolectables.resize(0);
     }
-    recolectables.clear();
 
-    this->recargarJugador();
-
-    delete controladorTiempo;
-    controladorTiempo=nullptr;
-
-    delete primeraSala;//llamo al puntero para que se destruya
-    primeraSala=nullptr;*/
-
-
+    //jugador.~Jugador();//limpiamos jugador
+    jugador = Jugador();//volvemos a crear jugador
 
 }
 
 bool Nivel::CargarNivel(int level) 
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
     //pre limpiamos todo
+    cout << "Limpiamos motor grafico" << endl;
     motor->LimpiarMotorGrafico();
-    jugador = Jugador();
-    
-    //LimpiarNivel();
+    cout << "Limpiamos nivel" << endl;
+    LimpiarNivel();
+    cout << "Limpiamos fisicas" << endl;
+    fisicas->limpiarFisicas();
+    //limpiammos la sala
     if(primeraSala != nullptr)
     {
         primeraSala->~Sala();
         primeraSala = nullptr;
     }
+    //cargamos el nivel
     cargador.CargarNivelXml(level);
-
-    
+    //cargamos la interfaz si no estuviera ya en memoria
     motor->cargarInterfaz();
-
     //esta ya todo ejecutamos ia y interpolado
     Ejecutar();
-    
-    return false;
+    //devolvemos true si todo a ido bien
+    return true;
 }
 
 void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -271,7 +252,7 @@ void Nivel::CogerObjeto()
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     MotorGrafico * motor = MotorGrafico::getInstance();
 
-    int rec_col = fisicas->collideColectable();
+    long unsigned int rec_col = fisicas->collideColectable();
         jugador.setAnimacion(4);
         if(jugador.getArma() == nullptr)//si no tiene arma equipada
         {
@@ -315,7 +296,7 @@ void Nivel::CogerObjeto()
 
 void Nivel::DejarObjeto()
 {
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    MotorFisicas * fisicas = MotorFisicas::getInstance();
     MotorGrafico * motor = MotorGrafico::getInstance();
 
         if(jugador.getArma() != nullptr)//si tiene arma equipada
@@ -1021,14 +1002,11 @@ void Nivel::NoEjecutar()
 void Nivel::borrarEnemigos()
 {
     MotorFisicas* fisicas = MotorFisicas::getInstance();
-    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
     //actualizamos el jugador
-    MotorGrafico * motor = MotorGrafico::getInstance();
     if(enemigos.size() > 0)
     {
             for(std::size_t i=0;i<enemigos.size();i++)
             {
-                    motor->EraseEnemigo(i);
                     fisicas->EraseEnemigo(i);
                     EraseEnemigo(i);
             }
