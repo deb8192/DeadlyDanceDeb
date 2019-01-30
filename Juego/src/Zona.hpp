@@ -28,6 +28,7 @@ class Zona
         float getAncho();
         float getAlto();
         float getLargo();
+        bool  getProposito();
         const char* getTipo();
 
     private:
@@ -37,6 +38,7 @@ class Zona
         float y = 0.0f;
         float z = 0.0f;
         int id = -1;
+        bool proposito = false; //Esto se pone true si la zona ha cumplido su proposito (como zona de cofres con un cofre)
 };
 
 #endif
