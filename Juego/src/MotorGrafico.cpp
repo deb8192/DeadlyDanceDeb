@@ -10,6 +10,7 @@ MotorGrafico* MotorGrafico::unica_instancia = 0;
 /*Tipo 1(640x480), Tipo 2(800x600), Tipo 3(1024x768), Tipo 4(1280x1024)
 Esta clase define que tipo de pantalla quieres
 */
+
 MotorGrafico::MotorGrafico()
 {
     input.setDevice(device);//lo  utilizamos para que los eventos puedan llamar a funciones de
