@@ -15,7 +15,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
 
         //metodos de interaccion
         bool accionar();
-        
+
         //drawable metodos
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
@@ -62,16 +62,17 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         float getLargo();
         float getAlto();
         int GetPosicionObjetos();
+        bool getAccionado();
 
 
-    private: 
+    private:
 
         //Si codigoObjeto es > 0 es un numero comun entre dos objetos: una palanca con el mismo numero que una puerta abre dicha puerta
         int codigoObjeto;   //En caso de igualarse a 0 es una puerta sin llave, y si es -1 es un cofre
         bool accionado;     //Dado que son objetos accionables tendra dos estado segun este accionado o no
         int posicionArrayObjetos; //Posicion del elemento en el vector de objetos del motor grafico.
         float * desplazamientos = new float [2];   //Desplazamientos en X y en Z para le giro de la puerta
-        
+
 };
 
 #endif /* Interactuable_HPP */

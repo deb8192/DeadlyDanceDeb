@@ -67,7 +67,7 @@ bool Nivel::CargarNivel(int level)
     }
     cargador.CargarNivelXml(level);
     //Cargar objetos con el nivel completo
-    this->cargarCofres(1); //Cargamos los cofres del nivel
+    this->cargarCofres(2); //Cargamos los cofres del nivel
 
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->cargarInterfaz();
@@ -184,18 +184,9 @@ void Nivel::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto,
    zon->setID(calcID);
    zon->setPosiciones(x,y,z);
 
-   std::string name_tipo(zon->getTipo());
-   char * cadena_tipo = new char[sizeof(name_tipo)];
-   strcpy(cadena_tipo, name_tipo.c_str());
-
    //guardarla en el nivel
    zonas.push_back(zon);
-   //Guardarla en el nivel como zona de cofres
-   if(strcmp(cadena_tipo,"zChest") == 0)
-   {
 
-     zonas_cofres.push_back(zon);
-   }
  }
 
 //Cargar los cofres del nivel
@@ -203,19 +194,26 @@ void Nivel::cargarCofres(int num)
 {
   long unsigned int num_cofres = num;
   MotorGrafico * motor = MotorGrafico::getInstance();
-  cout << "ESTAMOS AQUI" << endl;
-  if(!zonas_cofres.empty())
+
+  if(!zonas.empty())
   {
-    if(zonas_cofres.size() > num_cofres)
+    if(zonas.size() > num_cofres)
     {
       //Buscar zonas sin proposito y guardar posicion en vector
       std::vector<int> Zsinprop;
-      for(int i = zonas_cofres.size(); i > 0; i--)
+      for(int i = zonas.size(); i > 0; i--)
       {
-        if(zonas_cofres.at(i-1)->getProposito() == false)
+        std::string name_tipo(zonas.at(i-1)->getTipo());
+        char * cadena_tipo = new char[sizeof(name_tipo)];
+        strcpy(cadena_tipo, name_tipo.c_str());
+
+        if(strcmp(cadena_tipo,"zChest") == 0) //Si es zona de cofre
         {
-          cout << "entra:" << i-1 << endl;
-          Zsinprop.push_back(i-1);
+          if(zonas.at(i-1)->getProposito() == false) //Y no ha cumplido su proposito
+          {
+            cout << "entra:" << i-1 << endl;
+            Zsinprop.push_back(i-1);
+          }
         }
       }
 
@@ -226,20 +224,28 @@ void Nivel::cargarCofres(int num)
         int numAlt = rand() % Zsinprop.size();
         cout << "colocar en: " << Zsinprop[numAlt] << endl;
 
+        //proposito cumplido
+        zonas[Zsinprop[numAlt]]->setProposito(true);
+
         //Buscar zona donde colocar
-        float newx = zonas_cofres[Zsinprop[numAlt]]->getX();
-        float newy = zonas_cofres[Zsinprop[numAlt]]->getY();
-        float newz = zonas_cofres[Zsinprop[numAlt]]->getZ();
+        float newx = zonas[Zsinprop[numAlt]]->getX();
+        float newy = zonas[Zsinprop[numAlt]]->getY();
+        float newz = zonas[Zsinprop[numAlt]]->getZ();
 
         //Colocar cofre
-        int posicionObjeto = motor->CargarObjetos(3,newx,newy,newz,2,2,2,"assets/models/ChestCartoon/ChestCartoon.obj", "assets/models/ChestCartoon/ChestCartoon.mtl");
-        Interactuable * inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/ChestCartoon/ChestCartoon.obj","assets/models/ChestCartoon/ChestCartoon.mtl", posicionObjeto);
+        int posicionObjeto = motor->CargarObjetos(3,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
+        Interactuable * inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto);
         inter->setID(id++);
         inter->setPosiciones(newx,newy,newz);
         inter->SetPosicionArrayObjetos(posicionObjeto);
         inter->setRotacion(0.0,0.0,0.0);
         interactuables.push_back(inter);
 
+        //Fisicas del cofre
+        MotorFisicas* fisicas = MotorFisicas::getInstance();
+        fisicas->crearCuerpo(3,newx/2,newy/2,newz/2,2,2,4,2,3);
+
+//void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo)
         //borrar del Array
         Zsinprop.erase(Zsinprop.begin() + numAlt);
 
@@ -433,7 +439,19 @@ void Nivel::AccionarMecanismo(int int_col)
     }
     else if(interactuables.at(int_col)->getCodigo() == -1)
     {
-        cout<<"Es un cofre"<<endl;
+       //Cofre no abierto
+        if(!interactuables.at(int_col)->getAccionado())
+        {
+          //Se abre el cofre
+          interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ() + 80.0);
+          cout << "Abres el cofre" << endl;
+          interactuables.at(int_col)->accionar();
+        }
+        else
+        {
+          cout << "Cofre ya abierto" << endl;
+        }
+
     }
     else if(std::strcmp(interactuables.at(int_col)->getNombre(), PALANCA) == 0)
     {
@@ -460,7 +478,7 @@ void Nivel::AccionarMecanismo(int int_col)
             {
                 //Se abre/acciona la puerta / el mecanismo
                 interactuables.at(i)->setNewRotacion(interactuables.at(i)->getRX(), interactuables.at(i)->getRY() + 135.0, interactuables.at(i)->getRZ());
-                fisicas->updatePuerta(interactuables.at(i)->getX(), interactuables.at(i)->getY(), interactuables.at(i)->getZ(), interactuables.at(i)->getRX(), interactuables.at(i)->getRY() +135.0, interactuables.at(i)->getRZ(), interactuables.at(i)->GetDesplazamientos(), posicion);
+                fisicas->updatePuerta(interactuables.at(i)->getX(), interactuables.at(i)->getY(), interactuables.at(i)->getZ(), interactuables.at(i)->getRX() + 100.0, interactuables.at(i)->getRY(), interactuables.at(i)->getRZ(), interactuables.at(i)->GetDesplazamientos(), posicion);
                 cout<<"Abre la puerta"<<endl;
             }
             else
