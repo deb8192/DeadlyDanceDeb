@@ -66,9 +66,8 @@ bool Nivel::CargarNivel(int level)
         primeraSala = nullptr;
     }
     cargador.CargarNivelXml(level);
-
     //Cargar objetos con el nivel completo
-    cargarCofres(1); //Cargamos los cofres del nivel
+    this->cargarCofres(1); //Cargamos los cofres del nivel
 
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->cargarInterfaz();
@@ -185,62 +184,71 @@ void Nivel::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto,
    zon->setID(calcID);
    zon->setPosiciones(x,y,z);
 
-   std::string name_tipo(tipo);
+   std::string name_tipo(zon->getTipo());
    char * cadena_tipo = new char[sizeof(name_tipo)];
    strcpy(cadena_tipo, name_tipo.c_str());
 
    //guardarla en el nivel
    zonas.push_back(zon);
    //Guardarla en el nivel como zona de cofres
-   if(strcmp(cadena_tipo,"zChest") == 0)zonas_cofres.push_back(zon);
-}
+   if(strcmp(cadena_tipo,"zChest") == 0)
+   {
+
+     zonas_cofres.push_back(zon);
+   }
+ }
 
 //Cargar los cofres del nivel
 void Nivel::cargarCofres(int num)
 {
   long unsigned int num_cofres = num;
   MotorGrafico * motor = MotorGrafico::getInstance();
-  if(zonas_cofres.size() > 0 || zonas_cofres.size() < num_cofres)
+  cout << "ESTAMOS AQUI" << endl;
+  if(!zonas_cofres.empty())
   {
-    //Buscar zonas sin proposito y guardarlos en un vector
-    std::vector<Zona*> Zsinprop;
-    for(int i = zonas_cofres.size(); i > 0; i--)
+    if(zonas_cofres.size() > num_cofres)
     {
-      cout << "entra:" << i << endl;
-      if(zonas_cofres[i]->getProposito() == false)
+      //Buscar zonas sin proposito y guardarlos en un vector
+      std::vector<Zona*> Zsinprop;
+      for(int i = zonas_cofres.size(); i > 0; i--)
       {
-        Zsinprop.push_back(zonas_cofres[i]);
+        if(zonas_cofres[i]->getProposito() == false)
+        {
+          cout << "entra:" << i << endl;
+          Zsinprop.push_back(zonas_cofres[i]);
+        }
+      }
+      //Mientra hay cofres sin colocar, colocar en una zona aleatoria
+      while(num_cofres > 0)
+      {
+        srand(time(NULL));
+        int numAlt = rand() % Zsinprop.size();
+        cout << "colocar en: " << numAlt;
+
+        //Buscar zona donde colocar
+        float newx = zonas_cofres[numAlt]->getX();
+        float newy = zonas_cofres[numAlt]->getY();
+        float newz = zonas_cofres[numAlt]->getZ();
+
+        //Colocar cofre
+        int posicionObjeto = motor->CargarObjetos(3,newx,newy,newz,2,2,2,"assets/models/ChestCartoon/ChestCartoon.obj", "assets/models/ChestCartoon/ChestCartoon.mtl");
+        Interactuable * inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/ChestCartoon/ChestCartoon.obj","assets/models/ChestCartoon/ChestCartoon.mtl", posicionObjeto);
+        inter->setID(id++);
+        inter->setPosiciones(newx,newy,newz);
+        inter->SetPosicionArrayObjetos(posicionObjeto);
+        inter->setRotacion(0.0,0.0,0.0);
+        interactuables.push_back(inter);
+
+        //borrar del Array
+        Zsinprop.erase(Zsinprop.begin() + numAlt);
+
+        num_cofres--; //un cofre menos
       }
     }
-    //Mientra hay cofres sin colocar, colocar en una zona aleatoria
-    while(num_cofres > 0)
+    else
     {
-      srand(time(NULL));
-      int numAlt = rand() % Zsinprop.size();
-
-      //Buscar zona donde colocar
-      float newx = zonas_cofres[numAlt]->getX();
-      float newy = zonas_cofres[numAlt]->getY();
-      float newz = zonas_cofres[numAlt]->getZ();
-
-      //Colocar cofre
-      int posicionObjeto = motor->CargarObjetos(3,newx,newy,newz,2,2,2,"assets/models/ChestCartoon/ChestCartoon.obj", "assets/models/ChestCartoon/ChestCartoon.mtl");
-      Interactuable * inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/ChestCartoon/ChestCartoon.obj","assets/models/ChestCartoon/ChestCartoon.mtl", posicionObjeto);
-      inter->setID(id++);
-      inter->setPosiciones(newx,newy,newz);
-      inter->SetPosicionArrayObjetos(posicionObjeto);
-      inter->setRotacion(0.0,0.0,0.0);
-      interactuables.push_back(inter);
-
-      //borrar del Array
-      Zsinprop.erase(Zsinprop.begin() + numAlt);
-
-      num_cofres--; //un cofre menos
+      cout << "No hay zonas de cofres suficientes en el nivel" << endl;
     }
-  }
-  else
-  {
-    cout << "No hay zonas de cofres suficientes en el nivel" << endl;
   }
 }
 
