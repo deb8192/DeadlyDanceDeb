@@ -79,8 +79,8 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     MotorGrafico * motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
     pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
     //ia
-        CargadorBehaviorTrees cargadorIA;
-        ene->setArbol(cargadorIA.cargarArbol("Prueba1"));
+        //CargadorBehaviorTrees cargadorIA;
+        //ene->setArbol(cargadorIA.cargarArbol("Prueba1"));
     //fin ia
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
@@ -826,7 +826,7 @@ void Nivel::updateIA()
                 {
                     //si no esta muerto ni piensa morirse XD ejecutamos ia
                     //cout<< "Ejecuto ia: " << i << endl;
-                    enemigos[i]->runIA();
+                    //enemigos[i]->runIA();
                 }
             }
         }
