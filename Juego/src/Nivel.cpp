@@ -14,6 +14,9 @@ Nivel* Nivel::unica_instancia = 0;
 Nivel::Nivel()
 {
     primeraSala = nullptr;
+    //fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
+    id = 0;
+    ejecutar = false;
     destinoPathFinding = nullptr;
     fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     id = 0;
@@ -21,58 +24,87 @@ Nivel::Nivel()
     drawTime = 0.0f;
     lastDrawTime = drawTime;
 }
-/*
-void Nivel::LimpiarNivel(){
 
-    //Jugador = Jugador();//me cargo al jugador pero si da problemas ir a jugador y limpiar variables
-    //jugador en todos eliminar, enemigos, objetos, armas, salas,
-    unica_instancia->~Nivel();
-    unica_instancia=nullptr;
+void Nivel::LimpiarNivel()
+{
 
-    primeraSala->~Sala();//llamo al puntero para que se destruya
-    primeraSala=nullptr;
-    fisicas->~MotorFisicas();
-    fisicas=nullptr;
-    controladorTiempo->~times();
-    controladorTiempo=nullptr;
-*******************************
-    std::vector<Enemigo*> enemigos;//Enemigos en scena
-    std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
-    std::vector<Recolectable*> recolectables;
-    Jugador jugador;//objeto del jugador en el nivel
-    CargadorNiveles cargador;//nos ayuda a cargar los niveles
-******************************
+    //para ejecucion de la ia y interpolado
 
     id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
-    dt = 0.0f;
-    frameTime = 0.0f;
-    acumulator = 0.0f;
-    atacktime = 0.0f;
-    lastAtackEsptime = 0.0f;
-    newTime = 0;
-    currentTime = 0;
-    cogerObjeto = false;
-    objetoCogido = -1;
-    danyo = 0, danyo2 = 0;
-    enemigoSeleccionado = 0;
-    cambia = 0;
-}*/
+
+    cout << "se entra en borrar enemigos" << endl;
+
+    borrarEnemigos();
+
+    if(recolectables.size() > 0)
+    {
+        for(std::size_t i=0 ; i < recolectables.size() ; i++)
+        {
+            int numero = (int)i;
+            delete recolectables[numero];
+            recolectables[i] = nullptr;
+        }
+
+        recolectables.resize(0);
+    }
+
+    if(interactuables.size() > 0)
+    {
+        for(std::size_t i=0 ; i < interactuables.size() ; i++)
+        {
+            delete interactuables[i];
+            interactuables[i] = nullptr;
+        }
+
+        interactuables.resize(0);
+    }
+
+    if(zonas.size() > 0)
+    {
+        for(std::size_t i=0 ; i < zonas.size() ; i++)
+        {
+            delete zonas[i];
+            zonas[i] = nullptr;
+        }
+
+        zonas.resize(0);
+    }
+
+
+    //jugador.~Jugador();//limpiamos jugador
+    jugador = Jugador();//volvemos a crear jugador
+
+}
 
 bool Nivel::CargarNivel(int level)
 {
+    NoEjecutar();//se impide entrar en bucles del juego
+
+    MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
+
+    motor->borrarScena();//borramos la scena
+
+    //pre limpiamos todo
+    motor->LimpiarMotorGrafico();
+    LimpiarNivel();
+    fisicas->limpiarFisicas();
+    //limpiammos la sala
     if(primeraSala != nullptr)
     {
         primeraSala->~Sala();
         primeraSala = nullptr;
     }
+    //cargamos el nivel
     cargador.CargarNivelXml(level);
     //Cargar objetos con el nivel completo
     this->cargarCofres(2); //Cargamos los cofres del nivel
 
-    MotorGrafico * motor = MotorGrafico::getInstance();
     motor->cargarInterfaz();
-
-    return false;
+    //esta ya todo ejecutamos ia y interpolado
+    Ejecutar();
+    //devolvemos true si todo a ido bien
+    return true;
 }
 
 void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -118,8 +150,44 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     motora->getEvent(nameid)->start();
 }
 
+void Nivel::recargarJugador(){
+    jugador.setVida(100);
+    jugador.setBarraAtEs(100);
+    jugador.setAtaque(15);
+    jugador.setArma(NULL);
+    jugador.setArmaEspecial(100);
+    jugador.setTimeAtEsp(0.0f);
+    jugador.setDanyoCritico(50);
+    jugador.setProAtaCritico(10);
+    jugador.setVida(100);
+    jugador.setPosiciones(getjix(),getjiy(),getjiz());
+}
+
+void Nivel::setjix(int x){
+    this->jix =x ;
+}
+void Nivel::setjiy(int y){
+    this->jiy = y;
+}
+void Nivel::setjiz(int z){
+    this->jiz = z;
+}
+
+int Nivel::getjix(){
+    return this->jix;
+}
+int Nivel::getjiy(){
+    return this->jiy;
+}
+int Nivel::getjiz(){
+    return this->jiz;
+}
+
 void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
+    this->setjix(x);
+    this->setjiy(y);
+    this->setjiz(z);
     jugador.setVida(100);
     jugador.setID(id++);
     jugador.setBarraAtEs(100);
@@ -317,7 +385,7 @@ void Nivel::CogerObjeto()
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     MotorGrafico * motor = MotorGrafico::getInstance();
 
-    int rec_col = fisicas->collideColectable();
+    long unsigned int rec_col = fisicas->collideColectable();
         jugador.setAnimacion(4);
 
         //En caso de no ser llaves
@@ -381,7 +449,7 @@ void Nivel::CogerObjeto()
 
 void Nivel::DejarObjeto()
 {
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    MotorFisicas * fisicas = MotorFisicas::getInstance();
     MotorGrafico * motor = MotorGrafico::getInstance();
 
         if(jugador.getArma() != nullptr)//si tiene arma equipada
@@ -594,235 +662,253 @@ void Nivel::InteractuarNivel()
 
 void Nivel::update()
 {
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
-    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
-
-    //actualizamos el jugador
     MotorGrafico * motor = MotorGrafico::getInstance();
 
-    //animacion
+    if(motor->estaPulsado(KEY_J))
+    {
+        jugador.QuitarVida(20);
+        motor->resetKey(KEY_J);
+    }
+
+    if(ejecutar)
+    {
+        MotorFisicas* fisicas = MotorFisicas::getInstance();
+        MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+
+
+        //animacion
         motor->cambiarAnimacionJugador(jugador.getAnimacion());
 
-    //valores nuevos de interpolacion
+        //valores nuevos de interpolacion
 
 
-    //Interpolacion SE SUSTITUIRA
-    /*newTime = clock();
-    frameTime = newTime - currentTime;
-    if(frameTime>0.25f)
-    {
-        frameTime=0.25f;
-    }
-    currentTime = newTime;
-    acumulator += frameTime;*/
-    //while(acumulator >= dt)
-    //{
+        //Interpolacion SE SUSTITUIRA
+        /*newTime = clock();
+        frameTime = newTime - currentTime;
+        if(frameTime>0.25f)
+        {
+            frameTime=0.25f;
+        }
+        currentTime = newTime;
+        acumulator += frameTime;*/
+        //while(acumulator >= dt)
+        //{
 
-    if(jugador.getArma() != nullptr)
-    {
-        float posArmaX = 5 * sin(PI * jugador.getRY() / PIRADIAN) + jugador.getX();
-        float posArmaZ = 5 * cos(PI * jugador.getRY() / PIRADIAN) + jugador.getZ();;
-        //iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
-        jugador.getArma()->setPosiciones(posArmaX, jugador.getY()+3, posArmaZ);
-        motor->llevarObjeto(posArmaX, jugador.getY()+3,posArmaZ, jugador.getRX(), jugador.getRY(), jugador.getRZ() );
-        fisicas->llevarBox(posArmaX, jugador.getY()+3,posArmaZ, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(), jugador.getArma()->getAlto());
-}
+        if(jugador.getArma() != nullptr)
+        {
+            float posArmaX = 5 * sin(PI * jugador.getRY() / PIRADIAN) + jugador.getX();
+            float posArmaZ = 5 * cos(PI * jugador.getRY() / PIRADIAN) + jugador.getZ();;
+            //iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
+            jugador.getArma()->setPosiciones(posArmaX, jugador.getY()+3, posArmaZ);
+            motor->llevarObjeto(posArmaX, jugador.getY()+3,posArmaZ, jugador.getRX(), jugador.getRY(), jugador.getRZ() );
+            fisicas->llevarBox(posArmaX, jugador.getY()+3,posArmaZ, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(), jugador.getArma()->getAlto());
+        }
 
 
-      //adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
-      fisicas->colisionChecker(motor->estaPulsado(1),
-          motor->estaPulsado(2),
-          motor->estaPulsado(3),
-          motor->estaPulsado(4),
-          jugador.getNewX(),
-          jugador.getNewY(),
-          jugador.getNewZ()
-      );
-
-      //colisiones con todos los objetos y enemigos que no se traspasan
-      if(fisicas->collideObstacle() || !fisicas->collidePlatform())
-      {
-        //colisiona
-        jugadorInmovil = true;
-        jugador.setNewPosiciones(jugador.getX(), jugador.getY(), jugador.getZ());
-      }
-      else
-      {
-        //no colisiona
-        jugadorInmovil = false;
-      }
-
-      //actualizamos movimiento del jugador
-
-        jugador.movimiento(jugadorInmovil,
-            motor->estaPulsado(1),
+        //adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
+        fisicas->colisionChecker(motor->estaPulsado(1),
             motor->estaPulsado(2),
             motor->estaPulsado(3),
-            motor->estaPulsado(4)
+            motor->estaPulsado(4),
+            jugador.getNewX(),
+            jugador.getNewY(),
+            jugador.getNewZ()
         );
 
-        motor->clearDebug2();   //Pruebas debug
-        for(unsigned int i = 0; i < enemigos.size(); i++)
+        //colisiones con todos los objetos y enemigos que no se traspasan
+        if(fisicas->collideObstacle() || !fisicas->collidePlatform())
         {
-            fisicas->updateEnemigos(enemigos.at(i)->getFisX(),
-                enemigos.at(i)->getFisY(),
-                enemigos.at(i)->getFisZ(),
-                i
-            );
-            motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),5, 5, 5, 2);
-
+            //colisiona
+            jugadorInmovil = true;
+            jugador.setNewPosiciones(jugador.getX(), jugador.getY(), jugador.getZ());
         }
-
-        fisicas->updateJugador(jugador.getX(),
-            jugador.getY(),
-            jugador.getZ()
-        );
-
-        if(enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
-        {
-            //this->updateRecorridoPathfinding(nullptr);
-        }
-
-       //this->updateIA(); esto no se fuerza desde el update normal se llama desde main 4 veces por segundo
-       //Actualizar ataque especial
-        this->updateAtEsp(motor);
-        this->updateAt(&danyo2, motor);
-
-        //Si se realiza el ataque se comprueban las colisiones
-        if(jugador.getTimeAtEsp() > 0.0)
-        {
-            jugador.AtacarEspecialUpdate(&danyo);
-        }
-
-        else if(jugador.getTimeAt() > 0.0)
-        {
-            jugador.AtacarUpdate(danyo2);
-        }
-        //En caso contrario se colorean los enemigos de color gris
         else
         {
-            for(unsigned int i = 0; i < enemigos.size(); i++)
-            {
-                motor->colorearEnemigo(255, 150, 150, 150, i);
-            }
+            //no colisiona
+            jugadorInmovil = false;
         }
 
-       //Posicion de escucha
-       motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
+        //actualizamos movimiento del jugador
 
-       //actualizamos los enemigos
-       if(enemigos.size() > 0)//posiciones interpolacion
-       {
-           float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
-           for(std::size_t i=0;i<enemigos.size();i++)
-           {
-                int danyo_jug = 0;
-                enemigos[i]->setPosAtaques(i);
-                tiempoActual = controladorTiempo->getTiempo(2);
-                //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
-                if(enemigos[i]->getTimeAtEsp() > 0.0f)
-                {
-                    tiempoAtaqueEsp = enemigos[i]->getTimeAtEsp();
-                    tiempoAtaqueEsp -= (tiempoActual - enemigos[i]->getLastTimeAtEsp());
-                    enemigos[i]->setLastTimeAtEsp(tiempoActual);
-                    enemigos[i]->setTimeAtEsp(tiempoAtaqueEsp); //restar al tiempo de ataque
-                }
-                if(enemigos[i]->getTimeAtEsp() <= 0.0f)
-                {
-                    danyo_jug = enemigos[i]->AtacarEspecial();
-                    enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
-                    enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
-                }
-                else if(enemigos[i]->getBarraAtEs() < 100)
-                {
-                    enemigos[i]->AumentarBarraAtEs(1);
-                }
-                if(danyo_jug == 0)
-                {
-                    //cout << "Enemigo " << i  << " pos: " << enemigos[i]->getPosAtaques() << endl;
+            jugador.movimiento(jugadorInmovil,
+                motor->estaPulsado(1),
+                motor->estaPulsado(2),
+                motor->estaPulsado(3),
+                motor->estaPulsado(4)
+            );
 
+            motor->clearDebug2();   //Pruebas debug
+            for(unsigned int i = 0; i < enemigos.size(); i++)
+            {
+                fisicas->updateEnemigos(enemigos.at(i)->getFisX(),
+                    enemigos.at(i)->getFisY(),
+                    enemigos.at(i)->getFisZ(),
+                    i
+                );
+                motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),5, 5, 5, 2);
+
+            }
+
+            fisicas->updateJugador(jugador.getX(),
+                jugador.getY(),
+                jugador.getZ()
+            );
+
+            if(enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
+            {
+                this->updateRecorridoPathfinding(nullptr);
+            }
+
+        //this->updateIA(); esto no se fuerza desde el update normal se llama desde main 4 veces por segundo
+        //Actualizar ataque especial
+            this->updateAtEsp(motor);
+            this->updateAt(&danyo2, motor);
+
+            //Si se realiza el ataque se comprueban las colisiones
+            if(jugador.getTimeAtEsp() > 0.0)
+            {
+                jugador.AtacarEspecialUpdate(&danyo);
+            }
+
+            else if(jugador.getTimeAt() > 0.0)
+            {
+                jugador.AtacarUpdate(danyo2);
+            }
+            //En caso contrario se colorean los enemigos de color gris
+            else
+            {
+                for(unsigned int i = 0; i < enemigos.size(); i++)
+                {
+                    motor->colorearEnemigo(255, 150, 150, 150, i);
+                }
+            }
+
+        //Posicion de escucha
+        motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
+
+        //actualizamos los enemigos
+        if(enemigos.size() > 0)//posiciones interpolacion
+        {
+            float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
+            for(std::size_t i=0;i<enemigos.size();i++)
+            {
+                    int danyo_jug = 0;
+                    enemigos[i]->setPosAtaques(i);
+                    tiempoActual = controladorTiempo->getTiempo(2);
                     //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
-                    if(enemigos[i]->getTimeAt() > 0.0f)
+                    if(enemigos[i]->getTimeAtEsp() > 0.0f)
                     {
-                        tiempoAtaque = enemigos[i]->getTimeAt();
-                        tiempoAtaque -= (tiempoActual - enemigos[i]->getLastTimeAt());
-                        enemigos[i]->setLastTimeAt(tiempoActual);
-                        enemigos[i]->setTimeAt(tiempoAtaque); //restar al tiempo de ataque
+                        tiempoAtaqueEsp = enemigos[i]->getTimeAtEsp();
+                        tiempoAtaqueEsp -= (tiempoActual - enemigos[i]->getLastTimeAtEsp());
+                        enemigos[i]->setLastTimeAtEsp(tiempoActual);
+                        enemigos[i]->setTimeAtEsp(tiempoAtaqueEsp); //restar al tiempo de ataque
                     }
-                    if(enemigos[i]->getTimeAt() <= 0.0f)
+                    if(enemigos[i]->getTimeAtEsp() <= 0.0f)
                     {
-                        danyo_jug = enemigos[i]->Atacar();
-                        enemigos[i]->setTimeAt(1.5f); //tiempo hasta el proximo ataque
-                        enemigos[i]->setLastTimeAt(controladorTiempo->getTiempo(2));
+                        danyo_jug = enemigos[i]->AtacarEspecial();
+                        enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
+                        enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
                     }
-                    //Si el enemigo ha realizado danyo
-                    if(danyo_jug > 0)
+                    else if(enemigos[i]->getBarraAtEs() < 100)
                     {
-                        jugador.QuitarVida(danyo_jug);
-                        cout<< "Vida jugador: "<< jugador.getVida() << endl;
+                        enemigos[i]->AumentarBarraAtEs(1);
                     }
-                }
-                //Se le quita vida con el danyo del ataque especial
-                else
-                {
-                    if(danyo_jug > 0)
+                    if(danyo_jug == 0)
                     {
-                        jugador.QuitarVida(danyo_jug);
-                        cout<< "Vida jugador tras ataque especial: "<< jugador.getVida() << endl;
-                    }
-                }
-               //enemigos[i]->queVes();
-           }
-       }
-        //jugador.MuereJugador(acumulator);
-        //enemigos->MuereEnemigo(acumulator);
- 	      //acumulator -= dt;
-    //}
+                        //cout << "Enemigo " << i  << " pos: " << enemigos[i]->getPosAtaques() << endl;
 
-    //actualizamos la interfaz de jugador
-    jugador.updateInterfaz();
-    //actualizamos la interfaz en motor grafico
-    motor->updateInterfaz();
+                        //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
+                        if(enemigos[i]->getTimeAt() > 0.0f)
+                        {
+                            tiempoAtaque = enemigos[i]->getTimeAt();
+                            tiempoAtaque -= (tiempoActual - enemigos[i]->getLastTimeAt());
+                            enemigos[i]->setLastTimeAt(tiempoActual);
+                            enemigos[i]->setTimeAt(tiempoAtaque); //restar al tiempo de ataque
+                        }
+                        if(enemigos[i]->getTimeAt() <= 0.0f)
+                        {
+                            danyo_jug = enemigos[i]->Atacar();
+                            enemigos[i]->setTimeAt(1.5f); //tiempo hasta el proximo ataque
+                            enemigos[i]->setLastTimeAt(controladorTiempo->getTiempo(2));
+                        }
+                        //Si el enemigo ha realizado danyo
+                        if(danyo_jug > 0)
+                        {
+                            jugador.QuitarVida(danyo_jug);
+                            cout<< "Vida jugador: "<< jugador.getVida() << endl;
+                        }
+                    }
+                    //Se le quita vida con el danyo del ataque especial
+                    else
+                    {
+                        if(danyo_jug > 0)
+                        {
+                            jugador.QuitarVida(danyo_jug);
+                            cout<< "Vida jugador tras ataque especial: "<< jugador.getVida() << endl;
+                        }
+                    }
+                //enemigos[i]->queVes();
+            }
+        }
+            //jugador.MuereJugador(acumulator);
+            //enemigos->MuereEnemigo(acumulator);
+            //acumulator -= dt;
+        //}
+
+        //actualizamos la interfaz de jugador
+        jugador.updateInterfaz();
+        //actualizamos la interfaz en motor grafico
+        motor->updateInterfaz();
+    }
 }
 
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 {
-
-    float tiempoActual = 0.0f;
-    float tiempoAtaque = 0.0f;
-    if((motor->estaPulsado(KEY_ESPACIO) || motor->estaPulsado(LMOUSE_DOWN)) && jugador.getTimeAt() <= 0.0f)
+    if(ejecutar)
     {
-        *danyo = jugador.Atacar();
-        motor->resetKey(KEY_ESPACIO);
-        motor->resetEvento(LMOUSE_DOWN);
-        //atacktime = 1.5f;
-        jugador.setTimeAt(1.5f);
-        jugador.setLastTimeAt(controladorTiempo->getTiempo(2));
-    }else{
-        if(jugador.getTimeAt() > 0.0f)
+        float tiempoActual = 0.0f;
+        float tiempoAtaque = 0.0f;
+        if((motor->estaPulsado(KEY_ESPACIO) || motor->estaPulsado(LMOUSE_DOWN)) && jugador.getTimeAt() <= 0.0f)
         {
-            tiempoActual = controladorTiempo->getTiempo(2);
-            tiempoAtaque = jugador.getTimeAt();
-            tiempoAtaque -= (tiempoActual - jugador.getLastTimeAt());
-            jugador.setLastTimeAt(tiempoActual);
-            jugador.setTimeAt(tiempoAtaque);
-        }
-        if(atacktime > 0.5f)
-        {
-            //Colorear rojo
-            motor->colorearJugador(255,255,0,0);
-        }else if(atacktime > 0.0f){
-            //Colorear gris
-            motor->colorearJugador(255,150,150,150);
-        }
-    }
+            *danyo = jugador.Atacar();
+            motor->resetKey(KEY_ESPACIO);
+            motor->resetEvento(LMOUSE_DOWN);
+            //atacktime = 1.5f;
+            jugador.setTimeAt(1.5f);
+            jugador.setLastTimeAt(controladorTiempo->getTiempo(2));
+        }else{
+            if(jugador.getTimeAt() > 0.0f)
+            {
+                tiempoActual = controladorTiempo->getTiempo(2);
+                tiempoAtaque = jugador.getTimeAt();
+                tiempoAtaque -= (tiempoActual - jugador.getLastTimeAt());
+                jugador.setLastTimeAt(tiempoActual);
+                jugador.setTimeAt(tiempoAtaque);
+            }
+            if(atacktime > 0.5f)
+            {
+                if(atacktime > 0.0f)
+                {
+                    atacktime--;
+                }
+                if(atacktime > 500.0f)
+                {
+                    //Colorear rojo
+                    motor->colorearJugador(255,255,0,0);
+                }else if(atacktime > 0.0f){
+                    //Colorear gris
+                    motor->colorearJugador(255,150,150,150);
+                }
+            }
 
-    //clear
-    if(jugador.getTimeAt() <= 0.0f){
-      motor->clearDebug2();
+        //clear
+        if(jugador.getTimeAt() <= 0.0f){
+        motor->clearDebug2();
+        }
+
+    }
     }
 }
-
 void Nivel::updateAtEsp(MotorGrafico *motor)
 {
     float tiempoActual = 0.0f;
@@ -874,44 +960,48 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
 
 void Nivel::updateIA()
 {
-    //cout<< "Ejecuto ia " << endl;
-    MotorGrafico * motor = MotorGrafico::getInstance();
+    bool quehay = ejecutar;
+    if(ejecutar)
+    {
+        //cout<< "Ejecuto ia " << endl;
+        MotorGrafico * motor = MotorGrafico::getInstance();
 
-    //En esta parte muere jugador
-    if(motor->estaPulsado(16)){//SI PULSO 'J' MUERE JUGADOR
-        jugador.MuereJugador();
-    }
-    if(jugador.estasMuerto()){
-        if(jugador.estasMuerto() && jugador.finalAnimMuerte()){
-            motor->EraseJugador();//borrar del motor (escena)
-            fisicas->EraseJugador();//borrar de motorfisicas
-            EraseJugador();//borrar de nivel
-        }else{
-            if(jugador.estasMuerto()){
-                jugador.MuereJugador();
+        //En esta parte muere jugador
+        if(motor->estaPulsado(16)){//SI PULSO 'J' MUERE JUGADOR
+            jugador.MuereJugador();
+        }
+        if(jugador.estasMuerto()){
+            if(jugador.estasMuerto() && jugador.finalAnimMuerte())
+            {
+                NoEjecutar();//se dehsabilita ejecucion de updates
+                return;
+            }else{
+                if(jugador.estasMuerto()){
+                    jugador.MuereJugador();
+                }
             }
         }
-    }
 
-    //En esta parte muere enemigo
-    if(enemigos.size() > 0){
-        //comprobando los enemigos para saber si estan muertos
-        for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+        //En esta parte muere enemigo
+        if(enemigos.size() > 0){
+            //comprobando los enemigos para saber si estan muertos
+            for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
 
-            if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
+                if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
 
-                motor->EraseEnemigo(i);
-                fisicas->EraseEnemigo(i);
-                EraseEnemigo(i);
-            }else{
-                if(enemigos[i]->estasMuerto()){
-                    enemigos[i]->MuereEnemigo(i);
-                }
-                else
-                {
-                    //si no esta muerto ni piensa morirse XD ejecutamos ia
-                    //cout<< "Ejecuto ia: " << i << endl;
-                    enemigos[i]->runIA();
+                    motor->EraseEnemigo(i);
+                    fisicas->EraseEnemigo(i);
+                    EraseEnemigo(i);
+                }else{
+                    if(enemigos[i]->estasMuerto()){
+                        enemigos[i]->MuereEnemigo(i);
+                    }
+                    else
+                    {
+                        //si no esta muerto ni piensa morirse XD ejecutamos ia
+                        //cout<< "Ejecuto ia: " << i << endl;
+                        enemigos[i]->runIA();
+                    }
                 }
             }
         }
@@ -1183,131 +1273,133 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
 
 void Nivel::Draw()
 {
-
-    MotorGrafico * motor = MotorGrafico::getInstance();
-    //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
-    if(drawTime == 0.0)
+    if(ejecutar)
     {
+        MotorGrafico * motor = MotorGrafico::getInstance();
+        //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
+        if(drawTime == 0.0)
+        {
+            drawTime = controladorTiempo->getTiempo(2);
+        }
+        lastDrawTime = drawTime;
         drawTime = controladorTiempo->getTiempo(2);
-    }
-    lastDrawTime = drawTime;
-    drawTime = controladorTiempo->getTiempo(2);
 
-    //Dibujado del personaje
-    jugador.moverseEntidad(1 / controladorTiempo->getUpdateTime());
-    jugador.RotarEntidad(1 / controladorTiempo->getUpdateTime());
-    jugador.UpdateTimeMove(drawTime - lastDrawTime);
-    motor->mostrarJugador(jugador.getX(),
-        jugador.getY(),
-        jugador.getZ(),
-        jugador.getRX(),
-        jugador.getRY(),
-        jugador.getRZ()
-    );
-
-    //Dibujado de los enemigos
-    for(unsigned int i = 0; i < enemigos.size(); i++)
-    {
-        enemigos.at(i)->moverseEntidad(1 / controladorTiempo->getUpdateTime());
-        enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
-        motor->mostrarEnemigos(enemigos.at(i)->getX(),
-            enemigos.at(i)->getY(),
-            enemigos.at(i)->getZ(),
-            enemigos.at(i)->getRX(),
-            enemigos.at(i)->getRY(),
-            enemigos.at(i)->getRZ(),
-            i
+        //Dibujado del personaje
+        jugador.moverseEntidad(1 / controladorTiempo->getUpdateTime());
+        jugador.RotarEntidad(1 / controladorTiempo->getUpdateTime());
+        jugador.UpdateTimeMove(drawTime - lastDrawTime);
+        motor->mostrarJugador(jugador.getX(),
+            jugador.getY(),
+            jugador.getZ(),
+            jugador.getRX(),
+            jugador.getRY(),
+            jugador.getRZ()
         );
-    }
-    //Dibujado de las puertas
-    for(unsigned int i = 0; i < interactuables.size(); i++)
-    {
-        interactuables.at(i)->RotarEntidad(1 / controladorTiempo->getUpdateTime());
-        interactuables.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
-        motor->mostrarObjetos(interactuables.at(i)->getX(),
-            interactuables.at(i)->getY(),
-            interactuables.at(i)->getZ(),
-            interactuables.at(i)->getRX(),
-            interactuables.at(i)->getRY(),
-            interactuables.at(i)->getRZ(),
-            interactuables.at(i)->GetPosicionObjetos()
-        );
-    }
 
-    //Dibujado del ataque especial
-    //Ataque especial Heavy
-    if(jugador.getTimeAtEsp() > 0.0f)
-    {
-        if(strcmp(jugador.getArmaEspecial()->getNombre(), "Heavy") == 0)
+        //Dibujado de los enemigos
+        for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
-            jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
-            jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
-
-            motor->mostrarArmaEspecial(
-                jugador.GetDatosAtEsp()[0],
-                jugador.getY(),
-                jugador.GetDatosAtEsp()[2],
-                jugador.getRX(),
-                jugador.getRY(),
-                jugador.getRZ());
-
-            motor->clearDebug2(); //Pruebas debug
-
-            motor->dibujarObjetoTemporal(
-                jugador.getArmaEspecial()->getFisX()*2,
-                jugador.getY(),
-                jugador.getArmaEspecial()->getFisZ()*2,
-                jugador.getRX(),
-                jugador.getRY(),
-                jugador.getRZ(),
-                8,
-                1,
-                8,
-                2);
+            enemigos.at(i)->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+            enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
+            motor->mostrarEnemigos(enemigos.at(i)->getX(),
+                enemigos.at(i)->getY(),
+                enemigos.at(i)->getZ(),
+                enemigos.at(i)->getRX(),
+                enemigos.at(i)->getRY(),
+                enemigos.at(i)->getRZ(),
+                i
+            );
+        }
+        //Dibujado de las puertas
+        for(unsigned int i = 0; i < interactuables.size(); i++)
+        {
+            interactuables.at(i)->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+            interactuables.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
+            motor->mostrarObjetos(interactuables.at(i)->getX(),
+                interactuables.at(i)->getY(),
+                interactuables.at(i)->getZ(),
+                interactuables.at(i)->getRX(),
+                interactuables.at(i)->getRY(),
+                interactuables.at(i)->getRZ(),
+                interactuables.at(i)->GetPosicionObjetos()
+            );
         }
 
-        //Ataque especial bailaora
-        else if(strcmp(jugador.getArmaEspecial()->getNombre(), "Bailaora") == 0)
+        //Dibujado del ataque especial
+        //Ataque especial Heavy
+        if(jugador.getTimeAtEsp() > 0.0f)
         {
-            jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
-            jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
-            jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
+            if(strcmp(jugador.getArmaEspecial()->getNombre(), "Heavy") == 0)
+            {
+                jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+                jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+                jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
 
-            motor->mostrarArmaEspecial(
-                jugador.GetDatosAtEsp()[0],
-                jugador.GetDatosAtEsp()[1],
-                jugador.GetDatosAtEsp()[2],
-                jugador.GetDatosAtEsp()[3],
-                jugador.GetDatosAtEsp()[4],
-                jugador.GetDatosAtEsp()[5]);
+                motor->mostrarArmaEspecial(
+                    jugador.GetDatosAtEsp()[0],
+                    jugador.getY(),
+                    jugador.GetDatosAtEsp()[2],
+                    jugador.getRX(),
+                    jugador.getRY(),
+                    jugador.getRZ());
 
-            motor->clearDebug2(); //Pruebas debug
+                motor->clearDebug2(); //Pruebas debug
 
-            motor->dibujarObjetoTemporal(
-                jugador.getArmaEspecial()->getX(),
-                jugador.getArmaEspecial()->getY(),
-                jugador.getArmaEspecial()->getZ(),
-                jugador.GetDatosAtEsp()[3],
-                jugador.GetDatosAtEsp()[4],
-                jugador.GetDatosAtEsp()[5],
-                8,
-                1,
-                8,
-                3);
+                motor->dibujarObjetoTemporal(
+                    jugador.getArmaEspecial()->getFisX()*2,
+                    jugador.getY(),
+                    jugador.getArmaEspecial()->getFisZ()*2,
+                    jugador.getRX(),
+                    jugador.getRY(),
+                    jugador.getRZ(),
+                    8,
+                    1,
+                    8,
+                    2);
+            }
+
+            //Ataque especial bailaora
+            else if(strcmp(jugador.getArmaEspecial()->getNombre(), "Bailaora") == 0)
+            {
+                jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+                jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+                jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
+
+                motor->mostrarArmaEspecial(
+                    jugador.GetDatosAtEsp()[0],
+                    jugador.GetDatosAtEsp()[1],
+                    jugador.GetDatosAtEsp()[2],
+                    jugador.GetDatosAtEsp()[3],
+                    jugador.GetDatosAtEsp()[4],
+                    jugador.GetDatosAtEsp()[5]);
+
+                motor->clearDebug2(); //Pruebas debug
+
+                motor->dibujarObjetoTemporal(
+                    jugador.getArmaEspecial()->getX(),
+                    jugador.getArmaEspecial()->getY(),
+                    jugador.getArmaEspecial()->getZ(),
+                    jugador.GetDatosAtEsp()[3],
+                    jugador.GetDatosAtEsp()[4],
+                    jugador.GetDatosAtEsp()[5],
+                    8,
+                    1,
+                    8,
+                    3);
+            }
         }
-    }
 
-    //Dibujado zonas
-    for(unsigned int i = 0; i < zonas.size(); i++)
-    {
-        motor->dibujarZona(zonas.at(i)->getX(),
-            zonas.at(i)->getY(),
-            zonas.at(i)->getZ(),
-            zonas.at(i)->getAncho(),
-            zonas.at(i)->getAlto(),
-            zonas.at(i)->getLargo()
-        );
+        //Dibujado zonas
+        for(unsigned int i = 0; i < zonas.size(); i++)
+        {
+            motor->dibujarZona(zonas.at(i)->getX(),
+                zonas.at(i)->getY(),
+                zonas.at(i)->getZ(),
+                zonas.at(i)->getAncho(),
+                zonas.at(i)->getAlto(),
+                zonas.at(i)->getLargo()
+            );
+        }
     }
 }
 
@@ -1334,4 +1426,40 @@ std::vector<Enemigo *>  Nivel::getEnemigos()
 Jugador Nivel::getJugador()
 {
     return jugador;
+}
+
+
+void Nivel::Ejecutar()
+{
+    ejecutar = true;
+}
+
+void Nivel::NoEjecutar()
+{
+    ejecutar = false;
+}
+
+void Nivel::borrarEnemigos()
+{
+    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    //actualizamos el jugador
+    if(enemigos.size() > 0)
+    {
+        for(std::size_t i=0;i<enemigos.size();i++)
+        {
+                fisicas->EraseEnemigo(i);
+                EraseEnemigo(i);
+        }
+        enemigos.resize(0);//redimensionamos el vector a 0
+    }
+}
+
+void Nivel::ActivarLimpieza()
+{
+    limpiar = true;
+}
+
+bool Nivel::EstaLimpio()
+{
+    return limpio;
 }

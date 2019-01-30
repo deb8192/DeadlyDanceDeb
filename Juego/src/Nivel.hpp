@@ -40,11 +40,13 @@ class Nivel
             return unica_instancia;
         }
         //fin singleton public
+        void LimpiarNivel();
 
         //void LimpiarNivel();
         bool CargarNivel(int);//carga eñ nivel siempre que exista dicho nivel en assets/maps/xml/
 
         //cargar objetos
+        void recargarJugador();
         void CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
 
@@ -79,6 +81,18 @@ class Nivel
         void InteractuarNivel();
         void AccionarMecanismo(int);    //Activa mecanismos y o puertas
 
+        int getjix();
+        int getjiy();
+        int getjiz();
+        void setjix(int);
+        void setjiy(int);
+        void setjiz(int);
+        void Ejecutar();//activa ejecutar update y updateia
+        void NoEjecutar();//desactiva ejecutar update y updateia
+        void ActivarLimpieza();//se pone para limpiar el nivel
+        bool EstaLimpio();//devuelve si esta limpio el nivel
+        void borrarEnemigos();//borra todos los enemigos
+        
     private:
 
         //clase singleton
@@ -117,6 +131,12 @@ class Nivel
         int danyo = 0, danyo2 = 0;
         int contadorEnem = 0;
         int cambia;
+        //para el metodo recargarjugador()
+        int jix = 0;
+        int jiy = 0;
+        int jiz = 0;
+        bool ejecutar;//nos servira para saber si tenemmos que ejecutar el update y el updateia
+        bool limpiar;//para saber si hay que limpar el nivel
+        bool limpio;//para saber si esta limpio el nivel
 };
-
 #endif

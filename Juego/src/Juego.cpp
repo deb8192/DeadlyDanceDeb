@@ -60,10 +60,11 @@ void Juego::Draw()
     {
         times * tiempo = times::getInstance();
 
-        if(tiempo->calcularTiempoPasado(marcaTiempo) >= tiempoTotal || motor->finalCinematica())
+        if(tiempo->calcularTiempoPasado(marcaTiempo) >= tiempoTotal || motor->finalCinematica() || motor->estaPulsado(KEY_ESPACIO))
         {
             estado = &menu;
             InicializarVentana();
+            motor->resetKey(KEY_ESPACIO);
         }
 
         estado->Pintar();
@@ -102,15 +103,25 @@ void Juego::Update()
             motor->resetEvento(GUI_ID_EMPEZAR_BUTTON);//reseteamos el evento
             Jugar();
         }
-        // vamos a menu el jugador a muerto
-        if(motor->ocurreEvento(GUI_ID_MENU_BUTTON))
+        
+        if(motor->ocurreEvento(GUI_ID_MENU_BUTTON) /*&& nivel->EstaLimpio()*/)
         {
             motora->getEvent("Nivel1")->stop(); //Detener musica Menu
             motora->getEvent("Menu")->start(); //Reproducir musica juego
-
             motor->resetEvento(GUI_ID_MENU_BUTTON);
-            estado = &menu;
+            cambiarEstadoMenu();          
         }
+
+        if(motor->ocurreEvento(GUI_ID_REINICIAR_BUTTON))
+        {
+            motora->getEvent("Nivel1")->stop();
+            motor->resetEvento(GUI_ID_REINICIAR_BUTTON);
+            motor->borrarScena();
+            motor->borrarGui();
+            nivel->CargarNivel(3);
+            motor->CrearCamara();
+        }
+
         if(motor->ocurreEvento(GUI_ID_SALIR_BUTTON))//salimos del juego
         {
             motor->closeGame();
@@ -196,4 +207,14 @@ void Juego::CargarPuzzlesXML()
 void Juego::UpdateIA()
 {
     estado->ActualizarIA();
+}
+
+void Juego::cambiarEstadoMenu()
+{
+    motor->borrarScena();
+    motor->borrarGui();
+    motor->crearTextoDePrueba();//crea un texto
+    motor->activarFuenteDefault();//activa la fuente por defecto que trae irrlicht
+    motor->PintarBotonesMenu();
+    estado = &menu;
 }

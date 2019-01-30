@@ -5,6 +5,12 @@ Interactuable::Interactuable()
 {
 
 }
+
+Interactuable::~Interactuable()
+{
+
+}
+
 Interactuable::Interactuable(int codigo, const char *nombre, int anc, int lar, int alt, const char *objeto, const char *textura, int posicion)
 {
     std::string name_objeto(objeto);

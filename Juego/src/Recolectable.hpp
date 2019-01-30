@@ -11,9 +11,9 @@ using namespace std;
 class Recolectable : public INobjetos , public INdrawable //multiple herencia a esto se le llama derivacion multiple
 {
     public:
-        Recolectable();         //esto le deja a la entidad el constructor por defecto
+        Recolectable();//esto le deja a la entidad el constructor por defecto
+        ~Recolectable();//destructor del objeto
         Recolectable(int codigo, int ataque, const char *nombre, int anc, int lar, int alt, const char *objeto, const char *textura);
-        ~Recolectable();
         
         //drawable metodos
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion

@@ -30,6 +30,7 @@ using namespace idsEventos;
 
             //clase singleton en public
             ~MotorGrafico(void);
+            void LimpiarMotorGrafico();
             static MotorGrafico *getInstance() //esto se utiliza para crear el objeto una sola vez
             {
                 if(unica_instancia == 0)
@@ -147,8 +148,8 @@ using namespace idsEventos;
             //Cuando muere jugador aparecen 2 botones (Ir a menu o Reiniciar juego)
             void botonesMuerteJugador();
             int getEnemigos_Scena();
+            void EraseColectable(long unsigned int idx);
             int getObjetos_Scena();
-            void EraseColectable(int idx);
             void EraseEnemigo(std::size_t i);
             void EraseJugador();
             void EraseArma();
