@@ -32,7 +32,7 @@ void MotorGrafico::LimpiarMotorGrafico()
         Jugador_Scena = nullptr;
     }
     
-    if(Enemigos_Scena.size()>0)
+    if(Enemigos_Scena.size() > 0)
     {
         for(std::size_t i=0;i<Enemigos_Scena.size();i++)
         {
@@ -41,6 +41,50 @@ void MotorGrafico::LimpiarMotorGrafico()
 
         Enemigos_Scena.resize(0);
     }
+
+    if(Plataformas_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i < Plataformas_Scena.size();i++)
+        {
+            Plataformas_Scena[i] = nullptr;
+        }
+
+       Plataformas_Scena.resize(0);
+    }
+
+    if(Luces_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i < Luces_Scena.size();i++)
+        {
+            Luces_Scena[i] = nullptr;
+        }
+
+       Luces_Scena.resize(0);
+    }
+
+    if(Objetos_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i < Objetos_Scena.size();i++)
+        {
+           Objetos_Scena[i] = nullptr;
+        }
+
+       Objetos_Scena.resize(0);
+    }
+
+    if(Recolectables_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i < Recolectables_Scena.size();i++)
+        {
+           Recolectables_Scena[i] = nullptr;
+        }
+
+       Recolectables_Scena.resize(0);
+    }
+
+    arma = nullptr;
+    Arma_Jugador = nullptr;
+    armaEsp = nullptr;
 
     /*for (std::vector<Enemigos_Scena*>::iterator it = Enemigos_Scena.begin(); it!=Enemigos_Scena.end(); ++it){
         delete *it;
@@ -1025,11 +1069,14 @@ void MotorGrafico::ReiniciarHanoi()
     }
 }
 
-void MotorGrafico::EraseColectable(int idx)
+void MotorGrafico::EraseColectable(long unsigned int idx)
 {
-    Recolectables_Scena[idx]->setVisible(false);
-    Recolectables_Scena[idx]->remove();
-    Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
+    if(Recolectables_Scena[idx] && idx < Recolectables_Scena.size())
+    {
+        Recolectables_Scena[idx]->setVisible(false);
+        Recolectables_Scena[idx]->remove();
+        Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
+    }
 }
 
 //Cuando enemigo muere lo borramos 

@@ -78,6 +78,7 @@ class Nivel
         void ActivarLimpieza();//se pone para limpiar el nivel
         bool EstaLimpio();//devuelve si esta limpio el nivel
         void borrarEnemigos();//borra todos los enemigos
+        
     private:
 
         //clase singleton
