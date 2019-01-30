@@ -486,7 +486,6 @@ void MotorGrafico::CargarEnemigos(int accion, int x,int y,int z, int ancho, int 
         IAnimatedMeshSceneNode* enemigo_en_scena = smgr->addAnimatedMeshSceneNode(enemigo); //metemos el objeto en el escenario para eso lo pasamos al escenario
         enemigo_en_scena->setPosition(core::vector3df(x,y,z));
         Enemigos_Scena.push_back(enemigo_en_scena);
-
     }
 }
 
@@ -507,6 +506,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         Jugador_Scena->setFrameLoop(30, 44);
         cout << "creo jugador" << endl;
 		Jugador_Scena->setAnimationSpeed(10);
+        colorearJugador(255, 255, 255, 255);
         //const SColor COLOR  = SColor(255,0,0,255);
         //smgr->getMeshManipulator()->setVertexColors(Jugador_Scena->getMesh(),COLOR);
     }
