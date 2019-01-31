@@ -92,7 +92,6 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(vector<pugi::xml_node> tree, Nod
                 {
                     tool = tool.next_sibling();
                 }
-                free(atributos);
                 nivel++;
                 i = 0;
                 //Se recorren los atributos de cada nodo
@@ -110,8 +109,8 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(vector<pugi::xml_node> tree, Nod
                 if(std::strcmp(tool.name(), RAIZ) == 0)
                 {
                     //Se crea la raiz y el arbol
-                if((std::strcmp(atributos[1], SELECTOR)  == 0) || (std::strcmp(atributos[1], SECUENCIA) == 0) || (std::strcmp(atributos[1], TAREA) == 0))
-                {
+                    if((std::strcmp(atributos[1], SELECTOR)  == 0) || (std::strcmp(atributos[1], SECUENCIA) == 0) || (std::strcmp(atributos[1], TAREA) == 0))
+                    {
                         if(std::strcmp(atributos[1], TAREA) == 0)
                         {
                             generarTarea(tool, atributos, tarea, i, tipo);
@@ -142,9 +141,9 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(vector<pugi::xml_node> tree, Nod
 
                         padre = nodo;
                         raiz = nodo;
-                }
-                else if((std::strcmp(atributos[1], SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], SEC_ALEATORIA) == 0))
-                {
+                    }
+                    else if((std::strcmp(atributos[1], SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], SEC_ALEATORIA) == 0))
+                    {
                         if(std::strcmp(atributos[1], SEL_ALEATORIO)  == 0)
                         {
                             tipo = 4;
@@ -157,7 +156,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(vector<pugi::xml_node> tree, Nod
                         nodo = new Composicion(tool.name(), IDInt, tipo, nivel, padre, NULL, NULL, NULL, 0, NULL, true);
                         padre = nodo;
                         raiz = nodo;
-                }
+                    }
                     behavior_tree = new Arbol(raiz, raiz->getNombre());
                     cout<<"Se crea arbol"<<"\n"<<endl;
                 //Faltaria comprobar otro tipo de nodos raiz pero principalmente seran secuencias o selectores
@@ -238,7 +237,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(vector<pugi::xml_node> tree, Nod
                 }
 
                 tree.push_back(tool);
-                tool = tool.child("Platform");
+                tool = tool.first_child();
                 //sacarNodo(tool, nodo, padre, nivel);
             }
             while(tool.next_sibling() == NULL && !tree.empty())
