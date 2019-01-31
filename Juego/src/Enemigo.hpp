@@ -6,7 +6,7 @@
 #include "Arma.hpp"
 #include "Sala.hpp"
 #include <vector>
-#include "Arbol2.hpp"
+#include "Arbol.hpp"
 
 class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple herencia a esto se le llama derivacion multiple
 {
@@ -114,8 +114,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         //fin comportamientos bases
 
         //activar ia
-        void setArbol(Arbol2 *);//asigna un arbol de ia al enemigo
-        Arbol2 * getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
+        void setArbol(Arbol *);//asigna un arbol de ia al enemigo
+        Arbol * getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         void runIA();//corre la ia del enemigo
         //fin ia
 
@@ -126,7 +126,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float velocidad;  //Velocidad de desplazamiento del enemigo
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";
-        Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
+        Arbol * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
 };
 

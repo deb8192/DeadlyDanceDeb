@@ -80,8 +80,8 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
     //ia
         CargadorBehaviorTrees cargadorIA;
-        cargadorIA.cargarBehaviorTreeXml("PolloBT");
-        //ene->setArbol(cargadorIA.cargarArbol("Prueba1"));
+        //cargadorIA.cargarBehaviorTreeXml("PolloBT");
+        ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
     //fin ia
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta

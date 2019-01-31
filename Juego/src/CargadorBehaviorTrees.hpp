@@ -15,7 +15,15 @@
 class CargadorBehaviorTrees
 {
     public:
-    	const char* SELECTOR  = "selector";
+    	CargadorBehaviorTrees();
+        ~CargadorBehaviorTrees();
+        Arbol* cargarBehaviorTreeXml(std::string);
+        void guardarBehaviorTreeXml(std::string);
+
+        Arbol2 * cargarArbol(std::string);
+
+    private:
+        const char* SELECTOR  = "selector";
     	const char* SEL_ALEATORIO  = "selector-aleatorio";
     	const char* SECUENCIA  = "secuencia";
     	const char* SEC_ALEATORIA  = "secuencia-aleatoria";
@@ -30,19 +38,11 @@ class CargadorBehaviorTrees
         const char* ESCRIBE = "escribe";
         const char* VERDADERO = "true";
         const char* FALSO = "false";
-
-
-        CargadorBehaviorTrees();
-        Arbol* cargarBehaviorTreeXml(std::string);
-        void guardarBehaviorTreeXml(std::string);
-
-        Arbol2 * cargarArbol(std::string);
-
-    private:
+        
         void generarTarea(pugi::xml_node, const char **, int, unsigned int, int);
         Nodo* anyadirHijo(Arbol*, Nodo*, Nodo*, int);
+        void CrearArbolComportamiento(vector <pugi::xml_node>, Nodo *, Nodo *, int);
         Nodo* raiz;
-        pugi::xml_node sacarNodo(vector <pugi::xml_node>, Nodo *, Nodo *, int);
         int * lista;
         Arbol * behavior_tree;
 
