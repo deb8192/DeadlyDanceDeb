@@ -39,7 +39,7 @@ Jugador::~Jugador()
     danyo_arma = 10.0f;
     atx=0.0;
     atespx=0.0;
-    aty=0.0; 
+    aty=0.0;
     atespy=0.0;
     atz=0.0;
     atespz=0.0;
@@ -553,7 +553,11 @@ void Jugador::QuitarVida(int can)
 
 void Jugador::RecuperarVida(int can)
 {
-
+  if(vida < 100)
+  {
+    vida = vida + can;
+    if(vida > 100)vida = 100;
+  }
 }
 
 void Jugador::AumentarBarraAtEs(int can)
@@ -581,7 +585,7 @@ void Jugador::AnnadirLlave(Llave * llave)
 
 /***********EliminarLlave************
  * Metodo que elimina la llave pasada por
- * parametro del vector de llaves que 
+ * parametro del vector de llaves que
  * posee el jugador
  * Entradas:
  *          Llave * llave: llave a eliminar
@@ -591,8 +595,8 @@ void Jugador::EliminarLlave(Llave * llave)
     unsigned int i = 0;
     bool encontrado = false;
     while(!encontrado)
-    { 
-        i++;   
+    {
+        i++;
         //Se elimina la llave si coinide con el codigo de la puerta de la llave pasada por parametro
         if(llave->GetCodigoPuerta() == llaves.at(i)->GetCodigoPuerta())
         {
