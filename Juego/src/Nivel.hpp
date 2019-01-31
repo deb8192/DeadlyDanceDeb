@@ -80,6 +80,7 @@ class Nivel
         void DejarObjeto();
         void InteractuarNivel();
         void AccionarMecanismo(int);    //Activa mecanismos y o puertas
+        void crearObjetoCofre(Interactuable* newobjeto);
 
         int getjix();
         int getjiy();
@@ -92,7 +93,7 @@ class Nivel
         void ActivarLimpieza();//se pone para limpiar el nivel
         bool EstaLimpio();//devuelve si esta limpio el nivel
         void borrarEnemigos();//borra todos los enemigos
-        
+
     private:
 
         //clase singleton
@@ -107,7 +108,6 @@ class Nivel
         std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
         std::vector<Recolectable*> recolectables;
         std::vector<Zona*> zonas; //Array de zonas
-        std::vector<Zona*> zonas_cofres; //Array de zonas de cofres
         std::vector<Interactuable*> interactuables; //Objetos interactuables del mapa
         Jugador jugador;//objeto del jugador en el nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
