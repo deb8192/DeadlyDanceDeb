@@ -37,7 +37,7 @@
 					<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="95" Y="0" Z="60" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>									
 					<Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="85" Y="0" Z="40" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>						
 					<Object Type="1" codigo="2" nombre="palanca" accion="3" ancho="3" largo="1" alto="10" X="100" Y="0" Z="38" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/Palanca.obj"></Object>									
-					<Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="100" Y="0" Z="38" Texture="assets/texture/platform1.jpg" Model="assets/models/combinados/interruptor/Base.obj"></Object>
+					<Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="100" Y="0" Z="38" Texture="assets/texture/platform1.jpg" Model="assets/models/Base.obj"></Object>
 					<Object Type="1" accion="1" ancho="23" largo="2" alto="1" X="90" Y="0" Z="70" Texture="assets/texture/platform1.jpg" Model="assets/models/paredes_del.obj"></Object>
 					<Object Type="1" accion="1" ancho="2" largo="23" alto="1" X="111" Y="0" Z="50" Texture="assets/texture/platform1.jpg" Model="assets/models/paredes_der.obj"></Object>
 					
@@ -53,7 +53,7 @@
 					
 					<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="90" Y="0" Z="115" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
 						<Object Type="1" codigo="3" nombre="palanca" accion="3" ancho="3" largo="1" alto="10" X="100" Y="0" Z="130" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/Palanca.obj"></Object>									
-						<Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="100" Y="0" Z="130" Texture="assets/texture/platform1.jpg" Model="assets/models/combinados/interruptor/Base.obj"></Object>
+						<Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="100" Y="0" Z="130" Texture="assets/texture/platform1.jpg" Model="assets/models/Base.obj"></Object>
 						<Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="60" Y="0" Z="85" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
 						
 					</Platform>
