@@ -42,7 +42,7 @@ class CargadorBehaviorTrees
         void generarTarea(pugi::xml_node, const char **, int, unsigned int, int);
         Nodo* anyadirHijo(Arbol*, Nodo*, Nodo*, int);
         Nodo* raiz;
-        pugi::xml_node sacarNodo(pugi::xml_node, Nodo *, Nodo *, int);
+        pugi::xml_node sacarNodo(vector <pugi::xml_node>, Nodo *, Nodo *, int);
         int * lista;
         Arbol * behavior_tree;
 
