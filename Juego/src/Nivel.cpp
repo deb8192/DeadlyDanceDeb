@@ -70,7 +70,6 @@ void Nivel::LimpiarNivel()
         zonas.resize(0);
     }
 
-
     //jugador.~Jugador();//limpiamos jugador
     jugador = Jugador();//volvemos a crear jugador
 
@@ -98,7 +97,7 @@ bool Nivel::CargarNivel(int level)
     //cargamos el nivel
     cargador.CargarNivelXml(level);
     //Cargar objetos con el nivel completo
-    this->cargarCofres(2); //Cargamos los cofres del nivel
+    this->cargarCofres(1); //Cargamos los cofres del nivel
 
     motor->cargarInterfaz();
     //esta ya todo ejecutamos ia y interpolado
@@ -265,7 +264,7 @@ void Nivel::cargarCofres(int num)
 
   if(!zonas.empty())
   {
-    if(zonas.size() > num_cofres)
+    if(zonas.size() >= num_cofres)
     {
       //Buscar zonas sin proposito y guardar posicion en vector
       std::vector<int> Zsinprop;
@@ -313,12 +312,12 @@ void Nivel::cargarCofres(int num)
         MotorFisicas* fisicas = MotorFisicas::getInstance();
         fisicas->crearCuerpo(3,newx/2,newy/2,newz/2,2,2,4,2,3);
 
-//void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo)
         //borrar del Array
         Zsinprop.erase(Zsinprop.begin() + numAlt);
 
         num_cofres--; //un cofre menos
       }
+      Zsinprop.resize(0);
     }
     else
     {
@@ -479,6 +478,45 @@ void Nivel::DejarObjeto()
  *                  int_col: indicador del elemento en el vector de interactuables
  *      Salidas:
 */
+void Nivel::crearObjetoCofre(Interactuable* newobjeto)
+{
+  //Aleaotrio
+  srand(time(NULL));
+  int tipobj = 1 + rand() % 2; //aleatorio entre 1 y n tipos de objetos
+
+  MotorGrafico * motor = MotorGrafico::getInstance();
+  int accion = 2;
+  int x = newobjeto->getX() + 5;
+  int y = newobjeto->getY();
+  int z = newobjeto->getZ();
+  int ancho = 2 ,largo = 2,alto = 2;
+  int codigo,ataque;
+  const char *nombre, *modelo, *textura;
+  int * propiedades = new int [6];
+
+  if(tipobj == 1)
+  {
+    //crear guitarra
+    codigo = 0; //0:arma
+    ataque = 25;
+    nombre = "guitarra";
+    modelo = "assets/models/Arma.obj";
+    textura = "assets/texture/platform1.jpg";
+    cout << "Hay una guitarra!" << endl;
+  }
+  else if(tipobj == 2)
+  {
+    //crear arpa
+    codigo = 0; //0:arma
+    ataque = 10;
+    nombre = "arpa";
+    modelo = "assets/models/objeto2.obj";
+    textura = "assets/texture/platform1.png";
+    cout << "Hay una arpa!" << endl;
+  }
+
+  this->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+}
 
 void Nivel::AccionarMecanismo(int int_col)
 {
@@ -510,10 +548,14 @@ void Nivel::AccionarMecanismo(int int_col)
        //Cofre no abierto
         if(!interactuables.at(int_col)->getAccionado())
         {
-          //Se abre el cofre
+          //Se abre el cofre (Animacion)
           interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ() + 80.0);
           cout << "Abres el cofre" << endl;
           interactuables.at(int_col)->accionar();
+
+          //Crear objeto aleatorio
+          this->crearObjetoCofre(interactuables.at(int_col));
+
         }
         else
         {
