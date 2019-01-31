@@ -81,6 +81,7 @@ class Nivel
         void InteractuarNivel();
         void AccionarMecanismo(int);    //Activa mecanismos y o puertas
         void crearObjetoCofre(Interactuable* newobjeto);
+        void activarPowerUp();
 
         int getjix();
         int getjiy();
@@ -138,5 +139,9 @@ class Nivel
         bool ejecutar;//nos servira para saber si tenemmos que ejecutar el update y el updateia
         bool limpiar;//para saber si hay que limpar el nivel
         bool limpio;//para saber si esta limpio el nivel
+
+        //Comprobacion de powerup
+        int powerupYES = -1;
+
 };
 #endif

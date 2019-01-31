@@ -213,7 +213,7 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
     MotorGrafico * motor = MotorGrafico::getInstance();
     int posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
 
-    //Arma o power-up
+    //Arma
     if(accion == 2)
     {
         Recolectable* rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
@@ -232,6 +232,15 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
         inter->setDesplazamientos(despX,despZ);
         inter->setRotacion(0.0,0.0,0.0);
         interactuables.push_back(inter);
+    }
+    //Powerups
+    if(accion == 4)
+    {
+      Recolectable* rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
+      rec->setID(recolectables.size());
+      rec->setPosiciones(x,y,z);
+      rec->SetPosicionArrayObjetos(posicionObjeto);
+      recolectables.push_back(rec);
     }
 
     MotorFisicas* fisicas = MotorFisicas::getInstance();
@@ -746,6 +755,8 @@ void Nivel::update()
             fisicas->llevarBox(posArmaX, jugador.getY()+3,posArmaZ, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(), jugador.getArma()->getAlto());
         }
 
+        //Comprueba la activacion de un powerup
+        this->activarPowerUp();
 
         //adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
         fisicas->colisionChecker(motor->estaPulsado(1),
@@ -904,6 +915,22 @@ void Nivel::update()
     }
 }
 
+void Nivel::activarPowerUp()
+{
+  int int_cpw = fisicas->collideColectablePowerup();
+  if(int_cpw != powerupYES && int_cpw >= 0)
+  {
+      MotorGrafico * motor = MotorGrafico::getInstance();
+      cout << "PowerUP! " << int_cpw << endl;
+      jugador.RecuperarVida(15);
+      //Borrar objeto en todos los sitios
+      // recolectables_powerup.erase(recolectables_powerup.begin() + int_cpw);
+      // motor->EraseColectable(recolectables.size() + int_cpw);
+      // fisicas->EraseColectablePowerup(int_cpw);
+      powerupYES = int_cpw;
+  }
+}
+
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 {
     if(ejecutar)
@@ -1036,13 +1063,29 @@ void Nivel::updateIA()
                     EraseEnemigo(i);
                 }else{
                     if(enemigos[i]->estasMuerto()){
+                        int x = enemigos[i]->getX();
+                        int y = enemigos[i]->getY();
+                        int z = enemigos[i]->getZ();
+
                         enemigos[i]->MuereEnemigo(i);
+
+                        //Crear un power-up/dinero
+                        //Aqui hacer un aleatorio
+                        int accion = 4;
+                        int ancho = 0.5 ,largo = 0.5,alto = 0.5;
+                        int codigo = -2;
+                        int ataque = 0;
+                        const char *nombre = "vida_up";
+                        const char *modelo = "assets/models/powerup1.obj";
+                        const char *textura = "assets/models/powerup1.mtl";
+                        int * propiedades = new int [6];
+                        this->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
                     }
                     else
                     {
                         //si no esta muerto ni piensa morirse XD ejecutamos ia
                         //cout<< "Ejecuto ia: " << i << endl;
-                        enemigos[i]->runIA();
+                        //enemigos[i]->runIA();
                     }
                 }
             }

@@ -27,12 +27,12 @@ MotorGrafico::~MotorGrafico()
 void MotorGrafico::LimpiarMotorGrafico()
 {
     //hay que tener  cuidado porque si se borra previamente los objetos apuntan a objetos con memoria no accesible
-    
+
     if(Jugador_Scena)
     {
         Jugador_Scena = nullptr;
     }
-    
+
     if(Enemigos_Scena.size() > 0)
     {
         for(std::size_t i=0;i<Enemigos_Scena.size();i++)
@@ -594,7 +594,7 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
         Enemigos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
         Enemigos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
     }
-    
+
 
 }
 
