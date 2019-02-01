@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: 'untitled.blend'
 # www.blender.org
-mtllib powerup1.mtl
+mtllib powerup0.mtl
 o Sphere
 v -0.000001 0.412382 0.995577
 v -0.000001 0.598684 0.895994

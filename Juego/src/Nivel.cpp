@@ -211,20 +211,22 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
 void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
-    int posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+    int posicionObjeto;
 
     //Arma
     if(accion == 2)
     {
+        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         Recolectable* rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
         rec->setID(recolectables.size());
         rec->setPosiciones(x,y,z);
         rec->SetPosicionArrayObjetos(posicionObjeto);
         recolectables.push_back(rec);
-    }
+    }else
     //Puertas o interruptores
     if(accion == 3)
     {
+        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         Interactuable * inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto);
         inter->setID(id++);
         inter->setPosiciones(x,y,z);
@@ -232,15 +234,20 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
         inter->setDesplazamientos(despX,despZ);
         inter->setRotacion(0.0,0.0,0.0);
         interactuables.push_back(inter);
-    }
+    }else
     //Powerups
     if(accion == 4)
     {
-      Recolectable* rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
-      rec->setID(recolectables.size());
-      rec->setPosiciones(x,y,z);
-      rec->SetPosicionArrayObjetos(posicionObjeto);
-      recolectables.push_back(rec);
+        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        cout << "posicion objeto: " << posicionObjeto << endl;
+        Recolectable* rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
+        rec->setID(powerup.size());
+        rec->setPosiciones(x,y,z);
+        rec->SetPosicionArrayObjetos(posicionObjeto);
+        powerup.push_back(rec);
+    }else
+    {
+        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     }
 
     MotorFisicas* fisicas = MotorFisicas::getInstance();
@@ -493,7 +500,6 @@ void Nivel::crearObjetoCofre(Interactuable* newobjeto)
   srand(time(NULL));
   int tipobj = 1 + rand() % 2; //aleatorio entre 1 y n tipos de objetos
 
-  MotorGrafico * motor = MotorGrafico::getInstance();
   int accion = 2;
   int x = newobjeto->getX() + 5;
   int y = newobjeto->getY();
@@ -917,18 +923,29 @@ void Nivel::update()
 
 void Nivel::activarPowerUp()
 {
-  int int_cpw = fisicas->collideColectablePowerup();
-  if(int_cpw != powerupYES && int_cpw >= 0)
-  {
-      MotorGrafico * motor = MotorGrafico::getInstance();
-      cout << "PowerUP! " << int_cpw << endl;
-      jugador.RecuperarVida(15);
-      //Borrar objeto en todos los sitios
-      // recolectables_powerup.erase(recolectables_powerup.begin() + int_cpw);
-      // motor->EraseColectable(recolectables.size() + int_cpw);
-      // fisicas->EraseColectablePowerup(int_cpw);
-      powerupYES = int_cpw;
-  }
+    int int_cpw = fisicas->collideColectablePowerup();
+    cout << int_cpw << endl;
+    if(int_cpw >= 0)
+    {
+        MotorGrafico * motor = MotorGrafico::getInstance();
+
+        //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
+        if(powerup.at(int_cpw)->getAtaque() == 0)
+        {
+            cout << "PowerUP! Curado 15 de vida."<< endl;
+            jugador.RecuperarVida(15);
+        }
+        else if(powerup.at(int_cpw)->getAtaque() == 1)
+        {
+            cout << "PowerUP! 50 de energia."<< endl;
+            jugador.AumentarBarraAtEs(50);
+        }
+
+        //Borrar objeto en todos los sitios
+        powerup.erase(powerup.begin() + int_cpw);
+        motor->ErasePowerUP(int_cpw);
+        fisicas->EraseColectablePowerup(int_cpw);
+    }
 }
 
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
@@ -1029,7 +1046,7 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
 
 void Nivel::updateIA()
 {
-    bool quehay = ejecutar;
+    //bool quehay = ejecutar;
     if(ejecutar)
     {
         //cout<< "Ejecuto ia " << endl;
@@ -1058,28 +1075,54 @@ void Nivel::updateIA()
 
                 if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
 
+                    //Crear un power-up/dinero
+                    //Se crea un power-up?
+                    srand(time(NULL));
+                    int secreapower = rand() % 100; //Entre 0 y 100
+
+                    if(secreapower <= 100){ //20% de posibilidades
+                      //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
+                      srand(time(NULL));
+                      int cualpower = rand() % 100;
+
+                      int ataque;
+                      const char *nombre,*modelo,*textura;
+                      if(cualpower < 50)
+                      {
+                        ataque = 0;
+                        nombre = "vida_up";
+                        modelo = "assets/models/powerup0.obj";
+                        textura = "assets/models/powerup0.mtl";
+                      }
+                      else if(cualpower >= 50)
+                      {
+                        ataque = 1;
+                        nombre = "energy_up";
+                        modelo = "assets/models/powerup1.obj";
+                        textura = "assets/models/powerup1.mtl";
+                      }
+
+                      //DAtos comunes a todos
+                      int x = enemigos[i]->getX();
+                      int y = enemigos[i]->getY();
+                      int z = enemigos[i]->getZ();
+                      int accion = 4;
+                      int ancho = 0.5 ,largo = 0.5,alto = 0.5;
+                      int codigo = -2;
+                      int * propiedades = new int [6];
+
+                      //Crear objeto
+                      this->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+                    }
+
+                    //Borrar enemigo
                     motor->EraseEnemigo(i);
                     fisicas->EraseEnemigo(i);
                     EraseEnemigo(i);
+
                 }else{
                     if(enemigos[i]->estasMuerto()){
-                        int x = enemigos[i]->getX();
-                        int y = enemigos[i]->getY();
-                        int z = enemigos[i]->getZ();
-
                         enemigos[i]->MuereEnemigo(i);
-
-                        //Crear un power-up/dinero
-                        //Aqui hacer un aleatorio
-                        int accion = 4;
-                        int ancho = 0.5 ,largo = 0.5,alto = 0.5;
-                        int codigo = -2;
-                        int ataque = 0;
-                        const char *nombre = "vida_up";
-                        const char *modelo = "assets/models/powerup1.obj";
-                        const char *textura = "assets/models/powerup1.mtl";
-                        int * propiedades = new int [6];
-                        this->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
                     }
                     else
                     {

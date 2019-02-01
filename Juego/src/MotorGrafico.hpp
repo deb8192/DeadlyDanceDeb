@@ -153,6 +153,7 @@ using namespace idsEventos;
             void EraseEnemigo(std::size_t i);
             void EraseJugador();
             void EraseArma();
+            void ErasePowerUP(long unsigned int idx);
 
             //interfaz
             void cargarInterfaz();
@@ -175,8 +176,8 @@ using namespace idsEventos;
             //variables privadas
             IrrlichtDevice *device; //puntero a dispositivo por defecto
             IVideoDriver *driver;
-	        ISceneManager *smgr;
-	        IGUIEnvironment *guienv;
+  	        ISceneManager *smgr;
+  	        IGUIEnvironment *guienv;
             scene::ICameraSceneNode* camera;
             IGUIFont *font;
             IGUIFont *font2;
@@ -192,6 +193,7 @@ using namespace idsEventos;
             IAnimatedMeshSceneNode *ArmaEspecial_Jugador;//Malla del arma especial del jugador en escena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
+            std::vector<IAnimatedMeshSceneNode*> PowerUP_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
