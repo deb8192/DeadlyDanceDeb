@@ -36,5 +36,6 @@ class Arbol
         Composicion *raiz;               //Nodo raiz del arbol
         Nodo *nodoEnEjecucionDirecta;    //Nodo actualmente en ejecucion en la IA
         bool estado;                     //Booleano que indica si el arbol se esta recorriendo o no
+        bool finEjecucion;               //Si es un selector se pondra true cuando una opcion se realice; si es una secuencia se pondra true cuando todas las tareas se realicen
 };
 #endif

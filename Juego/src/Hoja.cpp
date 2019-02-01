@@ -2,6 +2,10 @@
 #include <iostream>
 
 using namespace std;
+Hoja::Hoja()
+{
+
+}
 
 Hoja::Hoja(const char* name, int idxml, int type, int level, Nodo* father, const char* action, const char* target, const char* blackboard, int task, const char* information) : Nodo(name, idxml, type, level, father)
 {
@@ -19,4 +23,14 @@ Hoja::Hoja(const char* name, int idxml, int type, int level, Nodo* father, const
         tarea = 0;
         info = "";
     }
+}
+
+std::string Hoja::GetAccion()
+{
+    return accion;
+}
+
+std::string Hoja::GetObjetivo()
+{
+    return objetivo;
 }
