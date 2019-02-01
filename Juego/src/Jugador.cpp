@@ -548,25 +548,30 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
 void Jugador::QuitarVida(int can)
 {
   vida-=can;
-  this->AumentarBarraAtEs(can);
+  this->AumentarBarraAtEs(5);
 }
 
 void Jugador::RecuperarVida(int can)
 {
   if(vida < 100)
   {
-    vida = vida + can;
+    vida += can;
     if(vida > 100)vida = 100;
   }
 }
 
 void Jugador::AumentarBarraAtEs(int can)
 {
-  if(vida < 100)
+  if(barraAtEs < 100)
   {
     barraAtEs += can;
     if(barraAtEs > 100)barraAtEs = 100;
   }
+}
+
+void Jugador::AumentarDinero(int can)
+{
+   dinero += can;
 }
 
 void Jugador::Interactuar(int id, int id2)
@@ -847,6 +852,11 @@ const char *Jugador::getRutaArmaEsp()
     return rutaArmaEspecial;
 }
 
+int Jugador::getDinero()
+{
+    return dinero;
+}
+
 int Jugador::getAnimacion()
 {
     return animacion;
@@ -977,12 +987,12 @@ void Jugador::setArma(Arma * arma)
             interfaz->setArma(1);
         }
 
-        if(strcmp(this->getArma()->getNombre(),"dinero") == 0)//entonces es la guitarra cuerpo a cuerpo
-        {
-            InterfazJugador * interfaz = InterfazJugador::getInstance();
-            dinero = dinero+1;
-            interfaz->setArma(0);
-        }
+        // if(strcmp(this->getArma()->getNombre(),"dinero") == 0)//entonces es la guitarra cuerpo a cuerpo
+        // {
+        //     InterfazJugador * interfaz = InterfazJugador::getInstance();
+        //     dinero = dinero+1;
+        //     interfaz->setArma(0);
+        // }
     }
     else
     {

@@ -83,6 +83,16 @@ void MotorGrafico::LimpiarMotorGrafico()
        Recolectables_Scena.resize(0);
     }
 
+    if(PowerUP_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i < PowerUP_Scena.size();i++)
+        {
+           PowerUP_Scena[i] = nullptr;
+        }
+
+       PowerUP_Scena.resize(0);
+    }
+
     arma = nullptr;
     Arma_Jugador = nullptr;
     armaEsp = nullptr;
