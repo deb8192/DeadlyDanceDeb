@@ -108,7 +108,7 @@ bool Nivel::CargarNivel(int level)
     //cargamos el nivel
     cargador.CargarNivelXml(level);
     //Cargar objetos con el nivel completo
-    this->cargarCofres(1); //Cargamos los cofres del nivel
+    this->cargarCofres(2); //Cargamos los cofres del nivel
 
     motor->cargarInterfaz();
     //esta ya todo ejecutamos ia y interpolado
@@ -254,6 +254,7 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
         rec->setID(powerup.size());
         rec->setPosiciones(x,y,z);
         rec->SetPosicionArrayObjetos(posicionObjeto);
+        rec->setCantidad(propiedades[0]); //cantidad
         powerup.push_back(rec);
     }else
     {
@@ -508,9 +509,10 @@ void Nivel::crearObjetoCofre(Interactuable* newobjeto)
 {
   //Aleaotrio
   srand(time(NULL));
-  int tipobj = 1 + rand() % 2; //aleatorio entre 1 y n tipos de objetos
+  int ntipos = 3;
+  int tipobj = 1 + rand() % ntipos; //aleatorio entre 1 y n tipos de objetos
 
-  int accion = 2;
+  int accion;
   int x = newobjeto->getX() + 5;
   int y = newobjeto->getY();
   int z = newobjeto->getZ();
@@ -522,6 +524,7 @@ void Nivel::crearObjetoCofre(Interactuable* newobjeto)
   if(tipobj == 1)
   {
     //crear guitarra
+    accion = 2;
     codigo = 0; //0:arma
     ataque = 25;
     nombre = "guitarra";
@@ -532,6 +535,7 @@ void Nivel::crearObjetoCofre(Interactuable* newobjeto)
   else if(tipobj == 2)
   {
     //crear arpa
+    accion = 2;
     codigo = 0; //0:arma
     ataque = 10;
     nombre = "arpa";
@@ -539,8 +543,23 @@ void Nivel::crearObjetoCofre(Interactuable* newobjeto)
     textura = "assets/texture/platform1.png";
     cout << "Hay una arpa!" << endl;
   }
+  else if(tipobj == 3)
+  {
+    //Oro
+    accion = 4;
+    codigo = -2;
+    ataque = 2;
+    nombre = "gold_up";
+    modelo = "assets/models/gold.obj";
+    textura = "assets/models/gold.mtl";
+    //Cantidad de oro entre 20 y 30
+    srand(time(NULL));
+    int orocant = 20 + rand() % (31 - 20); //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
+    cout << "Hay " << orocant << " de Oro!" << endl;
+    propiedades[0] = orocant; //para pasarlo a crear objeto
+  }
 
-  this->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+   this->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
 }
 
 void Nivel::AccionarMecanismo(int int_col)
@@ -954,8 +973,8 @@ void Nivel::activarPowerUp()
         }
         else if(powerup.at(int_cpw)->getAtaque() == 2)
         {
-            cout << "Recoges 5 de oro" << endl;
-            jugador.AumentarDinero(5);
+            cout << "Recoges " << powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
+            jugador.AumentarDinero(powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
 
@@ -1109,6 +1128,16 @@ void Nivel::updateIA()
                       cout << "POWER: " << cualpower << endl;
                       int ataque;
                       const char *nombre,*modelo,*textura;
+
+                      //DAtos comunes a todos
+                      int x = enemigos[i]->getX();
+                      int y = enemigos[i]->getY();
+                      int z = enemigos[i]->getZ();
+                      int accion = 4;
+                      int ancho = 0.5 ,largo = 0.5,alto = 0.5;
+                      int codigo = -2;
+                      int * propiedades = new int [6];
+
                       if(cualpower == 0)
                       {
                         ataque = 0;
@@ -1129,16 +1158,11 @@ void Nivel::updateIA()
                         nombre = "gold_up";
                         modelo = "assets/models/gold.obj";
                         textura = "assets/models/gold.mtl";
+                        //oro entre 1 y 5 monedas
+                        srand(time(NULL));
+                        int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
+                        propiedades[0] = orocant; //para pasarlo a crear objeto
                       }
-
-                      //DAtos comunes a todos
-                      int x = enemigos[i]->getX();
-                      int y = enemigos[i]->getY();
-                      int z = enemigos[i]->getZ();
-                      int accion = 4;
-                      int ancho = 0.5 ,largo = 0.5,alto = 0.5;
-                      int codigo = -2;
-                      int * propiedades = new int [6];
 
                       //Crear objeto
                       this->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
