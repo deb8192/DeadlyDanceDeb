@@ -108,6 +108,7 @@ class Nivel
         Enemigo* enemPideAyuda = nullptr;  //Enemigos que pide ayuda
         std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
         std::vector<Recolectable*> recolectables;
+        std::vector<Recolectable*> powerup;
         std::vector<Zona*> zonas; //Array de zonas
         std::vector<Interactuable*> interactuables; //Objetos interactuables del mapa
         Jugador jugador;//objeto del jugador en el nivel

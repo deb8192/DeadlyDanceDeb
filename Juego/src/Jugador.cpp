@@ -562,7 +562,11 @@ void Jugador::RecuperarVida(int can)
 
 void Jugador::AumentarBarraAtEs(int can)
 {
+  if(vida < 100)
+  {
     barraAtEs += can;
+    if(barraAtEs > 100)barraAtEs = 100;
+  }
 }
 
 void Jugador::Interactuar(int id, int id2)
