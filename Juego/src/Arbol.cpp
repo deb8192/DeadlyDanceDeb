@@ -88,7 +88,7 @@ Nodo* Arbol::anyadirHijo(Nodo * nod)
                                 return (Nodo*) padre;
                             }
                             //El padre es una composicion y se anade su nuevo hijo a la misma
-                            else if(strcmp(buscador->getNombre(), COMPOSITION) == 0)
+                            else if(strcmp(buscador->getNombre(), COMPOSICION) == 0)
                             {
                                 Composicion* padre = finderA;
                                 padre->addHijo((Nodo*) nod);
@@ -136,6 +136,8 @@ Nodo* Arbol::anyadirHijo(Nodo * nod)
 
 int Arbol::ContinuarSiguienteNodo(bool valor)
 {
+    Composicion comp;
+    Decorador deco;
     /*if(nodoEnEjecucionDirecta != nullptr)//esto significa que este arbol se esta ejecutando o entrado en una tarea repetitiva
     {
         if(valor)
@@ -176,24 +178,101 @@ int Arbol::ContinuarSiguienteNodo(bool valor)
                 return nodoEnEjecucionDirecta->conseguirComportamiento();
             }
         } 
-    }
-    else
+    }*/
+    bool primeraVez = true;
+    bool desciende = true;  //Permite o bloquea el descenso segun si hay mas hijos o no
+    int ID = 0;             //Por cada descenso, aumentara el ID y servira para elegir al siguiente hijo
+    
+    //El bucle continua mientras el nodo actual no sea una tarea o tenga hijos para descender
+    while((std::strcmp(nodoEnEjecucionDirecta->getNombre(), HOJA) != 0 && 
+    (std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) != 0 && 
+    (Composicion *) nodoEnEjecucionDirecta->GetAccion() != NULL) && desciende) || primeraVez)
     {
-        //estamos en la primera ejecucion 
-        
-        if(raiz == nullptr) //si es nula la raiz no se ha definido arbol
-            return 0;
-
-        nodoEnEjecucionDirecta = raiz->siguiente;   //Obtenemos la raiz del arbol
-        if(nodoEnEjecucionDirecta == nullptr)
+        if(primeraVez)
         {
-            estado = false;
-            return 0;
+            primeraVez = false;
         }
-        else if()
+        //No se comienza a recorrer el arbol
+        if(nodoEnEjecucionDirecta != nullptr)
         {
-            estado = true;
-            return nodoEnEjecucionDirecta->conseguirComportamiento();
+            unsigned int i = 0;
+            //Si el nodo actual es una composicion se hace downcasting hacia dicha clase
+            if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+            {
+                Composicion comp = (Composicion) nodoEnEjecucionDirecta;
+
+                //Se accede al hijo que toca en funcion del ultimo ID registrado en el recorrido
+                while(ID <= comp.getHijos().at(i)->getID())
+                {
+                    i++;
+                }
+
+                //De haber un hijo cuyo ID es superior al registrado, ese es el nuevo nodo
+                if(i < comp.getHijos().size())
+                {
+                    nodoEnEjecucionDirecta = comp.getHijos().at(i);
+                    ID++;
+                }
+                //En caso contrario, se asciende por el arbol para cambiar de rama
+                else
+                {
+                    nodoEnEjecucionDirecta = nodoEnEjecucionDirecta->getPadre();
+                }
+            }
+
+            //Si el nodo actual es un decorador se hace downcasting hacia dicha clase
+            else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
+            {
+                Decorador deco = (Decorador) nodoEnEjecucionDirecta;
+                
+                //Se accede al hijo que toca en funcion del ultimo ID registrado en el recorrido
+                while(ID <= deco.getHijos().at(i)->getID())
+                {
+                    i++;
+                }
+
+                //De haber un hijo cuyo ID es superior al registrado, ese es el nuevo nodo
+                if(i < deco.getHijos().size())
+                {
+                    nodoEnEjecucionDirecta = deco.getHijos().at(i);
+                    ID++;
+                }
+                //En caso contrario, se asciende por el arbol para cambiar de rama
+                else
+                {
+                    nodoEnEjecucionDirecta = nodoEnEjecucionDirecta->getPadre();
+                }
+            }
+        }
+        else
+        {
+            //Se comienza a recorrer el arbol
+            if(raiz == nullptr) //si es nula la raiz no se ha definido arbol
+            {
+                desciende = false;
+            }
+            else
+            {
+                nodoEnEjecucionDirecta = raiz;   //Obtenemos la raiz del arbol
+                ID++;
+            }
+
+
+            /*nodoEnEjecucionDirecta = raiz;   //Obtenemos la raiz del arbol
+            if(nodoEnEjecucionDirecta == nullptr)
+            {
+                estado = false;
+                return 0;
+            }
+            else
+            {
+                if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+                {
+
+                }
+                estado = true;
+                return nodoEnEjecucionDirecta->conseguirComportamiento();
+            }*/
         }
     }
 

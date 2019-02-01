@@ -2,6 +2,10 @@
 #include <iostream>
 
 using namespace std;
+Composicion::Composicion()
+{
+
+}
 
 Composicion::Composicion(const char* name, int idxml, int type, int level, Nodo *father, const char* action, const char* target, const char* blackboard, int task, const char* information, bool random) : Nodo(name, idxml, type, level, father)
 {
@@ -34,4 +38,14 @@ vector <Nodo*> Composicion::getHijos()
 bool Composicion::getAleatorio()
 {
     return aleatorio;
+}
+
+std::string Composicion::GetAccion()
+{
+    return accion;
+}
+
+std::string Composicion::GetObjetivo()
+{
+    return objetivo;
 }
