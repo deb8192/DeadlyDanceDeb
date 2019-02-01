@@ -70,6 +70,17 @@ void Nivel::LimpiarNivel()
         zonas.resize(0);
     }
 
+    if(powerup.size() > 0)
+    {
+        for(std::size_t i=0 ; i < powerup.size() ; i++)
+        {
+            delete powerup[i];
+            powerup[i] = nullptr;
+        }
+
+        powerup.resize(0);
+    }
+
     //jugador.~Jugador();//limpiamos jugador
     jugador = Jugador();//volvemos a crear jugador
 
@@ -239,7 +250,6 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
     if(accion == 4)
     {
         posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        cout << "posicion objeto: " << posicionObjeto << endl;
         Recolectable* rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
         rec->setID(powerup.size());
         rec->setPosiciones(x,y,z);
@@ -924,27 +934,38 @@ void Nivel::update()
 void Nivel::activarPowerUp()
 {
     int int_cpw = fisicas->collideColectablePowerup();
-    cout << int_cpw << endl;
     if(int_cpw >= 0)
     {
         MotorGrafico * motor = MotorGrafico::getInstance();
+        bool locoges = false; //Comprobar si lo puedes coger
 
         //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
-        if(powerup.at(int_cpw)->getAtaque() == 0)
+        if(powerup.at(int_cpw)->getAtaque() == 0 && jugador.getVida() < 100)
         {
-            cout << "PowerUP! Curado 15 de vida."<< endl;
-            jugador.RecuperarVida(15);
+            cout << "PowerUP! Curado 20 de vida. TOTAL:" << jugador.getVida() << endl;
+            jugador.RecuperarVida(20);
+            locoges = true;
         }
-        else if(powerup.at(int_cpw)->getAtaque() == 1)
+        else if(powerup.at(int_cpw)->getAtaque() == 1 && jugador.getBarraAtEs() < 100)
         {
-            cout << "PowerUP! 50 de energia."<< endl;
+            cout << "PowerUP! 50 de energia. TOTAL:" << jugador.getBarraAtEs() << endl;
             jugador.AumentarBarraAtEs(50);
+            locoges = true;
+        }
+        else if(powerup.at(int_cpw)->getAtaque() == 2)
+        {
+            cout << "Recoges 5 de oro" << endl;
+            jugador.AumentarDinero(5);
+            locoges = true;
         }
 
-        //Borrar objeto en todos los sitios
-        powerup.erase(powerup.begin() + int_cpw);
-        motor->ErasePowerUP(int_cpw);
-        fisicas->EraseColectablePowerup(int_cpw);
+        if(locoges == true)
+        {
+            //Borrar objeto en todos los sitios
+            powerup.erase(powerup.begin() + int_cpw);
+            motor->ErasePowerUP(int_cpw);
+            fisicas->EraseColectablePowerup(int_cpw);
+        }
     }
 }
 
@@ -1078,28 +1099,36 @@ void Nivel::updateIA()
                     //Crear un power-up/dinero
                     //Se crea un power-up?
                     srand(time(NULL));
-                    int secreapower = rand() % 100; //Entre 0 y 100
+                    int secreapower = rand() % 101; //Entre 0 y 100
 
                     if(secreapower <= 100){ //20% de posibilidades
-                      //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
+                      //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
                       srand(time(NULL));
-                      int cualpower = rand() % 100;
-
+                      int numpow = 3;
+                      int cualpower = rand() % numpow;
+                      cout << "POWER: " << cualpower << endl;
                       int ataque;
                       const char *nombre,*modelo,*textura;
-                      if(cualpower < 50)
+                      if(cualpower == 0)
                       {
                         ataque = 0;
                         nombre = "vida_up";
                         modelo = "assets/models/powerup0.obj";
                         textura = "assets/models/powerup0.mtl";
                       }
-                      else if(cualpower >= 50)
+                      else if(cualpower == 1)
                       {
                         ataque = 1;
                         nombre = "energy_up";
                         modelo = "assets/models/powerup1.obj";
                         textura = "assets/models/powerup1.mtl";
+                      }
+                      else if(cualpower == 2)
+                      {
+                        ataque = 2;
+                        nombre = "gold_up";
+                        modelo = "assets/models/gold.obj";
+                        textura = "assets/models/gold.mtl";
                       }
 
                       //DAtos comunes a todos
