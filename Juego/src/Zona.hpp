@@ -2,7 +2,6 @@
 #define Zona_HPP
 #include <iostream>
 #include <cstring>
-#include "INdrawable.hpp"
 
 using namespace std;
 
@@ -16,6 +15,7 @@ class Zona
 
         //set atributos
         void setPosiciones(float newx,float newy,float newz);
+        void setProposito(bool p);
 
         //ID de la zona
         void setID(int newid);

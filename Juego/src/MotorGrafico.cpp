@@ -27,12 +27,12 @@ MotorGrafico::~MotorGrafico()
 void MotorGrafico::LimpiarMotorGrafico()
 {
     //hay que tener  cuidado porque si se borra previamente los objetos apuntan a objetos con memoria no accesible
-    
+
     if(Jugador_Scena)
     {
         Jugador_Scena = nullptr;
     }
-    
+
     if(Enemigos_Scena.size() > 0)
     {
         for(std::size_t i=0;i<Enemigos_Scena.size();i++)
@@ -81,6 +81,16 @@ void MotorGrafico::LimpiarMotorGrafico()
         }
 
        Recolectables_Scena.resize(0);
+    }
+
+    if(PowerUP_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i < PowerUP_Scena.size();i++)
+        {
+           PowerUP_Scena[i] = nullptr;
+        }
+
+       PowerUP_Scena.resize(0);
     }
 
     arma = nullptr;
@@ -594,7 +604,7 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
         Enemigos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
         Enemigos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
     }
-    
+
 
 }
 
@@ -607,14 +617,20 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
 int MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
-	if (!objeto)
-	{
-		//error
-	}
+  	if (!objeto)
+  	{
+  		//error
+  	}
     else
     {
         IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
         objeto_en_scena->setPosition(core::vector3df(x,y,z));
+
+        if(accion == 4)
+        {
+          PowerUP_Scena.push_back(objeto_en_scena);
+          return PowerUP_Scena.size() - 1;
+        }
 
         //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
         accion == 2 ?
@@ -1116,6 +1132,16 @@ void MotorGrafico::EraseColectable(long unsigned int idx)
         Recolectables_Scena[idx]->setVisible(false);
         Recolectables_Scena[idx]->remove();
         Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
+    }
+}
+
+void MotorGrafico::ErasePowerUP(long unsigned int idx)
+{
+    if(PowerUP_Scena[idx] && idx < PowerUP_Scena.size())
+    {
+        PowerUP_Scena[idx]->setVisible(false);
+        PowerUP_Scena[idx]->remove();
+        PowerUP_Scena.erase(PowerUP_Scena.begin() + idx);
     }
 }
 
