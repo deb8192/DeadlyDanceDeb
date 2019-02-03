@@ -139,10 +139,10 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
             int Playerx = plat.attribute("StarX").as_int();//nos devuelve un int
             int Playery = plat.attribute("StarY").as_int();//nos devuelve un int
-            int Playerz = plat.attribute("StarZ").as_int();//nos devuelve un int 
+            int Playerz = plat.attribute("StarZ").as_int();//nos devuelve un int
             //TEMPORAL
             int ancho = 1;//nos devuelve un int
-            int largo = 1;//nos devuelve un int 
+            int largo = 1;//nos devuelve un int
             int alto = 5;//nos devuelve un int
             //!TEMPORAL
             const char * Playertextura = plat.attribute("StarTexture").value(); //nos da un char[] = string
@@ -178,11 +178,11 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node hijo,Sala * padre)
             int y = obj.attribute("Y").as_int();//nos devuelve un int
             int z = obj.attribute("Z").as_int();//nos devuelve un int
             int despX = obj.attribute("despX").as_int();//nos devuelve un int
-            int despZ = obj.attribute("despZ").as_int();//nos devuelve un int  
+            int despZ = obj.attribute("despZ").as_int();//nos devuelve un int
             int ancho = obj.attribute("ancho").as_int();//nos devuelve un int
-            int largo = obj.attribute("largo").as_int();//nos devuelve un int 
-            int alto = obj.attribute("alto").as_int();//nos devuelve un int  
-            int ataque = obj.attribute("ataque").as_int();//nos devuelve un int     
+            int largo = obj.attribute("largo").as_int();//nos devuelve un int
+            int alto = obj.attribute("alto").as_int();//nos devuelve un int
+            int ataque = obj.attribute("ataque").as_int();//nos devuelve un int
             const char * nombre = obj.attribute("nombre").value(); //nos da un char[] = string
             const char * textura = obj.attribute("Texture").value(); //nos da un char[] = string
             const char * modelo  =  obj.attribute("Model").value(); //nos da un char[] = string

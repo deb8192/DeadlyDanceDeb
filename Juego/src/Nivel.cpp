@@ -41,7 +41,7 @@ void Nivel::LimpiarNivel()
         for(std::size_t i=0 ; i < recolectables.size() ; i++)
         {
             int numero = (int)i;
-            delete recolectables[numero];   
+            delete recolectables[numero];
             recolectables[i] = nullptr;
         }
 
@@ -52,7 +52,7 @@ void Nivel::LimpiarNivel()
     {
         for(std::size_t i=0 ; i < interactuables.size() ; i++)
         {
-            delete interactuables[i];   
+            delete interactuables[i];
             interactuables[i] = nullptr;
         }
 
@@ -63,26 +63,36 @@ void Nivel::LimpiarNivel()
     {
         for(std::size_t i=0 ; i < zonas.size() ; i++)
         {
-            delete zonas[i];   
+            delete zonas[i];
             zonas[i] = nullptr;
         }
 
         zonas.resize(0);
     }
-    
+
+    if(powerup.size() > 0)
+    {
+        for(std::size_t i=0 ; i < powerup.size() ; i++)
+        {
+            delete powerup[i];
+            powerup[i] = nullptr;
+        }
+
+        powerup.resize(0);
+    }
 
     //jugador.~Jugador();//limpiamos jugador
     jugador = Jugador();//volvemos a crear jugador
 
 }
 
-bool Nivel::CargarNivel(int level) 
+bool Nivel::CargarNivel(int level)
 {
     NoEjecutar();//se impide entrar en bucles del juego
 
     MotorGrafico * motor = MotorGrafico::getInstance();
     MotorFisicas* fisicas = MotorFisicas::getInstance();
-    
+
     motor->borrarScena();//borramos la scena
 
     //pre limpiamos todo
@@ -97,7 +107,9 @@ bool Nivel::CargarNivel(int level)
     }
     //cargamos el nivel
     cargador.CargarNivelXml(level);
-    //cargamos la interfaz si no estuviera ya en memoria
+    //Cargar objetos con el nivel completo
+    this->cargarCofres(2); //Cargamos los cofres del nivel
+
     motor->cargarInterfaz();
     //esta ya todo ejecutamos ia y interpolado
     Ejecutar();
@@ -210,20 +222,22 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
 void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
-    int posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+    int posicionObjeto;
 
-    //Arma o power-up
+    //Arma
     if(accion == 2)
     {
+        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         Recolectable* rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
         rec->setID(recolectables.size());
         rec->setPosiciones(x,y,z);
         rec->SetPosicionArrayObjetos(posicionObjeto);
         recolectables.push_back(rec);
-    }
+    }else
     //Puertas o interruptores
     if(accion == 3)
     {
+        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         Interactuable * inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto);
         inter->setID(id++);
         inter->setPosiciones(x,y,z);
@@ -231,8 +245,22 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
         inter->setDesplazamientos(despX,despZ);
         inter->setRotacion(0.0,0.0,0.0);
         interactuables.push_back(inter);
+    }else
+    //Powerups
+    if(accion == 4)
+    {
+        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        Recolectable* rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
+        rec->setID(powerup.size());
+        rec->setPosiciones(x,y,z);
+        rec->SetPosicionArrayObjetos(posicionObjeto);
+        rec->setCantidad(propiedades[0]); //cantidad
+        powerup.push_back(rec);
+    }else
+    {
+        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     }
-    
+
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
     //motor->debugBox(x,y,z,ancho,alto,largo);
@@ -252,6 +280,77 @@ void Nivel::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto,
 
    //guardarla en el nivel
    zonas.push_back(zon);
+
+ }
+
+//Cargar los cofres del nivel
+void Nivel::cargarCofres(int num)
+{
+  long unsigned int num_cofres = num;
+  MotorGrafico * motor = MotorGrafico::getInstance();
+
+  if(!zonas.empty())
+  {
+    if(zonas.size() >= num_cofres)
+    {
+      //Buscar zonas sin proposito y guardar posicion en vector
+      std::vector<int> Zsinprop;
+      for(int i = zonas.size(); i > 0; i--)
+      {
+        std::string name_tipo(zonas.at(i-1)->getTipo());
+        char * cadena_tipo = new char[sizeof(name_tipo)];
+        strcpy(cadena_tipo, name_tipo.c_str());
+
+        if(strcmp(cadena_tipo,"zChest") == 0) //Si es zona de cofre
+        {
+          if(zonas.at(i-1)->getProposito() == false) //Y no ha cumplido su proposito
+          {
+            cout << "entra:" << i-1 << endl;
+            Zsinprop.push_back(i-1);
+          }
+        }
+      }
+
+      //Mientra hay cofres sin colocar, colocar en una zona aleatoria
+      while(num_cofres > 0)
+      {
+        srand(time(NULL));
+        int numAlt = rand() % Zsinprop.size();
+        cout << "colocar en: " << Zsinprop[numAlt] << endl;
+
+        //proposito cumplido
+        zonas[Zsinprop[numAlt]]->setProposito(true);
+
+        //Buscar zona donde colocar
+        float newx = zonas[Zsinprop[numAlt]]->getX();
+        float newy = zonas[Zsinprop[numAlt]]->getY();
+        float newz = zonas[Zsinprop[numAlt]]->getZ();
+
+        //Colocar cofre
+        int posicionObjeto = motor->CargarObjetos(3,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
+        Interactuable * inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto);
+        inter->setID(id++);
+        inter->setPosiciones(newx,newy,newz);
+        inter->SetPosicionArrayObjetos(posicionObjeto);
+        inter->setRotacion(0.0,0.0,0.0);
+        interactuables.push_back(inter);
+
+        //Fisicas del cofre
+        MotorFisicas* fisicas = MotorFisicas::getInstance();
+        fisicas->crearCuerpo(3,newx/2,newy/2,newz/2,2,2,4,2,3);
+
+        //borrar del Array
+        Zsinprop.erase(Zsinprop.begin() + numAlt);
+
+        num_cofres--; //un cofre menos
+      }
+      Zsinprop.resize(0);
+    }
+    else
+    {
+      cout << "No hay zonas de cofres suficientes en el nivel" << endl;
+    }
+  }
 }
 
 Sala * Nivel::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -397,7 +496,7 @@ void Nivel::DejarObjeto()
 }
 
 /*********** AccionarMecanismo ***********
- * Funcion que, en funcion del valor codigo 
+ * Funcion que, en funcion del valor codigo
  * del interactuable al que apunte int_col,
  * si es -1 abre un cofre, si es 0 abre una puerta
  * sin llave y si es mayor que 0 abrira la puerta
@@ -406,6 +505,62 @@ void Nivel::DejarObjeto()
  *                  int_col: indicador del elemento en el vector de interactuables
  *      Salidas:
 */
+void Nivel::crearObjetoCofre(Interactuable* newobjeto)
+{
+  //Aleaotrio
+  srand(time(NULL));
+  int ntipos = 3;
+  int tipobj = 1 + rand() % ntipos; //aleatorio entre 1 y n tipos de objetos
+
+  int accion;
+  int x = newobjeto->getX() + 5;
+  int y = newobjeto->getY();
+  int z = newobjeto->getZ();
+  int ancho = 2 ,largo = 2,alto = 2;
+  int codigo,ataque;
+  const char *nombre, *modelo, *textura;
+  int * propiedades = new int [6];
+
+  if(tipobj == 1)
+  {
+    //crear guitarra
+    accion = 2;
+    codigo = 0; //0:arma
+    ataque = 25;
+    nombre = "guitarra";
+    modelo = "assets/models/Arma.obj";
+    textura = "assets/texture/platform1.jpg";
+    cout << "Hay una guitarra!" << endl;
+  }
+  else if(tipobj == 2)
+  {
+    //crear arpa
+    accion = 2;
+    codigo = 0; //0:arma
+    ataque = 10;
+    nombre = "arpa";
+    modelo = "assets/models/objeto2.obj";
+    textura = "assets/texture/platform1.png";
+    cout << "Hay una arpa!" << endl;
+  }
+  else if(tipobj == 3)
+  {
+    //Oro
+    accion = 4;
+    codigo = -2;
+    ataque = 2;
+    nombre = "gold_up";
+    modelo = "assets/models/gold.obj";
+    textura = "assets/models/gold.mtl";
+    //Cantidad de oro entre 20 y 30
+    srand(time(NULL));
+    int orocant = 20 + rand() % (31 - 20); //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
+    cout << "Hay " << orocant << " de Oro!" << endl;
+    propiedades[0] = orocant; //para pasarlo a crear objeto
+  }
+
+   this->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+}
 
 void Nivel::AccionarMecanismo(int int_col)
 {
@@ -420,7 +575,7 @@ void Nivel::AccionarMecanismo(int int_col)
         if(abrir)
         {
             //Se abre/acciona la puerta / el mecanismo
-            interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());    
+            interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());
             fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos() , posicion);
             cout<<"Abre la puerta"<<endl;
         }
@@ -434,7 +589,23 @@ void Nivel::AccionarMecanismo(int int_col)
     }
     else if(interactuables.at(int_col)->getCodigo() == -1)
     {
-        cout<<"Es un cofre"<<endl;
+       //Cofre no abierto
+        if(!interactuables.at(int_col)->getAccionado())
+        {
+          //Se abre el cofre (Animacion)
+          interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ() + 80.0);
+          cout << "Abres el cofre" << endl;
+          interactuables.at(int_col)->accionar();
+
+          //Crear objeto aleatorio
+          this->crearObjetoCofre(interactuables.at(int_col));
+
+        }
+        else
+        {
+          cout << "Cofre ya abierto" << endl;
+        }
+
     }
     else if(std::strcmp(interactuables.at(int_col)->getNombre(), PALANCA) == 0)
     {
@@ -460,8 +631,8 @@ void Nivel::AccionarMecanismo(int int_col)
             if(abrir)
             {
                 //Se abre/acciona la puerta / el mecanismo
-                interactuables.at(i)->setNewRotacion(interactuables.at(i)->getRX(), interactuables.at(i)->getRY() + 135.0, interactuables.at(i)->getRZ());    
-                fisicas->updatePuerta(interactuables.at(i)->getX(), interactuables.at(i)->getY(), interactuables.at(i)->getZ(), interactuables.at(i)->getRX(), interactuables.at(i)->getRY() +135.0, interactuables.at(i)->getRZ(), interactuables.at(i)->GetDesplazamientos(), posicion);
+                interactuables.at(i)->setNewRotacion(interactuables.at(i)->getRX(), interactuables.at(i)->getRY() + 135.0, interactuables.at(i)->getRZ());
+                fisicas->updatePuerta(interactuables.at(i)->getX(), interactuables.at(i)->getY(), interactuables.at(i)->getZ(), interactuables.at(i)->getRX() + 100.0, interactuables.at(i)->getRY(), interactuables.at(i)->getRZ(), interactuables.at(i)->GetDesplazamientos(), posicion);
                 cout<<"Abre la puerta"<<endl;
             }
             else
@@ -471,17 +642,17 @@ void Nivel::AccionarMecanismo(int int_col)
                 fisicas->updatePuerta(interactuables.at(i)->getX(), interactuables.at(i)->getY(), interactuables.at(i)->getZ(), interactuables.at(i)->getRX(), - interactuables.at(i)->getRY(), interactuables.at(i)->getRZ(), interactuables.at(i)->GetDesplazamientos(), posicion);
                 cout<<"Cierra la puerta"<<endl;
             }
-            
+
             if(activar)
             {
                 //Se abre/acciona la puerta / el mecanismo
-                interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ()+50);    
+                interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ()+50);
                 cout<<"Acciona la palanca"<<endl;
             }
             else
             {
                 //Se cierra/desacciona la puerta / el mecanismo
-                interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ()-50);    
+                interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ()-50);
                 cout<<"Desacciona la palanca"<<endl;
             }
         }
@@ -508,7 +679,7 @@ void Nivel::AccionarMecanismo(int int_col)
             if(abrir)
             {
                 //Se abre/acciona la puerta / el mecanismo
-                interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());    
+                interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());
                 fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
                 cout<<"Abre la puerta"<<endl;
             }
@@ -521,7 +692,7 @@ void Nivel::AccionarMecanismo(int int_col)
             }
         }
     }
-    
+
 }
 /************************** InteractualNivel *************************
 * Detecta las posiciones de los objetos recolectables y de interaccion
@@ -619,6 +790,8 @@ void Nivel::update()
             fisicas->llevarBox(posArmaX, jugador.getY()+3,posArmaZ, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(), jugador.getArma()->getAlto());
         }
 
+        //Comprueba la activacion de un powerup
+        this->activarPowerUp();
 
         //adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
         fisicas->colisionChecker(motor->estaPulsado(1),
@@ -641,8 +814,8 @@ void Nivel::update()
         {
             //no colisiona
             jugadorInmovil = false;
-        } 
-        
+        }
+
         //actualizamos movimiento del jugador
 
             jugador.movimiento(jugadorInmovil,
@@ -777,6 +950,44 @@ void Nivel::update()
     }
 }
 
+void Nivel::activarPowerUp()
+{
+    int int_cpw = fisicas->collideColectablePowerup();
+    if(int_cpw >= 0)
+    {
+        MotorGrafico * motor = MotorGrafico::getInstance();
+        bool locoges = false; //Comprobar si lo puedes coger
+
+        //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
+        if(powerup.at(int_cpw)->getAtaque() == 0 && jugador.getVida() < 100)
+        {
+            cout << "PowerUP! Curado 20 de vida. TOTAL:" << jugador.getVida() << endl;
+            jugador.RecuperarVida(20);
+            locoges = true;
+        }
+        else if(powerup.at(int_cpw)->getAtaque() == 1 && jugador.getBarraAtEs() < 100)
+        {
+            cout << "PowerUP! 50 de energia. TOTAL:" << jugador.getBarraAtEs() << endl;
+            jugador.AumentarBarraAtEs(50);
+            locoges = true;
+        }
+        else if(powerup.at(int_cpw)->getAtaque() == 2)
+        {
+            cout << "Recoges " << powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
+            jugador.AumentarDinero(powerup.at(int_cpw)->getCantidad());
+            locoges = true;
+        }
+
+        if(locoges == true)
+        {
+            //Borrar objeto en todos los sitios
+            powerup.erase(powerup.begin() + int_cpw);
+            motor->ErasePowerUP(int_cpw);
+            fisicas->EraseColectablePowerup(int_cpw);
+        }
+    }
+}
+
 void Nivel::updateAt(int *danyo, MotorGrafico *motor)
 {
     if(ejecutar)
@@ -875,7 +1086,7 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
 
 void Nivel::updateIA()
 {
-    bool quehay = ejecutar;
+    //bool quehay = ejecutar;
     if(ejecutar)
     {
         //cout<< "Ejecuto ia " << endl;
@@ -888,7 +1099,7 @@ void Nivel::updateIA()
         if(jugador.estasMuerto()){
             if(jugador.estasMuerto() && jugador.finalAnimMuerte())
             {
-                NoEjecutar();//se dehsabilita ejecucion de updates 
+                NoEjecutar();//se dehsabilita ejecucion de updates
                 return;
             }else{
                 if(jugador.estasMuerto()){
@@ -904,9 +1115,64 @@ void Nivel::updateIA()
 
                 if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
 
+                    //Crear un power-up/dinero
+                    //Se crea un power-up?
+                    srand(time(NULL));
+                    int secreapower = rand() % 101; //Entre 0 y 100
+
+                    if(secreapower <= 100){ //20% de posibilidades
+                      //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
+                      srand(time(NULL));
+                      int numpow = 3;
+                      int cualpower = rand() % numpow;
+                      cout << "POWER: " << cualpower << endl;
+                      int ataque;
+                      const char *nombre,*modelo,*textura;
+
+                      //DAtos comunes a todos
+                      int x = enemigos[i]->getX();
+                      int y = enemigos[i]->getY();
+                      int z = enemigos[i]->getZ();
+                      int accion = 4;
+                      int ancho = 0.5 ,largo = 0.5,alto = 0.5;
+                      int codigo = -2;
+                      int * propiedades = new int [6];
+
+                      if(cualpower == 0)
+                      {
+                        ataque = 0;
+                        nombre = "vida_up";
+                        modelo = "assets/models/powerup0.obj";
+                        textura = "assets/models/powerup0.mtl";
+                      }
+                      else if(cualpower == 1)
+                      {
+                        ataque = 1;
+                        nombre = "energy_up";
+                        modelo = "assets/models/powerup1.obj";
+                        textura = "assets/models/powerup1.mtl";
+                      }
+                      else if(cualpower == 2)
+                      {
+                        ataque = 2;
+                        nombre = "gold_up";
+                        modelo = "assets/models/gold.obj";
+                        textura = "assets/models/gold.mtl";
+                        //oro entre 1 y 5 monedas
+                        srand(time(NULL));
+                        int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
+                        propiedades[0] = orocant; //para pasarlo a crear objeto
+                      }
+
+                      //Crear objeto
+                      this->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+                    }
+
+                    //Borrar enemigo
                     motor->EraseEnemigo(i);
                     fisicas->EraseEnemigo(i);
                     EraseEnemigo(i);
+
                 }else{
                     if(enemigos[i]->estasMuerto()){
                         enemigos[i]->MuereEnemigo(i);
@@ -915,7 +1181,7 @@ void Nivel::updateIA()
                     {
                         //si no esta muerto ni piensa morirse XD ejecutamos ia
                         //cout<< "Ejecuto ia: " << i << endl;
-                        enemigos[i]->runIA();
+                        //enemigos[i]->runIA();
                     }
                 }
             }
@@ -1272,7 +1538,7 @@ void Nivel::Draw()
                     8,
                     2);
             }
-        
+
             //Ataque especial bailaora
             else if(strcmp(jugador.getArmaEspecial()->getNombre(), "Bailaora") == 0)
             {
