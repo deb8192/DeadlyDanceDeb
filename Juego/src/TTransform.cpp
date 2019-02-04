@@ -3,12 +3,17 @@
  
 TTransform::TTransform()
 {
-    
+    didentidad = 'T'; //para sabe que funcion hace
 }
 
 TTransform::~TTransform()
 {
 
+}
+
+void TTransform::remove()
+{
+    this->~TTransform();
 }
 
 void TTransform::identidad()
@@ -58,7 +63,7 @@ void TTransform::escalar(float,float,float)
 
 void TTransform::beginDraw()
 {
-
+    std::cout << didentidad << std::endl;
 }
 
 void TTransform::endDraw()

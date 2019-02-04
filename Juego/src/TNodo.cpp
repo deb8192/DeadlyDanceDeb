@@ -1,4 +1,5 @@
 #include "TNodo.hpp"
+#include "iostream"
 
 //USO::inicializa las variables de entidad y padre a nullptr
 TNodo::TNodo()
@@ -12,8 +13,7 @@ TNodo::~TNodo()
 {
     if(entidad != nullptr)
     {
-        delete entidad;
-        
+        entidad->remove();
     }
     
     entidad = nullptr;
@@ -98,11 +98,11 @@ int TNodo::remHijo(TNodo* hijo)
 
 //USO: define la entidad(funcionalidad) que tiene este nodo, eso si es compatible con su estado (transformacion o luz,camara,malla)
 //SALIDA: true (si se ha cambiado), false (no se cambio porque no es compatible con el tipo de funcion (transformacion o luz,camara,malla)) 
-bool TNodo::setEntidad(TEntidad * funcion)
+bool TNodo::setEntidad(TEntidad * en)
 {
-    if(entidad == nullptr || funcion != entidad)
+    if(entidad == nullptr || en != entidad)
     {
-        entidad = funcion;
+        entidad = en;
         return true;
     }
     return false;
@@ -119,4 +119,20 @@ TNodo * TNodo::getPadre()
 void TNodo::setPadre(TNodo * papa)
 {
     padre = papa;
+}
+
+//USO: se recorre sus nodos en postorden
+//SALIDAS: Llama a todas las funciones no hay salida aparte de lo que hace la funcion internamente
+void TNodo::draw()
+{
+    std::cout << " Pintando nodo " << std::endl;
+    if(entidad && entidad != nullptr)
+    {
+        entidad->beginDraw();
+    }
+
+    for(std::size_t i=0 ; i < hijos.size() ; i++)
+    {
+        hijos[i]->draw();
+    }
 }

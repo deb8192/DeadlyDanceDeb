@@ -2,12 +2,17 @@
 
 TLuz::TLuz()
 {
-
+    didentidad = 'L'; //para sabe que funcion hace
 }
        
 TLuz::~TLuz()
 {
 
+}
+
+void TLuz::remove()
+{
+    this->~TLuz();
 }
 
 void TLuz::setIntensidad(float *)
@@ -22,15 +27,10 @@ float * TLuz::getIntensidad()
 
 void TLuz::beginDraw()
 {
-
+    std::cout << didentidad << std::endl;
 }
 
 void TLuz::endDraw()
 {
-    
-}
-
-int TLuz::prueba()
-{
-    return -1;
+    std::cout << didentidad << "final" << std::endl;
 }

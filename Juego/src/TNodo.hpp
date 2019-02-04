@@ -24,6 +24,7 @@ class TNodo
         bool setEntidad(TEntidad *);//se comprueba si es una entidad valida para la posicion
         TNodo * getPadre();//se devuelve el padre
         void setPadre(TNodo*);//se agrega el padre
+        
         //pintado
         void draw();//se llama a las funciones de pintado
 

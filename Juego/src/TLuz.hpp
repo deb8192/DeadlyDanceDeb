@@ -6,16 +6,19 @@
 class TLuz : public TEntidad
 {
     private:
+    
         float * intensidad;
 
     public:
+
         //constructor y destructor
         TLuz();
         ~TLuz();
+        void remove();
+
         //gestion atributos
         void setIntensidad(float *);
         float * getIntensidad();
-        int prueba();
         
         //sobrecarga Tentidad
         void beginDraw();
