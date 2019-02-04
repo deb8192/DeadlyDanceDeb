@@ -56,6 +56,11 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     }
     else if(typeCreator == 3)//objetos
     {
+        //Recolectable power ups
+        if(accion == 4)
+        {
+           recolectables_powerup.push_back(cuerpo);
+        }
         //Objetos con los que interactuar como puertas
         if(accion == 3)
         {
@@ -129,6 +134,11 @@ void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, 
 void MotorFisicas::EraseColectable(int idx)
 {
     recolectables.erase(recolectables.begin() + idx);
+}
+
+void MotorFisicas::EraseColectablePowerup(int idx)
+{
+    recolectables_powerup.erase(recolectables_powerup.begin() + idx);
 }
 
 void MotorFisicas::EraseEnemigo(std::size_t i)
@@ -210,13 +220,26 @@ int MotorFisicas::collideColectable()
 {
     for(long unsigned int i = 0; i < recolectables.size();i++)
     {
-      if(space->testOverlap(jugador,recolectables[i]))
-      {
-        return (int)i;
-      }
+        if(space->testOverlap(jugador,recolectables[i]))
+        {
+            return i;
+        }
     }
 
     return -1;
+}
+
+int MotorFisicas::collideColectablePowerup()
+{
+  for(long unsigned int i = 0; i < recolectables_powerup.size();i++)
+  {
+      if(space->testOverlap(jugador,recolectables_powerup[i]))
+      {
+          return i; //posicion mas recolectables
+      }
+  }
+
+  return -1;
 }
 
 int MotorFisicas::collideInteractuable()
@@ -237,9 +260,12 @@ bool MotorFisicas::collideObstacle()
     //abra que indicar tipo de objeto de alguna manera (que sean obstaculos)
     for(long unsigned int i = 0; i < obstaculos.size();i++)
     {
-      if(space->testOverlap(jugador,obstaculos[i]))
+      if(obstaculos[i])
       {
-        return true;
+            if(space->testOverlap(jugador,obstaculos[i]))
+            {
+                return true;
+            }
       }
     }
 
@@ -576,6 +602,11 @@ CollisionBody* MotorFisicas::getColectables(int n)
  return recolectables[n];
 }
 
+CollisionBody* MotorFisicas::getColectablesPowerup(int n)
+{
+ return recolectables_powerup[n];
+}
+
 CollisionBody* MotorFisicas::getObstacles(int n)
 {
  return obstaculos[n];
@@ -594,6 +625,118 @@ CollisionBody* MotorFisicas::getEnemiesAtack(int n)
 CollisionBody* MotorFisicas::getEnemiesAtEsp(int n)
 {
  return armaAtEspEne[n];
+}
+
+void MotorFisicas::limpiarFisicas()
+{
+    if(enemigos.size() > 0)
+    {
+        for(std::size_t i=0 ; i < enemigos.size() ; i++)
+        {
+            if(enemigos[i])
+            {
+                space->destroyCollisionBody(enemigos[i]);
+            }
+            enemigos[i] = nullptr;
+            enemigos.erase(enemigos.begin() + i);
+        }
+        enemigos.resize(0);
+    }
+
+    if(enemigosAtack.size() > 0)
+    {
+        for(std::size_t i=0 ; i < enemigosAtack.size() ; i++)
+        {
+            if(enemigosAtack[i])
+            {
+                space->destroyCollisionBody(enemigosAtack[i]);
+            }
+            enemigosAtack[i] = nullptr;
+            enemigosAtack.erase(enemigosAtack.begin() + i);
+        }
+        enemigosAtack.resize(0);
+    }
+
+    if(armaAtEspEne.size() > 0)
+    {
+        for(std::size_t i=0 ; i < armaAtEspEne.size() ; i++)
+        {
+            if(armaAtEspEne[i])
+            {
+                space->destroyCollisionBody(armaAtEspEne[i]);
+            }
+            armaAtEspEne[i] = nullptr;
+            armaAtEspEne.erase(armaAtEspEne.begin() + i);
+        }
+        armaAtEspEne.resize(0);
+    }
+
+    if(jugador)
+    {
+        if(jugador)
+        {
+            space->destroyCollisionBody(jugador);
+        }
+        jugador = NULL;
+    }
+
+    if(recolectables.size() > 0)
+    {
+        for(std::size_t i=0 ; i < recolectables.size() ; i++)
+        {
+            if(recolectables[i])
+            {
+                space->destroyCollisionBody(recolectables[i]);
+            }
+            recolectables[i] = nullptr;
+            recolectables.erase(recolectables.begin() + i);
+        }
+        recolectables.resize(0);
+    }
+
+    if(recolectables_powerup.size() > 0)
+    {
+        for(std::size_t i=0 ; i < recolectables_powerup.size() ; i++)
+        {
+            if(recolectables_powerup[i])
+            {
+                space->destroyCollisionBody(recolectables_powerup[i]);
+            }
+            recolectables_powerup[i] = nullptr;
+            recolectables_powerup.erase(recolectables_powerup.begin() + i);
+        }
+        recolectables_powerup.resize(0);
+    }
+
+    if(obstaculos.size() > 0)
+    {
+        for(std::size_t i=0 ; i < obstaculos.size() ; i++)
+        {
+            if(obstaculos[i])
+            {
+                space->destroyCollisionBody(obstaculos[i]);
+            }
+            obstaculos[i] = nullptr;
+            obstaculos.erase(obstaculos.begin() + i);
+        }
+        obstaculos.resize(0);
+    }
+
+    if(plataformas.size() > 0)
+    {
+        for(std::size_t i=0 ; i < plataformas.size() ; i++)
+        {
+            if(plataformas[i])
+            {
+                space->destroyCollisionBody(plataformas[i]);
+            }
+            plataformas[i] = nullptr;
+            plataformas.erase(plataformas.begin() + i);
+        }
+
+        plataformas.resize(0);
+    }
+
 }
 
 unsigned int MotorFisicas::GetRelacionInteractuablesObstaculos(int n)

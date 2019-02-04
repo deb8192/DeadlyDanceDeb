@@ -32,7 +32,7 @@
             void Salir();//sale del juego
             void Jugar();//cambia de estado y cargar mapa //aqui saldra el selector de nivel cuando se implemente
             void setNivelThen();
-            
+            void cambiarEstadoMenu();//cambia al estado menu
             void CargarArbolesXML();
             void CargarPuzzlesXML();
 

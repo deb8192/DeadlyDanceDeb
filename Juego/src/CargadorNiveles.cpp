@@ -183,7 +183,6 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node plat,Sala * padre)
         const char * modelo  =  enem.attribute("Model").value(); //nos da un char[] = string
         nivel_instancia->CrearEnemigo(accion,x,y,z,ancho,largo,alto,modelo,textura,propiedades,padren); //cargamos el enemigo
     }
-
     for (pugi::xml_node obj = plat.child("Object"); obj; obj = obj.next_sibling("Object"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         //aqui va la carga de objetos
@@ -195,15 +194,30 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node plat,Sala * padre)
         int y = obj.attribute("Y").as_int();//nos devuelve un int
         int z = obj.attribute("Z").as_int();//nos devuelve un int
         int despX = obj.attribute("despX").as_int();//nos devuelve un int
-        int despZ = obj.attribute("despZ").as_int();//nos devuelve un int  
+        int despZ = obj.attribute("despZ").as_int();//nos devuelve un int
         int ancho = obj.attribute("ancho").as_int();//nos devuelve un int
-        int largo = obj.attribute("largo").as_int();//nos devuelve un int 
-        int alto = obj.attribute("alto").as_int();//nos devuelve un int  
-        int ataque = obj.attribute("ataque").as_int();//nos devuelve un int           
+        int largo = obj.attribute("largo").as_int();//nos devuelve un int
+        int alto = obj.attribute("alto").as_int();//nos devuelve un int
+        int ataque = obj.attribute("ataque").as_int();//nos devuelve un int
         const char * nombre = obj.attribute("nombre").value(); //nos da un char[] = string
         const char * textura = obj.attribute("Texture").value(); //nos da un char[] = string
         const char * modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
         nivel_instancia->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
+    }
+    for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        //carga de las zonas
+        int * propiedades;
+        propiedades = new int [6];//hay que destruirlo en nivel
+        int accion = zon.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
+        int x = zon.attribute("X").as_int();//nos devuelve un int
+        int y = zon.attribute("Y").as_int();//nos devuelve un int
+        int z = zon.attribute("Z").as_int();//nos devuelve un int
+        int ancho = zon.attribute("ancho").as_int();//nos devuelve un int
+        int largo = zon.attribute("largo").as_int();//nos devuelve un int
+        int alto = zon.attribute("ancho").as_int();//nos devuelve un int
+        const char * tipo = zon.attribute("tipo").value(); //nos da un char[] = string
+        nivel_instancia->CrearZona(accion,x,y,z,ancho,largo,alto,tipo,propiedades); //cargamos el enemigo
     }
 
     return padren;
