@@ -3,7 +3,7 @@
 CargadorXML::CargadorXML() { }
 
 /* Función recursiva para acceder a todos los nodos */
-/*pugi::xml_node CargadorXML::sacarNodo(pugi::xml_node tree, Nodo *nodo, Nodo *padre) {
+/*pugi::xml_node CargadorXML::CrearArbolComportamiento(pugi::xml_node tree, Nodo *nodo, Nodo *padre) {
     int i = 0;
     const char* atributos[8];
     stringstream ID;
@@ -96,7 +96,7 @@ CargadorXML::CargadorXML() { }
                     }
                 }
             }
-            sacarNodo(tool, nodo, padre);
+            CrearArbolComportamiento(tool, nodo, padre);
             cout<<"sale"<<endl;
         }
     }
@@ -136,7 +136,7 @@ CargadorXML::CargadorXML() { }
     //Prueba de lectura de nodos
     pugi::xml_node tree = doc.child("BehaviorTree");
 
-    sacarNodo(tree, nodo, padre);
+    CrearArbolComportamiento(tree, nodo, padre);
     cout << "FIN" << "\n" <<endl;
 
     //string nombre = raiz.name();

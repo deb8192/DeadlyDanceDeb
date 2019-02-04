@@ -14,6 +14,8 @@
 #include "times.hpp"
 #include "Arma.hpp"
 #include <cstring>
+#include <stdlib.h>
+#include <time.h>
 //#include "MotorFisicas.hpp"
 
 //cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA()
@@ -52,10 +54,11 @@ class Nivel
         void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char *tipo, int * propiedades); //lo usamos para crear zonas
         Sala * CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
+        void cargarCofres(int num);
 
         void EraseEnemigo(std::size_t i);
         void EraseJugador();
-        
+
         //Bucle de actualizacion y dibujado de objetos
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
         void updateAtEsp(MotorGrafico *);//se actualiza la ejecucion de los ataques
@@ -77,6 +80,8 @@ class Nivel
         void DejarObjeto();
         void InteractuarNivel();
         void AccionarMecanismo(int);    //Activa mecanismos y o puertas
+        void crearObjetoCofre(Interactuable* newobjeto);
+        void activarPowerUp();
 
         int getjix();
         int getjiy();
@@ -89,7 +94,7 @@ class Nivel
         void ActivarLimpieza();//se pone para limpiar el nivel
         bool EstaLimpio();//devuelve si esta limpio el nivel
         void borrarEnemigos();//borra todos los enemigos
-        
+
     private:
 
         //clase singleton
@@ -99,10 +104,12 @@ class Nivel
         //std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena //crear clase objetos
 
         std::vector<Enemigo*> enemigos;//Enemigos en scena
+        CargadorBehaviorTrees cargadorIA; //Variable para crear la IA de los enemigos
         std::vector<Enemigo*> auxiliadores;  //Enemigos que responden a la ayuda
         Enemigo* enemPideAyuda = nullptr;  //Enemigos que pide ayuda
         std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
         std::vector<Recolectable*> recolectables;
+        std::vector<Recolectable*> powerup;
         std::vector<Zona*> zonas; //Array de zonas
         std::vector<Interactuable*> interactuables; //Objetos interactuables del mapa
         Jugador jugador;//objeto del jugador en el nivel
@@ -134,5 +141,9 @@ class Nivel
         bool ejecutar;//nos servira para saber si tenemmos que ejecutar el update y el updateia
         bool limpiar;//para saber si hay que limpar el nivel
         bool limpio;//para saber si esta limpio el nivel
+
+        //Comprobacion de powerup
+        int powerupYES = -1;
+
 };
 #endif

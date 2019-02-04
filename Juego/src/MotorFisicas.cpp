@@ -56,6 +56,11 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     }
     else if(typeCreator == 3)//objetos
     {
+        //Recolectable power ups
+        if(accion == 4)
+        {
+           recolectables_powerup.push_back(cuerpo);
+        }
         //Objetos con los que interactuar como puertas
         if(accion == 3)
         {
@@ -129,6 +134,11 @@ void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, 
 void MotorFisicas::EraseColectable(int idx)
 {
     recolectables.erase(recolectables.begin() + idx);
+}
+
+void MotorFisicas::EraseColectablePowerup(int idx)
+{
+    recolectables_powerup.erase(recolectables_powerup.begin() + idx);
 }
 
 void MotorFisicas::EraseEnemigo(std::size_t i)
@@ -217,6 +227,19 @@ int MotorFisicas::collideColectable()
     }
 
     return -1;
+}
+
+int MotorFisicas::collideColectablePowerup()
+{
+  for(long unsigned int i = 0; i < recolectables_powerup.size();i++)
+  {
+      if(space->testOverlap(jugador,recolectables_powerup[i]))
+      {
+          return i; //posicion mas recolectables
+      }
+  }
+
+  return -1;
 }
 
 int MotorFisicas::collideInteractuable()
@@ -579,6 +602,11 @@ CollisionBody* MotorFisicas::getColectables(int n)
  return recolectables[n];
 }
 
+CollisionBody* MotorFisicas::getColectablesPowerup(int n)
+{
+ return recolectables_powerup[n];
+}
+
 CollisionBody* MotorFisicas::getObstacles(int n)
 {
  return obstaculos[n];
@@ -600,7 +628,7 @@ CollisionBody* MotorFisicas::getEnemiesAtEsp(int n)
 }
 
 void MotorFisicas::limpiarFisicas()
-{    
+{
     if(enemigos.size() > 0)
     {
         for(std::size_t i=0 ; i < enemigos.size() ; i++)
@@ -610,7 +638,7 @@ void MotorFisicas::limpiarFisicas()
                 space->destroyCollisionBody(enemigos[i]);
             }
             enemigos[i] = nullptr;
-            enemigos.erase(enemigos.begin() + i);    
+            enemigos.erase(enemigos.begin() + i);
         }
         enemigos.resize(0);
     }
@@ -624,7 +652,7 @@ void MotorFisicas::limpiarFisicas()
                 space->destroyCollisionBody(enemigosAtack[i]);
             }
             enemigosAtack[i] = nullptr;
-            enemigosAtack.erase(enemigosAtack.begin() + i);    
+            enemigosAtack.erase(enemigosAtack.begin() + i);
         }
         enemigosAtack.resize(0);
     }
@@ -638,7 +666,7 @@ void MotorFisicas::limpiarFisicas()
                 space->destroyCollisionBody(armaAtEspEne[i]);
             }
             armaAtEspEne[i] = nullptr;
-            armaAtEspEne.erase(armaAtEspEne.begin() + i);    
+            armaAtEspEne.erase(armaAtEspEne.begin() + i);
         }
         armaAtEspEne.resize(0);
     }
@@ -659,11 +687,25 @@ void MotorFisicas::limpiarFisicas()
             if(recolectables[i])
             {
                 space->destroyCollisionBody(recolectables[i]);
-            }    
+            }
             recolectables[i] = nullptr;
             recolectables.erase(recolectables.begin() + i);
         }
         recolectables.resize(0);
+    }
+
+    if(recolectables_powerup.size() > 0)
+    {
+        for(std::size_t i=0 ; i < recolectables_powerup.size() ; i++)
+        {
+            if(recolectables_powerup[i])
+            {
+                space->destroyCollisionBody(recolectables_powerup[i]);
+            }
+            recolectables_powerup[i] = nullptr;
+            recolectables_powerup.erase(recolectables_powerup.begin() + i);
+        }
+        recolectables_powerup.resize(0);
     }
 
     if(obstaculos.size() > 0)
@@ -672,8 +714,8 @@ void MotorFisicas::limpiarFisicas()
         {
             if(obstaculos[i])
             {
-                space->destroyCollisionBody(obstaculos[i]);   
-            } 
+                space->destroyCollisionBody(obstaculos[i]);
+            }
             obstaculos[i] = nullptr;
             obstaculos.erase(obstaculos.begin() + i);
         }
@@ -686,10 +728,10 @@ void MotorFisicas::limpiarFisicas()
         {
             if(plataformas[i])
             {
-                space->destroyCollisionBody(plataformas[i]);   
+                space->destroyCollisionBody(plataformas[i]);
             }
             plataformas[i] = nullptr;
-            plataformas.erase(plataformas.begin() + i); 
+            plataformas.erase(plataformas.begin() + i);
         }
 
         plataformas.resize(0);

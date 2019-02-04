@@ -29,12 +29,12 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
         void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
-        
+
         //Metodos Muere jugador y enemigo
         bool estasMuerto();
         bool finalAnimMuerte();
         void MuereJugador();//muere jugador (el tiempo controla los cambio de color del jugador)
-        
+
         //npc metodos
         int Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
@@ -44,6 +44,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
+        void AumentarDinero(int); //aumenta el dinero
 
         //Metodos jugador
         void AnnadirLlave(Llave * llave);
@@ -122,11 +123,12 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getTimeAt();
         float getLastTimeAt();
         const char *getRutaArmaEsp();
+        int getDinero();
 
         //Jugador
         int getAnimacion();
         vector <Llave*> GetLlaves();
-        
+
     private:
         float ax = 1.0f,
               az = 20.0f,
