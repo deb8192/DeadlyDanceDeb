@@ -17,7 +17,7 @@ class CargadorBehaviorTrees
     public:
     	CargadorBehaviorTrees();
         ~CargadorBehaviorTrees();
-        Arbol* cargarBehaviorTreeXml(std::string);
+        Arbol cargarBehaviorTreeXml(std::string);
         void guardarBehaviorTreeXml(std::string);
 
         Arbol2 * cargarArbol(std::string);
@@ -41,10 +41,10 @@ class CargadorBehaviorTrees
         
         void generarTarea(pugi::xml_node, const char **, int, unsigned int, int);
         Nodo* anyadirHijo(Arbol*, Nodo*, Nodo*, int);
-        void CrearArbolComportamiento(vector <pugi::xml_node>, Nodo *, Nodo *, int);
-        Nodo* raiz;
+        Arbol CrearArbolComportamiento(vector <pugi::xml_node>, Nodo *, Nodo *, int);
+        Composicion* raiz;
         int * lista;
-        Arbol * behavior_tree;
+        vector <Arbol> behavior_tree;
 
         void agregarHoja(pugi::xml_node rutapadre,hoja2 *, Arbol2 * arb);//recibe al padre por parametro
          

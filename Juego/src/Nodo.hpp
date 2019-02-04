@@ -12,8 +12,9 @@ using namespace std;
 class Nodo
 {
     public:
+        Nodo();
         Nodo(const char*, int, int, int, Nodo*);
-        //~Nodo();
+        ~Nodo();
         int getID();
         Nodo* getPadre();
         int getNivel();

@@ -13,6 +13,8 @@ class Arbol
         Arbol(Nodo *, const char*);
         Nodo* anyadirHijo(Nodo *);
         int ContinuarSiguienteNodo(bool);
+        Nodo* GetRaiz();
+        Nodo* GetNodoEnEjecucionDirecta();
     private:
         
         const char* SELECTOR  = "selector";
@@ -33,9 +35,11 @@ class Arbol
         
         const char* nombre;              //Nombre del nodo --LO SUYO ES DETECTAR LA CLASE--
         int cantidadNodos;               //Variable que nos indica los nodos que tiene el arbol y que ayuda a situarnos dentro del mismo
-        Composicion *raiz;               //Nodo raiz del arbol
+        Nodo *raiz;               //Nodo raiz del arbol
         Nodo *nodoEnEjecucionDirecta;    //Nodo actualmente en ejecucion en la IA
         bool estado;                     //Booleano que indica si el arbol se esta recorriendo o no
         bool finEjecucion;               //Si es un selector se pondra true cuando una opcion se realice; si es una secuencia se pondra true cuando todas las tareas se realicen
+        int ID;             //Por cada descenso, aumentara el ID y servira para elegir al siguiente hijo
+
 };
 #endif
