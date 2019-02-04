@@ -104,6 +104,7 @@ class Nivel
         //std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena //crear clase objetos
 
         std::vector<Enemigo*> enemigos;//Enemigos en scena
+        CargadorBehaviorTrees cargadorIA; //Variable para crear la IA de los enemigos
         std::vector<Enemigo*> auxiliadores;  //Enemigos que responden a la ayuda
         Enemigo* enemPideAyuda = nullptr;  //Enemigos que pide ayuda
         std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding

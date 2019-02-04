@@ -12,8 +12,9 @@ using namespace std;
 class Nodo
 {
     public:
+        Nodo();
         Nodo(const char*, int, int, int, Nodo*);
-        //~Nodo();
+        ~Nodo();
         int getID();
         Nodo* getPadre();
         int getNivel();
@@ -31,11 +32,13 @@ class Nodo
 class Composicion: public Nodo
 {
     public:
-        
+        Composicion();
         Composicion(const char*, int, int, int, Nodo*, const char*, const char*, const char*, int task, const char* information, bool);
         //~Composicion();
         void addHijo(Nodo*);
         vector <Nodo*> getHijos();
+        std::string GetAccion();
+        std::string GetObjetivo();
         bool getAleatorio();
     private:
         std::vector<Nodo*> hijos;
@@ -50,7 +53,7 @@ class Composicion: public Nodo
 class Decorador: public Nodo
 {
     public:
-       
+        Decorador();
         Decorador(const char*, int, int, int, Nodo*, const char*, const char*);
         //~Decorador();
         void addHijo(Nodo*);
@@ -65,9 +68,11 @@ class Decorador: public Nodo
 class Hoja: public Nodo
 {
     public:
-        
+        Hoja();
         Hoja(const char*, int, int, int, Nodo*, const char*, const char*, const char*, int, const char*);
         //~Hoja();
+        std::string GetAccion();
+        std::string GetObjetivo();
     private:
         std::string accion;
         std::string objetivo;

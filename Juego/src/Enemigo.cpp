@@ -10,7 +10,7 @@
 
 Enemigo::Enemigo()
 {
-
+    
 }
 
 Enemigo::~Enemigo(){
@@ -619,12 +619,12 @@ float Enemigo::getLastTimeAtEsp()
 }
 //ia
 
-void Enemigo::setArbol(Arbol2 * ia)
+void Enemigo::setArbol(Arbol ia)
 {
-    arbol = ia;
+    arbol = new Arbol(ia.GetRaiz(), ia.GetRaiz()->getNombre());
 }
 
-Arbol2 * Enemigo::getArbol()
+Arbol * Enemigo::getArbol()
 {
     return arbol;
 }
@@ -632,14 +632,14 @@ Arbol2 * Enemigo::getArbol()
 void Enemigo::runIA()
 {
     //aun por determinar primero definir bien la carga de arboles
-    int accion = arbol->siguiente(false);//el false lo ponemos para evitar problemas
-    bool salir = false;//cuando terminemos el arbol salimos
-    while(!salir)
+    arbol->ContinuarSiguienteNodo(true);//el true lo ponemos para detectar la primera ejecucion del bucle
+    //bool salir = false;//cuando terminemos el arbol salimos
+    /*while(!salir)
     {
         bool es = Acciones(accion);
         accion = arbol->siguiente(es);//cambiamos de rama(false) o de hoja(true)
         salir = arbol->estadoActual();//ultima rama o entras en bucle
-    }
+    }*/
 }
 
 //fin ia

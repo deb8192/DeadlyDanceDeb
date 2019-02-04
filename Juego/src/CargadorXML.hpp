@@ -43,7 +43,7 @@ class CargadorXML
 
     private:
         // Arboles
-        /*pugi::xml_node sacarNodo(pugi::xml_node, Nodo *, Nodo *);
+        /*pugi::xml_node CrearArbolComportamiento(pugi::xml_node, Nodo *, Nodo *);
         int * lista;
         Arbol *behavior_tree;*/
 
