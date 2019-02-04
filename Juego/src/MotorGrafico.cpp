@@ -10,6 +10,7 @@ MotorGrafico* MotorGrafico::unica_instancia = 0;
 /*Tipo 1(640x480), Tipo 2(800x600), Tipo 3(1024x768), Tipo 4(1280x1024)
 Esta clase define que tipo de pantalla quieres
 */
+
 MotorGrafico::MotorGrafico()
 {
     input.setDevice(device);//lo  utilizamos para que los eventos puedan llamar a funciones de
@@ -21,6 +22,85 @@ MotorGrafico::MotorGrafico()
 MotorGrafico::~MotorGrafico()
 {
 
+}
+
+void MotorGrafico::LimpiarMotorGrafico()
+{
+    //hay que tener  cuidado porque si se borra previamente los objetos apuntan a objetos con memoria no accesible
+
+    if(Jugador_Scena)
+    {
+        Jugador_Scena = nullptr;
+    }
+
+    if(Enemigos_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i<Enemigos_Scena.size();i++)
+        {
+            Enemigos_Scena[i] = nullptr;
+        }
+
+        Enemigos_Scena.resize(0);
+    }
+
+    if(Plataformas_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i < Plataformas_Scena.size();i++)
+        {
+            Plataformas_Scena[i] = nullptr;
+        }
+
+       Plataformas_Scena.resize(0);
+    }
+
+    if(Luces_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i < Luces_Scena.size();i++)
+        {
+            Luces_Scena[i] = nullptr;
+        }
+
+       Luces_Scena.resize(0);
+    }
+
+    if(Objetos_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i < Objetos_Scena.size();i++)
+        {
+           Objetos_Scena[i] = nullptr;
+        }
+
+       Objetos_Scena.resize(0);
+    }
+
+    if(Recolectables_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i < Recolectables_Scena.size();i++)
+        {
+           Recolectables_Scena[i] = nullptr;
+        }
+
+       Recolectables_Scena.resize(0);
+    }
+
+    if(PowerUP_Scena.size() > 0)
+    {
+        for(std::size_t i=0;i < PowerUP_Scena.size();i++)
+        {
+           PowerUP_Scena[i] = nullptr;
+        }
+
+       PowerUP_Scena.resize(0);
+    }
+
+    arma = nullptr;
+    Arma_Jugador = nullptr;
+    armaEsp = nullptr;
+
+    /*for (std::vector<Enemigos_Scena*>::iterator it = Enemigos_Scena.begin(); it!=Enemigos_Scena.end(); ++it){
+        delete *it;
+    }
+    Enemigos_Scena.clear();*/
 }
 
 bool MotorGrafico::crearVentana(int tipo)
@@ -422,7 +502,6 @@ void MotorGrafico::CargarEnemigos(int accion, int x,int y,int z, int ancho, int 
         IAnimatedMeshSceneNode* enemigo_en_scena = smgr->addAnimatedMeshSceneNode(enemigo); //metemos el objeto en el escenario para eso lo pasamos al escenario
         enemigo_en_scena->setPosition(core::vector3df(x,y,z));
         Enemigos_Scena.push_back(enemigo_en_scena);
-
     }
 }
 
@@ -442,6 +521,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         Jugador_Scena->setScale(core::vector3df(1.75,1.75,1.75));
         Jugador_Scena->setFrameLoop(30, 44);
 		Jugador_Scena->setAnimationSpeed(10);
+        colorearJugador(255, 255, 255, 255);
         //const SColor COLOR  = SColor(255,0,0,255);
         //smgr->getMeshManipulator()->setVertexColors(Jugador_Scena->getMesh(),COLOR);
     }
@@ -520,8 +600,11 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
 void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
 {
-    Enemigos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
-    Enemigos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
+    if(Enemigos_Scena.size()>0 && Enemigos_Scena.size()>i && Enemigos_Scena[i] != nullptr){
+        Enemigos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
+        Enemigos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
+    }
+
 
 }
 
@@ -534,14 +617,20 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
 int MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* objeto = smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
-	if (!objeto)
-	{
-		//error
-	}
+  	if (!objeto)
+  	{
+  		//error
+  	}
     else
     {
         IAnimatedMeshSceneNode* objeto_en_scena = smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
         objeto_en_scena->setPosition(core::vector3df(x,y,z));
+
+        if(accion == 4)
+        {
+          PowerUP_Scena.push_back(objeto_en_scena);
+          return PowerUP_Scena.size() - 1;
+        }
 
         //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
         accion == 2 ?
@@ -1036,11 +1125,24 @@ void MotorGrafico::ReiniciarHanoi()
     }
 }
 
-void MotorGrafico::EraseColectable(int idx)
+void MotorGrafico::EraseColectable(long unsigned int idx)
 {
-    Recolectables_Scena[idx]->setVisible(false);
-    Recolectables_Scena[idx]->remove();
-    Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
+    if(Recolectables_Scena[idx] && idx < Recolectables_Scena.size())
+    {
+        Recolectables_Scena[idx]->setVisible(false);
+        Recolectables_Scena[idx]->remove();
+        Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
+    }
+}
+
+void MotorGrafico::ErasePowerUP(long unsigned int idx)
+{
+    if(PowerUP_Scena[idx] && idx < PowerUP_Scena.size())
+    {
+        PowerUP_Scena[idx]->setVisible(false);
+        PowerUP_Scena[idx]->remove();
+        PowerUP_Scena.erase(PowerUP_Scena.begin() + idx);
+    }
 }
 
 //Cuando enemigo muere lo borramos

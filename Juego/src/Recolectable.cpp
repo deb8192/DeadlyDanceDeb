@@ -5,12 +5,18 @@ Recolectable::Recolectable()
 {
 
 }
+
+Recolectable::~Recolectable()
+{
+
+}
+
 Recolectable::Recolectable(int codigo, int ataque, const char *nombre, int anc, int lar, int alt, const char *objeto, const char *textura)
 {
     std::string name_objeto(objeto);
     cadena_objeto = new char[sizeof(name_objeto)];
     strcpy(cadena_objeto, name_objeto.c_str());
-     
+
     std::string name_textura(textura);
     cadena_textura = new char[sizeof(name_textura)];
     strcpy(cadena_textura, name_textura.c_str());
@@ -140,6 +146,11 @@ void Recolectable::SetPosicionArrayObjetos(int posicionObjeto)
     posicionArrayObjetos = posicionObjeto;
 }
 
+void Recolectable::setCantidad(int can)
+{
+    cantidad = can;
+}
+
 int Recolectable::getAtaque()
 {
     return potenciaAtaque;
@@ -266,4 +277,9 @@ float Recolectable::getLargo()
 float Recolectable::getAlto()
 {
     return alto;
+}
+
+int Recolectable::getCantidad()
+{
+    return cantidad;
 }

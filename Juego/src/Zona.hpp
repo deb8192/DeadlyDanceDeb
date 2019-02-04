@@ -2,7 +2,6 @@
 #define Zona_HPP
 #include <iostream>
 #include <cstring>
-#include "INdrawable.hpp"
 
 using namespace std;
 
@@ -16,6 +15,7 @@ class Zona
 
         //set atributos
         void setPosiciones(float newx,float newy,float newz);
+        void setProposito(bool p);
 
         //ID de la zona
         void setID(int newid);
@@ -28,6 +28,7 @@ class Zona
         float getAncho();
         float getAlto();
         float getLargo();
+        bool  getProposito();
         const char* getTipo();
 
     private:
@@ -37,6 +38,7 @@ class Zona
         float y = 0.0f;
         float z = 0.0f;
         int id = -1;
+        bool proposito = false; //Esto se pone true si la zona ha cumplido su proposito (como zona de cofres con un cofre)
 };
 
 #endif

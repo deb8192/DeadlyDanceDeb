@@ -15,7 +15,6 @@
 Jugador::Jugador()
 {
     animacion = 0;
-
     //tiempos de animacion
     tiempoAtaque=2000.0f;//tiempo en milisegundos
     tiempoPasadoAtaque=0;
@@ -25,13 +24,38 @@ Jugador::Jugador()
     tiempoPasadoCogerObjeto=0;
     tiempoEnMorir=2000.0f;//tiempo en milisegundos
     tiempoPasadoEnMorir=0;
-
 }
 
 Jugador::~Jugador()
 {
+    //Poner variables con los valores iniciales que tenían
+    ax = 1.0f;
+    az = 20.0f;
+    deg = 0.0f;
     armaEquipada=nullptr;
     armaEspecial=nullptr;
+    //const char * rutaArmaEspecial = "assets/models/Arma.obj";
+    //const char * nombreJugador = "Heavy";
+    danyo_arma = 10.0f;
+    atx=0.0;
+    atespx=0.0;
+    aty=0.0;
+    atespy=0.0;
+    atz=0.0;
+    atespz=0.0;
+    atgx=0.0;
+    atgy=0.0;
+    atgz=0.0;
+    incrAtDisCirc=0.0;
+    atposX=0.0;
+    atespposX=0.0;
+    atposY=0.0;
+    atespposY=0.0;
+    atposZ=0.0;
+    atespposZ=0.0;
+    tipo_arma = 2;
+    //vector <unsigned int> atacados_normal;
+    dinero = 0;
 }
 
 Jugador::Jugador(int,int,int,int,int,int,std::string malla)
@@ -524,17 +548,30 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
 void Jugador::QuitarVida(int can)
 {
   vida-=can;
-  this->AumentarBarraAtEs(can);
+  this->AumentarBarraAtEs(5);
 }
 
 void Jugador::RecuperarVida(int can)
 {
-
+  if(vida < 100)
+  {
+    vida += can;
+    if(vida > 100)vida = 100;
+  }
 }
 
 void Jugador::AumentarBarraAtEs(int can)
 {
+  if(barraAtEs < 100)
+  {
     barraAtEs += can;
+    if(barraAtEs > 100)barraAtEs = 100;
+  }
+}
+
+void Jugador::AumentarDinero(int can)
+{
+   dinero += can;
 }
 
 void Jugador::Interactuar(int id, int id2)
@@ -557,7 +594,7 @@ void Jugador::AnnadirLlave(Llave * llave)
 
 /***********EliminarLlave************
  * Metodo que elimina la llave pasada por
- * parametro del vector de llaves que 
+ * parametro del vector de llaves que
  * posee el jugador
  * Entradas:
  *          Llave * llave: llave a eliminar
@@ -567,8 +604,8 @@ void Jugador::EliminarLlave(Llave * llave)
     unsigned int i = 0;
     bool encontrado = false;
     while(!encontrado)
-    { 
-        i++;   
+    {
+        i++;
         //Se elimina la llave si coinide con el codigo de la puerta de la llave pasada por parametro
         if(llave->GetCodigoPuerta() == llaves.at(i)->GetCodigoPuerta())
         {
@@ -815,6 +852,11 @@ const char *Jugador::getRutaArmaEsp()
     return rutaArmaEspecial;
 }
 
+int Jugador::getDinero()
+{
+    return dinero;
+}
+
 int Jugador::getAnimacion()
 {
     return animacion;
@@ -945,12 +987,12 @@ void Jugador::setArma(Arma * arma)
             interfaz->setArma(1);
         }
 
-        if(strcmp(this->getArma()->getNombre(),"dinero") == 0)//entonces es la guitarra cuerpo a cuerpo
-        {
-            InterfazJugador * interfaz = InterfazJugador::getInstance();
-            dinero = dinero+1;
-            interfaz->setArma(0);
-        }
+        // if(strcmp(this->getArma()->getNombre(),"dinero") == 0)//entonces es la guitarra cuerpo a cuerpo
+        // {
+        //     InterfazJugador * interfaz = InterfazJugador::getInstance();
+        //     dinero = dinero+1;
+        //     interfaz->setArma(0);
+        // }
     }
     else
     {
