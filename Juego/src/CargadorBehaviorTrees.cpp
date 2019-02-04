@@ -5,7 +5,13 @@
 
 CargadorBehaviorTrees::CargadorBehaviorTrees()
 {
-    behavior_tree = nullptr;
+    
+}
+
+CargadorBehaviorTrees::~CargadorBehaviorTrees()
+{
+    //delete raiz;
+    //delete behavior_tree;
 }
 
 void CargadorBehaviorTrees::generarTarea(pugi::xml_node tool, const char ** atributos, int tarea, unsigned int i, int tipo)
@@ -43,7 +49,7 @@ void CargadorBehaviorTrees::generarTarea(pugi::xml_node tool, const char ** atri
         }
         tarea = 0;
     }
-        tipo = 1;
+    tipo = 1;
 }
 
 Nodo* CargadorBehaviorTrees::anyadirHijo(Arbol *arbol, Nodo* padre, Nodo* nodo, int nivel)
@@ -66,30 +72,23 @@ Nodo* CargadorBehaviorTrees::anyadirHijo(Arbol *arbol, Nodo* padre, Nodo* nodo, 
  * Salidas:
  *      tree: nodo del archivo xml
  */
-pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo, Nodo *padre, int nivel) {
+Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tree, Nodo *nodo, Nodo *padre, int nivel) {
     unsigned int i = 0;
     const char** atributos = (const char**) malloc(8 * sizeof(const char*));
     int IDInt = 0;
     int tipo = 0;
     int tarea =0;
+    Arbol *arbol;
     
-
-    //Caso base
-    if(tree == NULL || (nodo != NULL && strcmp(nodo->getNombre(), HOJA) == 0)) {
-        cout << "No hijos" << "\n" <<endl;
-        return tree;
-    }
-    //Algoritmo recursivo
-    else 
+    //Bucle para recorrer el arbol
+    for (pugi::xml_node tool = tree.back().first_child(); tool; tool = tool.next_sibling())
     {
-        //Bucle para recorrer el arbol
-        for (pugi::xml_node tool = tree.first_child(); tool; tool = tool.next_sibling())
+        while(tool != NULL)
         {
             if(std::strcmp(tool.name(), PIZARRA)  == 0)
             {
                 tool = tool.next_sibling();
             }
-            free(atributos);
             nivel++;
             i = 0;
             //Se recorren los atributos de cada nodo
@@ -107,8 +106,8 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
             if(std::strcmp(tool.name(), RAIZ) == 0)
             {
                 //Se crea la raiz y el arbol
-               if((std::strcmp(atributos[1], SELECTOR)  == 0) || (std::strcmp(atributos[1], SECUENCIA) == 0) || (std::strcmp(atributos[1], TAREA) == 0))
-               {
+                if((std::strcmp(atributos[1], SELECTOR)  == 0) || (std::strcmp(atributos[1], SECUENCIA) == 0) || (std::strcmp(atributos[1], TAREA) == 0))
+                {
                     if(std::strcmp(atributos[1], TAREA) == 0)
                     {
                         generarTarea(tool, atributos, tarea, i, tipo);
@@ -134,14 +133,11 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                     }
                     
 
-                    nodo = nullptr;
-                    nodo = new Composicion(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3], atributos[4], tarea, atributos[6], false);
-
-                    padre = nodo;
-                    raiz = nodo;
-               }
-               else if((std::strcmp(atributos[1], SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], SEC_ALEATORIA) == 0))
-               {
+                    raiz = new Composicion(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3], atributos[4], tarea, atributos[6], false);
+                    padre = raiz;
+                }
+                else if((std::strcmp(atributos[1], SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], SEC_ALEATORIA) == 0))
+                {
                     if(std::strcmp(atributos[1], SEL_ALEATORIO)  == 0)
                     {
                         tipo = 4;
@@ -150,14 +146,13 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                     {
                         tipo = 5;
                     }
-                    nodo = nullptr;
-                    nodo = new Composicion(tool.name(), IDInt, tipo, nivel, padre, NULL, NULL, NULL, 0, NULL, true);
-                    padre = nodo;
-                    raiz = nodo;
-               }
-                behavior_tree = new Arbol(raiz, raiz->getNombre());
+                    raiz = new Composicion(tool.name(), IDInt, tipo, nivel, padre, NULL, NULL, NULL, 0, NULL, true);
+                    padre = raiz;
+                }
+                arbol = new Arbol(raiz, raiz->getNombre());
+                //behavior_tree.push_back(*arbol); 
                 cout<<"Se crea arbol"<<"\n"<<endl;
-               //Faltaria comprobar otro tipo de nodos raiz pero principalmente seran secuencias o selectores
+            //Faltaria comprobar otro tipo de nodos raiz pero principalmente seran secuencias o selectores
             }
             //Se crean el resto de nodos del arbol
             else if(std::strcmp(tool.name(), COMPOSICION) == 0)
@@ -189,9 +184,9 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                     }
                     nodo = nullptr;
                     nodo = new Composicion(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3], atributos[4], tarea, atributos[6], false);
-               }
-               else if((std::strcmp(atributos[1], SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], SEC_ALEATORIA) == 0))
-               {
+            }
+            else if((std::strcmp(atributos[1], SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], SEC_ALEATORIA) == 0))
+            {
                     if(std::strcmp(atributos[1], SEL_ALEATORIO)  == 0)
                     {
                         tipo = 4;
@@ -203,11 +198,11 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                     nodo = nullptr;
                     nodo = new Composicion(tool.name(), IDInt, tipo, nivel, padre, "", "", "", 0, "", true);
 
-               }
+            }
                 
                 //SEPARAR EN UNA FUNCION DISTINTA
 
-                padre = CargadorBehaviorTrees::anyadirHijo(behavior_tree, padre, nodo, nivel);
+                padre = CargadorBehaviorTrees::anyadirHijo(arbol, padre, nodo, nivel);
                 
                 padre = nodo;
             }
@@ -218,7 +213,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                 nodo = new Decorador(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3]);
 
                 //SEPARAR EN UNA FUNCION DISTINTA
-                padre = CargadorBehaviorTrees::anyadirHijo(behavior_tree, padre, nodo, nivel);
+                padre = CargadorBehaviorTrees::anyadirHijo(arbol, padre, nodo, nivel);
                 padre = nodo;
             }
             else if(std::strcmp(tool.name(), HOJA) == 0)
@@ -229,18 +224,24 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
                 nodo = nullptr;
                 nodo = new Hoja(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3], atributos[4], tarea, atributos[6]);
                 
-                padre = CargadorBehaviorTrees::anyadirHijo(behavior_tree, padre, nodo, nivel);
+                padre = CargadorBehaviorTrees::anyadirHijo(arbol, padre, nodo, nivel);
                 
-                 
+                
             }
-            sacarNodo(tool, nodo, padre, nivel);
-            
+
+            tree.push_back(tool);
+            tool = tool.first_child();
+            //CrearArbolComportamiento(tool, nodo, padre, nivel);
+        }
+        while(tool.next_sibling() == NULL && !tree.empty())
+        {
             nivel--;
-            
+            tool = tree.back();
+            tree.pop_back();
             padre = (Nodo*)nodo->getPadre();
         }
     }
-    return tree;//PARA QUITAR WARNING
+    return *arbol;
 }
 
 /*
@@ -253,7 +254,7 @@ pugi::xml_node CargadorBehaviorTrees::sacarNodo(pugi::xml_node tree, Nodo *nodo,
  *      behavior_tree: estructura que contiene un arbol de comportamiento
  */
 
-Arbol* CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
+Arbol CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
 {
     int level = 0;
     Nodo *nodo = nullptr;
@@ -281,11 +282,11 @@ Arbol* CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
 
     //Se pasa a la lectura del archivo .xml
     //Prueba de lectura de nodos
-    pugi::xml_node tree = doc.child("BehaviorTree");
+    vector<pugi::xml_node> tree;
+    tree.push_back(doc.child("BehaviorTree"));
 
-    sacarNodo(tree, nodo, padre, level);
     cout << "FIN" << "\n" <<endl;
-    return behavior_tree;
+    return CrearArbolComportamiento(tree, nodo, padre, level);
 }
 
 void CargadorBehaviorTrees::guardarBehaviorTreeXml(string arbol)

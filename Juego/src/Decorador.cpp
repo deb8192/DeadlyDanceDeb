@@ -3,6 +3,11 @@
 
 using namespace std;
 
+Decorador::Decorador()
+{
+    
+}
+
 Decorador::Decorador(const char* name, int idxml, int type, int level, Nodo *father, const char* end, const char* alternative) : Nodo(name, idxml, type, level, father)
 {
     fin = end;
