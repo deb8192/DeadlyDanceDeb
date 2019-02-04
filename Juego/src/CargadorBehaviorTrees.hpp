@@ -44,7 +44,6 @@ class CargadorBehaviorTrees
         Arbol CrearArbolComportamiento(vector <pugi::xml_node>, Nodo *, Nodo *, int);
         Composicion* raiz;
         int * lista;
-        vector <Arbol> behavior_tree;
 
         void agregarHoja(pugi::xml_node rutapadre,hoja2 *, Arbol2 * arb);//recibe al padre por parametro
          

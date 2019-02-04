@@ -256,7 +256,6 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
 
 Arbol CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
 {
-    behavior_tree;
     int level = 0;
     Nodo *nodo = nullptr;
     Nodo *padre = nullptr;
@@ -287,8 +286,7 @@ Arbol CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
     tree.push_back(doc.child("BehaviorTree"));
 
     cout << "FIN" << "\n" <<endl;
-    behavior_tree.push_back(CrearArbolComportamiento(tree, nodo, padre, level));
-    return behavior_tree.back();
+    return CrearArbolComportamiento(tree, nodo, padre, level);
 }
 
 void CargadorBehaviorTrees::guardarBehaviorTreeXml(string arbol)

@@ -613,7 +613,7 @@ Arbol * Enemigo::getArbol()
 void Enemigo::runIA()
 {
     //aun por determinar primero definir bien la carga de arboles
-    int accion = arbol->ContinuarSiguienteNodo(true);//el true lo ponemos para detectar la primera ejecucion del bucle
+    arbol->ContinuarSiguienteNodo(true);//el true lo ponemos para detectar la primera ejecucion del bucle
     //bool salir = false;//cuando terminemos el arbol salimos
     /*while(!salir)
     {
