@@ -79,7 +79,6 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
     MotorGrafico * motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
     pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
     //ia
-        CargadorBehaviorTrees cargadorIA;
         //cargadorIA.cargarBehaviorTreeXml("PolloBT");
         ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
     //fin ia
@@ -504,10 +503,12 @@ void Nivel::InteractuarNivel()
     }
     //cout << "cambia: " << cambia << endl; //esto es para ver cuantas iteraciones de bucle pasan cuando coge objeto
 }
-
-
-
-
+/************** Update *************
+ * Bucle de actualizacion del juego
+ * Entradas:
+ * 
+ * Salidas:
+ */
 void Nivel::update()
 {
     MotorFisicas* fisicas = MotorFisicas::getInstance();
@@ -779,7 +780,7 @@ void Nivel::updateIA()
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     //En esta parte muere jugador
-    if(motor->estaPulsado(16)){//SI PULSO 'J' MUERE JUGADOR
+    if(motor->estaPulsado(KEY_J)){//SI PULSO 'J' MUERE JUGADOR
         jugador.MuereJugador();
     }
     if(jugador.estasMuerto()){
@@ -811,8 +812,8 @@ void Nivel::updateIA()
                 else
                 {
                     //si no esta muerto ni piensa morirse XD ejecutamos ia
-                    //cout<< "Ejecuto ia: " << i << endl;
-                    //enemigos[i]->runIA();
+                    cout<< "Ejecuto ia: " << i << endl;
+                    enemigos[i]->runIA();
                 }
             }
         }
