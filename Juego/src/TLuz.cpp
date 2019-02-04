@@ -10,6 +10,16 @@ TLuz::~TLuz()
 
 }
 
+void TLuz::setIntensidad(float *)
+{
+
+}
+
+float * TLuz::getIntensidad()
+{
+
+}
+
 void TLuz::beginDraw()
 {
 
