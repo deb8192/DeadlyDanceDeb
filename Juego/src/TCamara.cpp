@@ -3,7 +3,7 @@
 //constructor y destructor
 TCamara::TCamara()
 {
-
+    didentidad = 'C'; //para sabe que funcion hace
 }
 
 TCamara::~TCamara()
@@ -11,6 +11,11 @@ TCamara::~TCamara()
 
 }
         
+void TCamara::remove()
+{
+    this->~TCamara();
+}
+
 //gestion de propiedades
 void TCamara::setPerspectiva()
 {
@@ -24,7 +29,7 @@ void TCamara::setParalela()
 
 void TCamara::beginDraw()
 {
-    
+    std::cout << didentidad << std::endl;
 }
 
 void TCamara::endDraw()

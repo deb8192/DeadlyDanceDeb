@@ -12,7 +12,7 @@ class TMalla : public TEntidad
         // Constructor y destructor
         TMalla();
         ~TMalla();
-        
+        void remove();
         // Propiedades 
         void cargarMalla();
         

@@ -12,7 +12,8 @@ class TTransform : public TEntidad
         //constructor y destructor
         TTransform();
         ~TTransform();
-
+        void remove();
+        
         //gestion matriz
         void identidad();
         void cargar(float *);
