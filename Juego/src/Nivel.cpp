@@ -28,7 +28,7 @@ Nivel::Nivel()
 void Nivel::LimpiarNivel()
 {
 
-    //para ejecucion de la ia y interpolado
+    /*//para ejecucion de la ia y interpolado
 
     id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
 
@@ -83,7 +83,7 @@ void Nivel::LimpiarNivel()
 
     //jugador.~Jugador();//limpiamos jugador
     jugador = Jugador();//volvemos a crear jugador
-
+*/
 }
 
 bool Nivel::CargarNivel(int level)
