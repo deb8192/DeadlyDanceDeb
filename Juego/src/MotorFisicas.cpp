@@ -737,6 +737,21 @@ void MotorFisicas::limpiarFisicas()
         plataformas.resize(0);
     }
 
+    if(interactuables.size() > 0)
+    {
+        for(std::size_t i=0 ; i < interactuables.size() ; i++)
+        {
+            if(interactuables[i])
+            {
+                space->destroyCollisionBody(interactuables[i]);
+            }
+            interactuables[i] = nullptr;
+            interactuables.erase(interactuables.begin() + i);
+        }
+
+        interactuables.resize(0);
+    }
+
 }
 
 unsigned int MotorFisicas::GetRelacionInteractuablesObstaculos(int n)
