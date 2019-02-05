@@ -1182,8 +1182,8 @@ void Nivel::updateIA()
                     else
                     {
                         //si no esta muerto ni piensa morirse XD ejecutamos ia
-                        //cout<< "Ejecuto ia: " << i << endl;
-                        //enemigos[i]->runIA();
+                        cout<< "Ejecuto ia: " << i << endl;
+                        enemigos[i]->runIA();
                     }
                 }
             }

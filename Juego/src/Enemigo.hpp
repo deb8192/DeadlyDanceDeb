@@ -128,6 +128,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         const char * rutaArmaEspecial = "assets/models/objeto.obj";
         Arbol *arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
+        bool accionRealizada; //
 };
 
 #endif
