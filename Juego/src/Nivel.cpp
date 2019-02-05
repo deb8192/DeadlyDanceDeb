@@ -19,7 +19,6 @@ Nivel::Nivel()
     ejecutar = false;
     destinoPathFinding = nullptr;
     fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
-    id = 0;
     controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
     drawTime = 0.0f;
     lastDrawTime = drawTime;
@@ -32,16 +31,16 @@ void Nivel::LimpiarNivel()
 
     id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
 
-    cout << "se entra en borrar enemigos" << endl;
-
     borrarEnemigos();
 
     if(recolectables.size() > 0)
     {
         for(std::size_t i=0 ; i < recolectables.size() ; i++)
         {
-            int numero = (int)i;
-            delete recolectables[numero];
+            if(recolectables[i] != nullptr && recolectables[i])
+            {
+                recolectables[i]->remove();
+            }
             recolectables[i] = nullptr;
         }
 
@@ -52,7 +51,10 @@ void Nivel::LimpiarNivel()
     {
         for(std::size_t i=0 ; i < interactuables.size() ; i++)
         {
-            delete interactuables[i];
+            if(interactuables[i] != nullptr && interactuables[i])
+            {
+                interactuables[i]->remove();
+            }
             interactuables[i] = nullptr;
         }
 
@@ -63,7 +65,10 @@ void Nivel::LimpiarNivel()
     {
         for(std::size_t i=0 ; i < zonas.size() ; i++)
         {
-            delete zonas[i];
+            if(zonas[i] != nullptr && zonas[i])
+            {
+                zonas[i]->~Zona();
+            }
             zonas[i] = nullptr;
         }
 
@@ -74,7 +79,10 @@ void Nivel::LimpiarNivel()
     {
         for(std::size_t i=0 ; i < powerup.size() ; i++)
         {
-            delete powerup[i];
+            if(powerup[i] != nullptr && powerup[i])
+            {
+                powerup[i]->remove();
+            }
             powerup[i] = nullptr;
         }
 
@@ -750,6 +758,7 @@ void Nivel::InteractuarNivel()
  */
 void Nivel::update()
 {
+
     MotorGrafico * motor = MotorGrafico::getInstance();
 
     if(motor->estaPulsado(KEY_J))
@@ -760,6 +769,19 @@ void Nivel::update()
 
     if(ejecutar)
     {
+        if(jugador.estasMuerto())
+        {
+            if(jugador.estasMuerto() && jugador.finalAnimMuerte())
+            {
+                NoEjecutar();//se dehsabilita ejecucion de updates
+                return;
+            }else{
+                if(jugador.estasMuerto()){
+                    jugador.MuereJugador();
+                }
+            }
+        }
+
         MotorFisicas* fisicas = MotorFisicas::getInstance();
         MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
@@ -1098,7 +1120,8 @@ void Nivel::updateIA()
         if(motor->estaPulsado(KEY_J)){//SI PULSO 'J' MUERE JUGADOR
             jugador.MuereJugador();
         }
-        if(jugador.estasMuerto()){
+        if(jugador.estasMuerto())
+        {
             if(jugador.estasMuerto() && jugador.finalAnimMuerte())
             {
                 NoEjecutar();//se dehsabilita ejecucion de updates

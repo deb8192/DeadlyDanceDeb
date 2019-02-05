@@ -12,7 +12,7 @@ class Zona
         //Constructor y destructor
         Zona(int anc, int lar, int alt, const char *tip);
         ~Zona();
-
+        
         //set atributos
         void setPosiciones(float newx,float newy,float newz);
         void setProposito(bool p);
