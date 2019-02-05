@@ -12,7 +12,8 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         Interactuable();         //esto le deja a la entidad el constructor por defecto
         Interactuable(int codigo, const char * nombre, int anc, int lar, int alt, const char *objeto, const char *textura, int posicion);
         ~Interactuable();
-
+        void remove();
+        
         //metodos de interaccion
         bool accionar();
 

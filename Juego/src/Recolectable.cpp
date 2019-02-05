@@ -11,6 +11,11 @@ Recolectable::~Recolectable()
 
 }
 
+void Recolectable::remove()
+{
+    this->~Recolectable();
+}
+
 Recolectable::Recolectable(int codigo, int ataque, const char *nombre, int anc, int lar, int alt, const char *objeto, const char *textura)
 {
     std::string name_objeto(objeto);
