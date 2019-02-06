@@ -170,7 +170,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
             deco = (Decorador*) nodoEnEjecucionDirecta;
         }
         //El bucle continua mientras el nodo actual no sea una tarea o tenga hijos para descender
-        while((std::strcmp(nodoEnEjecucionDirecta->getNombre(), HOJA) != 0 && 
+        while(((nodoEnEjecucionDirecta != nullptr && std::strcmp(nodoEnEjecucionDirecta->getNombre(), HOJA) != 0) && 
         (compo != nullptr && strcmp(compo->GetAccion(), FALSO) == 0) && desciende) || primeraVez)
         {
             if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), RAIZ) == 0)
@@ -192,7 +192,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
             {
                 i = 0;
                 //Se accede al hijo que toca en funcion del ultimo ID registrado en el recorrido
-                while(ID >= comp->getHijos().at(i)->getID() && i < comp->getHijos().size())
+                while(i < comp->getHijos().size() && ID >= comp->getHijos().at(i)->getID())
                 {
                     i++;
                 }
@@ -270,7 +270,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                 }
 
                 //Se accede al hijo que toca en funcion del ultimo ID registrado en el recorrido
-                while(ID >= deco->getHijos().at(i)->getID() && i < deco->getHijos().size())
+                while(i < deco->getHijos().size() && ID >= deco->getHijos().at(i)->getID())
                 {
                     i++;
                 }
@@ -372,14 +372,14 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
             {
                 arrayTareaObjetivo[0] = -1;
                 arrayTareaObjetivo[1] = -1;
-                return 0;
+                return arrayTareaObjetivo;
             }
         }
         else
         {
             arrayTareaObjetivo[0] = -1;
             arrayTareaObjetivo[1] = -1;
-            return 0;
+            return arrayTareaObjetivo;
         }
         
     }
@@ -392,7 +392,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
             desciende = false;
             arrayTareaObjetivo[0] = -1;
             arrayTareaObjetivo[1] = -1;
-            return 0;
+            return arrayTareaObjetivo;
         }
         else
         {
@@ -400,7 +400,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
             ID++;
             arrayTareaObjetivo[0] = -1;
             arrayTareaObjetivo[1] = -1;
-            return 0;
+            return arrayTareaObjetivo;
         }
     }  
     return arrayTareaObjetivo;

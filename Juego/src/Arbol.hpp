@@ -40,7 +40,7 @@ class Arbol
 
         //Comparadores de la lectura de las acciones y objetivos de las tareas
         const char* MOVERSE = "moverse";
-        const char* ATACAR = "atacar";
+        const char* ATACAR = "ataca";
 
         const char* JUGADOR = "jugador";
         const char* ZONA_COFRES = "zona-cofres";

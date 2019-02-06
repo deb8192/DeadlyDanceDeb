@@ -11,7 +11,8 @@ class pollo : public Enemigo
         pollo();
         void runIA();
 
-    protected:
+    private:
+        bool funciona;
 
 };
 

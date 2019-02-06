@@ -118,7 +118,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         //activar ia
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
         Arbol *getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
-        int* runIA();//corre la ia del enemigo
+        int* runIA(bool);//corre la ia del enemigo
         //fin ia
 
     protected:

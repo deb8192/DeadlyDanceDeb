@@ -537,7 +537,7 @@ void Jugador::AtacarEspecialUpdate(int *danyo)
 void Jugador::QuitarVida(int can)
 {
   vida-=can;
-  this->AumentarBarraAtEs(5);
+  this->AumentarBarraAtEs(can);
 }
 
 void Jugador::RecuperarVida(int can)

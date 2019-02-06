@@ -11,13 +11,27 @@ Composicion::Composicion(const char* name, int idxml, int type, int level, Nodo 
 {
     
     aleatorio = random;
-    accion = action;
-    objetivo = target;
+
+    std::string actionComp(action);
+    char * cadena_accion = new char[sizeof(actionComp)];
+    strcpy(cadena_accion, actionComp.c_str());
+
+    std::string targetComp(target);
+    char * cadena_objetivo = new char[sizeof(targetComp)];
+    strcpy(cadena_objetivo, targetComp.c_str());
+
+    accion = cadena_accion;
+    objetivo = cadena_objetivo;
     if(std::strcmp(blackboard, "true") == 0)
     {
+
+        std::string tareaInfo(information);
+        char * cadena_info = new char[sizeof(tareaInfo)];
+        strcpy(cadena_info, tareaInfo.c_str());
+
         pizarra = true;
         tarea = task;
-        info = information;
+        info = cadena_info;
     }
     else
     {
