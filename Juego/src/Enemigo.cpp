@@ -590,6 +590,11 @@ void Enemigo::setAtackTime(float t)
   atacktime = t;
 }
 
+void Enemigo::SetNombre(const char* name)
+{
+    nombre = name;
+}
+
 float Enemigo::getAtackTime()
 {
   return atacktime;
@@ -614,6 +619,11 @@ float Enemigo::getLastTimeAtEsp()
 {
     return lastAtackEspTime;
 }
+
+const char* Enemigo::GetNombre()
+{
+    return nombre;
+}
 //ia
 
 void Enemigo::setArbol(Arbol ia)
@@ -626,10 +636,10 @@ Arbol * Enemigo::getArbol()
     return arbol;
 }
 
-void Enemigo::runIA()
+int* Enemigo::runIA()
 {
     //aun por determinar primero definir bien la carga de arboles
-    arbol->ContinuarSiguienteNodo(true);//el true lo ponemos para detectar la primera ejecucion del bucle
+    return arbol->ContinuarSiguienteNodo(true);//el true lo ponemos para detectar la primera ejecucion del bucle
     //bool salir = false;//cuando terminemos el arbol salimos
     /*while(!salir)
     {

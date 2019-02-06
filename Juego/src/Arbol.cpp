@@ -151,6 +151,7 @@ void Arbol::finBucleDecorador()
 int* Arbol::ContinuarSiguienteNodo(bool exito)
 {
     Composicion *comp = nullptr;
+    Composicion *compo = nullptr;
     Decorador *deco = nullptr;
     bool desciende = true;  //Permite o bloquea el descenso segun si hay mas hijos o no
     bool primeraVez = true;
@@ -162,6 +163,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
         if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), RAIZ) == 0)
         {
             comp = (Composicion*) nodoEnEjecucionDirecta;
+            compo = comp;
         }
         else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
         {
@@ -169,7 +171,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
         }
         //El bucle continua mientras el nodo actual no sea una tarea o tenga hijos para descender
         while((std::strcmp(nodoEnEjecucionDirecta->getNombre(), HOJA) != 0 && 
-        (comp != nullptr && strlen(comp->GetAccion()) != 0) && desciende) || primeraVez)
+        (compo != nullptr && strcmp(compo->GetAccion(), FALSO) == 0) && desciende) || primeraVez)
         {
             if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), RAIZ) == 0)
             {
@@ -199,6 +201,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                 if(i < comp->getHijos().size())
                 {
                     nodoEnEjecucionDirecta = comp->getHijos().at(i);
+                    comp = (Composicion*) nodoEnEjecucionDirecta;
                     ID++;
                 }
 
@@ -289,41 +292,87 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
             {
                 nodoEnEjecucionDirecta = nodoEnEjecucionDirecta->getPadre();
             }
+            compo = comp;
             comp = nullptr;
             deco = nullptr;
         }
         if(nodoEnEjecucionDirecta != nullptr)
         {
-            Hoja  *hoja = (Hoja*) nodoEnEjecucionDirecta;
-            //Se indican la tarea y el objetivo a ejecutar
-            //Tarea
-            const char* accion = hoja->GetAccion();
-            if(strcmp(accion, MOVERSE) == 0)
+            if(strcmp(nodoEnEjecucionDirecta->getNombre(), HOJA) == 0)
             {
-                arrayTareaObjetivo[0] = 0;
+                Hoja  *hoja = (Hoja*) nodoEnEjecucionDirecta;
+                //Se indican la tarea y el objetivo a ejecutar
+                //Tarea
+                const char* accion = hoja->GetAccion();
+                if(strcmp(accion, MOVERSE) == 0)
+                {
+                    arrayTareaObjetivo[0] = 0;
+                }
+                else if(strcmp(accion, ATACAR) == 0)
+                {
+                    arrayTareaObjetivo[0] = 1;
+                }
+                else
+                {
+                    arrayTareaObjetivo[0] = -1;
+                }
+
+                //Objetivo
+                const char* objetivo = hoja->GetObjetivo();
+                if(strcmp(objetivo, JUGADOR) == 0)
+                {
+                    arrayTareaObjetivo[1] = 0;
+                }
+                else if(strcmp(objetivo, ZONA_COFRES) == 0)
+                {
+                    arrayTareaObjetivo[1] = 1;
+                }
+                else
+                {
+                    arrayTareaObjetivo[1] = -1;
+                }
             }
-            else if(strcmp(accion, ATACAR) == 0)
+            else if(strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
             {
-                arrayTareaObjetivo[0] = 1;
+                /*if(strcmp(compo->GetAccion(), FALSO) != 0)
+                {
+                    //Se indican la tarea y el objetivo a ejecutar
+                    //Tarea
+                    const char* accion = compo->GetAccion();
+                    if(strcmp(accion, MOVERSE) == 0)
+                    {
+                        arrayTareaObjetivo[0] = 0;
+                    }
+                    else if(strcmp(accion, ATACAR) == 0)
+                    {
+                        arrayTareaObjetivo[0] = 1;
+                    }
+                    else
+                    {
+                        arrayTareaObjetivo[0] = -1;
+                    }
+
+                    //Objetivo
+                    const char* objetivo = comp->GetObjetivo();
+                    if(strcmp(objetivo, JUGADOR) == 0)
+                    {
+                        arrayTareaObjetivo[1] = 0;
+                    }
+                    else if(strcmp(objetivo, ZONA_COFRES) == 0)
+                    {
+                        arrayTareaObjetivo[1] = 1;
+                    }
+                    else
+                    {
+                        arrayTareaObjetivo[1] = -1;
+                    }
+                }*/
             }
             else
             {
                 arrayTareaObjetivo[0] = -1;
-            }
-
-            //Objetivo
-            const char* objetivo = hoja->GetObjetivo();
-            if(strcmp(objetivo, JUGADOR) == 0)
-            {
-                arrayTareaObjetivo[1] = 0;
-            }
-            else if(strcmp(objetivo, ZONA_COFRES) == 0)
-            {
-                arrayTareaObjetivo[1] = 1;
-            }
-            else
-            {
                 arrayTareaObjetivo[1] = -1;
+                return 0;
             }
         }
         else
