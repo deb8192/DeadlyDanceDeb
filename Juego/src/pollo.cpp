@@ -9,3 +9,8 @@ pollo::~pollo()
 {
 
 }
+
+void pollo::runIA()
+{
+    Enemigo::runIA();
+}

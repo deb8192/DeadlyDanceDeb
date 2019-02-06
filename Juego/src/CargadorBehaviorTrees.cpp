@@ -150,9 +150,7 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                     padre = raiz;
                 }
                 arbol = new Arbol(raiz, raiz->getNombre());
-                //behavior_tree.push_back(*arbol); 
                 cout<<"Se crea arbol"<<"\n"<<endl;
-            //Faltaria comprobar otro tipo de nodos raiz pero principalmente seran secuencias o selectores
             }
             //Se crean el resto de nodos del arbol
             else if(std::strcmp(tool.name(), COMPOSICION) == 0)

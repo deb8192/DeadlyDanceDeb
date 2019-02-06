@@ -25,12 +25,12 @@ Hoja::Hoja(const char* name, int idxml, int type, int level, Nodo* father, const
     }
 }
 
-std::string Hoja::GetAccion()
+const char* Hoja::GetAccion()
 {
     return accion;
 }
 
-std::string Hoja::GetObjetivo()
+const char* Hoja::GetObjetivo()
 {
     return objetivo;
 }

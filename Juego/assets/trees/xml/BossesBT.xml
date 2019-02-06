@@ -2,7 +2,7 @@
 <BehaviorTree>
     <Root id="1" type="selector">
         <Composition id="2" type="secuencia">
-            <Leaf id="3" type="tarea" action="comprueba" target="max-vida-boss<=25%"></Leaf>
+            <Leaf id="3" type="tarea" action="comprueba" target="max-vida-boss=25%"></Leaf>
             <Leaf id="4" type="tarea" action="cambia" target="modo-peligro">
                 <Blackboard task="escribe" info="modo-peligro"></Blackboard>
             </Leaf>
@@ -12,7 +12,7 @@
                 <Blackboard task="lee" info="modo-peligro"></Blackboard>
             </Leaf>
             <Composition id="7" type="secuencia-aleatoria">
-                <Decorator id="8" type="iterador" end="0-2">
+                <Decorator id="8" type="iterador" end="random">
                     <Composition id="9" type="tarea" content="ataca">
                         <Blackboard task="lee" info="probabilidad-ataque-especial"></Blackboard>
                         <Composition id="10" type="selector">
@@ -32,7 +32,7 @@
                 </Decorator>
                 <Leaf id="18" type="tarea" action="defensa" target=""></Leaf>
                 <Leaf id="19" type="tarea" action="moverse" target=""></Leaf>
-                <Decorator id="20" type="iterador" end="0-2">
+                <Decorator id="20" type="iterador" end="random">
                     <Composition id="21" type="tarea" action="ataca">
                         <Blackboard task="lee" info="probabilidad-ataque-especial"></Blackboard>
                         <Composition id="22" type="selector">
@@ -51,7 +51,7 @@
                     </Composition>
                 </Decorator>
                 <Leaf id="29" type="tarea" action="defensa" target=""></Leaf>
-                <Decorator id="30" type="iterador" end="0-2">
+                <Decorator id="30" type="iterador" end="random">
                     <Composition id="31" type="tarea" action="atacar" target="jugador">
                         <Blackboard task="lee" info="probabilidad-ataque-especial"></Blackboard>
                         <Composition id="32" type="selector">
@@ -73,7 +73,7 @@
             </Composition>
         </Composition>
         <Composition id="40" type="secuencia-aleatoria">
-            <Decorator id="41" type="iterador" end="0-2">
+            <Decorator id="41" type="iterador" end="random">
                 <Composition id="42" type="tarea" action="atacar" target="jugador">
                     <Blackboard task="lee" info="probabilidad-ataque-especial"></Blackboard>
                     <Composition id="43" type="selector">
@@ -87,7 +87,7 @@
                 </Composition>
             </Decorator>
             <Leaf id="47" type="tarea" action="defensa" target=""></Leaf>
-            <Decorator id="48" type="iterador" end="0-2">
+            <Decorator id="48" type="iterador" end="random">
                 <Composition id="49" type="tarea" action="ataca" target="jugador">
                     <Blackboard task="lee" info="probabilidad-ataque-especial"></Blackboard>
                     <Composition id="50" type="selector">

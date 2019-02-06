@@ -4,8 +4,10 @@ Arbol::Arbol(Nodo *root, const char* name)
 {
     raiz = root;
     nodoEnEjecucionDirecta = nullptr;
+    arrayTareaObjetivo = new int[2];
     ID = 0;
 }
+
 /**************     anyadirHijosComposicion      *****************
  * Funcion que anyade un hijo de tipo composicion al arbol
  * Entradas:
@@ -137,42 +139,60 @@ Nodo* Arbol::anyadirHijo(Nodo * nod)
     return nullptr;
 }
 
-int Arbol::ContinuarSiguienteNodo(bool primeraVez)
+void Arbol::finBucleDecorador()
 {
-    Composicion *comp;
-    Decorador *deco;
+    finBucle.pop_back();
+    if(finBucle.empty())
+    {
+        bucleDecorador = false;
+    }
+}
+
+int* Arbol::ContinuarSiguienteNodo(bool exito)
+{
+    Composicion *comp = nullptr;
+    Composicion *compo = nullptr;
+    Decorador *deco = nullptr;
     bool desciende = true;  //Permite o bloquea el descenso segun si hay mas hijos o no
+    bool primeraVez = true;
+    unsigned int i = 0;
     
     //Si el arbol de esta recorrendo
     if(nodoEnEjecucionDirecta != nullptr) //TO DO
-    {
+    {        
         if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), RAIZ) == 0)
         {
             comp = (Composicion*) nodoEnEjecucionDirecta;
+            compo = comp;
         }
         else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
         {
             deco = (Decorador*) nodoEnEjecucionDirecta;
         }
-        
         //El bucle continua mientras el nodo actual no sea una tarea o tenga hijos para descender
         while((std::strcmp(nodoEnEjecucionDirecta->getNombre(), HOJA) != 0 && 
-        (comp != nullptr && comp->GetAccion() != "") && desciende) || primeraVez)
+        (compo != nullptr && strcmp(compo->GetAccion(), FALSO) == 0) && desciende) || primeraVez)
         {
-            comp = (Composicion*) nodoEnEjecucionDirecta;
+            if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), RAIZ) == 0)
+            {
+                comp = (Composicion*) nodoEnEjecucionDirecta;
+            }
+            else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
+            {
+                deco = (Decorador*) nodoEnEjecucionDirecta;
+            }
             //Es para asegurar que entra en el recorrido en caso de que tenga que ascender
             if(primeraVez)
             {
                 primeraVez = false;
             }
 
-            unsigned int i = 0;
             //Si el nodo actual es una composicion se hace downcasting hacia dicha clase
             if(comp != nullptr)
             {
-
+                i = 0;
                 //Se accede al hijo que toca en funcion del ultimo ID registrado en el recorrido
-                while(ID >= comp->getHijos().at(i)->getID())
+                while(ID >= comp->getHijos().at(i)->getID() && i < comp->getHijos().size())
                 {
                     i++;
                 }
@@ -181,6 +201,7 @@ int Arbol::ContinuarSiguienteNodo(bool primeraVez)
                 if(i < comp->getHijos().size())
                 {
                     nodoEnEjecucionDirecta = comp->getHijos().at(i);
+                    comp = (Composicion*) nodoEnEjecucionDirecta;
                     ID++;
                 }
 
@@ -202,9 +223,54 @@ int Arbol::ContinuarSiguienteNodo(bool primeraVez)
             //Si el nodo actual es un decorador se hace downcasting hacia dicha clase
             else if(deco != nullptr)
             {
-                deco = (Decorador*) nodoEnEjecucionDirecta;
+                //Se comprueba el ID del decorador para saber si coincide y entra
+                if(deco->getID() == ID)
+                {
+                    //Se detecta que tipo de final tiene el bucle del decorador
+                    
+                    const char * finalDecorador = deco->GetFin();
+
+                    if(strcmp(finalDecorador, VERDADERO) == 0)
+                    {
+                        finBucle.push_back(0);
+                    }
+                    else if(strcmp(finalDecorador, RANDOM) == 0)
+                    {
+                        finBucle.push_back(1);
+                    }
+                    else
+                    {
+                        finBucle.push_back(-1);
+                    }
+                    bucleDecorador = true;
+                }
+
+                //Se comprueba el ID del ultimo hijo del decorador para saber si sale
+                else if(deco->getHijos().back()->getID() < ID && exito)
+                {
+                    if(finBucle.back() > 0)
+                    {
+                        contadorRandom--;
+                        if(contadorRandom == 0)
+                        {
+                            this->finBucleDecorador();
+                        }
+                    }
+                    else if (finBucle.back() == 0)
+                    {
+                        this->finBucleDecorador();
+                    }
+                }
+
+                //Si algun hijo falla en su tarea, el booleano es falso por lo tanto se igual el contador ID
+                //al del decorador para volver a entrar al bucle
+                else if(!exito)
+                {
+                    ID = nodoEnEjecucionDirecta->getID();
+                }
+
                 //Se accede al hijo que toca en funcion del ultimo ID registrado en el recorrido
-                while(ID >= deco->getHijos().at(i)->getID())
+                while(ID >= deco->getHijos().at(i)->getID() && i < deco->getHijos().size())
                 {
                     i++;
                 }
@@ -221,38 +287,123 @@ int Arbol::ContinuarSiguienteNodo(bool primeraVez)
                     nodoEnEjecucionDirecta = nodoEnEjecucionDirecta->getPadre();
                 }
             }
+            //En caso contrario, se asciende por el arbol para cambiar de rama
+            else
+            {
+                nodoEnEjecucionDirecta = nodoEnEjecucionDirecta->getPadre();
+            }
+            compo = comp;
+            comp = nullptr;
+            deco = nullptr;
         }
         if(nodoEnEjecucionDirecta != nullptr)
         {
-            return 1;
+            if(strcmp(nodoEnEjecucionDirecta->getNombre(), HOJA) == 0)
+            {
+                Hoja  *hoja = (Hoja*) nodoEnEjecucionDirecta;
+                //Se indican la tarea y el objetivo a ejecutar
+                //Tarea
+                const char* accion = hoja->GetAccion();
+                if(strcmp(accion, MOVERSE) == 0)
+                {
+                    arrayTareaObjetivo[0] = 0;
+                }
+                else if(strcmp(accion, ATACAR) == 0)
+                {
+                    arrayTareaObjetivo[0] = 1;
+                }
+                else
+                {
+                    arrayTareaObjetivo[0] = -1;
+                }
+
+                //Objetivo
+                const char* objetivo = hoja->GetObjetivo();
+                if(strcmp(objetivo, JUGADOR) == 0)
+                {
+                    arrayTareaObjetivo[1] = 0;
+                }
+                else if(strcmp(objetivo, ZONA_COFRES) == 0)
+                {
+                    arrayTareaObjetivo[1] = 1;
+                }
+                else
+                {
+                    arrayTareaObjetivo[1] = -1;
+                }
+            }
+            else if(strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+            {
+                /*if(strcmp(compo->GetAccion(), FALSO) != 0)
+                {
+                    //Se indican la tarea y el objetivo a ejecutar
+                    //Tarea
+                    const char* accion = compo->GetAccion();
+                    if(strcmp(accion, MOVERSE) == 0)
+                    {
+                        arrayTareaObjetivo[0] = 0;
+                    }
+                    else if(strcmp(accion, ATACAR) == 0)
+                    {
+                        arrayTareaObjetivo[0] = 1;
+                    }
+                    else
+                    {
+                        arrayTareaObjetivo[0] = -1;
+                    }
+
+                    //Objetivo
+                    const char* objetivo = comp->GetObjetivo();
+                    if(strcmp(objetivo, JUGADOR) == 0)
+                    {
+                        arrayTareaObjetivo[1] = 0;
+                    }
+                    else if(strcmp(objetivo, ZONA_COFRES) == 0)
+                    {
+                        arrayTareaObjetivo[1] = 1;
+                    }
+                    else
+                    {
+                        arrayTareaObjetivo[1] = -1;
+                    }
+                }*/
+            }
+            else
+            {
+                arrayTareaObjetivo[0] = -1;
+                arrayTareaObjetivo[1] = -1;
+                return 0;
+            }
         }
         else
         {
+            arrayTareaObjetivo[0] = -1;
+            arrayTareaObjetivo[1] = -1;
             return 0;
         }
         
     }
 
     else
+    {
+        //Se comienza a recorrer el arbol
+        if(raiz == nullptr) //si es nula la raiz no se ha definido arbol
         {
-            //Se comienza a recorrer el arbol
-            if(raiz == nullptr) //si es nula la raiz no se ha definido arbol
-            {
-                desciende = false;
-                return 0;
-            }
-            else
-            {
-                nodoEnEjecucionDirecta = raiz;   //Obtenemos la raiz del arbol
-                ID++;
-                return 1;
-            }
+            desciende = false;
+            arrayTareaObjetivo[0] = -1;
+            arrayTareaObjetivo[1] = -1;
+            return 0;
         }
-    
-    
-
-    estado = true;//sale arbol*/
-    return 0;//no hace nada
+        else
+        {
+            nodoEnEjecucionDirecta = raiz;   //Obtenemos la raiz del arbol
+            ID++;
+            arrayTareaObjetivo[0] = -1;
+            arrayTareaObjetivo[1] = -1;
+            return 0;
+        }
+    }  
+    return arrayTareaObjetivo;
 }
 
 Nodo * Arbol::GetRaiz()
