@@ -227,7 +227,7 @@ int Enemigo::Atacar()
       //MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
       //Calcular posiciones
-      int distance= 2;
+      int distance= 5;
       atx = distance * sin(PI * getRY() / 180.0f) + getX();
       aty = getY();
       atz = distance * cos(PI * getRY() / 180.0f) + getZ();
@@ -636,10 +636,10 @@ Arbol * Enemigo::getArbol()
     return arbol;
 }
 
-int* Enemigo::runIA()
+int* Enemigo::runIA(bool funciona)
 {
     //aun por determinar primero definir bien la carga de arboles
-    return arbol->ContinuarSiguienteNodo(true);//el true lo ponemos para detectar la primera ejecucion del bucle
+    return arbol->ContinuarSiguienteNodo(funciona);//el true lo ponemos para detectar la primera ejecucion del bucle
     //bool salir = false;//cuando terminemos el arbol salimos
     /*while(!salir)
     {

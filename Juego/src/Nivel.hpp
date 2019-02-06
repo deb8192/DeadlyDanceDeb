@@ -83,6 +83,8 @@ class Nivel
         void crearObjetoCofre(Interactuable* newobjeto);
         void activarPowerUp();
 
+        Jugador * GetJugador();
+
         int getjix();
         int getjiy();
         int getjiz();

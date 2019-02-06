@@ -790,21 +790,6 @@ void Nivel::update()
         //animacion
         motor->cambiarAnimacionJugador(jugador.getAnimacion());
 
-        //valores nuevos de interpolacion
-
-
-        //Interpolacion SE SUSTITUIRA
-        /*newTime = clock();
-        frameTime = newTime - currentTime;
-        if(frameTime>0.25f)
-        {
-            frameTime=0.25f;
-        }
-        currentTime = newTime;
-        acumulator += frameTime;*/
-        //while(acumulator >= dt)
-        //{
-
         if(jugador.getArma() != nullptr)
         {
             float posArmaX = 5 * sin(PI * jugador.getRY() / PIRADIAN) + jugador.getX();
@@ -931,7 +916,7 @@ void Nivel::update()
                         //cout << "Enemigo " << i  << " pos: " << enemigos[i]->getPosAtaques() << endl;
 
                         //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
-                        if(enemigos[i]->getTimeAt() > 0.0f)
+                        /*if(enemigos[i]->getTimeAt() > 0.0f)
                         {
                             tiempoAtaque = enemigos[i]->getTimeAt();
                             tiempoAtaque -= (tiempoActual - enemigos[i]->getLastTimeAt());
@@ -949,7 +934,7 @@ void Nivel::update()
                         {
                             jugador.QuitarVida(danyo_jug);
                             cout<< "Vida jugador: "<< jugador.getVida() << endl;
-                        }
+                        }*/
                     }
                     //Se le quita vida con el danyo del ataque especial
                     else
@@ -1214,7 +1199,7 @@ void Nivel::updateIA()
                             enemPollo->runIA();
                         }
                         else
-                            enemigos[i]->runIA();
+                            enemigos[i]->runIA(true);
                     }
                 }
             }
@@ -1676,4 +1661,9 @@ void Nivel::ActivarLimpieza()
 bool Nivel::EstaLimpio()
 {
     return limpio;
+}
+
+Jugador * Nivel::GetJugador()
+{
+    return &jugador;
 }
