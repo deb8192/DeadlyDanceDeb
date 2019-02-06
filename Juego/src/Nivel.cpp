@@ -117,7 +117,7 @@ bool Nivel::CargarNivel(int level)
     return true;
 }
 
-void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearEnemigo(int accion, const char* nombre, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     //accion indicara futuramente que tipo de enemigo sera (herencia)
     MotorGrafico * motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
@@ -126,6 +126,7 @@ void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, in
         //cargadorIA.cargarBehaviorTreeXml("PolloBT");
         ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
     //fin ia
+    ene->SetNombre(nombre);
     ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     ene->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
@@ -1183,7 +1184,14 @@ void Nivel::updateIA()
                     {
                         //si no esta muerto ni piensa morirse XD ejecutamos ia
                         cout<< "Ejecuto ia: " << i << endl;
-                        enemigos[i]->runIA();
+                        const char * strg = "pollo";
+                        if(strcmp(enemigos[i]->GetNombre(), strg) == 0)
+                        {
+                            pollo *enemPollo = (pollo*) enemigos[i];
+                            enemPollo->runIA();
+                        }
+                        else
+                            enemigos[i]->runIA();
                     }
                 }
             }
