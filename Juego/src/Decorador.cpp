@@ -18,7 +18,18 @@ void Decorador::addHijo(Nodo* hijo)
 {
     hijos.push_back(hijo);
 }
+
 vector <Nodo*> Decorador::getHijos()
 {
     return hijos;
+}
+
+const char* Decorador::GetFin()
+{
+    return fin;
+}
+
+const char* Decorador::GetAlternativa()
+{
+    return alternativa;
 }

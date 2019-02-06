@@ -9,6 +9,7 @@ class pollo : public Enemigo
     public:
         ~pollo();
         pollo();
+        void runIA();
 
     protected:
 

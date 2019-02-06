@@ -40,12 +40,12 @@ bool Composicion::getAleatorio()
     return aleatorio;
 }
 
-std::string Composicion::GetAccion()
+const char* Composicion::GetAccion()
 {
     return accion;
 }
 
-std::string Composicion::GetObjetivo()
+const char* Composicion::GetObjetivo()
 {
     return objetivo;
 }

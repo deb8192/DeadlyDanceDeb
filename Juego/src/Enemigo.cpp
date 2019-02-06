@@ -273,8 +273,6 @@ int Enemigo::AtacarEspecial()
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
     if(vida > 0 && barraAtEs == por100)
     {
-        cout << "ATAQUE ESPECIAL ENEMIGO"<<endl;
-
         //Calcular posiciones si se inicia el ataque especial
         if(atackEspTime <= 0)
         {
@@ -328,7 +326,6 @@ int Enemigo::AtacarEspecial()
     }
     else
     {
-        cout << "No supera las restricciones"<<endl;
         barraAtEs += 1;
     }
     return danyo;
@@ -593,6 +590,11 @@ void Enemigo::setAtackTime(float t)
   atacktime = t;
 }
 
+void Enemigo::SetNombre(const char* name)
+{
+    nombre = name;
+}
+
 float Enemigo::getAtackTime()
 {
   return atacktime;
@@ -617,6 +619,11 @@ float Enemigo::getLastTimeAtEsp()
 {
     return lastAtackEspTime;
 }
+
+const char* Enemigo::GetNombre()
+{
+    return nombre;
+}
 //ia
 
 void Enemigo::setArbol(Arbol ia)
@@ -629,10 +636,10 @@ Arbol * Enemigo::getArbol()
     return arbol;
 }
 
-void Enemigo::runIA()
+int* Enemigo::runIA()
 {
     //aun por determinar primero definir bien la carga de arboles
-    arbol->ContinuarSiguienteNodo(true);//el true lo ponemos para detectar la primera ejecucion del bucle
+    return arbol->ContinuarSiguienteNodo(true);//el true lo ponemos para detectar la primera ejecucion del bucle
     //bool salir = false;//cuando terminemos el arbol salimos
     /*while(!salir)
     {

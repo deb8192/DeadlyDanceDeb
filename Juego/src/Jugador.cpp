@@ -396,7 +396,6 @@ int Jugador::AtacarEspecial()
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
     if(vida > 0 && barraAtEs == por100)
     {
-        cout << "Supera las restricciones, ATAQUE ESPECIAL"<<endl;
         //Calcular posiciones si se inicia el ataque especial
         setAnimacion(3);
         if(atackEspTime <= 0)
@@ -418,9 +417,6 @@ int Jugador::AtacarEspecial()
 
             //Posiciones en el mundo 3D
             armaEspecial->initPosicionesFisicas(atespx/2, getY()/2, atespz/2);
-            /*atespposX = (atespx/2);
-            atespposY = (getY()/2);
-            atespposZ = (atespz/2);*/
 
             //ATAQUE ESPECIAL DEL HEAVY
             if(strcmp(armaEspecial->getNombre(), NOMBREHEAVY) == 0)
@@ -454,20 +450,13 @@ int Jugador::AtacarEspecial()
         {
             critico += (float) danyoCritico / por100;
             critico = roundf(critico * por10) / por10;
-            cout<<"critico " << proAtaCritico << " " << critico <<endl;
         }
 
         //Se aplican todas las modificaciones en la variable danyo
         danyoF = ataque * critico * aumentosAtaque;
         danyo = roundf(danyoF * por10) / por10;
-        cout << "daño: " <<danyo<<endl;
         barraAtEs = 0;
         return danyo;
-    }
-    else
-    {
-        cout << "No supera las restricciones"<<endl;
-        barraAtEs = por100;
     }
     return danyo;
 }
