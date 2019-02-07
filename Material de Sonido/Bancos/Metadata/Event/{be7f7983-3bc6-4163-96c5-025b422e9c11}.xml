@@ -31,6 +31,9 @@
         <relationship name="timeline">
             <destination>{5647f077-010f-4744-8aff-06bf45d4d805}</destination>
         </relationship>
+        <relationship name="banks">
+            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
+        </relationship>
     </object>
     <object class="EventMixer" id="{8f1fba07-155b-4964-9cf0-f23c7bcd6d0e}">
         <relationship name="masterBus">
@@ -87,10 +90,13 @@
     <object class="MixerBusPanner" id="{34846a63-a137-415b-aaa2-6389ae465e99}"/>
     <object class="SingleSound" id="{a4e46cb9-3e8e-4601-80d6-162bf50672de}">
         <property name="length">
-            <value>3.5</value>
+            <value>1.8</value>
         </property>
         <property name="timelockedOffset">
             <value>0.5</value>
+        </property>
+        <property name="pitch">
+            <value>11</value>
         </property>
         <relationship name="fadeInCurve">
             <destination>{36fc4d99-cd14-4b42-8d63-aebaf91b63f8}</destination>
