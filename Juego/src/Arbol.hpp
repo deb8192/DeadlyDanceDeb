@@ -15,6 +15,7 @@ class Arbol
         int* ContinuarSiguienteNodo(bool);
         Nodo* GetRaiz();
         Nodo* GetNodoEnEjecucionDirecta();
+        Composicion* devolverPadre();
     private:
         
         void finBucleDecorador();
