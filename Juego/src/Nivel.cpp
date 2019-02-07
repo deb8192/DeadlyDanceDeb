@@ -113,6 +113,7 @@ bool Nivel::CargarNivel(int level)
 
     motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     motora->getEvent("Nivel1")->start(); //Reproducir musica juego
+    motora->getEvent("AmbienteGritos")->start(); //Reproducir ambiente
 
     motor->cargarInterfaz();
     //esta ya todo ejecutamos ia y interpolado
