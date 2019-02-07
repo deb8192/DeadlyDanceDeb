@@ -24,8 +24,10 @@ MotorAudioSystem::MotorAudioSystem()
   FMOD::Studio::Bank* pBank;
   ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/Music.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
   if(pBank)banks["Music"] = pBank; //Insertar en el mapa de Bancos
-  ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/HardFX.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
-  if(pBank)banks["HardFX"] = pBank; //Insertar en el mapa de Bancos
+  ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/SFX.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
+  if(pBank)banks["SFX"] = pBank; //Insertar en el mapa de Bancos
+  ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/Ambient.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
+  if(pBank)banks["Ambient"] = pBank; //Insertar en el mapa de Bancos
 
   //Cargar eventos
   LoadEvent("event:/Musica/Musica-situacion estandar n1","Nivel1");
@@ -38,6 +40,7 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/SFX/SFX-Objetos Chirrido de abrir puerta","AbrirPuerta");
   LoadEvent("event:/SFX/SFX-Objetos Cerrar puerta","CerrarPuerta");
   LoadEvent("event:/SFX/SFX-Objetos Abrir cerradura con llave","AbrirCerradura");
+  LoadEvent("event:/Ambientes/Ambiente-Gritos de lamentos","AmbienteGritos");
   //LoadEvent("event:/Chicken1","Chicken1");
 
  //***********EJEMPLO DE EJECUCION MUSICA*****************
