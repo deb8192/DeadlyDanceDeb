@@ -148,6 +148,15 @@ void Arbol::finBucleDecorador()
     }
 }
 
+Composicion * Arbol::devolverPadre()
+{
+    nodoEnEjecucionDirecta = nodoEnEjecucionDirecta->getPadre();
+    if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+    {
+        return (Composicion *) nodoEnEjecucionDirecta;
+    }
+}
+
 int* Arbol::ContinuarSiguienteNodo(bool exito)
 {
     Composicion *comp = nullptr;
@@ -201,14 +210,21 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                 if(i < comp->getHijos().size())
                 {
                     nodoEnEjecucionDirecta = comp->getHijos().at(i);
-                    comp = (Composicion*) nodoEnEjecucionDirecta;
+                    if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+                    {
+                        comp = (Composicion*) nodoEnEjecucionDirecta;
+                    }
+                    else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
+                    {
+                        deco = (Decorador*) nodoEnEjecucionDirecta;
+                    }
                     ID++;
                 }
 
                 //En caso contrario, se asciende por el arbol para cambiar de rama hasta que no se pueda
                 else if(nodoEnEjecucionDirecta->getPadre() != nullptr)
                 {
-                    nodoEnEjecucionDirecta = nodoEnEjecucionDirecta->getPadre();
+                    comp = this->devolverPadre();
                 }
 
                 //Si se ha llegado a la raiz y ya se ha recorrido el arbol
@@ -223,6 +239,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
             //Si el nodo actual es un decorador se hace downcasting hacia dicha clase
             else if(deco != nullptr)
             {
+                i = 0;
                 //Se comprueba el ID del decorador para saber si coincide y entra
                 if(deco->getID() == ID)
                 {
@@ -279,20 +296,31 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                 if(i < deco->getHijos().size())
                 {
                     nodoEnEjecucionDirecta = deco->getHijos().at(i);
+                    if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+                    {
+                        comp = (Composicion*) nodoEnEjecucionDirecta;
+                    }
+                    else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
+                    {
+                        deco = (Decorador*) nodoEnEjecucionDirecta;
+                    }
                     ID++;
                 }
                 //En caso contrario, se asciende por el arbol para cambiar de rama
                 else
                 {
-                    nodoEnEjecucionDirecta = nodoEnEjecucionDirecta->getPadre();
+                    comp = this->devolverPadre();
                 }
             }
             //En caso contrario, se asciende por el arbol para cambiar de rama
             else
             {
-                nodoEnEjecucionDirecta = nodoEnEjecucionDirecta->getPadre();
+                comp = this->devolverPadre();
             }
-            compo = comp;
+            if(comp != nullptr)
+            {
+                compo = comp;
+            }
             comp = nullptr;
             deco = nullptr;
         }
@@ -377,6 +405,8 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
         }
         else
         {
+            nodoEnEjecucionDirecta = raiz;   //Obtenemos la raiz del arbol
+            ID++;
             arrayTareaObjetivo[0] = -1;
             arrayTareaObjetivo[1] = -1;
             return arrayTareaObjetivo;

@@ -89,7 +89,10 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
             {
                 tool = tool.next_sibling();
             }
-            nivel++;
+            else 
+            {
+                nivel++;
+            }
             i = 0;
             //Se recorren los atributos de cada nodo
             for (pugi::xml_attribute attr = tool.first_attribute(); attr; attr = attr.next_attribute())
@@ -195,13 +198,11 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                     }
                     nodo = nullptr;
                     nodo = new Composicion(tool.name(), IDInt, tipo, nivel, padre, "", "", "", 0, "", true);
-
             }
                 
                 //SEPARAR EN UNA FUNCION DISTINTA
 
-                padre = CargadorBehaviorTrees::anyadirHijo(arbol, padre, nodo, nivel);
-                
+                padre = CargadorBehaviorTrees::anyadirHijo(arbol, padre, nodo, nivel);            
                 padre = nodo;
             }
             else if(std::strcmp(tool.name(), DECORADOR) == 0)
@@ -223,12 +224,14 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                 nodo = new Hoja(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3], atributos[4], tarea, atributos[6]);
                 
                 padre = CargadorBehaviorTrees::anyadirHijo(arbol, padre, nodo, nivel);
-                
+                padre = nodo;            
                 
             }
-
-            tree.push_back(tool);
-            tool = tool.first_child();
+            if(tool != NULL)
+            {
+                tree.push_back(tool);
+                tool = tool.first_child();
+            }
             //CrearArbolComportamiento(tool, nodo, padre, nivel);
         }
         while(tool.next_sibling() == NULL && !tree.empty())
@@ -236,7 +239,11 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
             nivel--;
             tool = tree.back();
             tree.pop_back();
-            padre = (Nodo*)nodo->getPadre();
+            nodo = padre;
+            if(nodo != nullptr)
+            {
+                padre = (Nodo*)nodo->getPadre();
+            }
         }
     }
     return *arbol;
