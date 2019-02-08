@@ -4,7 +4,7 @@ Arbol::Arbol(Nodo *root, const char* name)
 {
     raiz = root;
     nodoEnEjecucionDirecta = nullptr;
-    arrayTareaObjetivo = new int[2];
+    arrayTareaObjetivo = new int [2];
     ID = 0;
 }
 

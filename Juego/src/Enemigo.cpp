@@ -227,7 +227,7 @@ int Enemigo::Atacar()
       //MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
       //Calcular posiciones
-      int distance= 5;
+      int distance= 3;
       atx = distance * sin(PI * getRY() / 180.0f) + getX();
       aty = getY();
       atz = distance * cos(PI * getRY() / 180.0f) + getZ();
@@ -414,7 +414,7 @@ void Enemigo::RotarEntidad(float updTime)
 {
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
-    float pt = moveTime / updTime;
+    float pt = rotateTime / updTime;
 
     if(pt > 1.0f)
     {
@@ -429,6 +429,11 @@ void Enemigo::RotarEntidad(float updTime)
 void Enemigo::UpdateTimeMove(float updTime)
 {
     moveTime += updTime;
+}
+
+void Enemigo::UpdateTimeRotate(float updTime)
+{
+    rotateTime += updTime;
 }
 
 void Enemigo::setVida(int vid)
@@ -590,9 +595,9 @@ void Enemigo::setAtackTime(float t)
   atacktime = t;
 }
 
-void Enemigo::SetNombre(const char* name)
+void Enemigo::SetEnemigo(int enemigo)
 {
-    nombre = name;
+    tipoEnemigo = enemigo;
 }
 
 float Enemigo::getAtackTime()
@@ -620,9 +625,9 @@ float Enemigo::getLastTimeAtEsp()
     return lastAtackEspTime;
 }
 
-const char* Enemigo::GetNombre()
+int Enemigo::GetEnemigo()
 {
-    return nombre;
+    return tipoEnemigo;
 }
 //ia
 
