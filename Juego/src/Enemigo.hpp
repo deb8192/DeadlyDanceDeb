@@ -38,7 +38,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void Interactuar(int, int);//llama a la mecanica de interactuar
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
-        void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
+        void UpdateTimeMove(float);//actualiza el tiempo del movimiento de la interpolacion
+        void UpdateTimeRotate(float);
         
         //getters y setters
 
@@ -68,7 +69,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setRotation(float rot);
         void setPosAtaques(int p);
         void setVelocidad(float velocidad); //modifica la velocidad de desplazamiento
-        void SetNombre(const char*);
+        void SetEnemigo(int);
 
         int getID();
         int getVida();
@@ -102,7 +103,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getRY();
         float getRZ();
         float getVelocidad(); //modifica la velocidad de desplazamiento
-        const char* GetNombre();
+        int GetEnemigo();
 
         //comportamientos bases
             bool ver(int tipo);//1 si ve al jugador
@@ -128,7 +129,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float velocidad;  //Velocidad de desplazamiento del enemigo
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";
-        const char * nombre;
+        int tipoEnemigo;
         Arbol *arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
         bool accionRealizada; //

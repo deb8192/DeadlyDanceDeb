@@ -10,9 +10,11 @@ class pollo : public Enemigo
         ~pollo();
         pollo();
         void runIA();
+        void updatePollo();
 
     private:
         bool funciona;
+        int* ordenes;
 
 };
 

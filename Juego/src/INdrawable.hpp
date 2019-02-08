@@ -64,7 +64,7 @@ protected:
     float lastRy = 0.0f;
     float lastRz = 0.0f;
     float fisX, fisY, fisZ; //Posicion para colocar las fisicas de los objetos
-    float rotation = 90.0f; //en grados por defecto
+    float rotation = 0.0f; //en grados por defecto
     int id = -1;
     int animacion = 0;  //nos sirve para cambiar de animacion //por defecto en reposo
     int animacionAnterior = 0; //nos sirve para saber si debemos cambiar de animacion por la nueva
