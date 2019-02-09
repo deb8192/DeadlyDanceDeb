@@ -51,7 +51,7 @@ void Juego::InicializarVentana()
 
 void Juego::setNivelThen()
 {
-    nivel->setThen();
+    //nivel->setThen();
 }
 
 void Juego::Draw()

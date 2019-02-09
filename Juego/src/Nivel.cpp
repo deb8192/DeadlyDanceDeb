@@ -161,7 +161,7 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
     enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     enemigos.back()->Enemigo::initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     enemigos.back()->setVida(75);
-    enemigos.back()->setVelocidad(2.0f);
+    enemigos.back()->setVelocidad(1.0f);
     enemigos.back()->setBarraAtEs(0);
     enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
     enemigos.back()->setAtaque(10);
@@ -396,13 +396,6 @@ void Nivel::CrearLuz(int x,int y,int z)
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarLuces(x,y,z);
-}
-
-void Nivel::setThen()
-{   //variables de la interpolacion
-    currentTime = clock();
-	acumulator = 0.0f;
-    dt =1.0f/60.0f;
 }
 
 void Nivel::EraseEnemigo(std::size_t i){
@@ -958,10 +951,10 @@ void Nivel::update()
                 //!ESTE BUCLE SE VA A IR TODO SEGURAMENTE HASTA AQUI
 
                 cout<< "Ejecuto nodo actual de la ia: " << i << endl;
-                if(enemigos[i]->GetEnemigo() == 0)
+                if(enemigos[i]!= nullptr && enemigos[i]->GetEnemigo() == 0)
                 {
                     pollo *enemPollo = (pollo*) enemigos[i];
-                    enemPollo->updatePollo();
+                    enemPollo->updatePollo(i);
                 }
                 //enemigos[i]->queVes();
             }
@@ -1024,7 +1017,7 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
         float tiempoAtaque = 0.0f;
         if((motor->estaPulsado(KEY_ESPACIO) || motor->estaPulsado(LMOUSE_DOWN)) && jugador.getTimeAt() <= 0.0f)
         {
-            *danyo = jugador.Atacar();
+            *danyo = jugador.Atacar(0);
             motor->resetKey(KEY_ESPACIO);
             motor->resetEvento(LMOUSE_DOWN);
             //atacktime = 1.5f;
@@ -1214,6 +1207,7 @@ void Nivel::updateIA()
                         {
                             pollo *enemPollo = (pollo*) enemigos[i];
                             enemPollo->runIA();
+                            enemPollo->updatePollo(i);
                         }
                         else
                             enemigos[i]->runIA(true);

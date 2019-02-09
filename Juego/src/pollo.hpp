@@ -10,7 +10,7 @@ class pollo : public Enemigo
         ~pollo();
         pollo();
         void runIA();
-        void updatePollo();
+        void updatePollo(int i);
 
     private:
         bool funciona;

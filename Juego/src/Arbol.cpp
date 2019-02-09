@@ -155,8 +155,13 @@ Composicion * Arbol::devolverPadre()
     {
         return (Composicion *) nodoEnEjecucionDirecta;
     }
+    else
+    {
+        return nullptr;
+    }
 }
 
+//EN LA COMPOSICION NO DETECTA EL FALSO, HAY QUE ARREGLARLO
 int* Arbol::ContinuarSiguienteNodo(bool exito)
 {
     Composicion *comp = nullptr;
@@ -167,7 +172,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
     unsigned int i = 0;
     
     //Si el arbol de esta recorrendo
-    if(nodoEnEjecucionDirecta != nullptr) //TO DO
+    if(nodoEnEjecucionDirecta != nullptr)
     {        
         if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), RAIZ) == 0)
         {
@@ -200,42 +205,59 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
             if(comp != nullptr)
             {
                 i = 0;
-                //Se accede al hijo que toca en funcion del ultimo ID registrado en el recorrido
-                while(i < comp->getHijos().size() && ID >= comp->getHijos().at(i)->getID())
-                {
-                    i++;
-                }
 
-                //De haber un hijo cuyo ID es superior al registrado, ese es el nuevo nodo
-                if(i < comp->getHijos().size())
+                //Si la composicion es una secuencia y la accion anterior ha tenido exito
+                //o si es un selector y la accion anterior no ha tenido exito, se busca el siguiente hijo
+                if((comp->getTipo() == 2 && exito) || (comp->getTipo() == 3 && (!exito || ID < comp->getHijos().front()->getID())))
                 {
-                    nodoEnEjecucionDirecta = comp->getHijos().at(i);
-                    if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+                    //Se accede al hijo que toca en funcion del ultimo ID registrado en el recorrido
+                    while(i < comp->getHijos().size() && ID >= comp->getHijos().at(i)->getID())
                     {
-                        comp = (Composicion*) nodoEnEjecucionDirecta;
+                        i++;
                     }
-                    else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
+                    //De haber un hijo cuyo ID es superior al registrado, ese es el nuevo nodo
+                    if(i < comp->getHijos().size())
                     {
-                        deco = (Decorador*) nodoEnEjecucionDirecta;
+                        nodoEnEjecucionDirecta = comp->getHijos().at(i);
+                        if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+                        {
+                            comp = (Composicion*) nodoEnEjecucionDirecta;
+                        }
+                        else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
+                        {
+                            deco = (Decorador*) nodoEnEjecucionDirecta;
+                        }
+                        ID++;
                     }
-                    ID++;
-                }
+                    //En caso contrario, se asciende por el arbol para cambiar de rama hasta que no se pueda
+                    else if(nodoEnEjecucionDirecta->getPadre() != nullptr)
+                    {
+                        comp = this->devolverPadre();
+                    }
 
-                //En caso contrario, se asciende por el arbol para cambiar de rama hasta que no se pueda
-                else if(nodoEnEjecucionDirecta->getPadre() != nullptr)
-                {
-                    comp = this->devolverPadre();
+                    //Si se ha llegado a la raiz y ya se ha recorrido el arbol
+                    else
+                    {
+                        nodoEnEjecucionDirecta = nullptr;
+                        ID = 0;
+                    }
                 }
+                else if((comp->getTipo() == 2 && !exito) || (comp->getTipo() == 3 && exito && ID > comp->getHijos().front()->getID()))
+                {
+                    ID = comp->getHijos().back()->getID();
+                    if(nodoEnEjecucionDirecta->getPadre() != nullptr)
+                    {
+                        comp = this->devolverPadre();
+                    }
 
-                //Si se ha llegado a la raiz y ya se ha recorrido el arbol
-                else
-                {
-                    nodoEnEjecucionDirecta = nullptr;
-                    ID = 0;
-                }
-                
+                    //Si se ha llegado a la raiz y ya se ha recorrido el arbol
+                    else
+                    {
+                        nodoEnEjecucionDirecta = nullptr;
+                        ID = 0;
+                    }
+                }              
             }
-
             //Si el nodo actual es un decorador se hace downcasting hacia dicha clase
             else if(deco != nullptr)
             {
@@ -244,7 +266,6 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                 if(deco->getID() == ID)
                 {
                     //Se detecta que tipo de final tiene el bucle del decorador
-                    
                     const char * finalDecorador = deco->GetFin();
 
                     if(strcmp(finalDecorador, VERDADERO) == 0)
@@ -254,12 +275,29 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                     else if(strcmp(finalDecorador, RANDOM) == 0)
                     {
                         finBucle.push_back(1);
+                        contadorRandom = rand() % 5 + 1;
                     }
                     else
                     {
                         finBucle.push_back(-1);
                     }
                     bucleDecorador = true;
+                }
+
+                //Si algun hijo falla en su tarea, el booleano es falso por lo tanto se igual el contador ID
+                //al del decorador para volver a entrar al bucle
+                else if(!exito)
+                {
+                    ID = nodoEnEjecucionDirecta->getID();
+                    exito = true;
+                    if(finBucle.back() > 0)
+                    {
+                        contadorRandom--;
+                        if(contadorRandom == 0)
+                        {
+                            this->finBucleDecorador();
+                        }
+                    }
                 }
 
                 //Se comprueba el ID del ultimo hijo del decorador para saber si sale
@@ -277,13 +315,6 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                     {
                         this->finBucleDecorador();
                     }
-                }
-
-                //Si algun hijo falla en su tarea, el booleano es falso por lo tanto se igual el contador ID
-                //al del decorador para volver a entrar al bucle
-                else if(!exito)
-                {
-                    ID = nodoEnEjecucionDirecta->getID();
                 }
 
                 //Se accede al hijo que toca en funcion del ultimo ID registrado en el recorrido
@@ -307,15 +338,28 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                     ID++;
                 }
                 //En caso contrario, se asciende por el arbol para cambiar de rama
-                else
+                else if(nodoEnEjecucionDirecta->getPadre() != nullptr)
                 {
                     comp = this->devolverPadre();
                 }
+
+                //Si se ha llegado a la raiz y ya se ha recorrido el arbol
+                else
+                {
+                    nodoEnEjecucionDirecta = nullptr;
+                    ID = 0;
+                }
             }
             //En caso contrario, se asciende por el arbol para cambiar de rama
-            else
+            else if(nodoEnEjecucionDirecta->getPadre() != nullptr)
             {
                 comp = this->devolverPadre();
+            }
+            //Si se ha llegado a la raiz y ya se ha recorrido el arbol
+            else
+            {
+                nodoEnEjecucionDirecta = nullptr;
+                ID = 0;
             }
             if(comp != nullptr)
             {

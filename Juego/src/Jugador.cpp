@@ -99,31 +99,20 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     if(w)
     {
         //ax y az son las componentes del vector director (x,z), para calcular el angulo posteriormente.
-        az += 50.0; //cuando mas alto mejor es el efecto de giro
+        az = 50; //cuando mas alto mejor es el efecto de giro
     }
     if(s)
     {
-        az += -50.0;
+        az = -50;
     }
     if(a)
     {
-        ax += -50.0;
+        ax = -50;
 
     }
     if(d)
     {
-        ax += 50.0;
-    }
-
-    //Esto es para que az y ax no aumente de valores excesivamente
-    //valores de muchas cifras hace que tarde mas en hacer el giro y que le cueste
-    if(az < -10000 || az > 10000)
-    {
-        az = 10;
-    }
-    if(ax < -10000 || ax > 10000)
-    {
-        ax = 0;
+        ax = 50;
     }
 
     //Para giro: obtienes el maximo comun divisor y lo divides entre x, z
@@ -146,14 +135,14 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     float componente;
     if((w || s || a || d) && !noMueve)
     {
-        componente = 1.0;
+        componente = 1.5;
     }
     else
     {
         componente = 0.0;
     }
-    px += componente*sin(deg*DEGTORAD)/**dt*/;
-    pz += componente*cos(deg*DEGTORAD)/**dt*/;
+    px += componente*sin(deg*DEGTORAD);
+    pz += componente*cos(deg*DEGTORAD);
 
 
     //cout << "deg: " << deg << ", px:" << px << ", pz:" << pz << endl;
@@ -245,7 +234,7 @@ void Jugador::MuereJugador(){
     }
 }
 
-int Jugador::Atacar()
+int Jugador::Atacar(int i)
 {
   int danyo = 0;
   if(vida > 0)
