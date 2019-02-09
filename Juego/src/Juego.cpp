@@ -51,7 +51,7 @@ void Juego::InicializarVentana()
 
 void Juego::setNivelThen()
 {
-    nivel->setThen();
+    //nivel->setThen();
 }
 
 void Juego::Draw()
@@ -118,7 +118,7 @@ void Juego::Update()
             motor->resetEvento(GUI_ID_REINICIAR_BUTTON);
             motor->borrarScena();
             motor->borrarGui();
-            nivel->CargarNivel(3);
+            nivel->CargarNivel(5);
             motor->CrearCamara();
         }
 

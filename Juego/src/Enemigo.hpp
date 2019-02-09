@@ -26,7 +26,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         //drawables metodos
 
         //npc metodos
-        int Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
+        int Atacar(int i);//efectua un ataque normal, llama al motor para ejecutar la animacion.
         //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         void QuitarVida(int);//quita vida a la entidad
@@ -38,7 +38,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void Interactuar(int, int);//llama a la mecanica de interactuar
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
-        void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
+        void UpdateTimeMove(float);//actualiza el tiempo del movimiento de la interpolacion
+        void UpdateTimeRotate(float);
         
         //getters y setters
 
@@ -68,6 +69,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setRotation(float rot);
         void setPosAtaques(int p);
         void setVelocidad(float velocidad); //modifica la velocidad de desplazamiento
+        void SetEnemigo(int);
 
         int getID();
         int getVida();
@@ -101,6 +103,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getRY();
         float getRZ();
         float getVelocidad(); //modifica la velocidad de desplazamiento
+        int GetEnemigo();
 
         //comportamientos bases
             bool ver(int tipo);//1 si ve al jugador
@@ -116,7 +119,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         //activar ia
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
         Arbol *getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
-        void runIA();//corre la ia del enemigo
+        int* runIA(bool);//corre la ia del enemigo
         //fin ia
 
     protected:
@@ -126,8 +129,10 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float velocidad;  //Velocidad de desplazamiento del enemigo
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";
+        int tipoEnemigo;
         Arbol *arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
+        bool accionRealizada; //
 };
 
 #endif

@@ -37,17 +37,17 @@ class Composicion: public Nodo
         //~Composicion();
         void addHijo(Nodo*);
         vector <Nodo*> getHijos();
-        std::string GetAccion();
-        std::string GetObjetivo();
+        const char* GetAccion();
+        const char* GetObjetivo();
         bool getAleatorio();
     private:
         std::vector<Nodo*> hijos;
         bool aleatorio;
-        std::string accion;
-        std::string objetivo;
+        const char* accion;
+        const char* objetivo;
         bool pizarra;
         int tarea;
-        std::string info;
+        const char* info;
 };
 
 class Decorador: public Nodo
@@ -58,10 +58,12 @@ class Decorador: public Nodo
         //~Decorador();
         void addHijo(Nodo*);
         vector <Nodo*> getHijos();
+        const char* GetFin();
+        const char* GetAlternativa();
     private:
         std::vector<Nodo*> hijos;
-        std::string fin;
-        std::string alternativa;
+        const char* fin;
+        const char* alternativa;
 };
 
 
@@ -71,13 +73,13 @@ class Hoja: public Nodo
         Hoja();
         Hoja(const char*, int, int, int, Nodo*, const char*, const char*, const char*, int, const char*);
         //~Hoja();
-        std::string GetAccion();
-        std::string GetObjetivo();
+        const char* GetAccion();
+        const char* GetObjetivo();
     private:
-        std::string accion;
-        std::string objetivo;
+        const char* accion;
+        const char* objetivo;
         bool pizarra;
         int tarea;
-        std::string info;
+        const char* info;
 };
 #endif

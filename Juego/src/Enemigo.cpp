@@ -218,7 +218,7 @@ void Enemigo::setVelocidad(float newVelocidad)
     velocidad = newVelocidad;
 }
 
-int Enemigo::Atacar()
+int Enemigo::Atacar(int i)
 {
     int danyo = 0;
     if(vida > 0 && atacktime == 0)
@@ -227,7 +227,7 @@ int Enemigo::Atacar()
       //MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
       //Calcular posiciones
-      int distance= 2;
+      int distance= 3;
       atx = distance * sin(PI * getRY() / 180.0f) + getX();
       aty = getY();
       atz = distance * cos(PI * getRY() / 180.0f) + getZ();
@@ -236,10 +236,10 @@ int Enemigo::Atacar()
       atgz = getRZ();
 
       //Acutualizar posicion del ataque
-      fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,getPosAtaques());
+      fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,i);
 
       //Colision
-      if(fisicas->IfCollision(fisicas->getEnemiesAtack(getPosAtaques()),fisicas->getJugador()))
+      if(fisicas->IfCollision(fisicas->getEnemiesAtack(i),fisicas->getJugador()))
       {
         cout << "Jugador Atacado" << endl;
         danyo = 10.0f;
@@ -273,8 +273,6 @@ int Enemigo::AtacarEspecial()
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
     if(vida > 0 && barraAtEs == por100)
     {
-        cout << "ATAQUE ESPECIAL ENEMIGO"<<endl;
-
         //Calcular posiciones si se inicia el ataque especial
         if(atackEspTime <= 0)
         {
@@ -328,7 +326,6 @@ int Enemigo::AtacarEspecial()
     }
     else
     {
-        cout << "No supera las restricciones"<<endl;
         barraAtEs += 1;
     }
     return danyo;
@@ -417,7 +414,7 @@ void Enemigo::RotarEntidad(float updTime)
 {
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
-    float pt = moveTime / updTime;
+    float pt = rotateTime / updTime;
 
     if(pt > 1.0f)
     {
@@ -432,6 +429,11 @@ void Enemigo::RotarEntidad(float updTime)
 void Enemigo::UpdateTimeMove(float updTime)
 {
     moveTime += updTime;
+}
+
+void Enemigo::UpdateTimeRotate(float updTime)
+{
+    rotateTime += updTime;
 }
 
 void Enemigo::setVida(int vid)
@@ -593,6 +595,11 @@ void Enemigo::setAtackTime(float t)
   atacktime = t;
 }
 
+void Enemigo::SetEnemigo(int enemigo)
+{
+    tipoEnemigo = enemigo;
+}
+
 float Enemigo::getAtackTime()
 {
   return atacktime;
@@ -617,6 +624,11 @@ float Enemigo::getLastTimeAtEsp()
 {
     return lastAtackEspTime;
 }
+
+int Enemigo::GetEnemigo()
+{
+    return tipoEnemigo;
+}
 //ia
 
 void Enemigo::setArbol(Arbol ia)
@@ -629,10 +641,10 @@ Arbol * Enemigo::getArbol()
     return arbol;
 }
 
-void Enemigo::runIA()
+int* Enemigo::runIA(bool funciona)
 {
     //aun por determinar primero definir bien la carga de arboles
-    arbol->ContinuarSiguienteNodo(true);//el true lo ponemos para detectar la primera ejecucion del bucle
+    return arbol->ContinuarSiguienteNodo(funciona);//el true lo ponemos para detectar la primera ejecucion del bucle
     //bool salir = false;//cuando terminemos el arbol salimos
     /*while(!salir)
     {
