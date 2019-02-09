@@ -218,7 +218,7 @@ void Enemigo::setVelocidad(float newVelocidad)
     velocidad = newVelocidad;
 }
 
-int Enemigo::Atacar()
+int Enemigo::Atacar(int i)
 {
     int danyo = 0;
     if(vida > 0 && atacktime == 0)
@@ -236,10 +236,10 @@ int Enemigo::Atacar()
       atgz = getRZ();
 
       //Acutualizar posicion del ataque
-      fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,getPosAtaques());
+      fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,i);
 
       //Colision
-      if(fisicas->IfCollision(fisicas->getEnemiesAtack(getPosAtaques()),fisicas->getJugador()))
+      if(fisicas->IfCollision(fisicas->getEnemiesAtack(i),fisicas->getJugador()))
       {
         cout << "Jugador Atacado" << endl;
         danyo = 10.0f;
