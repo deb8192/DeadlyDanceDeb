@@ -103,13 +103,13 @@ void Juego::Update()
             motor->resetEvento(GUI_ID_EMPEZAR_BUTTON);//reseteamos el evento
             Jugar();
         }
-        
+
         if(motor->ocurreEvento(GUI_ID_MENU_BUTTON) /*&& nivel->EstaLimpio()*/)
         {
             motora->getEvent("Nivel1")->stop(); //Detener musica Menu
             motora->getEvent("Menu")->start(); //Reproducir musica juego
             motor->resetEvento(GUI_ID_MENU_BUTTON);
-            cambiarEstadoMenu();          
+            cambiarEstadoMenu();
         }
 
         if(motor->ocurreEvento(GUI_ID_REINICIAR_BUTTON))
@@ -178,8 +178,6 @@ void Juego::Salir()
 void Juego::Jugar()
 {
     motora->getEvent("Menu")->stop(); //Detener musica Menu
-    motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    motora->getEvent("Nivel1")->start(); //Reproducir musica juego
 
     estado = &jugando;//se cambia a estado jugando
 

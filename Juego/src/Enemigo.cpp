@@ -10,7 +10,7 @@
 
 Enemigo::Enemigo()
 {
-    
+
 }
 
 Enemigo::~Enemigo(){
@@ -366,7 +366,7 @@ void Enemigo::MuereEnemigo(int enemi){
     }
     //Sonido de muerte
     MotorAudioSystem* motora = MotorAudioSystem::getInstance();
-    motora->getEvent("Chicken2")->setPosition(x,y,z);
+    motora->getEvent("Chicken2")->setPosition(this->getX(),this->getY(),this->getZ());
     motora->getEvent("Chicken2")->start();
 }
 
