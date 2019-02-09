@@ -9,8 +9,12 @@ class pollo : public Enemigo
     public:
         ~pollo();
         pollo();
+        void runIA();
+        void updatePollo(int i);
 
-    protected:
+    private:
+        bool funciona;
+        int* ordenes;
 
 };
 

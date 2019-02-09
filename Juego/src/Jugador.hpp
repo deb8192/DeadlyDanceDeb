@@ -36,7 +36,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void MuereJugador();//muere jugador (el tiempo controla los cambio de color del jugador)
 
         //npc metodos
-        int Atacar();//efectua un ataque normal, llama al motor para ejecutar la animacion.
+        int Atacar(int);//efectua un ataque normal, llama al motor para ejecutar la animacion.
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         void AtacarUpdate(int danyo);
         void AtacarEspecialUpdate(int *danyo);

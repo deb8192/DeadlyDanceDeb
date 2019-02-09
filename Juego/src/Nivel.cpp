@@ -27,7 +27,7 @@ Nivel::Nivel()
 void Nivel::LimpiarNivel()
 {
 
-    //para ejecucion de la ia y interpolado
+    /*//para ejecucion de la ia y interpolado
 
     id = 0;//se vuelve a cero pq la proxima vez que entre se inicializa todo a 0
 
@@ -91,7 +91,7 @@ void Nivel::LimpiarNivel()
 
     //jugador.~Jugador();//limpiamos jugador
     jugador = Jugador();//volvemos a crear jugador
-
+*/
 }
 
 bool Nivel::CargarNivel(int level)
@@ -130,47 +130,58 @@ bool Nivel::CargarNivel(int level)
     return true;
 }
 
-void Nivel::CrearEnemigo(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     //accion indicara futuramente que tipo de enemigo sera (herencia)
     MotorGrafico * motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
-    pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
-    //ia
-        //cargadorIA.cargarBehaviorTreeXml("PolloBT");
-        ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
-    //fin ia
-    ene->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-    ene->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-    ene->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-    ene->Enemigo::initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-    ene->setVida(75);
-    ene->setVelocidad(2.0f);
-    ene->setBarraAtEs(0);
-    ene->definirSala(sala);//le pasamos la sala en donde esta
-    ene->setAtaque(10);
-    ene->setArmaEspecial(100);
-    ene->setTimeAtEsp(0.0f);
-    ene->setDanyoCritico(50);
-    ene->setProAtaCritico(10);
-    //ene->generarSonido(20,5);
-    ene->setRotation(0.0f);//le ponemos hacia donde mira cuando se carga
-    enemigos.push_back(ene);//guardamos el enemigo en el vector
-    id++;//generamos id para la figura
-    ene->setID(id);//le damos el id unico en esta partida al enemigo
+    switch (enemigo)
+    {
+        case 0:
+            {
+                pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
+                //ia
+                //cargadorIA.cargarBehaviorTreeXml("PolloBT");
+                ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
+                enemigos.push_back(ene);//guardamos el enemigo en el vector
+                id++;//generamos id para la figura
+                enemigos.back()->setID(id);//le damos el id unico en esta partida al enemigo
+
+                //Cargar sonido evento en una instancia con la id del enemigo como nombre
+                MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+                std::string nameid = std::to_string(id); //pasar id a string
+                motora->LoadEvent("event:/Chicken1",nameid);
+                motora->getEvent(nameid)->setPosition(x,y,z);
+                motora->getEvent(nameid)->setVolume(0.4f);
+                motora->getEvent(nameid)->start();
+            }
+            break;            
+    
+        default:
+            break;
+    }
+        //fin ia
+    enemigos.back()->SetEnemigo(enemigo);
+    enemigos.back()->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    enemigos.back()->Enemigo::initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    enemigos.back()->setVida(75);
+    enemigos.back()->setVelocidad(1.0f);
+    enemigos.back()->setBarraAtEs(0);
+    enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
+    enemigos.back()->setAtaque(10);
+    enemigos.back()->setArmaEspecial(100);
+    enemigos.back()->setTimeAtEsp(0.0f);
+    enemigos.back()->setDanyoCritico(50);
+    enemigos.back()->setProAtaCritico(10);
+    //enemigos.back()->genemigos.back()rarSonido(20,5);
+    enemigos.back()->setRotation(0.0f);//le ponemos hacia donde mira cuando se carga
 
     motor->CargarEnemigos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2);
     fisicas->crearCuerpo(0,x/2,y/2,z/2,2,1,1,1,7); //Para ataques
     fisicas->crearCuerpo(0,x/2,y/2,z/2,2,4,4,4,8); //Para ataques especiales
-
-    //Cargar sonido evento en una instancia con la id del enemigo como nombre
-    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
-    std::string nameid = std::to_string(id); //pasar id a string
-    motora->LoadEvent("event:/SFX/SFX-Pollo enfadado",nameid);
-    motora->getEvent(nameid)->setPosition(x,y,z);
-    motora->getEvent(nameid)->setVolume(0.4f);
-    motora->getEvent(nameid)->start();
 }
 
 void Nivel::recargarJugador(){
@@ -390,13 +401,6 @@ void Nivel::CrearLuz(int x,int y,int z)
 {
     MotorGrafico * motor = MotorGrafico::getInstance();
     motor->CargarLuces(x,y,z);
-}
-
-void Nivel::setThen()
-{   //variables de la interpolacion
-    currentTime = clock();
-	acumulator = 0.0f;
-    dt =1.0f/60.0f;
 }
 
 void Nivel::EraseEnemigo(std::size_t i){
@@ -809,21 +813,6 @@ void Nivel::update()
         //animacion
         motor->cambiarAnimacionJugador(jugador.getAnimacion());
 
-        //valores nuevos de interpolacion
-
-
-        //Interpolacion SE SUSTITUIRA
-        /*newTime = clock();
-        frameTime = newTime - currentTime;
-        if(frameTime>0.25f)
-        {
-            frameTime=0.25f;
-        }
-        currentTime = newTime;
-        acumulator += frameTime;*/
-        //while(acumulator >= dt)
-        //{
-
         if(jugador.getArma() != nullptr)
         {
             float posArmaX = 5 * sin(PI * jugador.getRY() / PIRADIAN) + jugador.getX();
@@ -891,7 +880,6 @@ void Nivel::update()
                 this->updateRecorridoPathfinding(nullptr);
             }
 
-        //this->updateIA(); esto no se fuerza desde el update normal se llama desde main 4 veces por segundo
         //Actualizar ataque especial
             this->updateAtEsp(motor);
             this->updateAt(&danyo2, motor);
@@ -924,61 +912,77 @@ void Nivel::update()
             float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
             for(std::size_t i=0;i<enemigos.size();i++)
             {
-                    int danyo_jug = 0;
-                    enemigos[i]->setPosAtaques(i);
-                    tiempoActual = controladorTiempo->getTiempo(2);
-                    //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
-                    if(enemigos[i]->getTimeAtEsp() > 0.0f)
-                    {
-                        tiempoAtaqueEsp = enemigos[i]->getTimeAtEsp();
-                        tiempoAtaqueEsp -= (tiempoActual - enemigos[i]->getLastTimeAtEsp());
-                        enemigos[i]->setLastTimeAtEsp(tiempoActual);
-                        enemigos[i]->setTimeAtEsp(tiempoAtaqueEsp); //restar al tiempo de ataque
-                    }
-                    if(enemigos[i]->getTimeAtEsp() <= 0.0f)
-                    {
-                        danyo_jug = enemigos[i]->AtacarEspecial();
-                        enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
-                        enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
-                    }
-                    else if(enemigos[i]->getBarraAtEs() < 100)
-                    {
-                        enemigos[i]->AumentarBarraAtEs(1);
-                    }
-                    if(danyo_jug == 0)
-                    {
-                        //cout << "Enemigo " << i  << " pos: " << enemigos[i]->getPosAtaques() << endl;
+                //ESTE BUCLE SE VA A IR TODO SEGURAMENTE DESDE AQUI
+                int danyo_jug = 0;
+                enemigos[i]->setPosAtaques(i);
+                tiempoActual = controladorTiempo->getTiempo(2);
+                //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
+                if(enemigos[i]->getTimeAtEsp() > 0.0f)
+                {
+                    tiempoAtaqueEsp = enemigos[i]->getTimeAtEsp();
+                    tiempoAtaqueEsp -= (tiempoActual - enemigos[i]->getLastTimeAtEsp());
+                    enemigos[i]->setLastTimeAtEsp(tiempoActual);
+                    enemigos[i]->setTimeAtEsp(tiempoAtaqueEsp); //restar al tiempo de ataque
+                }
+                if(enemigos[i]->getTimeAtEsp() <= 0.0f)
+                {
+                    danyo_jug = enemigos[i]->AtacarEspecial();
+                    enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
+                    enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
+                }
+                else if(enemigos[i]->getBarraAtEs() < 100)
+                {
+                    enemigos[i]->AumentarBarraAtEs(1);
+                }
+                if(danyo_jug == 0)
+                {
+                    //cout << "Enemigo " << i  << " pos: " << enemigos[i]->getPosAtaques() << endl;
 
-                        //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
-                        if(enemigos[i]->getTimeAt() > 0.0f)
-                        {
-                            tiempoAtaque = enemigos[i]->getTimeAt();
-                            tiempoAtaque -= (tiempoActual - enemigos[i]->getLastTimeAt());
-                            enemigos[i]->setLastTimeAt(tiempoActual);
-                            enemigos[i]->setTimeAt(tiempoAtaque); //restar al tiempo de ataque
-                        }
-                        if(enemigos[i]->getTimeAt() <= 0.0f)
-                        {
-                            danyo_jug = enemigos[i]->Atacar();
-                            enemigos[i]->setTimeAt(1.5f); //tiempo hasta el proximo ataque
-                            enemigos[i]->setLastTimeAt(controladorTiempo->getTiempo(2));
-                        }
-                        //Si el enemigo ha realizado danyo
-                        if(danyo_jug > 0)
-                        {
-                            jugador.QuitarVida(danyo_jug);
-                            cout<< "Vida jugador: "<< jugador.getVida() << endl;
-                        }
-                    }
-                    //Se le quita vida con el danyo del ataque especial
-                    else
+                    //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
+                    /*if(enemigos[i]->getTimeAt() > 0.0f)
                     {
-                        if(danyo_jug > 0)
-                        {
-                            jugador.QuitarVida(danyo_jug);
-                            cout<< "Vida jugador tras ataque especial: "<< jugador.getVida() << endl;
-                        }
+                        tiempoAtaque = enemigos[i]->getTimeAt();
+                        tiempoAtaque -= (tiempoActual - enemigos[i]->getLastTimeAt());
+                        enemigos[i]->setLastTimeAt(tiempoActual);
+                        enemigos[i]->setTimeAt(tiempoAtaque); //restar al tiempo de ataque
                     }
+                    if(enemigos[i]->getTimeAt() <= 0.0f)
+                    {
+                        danyo_jug = enemigos[i]->Atacar();
+                        enemigos[i]->setTimeAt(1.5f); //tiempo hasta el proximo ataque
+                        enemigos[i]->setLastTimeAt(controladorTiempo->getTiempo(2));
+                    }
+                    //Si el enemigo ha realizado danyo
+                    if(danyo_jug > 0)
+                    {
+                        jugador.QuitarVida(danyo_jug);
+                        cout<< "Vida jugador: "<< jugador.getVida() << endl;
+                    }*/
+                }
+                //Se le quita vida con el danyo del ataque especial
+                else
+                {
+                    if(danyo_jug > 0)
+                    {
+                        jugador.QuitarVida(danyo_jug);
+                        cout<< "Vida jugador tras ataque especial: "<< jugador.getVida() << endl;
+                    }
+                }
+                //!ESTE BUCLE SE VA A IR TODO SEGURAMENTE HASTA AQUI
+
+                cout<< "Ejecuto nodo actual de la ia: " << i << endl;
+                if(enemigos[i]!= nullptr && enemigos[i]->GetEnemigo() == 0)
+                {
+                    pollo *enemPollo = (pollo*) enemigos[i];
+                    enemPollo->updatePollo(i);
+                    //colisiones con todos los objetos y enemigos que no se traspasan
+                    //AUN NO FUNCIONA
+                    /*if(fisicas->enemyCollideObstacle(i) || !fisicas->enemyCollidePlatform(i))
+                    {
+                        //colisiona
+                        enemPollo->Enemigo::setNewPosiciones(enemPollo->Enemigo::getX(), enemPollo->Enemigo::getY(), enemPollo->Enemigo::getZ());
+                    }*/
+                }
                 //enemigos[i]->queVes();
             }
         }
@@ -1040,7 +1044,7 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
         float tiempoAtaque = 0.0f;
         if((motor->estaPulsado(KEY_ESPACIO) || motor->estaPulsado(LMOUSE_DOWN)) && jugador.getTimeAt() <= 0.0f)
         {
-            *danyo = jugador.Atacar();
+            *danyo = jugador.Atacar(0);
             motor->resetKey(KEY_ESPACIO);
             motor->resetEvento(LMOUSE_DOWN);
             //atacktime = 1.5f;
@@ -1225,8 +1229,21 @@ void Nivel::updateIA()
                     else
                     {
                         //si no esta muerto ni piensa morirse XD ejecutamos ia
-                        //cout<< "Ejecuto ia: " << i << endl;
-                        //enemigos[i]->runIA();
+                        cout<< "Ejecuto ia: " << i << endl;
+                        if(enemigos[i]->GetEnemigo() == 0)
+                        {
+                            pollo *enemPollo = (pollo*) enemigos[i];
+                            enemPollo->runIA();
+                            enemPollo->updatePollo(i);
+                            //AUN NO FUNCIONA
+                            /*if(fisicas->enemyCollideObstacle(i) || !fisicas->enemyCollidePlatform(i))
+                            {
+                                //colisiona
+                                enemPollo->Enemigo::setNewPosiciones(enemPollo->Enemigo::getX(), enemPollo->Enemigo::getY(), enemPollo->Enemigo::getZ());
+                            }*/
+                        }
+                        else
+                            enemigos[i]->runIA(true);
                     }
                 }
             }
@@ -1527,6 +1544,8 @@ void Nivel::Draw()
         {
             enemigos.at(i)->moverseEntidad(1 / controladorTiempo->getUpdateTime());
             enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
+            enemigos.at(i)->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+            enemigos.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
             motor->mostrarEnemigos(enemigos.at(i)->getX(),
                 enemigos.at(i)->getY(),
                 enemigos.at(i)->getZ(),
@@ -1688,4 +1707,9 @@ void Nivel::ActivarLimpieza()
 bool Nivel::EstaLimpio()
 {
     return limpio;
+}
+
+Jugador * Nivel::GetJugador()
+{
+    return &jugador;
 }
