@@ -955,6 +955,13 @@ void Nivel::update()
                 {
                     pollo *enemPollo = (pollo*) enemigos[i];
                     enemPollo->updatePollo(i);
+                    //colisiones con todos los objetos y enemigos que no se traspasan
+                    //AUN NO FUNCIONA
+                    /*if(fisicas->enemyCollideObstacle(i) || !fisicas->enemyCollidePlatform(i))
+                    {
+                        //colisiona
+                        enemPollo->Enemigo::setNewPosiciones(enemPollo->Enemigo::getX(), enemPollo->Enemigo::getY(), enemPollo->Enemigo::getZ());
+                    }*/
                 }
                 //enemigos[i]->queVes();
             }
@@ -1208,6 +1215,12 @@ void Nivel::updateIA()
                             pollo *enemPollo = (pollo*) enemigos[i];
                             enemPollo->runIA();
                             enemPollo->updatePollo(i);
+                            //AUN NO FUNCIONA
+                            /*if(fisicas->enemyCollideObstacle(i) || !fisicas->enemyCollidePlatform(i))
+                            {
+                                //colisiona
+                                enemPollo->Enemigo::setNewPosiciones(enemPollo->Enemigo::getX(), enemPollo->Enemigo::getY(), enemPollo->Enemigo::getZ());
+                            }*/
                         }
                         else
                             enemigos[i]->runIA(true);
