@@ -202,20 +202,6 @@ Ray * MotorFisicas::crearRayo(float x, float y, float z, float rotation, float l
     return rayo;
 }
 
-bool MotorFisicas::collidePlatform()
-{
-    for(long unsigned int i = 0; i < plataformas.size();i++)
-    {
-      if(space->testOverlap(jugador,plataformas[i]))
-      {
-        return true;
-      }
-    }
-
-    return false;
-
-}
-
 int MotorFisicas::collideColectable()
 {
     for(long unsigned int i = 0; i < recolectables.size();i++)
@@ -279,6 +265,63 @@ bool MotorFisicas::collideObstacle()
     }
 
     return false;
+}
+
+bool MotorFisicas::enemyCollideObstacle(unsigned int enemigo)
+{
+    //abra que indicar tipo de objeto de alguna manera (que sean obstaculos)
+    for(long unsigned int i = 0; i < obstaculos.size();i++)
+    {
+        if(obstaculos[i])
+        {
+            if(space->testOverlap(enemigos[enemigo],obstaculos[i]))
+            {
+                return true;
+            }
+        }
+    }
+
+    //tampoco debe intersectar en el espacio con los enemigos
+    for(long unsigned int i = 0; i < enemigos.size();i++)
+    {
+        if(enemigo != i)
+        {
+            if(space->testOverlap(enemigos[enemigo],enemigos[i]))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+bool MotorFisicas::collidePlatform()
+{
+    for(long unsigned int i = 0; i < plataformas.size();i++)
+    {
+      if(space->testOverlap(jugador,plataformas[i]))
+      {
+        return true;
+      }
+    }
+
+    return false;
+
+}
+
+bool MotorFisicas::enemyCollidePlatform(unsigned int enemigo)
+{
+    for(long unsigned int i = 0; i < plataformas.size();i++)
+    {
+      if(space->testOverlap(enemigos[enemigo],plataformas[i]))
+      {
+        return true;
+      }
+    }
+
+    return false;
+
 }
 
 int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,float longitud,int modo)

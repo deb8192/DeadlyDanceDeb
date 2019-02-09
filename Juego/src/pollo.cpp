@@ -38,39 +38,33 @@ void pollo::updatePollo(int i)
                 {
                     Nivel * nivel;
                     bool trueX = false;
-                    float x = Enemigo::getX();
-                    float y = Enemigo::getY();
-                    float z = Enemigo::getZ();
-                    float ax = 0;
-                    float az = 0;
+                    float x = this->Enemigo::getNewX();
+                    float y = this->Enemigo::getNewY();
+                    float z = this->Enemigo::getNewZ();
                     float rotacion = 0.0;
-                    float deg = 0.0f;
                     
                     struct Datos{
-                        float distancia = 3.0;
+                        float distancia = 4.0;
                         float velocidadX = 0.0;
                         float velocidadY = 0.0;
                         float velocidadZ = 0.0;
                     }datosDesplazamiento;
+                    
                     cout<<"Se mueve el pollo"<<endl;
                     nivel = Nivel::getInstance();
-                    if(nivel->GetJugador()->getX() > this->Enemigo::getX() + datosDesplazamiento.distancia)
+                    if(nivel->GetJugador()->getNewX() > this->Enemigo::getNewX() + datosDesplazamiento.distancia)
                     {
                         trueX = true;
                         rotacion = -90.0f;
-                        ax = 50;
-                        //x += this->Enemigo::getVelocidad();
                         datosDesplazamiento.velocidadX = this->Enemigo::getVelocidad(); 
                     }
-                    else if(nivel->GetJugador()->getX() < this->Enemigo::getX() - datosDesplazamiento.distancia)
+                    else if(nivel->GetJugador()->getNewX() < this->Enemigo::getNewX() - datosDesplazamiento.distancia)
                     {
                         trueX = true;
                         rotacion = 90.0f;
-                        ax = -50;
-                        //x -= this->Enemigo::getVelocidad();
                         datosDesplazamiento.velocidadX = -this->Enemigo::getVelocidad(); 
                     }
-                    if(nivel->GetJugador()->getZ() > this->Enemigo::getZ() + datosDesplazamiento.distancia)
+                    if(nivel->GetJugador()->getNewZ() > this->Enemigo::getNewZ() + datosDesplazamiento.distancia)
                     {
                         if(trueX)
                         {
@@ -78,16 +72,17 @@ void pollo::updatePollo(int i)
                                 rotacion -= 45.0f;
                             else
                                 rotacion += 45.0f;
+
+                            datosDesplazamiento.velocidadZ = this->Enemigo::getVelocidad() * 0.5; 
+                            datosDesplazamiento.velocidadX *= 0.5;
                         }
                         else
                         {
                             rotacion = 0.0f;
+                            datosDesplazamiento.velocidadZ = this->Enemigo::getVelocidad(); 
                         }
-                        az = 50;
-                        //z += this->Enemigo::getVelocidad();
-                        datosDesplazamiento.velocidadZ = this->Enemigo::getVelocidad(); 
                     }
-                    else if(nivel->GetJugador()->getZ() < this->Enemigo::getZ() - datosDesplazamiento.distancia)
+                    else if(nivel->GetJugador()->getNewZ() < this->Enemigo::getNewZ() - datosDesplazamiento.distancia)
                     {
                         if(trueX)
                         {
@@ -95,33 +90,17 @@ void pollo::updatePollo(int i)
                                 rotacion += 45.0f;
                             else
                                 rotacion -= 45.0f;
+                            datosDesplazamiento.velocidadZ = -this->Enemigo::getVelocidad() * 0.5; 
+                            datosDesplazamiento.velocidadX *= 0.5;
                         }
                         else
                         {
                             rotacion = 180.0f;
+                            datosDesplazamiento.velocidadZ = -this->Enemigo::getVelocidad(); 
                         }
-                        az = -50;
-                        //z -= this->Enemigo::getVelocidad();
-                        datosDesplazamiento.velocidadZ = -this->Enemigo::getVelocidad(); 
                     }
-                    //MCD para hacer bien el giro
-                    float div = (float)__gcd((int)abs(ax),(int)abs(az));
-
-                    if(div != 1.0 && div != 0.0)
-                    {
-                        ax /= div;
-                        az /= div;
-                    }
-
-                    //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
-                    az < 0 ?
-                        deg = PIRADIAN + (RADTODEG * atan(ax/az)) :
-                        deg =  RADTODEG * atan(ax/az) ;
-
-                    x += datosDesplazamiento.velocidadX*sin(deg*DEGTORAD);
-                    z += datosDesplazamiento.velocidadZ*cos(deg*DEGTORAD);
-
-
+                    x += datosDesplazamiento.velocidadX;
+                    z += datosDesplazamiento.velocidadZ;
                     this->Enemigo::setNewRotacion(this->Enemigo::getRX(), rotacion, this->Enemigo::getRZ());
                     this->Enemigo::setNewPosiciones(x, y, z);
                     this->Enemigo::setPosicionesFisicas(datosDesplazamiento.velocidadX, datosDesplazamiento.velocidadY, datosDesplazamiento.velocidadZ);
