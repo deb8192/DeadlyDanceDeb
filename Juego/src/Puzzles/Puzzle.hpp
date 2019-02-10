@@ -1,16 +1,16 @@
+#ifndef Puzzle_HPP
+#define Puzzle_HPP
+
 #include <string>
 #include <vector>
 using namespace std;
-
-#ifndef Puzzle_HPP
-#define Puzzle_HPP
 
 class Puzzle
 {
     public:
         Puzzle();
         Puzzle(short tipo, std::string enunciado, short opciones, short solucion);
-        virtual ~Puzzle();
+        ~Puzzle();
 
         short GetTipo();
         std::string GetEnunciado();

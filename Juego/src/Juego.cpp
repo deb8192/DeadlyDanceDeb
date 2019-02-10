@@ -1,17 +1,17 @@
 #include "Juego.hpp"
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
-Juego* Juego::unica_instancia = 0;
+Juego* Juego::_unica_instancia = 0;
 //fin indicador singleton
 
 Juego::Juego()
 {
-    motor = MotorGrafico::getInstance();//se recoge instancia de motor
+    _motor = MotorGrafico::getInstance();//se recoge instancia de motor
 
     //Motor de audio inicializar
-    motora = MotorAudioSystem::getInstance();
-    motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    motora->getEvent("Menu")->start(); //Reproducir musica Menu
+    _motora = MotorAudioSystem::getInstance();
+    _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
+    _motora->getEvent("Menu")->start(); //Reproducir musica Menu
 
     nivel = Nivel::getInstance();//se recoge la instancia de nivel
     estado = &cinematica;//se empieza en el estado menu
@@ -22,30 +22,30 @@ Juego::Juego()
 
 bool Juego::Running()
 {
-    return motor->sigueFuncionando();
+    return _motor->sigueFuncionando();
 }
 
 void Juego::LimpiarVentana()
 {
-    motor->limpiarDevice();
+    _motor->limpiarDevice();
 }
 
 void Juego::InicializarVentana()
 {
     if(estado->QueEstado() == 3)
     {
-        motor->crearVentana(2);//crea ventana
-        motor->CrearCamara();//creamos la camara
+        _motor->crearVentana(2);//crea ventana
+        _motor->CrearCamara();//creamos la camara
         //le ponemos la marca de tiempo, cuando pasen 16 segundos lo pasamos
-        times * tiempo = times::getInstance();
-        marcaTiempo=tiempo->getTiempo(1);
+        Times* _tiempo = Times::GetInstance();
+        marcaTiempo=_tiempo->GetTiempo(1);
     }
     else
     {
-        motor->borrarGui();//para borrar cinematicas
-	    motor->crearTextoDePrueba();//crea un texto
-        motor->activarFuenteDefault();//activa la fuente por defecto que trae irrlicht
-        motor->PintarBotonesMenu();//pinta los botones del menu -> esto mover a menu
+        _motor->borrarGui();//para borrar cinematicas
+	    _motor->crearTextoDePrueba();//crea un texto
+        _motor->activarFuenteDefault();//activa la fuente por defecto que trae irrlicht
+        _motor->PintarBotonesMenu();//pinta los botones del menu -> esto mover a menu
     }
 }
 
@@ -58,13 +58,13 @@ void Juego::Draw()
 {
     if(estado->QueEstado() == 3)
     {
-        times * tiempo = times::getInstance();
+        Times* _tiempo = Times::GetInstance();
 
-        if(tiempo->calcularTiempoPasado(marcaTiempo) >= tiempoTotal || motor->finalCinematica() || motor->estaPulsado(KEY_ESPACIO))
+        if(_tiempo->CalcularTiempoPasado(marcaTiempo) >= tiempoTotal || _motor->finalCinematica() || _motor->estaPulsado(KEY_ESPACIO))
         {
             estado = &menu;
             InicializarVentana();
-            motor->resetKey(KEY_ESPACIO);
+            _motor->resetKey(KEY_ESPACIO);
         }
 
         estado->Pintar();
@@ -79,9 +79,9 @@ void Juego::Update()
 {
     /*if(estado->QueEstado() == 3)
     {
-        times * tiempo = times::getInstance();
+        Times* _tiempo = Times::GetInstance();
 
-        if(tiempo->calcularTiempoPasado(marcaTiempo) >= tiempoTotal || motor->finalCinematica())
+        if(_tiempo->CalcularTiempoPasado(marcaTiempo) >= tiempoTotal || _motor->finalCinematica())
         {
             estado = &menu;
             InicializarVentana();
@@ -94,75 +94,75 @@ void Juego::Update()
         estado->Actualizar();
         //con esto se llama al update adecuado
         //cout << "\e[24m Aqui \e[0m" << endl;
-        if(motor->ocurreEvento(GUI_ID_EMPEZAR_BUTTON))//cambiamos de estado porque han pulsado boton jugar
+        if(_motor->ocurreEvento(GUI_ID_EMPEZAR_BUTTON))//cambiamos de estado porque han pulsado boton jugar
         {
             //limpiamos el gui y la scena
-            motor->borrarScena();
-            motor->borrarGui();
+            _motor->borrarScena();
+            _motor->borrarGui();
             nivel->CargarNivel(5);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-            motor->resetEvento(GUI_ID_EMPEZAR_BUTTON);//reseteamos el evento
+            _motor->resetEvento(GUI_ID_EMPEZAR_BUTTON);//reseteamos el evento
             Jugar();
         }
 
-        if(motor->ocurreEvento(GUI_ID_MENU_BUTTON) /*&& nivel->EstaLimpio()*/)
+        if(_motor->ocurreEvento(GUI_ID_MENU_BUTTON) /*&& nivel->EstaLimpio()*/)
         {
-            motora->getEvent("Nivel1")->stop(); //Detener musica Menu
-            motora->getEvent("Menu")->start(); //Reproducir musica juego
-            motor->resetEvento(GUI_ID_MENU_BUTTON);
+            _motora->getEvent("Nivel1")->stop(); //Detener musica Menu
+            _motora->getEvent("Menu")->start(); //Reproducir musica juego
+            _motor->resetEvento(GUI_ID_MENU_BUTTON);
             cambiarEstadoMenu();
         }
 
-        if(motor->ocurreEvento(GUI_ID_REINICIAR_BUTTON))
+        if(_motor->ocurreEvento(GUI_ID_REINICIAR_BUTTON))
         {
-            motora->getEvent("Nivel1")->stop();
-            motor->resetEvento(GUI_ID_REINICIAR_BUTTON);
-            motor->borrarScena();
-            motor->borrarGui();
+            _motora->getEvent("Nivel1")->stop();
+            _motor->resetEvento(GUI_ID_REINICIAR_BUTTON);
+            _motor->borrarScena();
+            _motor->borrarGui();
             nivel->CargarNivel(5);
-            motor->CrearCamara();
+            _motor->CrearCamara();
         }
 
-        if(motor->ocurreEvento(GUI_ID_SALIR_BUTTON))//salimos del juego
+        if(_motor->ocurreEvento(GUI_ID_SALIR_BUTTON))//salimos del juego
         {
-            motor->closeGame();
+            _motor->closeGame();
         }
 
         estado->Eventos();
 
         //para modo debug
-        if(motor->estaPulsado(KEY_G_DEBUG))
+        if(_motor->estaPulsado(KEY_G_DEBUG))
         {
-            motor->activarDebugGrafico();
-            motor->resetKey(KEY_G_DEBUG);
+            _motor->activarDebugGrafico();
+            _motor->resetKey(KEY_G_DEBUG);
         }
 
         //para pathfinding activado
-        if(motor->estaPulsado(KEY_C))
+        if(_motor->estaPulsado(KEY_C))
         {
-            motor->activarPathfinding();
-            motor->resetKey(KEY_C);
+            _motor->activarPathfinding();
+            _motor->resetKey(KEY_C);
         }
 
         // Cargar XML arboles
-        if(motor->ocurreEvento(GUI_ID_ARBOLES_BUTTON))
+        if(_motor->ocurreEvento(GUI_ID_ARBOLES_BUTTON))
         {
-            motor->resetEvento(GUI_ID_ARBOLES_BUTTON);
+            _motor->resetEvento(GUI_ID_ARBOLES_BUTTON);
             CargarArbolesXML();
         }
 
         // Puzzles
-        if(motor->ocurreEvento(GUI_ID_PUZZLES_BUTTON))
+        if(_motor->ocurreEvento(GUI_ID_PUZZLES_BUTTON))
         {
-            motor->resetEvento(GUI_ID_PUZZLES_BUTTON);
-            motor->borrarScena();
-            motor->borrarGui();
+            _motor->resetEvento(GUI_ID_PUZZLES_BUTTON);
+            _motor->borrarScena();
+            _motor->borrarGui();
             CargarPuzzlesXML();
         }
 
         // Ocurre despues de pulsar Atras en Puzzles
-        if(motor->ocurreEvento(GUI_ID_BACK_MENU_BUTTON))
+        if(_motor->ocurreEvento(GUI_ID_ATRAS_BUTTON))
         {
-            motor->resetEvento(GUI_ID_BACK_MENU_BUTTON);
+            _motor->resetEvento(GUI_ID_ATRAS_BUTTON);
             estado = &menu;
         }
     //}
@@ -177,7 +177,7 @@ void Juego::Salir()
 //cuando se presiona boton de jugar
 void Juego::Jugar()
 {
-    motora->getEvent("Menu")->stop(); //Detener musica Menu
+    _motora->getEvent("Menu")->stop(); //Detener musica Menu
 
     estado = &jugando;//se cambia a estado jugando
 
@@ -194,8 +194,8 @@ void Juego::CargarPuzzlesXML()
     estado = &haciendo_puzzles;//se cambia a estado puzzles
 
     // Creamos la camara y la posicionamos
-    motor->CrearCamara();
-    motor->PosicionCamaraEnPuzzles();
+    _motor->CrearCamara();
+    _motor->PosicionCamaraEnPuzzles();
 
     // Cargamos el puzzle: 3=HANOI / 0 al 2=OPCIONES
     haciendo_puzzles.AsignarPuzzle(cargadorXML.GetPuzzles().at(3));
@@ -209,10 +209,10 @@ void Juego::UpdateIA()
 
 void Juego::cambiarEstadoMenu()
 {
-    motor->borrarScena();
-    motor->borrarGui();
-    motor->crearTextoDePrueba();//crea un texto
-    motor->activarFuenteDefault();//activa la fuente por defecto que trae irrlicht
-    motor->PintarBotonesMenu();
+    _motor->borrarScena();
+    _motor->borrarGui();
+    _motor->crearTextoDePrueba();//crea un texto
+    _motor->activarFuenteDefault();//activa la fuente por defecto que trae irrlicht
+    _motor->PintarBotonesMenu();
     estado = &menu;
 }

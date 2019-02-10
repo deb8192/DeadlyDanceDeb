@@ -1,8 +1,8 @@
 #include "Estado.hpp"
 //#include "MotorGrafico.hpp"
 #include "SenseEventos.hpp"
-#include "Nivel.hpp"
-#include "Enemigo.hpp"
+#include "Jugando/Nivel.hpp"
+#include "Enemigos/Enemigo.hpp"
 #include "MotorAudio.hpp"
 
 #include "math.h" // Para los colores random
@@ -152,10 +152,10 @@ void Puzzles::Update()
     motor->updateMotorPuzzles(GetTipo());
 
     // Boton atras, vuelve al menu
-    if(motor->ocurreEvento(GUI_ID_BACK_MENU_BUTTON))
+    if(motor->ocurreEvento(GUI_ID_ATRAS_BUTTON))
     {
         // Se resetea en el Update de Juego
-        //resetEvento(GUI_ID_BACK_MENU_BUTTON);
+        //resetEvento(GUI_ID_ATRAS_BUTTON);
 
         // Borrar pila y vectores
 

@@ -1,24 +1,24 @@
-#include "times.hpp" //se llama a su cabezera para cargar las dependencias
+#include "Times.hpp" //se llama a su cabezera para cargar las dependencias
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
-times* times::unica_instancia = 0;
+Times* Times::_unica_instancia = 0;
 //fin indicador singleton
 
 //inicialiciamos 
-times::times()
+Times::Times()
 {
-    inicializar();
+    Inicializar();
 }
 
 //destructor de la clase
-times::~times(void)
+Times::~Times(void)
 {
 
 }
 
 //modificas los valores de frames y de numero de calculas de ia por cada ciclo
-void times::setFrames(int valor, int update, int ia)
+void Times::SetFrames(int valor, int update, int ia)
 {
-    inicializar();
+    Inicializar();
     numero_frames = valor;
     tiempo_frame = milisegundos/valor;
     numero_updateia = ia;
@@ -31,7 +31,7 @@ void times::setFrames(int valor, int update, int ia)
     //std::cout << "Tiempo hasta cada update ia: "<< tiempo_ia << std::endl;
 }
 //dice cuando se debe ejecutar el siguiente frame
-bool times::EjecutoDraw()
+bool Times::EjecutoDraw()
 {
     if(tiempoInicio != 0.0)
     {
@@ -72,7 +72,7 @@ bool times::EjecutoDraw()
     return false;
 }
 //dice cuando se debe ejecutar update
-bool times::EjecutoUpdate()
+bool Times::EjecutoUpdate()
 {
     unsigned tiempo_ahora = clock();
     float tiempo_restante = (float(tiempo_ahora-tiempoInicio2)/(CLOCKS_PER_SEC/1000.0f));
@@ -116,7 +116,7 @@ bool times::EjecutoUpdate()
     return false;
 }
 //dice cuando se debe ejecutar la ia
-bool times::EjecutoIA()
+bool Times::EjecutoIA()
 {
     unsigned tiempo_ahora = clock();
     float tiempo_restante = (float(tiempo_ahora-tiempoInicio3)/(CLOCKS_PER_SEC/1000.0f));
@@ -142,14 +142,14 @@ bool times::EjecutoIA()
     return false;
 }
 //tiempo que queda en este frame
-float times::getMaximoTiempoFrame()
+float Times::GetMaximoTiempoFrame()
 {
     unsigned tiempo_ahora = clock();
     float tiempo_restante = (float(tiempo_ahora-tiempoInicio)/(CLOCKS_PER_SEC/1000.0f));
     return (tiempo_frame-tiempo_restante);
 }
 //sirve para recuperar el tiempo de ejecucion, si le pasas 1 te lo devolvera en milisegundos si le pasas 2 te lo devuelve en segundos
-float times::getTiempo(int modo)
+float Times::GetTiempo(int modo)
 {
     unsigned tiempo_ahora = clock();
 
@@ -166,8 +166,8 @@ float times::getTiempo(int modo)
     return (float(tiempo_ahora/(CLOCKS_PER_SEC/1000.0f))); // se devuelve por defecto en ms el tiempo actual
 
 }
-//nos servira para devolver el tiempo pasado desde una marca de tiempo con getTiempo(modo 1)
-float times::calcularTiempoPasado(float antiguo)
+//nos servira para devolver el tiempo pasado desde una marca de tiempo con GetTiempo(modo 1)
+float Times::CalcularTiempoPasado(float antiguo)
 {
 
    unsigned tiempo_ahora = clock();
@@ -177,7 +177,7 @@ float times::calcularTiempoPasado(float antiguo)
 }
 
 //inicializa los valores como si fuera la primera vez
-void times::inicializar()
+void Times::Inicializar()
 {
     pasado=false;//para que no cuente como pasado
     frame_actual=1;//para que procese el primer frame
@@ -187,22 +187,22 @@ void times::inicializar()
     tiempo_pasado = 0.0;
 }
 
-float times::getUpdateIATime()
+float Times::GetUpdateIATime()
 {
     return numero_updateia;   //Aquí se deberia devolver el tiempo de actualizacion, no el de dibujado
 }
 
-float times::getUpdateTime()
+float Times::GetUpdateTime()
 {
     return numero_update;   //Aquí se deberia devolver el tiempo de actualizacion, no el de dibujado
 }
 
-float times::getUpdateFrame()
+float Times::GetUpdateFrame()
 {
     return numero_frames;   //Aquí se deberia devolver el tiempo de dibujado
 }
 
-/*float times::getDrawingTime()
+/*float Times::GetDrawingTime()
 {
 
 }*/
