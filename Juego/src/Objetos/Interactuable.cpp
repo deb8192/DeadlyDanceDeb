@@ -67,8 +67,8 @@ void Interactuable::moverseEntidad(float updTime)
         pt = 1.0f;
     }
 
-    x = lastX * (1 - pt) + newX * pt;
-    z = lastZ * (1 - pt) + newZ * pt;
+    posActual.x = posPasada.x * (1 - pt) + posFutura.x * pt;
+    posActual.z = posPasada.z * (1 - pt) + posFutura.z * pt;
 }
 
 /*************** rotarEntidad *****************
@@ -87,9 +87,9 @@ void Interactuable::RotarEntidad(float updTime)
         pt = 1.0f;
     }
 
-    rx = lastRx * (1 - pt) + newRx * pt;
-    ry = lastRy * (1 - pt) + newRy * pt;
-    rz = lastRz * (1 - pt) + newRz * pt;
+    rotActual.x = rotPasada.x * (1 - pt) + rotFutura.x * pt;
+    rotActual.y = rotPasada.y * (1 - pt) + rotFutura.y * pt;
+    rotActual.z = rotPasada.z * (1 - pt) + rotFutura.z * pt;
 }
 
 void Interactuable::UpdateTimeMove(float updTime)
@@ -103,25 +103,25 @@ void Interactuable::UpdateTimeRotate(float updTime)
 }
 void Interactuable::setPosiciones(float nx,float ny,float nz)
 {
-    x = nx;
-    y = ny;
-    z = nz;
+    posActual.x = nx;
+    posActual.y = ny;
+    posActual.z = nz;
 }
 
 void Interactuable::setLastPosiciones(float nx,float ny,float nz)
 {
-    lastX = nx;
-    lastY = ny;
-    lastZ = nz;
+    posPasada.x = nx;
+    posPasada.y = ny;
+    posPasada.z = nz;
 }
 
 void Interactuable::setNewPosiciones(float nx,float ny,float nz)
 {
     moveTime = 0.0;
-    this->setLastPosiciones(newX, newY, newZ);
-    newX = nx;
-    newY = ny;
-    newZ = nz;
+    this->setLastPosiciones(posFutura.x, posFutura.y, posFutura.z);
+    posFutura.x = nx;
+    posFutura.y = ny;
+    posFutura.z = nz;
 }
 
 void Interactuable::setDesplazamientos(float despX, float despZ)
@@ -132,39 +132,39 @@ void Interactuable::setDesplazamientos(float despX, float despZ)
 
 void Interactuable::setRotacion(float nrx, float nry, float nrz)
 {
-    rx = nrx;
-    ry = nry;
-    rz = nrz;
+    rotActual.x = nrx;
+    rotActual.y = nry;
+    rotActual.z = nrz;
 }
 
 void Interactuable::setNewRotacion(float nrx, float nry, float nrz)
 {
     rotateTime = 0.0;
-    this->setLastRotacion(newRx, newRy, newRz);
-    newRx = nrx;
-    newRy = nry;
-    newRz = nrz;
+    this->setLastRotacion(rotFutura.x, rotFutura.y, rotFutura.z);
+    rotFutura.x = nrx;
+    rotFutura.y = nry;
+    rotFutura.z = nrz;
 }
 
 void Interactuable::setLastRotacion(float nrx, float nry, float nrz)
 {
-    lastRx = nrx;
-    lastRy = nry;
-    lastRz = nrz;
+    rotPasada.x = nrx;
+    rotPasada.y = nry;
+    rotPasada.z = nrz;
 }
 
 void Interactuable::initPosicionesFisicas(float nx,float ny,float nz)
 {
-    fisX = nx;
-    fisY = ny;
-    fisZ = nz;
+    posFisicas.x = nx;
+    posFisicas.y = ny;
+    posFisicas.z = nz;
 }
 
 void Interactuable::setPosicionesFisicas(float nx,float ny,float nz)
 {
-    fisX += nx;
-    fisY += ny;
-    fisZ += nz;
+    posFisicas.x += nx;
+    posFisicas.y += ny;
+    posFisicas.z += nz;
 }
 
 void Interactuable::SetPosicionArrayObjetos(int posicionObjeto)
@@ -194,77 +194,77 @@ const char* Interactuable::getObjeto()
 
 float Interactuable::getX()
 {
-    return x;
+    return posActual.x;
 }
 
 float Interactuable::getY()
 {
-    return y;
+    return posActual.y;
 }
 
 float Interactuable::getZ()
 {
-    return z;
+    return posActual.z;
 }
 
 float Interactuable::getNewX()
 {
-    return newX;
+    return posFutura.x;
 }
 
 float Interactuable::getNewY()
 {
-    return newY;
+    return posFutura.y;
 }
 
 float Interactuable::getNewZ()
 {
-    return newZ;
+    return posFutura.z;
 }
 
 float Interactuable::getLastX()
 {
-    return lastX;
+    return posPasada.x;
 }
 
 float Interactuable::getLastY()
 {
-    return lastY;
+    return posPasada.y;
 }
 
 float Interactuable::getLastZ()
 {
-    return lastZ;
+    return posPasada.z;
 }
 
 float Interactuable::getFisX()
 {
-    return fisX;
+    return posFisicas.x;
 }
 
 float Interactuable::getFisY()
 {
-    return fisY;
+    return posFisicas.y;
 }
 
 float Interactuable::getFisZ()
 {
-    return fisZ;
+    return posFisicas.z;
 }
 
 float Interactuable::getRX()
 {
-    return rx;
+    return rotActual.x;
 }
 
 float Interactuable::getRY()
 {
-    return ry;
+    return rotActual.y;
 }
 
 float Interactuable::getRZ()
 {
-    return rz;
+    return rotActual.z;
 }
 
 float * Interactuable::GetDesplazamientos()

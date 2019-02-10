@@ -50,8 +50,8 @@ void Arma::moverseEntidad(float updTime)
         pt = 1.0f;
     }
 
-    x = lastX * (1 - pt) + newX * pt;
-    z = lastZ * (1 - pt) + newZ * pt;
+    posActual.x = posPasada.x * (1 - pt) + posFutura.x * pt;
+    posActual.z = posPasada.z * (1 - pt) + posFutura.z * pt;
 }
 
 /*************** rotarEntidad *****************
@@ -70,19 +70,19 @@ void Arma::RotarEntidad(float updTime)
         pt = 1.0f;
     }
 
-    if(newRy == 0.0 && newRy < lastRy)
+    if(rotFutura.y == 0.0 && rotFutura.y < rotPasada.y)
     {
-        lastRy = 2 * PIRADIAN - lastRy;
+        rotPasada.y = 2 * PIRADIAN - rotPasada.y;
     }
 
-    else if(newRy == 0.0 && lastRy < 0.0)
+    else if(rotFutura.y == 0.0 && rotPasada.y < 0.0)
     {
-        lastRy = lastRy + 2 * PIRADIAN;
+        rotPasada.y = rotPasada.y + 2 * PIRADIAN;
     }
 
-    rx = lastRx * (1 - pt) + newRx * pt;
-    ry = lastRy * (1 - pt) + newRy * pt;
-    rz = lastRz * (1 - pt) + newRz * pt;
+    rotActual.x = rotPasada.x * (1 - pt) + rotFutura.x * pt;
+    rotActual.y = rotPasada.y * (1 - pt) + rotFutura.y * pt;
+    rotActual.z = rotPasada.z * (1 - pt) + rotFutura.z * pt;
 }
 
 void Arma::UpdateTimeMove(float updTime)
@@ -92,68 +92,69 @@ void Arma::UpdateTimeMove(float updTime)
 
 void Arma::setPosiciones(float nx,float ny,float nz)
 {
-    x = nx;
-    y = ny;
-    z = nz;
+    posActual.x = nx;
+    posActual.y = ny;
+    posActual.z = nz;
 }
 
 void Arma::setLastPosiciones(float nx,float ny,float nz)
 {
-    lastX = nx;
-    lastY = ny;
-    lastZ = nz;
+    posPasada.x = nx;
+    posPasada.y = ny;
+    posPasada.z = nz;
 }
 
 void Arma::setNewPosiciones(float nx,float ny,float nz)
 {
     moveTime = 0.0;
-    this->setLastPosiciones(newX, newY, newZ);
-    newX = nx;
-    newY = ny;
-    newZ = nz;
+    this->setLastPosiciones(posFutura.x, posFutura.y, posFutura.z);
+    posFutura.x = nx;
+    posFutura.y = ny;
+    posFutura.z = nz;
 }
 
 void Arma::setRotacion(float nrx, float nry, float nrz)
 {
-    rx = nrx;
-    ry = nry;
-    rz = nrz;
+    rotActual.x = nrx;
+    rotActual.y = nry;
+    rotActual.z = nrz;
 }
 
 void Arma::setNewRotacion(float nrx, float nry, float nrz)
 {
     rotateTime = 0.0;
-    this->setLastRotacion(newRx, newRy, newRz);
-    newRx = nrx;
-    newRy = nry;
-    newRz = nrz;
+    this->setLastRotacion(rotFutura.x, rotFutura.y, rotFutura.z);
+    rotFutura.x = nrx;
+    rotFutura.y = nry;
+    rotFutura.z = nrz;
 }
 
 void Arma::setLastRotacion(float nrx, float nry, float nrz)
 {
-    lastRx = nrx;
-    lastRy = nry;
-    lastRz = nrz;
+    rotPasada.x = nrx;
+    rotPasada.y = nry;
+    rotPasada.z = nrz;
 }
 
 void Arma::initPosicionesFisicas(float nx,float ny,float nz)
 {
-    fisX = nx;
-    fisY = ny;
-    fisZ = nz;
+    posFisicas.x = nx;
+    posFisicas.y = ny;
+    posFisicas.z = nz;
 }
 
 void Arma::setPosicionesFisicas(float nx,float ny,float nz)
 {
-    fisX += nx;
-    fisY += ny;
-    fisZ += nz;
+    posFisicas.x += nx;
+    posFisicas.y += ny;
+    posFisicas.z += nz;
 }
-void Arma::setPosicionesArmaEsp(float nx,float ny,float nz, float ry)
+
+void Arma::setPosicionesArmaEsp(float nx,float ny,float nz, float nry)
 {
-    float mx = nx + 6.5*(sin(DEGTORAD*ry));
+    float mx = nx + 6.5*(sin(DEGTORAD*nry));
     float my = ny;
-    float mz = nz + 6.5*(cos(DEGTORAD*ry));
+    float mz = nz + 6.5*(cos(DEGTORAD*nry));
 
     this->setPosiciones((int)mx,(int)my,(int)mz);
 }
@@ -180,77 +181,77 @@ int Arma::getAtaque()
 
 float Arma::getX()
 {
-    return x;
+    return posActual.x;
 }
 
 float Arma::getY()
 {
-    return y;
+    return posActual.y;
 }
 
 float Arma::getZ()
 {
-    return z;
+    return posActual.z;
 }
 
 float Arma::getNewX()
 {
-    return newX;
+    return posFutura.x;
 }
 
 float Arma::getNewY()
 {
-    return newY;
+    return posFutura.y;
 }
 
 float Arma::getNewZ()
 {
-    return newZ;
+    return posFutura.z;
 }
 
 float Arma::getLastX()
 {
-    return lastX;
+    return posPasada.x;
 }
 
 float Arma::getLastY()
 {
-    return lastY;
+    return posPasada.y;
 }
 
 float Arma::getLastZ()
 {
-    return lastZ;
+    return posPasada.z;
 }
 
 float Arma::getFisX()
 {
-    return fisX;
+    return posFisicas.x;
 }
 
 float Arma::getFisY()
 {
-    return fisY;
+    return posFisicas.y;
 }
 
 float Arma::getFisZ()
 {
-    return fisZ;
+    return posFisicas.z;
 }
 
 float Arma::getRX()
 {
-    return rx;
+    return rotActual.x;
 }
 
 float Arma::getRY()
 {
-    return ry;
+    return rotActual.y;
 }
 
 float Arma::getRZ()
 {
-    return rz;
+    return rotActual.z;
 }
 
 void Arma::setID(int nid)
