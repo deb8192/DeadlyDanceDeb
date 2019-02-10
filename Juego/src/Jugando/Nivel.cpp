@@ -1,10 +1,10 @@
 #include "Nivel.hpp"
-#include "Pathfinder.hpp"
+#include "../Pathfinder.hpp"
 #include <math.h>
 #include "reactphysics3d.h"
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
-Nivel* Nivel::unica_instancia = 0;
+Nivel* Nivel::_unica_instancia = 0;
 //fin indicador singleton
 
 #define PIRADIAN 180.0f
@@ -13,13 +13,13 @@ Nivel* Nivel::unica_instancia = 0;
 
 Nivel::Nivel()
 {
-    primeraSala = nullptr;
+   _primeraSala = nullptr;
     //fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     id = 0;
     ejecutar = false;
-    destinoPathFinding = nullptr;
-    fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
-    controladorTiempo = times::getInstance();//obtenemos la instancia de la clase times
+    _destinoPathFinding = nullptr;
+    _fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
+    _controladorTiempo = Times::GetInstance();//obtenemos la instancia de la clase Times
     drawTime = 0.0f;
     lastDrawTime = drawTime;
 }
@@ -98,47 +98,47 @@ bool Nivel::CargarNivel(int level)
 {
     NoEjecutar();//se impide entrar en bucles del juego
 
-    MotorGrafico * motor = MotorGrafico::getInstance();
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
-    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
+    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
 
-    motor->borrarScena();//borramos la scena
+    _motor->borrarScena();//borramos la scena
 
     //pre limpiamos todo
-    motor->LimpiarMotorGrafico();
+    _motor->LimpiarMotorGrafico();
     LimpiarNivel();
-    fisicas->limpiarFisicas();
+    _fisicas->limpiarFisicas();
     //limpiammos la sala
-    if(primeraSala != nullptr)
+    if(_primeraSala != nullptr)
     {
-        primeraSala->~Sala();
-        primeraSala = nullptr;
+       _primeraSala->~Sala();
+       _primeraSala = nullptr;
     }
     //cargamos el nivel
     cargador.CargarNivelXml(level);
     //Cargar objetos con el nivel completo
     this->cargarCofres(2); //Cargamos los cofres del nivel
 
-    motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    motora->getEvent("Nivel1")->start(); //Reproducir musica juego
-    motora->getEvent("AmbienteGritos")->start(); //Reproducir ambiente
+    _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
+    _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
+    _motora->getEvent("AmbienteGritos")->start(); //Reproducir ambiente
 
-    motor->cargarInterfaz();
+    _motor->cargarInterfaz();
     //esta ya todo ejecutamos ia y interpolado
     Ejecutar();
     //devolvemos true si todo a ido bien
     return true;
 }
 
-void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades, Sala * sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int*  propiedades, Sala*  sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     //accion indicara futuramente que tipo de enemigo sera (herencia)
-    MotorGrafico * motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
+    MotorGrafico* _motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
     switch (enemigo)
     {
         case 0:
             {
-                pollo * ene = new pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
+                Pollo*  ene = new Pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
                 //ia
                 //cargadorIA.cargarBehaviorTreeXml("PolloBT");
                 ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
@@ -153,6 +153,7 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
                 motora->getEvent(nameid)->setPosition(x,y,z);
                 motora->getEvent(nameid)->setVolume(0.4f);
                 motora->getEvent(nameid)->start();
+
             }
             break;            
     
@@ -177,11 +178,11 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
     //enemigos.back()->genemigos.back()rarSonido(20,5);
     enemigos.back()->setRotation(0.0f);//le ponemos hacia donde mira cuando se carga
 
-    motor->CargarEnemigos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
-    fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2);
-    fisicas->crearCuerpo(0,x/2,y/2,z/2,2,1,1,1,7); //Para ataques
-    fisicas->crearCuerpo(0,x/2,y/2,z/2,2,4,4,4,8); //Para ataques especiales
+    _motor->CargarEnemigos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2);
+    _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,1,1,1,7); //Para ataques
+    _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,4,4,4,8); //Para ataques especiales
 }
 
 void Nivel::recargarJugador(){
@@ -217,7 +218,7 @@ int Nivel::getjiz(){
     return this->jiz;
 }
 
-void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int*  propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     this->setjix(x);
     this->setjiy(y);
@@ -233,25 +234,25 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
     jugador.setProAtaCritico(10);
     jugador.setVida(100);
     jugador.setPosiciones(x,y,z);
-    MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::getInstance();
 
-    motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    _motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     cout << x << " " << y << " " << z << " " << endl;
-    motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
-    fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
+    _motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
+    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
 
 }
 
-void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, int * propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int*  propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
-    MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::getInstance();
     int posicionObjeto;
 
     //Arma
     if(accion == 2)
     {
-        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         Recolectable* rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
         rec->setID(recolectables.size());
         rec->setPosiciones(x,y,z);
@@ -261,8 +262,8 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
     //Puertas o interruptores
     if(accion == 3)
     {
-        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Interactuable * inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto);
+        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        Interactuable*  inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto);
         inter->setID(id++);
         inter->setPosiciones(x,y,z);
         inter->SetPosicionArrayObjetos(posicionObjeto);
@@ -273,7 +274,7 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
     //Powerups
     if(accion == 4)
     {
-        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         Recolectable* rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
         rec->setID(powerup.size());
         rec->setPosiciones(x,y,z);
@@ -282,17 +283,17 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
         powerup.push_back(rec);
     }else
     {
-        posicionObjeto = motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     }
 
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
-    fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
 
 }
 
-void Nivel::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char *tipo, int * propiedades)//lo utilizamos para crear zonas
+void Nivel::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int*  propiedades)//lo utilizamos para crear zonas
 {
    //Crear zona
    Zona* zon = new Zona(ancho,largo,alto,tipo);
@@ -311,7 +312,7 @@ void Nivel::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto,
 void Nivel::cargarCofres(int num)
 {
   long unsigned int num_cofres = num;
-  MotorGrafico * motor = MotorGrafico::getInstance();
+  MotorGrafico* _motor = MotorGrafico::getInstance();
 
   if(!zonas.empty())
   {
@@ -322,7 +323,7 @@ void Nivel::cargarCofres(int num)
       for(int i = zonas.size(); i > 0; i--)
       {
         std::string name_tipo(zonas.at(i-1)->getTipo());
-        char * cadena_tipo = new char[sizeof(name_tipo)];
+        char*  cadena_tipo = new char[sizeof(name_tipo)];
         strcpy(cadena_tipo, name_tipo.c_str());
 
         if(strcmp(cadena_tipo,"zChest") == 0) //Si es zona de cofre
@@ -351,8 +352,8 @@ void Nivel::cargarCofres(int num)
         float newz = zonas[Zsinprop[numAlt]]->getZ();
 
         //Colocar cofre
-        int posicionObjeto = motor->CargarObjetos(3,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
-        Interactuable * inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto);
+        int posicionObjeto = _motor->CargarObjetos(3,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
+        Interactuable*  inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto);
         inter->setID(id++);
         inter->setPosiciones(newx,newy,newz);
         inter->SetPosicionArrayObjetos(posicionObjeto);
@@ -360,8 +361,8 @@ void Nivel::cargarCofres(int num)
         interactuables.push_back(inter);
 
         //Fisicas del cofre
-        MotorFisicas* fisicas = MotorFisicas::getInstance();
-        fisicas->crearCuerpo(3,newx/2,newy/2,newz/2,2,2,4,2,3);
+        MotorFisicas* _fisicas = MotorFisicas::getInstance();
+        _fisicas->crearCuerpo(3,newx/2,newy/2,newz/2,2,2,4,2,3);
 
         //borrar del Array
         Zsinprop.erase(Zsinprop.begin() + numAlt);
@@ -377,21 +378,21 @@ void Nivel::cargarCofres(int num)
   }
 }
 
-Sala * Nivel::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char *ruta_objeto, const char *ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+Sala*  Nivel::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
-    MotorGrafico * motor = MotorGrafico::getInstance();
-    Sala * sala = new Sala(ancho,largo,alto,x,y,z,centro);
-    //int * datos = sala->getSizes(); //para comprobar la informacion de la sala
+    MotorGrafico* _motor = MotorGrafico::getInstance();
+    Sala*  sala = new Sala(ancho,largo,alto,x,y,z,centro);
+    //int*  datos = sala->getSizes(); //para comprobar la informacion de la sala
     //cout << "\e[36m datos de la sala: \e[0m" << datos[0] << " " << datos[1]  << " " << datos[2] << " " << datos[3] << " " << datos[4] << endl;
-    int id = motor->CargarPlataformas(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+    int id = _motor->CargarPlataformas(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     sala->definirID(id);
 
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
-    fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,6);
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,6);
 
-    if(primeraSala == nullptr)
+    if(_primeraSala == nullptr)
     {
-        primeraSala = sala;
+       _primeraSala = sala;
     }
 
     return sala;
@@ -399,15 +400,15 @@ Sala * Nivel::CrearPlataforma(int accion, int x,int y,int z, int ancho, int larg
 
 void Nivel::CrearLuz(int x,int y,int z)
 {
-    MotorGrafico * motor = MotorGrafico::getInstance();
-    motor->CargarLuces(x,y,z);
+    MotorGrafico* _motor = MotorGrafico::getInstance();
+    _motor->CargarLuces(x,y,z);
 }
 
 void Nivel::EraseEnemigo(std::size_t i){
     //Eliminar sonido
-    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+    MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
     std::string nameid = std::to_string(enemigos[i]->getID()); //pasar id a string
-    motora->getEvent(nameid)->stop();
+    _motora->getEvent(nameid)->stop();
 
     //elimniar el objeto en memoria(la onda)
     enemigos[i]->~Enemigo();//el destructor de enemigo
@@ -425,10 +426,10 @@ void Nivel::EraseJugador(){
 
 void Nivel::CogerObjeto()
 {
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
-    MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    MotorGrafico* _motor = MotorGrafico::getInstance();
 
-    long unsigned int rec_col = fisicas->collideColectable();
+    long unsigned int rec_col = _fisicas->collideColectable();
         jugador.setAnimacion(4);
 
         //En caso de no ser llaves
@@ -443,13 +444,13 @@ void Nivel::CogerObjeto()
                 jugador.getArma()->setRotacion(0.0, PIRADIAN, 0.0);
                 //!PROVISIONAL
                 //lo cargamos por primera vez en el motor de graficos
-                motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), recolectables[rec_col]->getObjeto(), recolectables[rec_col]->getTextura());
+                _motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), recolectables[rec_col]->getObjeto(), recolectables[rec_col]->getTextura());
                 //lo cargamos por primera vez en el motor de fisicas
-                fisicas->crearCuerpo(0,jugador.getX()/2,jugador.getY()/2,jugador.getZ()/2,2,recolectables[rec_col]->getAncho(), recolectables[rec_col]->getLargo(), recolectables[rec_col]->getAlto(), 6);
-                //borramos el recolectable de nivel, motor grafico y motor fisicas
+                _fisicas->crearCuerpo(0,jugador.getX()/2,jugador.getY()/2,jugador.getZ()/2,2,recolectables[rec_col]->getAncho(), recolectables[rec_col]->getLargo(), recolectables[rec_col]->getAlto(), 6);
+                //borramos el recolectable de nivel, _motor grafico y motor fisicas
                 recolectables.erase(recolectables.begin() + rec_col);
-                motor->EraseColectable(rec_col);
-                fisicas->EraseColectable(rec_col);
+                _motor->EraseColectable(rec_col);
+                _fisicas->EraseColectable(rec_col);
                 atacktime = 0.0f; //Reiniciar tiempo de ataques
             }
             else if(jugador.getArma() != nullptr)//si tiene arma equipada
@@ -458,69 +459,69 @@ void Nivel::CogerObjeto()
                 Recolectable* nuRec = new Recolectable(0, jugador.getArma()->getAtaque(),jugador.getArma()->getNombre(),jugador.getArma()->getAncho(),jugador.getArma()->getLargo(), jugador.getArma()->getAlto(),jugador.getArma()->getObjeto(),jugador.getArma()->getTextura());
                 nuRec->setPosiciones(jugador.getX(),jugador.getY(), jugador.getZ());
                 Arma* nuArma = new Arma(recolectables[rec_col]->getAtaque(),recolectables[rec_col]->getNombre(),recolectables[rec_col]->getAncho(),recolectables[rec_col]->getLargo(),recolectables[rec_col]->getAlto(),recolectables[rec_col]->getObjeto(),recolectables[rec_col]->getTextura());
-                motor->EraseArma();
+                _motor->EraseArma();
                 jugador.setArma(nuArma);
                 //PROVISIONAL
                 jugador.getArma()->setRotacion(0.0, PIRADIAN, 0.0);
                 //!PROVISIONAL
                 //lo cargamos por primera vez en el motor de graficos
-                motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), recolectables[rec_col]->getObjeto(), recolectables[rec_col]->getTextura());
+                _motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), recolectables[rec_col]->getObjeto(), recolectables[rec_col]->getTextura());
                 //lo cargamos en el motor de fisicas
-                fisicas->setFormaArma(jugador.getX()/2, jugador.getY()/2, jugador.getZ()/2, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(),jugador.getArma()->getAlto());
-                //borramos el recolectable anterior de nivel, motor grafico y motor fisicas
+                _fisicas->setFormaArma(jugador.getX()/2, jugador.getY()/2, jugador.getZ()/2, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(),jugador.getArma()->getAlto());
+                //borramos el recolectable anterior de nivel, _motor grafico y motor fisicas
                 recolectables.erase(recolectables.begin() + rec_col);
-                motor->EraseColectable(rec_col);
-                fisicas->EraseColectable(rec_col);
+                _motor->EraseColectable(rec_col);
+                _fisicas->EraseColectable(rec_col);
                 //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
                 recolectables.push_back(nuRec);
-                fisicas->setFormaRecolectable(recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
-                motor->CargarRecolectable(recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
+                _fisicas->setFormaRecolectable(recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
+                _motor->CargarRecolectable(recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
                 atacktime = 0.0f; //Reiniciar tiempo de ataques
             }
         }
         else if(recolectables.at(rec_col)->getCodigo() > 0)
         {
-            Llave *llave = new Llave(recolectables.at(rec_col)->getCodigo());
+            Llave* llave = new Llave(recolectables.at(rec_col)->getCodigo());
             jugador.AnnadirLlave(llave);
-            //borramos el recolectable de nivel, motor grafico y motor fisicas
+            //borramos el recolectable de nivel, _motor grafico y motor fisicas
                 recolectables.erase(recolectables.begin() + rec_col);
-                motor->EraseColectable(rec_col);
-                fisicas->EraseColectable(rec_col);
+                _motor->EraseColectable(rec_col);
+                _fisicas->EraseColectable(rec_col);
         }
 
 }
 
 void Nivel::DejarObjeto()
 {
-    MotorFisicas * fisicas = MotorFisicas::getInstance();
-    MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorFisicas*  _fisicas = MotorFisicas::getInstance();
+    MotorGrafico* _motor = MotorGrafico::getInstance();
 
         if(jugador.getArma() != nullptr)//si tiene arma equipada
         {
             //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
             Recolectable* nuRec = new Recolectable(0, jugador.getArma()->getAtaque(),jugador.getArma()->getNombre(),jugador.getArma()->getAncho(),jugador.getArma()->getLargo(), jugador.getArma()->getAlto(),jugador.getArma()->getObjeto(),jugador.getArma()->getTextura());
             nuRec->setPosiciones(jugador.getX(),jugador.getY(), jugador.getZ());
-            motor->EraseArma();
-            fisicas->EraseArma();
+            _motor->EraseArma();
+            _fisicas->EraseArma();
             jugador.setArma(NULL);
 
             //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
             recolectables.push_back(nuRec);
-            fisicas->setFormaRecolectable(recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
-            motor->CargarRecolectable(recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
+            _fisicas->setFormaRecolectable(recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
+            _motor->CargarRecolectable(recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
         }
 
 }
 
-/*********** AccionarMecanismo ***********
- * Funcion que, en funcion del valor codigo
- * del interactuable al que apunte int_col,
- * si es -1 abre un cofre, si es 0 abre una puerta
- * sin llave y si es mayor que 0 abrira la puerta
- * indicada si el jugador tiene su llave.
- *      Entradas:
- *                  int_col: indicador del elemento en el vector de interactuables
- *      Salidas:
+/*********** AccionarMecanismo* **********
+*  Funcion que, en funcion del valor codigo
+*  del interactuable al que apunte int_col,
+*  si es -1 abre un cofre, si es 0 abre una puerta
+*  sin llave y si es mayor que 0 abrira la puerta
+*  indicada si el jugador tiene su llave.
+*       Entradas:
+*                   int_col: indicador del elemento en el vector de interactuables
+*       Salidas:
 */
 void Nivel::crearObjetoCofre(Interactuable* newobjeto)
 {
@@ -535,8 +536,8 @@ void Nivel::crearObjetoCofre(Interactuable* newobjeto)
   int z = newobjeto->getZ();
   int ancho = 2 ,largo = 2,alto = 2;
   int codigo,ataque;
-  const char *nombre, *modelo, *textura;
-  int * propiedades = new int [6];
+  const char* nombre,* modelo,* textura;
+  int*  propiedades = new int [6];
 
   if(tipobj == 1)
   {
@@ -581,7 +582,7 @@ void Nivel::crearObjetoCofre(Interactuable* newobjeto)
 
 void Nivel::AccionarMecanismo(int int_col)
 {
-    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
+    MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
     unsigned int i = 0;
     bool coincide = false;
     //Si es una puerta sin llave o palanca asociada
@@ -589,25 +590,25 @@ void Nivel::AccionarMecanismo(int int_col)
     {
         //Se acciona o desacciona el mecanismo segun su estado actual
         bool abrir = interactuables.at(int_col)->accionar();
-        unsigned int posicion = fisicas->GetRelacionInteractuablesObstaculos(int_col);
+        unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(int_col);
         if(abrir)
         {
             //Se abre/acciona la puerta / el mecanismo
             //sonido
-            //motora->getEvent("AbrirPuerta")->setVolume(0.8f);
-            motora->getEvent("AbrirPuerta")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
-            motora->getEvent("AbrirPuerta")->start();
+            //_motora->getEvent("AbrirPuerta")->setVolume(0.8f);
+            _motora->getEvent("AbrirPuerta")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
+            _motora->getEvent("AbrirPuerta")->start();
             interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());
-            fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos() , posicion);
+            _fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos() , posicion);
             cout<<"Abre la puerta"<<endl;
         }
         else
         {
             //Se cierra/desacciona la puerta / el mecanismo
-            motora->getEvent("CerrarPuerta")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
-            motora->getEvent("CerrarPuerta")->start();
+            _motora->getEvent("CerrarPuerta")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
+            _motora->getEvent("CerrarPuerta")->start();
             interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() - 135.0, interactuables.at(int_col)->getRZ());
-            fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
+            _fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
             cout<<"Cierra la puerta"<<endl;
         }
     }
@@ -651,23 +652,23 @@ void Nivel::AccionarMecanismo(int int_col)
             //Se acciona o desacciona el mecanismo segun su estado actual
             bool activar = interactuables.at(int_col)->accionar();
             bool abrir = interactuables.at(i)->accionar();
-            unsigned int posicion = fisicas->GetRelacionInteractuablesObstaculos(i);
+            unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(i);
             if(abrir)
             {
                 //Se abre/acciona la puerta / el mecanismo
-                motora->getEvent("AbrirPuerta")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
-                motora->getEvent("AbrirPuerta")->start();
+                _motora->getEvent("AbrirPuerta")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
+                _motora->getEvent("AbrirPuerta")->start();
                 interactuables.at(i)->setNewRotacion(interactuables.at(i)->getRX(), interactuables.at(i)->getRY() + 135.0, interactuables.at(i)->getRZ());
-                fisicas->updatePuerta(interactuables.at(i)->getX(), interactuables.at(i)->getY(), interactuables.at(i)->getZ(), interactuables.at(i)->getRX() + 100.0, interactuables.at(i)->getRY(), interactuables.at(i)->getRZ(), interactuables.at(i)->GetDesplazamientos(), posicion);
+                _fisicas->updatePuerta(interactuables.at(i)->getX(), interactuables.at(i)->getY(), interactuables.at(i)->getZ(), interactuables.at(i)->getRX() + 100.0, interactuables.at(i)->getRY(), interactuables.at(i)->getRZ(), interactuables.at(i)->GetDesplazamientos(), posicion);
                 cout<<"Abre la puerta"<<endl;
             }
             else
             {
                 //Se cierra/desacciona la puerta / el mecanismo
-                motora->getEvent("CerrarPuerta")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
-                motora->getEvent("CerrarPuerta")->start();
+                _motora->getEvent("CerrarPuerta")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
+                _motora->getEvent("CerrarPuerta")->start();
                 interactuables.at(i)->setNewRotacion(interactuables.at(i)->getRX(), interactuables.at(i)->getRY() - 135.0, interactuables.at(i)->getRZ());
-                fisicas->updatePuerta(interactuables.at(i)->getX(), interactuables.at(i)->getY(), interactuables.at(i)->getZ(), interactuables.at(i)->getRX(), - interactuables.at(i)->getRY(), interactuables.at(i)->getRZ(), interactuables.at(i)->GetDesplazamientos(), posicion);
+                _fisicas->updatePuerta(interactuables.at(i)->getX(), interactuables.at(i)->getY(), interactuables.at(i)->getZ(), interactuables.at(i)->getRX(), - interactuables.at(i)->getRY(), interactuables.at(i)->getRZ(), interactuables.at(i)->GetDesplazamientos(), posicion);
                 cout<<"Cierra la puerta"<<endl;
             }
 
@@ -703,44 +704,44 @@ void Nivel::AccionarMecanismo(int int_col)
             cout<<"Tiene la llave para abrir la puerta"<<endl;
             //Se acciona o desacciona el mecanismo segun su estado actual
             bool abrir = interactuables.at(int_col)->accionar();
-            unsigned int posicion = fisicas->GetRelacionInteractuablesObstaculos(int_col);
+            unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(int_col);
             if(abrir)
             {
                 //Se abre/acciona la puerta / el mecanismo
-                motora->getEvent("AbrirCerradura")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
-                motora->getEvent("AbrirCerradura")->start();
+                _motora->getEvent("AbrirCerradura")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
+                _motora->getEvent("AbrirCerradura")->start();
                 interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() + 135.0, interactuables.at(int_col)->getRZ());
-                fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
+                _fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() +135.0, interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
                 cout<<"Abre la puerta"<<endl;
             }
             else
             {
                 //Se cierra/desacciona la puerta / el mecanismo
-                motora->getEvent("CerrarPuerta")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
-                motora->getEvent("CerrarPuerta")->start();
+                _motora->getEvent("CerrarPuerta")->setPosition(interactuables.at(int_col)->getX(),interactuables.at(int_col)->getY(),interactuables.at(int_col)->getZ());
+                _motora->getEvent("CerrarPuerta")->start();
                 interactuables.at(int_col)->setNewRotacion(interactuables.at(int_col)->getRX(), interactuables.at(int_col)->getRY() - 135.0, interactuables.at(int_col)->getRZ());
-                fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
+                _fisicas->updatePuerta(interactuables.at(int_col)->getX(), interactuables.at(int_col)->getY(), interactuables.at(int_col)->getZ(), interactuables.at(int_col)->getRX(), - interactuables.at(int_col)->getRY(), interactuables.at(int_col)->getRZ(), interactuables.at(int_col)->GetDesplazamientos(), posicion);
                 cout<<"Cierra la puerta"<<endl;
             }
         }
     }
 
 }
-/************************** InteractualNivel *************************
+/************************** InteractualNivel* ************************
 * Detecta las posiciones de los objetos recolectables y de interaccion
 * y si está pulsado E interactua y si no lo pinta de color para destacarlo
 */
 void Nivel::InteractuarNivel()
 {
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
-    MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    MotorGrafico* _motor = MotorGrafico::getInstance();
     //lo siguiente es para saber que objeto colisiona con jugador
-    int rec_col = fisicas->collideColectable();
-    int int_col = fisicas->collideInteractuable();
+    int rec_col = _fisicas->collideColectable();
+    int int_col = _fisicas->collideInteractuable();
 
     //cambia se utiliza porque coge y suelta el objeto sucesivamente varias veces, la causa de este error
     //era porque ocurren varias iteraciones del bucle tal vez porque la interpolacion crea mas iteraciones en el bucle
-    if(motor->estaPulsado(KEY_E))
+    if(_motor->estaPulsado(KEY_E))
     {
         if(rec_col < 0 && int_col < 0)
         {
@@ -767,28 +768,28 @@ void Nivel::InteractuarNivel()
             }
             cambia++;
         }
-        motor->resetKey(KEY_E);
+        _motor->resetKey(KEY_E);
     }
     else{
         cambia = 0;
     }
     //cout << "cambia: " << cambia << endl; //esto es para ver cuantas iteraciones de bucle pasan cuando coge objeto
 }
-/************** Update *************
- * Bucle de actualizacion del juego
- * Entradas:
- *
- * Salidas:
- */
+/************** Update* ************
+*  Bucle de actualizacion del juego
+*  Entradas:
+* 
+*  Salidas:
+* */
 void Nivel::update()
 {
 
-    MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::getInstance();
 
-    if(motor->estaPulsado(KEY_J))
+    if(_motor->estaPulsado(KEY_J))
     {
         jugador.QuitarVida(20);
-        motor->resetKey(KEY_J);
+        _motor->resetKey(KEY_J);
     }
 
     if(ejecutar)
@@ -806,38 +807,38 @@ void Nivel::update()
             }
         }
 
-        MotorFisicas* fisicas = MotorFisicas::getInstance();
-        MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+        MotorFisicas* _fisicas = MotorFisicas::getInstance();
+        MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
 
 
         //animacion
-        motor->cambiarAnimacionJugador(jugador.getAnimacion());
+        _motor->cambiarAnimacionJugador(jugador.getAnimacion());
 
         if(jugador.getArma() != nullptr)
         {
-            float posArmaX = 5 * sin(PI * jugador.getRY() / PIRADIAN) + jugador.getX();
-            float posArmaZ = 5 * cos(PI * jugador.getRY() / PIRADIAN) + jugador.getZ();;
+            float posArmaX = 5*  sin(PI*  jugador.getRY() / PIRADIAN) + jugador.getX();
+            float posArmaZ = 5*  cos(PI*  jugador.getRY() / PIRADIAN) + jugador.getZ();;
             //iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
             jugador.getArma()->setPosiciones(posArmaX, jugador.getY()+3, posArmaZ);
-            motor->llevarObjeto(posArmaX, jugador.getY()+3,posArmaZ, jugador.getRX(), jugador.getRY(), jugador.getRZ() );
-            fisicas->llevarBox(posArmaX, jugador.getY()+3,posArmaZ, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(), jugador.getArma()->getAlto());
+            _motor->llevarObjeto(posArmaX, jugador.getY()+3,posArmaZ, jugador.getRX(), jugador.getRY(), jugador.getRZ() );
+            _fisicas->llevarBox(posArmaX, jugador.getY()+3,posArmaZ, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(), jugador.getArma()->getAlto());
         }
 
         //Comprueba la activacion de un powerup
         this->activarPowerUp();
 
         //adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
-        fisicas->colisionChecker(motor->estaPulsado(1),
-            motor->estaPulsado(2),
-            motor->estaPulsado(3),
-            motor->estaPulsado(4),
+        _fisicas->colisionChecker(_motor->estaPulsado(1),
+            _motor->estaPulsado(2),
+            _motor->estaPulsado(3),
+            _motor->estaPulsado(4),
             jugador.getNewX(),
             jugador.getNewY(),
             jugador.getNewZ()
         );
 
         //colisiones con todos los objetos y enemigos que no se traspasan
-        if(fisicas->collideObstacle() || !fisicas->collidePlatform())
+        if(_fisicas->collideObstacle() || !_fisicas->collidePlatform())
         {
             //colisiona
             jugadorInmovil = true;
@@ -852,37 +853,37 @@ void Nivel::update()
         //actualizamos movimiento del jugador
 
             jugador.movimiento(jugadorInmovil,
-                motor->estaPulsado(1),
-                motor->estaPulsado(2),
-                motor->estaPulsado(3),
-                motor->estaPulsado(4)
+                _motor->estaPulsado(1),
+                _motor->estaPulsado(2),
+                _motor->estaPulsado(3),
+                _motor->estaPulsado(4)
             );
 
-            motor->clearDebug2();   //Pruebas debug
+            _motor->clearDebug2();   //Pruebas debug
             for(unsigned int i = 0; i < enemigos.size(); i++)
             {
-                fisicas->updateEnemigos(enemigos.at(i)->getFisX(),
+                _fisicas->updateEnemigos(enemigos.at(i)->getFisX(),
                     enemigos.at(i)->getFisY(),
                     enemigos.at(i)->getFisZ(),
                     i
                 );
-                motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),5, 5, 5, 2);
+                _motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),5, 5, 5, 2);
 
             }
 
-            fisicas->updateJugador(jugador.getX(),
+            _fisicas->updateJugador(jugador.getX(),
                 jugador.getY(),
                 jugador.getZ()
             );
 
-            if(enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
+            if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
             {
                 this->updateRecorridoPathfinding(nullptr);
             }
 
         //Actualizar ataque especial
-            this->updateAtEsp(motor);
-            this->updateAt(&danyo2, motor);
+            this->updateAtEsp(_motor);
+            this->updateAt(&danyo2, _motor);
 
             //Si se realiza el ataque se comprueban las colisiones
             if(jugador.getTimeAtEsp() > 0.0)
@@ -899,12 +900,12 @@ void Nivel::update()
             {
                 for(unsigned int i = 0; i < enemigos.size(); i++)
                 {
-                    motor->colorearEnemigo(255, 150, 150, 150, i);
+                    _motor->colorearEnemigo(255, 150, 150, 150, i);
                 }
             }
 
         //Posicion de escucha
-        motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
+        _motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
 
         //actualizamos los enemigos
         if(enemigos.size() > 0)//posiciones interpolacion
@@ -915,7 +916,7 @@ void Nivel::update()
                 //ESTE BUCLE SE VA A IR TODO SEGURAMENTE DESDE AQUI
                 int danyo_jug = 0;
                 enemigos[i]->setPosAtaques(i);
-                tiempoActual = controladorTiempo->getTiempo(2);
+                tiempoActual = _controladorTiempo->GetTiempo(2);
                 //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
                 if(enemigos[i]->getTimeAtEsp() > 0.0f)
                 {
@@ -928,7 +929,7 @@ void Nivel::update()
                 {
                     danyo_jug = enemigos[i]->AtacarEspecial();
                     enemigos[i]->setTimeAtEsp(10.0f); //tiempo hasta el proximo ataque
-                    enemigos[i]->setLastTimeAtEsp(controladorTiempo->getTiempo(2));
+                    enemigos[i]->setLastTimeAtEsp(_controladorTiempo->GetTiempo(2));
                 }
                 else if(enemigos[i]->getBarraAtEs() < 100)
                 {
@@ -950,7 +951,7 @@ void Nivel::update()
                     {
                         danyo_jug = enemigos[i]->Atacar();
                         enemigos[i]->setTimeAt(1.5f); //tiempo hasta el proximo ataque
-                        enemigos[i]->setLastTimeAt(controladorTiempo->getTiempo(2));
+                        enemigos[i]->setLastTimeAt(_controladorTiempo->GetTiempo(2));
                     }
                     //Si el enemigo ha realizado danyo
                     if(danyo_jug > 0)
@@ -973,11 +974,11 @@ void Nivel::update()
                 cout<< "Ejecuto nodo actual de la ia: " << i << endl;
                 if(enemigos[i]!= nullptr && enemigos[i]->GetEnemigo() == 0)
                 {
-                    pollo *enemPollo = (pollo*) enemigos[i];
-                    enemPollo->updatePollo(i);
+                    Pollo* enemPollo = (Pollo*) enemigos[i];
+                    enemPollo->UpdatePollo(i);
                     //colisiones con todos los objetos y enemigos que no se traspasan
                     //AUN NO FUNCIONA
-                    /*if(fisicas->enemyCollideObstacle(i) || !fisicas->enemyCollidePlatform(i))
+                    /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
                     {
                         //colisiona
                         enemPollo->Enemigo::setNewPosiciones(enemPollo->Enemigo::getX(), enemPollo->Enemigo::getY(), enemPollo->Enemigo::getZ());
@@ -994,16 +995,16 @@ void Nivel::update()
         //actualizamos la interfaz de jugador
         jugador.updateInterfaz();
         //actualizamos la interfaz en motor grafico
-        motor->updateInterfaz();
+        _motor->updateInterfaz();
     }
 }
 
 void Nivel::activarPowerUp()
 {
-    int int_cpw = fisicas->collideColectablePowerup();
+    int int_cpw = _fisicas->collideColectablePowerup();
     if(int_cpw >= 0)
     {
-        MotorGrafico * motor = MotorGrafico::getInstance();
+        MotorGrafico* _motor = MotorGrafico::getInstance();
         bool locoges = false; //Comprobar si lo puedes coger
 
         //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
@@ -1030,30 +1031,30 @@ void Nivel::activarPowerUp()
         {
             //Borrar objeto en todos los sitios
             powerup.erase(powerup.begin() + int_cpw);
-            motor->ErasePowerUP(int_cpw);
-            fisicas->EraseColectablePowerup(int_cpw);
+            _motor->ErasePowerUP(int_cpw);
+            _fisicas->EraseColectablePowerup(int_cpw);
         }
     }
 }
 
-void Nivel::updateAt(int *danyo, MotorGrafico *motor)
+void Nivel::updateAt(int* danyo, MotorGrafico* _motor)
 {
     if(ejecutar)
     {
         float tiempoActual = 0.0f;
         float tiempoAtaque = 0.0f;
-        if((motor->estaPulsado(KEY_ESPACIO) || motor->estaPulsado(LMOUSE_DOWN)) && jugador.getTimeAt() <= 0.0f)
+        if((_motor->estaPulsado(KEY_ESPACIO) || _motor->estaPulsado(LMOUSE_DOWN)) && jugador.getTimeAt() <= 0.0f)
         {
-            *danyo = jugador.Atacar(0);
-            motor->resetKey(KEY_ESPACIO);
-            motor->resetEvento(LMOUSE_DOWN);
+           *danyo = jugador.Atacar(0);
+            _motor->resetKey(KEY_ESPACIO);
+            _motor->resetEvento(LMOUSE_DOWN);
             //atacktime = 1.5f;
             jugador.setTimeAt(1.5f);
-            jugador.setLastTimeAt(controladorTiempo->getTiempo(2));
+            jugador.setLastTimeAt(_controladorTiempo->GetTiempo(2));
         }else{
             if(jugador.getTimeAt() > 0.0f)
             {
-                tiempoActual = controladorTiempo->getTiempo(2);
+                tiempoActual = _controladorTiempo->GetTiempo(2);
                 tiempoAtaque = jugador.getTimeAt();
                 tiempoAtaque -= (tiempoActual - jugador.getLastTimeAt());
                 jugador.setLastTimeAt(tiempoActual);
@@ -1068,36 +1069,36 @@ void Nivel::updateAt(int *danyo, MotorGrafico *motor)
                 if(atacktime > 500.0f)
                 {
                     //Colorear rojo
-                    motor->colorearJugador(255,255,0,0);
+                    _motor->colorearJugador(255,255,0,0);
                 }else if(atacktime > 0.0f){
                     //Colorear gris
-                    motor->colorearJugador(255,150,150,150);
+                    _motor->colorearJugador(255,150,150,150);
                 }
             }
 
         //clear
         if(jugador.getTimeAt() <= 0.0f){
-        motor->clearDebug2();
+        _motor->clearDebug2();
         }
 
     }
     }
 }
-void Nivel::updateAtEsp(MotorGrafico *motor)
+void Nivel::updateAtEsp(MotorGrafico* _motor)
 {
     float tiempoActual = 0.0f;
     float tiempoAtaqueEsp = 0.0f;
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((motor->estaPulsado(RMOUSE_DOWN)||motor->estaPulsado(KEY_Q)) && jugador.getTimeAtEsp() <= 0.0)
+    if((_motor->estaPulsado(RMOUSE_DOWN)||_motor->estaPulsado(KEY_Q)) && jugador.getTimeAtEsp() <= 0.0)
     {
         danyo = jugador.AtacarEspecial();
-        motor->resetKey(KEY_Q);
-        motor->resetEvento(RMOUSE_DOWN);
-        motor->colorearJugador(255, 55, 0, 255);
+        _motor->resetKey(KEY_Q);
+        _motor->resetEvento(RMOUSE_DOWN);
+        _motor->colorearJugador(255, 55, 0, 255);
         if(danyo > 0)
         {
             jugador.setTimeAtEsp(1.5f);
-            jugador.setLastTimeAtEsp(controladorTiempo->getTiempo(2));
+            jugador.setLastTimeAtEsp(_controladorTiempo->GetTiempo(2));
 
         }
     }
@@ -1109,25 +1110,25 @@ void Nivel::updateAtEsp(MotorGrafico *motor)
         }
         if(jugador.getTimeAtEsp() > 0.f)
         {
-            tiempoActual = controladorTiempo->getTiempo(2);
+            tiempoActual = _controladorTiempo->GetTiempo(2);
             tiempoAtaqueEsp = jugador.getTimeAtEsp();
             tiempoAtaqueEsp -= (tiempoActual - jugador.getLastTimeAtEsp());
             jugador.setLastTimeAtEsp(tiempoActual);
             jugador.setTimeAtEsp(tiempoAtaqueEsp);
             danyo = jugador.AtacarEspecial();
         }
-        /*if(jugador.getTimeAtEsp() > 0.f && ((int) (jugador.getTimeAtEsp() * 100) % 10 >= 4) && ((int) (jugador.getTimeAtEsp() * 100) % 10 <= 4))
+        /*if(jugador.getTimeAtEsp() > 0.f && ((int) (jugador.getTimeAtEsp()*  100) % 10 >= 4) && ((int) (jugador.getTimeAtEsp()*  100) % 10 <= 4))
         {
             danyo = jugador.AtacarEspecial();
         }*/
         if(jugador.getTimeAtEsp() == 1.0f)
         {
-            motor->colorearEnemigo(255,255,255,255,0);
+            _motor->colorearEnemigo(255,255,255,255,0);
         }
-        if(jugador.getTimeAtEsp() <= 0.5f && motor->getArmaEspecial()) //Zona de pruebas
+        if(jugador.getTimeAtEsp() <= 0.5f && _motor->getArmaEspecial()) //Zona de pruebas
         {
-            motor->borrarArmaEspecial();
-            motor->colorearJugador(255, 150, 150, 150);
+            _motor->borrarArmaEspecial();
+            _motor->colorearJugador(255, 150, 150, 150);
         }
     }
 }
@@ -1138,10 +1139,10 @@ void Nivel::updateIA()
     if(ejecutar)
     {
         //cout<< "Ejecuto ia " << endl;
-        MotorGrafico * motor = MotorGrafico::getInstance();
+        MotorGrafico* _motor = MotorGrafico::getInstance();
 
         //En esta parte muere jugador
-        if(motor->estaPulsado(KEY_J)){//SI PULSO 'J' MUERE JUGADOR
+        if(_motor->estaPulsado(KEY_J)){//SI PULSO 'J' MUERE JUGADOR
             jugador.MuereJugador();
         }
         if(jugador.estasMuerto())
@@ -1176,7 +1177,7 @@ void Nivel::updateIA()
                       int cualpower = rand() % numpow;
                       cout << "POWER: " << cualpower << endl;
                       int ataque;
-                      const char *nombre,*modelo,*textura;
+                      const char* nombre,*modelo,*textura;
 
                       //DAtos comunes a todos
                       int x = enemigos[i]->getX();
@@ -1185,7 +1186,7 @@ void Nivel::updateIA()
                       int accion = 4;
                       int ancho = 0.5 ,largo = 0.5,alto = 0.5;
                       int codigo = -2;
-                      int * propiedades = new int [6];
+                      int*  propiedades = new int [6];
 
                       if(cualpower == 0)
                       {
@@ -1218,8 +1219,8 @@ void Nivel::updateIA()
                     }
 
                     //Borrar enemigo
-                    motor->EraseEnemigo(i);
-                    fisicas->EraseEnemigo(i);
+                    _motor->EraseEnemigo(i);
+                    _fisicas->EraseEnemigo(i);
                     EraseEnemigo(i);
 
                 }else{
@@ -1232,18 +1233,18 @@ void Nivel::updateIA()
                         cout<< "Ejecuto ia: " << i << endl;
                         if(enemigos[i]->GetEnemigo() == 0)
                         {
-                            pollo *enemPollo = (pollo*) enemigos[i];
-                            enemPollo->runIA();
-                            enemPollo->updatePollo(i);
+                            Pollo* enemPollo = (Pollo*) enemigos[i];
+                            enemPollo->RunIA();
+                            enemPollo->UpdatePollo(i);
                             //AUN NO FUNCIONA
-                            /*if(fisicas->enemyCollideObstacle(i) || !fisicas->enemyCollidePlatform(i))
+                            /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
                             {
                                 //colisiona
                                 enemPollo->Enemigo::setNewPosiciones(enemPollo->Enemigo::getX(), enemPollo->Enemigo::getY(), enemPollo->Enemigo::getZ());
                             }*/
                         }
                         else
-                            enemigos[i]->runIA(true);
+                            enemigos[i]->RunIA(true);
                     }
                 }
             }
@@ -1252,35 +1253,35 @@ void Nivel::updateIA()
 }
 
 
-void Nivel::updateRecorridoPathfinding(Enemigo * enem)
+void Nivel::updateRecorridoPathfinding(Enemigo*  enem)
 {
     //Si enem no es nulo se anade a la cola de enemigos auxiliadores
-    if(enem != nullptr && enem != enemPideAyuda )
+    if(enem != nullptr && enem != _enemPideAyuda )
     {
         auxiliadores.push_back(enem);
         contadorEnem--;
     }
-    else if(contadorEnem > 0 && enem == enemPideAyuda)
+    else if(contadorEnem > 0 && enem == _enemPideAyuda)
     {
         this->setEnemigoPideAyuda(nullptr);
-        destinoPathFinding = nullptr;
+        _destinoPathFinding = nullptr;
         contadorEnem = 0;
     }
     //Si no hay sala de destino guardada, se guarda en este momento
-    else if(destinoPathFinding == nullptr)
+    else if(_destinoPathFinding == nullptr)
     {
-        destinoPathFinding = enemPideAyuda->getSala();
+        _destinoPathFinding = _enemPideAyuda->getSala();
     }
     //Ejecucion del pathfinding si hay una sala de destino guardada
-    if(destinoPathFinding != nullptr)
+    if(_destinoPathFinding != nullptr)
     {
-        Pathfinder *path = Pathfinder::getInstance();
+        Pathfinder* path = Pathfinder::getInstance();
         int tipoCentro;
 
         //Se inicia el recorrido hacia la primera sala del enemigo que pide ayuda.
-        if(recorrido.empty() && !auxiliadores.empty() && !path->encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding).empty())
+        if(recorrido.empty() && !auxiliadores.empty() && !path->encontrarCamino(auxiliadores.front()->getSala(), _destinoPathFinding).empty())
         {
-            recorrido = path->encontrarCamino(auxiliadores.front()->getSala(), destinoPathFinding);
+            recorrido = path->encontrarCamino(auxiliadores.front()->getSala(), _destinoPathFinding);
             auxiliadores.erase(auxiliadores.begin());
         }
         //Desplazamiento del enemigo hacia su destino
@@ -1504,7 +1505,7 @@ void Nivel::updateRecorridoPathfinding(Enemigo * enem)
                 recorrido.erase(recorrido.begin());
                 if(recorrido.empty() && auxiliadores.empty())
                 {
-                    destinoPathFinding = nullptr;
+                    _destinoPathFinding = nullptr;
                     this->setEnemigoPideAyuda(nullptr);
                     contadorEnem = 0;
                 }
@@ -1518,20 +1519,20 @@ void Nivel::Draw()
 {
     if(ejecutar)
     {
-        MotorGrafico * motor = MotorGrafico::getInstance();
+        MotorGrafico* _motor = MotorGrafico::getInstance();
         //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
         if(drawTime == 0.0)
         {
-            drawTime = controladorTiempo->getTiempo(2);
+            drawTime = _controladorTiempo->GetTiempo(2);
         }
         lastDrawTime = drawTime;
-        drawTime = controladorTiempo->getTiempo(2);
+        drawTime = _controladorTiempo->GetTiempo(2);
 
         //Dibujado del personaje
-        jugador.moverseEntidad(1 / controladorTiempo->getUpdateTime());
-        jugador.RotarEntidad(1 / controladorTiempo->getUpdateTime());
+        jugador.moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
+        jugador.RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
         jugador.UpdateTimeMove(drawTime - lastDrawTime);
-        motor->mostrarJugador(jugador.getX(),
+        _motor->mostrarJugador(jugador.getX(),
             jugador.getY(),
             jugador.getZ(),
             jugador.getRX(),
@@ -1542,11 +1543,11 @@ void Nivel::Draw()
         //Dibujado de los enemigos
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            enemigos.at(i)->moverseEntidad(1 / controladorTiempo->getUpdateTime());
+            enemigos.at(i)->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
             enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
-            enemigos.at(i)->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+            enemigos.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
             enemigos.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
-            motor->mostrarEnemigos(enemigos.at(i)->getX(),
+            _motor->mostrarEnemigos(enemigos.at(i)->getX(),
                 enemigos.at(i)->getY(),
                 enemigos.at(i)->getZ(),
                 enemigos.at(i)->getRX(),
@@ -1558,9 +1559,9 @@ void Nivel::Draw()
         //Dibujado de las puertas
         for(unsigned int i = 0; i < interactuables.size(); i++)
         {
-            interactuables.at(i)->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+            interactuables.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
             interactuables.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
-            motor->mostrarObjetos(interactuables.at(i)->getX(),
+            _motor->mostrarObjetos(interactuables.at(i)->getX(),
                 interactuables.at(i)->getY(),
                 interactuables.at(i)->getZ(),
                 interactuables.at(i)->getRX(),
@@ -1576,11 +1577,11 @@ void Nivel::Draw()
         {
             if(strcmp(jugador.getArmaEspecial()->getNombre(), "Heavy") == 0)
             {
-                jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
-                jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+                jugador.getArmaEspecial()->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
+                jugador.getArmaEspecial()->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
                 jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
 
-                motor->mostrarArmaEspecial(
+                _motor->mostrarArmaEspecial(
                     jugador.GetDatosAtEsp()[0],
                     jugador.getY(),
                     jugador.GetDatosAtEsp()[2],
@@ -1588,9 +1589,9 @@ void Nivel::Draw()
                     jugador.getRY(),
                     jugador.getRZ());
 
-                motor->clearDebug2(); //Pruebas debug
+                _motor->clearDebug2(); //Pruebas debug
 
-                motor->dibujarObjetoTemporal(
+                _motor->dibujarObjetoTemporal(
                     jugador.getArmaEspecial()->getFisX()*2,
                     jugador.getY(),
                     jugador.getArmaEspecial()->getFisZ()*2,
@@ -1606,11 +1607,11 @@ void Nivel::Draw()
             //Ataque especial bailaora
             else if(strcmp(jugador.getArmaEspecial()->getNombre(), "Bailaora") == 0)
             {
-                jugador.getArmaEspecial()->moverseEntidad(1 / controladorTiempo->getUpdateTime());
-                jugador.getArmaEspecial()->RotarEntidad(1 / controladorTiempo->getUpdateTime());
+                jugador.getArmaEspecial()->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
+                jugador.getArmaEspecial()->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
                 jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
 
-                motor->mostrarArmaEspecial(
+                _motor->mostrarArmaEspecial(
                     jugador.GetDatosAtEsp()[0],
                     jugador.GetDatosAtEsp()[1],
                     jugador.GetDatosAtEsp()[2],
@@ -1618,9 +1619,9 @@ void Nivel::Draw()
                     jugador.GetDatosAtEsp()[4],
                     jugador.GetDatosAtEsp()[5]);
 
-                motor->clearDebug2(); //Pruebas debug
+                _motor->clearDebug2(); //Pruebas debug
 
-                motor->dibujarObjetoTemporal(
+                _motor->dibujarObjetoTemporal(
                     jugador.getArmaEspecial()->getX(),
                     jugador.getArmaEspecial()->getY(),
                     jugador.getArmaEspecial()->getZ(),
@@ -1637,7 +1638,7 @@ void Nivel::Draw()
         //Dibujado zonas
         for(unsigned int i = 0; i < zonas.size(); i++)
         {
-            motor->dibujarZona(zonas.at(i)->getX(),
+            _motor->dibujarZona(zonas.at(i)->getX(),
                 zonas.at(i)->getY(),
                 zonas.at(i)->getZ(),
                 zonas.at(i)->getAncho(),
@@ -1648,22 +1649,22 @@ void Nivel::Draw()
     }
 }
 
-void Nivel::setEnemigoPideAyuda(Enemigo *ene)
+void Nivel::setEnemigoPideAyuda(Enemigo* ene)
 {
-    enemPideAyuda = ene;
+    _enemPideAyuda = ene;
 }
 
-Enemigo * Nivel::getEnemigoPideAyuda()
+Enemigo*  Nivel::getEnemigoPideAyuda()
 {
-    return enemPideAyuda;
+    return _enemPideAyuda;
 }
 
-Sala * Nivel::getPrimeraSala()
+Sala*  Nivel::getPrimeraSala()
 {
-    return primeraSala;
+    return _primeraSala;
 }
 
-std::vector<Enemigo *>  Nivel::getEnemigos()
+std::vector<Enemigo* >  Nivel::getEnemigos()
 {
     return enemigos;
 }
@@ -1686,13 +1687,13 @@ void Nivel::NoEjecutar()
 
 void Nivel::borrarEnemigos()
 {
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     //actualizamos el jugador
     if(enemigos.size() > 0)
     {
         for(std::size_t i=0;i<enemigos.size();i++)
         {
-                fisicas->EraseEnemigo(i);
+                _fisicas->EraseEnemigo(i);
                 EraseEnemigo(i);
         }
         enemigos.resize(0);//redimensionamos el vector a 0
@@ -1709,7 +1710,7 @@ bool Nivel::EstaLimpio()
     return limpio;
 }
 
-Jugador * Nivel::GetJugador()
+Jugador*  Nivel::GetJugador()
 {
     return &jugador;
 }

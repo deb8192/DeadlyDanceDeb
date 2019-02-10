@@ -1,3 +1,6 @@
+#ifndef CargadorXML_HPP
+#define CargadorXML_HPP
+
 #include <stdio.h>
 #include <iostream>
 #include <string>
@@ -6,13 +9,10 @@
 #include "pugixml.hpp"
 //#include "Nodo.hpp"
 //#include "Arbol.hpp"
-#include "Puzzle.hpp"
+#include "Puzzles/Puzzle.hpp"
 #include <vector>
 
 using namespace std;
-
-#ifndef CargadorXML_HPP
-#define CargadorXML_HPP
 
 class CargadorXML
 {

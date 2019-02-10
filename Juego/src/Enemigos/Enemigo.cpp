@@ -1,9 +1,9 @@
 #include "Enemigo.hpp"
-#include "Nivel.hpp"
+#include "../Jugando/Nivel.hpp"
 //#include "MotorGrafico.hpp"
 //#include "MotorFisicas.hpp"
 //#include "MotorAudio.hpp"
-//#include "times.hpp"
+//#include "Times.hpp"
 
 #define PI 3.14159265358979323846
 #define PIRADIAN 180.0f
@@ -32,7 +32,7 @@ Enemigo::~Enemigo(){
     atacktime = 0.0f;
     //Arma *armaEspecial;
     //const char * rutaArmaEspecial = "assets/models/objeto.obj";
-    //Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
+    //Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a RunIA() desde nivel, cuidado porque si es nullptr puede dar errores.
     pos_ataques=0; //para controlar el array de ataques en colisiones
 }
 
@@ -345,22 +345,22 @@ bool Enemigo::estasMuerto(){
 }
 
 bool Enemigo::finalAnimMuerte(){
-    times* tiempo = times::getInstance();
-    if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) >= animacionMuerteTiem && tiempoPasadoMuerte != 0){//sino se cumple no ha acabado
+    Times* _tiempo = Times::GetInstance();
+    if(_tiempo->CalcularTiempoPasado(tiempoPasadoMuerte) >= animacionMuerteTiem && tiempoPasadoMuerte != 0){//sino se cumple no ha acabado
         return true;
     }
     return false;
 }
 
 void Enemigo::MuereEnemigo(int enemi){
-    times* tiempo = times::getInstance();
+    Times* _tiempo = Times::GetInstance();
     MotorGrafico* motor = MotorGrafico::getInstance();
     if(tiempoPasadoMuerte == 0){
         motor->colorearEnemigo(255,0,0,0,enemi);//negro
-        tiempoPasadoMuerte = tiempo->getTiempo(1);
+        tiempoPasadoMuerte = _tiempo->GetTiempo(1);
     }
-    if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) < animacionMuerteTiem){
-        if(tiempo->calcularTiempoPasado(tiempoPasadoMuerte) >= 1000.0f){
+    if(_tiempo->CalcularTiempoPasado(tiempoPasadoMuerte) < animacionMuerteTiem){
+        if(_tiempo->CalcularTiempoPasado(tiempoPasadoMuerte) >= 1000.0f){
             motor->colorearEnemigo(255,255,0,0,enemi);//rojo
         }
     }
@@ -641,7 +641,7 @@ Arbol * Enemigo::getArbol()
     return arbol;
 }
 
-int* Enemigo::runIA(bool funciona)
+int* Enemigo::RunIA(bool funciona)
 {
     //aun por determinar primero definir bien la carga de arboles
     return arbol->ContinuarSiguienteNodo(funciona);//el true lo ponemos para detectar la primera ejecucion del bucle
