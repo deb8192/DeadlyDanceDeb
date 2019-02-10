@@ -1,18 +1,18 @@
 #ifndef Jugador_HPP
 #define Jugador_HPP
+
 #include <iostream>
 #include <math.h>
 #include <algorithm>
-#include "INnpc.hpp"
-#include "INdrawable.hpp"
-#include "Arma.hpp"
-#include "Llave.hpp"
-#include "MotorFisicas.hpp"
-#include "MotorGrafico.hpp"
 #include <ctime>
-#include "Jugando/InterfazJugador.hpp"
 #include <cstring>
-#include "times.hpp"
+#include "../INnpc.hpp"
+#include "../INdrawable.hpp"
+#include "../Armas/Arma.hpp"
+#include "../Objetos/Llave.hpp"
+#include "../MotorFisicas.hpp"
+#include "../MotorGrafico.hpp"
+#include "../Jugando/InterfazJugador.hpp"
 
 using namespace std;
 
@@ -39,7 +39,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int Atacar(int);//efectua un ataque normal, llama al motor para ejecutar la animacion.
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         void AtacarUpdate(int danyo);
-        void AtacarEspecialUpdate(int *danyo);
+        void AtacarEspecialUpdate(int* danyo);
         void QuitarVida(int);//quita vida a la entidad
         void RecuperarVida(int);//le suma vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
@@ -47,8 +47,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void AumentarDinero(int); //aumenta el dinero
 
         //Metodos jugador
-        void AnnadirLlave(Llave * llave);
-        void EliminarLlave(Llave * llave);
+        void AnnadirLlave(Llave* llave);
+        void EliminarLlave(Llave* llave);
 
         //interfaz
         void updateInterfaz();//nos sirve para actualizar la info de la interfaz
@@ -73,9 +73,9 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void setTipo(int tip);
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
-        void setArma(Arma *arma);
+        void setArma(Arma* arma);
         void setArmaEspecial(int ataque);
-        void setNombre(const char * nombre);
+        void setNombre(const char* nombre);
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
@@ -103,7 +103,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getRX();
         float getRY();
         float getRZ();
-        float * GetDatosAtEsp();
+        float* GetDatosAtEsp();
         int getID();
 
         //gets de npc
@@ -122,7 +122,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getLastTimeAtEsp();
         float getTimeAt();
         float getLastTimeAt();
-        const char *getRutaArmaEsp();
+        const char* getRutaArmaEsp();
         int getDinero();
 
         //Jugador
@@ -133,12 +133,12 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float ax = 1.0f,
               az = 20.0f,
               deg;
-        Arma *armaEquipada;
-        Arma *armaEspecial;
+        Arma* _armaEquipada;
+        Arma* _armaEspecial;
         vector <Llave*> llaves;
         //PRUEBAS ATAQUE ESPECIAL
-        const char * rutaArmaEspecial = "assets/models/Arma.obj";
-        const char * nombreJugador = "Heavy";
+        const char* _rutaArmaEspecial = "assets/models/Arma.obj";
+        const char* _nombreJugador = "Heavy";
         //!PRUEBAS ATAQUE ESPECIAL
        //  core::vector3df dir;
         float danyo_arma = 10.0f;

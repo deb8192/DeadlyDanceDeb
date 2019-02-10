@@ -1,12 +1,12 @@
+#ifndef CargadorNiveles_HPP
+#define CargadorNiveles_HPP
+
 #include "pugixml.hpp"
 #include <stdio.h>
 #include <iostream>
 #include <string>
 #include <cstring>
-#include "Sala.hpp"
-
-#ifndef CargadorNiveles_HPP
-#define CargadorNiveles_HPP
+#include "Jugando/Sala.hpp"
 
 class CargadorNiveles
 {
@@ -18,8 +18,8 @@ class CargadorNiveles
         void CargarNivelBin(int); //esta funcion carga el nivel desde un archivo binario  
         
     private:
-        Sala * crearSala(pugi::xml_node hijo,Sala * padre);//se llama recursivamente si hay salas
-        int * lista;
+        Sala* crearSala(pugi::xml_node hijo, Sala* padre);//se llama recursivamente si hay salas
+        int* lista;
 };
 
 #endif
