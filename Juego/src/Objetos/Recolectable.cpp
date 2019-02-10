@@ -56,8 +56,8 @@ void Recolectable::moverseEntidad(float updTime)
         pt = 1.0f;
     }
 
-    x = lastX * (1 - pt) + newX * pt;
-    z = lastZ * (1 - pt) + newZ * pt;
+    posActual.x = posPasada.x * (1 - pt) + posFutura.x * pt;
+    posActual.z = posPasada.z * (1 - pt) + posFutura.z * pt;
 }
 
 /*************** rotarEntidad *****************
@@ -76,9 +76,9 @@ void Recolectable::RotarEntidad(float updTime)
         pt = 1.0f;
     }
 
-    rx = lastRx * (1 - pt) + newRx * pt;
-    ry = lastRy * (1 - pt) + newRy * pt;
-    rz = lastRz * (1 - pt) + newRz * pt;
+    rotActual.x = rotPasada.x * (1 - pt) + rotFutura.x * pt;
+    rotActual.y = rotPasada.y * (1 - pt) + rotFutura.y * pt;
+    rotActual.z = rotPasada.z * (1 - pt) + rotFutura.z * pt;
 }
 
 void Recolectable::UpdateTimeMove(float updTime)
@@ -88,62 +88,62 @@ void Recolectable::UpdateTimeMove(float updTime)
 
 void Recolectable::setPosiciones(float nx,float ny,float nz)
 {
-    x = nx;
-    y = ny;
-    z = nz;
+    posActual.x = nx;
+    posActual.y = ny;
+    posActual.z = nz;
 }
 
 void Recolectable::setLastPosiciones(float nx,float ny,float nz)
 {
-    lastX = nx;
-    lastY = ny;
-    lastZ = nz;
+    posPasada.x = nx;
+    posPasada.y = ny;
+    posPasada.z = nz;
 }
 
 void Recolectable::setNewPosiciones(float nx,float ny,float nz)
 {
     moveTime = 0.0;
-    this->setLastPosiciones(newX, newY, newZ);
-    newX = nx;
-    newY = ny;
-    newZ = nz;
+    this->setLastPosiciones(posFutura.x, posFutura.y, posFutura.z);
+    posFutura.x = nx;
+    posFutura.y = ny;
+    posFutura.z = nz;
 }
 
 void Recolectable::setRotacion(float nrx, float nry, float nrz)
 {
-    rx = nrx;
-    ry = nry;
-    rz = nrz;
+    rotActual.x = nrx;
+    rotActual.y = nry;
+    rotActual.z = nrz;
 }
 
 void Recolectable::setNewRotacion(float nrx, float nry, float nrz)
 {
     rotateTime = 0.0;
-    this->setLastRotacion(newRx, newRy, newRz);
-    newRx = nrx;
-    newRy = nry;
-    newRz = nrz;
+    this->setLastRotacion(rotFutura.x, rotFutura.y, rotFutura.z);
+    rotFutura.x = nrx;
+    rotFutura.y = nry;
+    rotFutura.z = nrz;
 }
 
 void Recolectable::setLastRotacion(float nrx, float nry, float nrz)
 {
-    lastRx = nrx;
-    lastRy = nry;
-    lastRz = nrz;
+    rotPasada.x = nrx;
+    rotPasada.y = nry;
+    rotPasada.z = nrz;
 }
 
 void Recolectable::initPosicionesFisicas(float nx,float ny,float nz)
 {
-    fisX = nx;
-    fisY = ny;
-    fisZ = nz;
+    posFisicas.x = nx;
+    posFisicas.y = ny;
+    posFisicas.z = nz;
 }
 
 void Recolectable::setPosicionesFisicas(float nx,float ny,float nz)
 {
-    fisX += nx;
-    fisY += ny;
-    fisZ += nz;
+    posFisicas.x += nx;
+    posFisicas.y += ny;
+    posFisicas.z += nz;
 }
 
 void Recolectable::SetPosicionArrayObjetos(int posicionObjeto)
@@ -183,77 +183,77 @@ const char* Recolectable::getObjeto()
 
 float Recolectable::getX()
 {
-    return x;
+    return posActual.x;
 }
 
 float Recolectable::getY()
 {
-    return y;
+    return posActual.y;
 }
 
 float Recolectable::getZ()
 {
-    return z;
+    return posActual.z;
 }
 
 float Recolectable::getNewX()
 {
-    return newX;
+    return posFutura.x;
 }
 
 float Recolectable::getNewY()
 {
-    return newY;
+    return posFutura.y;
 }
 
 float Recolectable::getNewZ()
 {
-    return newZ;
+    return posFutura.z;
 }
 
 float Recolectable::getLastX()
 {
-    return lastX;
+    return posPasada.x;
 }
 
 float Recolectable::getLastY()
 {
-    return lastY;
+    return posPasada.y;
 }
 
 float Recolectable::getLastZ()
 {
-    return lastZ;
+    return posPasada.z;
 }
 
 float Recolectable::getFisX()
 {
-    return fisX;
+    return posFisicas.x;
 }
 
 float Recolectable::getFisY()
 {
-    return fisY;
+    return posFisicas.y;
 }
 
 float Recolectable::getFisZ()
 {
-    return fisZ;
+    return posFisicas.z;
 }
 
 float Recolectable::getRX()
 {
-    return rx;
+    return rotActual.x;
 }
 
 float Recolectable::getRY()
 {
-    return ry;
+    return rotActual.y;
 }
 
 float Recolectable::getRZ()
 {
-    return rz;
+    return rotActual.z;
 }
 
 void Recolectable::setID(int nid)
