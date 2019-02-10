@@ -1,5 +1,7 @@
 /* Esta clase se encarga de fachada entre la logica del juego y sus aspectos graficos, de momento solo esta irrlicht
 cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo habra un objeto de MotorGrafico).*/
+#ifndef MotorGrafico_HPP
+#define MotorGrafico_HPP
 
 #include <irrlicht/irrlicht.h> //la utilizaremos para las funcionalidades del motor
 #include "Eventos.hpp" //este archivo contiene los ids de los eventos
@@ -20,9 +22,6 @@ using namespace std;
 using namespace idsEventos;
 //fin de acortes
 
-#ifndef MotorGrafico_HPP
-#define MotorGrafico_HPP
-
     class MotorGrafico
     {
         public: //clases accesibles desde fuera
@@ -30,62 +29,55 @@ using namespace idsEventos;
             //clase singleton en public
             ~MotorGrafico(void);
             void LimpiarMotorGrafico();
-            static MotorGrafico *getInstance() //esto se utiliza para crear el objeto una sola vez
+            static MotorGrafico* GetInstance() //esto se utiliza para crear el objeto una sola vez
             {
-                if(unica_instancia == 0)
-                unica_instancia = new MotorGrafico();
-                return unica_instancia;
+                if(_unica_instancia == 0)
+                _unica_instancia = new MotorGrafico();
+                return _unica_instancia;
             }
             //fin singleton public
 
-            bool crearVentana(int tipo);//nos crea la ventana del juego. Tipo define lo grande que es por defecto 1024 x 768
-            bool sigueFuncionando(); //sirve para saber si la ventana esta activa
-            void limpiarDevice();//elimina el dispositivo
-            void crearTextoDePrueba();//texto de prueba de que va el motor
-            //esto es provisional cuando tengamos diferentes pintados se llamara pero para llamar a todos los pintados
-            void updateMotorMenu();
-            //esto es provisional cuando tengamos diferentes pintados se llamara pero para llamar a todos los pintados
-            void updateMotorJuego();
-            //esto es provisional cuando tengamos diferentes pintados se llamara pero para llamar a todos los pintados
-            void updateMotorCinematica();
-            bool finalCinematica();
-            //crea una camara para ver el escenario
-            void CrearCamara();
-            //crea al jugador
-            void crearJugador(std::string malla);
-            //crea los botones del menu
-            void PintarBotonesMenu();
-            //define fuente por defecto
-            void activarFuenteDefault();
-            //borrar scena
-            void borrarScena();//borra todo lo que haya en la ventana
-            //borrar gui
-            void borrarGui();//borra todo lo que haya en la ventana relacionado con el gui
+            bool CrearVentana(short tipo);//nos crea la ventana del juego. Tipo define lo grande que es por defecto 1024 x 768
+            bool VentanaAbierta(); //sirve para saber si la ventana esta activa
+            void CerrarJuego();
+            void LimpiarDevice();//elimina el dispositivo
+            void ActivarFuenteDefault(); //define fuente por defecto
+            
+            void FondoEscena(short a, short r, short g, short b);
+            void RenderEscena();
+            void BorrarScena(); // borra todo lo que haya en la ventana
+            void BorrarGui(); // borra todo lo que haya en la ventana relacionado con el gui
 
+            void CrearTexto(std::string texto, short x1, short y1, short x2, short y2);
+            void CrearBoton(short x, short y, short x2, short y2, s32 id, 
+                const wchar_t* texto, const wchar_t* texto2);
 
-
-            /*IMPORTANTE para bullet motor de fisicas y Joints*/
-            //btHingeConstraint(btRigidBody& rbA,const btTransform& rbAFrame, const btTransform& rbBFrame);
-
-
-            //eventos facade
-            //detecta si esta pulsado un boton, 1=a, 2 =s, 3=d, 4=w, 5=space, 6=intro
-            bool estaPulsado(int);
-            //fin eventos del teclado
-            //detecta si un evento con un id pasado a sido llamado
-            bool ocurreEvento(int);
-            //fin evento botones se puede utilizar para cualquier tipo de evento de irrlicht
-            void resetEvento(int);//resetea el evento
-
-            void resetKey(int event);
+            // detecta si un evento de boton con un id pasado ha sido llamado
+            bool OcurreEvento(short);
+            void ResetEvento(short); // resetea el evento
+            
+            // Eventos de teclas
+            bool EstaPulsado(short); 
+            void ResetKey(short); // resetea la tecla
 
             // Eventos del raton
             bool PulsadoClicDer();
             bool PulsadoClicIzq();
             bool SueltoClicDer();
             bool SueltoClicIzq();
-            void resetEventoMoveRaton();
+            void ResetEventoMoveRaton();
             position2di GetPosicionRaton();
+
+            void CrearCamara(); // crea una camara para ver el escenario
+
+
+            //----------------- Revisar
+
+            //crea al jugador
+            void crearJugador(std::string malla);
+            
+            /*IMPORTANTE para bullet motor de fisicas y Joints*/
+            //btHingeConstraint(btRigidBody& rbA,const btTransform& rbAFrame, const btTransform& rbBFrame);
 
             //cargadores de objetos
             int CargarPlataformas(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
@@ -95,10 +87,6 @@ using namespace idsEventos;
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             int CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
-
-
-
-            void closeGame();
 
             //colision rayo
             bool colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);
@@ -144,8 +132,6 @@ using namespace idsEventos;
             void RecolocarFicha(short y, short z);
             void ReiniciarHanoi();
 
-            //Cuando muere jugador aparecen 2 botones (Ir a menu o Reiniciar juego)
-            void botonesMuerteJugador();
             int getEnemigos_Scena();
             void EraseColectable(long unsigned int idx);
             int getObjetos_Scena();
@@ -165,23 +151,38 @@ using namespace idsEventos;
             //getters & setters
             bool getPathfindingActivado();
 
+
+            void updateMotorCinematica();
+            bool finalCinematica();
+            //Cuando muere jugador aparecen 2 botones (Ir a menu o Reiniciar juego)
+            void botonesMuerteJugador();
+
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
             MotorGrafico();
-            static MotorGrafico* unica_instancia;
+            static MotorGrafico* _unica_instancia;
             //fin clase singleton private
-            void PropiedadesDevice();
+
+            void propiedadesDevice();
+
             //variables privadas
-            IrrlichtDevice *device; //puntero a dispositivo por defecto
-            IVideoDriver *driver;
-  	        ISceneManager *smgr;
-  	        IGUIEnvironment *guienv;
-            scene::ICameraSceneNode* camera;
-            IGUIFont *font;
-            IGUIFont *font2;
-            IGUISkin *skin;
             Inputs input;
+            IrrlichtDevice* _device; //puntero a dispositivo por defecto
+            IVideoDriver* _driver;
+            ISceneManager* _smgr;
+            IGUIEnvironment* _guienv;
+            const IGeometryCreator* _geometryCreator;
+            ISceneCollisionManager* _collmgr;
+            ICameraSceneNode* _camera;
+
+            // Ventana
+            short width, height;
+            IGUIFont* _font;
+            IGUISkin* _skin;
+
+            /** Revisar **/
+            IGUIFont *font2;
             IAnimatedMeshSceneNode* ninja;
             std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
             std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
@@ -211,8 +212,6 @@ using namespace idsEventos;
 
             // Objetos y funciones para puzzles
             IGUIStaticText* myTextBox;
-            ISceneCollisionManager* collmgr;
-            const IGeometryCreator* geometryCreator;
 
             IMesh* fichaMesh;                         // Malla
             IMeshSceneNode* ficha;                    // Nodo
