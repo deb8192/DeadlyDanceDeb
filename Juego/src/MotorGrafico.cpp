@@ -1,15 +1,16 @@
-#include "MotorGrafico.hpp" //se llama a su cabezera para cargar las dependencias
+#include "MotorGrafico.hpp" //se llama a su cabecera para cargar las dependencias
+#include "Times.hpp"
+
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
-
-#define DEGTORAD 0.0174532925199432957f
-#define RADTODEG 57.295779513082320876f
-
 MotorGrafico* MotorGrafico::unica_instancia = 0;
 //fin indicador singleton
 
-/*Tipo 1(640x480), Tipo 2(800x600), Tipo 3(1024x768), Tipo 4(1280x1024)
+/*Tipo 1(640x480), Tipo 2(800x600), Tipo 3(1280x1024), Por defecto(1024x768)
 Esta clase define que tipo de pantalla quieres
 */
+
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
 
 MotorGrafico::MotorGrafico()
 {
@@ -119,17 +120,14 @@ bool MotorGrafico::crearVentana(int tipo)
             break;
 
         case 3:
-            WIDTH=1024; HEIGHT=768;
-            titulo = "DeadlyDance NormalResolution";
-            break;
-
-        case 4:
             WIDTH=1280; HEIGHT=1024;
             titulo = "DeadlyDance HightResolution";
             break;
 
         default:
-            return false;
+            WIDTH=1024; HEIGHT=768;
+            titulo = "DeadlyDance NormalResolution";
+            break;
     }
     device = createDevice( video::EDT_SOFTWARE, dimension2d<u32>(WIDTH, HEIGHT), 16,false, false, false, &input);
 
@@ -209,7 +207,7 @@ void MotorGrafico::updateMotorCinematica()
         //definimos los strings
         std::string fram = "";
         std::string extension = ".jpg";
-        float marcaTiempo = times::getInstance()->getTiempo(1);
+        float marcaTiempo = Times::GetInstance()->GetTiempo(1);
         std::string ruta = "assets/cinematicas/frames/";
         fram = std::to_string(frame_actual);
         //creamos la ruta completa
@@ -230,7 +228,7 @@ void MotorGrafico::updateMotorCinematica()
             actual = guienv->addImage(driver->getTexture(buffer),position2d<int>(0,0));//creo imagen con textura
         }
 
-        tiempoUltimoFrame = times::getInstance()->calcularTiempoPasado(marcaTiempo);
+        tiempoUltimoFrame = Times::GetInstance()->CalcularTiempoPasado(marcaTiempo);
         //cout << tiempoUltimoFrame << " " << salto << endl;
     }
     smgr->drawAll();
@@ -913,7 +911,7 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
 
     // Atras
     guienv->addButton(rect<s32>(700,HEIGHT-60,750,HEIGHT-30), 0,
-        GUI_ID_BACK_MENU_BUTTON,L"Atrás", L"Vuelve al menú");
+        GUI_ID_ATRAS_BUTTON,L"Atrás", L"Vuelve al menú");
 
     // Enunciado
     std::wstring widestr = std::wstring(enun.begin(), enun.end());

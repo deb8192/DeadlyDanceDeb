@@ -1,22 +1,22 @@
-#include "Interactuable.hpp"
+#include "Recolectable.hpp"
 
 
-Interactuable::Interactuable()
+Recolectable::Recolectable()
 {
 
 }
 
-Interactuable::~Interactuable()
+Recolectable::~Recolectable()
 {
 
 }
 
-void Interactuable::remove()
+void Recolectable::remove()
 {
-    this->~Interactuable();
+    this->~Recolectable();
 }
 
-Interactuable::Interactuable(int codigo, const char *nombre, int anc, int lar, int alt, const char *objeto, const char *textura, int posicion)
+Recolectable::Recolectable(int codigo, int ataque, const char* nombre, int anc, int lar, int alt, const char* objeto, const char* textura)
 {
     std::string name_objeto(objeto);
     cadena_objeto = new char[sizeof(name_objeto)];
@@ -30,25 +30,14 @@ Interactuable::Interactuable(int codigo, const char *nombre, int anc, int lar, i
     cadena_nombre = new char[sizeof(name_nombre)];
     strcpy(cadena_nombre, name_nombre.c_str());
 
-    nombreObjeto = cadena_nombre;
     codigoObjeto = codigo;
+    potenciaAtaque = ataque;
+    nombreObjeto = cadena_nombre;
     ancho = anc;
     largo = lar;
     alto = alt;
     ruta_objeto = cadena_objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
     ruta_textura = cadena_textura;
-    posicionArrayObjetos = posicion;
-    accionado = false;
-}
-
-bool Interactuable::accionar()
-{
-    if(accionado)
-    {
-        accionado = false;
-    }
-    else accionado = true;
-    return accionado;
 }
 
 /*************** moverseEntidad *****************
@@ -56,7 +45,7 @@ bool Interactuable::accionar()
  * por el escenario mediante una interpolacion desde
  * el punto de origen al punto de destino
  */
-void Interactuable::moverseEntidad(float updTime)
+void Recolectable::moverseEntidad(float updTime)
 {
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
@@ -76,11 +65,11 @@ void Interactuable::moverseEntidad(float updTime)
  * sobre si mismo mediante una interpolacion desde
  * el punto de origen al punto de destino
  */
-void Interactuable::RotarEntidad(float updTime)
+void Recolectable::RotarEntidad(float updTime)
 {
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
-    float pt = rotateTime / updTime;
+    float pt = moveTime / updTime;
 
     if(pt > 1.0f)
     {
@@ -92,30 +81,26 @@ void Interactuable::RotarEntidad(float updTime)
     rz = lastRz * (1 - pt) + newRz * pt;
 }
 
-void Interactuable::UpdateTimeMove(float updTime)
+void Recolectable::UpdateTimeMove(float updTime)
 {
     moveTime += updTime;
 }
 
-void Interactuable::UpdateTimeRotate(float updTime)
-{
-    rotateTime += updTime;
-}
-void Interactuable::setPosiciones(float nx,float ny,float nz)
+void Recolectable::setPosiciones(float nx,float ny,float nz)
 {
     x = nx;
     y = ny;
     z = nz;
 }
 
-void Interactuable::setLastPosiciones(float nx,float ny,float nz)
+void Recolectable::setLastPosiciones(float nx,float ny,float nz)
 {
     lastX = nx;
     lastY = ny;
     lastZ = nz;
 }
 
-void Interactuable::setNewPosiciones(float nx,float ny,float nz)
+void Recolectable::setNewPosiciones(float nx,float ny,float nz)
 {
     moveTime = 0.0;
     this->setLastPosiciones(newX, newY, newZ);
@@ -124,20 +109,14 @@ void Interactuable::setNewPosiciones(float nx,float ny,float nz)
     newZ = nz;
 }
 
-void Interactuable::setDesplazamientos(float despX, float despZ)
-{
-    desplazamientos[0] = despX;
-    desplazamientos[1] = despZ;
-}
-
-void Interactuable::setRotacion(float nrx, float nry, float nrz)
+void Recolectable::setRotacion(float nrx, float nry, float nrz)
 {
     rx = nrx;
     ry = nry;
     rz = nrz;
 }
 
-void Interactuable::setNewRotacion(float nrx, float nry, float nrz)
+void Recolectable::setNewRotacion(float nrx, float nry, float nrz)
 {
     rotateTime = 0.0;
     this->setLastRotacion(newRx, newRy, newRz);
@@ -146,166 +125,166 @@ void Interactuable::setNewRotacion(float nrx, float nry, float nrz)
     newRz = nrz;
 }
 
-void Interactuable::setLastRotacion(float nrx, float nry, float nrz)
+void Recolectable::setLastRotacion(float nrx, float nry, float nrz)
 {
     lastRx = nrx;
     lastRy = nry;
     lastRz = nrz;
 }
 
-void Interactuable::initPosicionesFisicas(float nx,float ny,float nz)
+void Recolectable::initPosicionesFisicas(float nx,float ny,float nz)
 {
     fisX = nx;
     fisY = ny;
     fisZ = nz;
 }
 
-void Interactuable::setPosicionesFisicas(float nx,float ny,float nz)
+void Recolectable::setPosicionesFisicas(float nx,float ny,float nz)
 {
     fisX += nx;
     fisY += ny;
     fisZ += nz;
 }
 
-void Interactuable::SetPosicionArrayObjetos(int posicionObjeto)
+void Recolectable::SetPosicionArrayObjetos(int posicionObjeto)
 {
     posicionArrayObjetos = posicionObjeto;
 }
 
+void Recolectable::setCantidad(int can)
+{
+    cantidad = can;
+}
 
-int Interactuable::GetPosicionArrayObjetos()
+int Recolectable::getAtaque()
+{
+    return potenciaAtaque;
+}
+
+int Recolectable::GetPosicionArrayObjetos()
 {
     return posicionArrayObjetos;
 }
-int Interactuable::getCodigo()
+
+int Recolectable::getCodigo()
 {
     return codigoObjeto;
 }
 
-const char* Interactuable::getNombre()
+const char* Recolectable::getNombre()
 {
     return nombreObjeto;
 }
 
-const char* Interactuable::getObjeto()
+const char* Recolectable::getObjeto()
 {
     return ruta_objeto;
 }
 
-float Interactuable::getX()
+float Recolectable::getX()
 {
     return x;
 }
 
-float Interactuable::getY()
+float Recolectable::getY()
 {
     return y;
 }
 
-float Interactuable::getZ()
+float Recolectable::getZ()
 {
     return z;
 }
 
-float Interactuable::getNewX()
+float Recolectable::getNewX()
 {
     return newX;
 }
 
-float Interactuable::getNewY()
+float Recolectable::getNewY()
 {
     return newY;
 }
 
-float Interactuable::getNewZ()
+float Recolectable::getNewZ()
 {
     return newZ;
 }
 
-float Interactuable::getLastX()
+float Recolectable::getLastX()
 {
     return lastX;
 }
 
-float Interactuable::getLastY()
+float Recolectable::getLastY()
 {
     return lastY;
 }
 
-float Interactuable::getLastZ()
+float Recolectable::getLastZ()
 {
     return lastZ;
 }
 
-float Interactuable::getFisX()
+float Recolectable::getFisX()
 {
     return fisX;
 }
 
-float Interactuable::getFisY()
+float Recolectable::getFisY()
 {
     return fisY;
 }
 
-float Interactuable::getFisZ()
+float Recolectable::getFisZ()
 {
     return fisZ;
 }
 
-float Interactuable::getRX()
+float Recolectable::getRX()
 {
     return rx;
 }
 
-float Interactuable::getRY()
+float Recolectable::getRY()
 {
     return ry;
 }
 
-float Interactuable::getRZ()
+float Recolectable::getRZ()
 {
     return rz;
 }
 
-float * Interactuable::GetDesplazamientos()
-{
-    return desplazamientos;
-}
-
-void Interactuable::setID(int nid)
+void Recolectable::setID(int nid)
 {
     id = nid;
 }
 
-int Interactuable::getID()
+int Recolectable::getID()
 {
     return id;
 }
 
 
-const char* Interactuable::getTextura()
+const char* Recolectable::getTextura()
 {
     return ruta_textura;
 }
-float Interactuable::getAncho()
+float Recolectable::getAncho()
 {
     return ancho;
 }
-float Interactuable::getLargo()
+float Recolectable::getLargo()
 {
     return largo;
 }
-float Interactuable::getAlto()
+float Recolectable::getAlto()
 {
     return alto;
 }
 
-int Interactuable::GetPosicionObjetos()
+int Recolectable::getCantidad()
 {
-    return posicionArrayObjetos;
-}
-
-bool Interactuable::getAccionado()
-{
-  return accionado;
+    return cantidad;
 }

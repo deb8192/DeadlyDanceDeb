@@ -1,4 +1,4 @@
-#include "Nodo.hpp"
+#include "../Nodo.hpp"
 #include <iostream>
 
 using namespace std;

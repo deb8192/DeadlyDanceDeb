@@ -21,12 +21,18 @@ SOURCESM = $(shell ls src/Menus/*.cpp)
 SOURCESP = $(shell ls src/Personajes/*.cpp)
 SOURCESE = $(shell ls src/Enemigos/*.cpp)
 SOURCESJ = $(shell ls src/Jugando/*.cpp)
+SOURCESPU = $(shell ls src/Puzzles/*.cpp)
+SOURCESO = $(shell ls src/Objetos/*.cpp)
+SOURCESA = $(shell ls src/Armas/*.cpp)
 
 SOURCESHEADER = $(shell ls src/*.hpp)
 SOURCESHEADERM = $(shell ls src/Menus/*.hpp)
 SOURCESHEADERP = $(shell ls src/Personajes/*.hpp)
 SOURCESHEADERE = $(shell ls src/Enemigos/*.hpp)
 SOURCESHEADERJ = $(shell ls src/Jugando/*.hpp)
+SOURCESHEADERPU = $(shell ls src/Puzzles/*.hpp)
+SOURCESHEADERO = $(shell ls src/Objetos/*.hpp)
+SOURCESHEADERA = $(shell ls src/Armas/*.hpp)
 
 #OSOURCES = $(wildcard obj/*.o) #se elimina por problemas de no refrescarse
 
@@ -35,12 +41,18 @@ OSOURCESMV2 = $(shell ls obj/Menus/*.o)
 OSOURCESPV2 = $(shell ls obj/Personajes/*.o)
 OSOURCESEV2 = $(shell ls obj/Enemigos/*.o)
 OSOURCESJV2 = $(shell ls obj/Jugando/*.o)
+OSOURCESPU2 = $(shell ls obj/Puzzles/*.o)
+OSOURCESO2 = $(shell ls obj/Objetos/*.o)
+OSOURCESA2 = $(shell ls obj/Armas/*.o)
 
 OBJECTS = $(SOURCES:.cpp=.o)
 OBJECTSM = $(SOURCESM:.cpp=.o)
 OBJECTSP = $(SOURCESP:.cpp=.o)
 OBJECTSE = $(SOURCESE:.cpp=.o)
 OBJECTSJ = $(SOURCESJ:.cpp=.o)
+OBJECTSPU = $(SOURCESPU:.cpp=.o)
+OBJECTSO = $(SOURCESO:.cpp=.o)
+OBJECTSA = $(SOURCESA:.cpp=.o)
 
 RECUR = Recursiva
 RECUR2 = Recursiva2
@@ -51,20 +63,26 @@ BUSQM = $(shell find ./obj/Menus -name "*.o" | wc -l)
 BUSQP = $(shell find ./obj/Personajes -name "*.o" | wc -l)
 BUSQE = $(shell find ./obj/Enemigos -name "*.o" | wc -l)
 BUSQJ = $(shell find ./obj/Jugando -name "*.o" | wc -l)
+BUSQPU = $(shell find ./obj/Puzzles -name "*.o" | wc -l)
+BUSQO = $(shell find ./obj/Objetos -name "*.o" | wc -l)
+BUSQA = $(shell find ./obj/Armas -name "*.o" | wc -l)
 
 BUSQ2 = $(shell find ./src -name "*.o" | wc -l)
 BUSQ2M = $(shell find ./src/Menus -name "*.o" | wc -l)
 BUSQ2P = $(shell find ./src/Personajes -name "*.o" | wc -l)
 BUSQ2E = $(shell find ./src/Enemigos -name "*.o" | wc -l)
 BUSQ2J = $(shell find ./src/Jugando -name "*.o" | wc -l)
+BUSQ2PU = $(shell find ./src/Puzzles -name "*.o" | wc -l)
+BUSQ2O = $(shell find ./src/Objetos -name "*.o" | wc -l)
+BUSQ2A = $(shell find ./src/Armas -name "*.o" | wc -l)
 
 # Aqui es donde se hace la magia y se unifican las clases en una sola, basicamente se le pasa las clases de objeto (.o) para unificarlas
-$(BEGIN): $(PRECA) $(RECUR) $(OBJECTS) $(OBJECTSP) $(OBJECTSE) $(OBJECTSM) $(OBJECTSJ) $(RECUR2) $(EXEC)
+$(BEGIN): $(PRECA) $(RECUR) $(OBJECTS) $(OBJECTSP) $(OBJECTSE) $(OBJECTSM) $(OBJECTSJ) $(OBJECTSPU) $(OBJECTSO) $(OBJECTSA) $(RECUR2) $(EXEC)
 	#Finalizado Comprobaciones
 
-$(EXEC): $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2)
+$(EXEC): $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2)
 	#Comprobando ejecutable si esta actualizado
-	$(CXX) $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(irrlichtN) $(LIBRERIAS) $(LIBRERIAS_ESPECIFICAS)  -o $(EXEC)
+	$(CXX) $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(irrlichtN) $(LIBRERIAS) $(LIBRERIAS_ESPECIFICAS)  -o $(EXEC)
 	#Ejecutable Actualizado
 
 $(PRECA):
@@ -73,6 +91,9 @@ $(PRECA):
 	if [ $(BUSQ2P) -gt 0 ] ; then mv src/Personajes/*.o obj/Personajes/ ; fi
 	if [ $(BUSQ2E) -gt 0 ] ; then mv src/Enemigos/*.o obj/Enemigos/ ; fi
 	if [ $(BUSQ2J) -gt 0 ] ; then mv src/Jugando/*.o obj/Jugando/ ; fi
+	if [ $(BUSQ2PU) -gt 0 ] ; then mv src/Puzzles/*.o obj/Puzzles/ ; fi
+	if [ $(BUSQ2O) -gt 0 ] ; then mv src/Objetos/*.o obj/Objetos/ ; fi
+	if [ $(BUSQ2A) -gt 0 ] ; then mv src/Armas/*.o obj/Armas/ ; fi
 
 $(RECUR):
 	if [ $(BUSQ) -gt 0 ] ; then mv obj/*.o src/ ; fi
@@ -80,6 +101,9 @@ $(RECUR):
 	if [ $(BUSQP) -gt 0 ] ; then mv obj/Personajes/*.o src/Personajes/ ; fi
 	if [ $(BUSQE) -gt 0 ] ; then mv obj/Enemigos/*.o src/Enemigos/ ; fi
 	if [ $(BUSQJ) -gt 0 ] ; then mv obj/Jugando/*.o src/Jugando/ ; fi
+	if [ $(BUSQPU) -gt 0 ] ; then mv obj/Puzzles/*.o src/Puzzles/ ; fi
+	if [ $(BUSQO) -gt 0 ] ; then mv obj/Objetos/*.o src/Objetos/ ; fi
+	if [ $(BUSQA) -gt 0 ] ; then mv obj/Armas/*.o src/Armas/ ; fi
 
 # si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
 
@@ -99,6 +123,9 @@ $(RECUR2):
 	 if [ $(BUSQ2P) -gt 0 ] ; then mv src/Personajes/*.o obj/Personajes/ ; fi
 	 if [ $(BUSQ2E) -gt 0 ] ; then mv src/Enemigos/*.o obj/Enemigos/ ; fi
 	 if [ $(BUSQ2J) -gt 0 ] ; then mv src/Jugando/*.o obj/Jugando/ ; fi
+	 if [ $(BUSQ2PU) -gt 0 ] ; then mv src/Puzzles/*.o obj/Puzzles/ ; fi
+	 if [ $(BUSQ2O) -gt 0 ] ; then mv src/Objetos/*.o obj/Objetos/ ; fi
+	 if [ $(BUSQ2A) -gt 0 ] ; then mv src/Armas/*.o obj/Armas/ ; fi
 
 #main: main.o MotorGrafico.o
 #le decimos que clase depende de irrlicht
@@ -106,7 +133,7 @@ $(RECUR2):
 
 # Limpia los .o y el ejecutable creado, si se ponen archivos autogenerados deben ponerse aqui para que se quiten
 clean:
-	rm -f $(EXEC) $(OSOURCESV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESMV2)
+	rm -f $(EXEC) $(OSOURCESV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESMV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2)
 	rm -f src/*.o
 # si ejecutas "make run" despues de compilar ejecutara automaticamente el ejecutable
 run: $(BEGIN)
