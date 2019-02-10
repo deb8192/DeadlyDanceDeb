@@ -38,77 +38,77 @@ Enemigo::~Enemigo(){
 
 float Enemigo::getX()
 {
-    return x;
+    return posActual.x;
 }
 
 float Enemigo::getY()
 {
-    return y;
+    return posActual.y;
 }
 
 float Enemigo::getZ()
 {
-    return z;
+    return posActual.z;
 }
 
 float Enemigo::getNewX()
 {
-    return newX;
+    return posFutura.x;
 }
 
 float Enemigo::getNewY()
 {
-    return newY;
+    return posFutura.y;
 }
 
 float Enemigo::getNewZ()
 {
-    return newZ;
+    return posFutura.z;
 }
 
 float Enemigo::getLastX()
 {
-    return lastX;
+    return posPasada.x;
 }
 
 float Enemigo::getLastY()
 {
-    return lastY;
+    return posPasada.y;
 }
 
 float Enemigo::getLastZ()
 {
-    return lastZ;
+    return posPasada.z;
 }
 
 float Enemigo::getFisX()
 {
-    return fisX;
+    return posFisicas.x;
 }
 
 float Enemigo::getFisY()
 {
-    return fisY;
+    return posFisicas.y;
 }
 
 float Enemigo::getFisZ()
 {
-    return fisZ;
+    return posFisicas.z;
 }
 
 float Enemigo::getRX()
 {
-    return rx;
+    return rotActual.x;
 }
 
 float Enemigo::getRY()
 {
-    return ry;
+    return rotActual.y;
 }
 
 float Enemigo::getRZ()
 {
-    return rz;
+    return rotActual.z;
 }
 
 float Enemigo::getVelocidad()
@@ -123,7 +123,7 @@ void Enemigo::definirSala(Sala * sala)
 
 void Enemigo::generarSonido(int intensidad,double duracion,int tipo)
 {
-    eventoSonido * sonid = new eventoSonido(intensidad,duracion,x,y,z,2,tipo);
+    eventoSonido * sonid = new eventoSonido(intensidad, duracion, posActual.x, posActual.y, posActual.z, 2, tipo);
     SenseEventos * eventos = SenseEventos::getInstance();
     eventos->agregarEvento(sonid);
 }
@@ -131,7 +131,7 @@ void Enemigo::generarSonido(int intensidad,double duracion,int tipo)
 void Enemigo::queEscuchas()
 {
     SenseEventos * eventos = SenseEventos::getInstance();
-    std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(x,y);//le pasamos nuestra x e y
+    std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(posActual.x, posActual.y);//le pasamos nuestra x e y
     //int cuantos = listaSonidos.size();
     //cout << "Esta escuchando " << cuantos << " sonidos" << endl;
 }
@@ -142,7 +142,7 @@ void Enemigo::queVes()
     //esto es un ejemplo
 
 
-    int * loqueve = eventos->listaObjetos(x,y,z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+    int * loqueve = eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
 
     if(loqueve != nullptr)
     {
@@ -177,39 +177,39 @@ Sala* Enemigo::getSala()
 
 void Enemigo::setPosiciones(float nx,float ny,float nz)
 {
-    x = nx;
-    y = ny;
-    z = nz;
+    posActual.x = nx;
+    posActual.y = ny;
+    posActual.z = nz;
 }
 
 void Enemigo::setNewPosiciones(float nx,float ny,float nz)
 {
     moveTime = 0.0;
-    this->setLastPosiciones(newX, newY, newZ);
-    newX = nx;
-    newY = ny;
-    newZ = nz;
+    this->setLastPosiciones(posFutura.x, posFutura.y, posFutura.z);
+    posFutura.x = nx;
+    posFutura.y = ny;
+    posFutura.z = nz;
 }
 
 void Enemigo::setLastPosiciones(float nx,float ny,float nz)
 {
-    lastX = nx;
-    lastY = ny;
-    lastZ = nz;
+    posPasada.x = nx;
+    posPasada.y = ny;
+    posPasada.z = nz;
 }
 
 void Enemigo::initPosicionesFisicas(float nx,float ny,float nz)
 {
-    fisX = nx;
-    fisY = ny;
-    fisZ = nz;
+    posFisicas.x = nx;
+    posFisicas.y = ny;
+    posFisicas.z = nz;
 }
 
 void Enemigo::setPosicionesFisicas(float nx,float ny,float nz)
 {
-    fisX += nx;
-    fisY += ny;
-    fisZ += nz;
+    posFisicas.x += nx;
+    posFisicas.y += ny;
+    posFisicas.z += nz;
 }
 
 
@@ -401,8 +401,8 @@ void Enemigo::moverseEntidad(float updTime)
         pt = 1.0f;
     }
 
-    x = lastX * (1 - pt) + newX * pt;
-    z = lastZ * (1 - pt) + newZ * pt;
+    posActual.x = posPasada.x * (1 - pt) + posFutura.x * pt;
+    posActual.z = posPasada.z * (1 - pt) + posFutura.z * pt;
 }
 
 /*************** rotarEntidad *****************
@@ -421,9 +421,9 @@ void Enemigo::RotarEntidad(float updTime)
         pt = 1.0f;
     }
 
-    rx = lastRx * (1 - pt) + newRx * pt;
-    ry = lastRy * (1 - pt) + newRy * pt;
-    rz = lastRz * (1 - pt) + newRz * pt;
+    rotActual.x = rotPasada.x * (1 - pt) + rotFutura.x * pt;
+    rotActual.y = rotPasada.y * (1 - pt) + rotFutura.y * pt;
+    rotActual.z = rotPasada.z * (1 - pt) + rotFutura.z * pt;
 }
 
 void Enemigo::UpdateTimeMove(float updTime)
@@ -569,25 +569,25 @@ void Enemigo::setRotation(float rot)
 
 void Enemigo::setRotacion(float nrx, float nry, float nrz)
 {
-    rx = nrx;
-    ry = nry;
-    rz = nrz;
+    rotActual.x = nrx;
+    rotActual.y = nry;
+    rotActual.z = nrz;
 }
 
 void Enemigo::setNewRotacion(float nrx, float nry, float nrz)
 {
     rotateTime = 0.0;
-    this->setLastRotacion(newRx, newRy, newRz);
-    newRx = nrx;
-    newRy = nry;
-    newRz = nrz;
+    this->setLastRotacion(rotFutura.x, rotFutura.y, rotFutura.z);
+    rotFutura.x = nrx;
+    rotFutura.y = nry;
+    rotFutura.z = nrz;
 }
 
 void Enemigo::setLastRotacion(float nrx, float nry, float nrz)
 {
-    lastRx = nrx;
-    lastRy = nry;
-    lastRz = nrz;
+    rotPasada.x = nrx;
+    rotPasada.y = nry;
+    rotPasada.z = nrz;
 }
 
 void Enemigo::setAtackTime(float t)
@@ -691,7 +691,7 @@ int* Enemigo::RunIA(bool funciona)
         SenseEventos * eventos = SenseEventos::getInstance();
         if(tipo == 1)//ves al jugador ?
         {
-            int * loqueve = eventos->listaObjetos(x,y,z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+            int * loqueve = eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
 
             if(loqueve != nullptr)
             {
@@ -712,7 +712,7 @@ int* Enemigo::RunIA(bool funciona)
     bool Enemigo::oir(int tipo)//tipo 1 oir al jugador si lo oye true, tipo 2 si oye al enemigo pedir ayuda si lo oye true si no false
     {
         SenseEventos * eventos = SenseEventos::getInstance();
-        std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(x,y);//le pasamos nuestra x e y
+        std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(posActual.x, posActual.y);//le pasamos nuestra x e y
 
         if(listaSonidos.size() > 0)
         {
