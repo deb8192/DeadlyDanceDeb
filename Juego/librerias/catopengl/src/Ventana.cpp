@@ -74,22 +74,21 @@ bool Ventana::SigueAbierta()
 //USO: sirve para limpiar el buffer y cambiar el color ambiente
 void Ventana::draw()
 {
-    //actualizar inputs(teclado y raton)
-    procesarInputs(_window);
-
-    //Comandos de render
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Designamos a el glClearColor un color
-    glClear(GL_COLOR_BUFFER_BIT);         //Borrarmos en el buffer con el glClearColor designado
-
     //Comprobar y llamar eventos, cambiar buffers
     glfwSwapBuffers(_window);             //Intercambia los buffer de la ventana
     glfwPollEvents();  
 }
 
 //USO: sirve para unificar el update general de la ventana(se llaman a las diferentes funciones necesarias para actualizar la ventana)
-void Ventana::Update()
+void Ventana::UpdateFase1()
 {
-    draw();//actualizamos la ventana
+    limpiar();
+}
+
+//USO: llamamos a pintar buffers
+void Ventana::UpdateFase2()
+{
+    draw();
 }
 
 //USO: limpia toda la informacion de la ventana
@@ -114,4 +113,15 @@ void Ventana::procesarInputs(GLFWwindow * _ventana)
     {
         glfwSetWindowShouldClose(_ventana, true);            //Cerrar GLFW
     }
+}
+
+
+void Ventana::limpiar()
+{
+    //actualizar inputs(teclado y raton)
+    procesarInputs(_window);
+
+    //Comandos de render
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Designamos a el glClearColor un color
+    glClear(GL_COLOR_BUFFER_BIT);         //Borrarmos en el buffer con el glClearColor designado
 }
