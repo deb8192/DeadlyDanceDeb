@@ -1,5 +1,5 @@
 #include "Inputs.hpp"
-#include "eventos.hpp"
+#include "Eventos.hpp"
 //se llama a su cabezera para cargar las dependencias
 //#include "eventos.hpp"
 
