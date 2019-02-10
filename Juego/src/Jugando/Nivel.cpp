@@ -98,11 +98,11 @@ bool Nivel::CargarNivel(int level)
 {
     NoEjecutar();//se impide entrar en bucles del juego
 
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
 
-    _motor->borrarScena();//borramos la scena
+    _motor->BorrarScena();//borramos la scena
 
     //pre limpiamos todo
     _motor->LimpiarMotorGrafico();
@@ -133,7 +133,7 @@ bool Nivel::CargarNivel(int level)
 void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int*  propiedades, Sala*  sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     //accion indicara futuramente que tipo de enemigo sera (herencia)
-    MotorGrafico* _motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
+    MotorGrafico* _motor = MotorGrafico::GetInstance();//cogemos instancia del motor para crear la figura 3d
     switch (enemigo)
     {
         case 0:
@@ -234,7 +234,7 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
     jugador.setProAtaCritico(10);
     jugador.setVida(100);
     jugador.setPosiciones(x,y,z);
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
 
     _motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
@@ -246,7 +246,7 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
 
 void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int*  propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
     int posicionObjeto;
 
     //Arma
@@ -312,7 +312,7 @@ void Nivel::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto,
 void Nivel::cargarCofres(int num)
 {
   long unsigned int num_cofres = num;
-  MotorGrafico* _motor = MotorGrafico::getInstance();
+  MotorGrafico* _motor = MotorGrafico::GetInstance();
 
   if(!zonas.empty())
   {
@@ -380,7 +380,7 @@ void Nivel::cargarCofres(int num)
 
 Sala*  Nivel::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
     Sala*  sala = new Sala(ancho,largo,alto,x,y,z,centro);
     //int*  datos = sala->getSizes(); //para comprobar la informacion de la sala
     //cout << "\e[36m datos de la sala: \e[0m" << datos[0] << " " << datos[1]  << " " << datos[2] << " " << datos[3] << " " << datos[4] << endl;
@@ -400,7 +400,7 @@ Sala*  Nivel::CrearPlataforma(int accion, int x,int y,int z, int ancho, int larg
 
 void Nivel::CrearLuz(int x,int y,int z)
 {
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
     _motor->CargarLuces(x,y,z);
 }
 
@@ -427,7 +427,7 @@ void Nivel::EraseJugador(){
 void Nivel::CogerObjeto()
 {
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
 
     long unsigned int rec_col = _fisicas->collideColectable();
         jugador.setAnimacion(4);
@@ -494,7 +494,7 @@ void Nivel::CogerObjeto()
 void Nivel::DejarObjeto()
 {
     MotorFisicas*  _fisicas = MotorFisicas::getInstance();
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
 
         if(jugador.getArma() != nullptr)//si tiene arma equipada
         {
@@ -734,14 +734,14 @@ void Nivel::AccionarMecanismo(int int_col)
 void Nivel::InteractuarNivel()
 {
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
     //lo siguiente es para saber que objeto colisiona con jugador
     int rec_col = _fisicas->collideColectable();
     int int_col = _fisicas->collideInteractuable();
 
     //cambia se utiliza porque coge y suelta el objeto sucesivamente varias veces, la causa de este error
     //era porque ocurren varias iteraciones del bucle tal vez porque la interpolacion crea mas iteraciones en el bucle
-    if(_motor->estaPulsado(KEY_E))
+    if(_motor->EstaPulsado(KEY_E))
     {
         if(rec_col < 0 && int_col < 0)
         {
@@ -768,7 +768,7 @@ void Nivel::InteractuarNivel()
             }
             cambia++;
         }
-        _motor->resetKey(KEY_E);
+        _motor->ResetKey(KEY_E);
     }
     else{
         cambia = 0;
@@ -784,12 +784,12 @@ void Nivel::InteractuarNivel()
 void Nivel::update()
 {
 
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
 
-    if(_motor->estaPulsado(KEY_J))
+    if(_motor->EstaPulsado(KEY_J))
     {
         jugador.QuitarVida(20);
-        _motor->resetKey(KEY_J);
+        _motor->ResetKey(KEY_J);
     }
 
     if(ejecutar)
@@ -828,10 +828,10 @@ void Nivel::update()
         this->activarPowerUp();
 
         //adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
-        _fisicas->colisionChecker(_motor->estaPulsado(1),
-            _motor->estaPulsado(2),
-            _motor->estaPulsado(3),
-            _motor->estaPulsado(4),
+        _fisicas->colisionChecker(_motor->EstaPulsado(1),
+            _motor->EstaPulsado(2),
+            _motor->EstaPulsado(3),
+            _motor->EstaPulsado(4),
             jugador.getNewX(),
             jugador.getNewY(),
             jugador.getNewZ()
@@ -853,10 +853,10 @@ void Nivel::update()
         //actualizamos movimiento del jugador
 
             jugador.movimiento(jugadorInmovil,
-                _motor->estaPulsado(1),
-                _motor->estaPulsado(2),
-                _motor->estaPulsado(3),
-                _motor->estaPulsado(4)
+                _motor->EstaPulsado(1),
+                _motor->EstaPulsado(2),
+                _motor->EstaPulsado(3),
+                _motor->EstaPulsado(4)
             );
 
             _motor->clearDebug2();   //Pruebas debug
@@ -1004,7 +1004,7 @@ void Nivel::activarPowerUp()
     int int_cpw = _fisicas->collideColectablePowerup();
     if(int_cpw >= 0)
     {
-        MotorGrafico* _motor = MotorGrafico::getInstance();
+        MotorGrafico* _motor = MotorGrafico::GetInstance();
         bool locoges = false; //Comprobar si lo puedes coger
 
         //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
@@ -1043,11 +1043,11 @@ void Nivel::updateAt(int* danyo, MotorGrafico* _motor)
     {
         float tiempoActual = 0.0f;
         float tiempoAtaque = 0.0f;
-        if((_motor->estaPulsado(KEY_ESPACIO) || _motor->estaPulsado(LMOUSE_DOWN)) && jugador.getTimeAt() <= 0.0f)
+        if((_motor->EstaPulsado(KEY_ESPACIO) || _motor->EstaPulsado(LMOUSE_DOWN)) && jugador.getTimeAt() <= 0.0f)
         {
            *danyo = jugador.Atacar(0);
-            _motor->resetKey(KEY_ESPACIO);
-            _motor->resetEvento(LMOUSE_DOWN);
+            _motor->ResetKey(KEY_ESPACIO);
+            _motor->ResetEvento(LMOUSE_DOWN);
             //atacktime = 1.5f;
             jugador.setTimeAt(1.5f);
             jugador.setLastTimeAt(_controladorTiempo->GetTiempo(2));
@@ -1089,11 +1089,11 @@ void Nivel::updateAtEsp(MotorGrafico* _motor)
     float tiempoActual = 0.0f;
     float tiempoAtaqueEsp = 0.0f;
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((_motor->estaPulsado(RMOUSE_DOWN)||_motor->estaPulsado(KEY_Q)) && jugador.getTimeAtEsp() <= 0.0)
+    if((_motor->EstaPulsado(RMOUSE_DOWN)||_motor->EstaPulsado(KEY_Q)) && jugador.getTimeAtEsp() <= 0.0)
     {
         danyo = jugador.AtacarEspecial();
-        _motor->resetKey(KEY_Q);
-        _motor->resetEvento(RMOUSE_DOWN);
+        _motor->ResetKey(KEY_Q);
+        _motor->ResetEvento(RMOUSE_DOWN);
         _motor->colorearJugador(255, 55, 0, 255);
         if(danyo > 0)
         {
@@ -1139,10 +1139,10 @@ void Nivel::updateIA()
     if(ejecutar)
     {
         //cout<< "Ejecuto ia " << endl;
-        MotorGrafico* _motor = MotorGrafico::getInstance();
+        MotorGrafico* _motor = MotorGrafico::GetInstance();
 
         //En esta parte muere jugador
-        if(_motor->estaPulsado(KEY_J)){//SI PULSO 'J' MUERE JUGADOR
+        if(_motor->EstaPulsado(KEY_J)){//SI PULSO 'J' MUERE JUGADOR
             jugador.MuereJugador();
         }
         if(jugador.estasMuerto())
@@ -1519,7 +1519,7 @@ void Nivel::Draw()
 {
     if(ejecutar)
     {
-        MotorGrafico* _motor = MotorGrafico::getInstance();
+        MotorGrafico* _motor = MotorGrafico::GetInstance();
         //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
         if(drawTime == 0.0)
         {

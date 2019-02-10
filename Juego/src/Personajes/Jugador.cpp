@@ -61,7 +61,7 @@ Jugador::Jugador(int,int,int,int,int,int,std::string malla)
 {
 
     vida = 100;//esto lo hereda de la interfaz por el protected
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
     _motor->crearJugador(malla);
 
     posActual.x = 1;
@@ -219,7 +219,7 @@ bool Jugador::finalAnimMuerte(){
 
 void Jugador::MuereJugador(){
     Times* _tiempo = Times::GetInstance();
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
 
     if(tiempoPasadoMuerte == 0){
         _motor->colorearJugador(255,0,0,0);//negro
@@ -296,7 +296,7 @@ void Jugador::AtacarUpdate(int danyo)
   {
     Nivel* nivel = Nivel::getInstance();
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
     if(this->getArma() == nullptr){
       _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
       _motor->clearDebug2();
@@ -456,7 +456,7 @@ int Jugador::AtacarEspecial()
  */
 void Jugador::AtacarEspecialUpdate(int*danyo)
 {
-    MotorGrafico* _motor = MotorGrafico::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
     MotorFisicas * _fisicas = MotorFisicas::getInstance();
     Nivel* nivel = Nivel::getInstance();
 

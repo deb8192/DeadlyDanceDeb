@@ -43,7 +43,7 @@ void SenseEventos::update()
             {
                 int * propie = sonidos[i]->getPropiedades();
                 float inten = sonidos[i]->getIntensidad();
-                MotorGrafico * motor = MotorGrafico::getInstance();
+                MotorGrafico * motor = MotorGrafico::GetInstance();
                 motor->dibujarCirculoEventoSonido(propie[2],propie[3],propie[4],inten);
                 delete [] propie;
             }
@@ -89,7 +89,7 @@ int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista
 { 
 
     MotorFisicas * fisicas = MotorFisicas::getInstance();
-    MotorGrafico * motor = MotorGrafico::getInstance();
+    MotorGrafico * motor = MotorGrafico::GetInstance();
 
     int * perDer;
     int * perIzq;

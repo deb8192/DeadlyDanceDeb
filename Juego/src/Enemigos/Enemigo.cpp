@@ -267,7 +267,7 @@ int Enemigo::AtacarEspecial()
     int danyo = 0, por10 = 10, por100 = 100;
     MotorFisicas* fisicas = MotorFisicas::getInstance();
     MotorAudioSystem* motora = MotorAudioSystem::getInstance();
-    MotorGrafico* motor = MotorGrafico::getInstance();
+    MotorGrafico* motor = MotorGrafico::GetInstance();
 
     cout << vida << " " << barraAtEs << " " << por100 << endl;
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
@@ -354,7 +354,7 @@ bool Enemigo::finalAnimMuerte(){
 
 void Enemigo::MuereEnemigo(int enemi){
     Times* _tiempo = Times::GetInstance();
-    MotorGrafico* motor = MotorGrafico::getInstance();
+    MotorGrafico* motor = MotorGrafico::GetInstance();
     if(tiempoPasadoMuerte == 0){
         motor->colorearEnemigo(255,0,0,0,enemi);//negro
         tiempoPasadoMuerte = _tiempo->GetTiempo(1);
@@ -731,7 +731,7 @@ int* Enemigo::RunIA(bool funciona)
     bool Enemigo::pedirAyuda()
     {
         Nivel * nivel = Nivel::getInstance();
-        MotorGrafico * motor = MotorGrafico::getInstance();
+        MotorGrafico * motor = MotorGrafico::GetInstance();
         //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
         if(nivel->getEnemigoPideAyuda() == nullptr && motor->getPathfindingActivado())
         {
@@ -747,7 +747,7 @@ int* Enemigo::RunIA(bool funciona)
     {
         //vamos a generar un sonido de ayuda
         generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
-        MotorGrafico * motor = MotorGrafico::getInstance();
+        MotorGrafico * motor = MotorGrafico::GetInstance();
         if(motor->getPathfindingActivado()){
             Nivel * nivel = Nivel::getInstance();
             nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
