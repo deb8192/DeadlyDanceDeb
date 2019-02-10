@@ -2,7 +2,7 @@
 #define Pathfinder_HPP
 #include <vector>
 #include<bits/stdc++.h> 
-#include "Sala.hpp"
+#include "Jugando/Sala.hpp"
 
 using namespace std;
 

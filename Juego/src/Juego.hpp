@@ -1,10 +1,10 @@
 //#include "MotorGrafico.hpp"
 #include "MotorAudio.hpp"
 #include "Estado.hpp"
-#include "Nivel.hpp"
+#include "Jugando/Nivel.hpp"
 #include "CargadorBehaviorTrees.hpp" //prueba
 #include "CargadorXML.hpp"
-#include "times.hpp"
+#include "Times.hpp"
 
 #ifndef Juego_HPP
 #define Juego_CPP
@@ -15,11 +15,11 @@
 
             //singleton public
             ~Juego(void);
-            static Juego *getInstance() //esto se utiliza para crear el objeto una sola vez
+            static Juego* getInstance() //esto se utiliza para crear el objeto una sola vez
             {
-                if(unica_instancia == 0)
-                unica_instancia = new Juego();
-                return unica_instancia;
+                if(_unica_instancia == 0)
+                _unica_instancia = new Juego();
+                return _unica_instancia;
             }
             //fin singleton public
 
@@ -40,15 +40,15 @@
 
             //clase singleton
             Juego();
-            static Juego* unica_instancia;
+            static Juego* _unica_instancia;
             //fin clase singleton private
-            Estado * estado;//puntero del estado
-            MotorGrafico *motor;//instancia de la fachada
-            MotorAudioSystem *motora;//instancia de la fachada audio
+            Estado*  estado;//puntero del estado
+            MotorGrafico* _motor;//instancia de la fachada
+            MotorAudioSystem* _motora;//instancia de la fachada audio
             Cinematica cinematica;//contiene la clase cinematica (estado)
             Menu menu;//contiene la clase menu (estado)
             Jugando jugando;//contiene la clase Jugando (estado)
-            Nivel *nivel;
+            Nivel* nivel;
             
             // Probando puzzles
             Puzzles haciendo_puzzles;//contiene la clase Puzzles (estado)

@@ -1,8 +1,8 @@
-#include <vector>
-#include <iostream>
-
 #ifndef Salas_HPP
 #define Salas_HPP
+
+#include <vector>
+#include <iostream>
 
 class Sala
 {

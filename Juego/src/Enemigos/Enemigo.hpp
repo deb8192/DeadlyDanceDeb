@@ -1,12 +1,12 @@
 #ifndef Enemigo_HPP
 #define Enemigo_HPP
-#include "INnpc.hpp"
-#include "INdrawable.hpp"
-#include "INsentidos.hpp"
-#include "Arma.hpp"
-#include "Sala.hpp"
+#include "../INnpc.hpp"
+#include "../INdrawable.hpp"
+#include "../INsentidos.hpp"
+#include "../Armas/Arma.hpp"
+#include "../Jugando/Sala.hpp"
 #include <vector>
-#include "Arbol.hpp"
+#include "../Arbol.hpp"
 
 class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple herencia a esto se le llama derivacion multiple
 {
@@ -119,7 +119,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         //activar ia
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
         Arbol *getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
-        int* runIA(bool);//corre la ia del enemigo
+        int* RunIA(bool);//corre la ia del enemigo
         //fin ia
 
     protected:

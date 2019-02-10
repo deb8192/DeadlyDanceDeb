@@ -10,7 +10,7 @@ Arma::Arma()
 {
 
 }
-Arma::Arma(int ataque, const char * nombre, int anc, int lar, int alt, const char *objeto, const char *textura)
+Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt, const char* objeto, const char* textura)
 {
     std::string name_objeto(objeto);
     cadena_objeto = new char[sizeof(name_objeto)];
@@ -25,7 +25,7 @@ Arma::Arma(int ataque, const char * nombre, int anc, int lar, int alt, const cha
     strcpy(cadena_nombre, name_nombre.c_str());
     
     potenciaAtaque = ataque;
-    nombreArma = cadena_nombre;
+    _nombreArma = cadena_nombre;
     ancho = anc;
     largo = lar;
     alto = alt;
@@ -160,7 +160,7 @@ void Arma::setPosicionesArmaEsp(float nx,float ny,float nz, float ry)
 
 void Arma::setNombre(const char* weaponName)
 {
-    nombreArma = weaponName;
+    _nombreArma = weaponName;
 }
 
 void Arma::setAtaque(int danyo)
@@ -170,7 +170,7 @@ void Arma::setAtaque(int danyo)
 
 const char* Arma::getNombre()
 {
-    return nombreArma;
+    return _nombreArma;
 }
 
 int Arma::getAtaque()
