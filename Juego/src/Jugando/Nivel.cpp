@@ -147,12 +147,13 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
                 enemigos.back()->setID(id);//le damos el id unico en esta partida al enemigo
 
                 //Cargar sonido evento en una instancia con la id del enemigo como nombre
-                /*MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
+                MotorAudioSystem* motora = MotorAudioSystem::getInstance();
                 std::string nameid = std::to_string(id); //pasar id a string
-                _motora->LoadEvent("event:/Chicken1",nameid);
-                _motora->getEvent(nameid)->setPosition(x,y,z);
-                _motora->getEvent(nameid)->setVolume(0.4f);
-                _motora->getEvent(nameid)->start();*/
+                motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+                motora->getEvent(nameid)->setPosition(x,y,z);
+                motora->getEvent(nameid)->setVolume(0.4f);
+                motora->getEvent(nameid)->start();
+
             }
             break;            
     
