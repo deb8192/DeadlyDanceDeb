@@ -9,6 +9,13 @@ class INdrawable
 {
 
 public:
+    // Estructura con el alias "Posiciones"
+    typedef struct {
+        float x = 0.0f;
+        float y = 0.0f;
+        float z = 0.0f;
+    } Posiciones;
+
     virtual void moverseEntidad(float)=0;//Realiza el desplazamiento mediante la interpolacion
     virtual void RotarEntidad(float)=0;//Realiza la rotacion mediante la interpolacion
     virtual void UpdateTimeMove(float time)=0;//actualiza el tiempo del movimiento de la interpolacion
@@ -44,27 +51,17 @@ public:
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:
     //posiciones del objeto drawable
+    Posiciones posActual;
+    Posiciones posPasada; //Posiciones antiguas de la interpolacion
+    Posiciones posFutura; //Posiciones finales de la interpolacion
+    Posiciones posFisicas; //Posicion para colocar las fisicas de los objetos
+
+    Posiciones rotActual;  //Rotacion
+    Posiciones rotPasada;
+    Posiciones rotFutura;
+    
     float moveTime, rotateTime; //variables para controlar la interpolacion del movimiento y la rotacion;
-    float x = 0.0f;
-    float y = 0.0f;
-    float z = 0.0f;
-    float lastX = 0.0f; //Posiciones antiguas de la interpolacion
-    float lastY = 0.0f;
-    float lastZ = 0.0f;
-    float newX = 0.0f;  //Posiciones finales de la interpolacion
-    float newY = 0.0f;
-    float newZ = 0.0f;
-    float rx = 0.0f;    //Rotacion
-    float ry = 0.0f;
-    float rz = 0.0f;
-    float newRx = 0.0f;
-    float newRy = 0.0f;
-    float newRz = 0.0f;
-    float lastRx = 0.0f;
-    float lastRy = 0.0f;
-    float lastRz = 0.0f;
-    float fisX, fisY, fisZ; //Posicion para colocar las fisicas de los objetos
-    float rotation = 90.0f; //en grados por defecto
+    float rotation = 0.0f; //en grados por defecto
     int id = -1;
     int animacion = 0;  //nos sirve para cambiar de animacion //por defecto en reposo
     int animacionAnterior = 0; //nos sirve para saber si debemos cambiar de animacion por la nueva

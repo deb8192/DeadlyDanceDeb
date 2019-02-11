@@ -1,5 +1,5 @@
 #include "CargadorNiveles.hpp"
-#include "Nivel.hpp"
+#include "Jugando/Nivel.hpp"
 
 CargadorNiveles::CargadorNiveles()
 {
@@ -8,7 +8,7 @@ CargadorNiveles::CargadorNiveles()
 
 void CargadorNiveles::CargarNivelXml(int level)
 {
-    Nivel * nivel_instancia = Nivel::getInstance();
+    Nivel* nivel_instancia = Nivel::getInstance();
     //definimos los strings
     std::string nivel = ""; //donde se almacenara el nombre del nivel   
     std::string extension = ".xml"; // extension del archivo a abrir
@@ -32,8 +32,8 @@ void CargadorNiveles::CargarNivelXml(int level)
     pugi::xml_node primera = doc.child("Level"); //partimos de nivel
     vector <pugi::xml_node> anterior;
     anterior.push_back(primera.child("Platform"));
-    vector <Sala *> padre;
-    Sala * sala = crearSala(anterior.back(),nullptr);//pasamos la primera parte para que busque plataformas
+    vector <Sala* > padre;
+    Sala* sala = crearSala(anterior.back(),nullptr);//pasamos la primera parte para que busque plataformas
 
 
     for (pugi::xml_node hijo = doc.child("Level").child("Light"); hijo; hijo = hijo.next_sibling("Light"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -126,10 +126,10 @@ void CargadorNiveles::GuardarNivelBin(int level)
     //llamamos a las datos desde nivel para almacenarlos en formato binario 
 }
 
-Sala * CargadorNiveles::crearSala(pugi::xml_node plat,Sala * padre)
+Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
 {
-    Nivel * nivel_instancia = Nivel::getInstance();
-    Sala * padren = nullptr;//sala hijo
+    Nivel* nivel_instancia = Nivel::getInstance();
+    Sala* padren = nullptr;//sala hijo
     
     int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
     int x = plat.attribute("X").as_int();//nos devuelve un int
@@ -140,8 +140,8 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node plat,Sala * padre)
     int alto = plat.attribute("alto").as_int();//nos devuelve un int 
     int centro = plat.attribute("TypeCenter").as_int();//nos devuelve el tipo de centro de masas del objeto
     bool jugadorEstasAqui = plat.attribute("UserStar").as_bool();//nos devuelve true si es donde empieza el jugador 
-    const char * textura = plat.attribute("Texture").value(); //nos da un char[] = string
-    const char * modelo  =  plat.attribute("Model").value(); //nos da un char[] = string
+    const char* textura = plat.attribute("Texture").value(); //nos da un char[] = string
+    const char* modelo  =  plat.attribute("Model").value(); //nos da un char[] = string
     padren = nivel_instancia->CrearPlataforma(accion,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
 
     if(padre != nullptr && padren != nullptr)
@@ -153,7 +153,7 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node plat,Sala * padre)
     if(jugadorEstasAqui)
     {
         //cogemos las posiciones del jugador en el escenario
-        int * propiedades;
+        int* propiedades;
         propiedades = new int [6];
         int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
         int Playerx = plat.attribute("StarX").as_int();//nos devuelve un int
@@ -162,15 +162,15 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node plat,Sala * padre)
         int ancho = 1;//nos devuelve un int
         int largo = 1;//nos devuelve un int 
         int alto = 5;//nos devuelve un int
-        const char * Playertextura = plat.attribute("StarTexture").value(); //nos da un char[] = string
-        const char * Playermodelo  =  plat.attribute("StarModel").value(); //nos da un char[] = string
+        const char* Playertextura = plat.attribute("StarTexture").value(); //nos da un char[] = string
+        const char* Playermodelo  =  plat.attribute("StarModel").value(); //nos da un char[] = string
         nivel_instancia->CrearJugador(accion,Playerx,Playerz,Playery,ancho,largo,alto,Playermodelo,Playertextura,propiedades);
     }
 
     for (pugi::xml_node enem = plat.child("Enemy"); enem; enem = enem.next_sibling("Enemy"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         //aqui va la carga de enemigos
-        int * propiedades;
+        int* propiedades;
         propiedades = new int [6];
         int accion = enem.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
         int x = enem.attribute("X").as_int();//nos devuelve un int
@@ -179,14 +179,15 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node plat,Sala * padre)
         int ancho = enem.attribute("ancho").as_int();//nos devuelve un int
         int largo = enem.attribute("largo").as_int();//nos devuelve un int 
         int alto = enem.attribute("ancho").as_int();//nos devuelve un int
-        const char * textura = enem.attribute("Texture").value(); //nos da un char[] = string
-        const char * modelo  =  enem.attribute("Model").value(); //nos da un char[] = string
-        nivel_instancia->CrearEnemigo(accion,x,y,z,ancho,largo,alto,modelo,textura,propiedades,padren); //cargamos el enemigo
+        int enemigo = enem.attribute("enemigo").as_int(); //nos da un char[] = string
+        const char* textura = enem.attribute("Texture").value(); //nos da un char[] = string
+        const char* modelo  =  enem.attribute("Model").value(); //nos da un char[] = string
+        nivel_instancia->CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,modelo,textura,propiedades,padren); //cargamos el enemigo
     }
     for (pugi::xml_node obj = plat.child("Object"); obj; obj = obj.next_sibling("Object"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         //aqui va la carga de objetos
-        int * propiedades;
+        int* propiedades;
         propiedades = new int [6];//hay que destruirlo en nivel
         int codigo = obj.attribute("codigo").as_int(); //se utiliza para asociar palancas y/o llaves a puertas
         int accion = obj.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
@@ -199,15 +200,15 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node plat,Sala * padre)
         int largo = obj.attribute("largo").as_int();//nos devuelve un int
         int alto = obj.attribute("alto").as_int();//nos devuelve un int
         int ataque = obj.attribute("ataque").as_int();//nos devuelve un int
-        const char * nombre = obj.attribute("nombre").value(); //nos da un char[] = string
-        const char * textura = obj.attribute("Texture").value(); //nos da un char[] = string
-        const char * modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
+        const char* nombre = obj.attribute("nombre").value(); //nos da un char[] = string
+        const char* textura = obj.attribute("Texture").value(); //nos da un char[] = string
+        const char* modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
         nivel_instancia->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
     }
     for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         //carga de las zonas
-        int * propiedades;
+        int* propiedades;
         propiedades = new int [6];//hay que destruirlo en nivel
         int accion = zon.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
         int x = zon.attribute("X").as_int();//nos devuelve un int
@@ -216,7 +217,7 @@ Sala * CargadorNiveles::crearSala(pugi::xml_node plat,Sala * padre)
         int ancho = zon.attribute("ancho").as_int();//nos devuelve un int
         int largo = zon.attribute("largo").as_int();//nos devuelve un int
         int alto = zon.attribute("ancho").as_int();//nos devuelve un int
-        const char * tipo = zon.attribute("tipo").value(); //nos da un char[] = string
+        const char* tipo = zon.attribute("tipo").value(); //nos da un char[] = string
         nivel_instancia->CrearZona(accion,x,y,z,ancho,largo,alto,tipo,propiedades); //cargamos el enemigo
     }
 
