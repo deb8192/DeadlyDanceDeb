@@ -1,8 +1,8 @@
 #ifndef TTransform_HPP
 #define TTansform_HPP
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
 
 #include "TEntidad.hpp"
 
