@@ -2,13 +2,12 @@
 cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo habra un objeto de MotorGrafico).*/
 
 #include <irrlicht/irrlicht.h> //la utilizaremos para las funcionalidades del motor
-#include "eventos.hpp" //este archivo contiene los ids de los eventos
+#include "Eventos.hpp" //este archivo contiene los ids de los eventos
 #include "Inputs.hpp" //
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
 #include <vector>//para los objetos en escena
 #include "Jugando/InterfazJugador.hpp"//para la interfaz
-#include "times.hpp"
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;

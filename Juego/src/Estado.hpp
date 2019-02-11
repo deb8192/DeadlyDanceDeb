@@ -2,8 +2,8 @@
 #define ESTADO_HPP
 #include <iostream>
 
-#include "Puzzle.hpp" // Para pruebas puzzles
-#include "PilaFichas.hpp"
+#include "Puzzles/Puzzle.hpp" // Para pruebas puzzles
+#include "Puzzles/PilaFichas.hpp"
 #include <stack> // para la pila de fichas
 
 //aqui definimos la clase interfaz de los estados
