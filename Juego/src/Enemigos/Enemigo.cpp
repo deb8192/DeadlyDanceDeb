@@ -1,9 +1,5 @@
 #include "Enemigo.hpp"
 #include "../Jugando/Nivel.hpp"
-//#include "MotorGrafico.hpp"
-//#include "MotorFisicas.hpp"
-//#include "MotorAudio.hpp"
-//#include "Times.hpp"
 
 #define PI 3.14159265358979323846
 #define PIRADIAN 180.0f
@@ -13,9 +9,10 @@ Enemigo::Enemigo()
 
 }
 
-Enemigo::~Enemigo(){
+Enemigo::~Enemigo()
+{
     //Inicializo variables y punteros
-    //Sala * estoy;//sala en la que esta el enemigo
+    //Sala* _estoy;//sala en la que esta el enemigo
     atx=0.0;
     atespx=0.0;
     aty=0.0;
@@ -30,8 +27,8 @@ Enemigo::~Enemigo(){
     atespposY=0.0;
     atespposZ=0.0;
     atacktime = 0.0f;
-    //Arma *armaEspecial;
-    //const char * rutaArmaEspecial = "assets/models/objeto.obj";
+    //Arma* _armaEspecial;
+    //const char * _rutaArmaEspecial = "assets/models/objeto.obj";
     //Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a RunIA() desde nivel, cuidado porque si es nullptr puede dar errores.
     pos_ataques=0; //para controlar el array de ataques en colisiones
 }
@@ -116,33 +113,33 @@ float Enemigo::getVelocidad()
     return velocidad;
 }
 
-void Enemigo::definirSala(Sala * sala)
+void Enemigo::definirSala(Sala* sala)
 {
-    estoy = sala;
+    _estoy = sala;
 }
 
 void Enemigo::generarSonido(int intensidad,double duracion,int tipo)
 {
-    eventoSonido * sonid = new eventoSonido(intensidad, duracion, posActual.x, posActual.y, posActual.z, 2, tipo);
-    SenseEventos * eventos = SenseEventos::getInstance();
-    eventos->agregarEvento(sonid);
+    EventoSonido* _sonid = new EventoSonido(intensidad, duracion, posActual.x, posActual.y, posActual.z, 2, tipo);
+    SenseEventos* _eventos = SenseEventos::getInstance();
+    _eventos->agregarEvento(_sonid);
 }
 
 void Enemigo::queEscuchas()
 {
-    SenseEventos * eventos = SenseEventos::getInstance();
-    std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(posActual.x, posActual.y);//le pasamos nuestra x e y
+    SenseEventos* _eventos = SenseEventos::getInstance();
+    std::vector<EventoSonido* > listaSonidos =  _eventos->listarSonidos(posActual.x, posActual.y);//le pasamos nuestra x e y
     //int cuantos = listaSonidos.size();
     //cout << "Esta escuchando " << cuantos << " sonidos" << endl;
 }
 
 void Enemigo::queVes()
 {
-    /*SenseEventos * eventos = SenseEventos::getInstance();
+    /*SenseEventos* _eventos = SenseEventos::getInstance();
     //esto es un ejemplo
 
 
-    int * loqueve = eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+    int* loqueve = _eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
 
     if(loqueve != nullptr)
     {
@@ -172,7 +169,7 @@ void Enemigo::queVes()
 
 Sala* Enemigo::getSala()
 {
-    return estoy;
+    return _estoy;
 }
 
 void Enemigo::setPosiciones(float nx,float ny,float nz)
@@ -223,8 +220,8 @@ int Enemigo::Atacar(int i)
     int danyo = 0;
     if(vida > 0 && atacktime == 0)
     {
-      MotorFisicas* fisicas = MotorFisicas::getInstance();
-      //MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+      MotorFisicas* _fisicas = MotorFisicas::getInstance();
+      //MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
 
       //Calcular posiciones
       int distance= 3;
@@ -236,10 +233,10 @@ int Enemigo::Atacar(int i)
       atgz = getRZ();
 
       //Acutualizar posicion del ataque
-      fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,i);
+      _fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,i);
 
       //Colision
-      if(fisicas->IfCollision(fisicas->getEnemiesAtack(i),fisicas->getJugador()))
+      if(_fisicas->IfCollision(_fisicas->getEnemiesAtack(i),_fisicas->getJugador()))
       {
         cout << "Jugador Atacado" << endl;
         danyo = 10.0f;
@@ -254,20 +251,20 @@ int Enemigo::Atacar(int i)
 }
 
 /*************** AtacarEspecial *****************
- *  Funcion que inicia la ejecucion del ataque
- *  especial del enemigo si la barra de ataque
- *  especial esta completa y se pulsa el boton Q /
- *  click derecho del raton.
- *      Entradas:
- *      Salidas: int danyo;
+ * Funcion que inicia la ejecucion del ataque
+ * especial del enemigo si la barra de ataque
+ * especial esta completa y se pulsa el boton Q /
+ * click derecho del raton.
+ *     Entradas:
+ *     Salidas: int danyo;
  */
 int Enemigo::AtacarEspecial()
 {
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
-    MotorFisicas* fisicas = MotorFisicas::getInstance();
-    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
-    MotorGrafico* motor = MotorGrafico::GetInstance();
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
 
     cout << vida << " " << barraAtEs << " " << por100 << endl;
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
@@ -290,12 +287,12 @@ int Enemigo::AtacarEspecial()
             atespposZ = (atespz/2);
 
             //Acutualizar posicion del ataque especial
-            fisicas->updateAtaquEspecEnemigos(atespposX,atespposY,atespposZ,getPosAtaques());
+            _fisicas->updateAtaquEspecEnemigos(atespposX,atespposY,atespposZ,getPosAtaques());
 
             //Crear cuerpo de colision de ataque delante del jugador
-            motora->getEvent("Arpa")->setVolume(0.8f);
-            motora->getEvent("Arpa")->start();
-            motor->dibujarObjetoTemporal(atespx, atespy, atespz, atgx, atgy, atgz, 4, 4, 4, 2);
+            _motora->getEvent("Arpa")->setVolume(0.8f);
+            _motora->getEvent("Arpa")->start();
+            _motor->dibujarObjetoTemporal(atespx, atespy, atespz, atgx, atgy, atgz, 4, 4, 4, 2);
         }
 
         //Se calcula el danyo del ataque
@@ -316,7 +313,7 @@ int Enemigo::AtacarEspecial()
         cout << "daño: " <<danyoF<<endl;
 
         //Colision
-        if(fisicas->IfCollision(fisicas->getEnemiesAtEsp(getPosAtaques()),fisicas->getJugador()))
+        if(_fisicas->IfCollision(_fisicas->getEnemiesAtEsp(getPosAtaques()),_fisicas->getJugador()))
         {
             cout << "Jugador Atacado por ataque especial" << endl;
             danyo = roundf(danyoF * por10) / por10;
@@ -354,20 +351,20 @@ bool Enemigo::finalAnimMuerte(){
 
 void Enemigo::MuereEnemigo(int enemi){
     Times* _tiempo = Times::GetInstance();
-    MotorGrafico* motor = MotorGrafico::GetInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
     if(tiempoPasadoMuerte == 0){
-        motor->colorearEnemigo(255,0,0,0,enemi);//negro
+        _motor->colorearEnemigo(255,0,0,0,enemi);//negro
         tiempoPasadoMuerte = _tiempo->GetTiempo(1);
     }
     if(_tiempo->CalcularTiempoPasado(tiempoPasadoMuerte) < animacionMuerteTiem){
         if(_tiempo->CalcularTiempoPasado(tiempoPasadoMuerte) >= 1000.0f){
-            motor->colorearEnemigo(255,255,0,0,enemi);//rojo
+            _motor->colorearEnemigo(255,255,0,0,enemi);//rojo
         }
     }
     //Sonido de muerte
-    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
-    motora->getEvent("Chicken2")->setPosition(this->getX(),this->getY(),this->getZ());
-    motora->getEvent("Chicken2")->start();
+    MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
+    _motora->getEvent("Chicken2")->setPosition(this->getX(),this->getY(),this->getZ());
+    _motora->getEvent("Chicken2")->start();
 }
 
 void Enemigo::RecuperarVida(int can)
@@ -458,7 +455,7 @@ void Enemigo::setAtaque(int ataq)
 
 void Enemigo::setArmaEspecial(int ataque)
 {
-    armaEspecial = new Arma(ataque, "",2,2,2,rutaArmaEspecial,"");
+    _armaEspecial = new Arma(ataque, "",2,2,2,_rutaArmaEspecial,"");
 }
 
 void Enemigo::setSuerte(int suer)
@@ -508,7 +505,7 @@ void Enemigo::setLastTimeAtEsp(float time)
 
 void Enemigo::setSala(Sala* sala)
 {
-    estoy = sala;
+    _estoy = sala;
 }
 
 int Enemigo::getVida()
@@ -546,9 +543,9 @@ int Enemigo::getProAtaCritico()
     return -1;
 }
 
-int * Enemigo::getBuffos()
+int* Enemigo::getBuffos()
 {
-    int * valores = new int[6];
+    int* valores = new int[6];
     return valores;
 }
 
@@ -688,10 +685,10 @@ int* Enemigo::RunIA(bool funciona)
     bool Enemigo::ver(int tipo)
     {
         //vamosa  ver si vemos al jugador
-        SenseEventos * eventos = SenseEventos::getInstance();
+        SenseEventos* _eventos = SenseEventos::getInstance();
         if(tipo == 1)//ves al jugador ?
         {
-            int * loqueve = eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+            int* loqueve = _eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
 
             if(loqueve != nullptr)
             {
@@ -711,8 +708,8 @@ int* Enemigo::RunIA(bool funciona)
 
     bool Enemigo::oir(int tipo)//tipo 1 oir al jugador si lo oye true, tipo 2 si oye al enemigo pedir ayuda si lo oye true si no false
     {
-        SenseEventos * eventos = SenseEventos::getInstance();
-        std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(posActual.x, posActual.y);//le pasamos nuestra x e y
+        SenseEventos* _eventos = SenseEventos::getInstance();
+        std::vector<EventoSonido* > listaSonidos =  _eventos->listarSonidos(posActual.x, posActual.y);//le pasamos nuestra x e y
 
         if(listaSonidos.size() > 0)
         {
@@ -730,14 +727,14 @@ int* Enemigo::RunIA(bool funciona)
 
     bool Enemigo::pedirAyuda()
     {
-        Nivel * nivel = Nivel::getInstance();
-        MotorGrafico * motor = MotorGrafico::GetInstance();
+        Nivel* _nivel = Nivel::getInstance();
+        MotorGrafico* _motor = MotorGrafico::GetInstance();
         //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
-        if(nivel->getEnemigoPideAyuda() == nullptr && motor->getPathfindingActivado())
+        if(_nivel->getEnemigoPideAyuda() == nullptr && _motor->getPathfindingActivado())
         {
             //vamos a generar un sonido de ayuda
             generarSonido(60,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
-            nivel->setEnemigoPideAyuda(this); //En caso de no estar buscando a ningun aliado se anade este como peticionario
+            _nivel->setEnemigoPideAyuda(this); //En caso de no estar buscando a ningun aliado se anade este como peticionario
         }
         //cout << " grita pidiendo ayuda "<< endl;
         return true;
@@ -747,10 +744,10 @@ int* Enemigo::RunIA(bool funciona)
     {
         //vamos a generar un sonido de ayuda
         generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
-        MotorGrafico * motor = MotorGrafico::GetInstance();
-        if(motor->getPathfindingActivado()){
-            Nivel * nivel = Nivel::getInstance();
-            nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
+        MotorGrafico* _motor = MotorGrafico::GetInstance();
+        if(_motor->getPathfindingActivado()){
+            Nivel* _nivel = Nivel::getInstance();
+            _nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
         }
         //cout << " contesta a la llamada de auxilio "<< endl;
 

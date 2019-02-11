@@ -1,9 +1,8 @@
 #ifndef Recolectable_HPP
 #define Recolectable_HPP
 #include <iostream>
-#include "../INobjetos.hpp"
-#include "../INdrawable.hpp"
-//#include "MotorGrafico.hpp"
+#include "../Motores/INobjetos.hpp"
+#include "../Motores/INdrawable.hpp"
 
 using namespace std;
 

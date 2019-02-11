@@ -3,6 +3,7 @@
 
 #include "GestorEstados.hpp"
 #include "Times.hpp"
+#include "Motores/MotorGrafico.hpp"
 
 class Juego
 {
@@ -10,7 +11,7 @@ class Juego
 
         //singleton public
         ~Juego();
-        static Juego *GetInstance() //esto se utiliza para crear el objeto una sola vez
+        static Juego* GetInstance() //esto se utiliza para crear el objeto una sola vez
         {
             if (_unicaInstancia == 0) {
                 _unicaInstancia = new Juego();

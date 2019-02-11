@@ -1,9 +1,7 @@
 #include "Menu.hpp"
 #include "../Juego.hpp"
-
-// para clases singleton deben tener un indicador de que se ha creado el unico objeto
-//Menu* Menu::_unicaInstancia = 0;
-// fin indicador singleton
+#include "../Jugando/Nivel.hpp"
+#include "../CargadorPuzzles.hpp"
 
 Menu::Menu()
 {
@@ -13,7 +11,6 @@ Menu::~Menu()
 {
     cout << "Borrando menu" <<endl;
     delete _motor;
-    //delete _unicaInstancia;
 }
 
 void Menu::Iniciar()
@@ -102,8 +99,8 @@ void Menu::jugar()
 
     _motora->getEvent("Menu")->stop(); //Detener musica Menu
     
-    nivel = Nivel::getInstance();//se recoge la instancia de nivel
-    nivel->CargarNivel(5);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
+    Nivel* _nivel = Nivel::getInstance();//se recoge la instancia de nivel
+    _nivel->CargarNivel(5);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
 
     Juego::GetInstance()->estado.CambioEstadoJugar();
 }
@@ -111,7 +108,8 @@ void Menu::jugar()
 void Menu::cargarPuzzlesXML()
 {
     // Cargamos los puzzles 1 vez
-    cargadorXML.CargarPuzzlesXml();
+    CargadorPuzzles cargadorPuzzles;
+    cargadorPuzzles.CargarPuzzlesXml();
     Juego::GetInstance()->estado.CambioEstadoPuzle();
 }
 

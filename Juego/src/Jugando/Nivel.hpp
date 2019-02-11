@@ -1,7 +1,6 @@
 #ifndef Nivel_HPP
 #define Nivel_HPP
 
-//#include "Sala.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "../Enemigos/Enemigo.hpp"
 #include "../CargadorNiveles.hpp"
@@ -9,17 +8,14 @@
 #include "../Objetos/Interactuable.hpp"
 #include "../Objetos/Recolectable.hpp"
 #include "Zona.hpp"
-#include "../MotorAudio.hpp"
+#include "../Motores/MotorAudio.hpp"
+#include "../Motores/MotorGrafico.hpp"
 #include "../Pathfinder.hpp"
-//#include "MotorGrafico.hpp"
-//#include <vector>//para tener los diferentes objetos,enemigos, jugadores.
-//#include <ctime>
 #include "../Times.hpp"
 #include "../Armas/Arma.hpp"
 #include <cstring>
 #include <stdlib.h>
 #include <time.h>
-//#include "MotorFisicas.hpp"
 
 //cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA()
 #include "../CargadorBehaviorTrees.hpp"
@@ -29,7 +25,6 @@
 
 class Nivel
 {
-
     public:
 
         //singleton public

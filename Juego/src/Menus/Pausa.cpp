@@ -1,17 +1,11 @@
 #include "Pausa.hpp"
 #include "../Juego.hpp"
-
 #include "../Jugando/Jugando.hpp"
-
-// para clases singleton deben tener un indicador de que se ha creado el unico objeto
-//Pausa* Pausa::_unicaInstancia = 0;
-// fin indicador singleton
 
 Pausa::~Pausa()
 {
     cout << "Borrando pausa" <<endl;
     delete _motor;
-    //delete _unicaInstancia;
 }
 
 void Pausa::Iniciar()

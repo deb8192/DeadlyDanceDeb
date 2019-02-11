@@ -1,14 +1,9 @@
 #include "EstadoMuerte.hpp"
 #include "../Juego.hpp"
 
-// para clases singleton deben tener un indicador de que se ha creado el unico objeto
-//EstadoMuerte* EstadoMuerte::_unicaInstancia = 0;
-// fin indicador singleton
-
 EstadoMuerte::~EstadoMuerte()
 {
     delete _motor;
-    //delete _unicaInstancia;
 }
 
 void EstadoMuerte::Iniciar()
@@ -25,7 +20,7 @@ void EstadoMuerte::Iniciar()
 void EstadoMuerte::Render()
 {
     _motor->FondoEscena(255,5,115,125); // Borra
-    _motor->RenderEscena();               // Vuelve a pintar
+    _motor->RenderEscena();             // Vuelve a pintar
 }
 
 void EstadoMuerte::Update()

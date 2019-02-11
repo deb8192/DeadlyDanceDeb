@@ -2,9 +2,7 @@
 #define MENU_HPP
 
 #include "../Estado.hpp"
-#include "../MotorAudio.hpp"
-#include "../Jugando/Nivel.hpp"
-#include "../CargadorXML.hpp"
+#include "../Motores/MotorAudio.hpp"
 
 class Menu: public Estado {
     public:
@@ -31,7 +29,5 @@ class Menu: public Estado {
         void salir();
 
         MotorAudioSystem* _motora;//instancia de la fachada audio
-        Nivel* nivel;
-        CargadorXML cargadorXML;
 };
 #endif /* MENU_HPP */

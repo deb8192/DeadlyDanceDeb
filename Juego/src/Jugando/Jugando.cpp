@@ -25,8 +25,8 @@ void Jugando::Render()
 {
     _motor->FondoEscena(255,0,0,0); // Borra
 
-    Nivel* nivel = Nivel::getInstance();
-    nivel->Draw();
+    Nivel* _nivel = Nivel::getInstance();
+    _nivel->Draw();
 
     _motor->RenderEscena();               // Vuelve a pintar
 }
@@ -34,10 +34,10 @@ void Jugando::Render()
 void Jugando::Update()
 {
     _motor->clearDebug();
-    Nivel* nivel = Nivel::getInstance();
+    Nivel* _nivel = Nivel::getInstance();
     SenseEventos* sense = SenseEventos::getInstance();
     sense->update();//se actualizan sentidos
-    nivel->update();//se actualiza posiciones y interpolado
+    _nivel->update();//se actualiza posiciones y interpolado
 
     //Actualiza el motor de audio
     MotorAudioSystem* motora = MotorAudioSystem::getInstance();
@@ -46,8 +46,8 @@ void Jugando::Update()
 
 void Jugando::UpdateIA()
 {
-    Nivel* nivel = Nivel::getInstance();
-    nivel->updateIA();
+    Nivel* _nivel = Nivel::getInstance();
+    _nivel->updateIA();
 }
 
 void Jugando::ManejarEventos() {
@@ -66,8 +66,22 @@ void Jugando::ManejarEventos() {
         menuMuerto();
     }
 
-    Nivel* nivel = Nivel::getInstance();
-    nivel->InteractuarNivel();
+    //para modo debug
+    if(_motor->EstaPulsado(KEY_G_DEBUG))
+    {
+        _motor->activarDebugGrafico();
+        _motor->ResetKey(KEY_G_DEBUG);
+    }
+
+    //para pathfinding activado
+    if(_motor->EstaPulsado(KEY_C))
+    {
+        _motor->activarPathfinding();
+        _motor->ResetKey(KEY_C);
+    }
+
+    Nivel* _nivel = Nivel::getInstance();
+    _nivel->InteractuarNivel();
 }
 
 void Jugando::menuPausa()

@@ -1,14 +1,9 @@
 #include "Configuracion.hpp"
 #include "../Juego.hpp"
 
-// para clases singleton deben tener un indicador de que se ha creado el unico objeto
-//Configuracion* Configuracion::_unicaInstancia = 0;
-// fin indicador singleton
-
 Configuracion::~Configuracion()
 {
     delete _motor;
-    //delete _unicaInstancia;
 }
 
 void Configuracion::Iniciar()

@@ -1,15 +1,10 @@
 #include "Cinematica.hpp"
 #include "../Juego.hpp"
 
-// para clases singleton deben tener un indicador de que se ha creado el unico objeto
-//Cinematica* Cinematica::_unicaInstancia = 0;
-// fin indicador singleton
-
 Cinematica::~Cinematica()
 {
     cout << "Borrando cinematica" <<endl;
     delete _motor;
-    //delete _unicaInstancia;
 }
 
 void Cinematica::Iniciar()

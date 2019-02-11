@@ -5,17 +5,7 @@
 
 class Cinematica: public Estado {
     public:
-        //singleton public
         ~Cinematica();
-        /*static Cinematica* GetInstance() //esto se utiliza para crear el objeto una sola vez
-        {
-            if (_unicaInstancia == 0) {
-                _unicaInstancia = new Cinematica();
-            }
-            return _unicaInstancia;
-        }*/
-        //fin singleton public
-
         short Tipo() { return 1; };
         void Iniciar();
         void Render();
@@ -24,6 +14,5 @@ class Cinematica: public Estado {
         void Vaciar();
 
     private:
-        //static Cinematica* _unicaInstancia;
 };
 #endif /* CINEMATICA_HPP */

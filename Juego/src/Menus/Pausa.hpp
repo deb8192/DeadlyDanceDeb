@@ -5,17 +5,8 @@
 
 class Pausa: public Estado {
     public:
-        //singleton public
-        ~Pausa();
-        /*static Pausa* GetInstance() //esto se utiliza para crear el objeto una sola vez
-        {
-            if (_unicaInstancia == 0) {
-                _unicaInstancia = new Pausa();
-            }
-            return _unicaInstancia;
-        }*/
-        //fin singleton public
 
+        ~Pausa();
         short Tipo() { return 6; };
         void Iniciar();
         void Render();
@@ -24,8 +15,6 @@ class Pausa: public Estado {
         void Vaciar();
 
     private:
-        //static Pausa* _unicaInstancia;
-
         void pintarBotones();
         void borrarEscenaResetearEvento(short id);
         void menuPrincipal();
