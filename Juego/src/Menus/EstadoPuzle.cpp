@@ -1,14 +1,9 @@
 #include "EstadoPuzle.hpp"
 #include "../Juego.hpp"
 
-// para clases singleton deben tener un indicador de que se ha creado el unico objeto
-//EstadoPuzle* EstadoPuzle::_unicaInstancia = 0;
-// fin indicador singleton
-
 EstadoPuzle::~EstadoPuzle()
 {
     delete _motor;
-    //delete _unicaInstancia;
 }
 
 void EstadoPuzle::Iniciar()

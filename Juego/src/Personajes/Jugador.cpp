@@ -1,7 +1,7 @@
 #include "Jugador.hpp"
 #include "../Jugando/Nivel.hpp"
 #include <stdlib.h>
-#include "../MotorAudio.hpp"
+#include "../Motores/MotorAudio.hpp"
 #include "../Times.hpp"
 
 #define PI 3.14159265358979323846

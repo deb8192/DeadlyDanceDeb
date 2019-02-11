@@ -1,14 +1,9 @@
 #include "Creditos.hpp"
 #include "../Juego.hpp"
 
-// para clases singleton deben tener un indicador de que se ha creado el unico objeto
-//Creditos* Creditos::_unicaInstancia = 0;
-// fin indicador singleton
-
 Creditos::~Creditos()
 {
     delete _motor;
-    //delete _unicaInstancia;
 }
 
 void Creditos::Iniciar()

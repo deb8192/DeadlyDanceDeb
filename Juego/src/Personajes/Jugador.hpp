@@ -6,12 +6,12 @@
 #include <algorithm>
 #include <ctime>
 #include <cstring>
-#include "../INnpc.hpp"
-#include "../INdrawable.hpp"
+#include "../Motores/INnpc.hpp"
+#include "../Motores/INdrawable.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Objetos/Llave.hpp"
-#include "../MotorFisicas.hpp"
-#include "../MotorGrafico.hpp"
+#include "../Motores/MotorFisicas.hpp"
+#include "../Motores/MotorGrafico.hpp"
 #include "../Jugando/InterfazJugador.hpp"
 
 using namespace std;

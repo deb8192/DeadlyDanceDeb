@@ -1,7 +1,7 @@
 #include "InterfazJugador.hpp"
 
 //singleton
-InterfazJugador* InterfazJugador::unica_instancia = 0;
+InterfazJugador* InterfazJugador::_unica_instancia = 0;
 //fin indicador singleton
 
 InterfazJugador::InterfazJugador()

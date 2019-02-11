@@ -1,8 +1,8 @@
 #ifndef Enemigo_HPP
 #define Enemigo_HPP
-#include "../INnpc.hpp"
-#include "../INdrawable.hpp"
-#include "../INsentidos.hpp"
+#include "../Motores/INnpc.hpp"
+#include "../Motores/INdrawable.hpp"
+#include "../Motores/INsentidos.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/Sala.hpp"
 #include <vector>
@@ -15,7 +15,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Enemigo();
         ~Enemigo();
 
-        void definirSala(Sala * sala);
+        void definirSala(Sala* sala);
 
         //sentidos metodos
         void generarSonido(int intensidad,double duracion,int tipo);//la intensidad es el alcance y la duracion es cuanto dura el sonido, el tipo 1 son sonidos del jugador, 2 es pedir ayuda de los enemigos
@@ -118,19 +118,19 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         //activar ia
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
-        Arbol *getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
+        Arbol* getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         int* RunIA(bool);//corre la ia del enemigo
         //fin ia
 
     protected:
-        Sala * estoy;//sala en la que esta el enemigo
+        Sala* _estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
         float atacktime = 0.0f;
         float velocidad;  //Velocidad de desplazamiento del enemigo
-        Arma *armaEspecial;
-        const char * rutaArmaEspecial = "assets/models/objeto.obj";
+        Arma* _armaEspecial;
+        const char* _rutaArmaEspecial = "assets/models/objeto.obj";
         int tipoEnemigo;
-        Arbol *arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
+        Arbol* arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
         bool accionRealizada; //
 };

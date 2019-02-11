@@ -1,7 +1,7 @@
 #ifndef ESTADO_HPP
 #define ESTADO_HPP
 
-#include "MotorGrafico.hpp"
+#include "Motores/MotorGrafico.hpp"
 using namespace idsEventos;
 
 //aqui definimos la clase interfaz de los estados

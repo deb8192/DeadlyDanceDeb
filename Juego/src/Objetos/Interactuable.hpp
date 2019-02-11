@@ -1,7 +1,7 @@
 #ifndef Interactuable_HPP
 #define Interactuable_HPP
-#include "../INobjetos.hpp"
-#include "../INdrawable.hpp"
+#include "../Motores/INobjetos.hpp"
+#include "../Motores/INdrawable.hpp"
 
 using namespace std;
 

@@ -5,17 +5,7 @@
 
 class EstadoPuzle: public Estado {
     public:
-        //singleton public
         ~EstadoPuzle();
-        /*static EstadoPuzle* GetInstance() //esto se utiliza para crear el objeto una sola vez
-        {
-            if (_unicaInstancia == 0) {
-                _unicaInstancia = new EstadoPuzle();
-            }
-            return _unicaInstancia;
-        }*/
-        //fin singleton public
-
         short Tipo() { return 3; };
         void Iniciar();
         void Render();
@@ -24,8 +14,6 @@ class EstadoPuzle: public Estado {
         void Vaciar();
         
     private:
-        //static EstadoPuzle* _unicaInstancia;
-
         void atras();
 
 };
