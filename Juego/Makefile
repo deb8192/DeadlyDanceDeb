@@ -3,12 +3,13 @@ CC_FLAGS = -w #comandos extras para el compilador
 RUTACPP = src/ #variable donde iran las clases que utilizamos
 # $(CXX) - Es la variable de entorno del compilador si estas con g++ o gcc te lo detecta solo+
 CXXFLAGS = -g -Wall # lo que hace es que crea archivos debug para que se pueda comprobar la informacion
-CABECERAS =-I"/usr/include/irrlicht" -I"librerias/fmod/lowlevel/inc/" -I"librerias/fmod/studio/inc/" -I"librerias/reactphysics3d/src/" -I"librerias/glew/inc/" -I"librerias/glad/inc/" -I"librerias/glfw/inc/" -I"librerias/stb_image/inc/" -I"librerias/glm/" -I"librerias/assimp/inc/" #nos dice donde estan los includes
-LIBRERIAS =-L"librerias/reactphysics3d/lib/" -L"librerimmas/fmod/lowlevel/lib/x86_64/" -L"librerias/fmod/studio/lib/x86_64/" -L"librerias/glew/lib/" -L"librerias/glad/lib/" -L"librerias/glfw/lib/" -L"librerias/assimp/lib/" #nos dice donde estan las librerias
-LIBRERIAS_CARPETAS = "librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib:librerias/glew/lib:librerias/glad/lib:librerias/glfw/lib:librerias/assimp/lib:"
-LIBRERIAS_ESPECIFICAS = librerias/fmod/studio/lib/x86_64/libfmodstudio.so librerias/fmod/lowlevel/lib/x86_64/libfmod.so librerias/reactphysics3d/lib/libreactphysics3d.a librerias/glew/lib/libGLEW.a librerias/glad/lib/libglad.a librerias/glfw/lib/libglfw3.a librerias/assimp/lib/libIrrXML.a #librerias necesarias
-irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor -lGL -lIrrlicht   #porque nombre llamarla
+CABECERAS =-I"/usr/include/irrlicht" -I"librerias/fmod/lowlevel/inc/" -I"librerias/fmod/studio/inc/" -I"librerias/reactphysics3d/src/" -I"librerias/glew/inc/" -I"librerias/glad/inc/" -I"librerias/glfw/inc/" -I"librerias/stb_image/inc/" -I"librerias/glm/" -I"librerias/assimp/inc/" -I"librerias/catopengl/inc/" #nos dice donde estan los includes
+LIBRERIAS =-L"librerias/reactphysics3d/lib/" -L"librerimmas/fmod/lowlevel/lib/x86_64/" -L"librerias/fmod/studio/lib/x86_64/" -L"librerias/glew/lib/" -L"librerias/glad/lib/" -L"librerias/glfw/lib/" -L"librerias/assimp/lib/" -L"librerias/catopengl/lib/" #nos dice donde estan las librerias
+LIBRERIAS_CARPETAS = "librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib:librerias/glew/lib:librerias/glad/lib:librerias/glfw/lib:librerias/assimp/lib:librerias/catopengl/lib"
+LIBRERIAS_ESPECIFICAS = librerias/fmod/studio/lib/x86_64/libfmodstudio.so librerias/fmod/lowlevel/lib/x86_64/libfmod.so librerias/reactphysics3d/lib/libreactphysics3d.a librerias/glew/lib/libGLEW.a librerias/glad/lib/libglad.a librerias/glfw/lib/libglfw3.a librerias/assimp/lib/libIrrXML.a librerias/catopengl/lib/libcatopengl.a #librerias necesarias
+irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor -lGL -lIrrlicht -lassimp   #porque nombre llamarla
 SHELL = /bin/bash
+CPUCOUNT=$(grep -c   "^processor" /proc/cpuinfo)
 # ${CXXFLAGS} - Son las opciones del compilador
 #pwd
 
@@ -57,28 +58,44 @@ OBJECTSA = $(SOURCESA:.cpp=.o)
 RECUR = Recursiva
 RECUR2 = Recursiva2
 PRECA = Precaucion
+LG = LIBRERIAGRAFICA
+PARALLEL = Paralelo
+BUSQ = $(shell find ./obj  -maxdepth 1 -name "*.o" | wc -l)
+BUSQM = $(shell find ./obj/Menus  -maxdepth 1 -name "*.o" | wc -l)
+BUSQP = $(shell find ./obj/Personajes  -maxdepth 1 -name "*.o" | wc -l)
+BUSQE = $(shell find ./obj/Enemigos  -maxdepth 1 -name "*.o" | wc -l)
+BUSQJ = $(shell find ./obj/Jugando  -maxdepth 1 -name "*.o" | wc -l)
+BUSQPU = $(shell find ./obj/Puzzles  -maxdepth 1 -name "*.o" | wc -l)
+BUSQO = $(shell find ./obj/Objetos  -maxdepth 1 -name "*.o" | wc -l)
+BUSQA = $(shell find ./obj/Armas  -maxdepth 1 -name "*.o" | wc -l)
 
-BUSQ = $(shell find ./obj -name "*.o" | wc -l)
-BUSQM = $(shell find ./obj/Menus -name "*.o" | wc -l)
-BUSQP = $(shell find ./obj/Personajes -name "*.o" | wc -l)
-BUSQE = $(shell find ./obj/Enemigos -name "*.o" | wc -l)
-BUSQJ = $(shell find ./obj/Jugando -name "*.o" | wc -l)
-BUSQPU = $(shell find ./obj/Puzzles -name "*.o" | wc -l)
-BUSQO = $(shell find ./obj/Objetos -name "*.o" | wc -l)
-BUSQA = $(shell find ./obj/Armas -name "*.o" | wc -l)
-
-BUSQ2 = $(shell find ./src -name "*.o" | wc -l)
-BUSQ2M = $(shell find ./src/Menus -name "*.o" | wc -l)
-BUSQ2P = $(shell find ./src/Personajes -name "*.o" | wc -l)
-BUSQ2E = $(shell find ./src/Enemigos -name "*.o" | wc -l)
-BUSQ2J = $(shell find ./src/Jugando -name "*.o" | wc -l)
-BUSQ2PU = $(shell find ./src/Puzzles -name "*.o" | wc -l)
-BUSQ2O = $(shell find ./src/Objetos -name "*.o" | wc -l)
-BUSQ2A = $(shell find ./src/Armas -name "*.o" | wc -l)
+BUSQ2 = $(shell find ./src  -maxdepth 1 -name "*.o" | wc -l)
+BUSQ2M = $(shell find ./src/Menus  -maxdepth 1 -name "*.o" | wc -l)
+BUSQ2P = $(shell find ./src/Personajes  -maxdepth 1 -name "*.o" | wc -l)
+BUSQ2E = $(shell find ./src/Enemigos  -maxdepth 1 -name "*.o" | wc -l)
+BUSQ2J = $(shell find ./src/Jugando  -maxdepth 1 -name "*.o" | wc -l)
+BUSQ2PU = $(shell find ./src/Puzzles  -maxdepth 1 -name "*.o" | wc -l)
+BUSQ2O = $(shell find ./src/Objetos  -maxdepth 1 -name "*.o" | wc -l)
+BUSQ2A = $(shell find ./src/Armas  -maxdepth 1 -name "*.o" | wc -l)
 
 # Aqui es donde se hace la magia y se unifican las clases en una sola, basicamente se le pasa las clases de objeto (.o) para unificarlas
-$(BEGIN): $(PRECA) $(RECUR) $(OBJECTS) $(OBJECTSP) $(OBJECTSE) $(OBJECTSM) $(OBJECTSJ) $(OBJECTSPU) $(OBJECTSO) $(OBJECTSA) $(RECUR2) $(EXEC)
-	#Finalizado Comprobaciones
+$(BEGIN): 
+	@echo -e '\e[45m Paso 1 Revision Libreria Grafica \e[0m';
+	$(MAKE) $(LG)
+	@echo -e '\e[45m Paso 2 Precuaciones \e[0m';
+	$(MAKE) $(PRECA)
+	$(MAKE) $(RECUR)
+	@echo -e '\e[45m Paso 3 Creando Objetos \e[0m';
+	$(MAKE) -j$(CPUCOUNT) $(PARALLEL) 
+	@echo -e '\e[45m Paso 4  \e[0m';
+	$(MAKE) $(RECUR2)
+	@echo -e '\e[45m Paso 5 Creacion de Ejecutable \e[0m';
+	$(MAKE) $(EXEC)
+	@echo -e '\e[45m Finalizado Ejecucion Makefile \e[0m';
+
+$(PARALLEL): $(OBJECTS) $(OBJECTSP) $(OBJECTSE) $(OBJECTSM) $(OBJECTSJ) $(OBJECTSPU) $(OBJECTSO) $(OBJECTSA) |
+
+#Finalizado Comprobaciones
 
 $(EXEC): $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2)
 	#Comprobando ejecutable si esta actualizado
@@ -110,12 +127,10 @@ $(RECUR):
 %.o: %.cpp %.hpp #para las clases normales
 	#Compilacion objeto con cabecera
 	$(CXX) -c $(CXXFLAGS) $< -o $@ $(CABECERAS)
-	#mv $@ obj/
 
 %.o: %.cpp #esto es para el main sobretodo
 	#Compilacion objeto sin cabecera
 	$(CXX) -c $(CXXFLAGS) $< -o $@ $(CABECERAS)
-	#mv $@ obj/
 
 $(RECUR2):
 	 if [ $(BUSQ2) -gt 0 ] ; then mv src/*.o obj/ ; fi
@@ -126,6 +141,11 @@ $(RECUR2):
 	 if [ $(BUSQ2PU) -gt 0 ] ; then mv src/Puzzles/*.o obj/Puzzles/ ; fi
 	 if [ $(BUSQ2O) -gt 0 ] ; then mv src/Objetos/*.o obj/Objetos/ ; fi
 	 if [ $(BUSQ2A) -gt 0 ] ; then mv src/Armas/*.o obj/Armas/ ; fi
+
+$(LG):
+	@echo -e '\e[45m Iniciando Compilacion Libreria Grafica \e[0m'; \
+	cd librerias/catopengl/; make; \
+	echo -e '\e[45m Compilacion Libreria Grafica Correcta :) \e[0m'; \
 
 #main: main.o MotorGrafico.o
 #le decimos que clase depende de irrlicht
@@ -138,11 +158,12 @@ clean:
 # si ejecutas "make run" despues de compilar ejecutara automaticamente el ejecutable
 run: $(BEGIN)
 	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia
-	export LD_LIBRARY_PATH="librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib:librerias/glew/lib:librerias/glad/lib:librerias/glfw/lib:";\
+	export LD_LIBRARY_PATH="$(LIBRERIAS_CARPETAS)";\
 	./$(EXEC)
 
 val: $(BEGIN)
 	#CUIDADO hay que tener valgrind para instalarlo "sudo pacman -S valgrind"
 	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia
-	export LD_LIBRARY_PATH="librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib:librerias/glew/lib:librerias/glad/lib:librerias/glfw/lib:";\
+	export LD_LIBRARY_PATH="$(LIBRERIAS_CARPETAS)";\
 	valgrind ./$(EXEC)
+		
