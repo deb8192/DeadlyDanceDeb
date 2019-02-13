@@ -111,6 +111,21 @@ float Enemigo::getRZ()
     return rotActual.z;
 }
 
+float Enemigo::getAtX()
+{
+    return atx;
+}
+
+float Enemigo::getAtY()
+{
+    return aty;
+}
+
+float Enemigo::getAtZ()
+{
+    return atz;
+}
+
 float Enemigo::getVelocidad()
 {
     return velocidad;
@@ -227,13 +242,13 @@ int Enemigo::Atacar(int i)
       //MotorAudioSystem* motora = MotorAudioSystem::getInstance();
 
       //Calcular posiciones
-      int distance= 3;
-      atx = distance * sin(PI * getRY() / 180.0f) + getX();
-      aty = getY();
-      atz = distance * cos(PI * getRY() / 180.0f) + getZ();
-      atgx = getRX();
-      atgy = getRY();
-      atgz = getRZ();
+      int distance = 4;
+      atx = distance * sin(PI * this->getRY() / 180.0f) + this->getX();
+      aty = this->getY();
+      atz = distance * cos(PI * this->getRY() / 180.0f) + this->getZ();
+      atgx = this->getRX();
+      atgy = this->getRY();
+      atgz = this->getRZ();
 
       //Acutualizar posicion del ataque
       fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,i);
@@ -641,7 +656,7 @@ Arbol * Enemigo::getArbol()
     return arbol;
 }
 
-int* Enemigo::RunIA(bool funciona)
+short int* Enemigo::RunIA(bool funciona)
 {
     //aun por determinar primero definir bien la carga de arboles
     return arbol->ContinuarSiguienteNodo(funciona);//el true lo ponemos para detectar la primera ejecucion del bucle
@@ -691,7 +706,7 @@ int* Enemigo::RunIA(bool funciona)
         SenseEventos * eventos = SenseEventos::getInstance();
         if(tipo == 1)//ves al jugador ?
         {
-            int * loqueve = eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotation,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+            int * loqueve = eventos->listaObjetos(posActual.x, posActual.y, posActual.z, rotActual.y ,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
 
             if(loqueve != nullptr)
             {
@@ -738,9 +753,10 @@ int* Enemigo::RunIA(bool funciona)
             //vamos a generar un sonido de ayuda
             generarSonido(60,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
             nivel->setEnemigoPideAyuda(this); //En caso de no estar buscando a ningun aliado se anade este como peticionario
+            return true;
         }
         //cout << " grita pidiendo ayuda "<< endl;
-        return true;
+        return false;
     }
 
     bool Enemigo::ContestarAyuda()

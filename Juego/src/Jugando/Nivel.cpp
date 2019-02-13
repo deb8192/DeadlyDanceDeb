@@ -176,13 +176,15 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
     enemigos.back()->setDanyoCritico(50);
     enemigos.back()->setProAtaCritico(10);
     //enemigos.back()->genemigos.back()rarSonido(20,5);
-    enemigos.back()->setRotation(0.0f);//le ponemos hacia donde mira cuando se carga
-
+    enemigos.back()->setRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+    enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+    enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+    
     _motor->CargarEnemigos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2);
-    _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,1,1,1,7); //Para ataques
-    _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,4,4,4,8); //Para ataques especiales
+    _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
+    _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
 }
 
 void Nivel::recargarJugador(){
@@ -1637,6 +1639,24 @@ void Nivel::Draw()
                     8,
                     3);
             }
+        }
+
+        _motor->clearDebug2(); //Pruebas debug
+
+        //Dibujado de ataques
+        for(unsigned int i = 0; i < enemigos.size(); i++)
+        {
+            _motor->dibujarObjetoTemporal(
+                enemigos.at(i)->getAtX(),
+                enemigos.at(i)->getAtY(),
+                enemigos.at(i)->getAtZ(),
+                enemigos.at(i)->getRX(),
+                enemigos.at(i)->getRY(),
+                enemigos.at(i)->getRZ(),
+                4,
+                4,
+                4,
+                2);
         }
 
         //Dibujado zonas

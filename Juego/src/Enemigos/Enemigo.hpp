@@ -102,6 +102,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getRX();
         float getRY();
         float getRZ();
+        float getAtX();
+        float getAtY();
+        float getAtZ();
         float getVelocidad(); //modifica la velocidad de desplazamiento
         int GetEnemigo();
 
@@ -119,10 +122,20 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         //activar ia
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
         Arbol *getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
-        int* RunIA(bool);//corre la ia del enemigo
+        short int* RunIA(bool);//corre la ia del enemigo
         //fin ia
 
     protected:
+
+        //Comparadores de la lectura de las acciones y objetivos de las tareas
+        enum accionesJugador 
+        {  
+            MOVERSE = 0,
+            ATACAR,
+            VER,
+            PIDE_AYUDA
+        };
+
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
         float atacktime = 0.0f;

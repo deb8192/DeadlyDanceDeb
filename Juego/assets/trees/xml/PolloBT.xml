@@ -6,7 +6,7 @@
             <Leaf id="3" type="tarea" action="ve" target="jugador">
                 <Blackboard task="escribe" info="pos-jugador"></Blackboard>
             </Leaf>
-            <Leaf id="4" type="tarea" action="pide" target="ayuda">
+            <Leaf id="4" type="tarea" action="pide-ayuda" target="">
                 <Blackboard task="escribe" info="pos-ayuda"></Blackboard>
             </Leaf>
             <Decorator id="5" type="iterador" end="true">

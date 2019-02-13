@@ -4,7 +4,7 @@ Arbol::Arbol(Nodo *root, const char* name)
 {
     raiz = root;
     nodoEnEjecucionDirecta = nullptr;
-    arrayTareaObjetivo = new int [2];
+    arrayTareaObjetivo = new short int [2];
     ID = 0;
 }
 
@@ -162,7 +162,8 @@ Composicion * Arbol::devolverPadre()
 }
 
 //EN LA COMPOSICION NO DETECTA EL FALSO, HAY QUE ARREGLARLO
-int* Arbol::ContinuarSiguienteNodo(bool exito)
+//AHORA PETA
+short int* Arbol::ContinuarSiguienteNodo(bool exito)
 {
     Composicion *comp = nullptr;
     Composicion *compo = nullptr;
@@ -242,8 +243,12 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                         ID = 0;
                     }
                 }
+                //Si la composicion es una secuencia y la accion anterior no ha tenido exito
+                //o si es un selector y la accion anterior ha tenido exito, se asciende para seleccionar otro nodo no hijo
                 else if((comp->getTipo() == 2 && !exito) || (comp->getTipo() == 3 && exito && ID > comp->getHijos().front()->getID()))
                 {
+                    //Se iguala el ID al ultimo de los hijos para continuar
+                    //la lectura del arbol en otra rama y no bajar a los hijos restantes
                     ID = comp->getHijos().back()->getID();
                     if(nodoEnEjecucionDirecta->getPadre() != nullptr)
                     {
@@ -376,13 +381,26 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                 //Se indican la tarea y el objetivo a ejecutar
                 //Tarea
                 const char* accion = hoja->GetAccion();
+
+                //La accion es moverse
                 if(strcmp(accion, MOVERSE) == 0)
                 {
                     arrayTareaObjetivo[0] = 0;
                 }
+                //La accion es atacar
                 else if(strcmp(accion, ATACAR) == 0)
                 {
                     arrayTareaObjetivo[0] = 1;
+                }
+                //La accion es ver
+                else if(strcmp(accion, VER) == 0)
+                {
+                    arrayTareaObjetivo[0] = 2;
+                }
+                //La accion es pedir ayuda
+                else if(strcmp(accion, PIDE_AYUDA) == 0)
+                {
+                    arrayTareaObjetivo[0] = 3;
                 }
                 else
                 {
@@ -474,7 +492,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
             ID++;
             arrayTareaObjetivo[0] = -1;
             arrayTareaObjetivo[1] = -1;
-            return arrayTareaObjetivo;
+            return this->ContinuarSiguienteNodo(exito);
         }
     }  
     return arrayTareaObjetivo;
