@@ -1206,7 +1206,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
             smgr->getMeshManipulator()->setVertexColors(objeto_en_scena->getMesh(),COLOR);
 
             core::vector3df rotation = objeto_en_scena->getRotation();
-            objeto_en_scena->setRotation(core::vector3df(rotation.X,(-1*(rotacion-180)),rotation.Z));
+            objeto_en_scena->setRotation(core::vector3df(rotation.X,rotacion,rotation.Z));
 
             rotation = objeto_en_scena->getRotation();
 

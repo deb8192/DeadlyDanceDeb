@@ -13,8 +13,9 @@ class Pollo : public Enemigo
         void UpdatePollo(int i);
 
     private:
-        bool funciona;
+        bool funciona, atacado, hecho;
         short int* _ordenes;
+        short int direccion;
 
 };
 

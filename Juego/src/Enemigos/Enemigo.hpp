@@ -61,6 +61,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
         void setSala(Sala* sala);
+        void setTimeMerodear(float t);
+        void setLastTimeMerodear(float t);
         void setAtackTime(float t);
         void setTimeAt(float time);
         void setLastTimeAt(float time);
@@ -82,6 +84,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getProAtaCritico();
         int* getBuffos();
         Sala* getSala();
+        float getTimeMerodear();
+        float getLastTimeMerodear();
         float getAtackTime();
         float getTimeAt();
         float getLastTimeAt();
@@ -128,17 +132,19 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
     protected:
 
         //Comparadores de la lectura de las acciones y objetivos de las tareas
-        enum accionesJugador 
+        enum accionesEnemigo 
         {  
             MOVERSE = 0,
             ATACAR,
             VER,
-            PIDE_AYUDA
+            PIDE_AYUDA,
+            MERODEA
         };
 
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
         float atacktime = 0.0f;
+        float tiempoMerodear, lastTiempoMerodear;
         float velocidad;  //Velocidad de desplazamiento del enemigo
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";

@@ -245,7 +245,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 }
                 //Si la composicion es una secuencia y la accion anterior no ha tenido exito
                 //o si es un selector y la accion anterior ha tenido exito, se asciende para seleccionar otro nodo no hijo
-                else if((comp->getTipo() == 2 && !exito) || (comp->getTipo() == 3 && exito && ID > comp->getHijos().front()->getID()))
+                else if((comp->getTipo() == 2 && !exito) || (comp->getTipo() == 3 && exito && ID >= comp->getHijos().front()->getID()))
                 {
                     //Se iguala el ID al ultimo de los hijos para continuar
                     //la lectura del arbol en otra rama y no bajar a los hijos restantes
@@ -401,6 +401,11 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 else if(strcmp(accion, PIDE_AYUDA) == 0)
                 {
                     arrayTareaObjetivo[0] = 3;
+                }
+                //La accion es merodear
+                else if(strcmp(accion, MERODEA) == 0)
+                {
+                    arrayTareaObjetivo[0] = 4;
                 }
                 else
                 {

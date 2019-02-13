@@ -916,7 +916,7 @@ void Nivel::update()
             for(std::size_t i=0;i<enemigos.size();i++)
             {
                 //ESTE BUCLE SE VA A IR TODO SEGURAMENTE DESDE AQUI
-                int danyo_jug = 0;
+                /*int danyo_jug = 0;
                 enemigos[i]->setPosAtaques(i);
                 tiempoActual = _controladorTiempo->GetTiempo(2);
                 //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
@@ -942,7 +942,7 @@ void Nivel::update()
                     //cout << "Enemigo " << i  << " pos: " << enemigos[i]->getPosAtaques() << endl;
 
                     //si el tiempo de ataque es mayor que 0, ir restando tiempo hasta 0
-                    /*if(enemigos[i]->getTimeAt() > 0.0f)
+                    if(enemigos[i]->getTimeAt() > 0.0f)
                     {
                         tiempoAtaque = enemigos[i]->getTimeAt();
                         tiempoAtaque -= (tiempoActual - enemigos[i]->getLastTimeAt());
@@ -960,7 +960,7 @@ void Nivel::update()
                     {
                         jugador.QuitarVida(danyo_jug);
                         cout<< "Vida jugador: "<< jugador.getVida() << endl;
-                    }*/
+                    }
                 }
                 //Se le quita vida con el danyo del ataque especial
                 else
@@ -971,13 +971,27 @@ void Nivel::update()
                         cout<< "Vida jugador tras ataque especial: "<< jugador.getVida() << endl;
                     }
                 }
-                //!ESTE BUCLE SE VA A IR TODO SEGURAMENTE HASTA AQUI
+                //!ESTE BUCLE SE VA A IR TODO SEGURAMENTE HASTA AQUI*/
 
                 cout<< "Ejecuto nodo actual de la ia: " << i << endl;
                 if(enemigos[i]!= nullptr && enemigos[i]->GetEnemigo() == 0)
                 {
                     Pollo* enemPollo = (Pollo*) enemigos[i];
                     enemPollo->UpdatePollo(i);
+                    if(enemigos.at(i)->getTimeMerodear() > 0.0f)
+                    {
+                        float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
+                        tiempoActual = _controladorTiempo->GetTiempo(2);
+                        tiempoMerodear = enemigos.at(i)->getTimeMerodear();
+                        if(tiempoActual > tiempoMerodear)
+                        {
+                            tiempoActual = tiempoMerodear;
+                            enemigos.at(i)->setLastTimeMerodear(tiempoActual);
+                        }
+                        tiempoMerodear -= (tiempoActual - enemigos.at(i)->getLastTimeMerodear());
+                        enemigos.at(i)->setLastTimeMerodear(tiempoActual);
+                        enemigos.at(i)->setTimeMerodear(tiempoMerodear);
+                    }
                     //colisiones con todos los objetos y enemigos que no se traspasan
                     //AUN NO FUNCIONA
                     /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
@@ -1242,6 +1256,20 @@ void Nivel::updateIA()
                             Pollo* enemPollo = (Pollo*) enemigos[i];
                             enemPollo->RunIA();
                             enemPollo->UpdatePollo(i);
+                            if(enemigos.at(i)->getTimeMerodear() > 0.0f)
+                            {
+                                float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
+                                tiempoActual = _controladorTiempo->GetTiempo(2);
+                                tiempoMerodear = enemigos.at(i)->getTimeMerodear();
+                                if(tiempoActual > tiempoMerodear)
+                                {
+                                    tiempoActual = tiempoMerodear;
+                                    enemigos.at(i)->setLastTimeMerodear(tiempoActual);
+                                }
+                                tiempoMerodear -= (tiempoActual - enemigos.at(i)->getLastTimeMerodear());
+                                enemigos.at(i)->setLastTimeMerodear(tiempoActual);
+                                enemigos.at(i)->setTimeMerodear(tiempoMerodear);
+                            }
                             //AUN NO FUNCIONA
                             /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
                             {

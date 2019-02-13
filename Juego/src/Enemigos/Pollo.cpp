@@ -7,6 +7,7 @@
 Pollo::Pollo() : Enemigo()
 {
     funciona = true;
+    atacado = false;
     _ordenes = nullptr;
 }
 
@@ -25,7 +26,18 @@ Pollo::~Pollo()
 */
 void Pollo::RunIA()
 {
-    _ordenes = Enemigo::RunIA(funciona);
+    if(this->getTimeMerodear() == 0)
+    {
+        if(atacado)
+        {
+            atacado = false;
+        }
+        if(hecho)
+        {
+            hecho = false;
+        }
+        _ordenes = this->Enemigo::RunIA(funciona);
+    }
 }
 
 /***************** UpdatePollo *****************
@@ -39,6 +51,7 @@ void Pollo::RunIA()
 
 void Pollo::UpdatePollo(int i)
 {
+
     funciona = true;
     if(_ordenes != nullptr)
     {
@@ -49,9 +62,9 @@ void Pollo::UpdatePollo(int i)
                     Nivel* _nivel;
                     bool trueX = false;
                     bool trueZ = false;
-                    float x = this->Enemigo::getNewX();
-                    float y = this->Enemigo::getNewY();
-                    float z = this->Enemigo::getNewZ();
+                    float x = this->getNewX();
+                    float y = this->getNewY();
+                    float z = this->getNewZ();
                     float rotacion = 0.0;
                     
                     //Struct para indicar la velocidad de desplazamiento y la
@@ -67,23 +80,23 @@ void Pollo::UpdatePollo(int i)
                     _nivel = Nivel::getInstance();
 
                     //Se mueve a la derecha
-                    if(_nivel->GetJugador()->getNewX() > this->Enemigo::getNewX() + datosDesplazamiento.distancia)
+                    if(_nivel->GetJugador()->getNewX() > this->getNewX() + datosDesplazamiento.distancia)
                     {
                         trueX = true;
                         rotacion = 90.0f;
-                        datosDesplazamiento.velocidadX = this->Enemigo::getVelocidad(); 
+                        datosDesplazamiento.velocidadX = this->getVelocidad(); 
                     }
 
                     //Se mueve a la izquierda
-                    else if(_nivel->GetJugador()->getNewX() < this->Enemigo::getNewX() - datosDesplazamiento.distancia)
+                    else if(_nivel->GetJugador()->getNewX() < this->getNewX() - datosDesplazamiento.distancia)
                     {
                         trueX = true;
                         rotacion = -90.0f;
-                        datosDesplazamiento.velocidadX = -this->Enemigo::getVelocidad(); 
+                        datosDesplazamiento.velocidadX = -this->getVelocidad(); 
                     }
 
                     //Se mueve hacia arriba
-                    if(_nivel->GetJugador()->getNewZ() > this->Enemigo::getNewZ() + datosDesplazamiento.distancia)
+                    if(_nivel->GetJugador()->getNewZ() > this->getNewZ() + datosDesplazamiento.distancia)
                     {
                         trueZ = true;
                         //Desplazamiento en diagonal
@@ -97,7 +110,7 @@ void Pollo::UpdatePollo(int i)
                             else
                                 rotacion += 45.0f;
 
-                            datosDesplazamiento.velocidadZ = this->Enemigo::getVelocidad() * 0.5; 
+                            datosDesplazamiento.velocidadZ = this->getVelocidad() * 0.5; 
                             datosDesplazamiento.velocidadX *= 0.5;
                         }
 
@@ -105,10 +118,10 @@ void Pollo::UpdatePollo(int i)
                         else
                         {
                             rotacion = 0.0f;
-                            datosDesplazamiento.velocidadZ = this->Enemigo::getVelocidad(); 
+                            datosDesplazamiento.velocidadZ = this->getVelocidad(); 
                         }
                     }
-                    else if(_nivel->GetJugador()->getNewZ() < this->Enemigo::getNewZ() - datosDesplazamiento.distancia)
+                    else if(_nivel->GetJugador()->getNewZ() < this->getNewZ() - datosDesplazamiento.distancia)
                     {
                         trueZ = true;
                         //Desplazamiento en diagonal
@@ -122,7 +135,7 @@ void Pollo::UpdatePollo(int i)
                             //Se mueve hacia abajo a la izquierda
                             else
                                 rotacion -= 45.0f;
-                            datosDesplazamiento.velocidadZ = -this->Enemigo::getVelocidad() * 0.5; 
+                            datosDesplazamiento.velocidadZ = -this->getVelocidad() * 0.5; 
                             datosDesplazamiento.velocidadX *= 0.5;
                         }
 
@@ -130,7 +143,7 @@ void Pollo::UpdatePollo(int i)
                         else
                         {
                             rotacion = 180.0f;
-                            datosDesplazamiento.velocidadZ = -this->Enemigo::getVelocidad(); 
+                            datosDesplazamiento.velocidadZ = -this->getVelocidad(); 
                         }
                     }
 
@@ -141,14 +154,14 @@ void Pollo::UpdatePollo(int i)
 
                     x += datosDesplazamiento.velocidadX;
                     z += datosDesplazamiento.velocidadZ;
-                    this->Enemigo::setNewRotacion(this->Enemigo::getRX(), rotacion, this->Enemigo::getRZ());
-                    this->Enemigo::setNewPosiciones(x, y, z);
-                    this->Enemigo::setPosicionesFisicas(datosDesplazamiento.velocidadX, datosDesplazamiento.velocidadY, datosDesplazamiento.velocidadZ);
+                    this->setNewRotacion(this->Enemigo::getRX(), rotacion, this->Enemigo::getRZ());
+                    this->setNewPosiciones(x, y, z);
+                    this->setPosicionesFisicas(datosDesplazamiento.velocidadX, datosDesplazamiento.velocidadY, datosDesplazamiento.velocidadZ);
                     
                     //Se comprueba si la distancia entre el enemigo y el jugador es menor o igual a la distancia maxima que que indica la variable "distancia"
-                    if(abs(_nivel->GetJugador()->getZ() - this->Enemigo::getZ()) <= abs(datosDesplazamiento.distancia))
+                    if(abs(_nivel->GetJugador()->getZ() - this->getZ()) <= abs(datosDesplazamiento.distancia))
                     {
-                        if(abs(_nivel->GetJugador()->getX() - this->Enemigo::getX()) <= abs(datosDesplazamiento.distancia))
+                        if(abs(_nivel->GetJugador()->getX() - this->getX()) <= abs(datosDesplazamiento.distancia))
                         {
                             funciona = true;
                         }
@@ -166,20 +179,24 @@ void Pollo::UpdatePollo(int i)
         
             case ATACAR: //El Pollo ataca
                 {
-                    cout<<"intenta atacar"<<endl;
-                    Nivel* _nivel;
-                    int danyo;
-                    danyo = this->Enemigo::Atacar(i);
-                    _nivel = Nivel::getInstance();
-                    if(danyo > 0)
+                    if(!atacado)
                     {
-                        _nivel->GetJugador()->QuitarVida(danyo);
-                        cout<<"Ataca por la IA" <<endl;
-                        funciona = true;
-                    }
-                    else 
-                    {
-                        funciona = false;
+                        cout<<"intenta atacar"<<endl;
+                        Nivel* _nivel;
+                        int danyo;
+                        danyo = this->Atacar(i);
+                        _nivel = Nivel::getInstance();
+                        if(danyo > 0)
+                        {
+                            _nivel->GetJugador()->QuitarVida(danyo);
+                            cout<<"Ataca por la IA" <<endl;
+                            funciona = true;
+                            atacado = true;
+                        }
+                        else 
+                        {
+                            funciona = false;
+                        }
                     }
                 }
                 break;
@@ -188,7 +205,7 @@ void Pollo::UpdatePollo(int i)
                 {
                     short int jugador = 1;
                     cout<<"Comprueba si ve al jugador"<<endl;
-                    if(this->Enemigo::ver(jugador))
+                    if(this->ver(jugador))
                     {
                         funciona = true;
                     }
@@ -201,7 +218,24 @@ void Pollo::UpdatePollo(int i)
             case PIDE_AYUDA: //El Pollo pide ayuda
                 {
                     cout<<"Pide ayuda a los aliados"<<endl;
-                    this->Enemigo::pedirAyuda();
+                    this->pedirAyuda();
+                    funciona = true;
+                }
+                break;
+            case MERODEA: //El Pollo merodea
+                {
+                    cout<<"Merodea"<<endl;
+                    if(!hecho)
+                    {
+                        direccion = rand() % 8 + 0;
+                        this->Merodear(direccion);
+                        this->setTimeMerodear(1.5f);
+                        hecho = true;
+                    }
+                    else 
+                    {
+                        this->Merodear(direccion);
+                    }
                     funciona = true;
                 }
                 break;

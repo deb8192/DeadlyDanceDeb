@@ -10,7 +10,8 @@
 
 Enemigo::Enemigo()
 {
-
+    tiempoMerodear = 0.0f;
+    lastTiempoMerodear = 0.0f;
 }
 
 Enemigo::~Enemigo(){
@@ -605,6 +606,17 @@ void Enemigo::setLastRotacion(float nrx, float nry, float nrz)
     rotPasada.z = nrz;
 }
 
+
+void Enemigo::setTimeMerodear(float t)
+{
+    tiempoMerodear = t;
+}
+
+void Enemigo::setLastTimeMerodear(float t)
+{
+    lastTiempoMerodear = t;
+}
+
 void Enemigo::setAtackTime(float t)
 {
   atacktime = t;
@@ -613,6 +625,16 @@ void Enemigo::setAtackTime(float t)
 void Enemigo::SetEnemigo(int enemigo)
 {
     tipoEnemigo = enemigo;
+}
+
+float Enemigo::getTimeMerodear()
+{
+    return tiempoMerodear;
+}
+
+float Enemigo::getLastTimeMerodear()
+{
+    return lastTiempoMerodear;
 }
 
 float Enemigo::getAtackTime()
@@ -702,7 +724,7 @@ short int* Enemigo::RunIA(bool funciona)
 
     bool Enemigo::ver(int tipo)
     {
-        //vamosa  ver si vemos al jugador
+        //vamos a  ver si vemos al jugador
         SenseEventos * eventos = SenseEventos::getInstance();
         if(tipo == 1)//ves al jugador ?
         {
@@ -773,12 +795,41 @@ short int* Enemigo::RunIA(bool funciona)
         return true;
     }
 
-    bool Enemigo::Merodear(int tipo)
+    bool Enemigo::Merodear(int direccion)
     {
-        if(tipo == 1)//pollo
-        {
-           //cout << " pollo merodeando " << endl;
-           return true;
+        switch (direccion){
+            case 0:
+                this->setNewPosiciones(posActual.x, posActual.y, posActual.z + velocidad);
+                this->setNewRotacion(rotActual.x, 0.0f, rotActual.z);
+            break;
+            case 1:
+                this->setNewPosiciones(posActual.x + velocidad * 0.5, posActual.y, posActual.z + velocidad * 0.5);
+                this->setNewRotacion(rotActual.x, 45.0f, rotActual.z);
+            break;
+            case 2:
+                this->setNewPosiciones(posActual.x + velocidad, posActual.y, posActual.z);
+                this->setNewRotacion(rotActual.x, 90.0f, rotActual.z);
+            break;
+            case 3:
+                this->setNewPosiciones(posActual.x + velocidad * 0.5, posActual.y, posActual.z - velocidad * 0.5);
+                this->setNewRotacion(rotActual.x, 135.0f, rotActual.z);
+            break;
+            case 4:
+                this->setNewPosiciones(posActual.x, posActual.y, posActual.z - velocidad);
+                this->setNewRotacion(rotActual.x, 180.0f, rotActual.z);
+            break;
+            case 5:
+                this->setNewPosiciones(posActual.x - velocidad * 0.5, posActual.y, posActual.z - velocidad * 0.5);
+                this->setNewRotacion(rotActual.x, 225.0f, rotActual.z);
+            break;
+            case 6:
+                this->setNewPosiciones(posActual.x - velocidad, posActual.y, posActual.z);
+                this->setNewRotacion(rotActual.x, 270.0f, rotActual.z);
+            break;
+            case 7:
+                this->setNewPosiciones(posActual.x - velocidad * 0.5, posActual.y, posActual.z + velocidad * 0.5);
+                this->setNewRotacion(rotActual.x, 315.0f, rotActual.z);
+            break;
         }
 
 	return false;
