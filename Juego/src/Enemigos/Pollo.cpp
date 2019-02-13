@@ -26,7 +26,7 @@ Pollo::~Pollo()
 */
 void Pollo::RunIA()
 {
-    if(this->getTimeMerodear() == 0)
+    if(this->getTimeMerodear() <= 0)
     {
         if(atacado)
         {

@@ -830,6 +830,10 @@ short int* Enemigo::RunIA(bool funciona)
                 this->setNewPosiciones(posActual.x - velocidad * 0.5, posActual.y, posActual.z + velocidad * 0.5);
                 this->setNewRotacion(rotActual.x, 315.0f, rotActual.z);
             break;
+            default:
+                this->setNewPosiciones(posActual.x, posActual.y, posActual.z + velocidad);
+                this->setNewRotacion(rotActual.x, 0.0f, rotActual.z);
+            break;
         }
 
 	return false;

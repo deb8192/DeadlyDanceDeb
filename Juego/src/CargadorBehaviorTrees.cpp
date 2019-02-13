@@ -18,13 +18,11 @@ void CargadorBehaviorTrees::generarTarea(pugi::xml_node tool, const char ** atri
 {
     if((tool.first_child() != NULL) && (std::strcmp(tool.first_child().name(), PIZARRA) == 0))
     {
-        cout<<"Pizarra?"<<endl;
         atributos[i] = VERDADERO;
         i++;
         for (pugi::xml_attribute attr = tool.first_child().first_attribute(); attr; attr = attr.next_attribute())
         {
             atributos[i] = attr.value();
-            cout << " " << attr.name() << "=" << atributos[i];
             i++;
         }
 
@@ -39,7 +37,6 @@ void CargadorBehaviorTrees::generarTarea(pugi::xml_node tool, const char ** atri
     }
     else
     {
-        cout<<"No Pizarra"<<endl;
         atributos[i] = FALSO;
         i++;
         while(i < sizeof(atributos))
@@ -97,8 +94,7 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
             //Se recorren los atributos de cada nodo
             for (pugi::xml_attribute attr = tool.first_attribute(); attr; attr = attr.next_attribute())
             {
-                atributos[i] = attr.value(); //devuelve los atributos como const char*
-                cout << " " << attr.name() << "=" << atributos[i];
+                atributos[i] = attr.value(); //devuelve los atributos como const char*;
                 i++;
             }
 
@@ -153,7 +149,6 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                     padre = raiz;
                 }
                 arbol = new Arbol(raiz, raiz->getNombre());
-                cout<<"Se crea arbol"<<"\n"<<endl;
             }
             //Se crean el resto de nodos del arbol
             else if(std::strcmp(tool.name(), COMPOSICION) == 0)
@@ -271,7 +266,6 @@ Arbol CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
 
     //Se crea la ruta completa hacia el arbol de comportamiento
     ruta_completa = ruta+nombre_arbol+extension;
-    cout<<ruta_completa<<endl;  
 
     //Se transforma el string a un char array
     char cadena[sizeof(ruta_completa)];
@@ -283,14 +277,15 @@ Arbol CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
     if (!doc.load_file(cadena)) {
     	cout<<"No existe el documento"<<"\n"<<endl;
 	}
-    cout<<"Hay documento"<<"\n"<<endl;
-
+    else
+    {
+        cout<<"Hay documento"<<"\n"<<endl;
+    }
+    
     //Se pasa a la lectura del archivo .xml
     //Prueba de lectura de nodos
     vector<pugi::xml_node> tree;
     tree.push_back(doc.child("BehaviorTree"));
-
-    cout << "FIN" << "\n" <<endl;
     return CrearArbolComportamiento(tree, nodo, padre, level);
 }
 
@@ -323,7 +318,6 @@ Arbol2 * CargadorBehaviorTrees::cargarArbol(string nombre)
 
         //Se crea la ruta completa hacia el arbol de comportamiento
         ruta_completa = ruta+nombre+extension;
-        cout<<ruta_completa<<endl;  
 
         //Se transforma el string a un char array
         char cadena[sizeof(ruta_completa)];
@@ -338,8 +332,6 @@ Arbol2 * CargadorBehaviorTrees::cargarArbol(string nombre)
         }
         else
         {
-            //cout<<"Hay documento"<<"\n"<<endl;
-           // cout << "Inicio construccion arbol" << "\n" <<endl;
             pugi::xml_node tree = doc.child("BehaviorTree");
             agregarHoja(tree,arbol->getCabeza(),arbol);
         }

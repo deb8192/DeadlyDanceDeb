@@ -983,11 +983,6 @@ void Nivel::update()
                         float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
                         tiempoActual = _controladorTiempo->GetTiempo(2);
                         tiempoMerodear = enemigos.at(i)->getTimeMerodear();
-                        if(tiempoActual > tiempoMerodear)
-                        {
-                            tiempoActual = tiempoMerodear;
-                            enemigos.at(i)->setLastTimeMerodear(tiempoActual);
-                        }
                         tiempoMerodear -= (tiempoActual - enemigos.at(i)->getLastTimeMerodear());
                         enemigos.at(i)->setLastTimeMerodear(tiempoActual);
                         enemigos.at(i)->setTimeMerodear(tiempoMerodear);
@@ -1258,16 +1253,18 @@ void Nivel::updateIA()
                             enemPollo->UpdatePollo(i);
                             if(enemigos.at(i)->getTimeMerodear() > 0.0f)
                             {
+                                if(enemigos.at(i)->getTimeMerodear() == 1.5f)
+                                {
+                                    enemigos.at(i)->setLastTimeMerodear(_controladorTiempo->GetTiempo(2));
+                                }
                                 float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
                                 tiempoActual = _controladorTiempo->GetTiempo(2);
                                 tiempoMerodear = enemigos.at(i)->getTimeMerodear();
-                                if(tiempoActual > tiempoMerodear)
+                                tiempoMerodear -= (tiempoActual - enemigos.at(i)->getLastTimeMerodear());
+                                if(tiempoActual > enemigos.at(i)->getLastTimeMerodear())
                                 {
-                                    tiempoActual = tiempoMerodear;
                                     enemigos.at(i)->setLastTimeMerodear(tiempoActual);
                                 }
-                                tiempoMerodear -= (tiempoActual - enemigos.at(i)->getLastTimeMerodear());
-                                enemigos.at(i)->setLastTimeMerodear(tiempoActual);
                                 enemigos.at(i)->setTimeMerodear(tiempoMerodear);
                             }
                             //AUN NO FUNCIONA
