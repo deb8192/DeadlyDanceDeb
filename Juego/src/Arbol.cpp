@@ -44,16 +44,13 @@ Nodo* Arbol::anyadirHijo(Nodo * nod)
             //Si el nodo actual encontrado "buscador" es una composicion entra
             if(strcmp(buscador->getNombre(), RAIZ) == 0 || strcmp(buscador->getNombre(), COMPOSICION) == 0)
             {
-                cout<<typeid(buscador).name()<<endl;
                 finderA = (Composicion*) buscador;
             }
 
             //Si el nodo actual encontrado "buscador" es un decorador entra
             else if(strcmp(buscador->getNombre(), DECORADOR) == 0)
             {
-                cout<<typeid(buscador).name()<<endl;
                 finderB = (Decorador*) buscador;
-                
             }  
             //Si no hay nodos en ese nivel o dichos nodos no tienen hijos hijos, desactiva el descenso para retroceder en las ramas del arbol 
             if((finderA == nullptr || finderA->getHijos().size() <= 0) && (finderB == nullptr || finderB->getHijos().size() <= 0))
