@@ -12,7 +12,7 @@ void Pausa::Iniciar()
 {
     cout << "\e[42m Pausa \e[0m" << endl;
     _motor = MotorGrafico::GetInstance();
-    _motor->FondoEscena(255,5,115,125);
+    _motor->FondoEscena(255,0,0,0);
     _motor->ActivarFuenteDefault();
     _motor->CrearTexto("Pausa - ESC o P = Atras", 0, 0, 400, 20);
     pintarBotones();
@@ -21,7 +21,7 @@ void Pausa::Iniciar()
 // Actualiza lo que se ve por pantalla
 void Pausa::Render()
 {
-    _motor->FondoEscena(255,5,115,125);     // Borra
+    _motor->FondoEscena(255,0,0,0);         // Borra
     _motor->RenderEscena();                 // Vuelve a pintar
 }
 

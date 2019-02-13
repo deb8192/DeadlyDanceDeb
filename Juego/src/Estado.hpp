@@ -7,6 +7,9 @@ using namespace idsEventos;
 //aqui definimos la clase interfaz de los estados
 class Estado {
     public:
+        ~Estado() {
+            _motor = nullptr;
+        };
         //funciones que tiene la interfaz como virtual (porque no existen pero deberian)
         virtual short Tipo() = 0;
         virtual void Iniciar() = 0;
@@ -20,7 +23,7 @@ class Estado {
         virtual void Reanudar() { }
 
         MotorGrafico* _motor;
-        
+
     private:
         
 };

@@ -30,6 +30,7 @@ class Juego
         Juego();
         static Juego* _unicaInstancia;
         //fin clase singleton private
+        
         MotorGrafico* _motor;//instancia de la fachada
         Times* _tiempo;
 

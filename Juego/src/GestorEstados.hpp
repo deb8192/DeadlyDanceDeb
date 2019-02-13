@@ -10,7 +10,7 @@ public:
     ~GestorEstados() {
         while (_estados.size() > 0) {
             _estado = _estados.top();
-            delete _estado;
+            //delete _estado;
             _estado = 0;
             _estados.pop();
         }

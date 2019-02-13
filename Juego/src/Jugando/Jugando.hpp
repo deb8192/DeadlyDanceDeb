@@ -2,7 +2,6 @@
 #define JUGANDO_HPP
 
 #include "../Estado.hpp"
-#include "Nivel.hpp"
 
 class Jugando: public Estado {
     public:
@@ -32,9 +31,6 @@ class Jugando: public Estado {
     static Jugando* _unicaInstancia;
 
     bool reiniciando;
-
-    void menuPausa();
-    void menuMuerto();
     
 };
 #endif /* JUGANDO_HPP */

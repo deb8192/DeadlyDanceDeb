@@ -186,6 +186,7 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
 }
 
 void Nivel::recargarJugador(){
+    cout << "CACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"<<endl;
     jugador.setVida(100);
     jugador.setBarraAtEs(100);
     jugador.setAtaque(15);
@@ -194,7 +195,6 @@ void Nivel::recargarJugador(){
     jugador.setTimeAtEsp(0.0f);
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
-    jugador.setVida(100);
     jugador.setPosiciones(getjix(),getjiy(),getjiz());
 }
 
@@ -232,7 +232,6 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
     jugador.setTimeAtEsp(0.0f);
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
-    jugador.setVida(100);
     jugador.setPosiciones(x,y,z);
     MotorGrafico* _motor = MotorGrafico::GetInstance();
 
@@ -783,33 +782,12 @@ void Nivel::InteractuarNivel()
 * */
 void Nivel::update()
 {
-
     MotorGrafico* _motor = MotorGrafico::GetInstance();
-
-    if(_motor->EstaPulsado(KEY_J))
-    {
-        jugador.QuitarVida(20);
-        _motor->ResetKey(KEY_J);
-    }
 
     if(ejecutar)
     {
-        if(jugador.estasMuerto())
-        {
-            if(jugador.estasMuerto() && jugador.finalAnimMuerte())
-            {
-                NoEjecutar();//se dehsabilita ejecucion de updates
-                return;
-            }else{
-                if(jugador.estasMuerto()){
-                    jugador.MuereJugador();
-                }
-            }
-        }
-
         MotorFisicas* _fisicas = MotorFisicas::getInstance();
         MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
-
 
         //animacion
         _motor->cambiarAnimacionJugador(jugador.getAnimacion());
@@ -828,10 +806,10 @@ void Nivel::update()
         this->activarPowerUp();
 
         //adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
-        _fisicas->colisionChecker(_motor->EstaPulsado(1),
-            _motor->EstaPulsado(2),
-            _motor->EstaPulsado(3),
-            _motor->EstaPulsado(4),
+        _fisicas->colisionChecker(_motor->EstaPulsado(KEY_A),
+            _motor->EstaPulsado(KEY_S),
+            _motor->EstaPulsado(KEY_D),
+            _motor->EstaPulsado(KEY_W),
             jugador.getNewX(),
             jugador.getNewY(),
             jugador.getNewZ()
@@ -853,10 +831,10 @@ void Nivel::update()
         //actualizamos movimiento del jugador
 
             jugador.movimiento(jugadorInmovil,
-                _motor->EstaPulsado(1),
-                _motor->EstaPulsado(2),
-                _motor->EstaPulsado(3),
-                _motor->EstaPulsado(4)
+                _motor->EstaPulsado(KEY_A),
+                _motor->EstaPulsado(KEY_S),
+                _motor->EstaPulsado(KEY_D),
+                _motor->EstaPulsado(KEY_W)
             );
 
             _motor->clearDebug2();   //Pruebas debug
@@ -1140,23 +1118,6 @@ void Nivel::updateIA()
     {
         //cout<< "Ejecuto ia " << endl;
         MotorGrafico* _motor = MotorGrafico::GetInstance();
-
-        //En esta parte muere jugador
-        if(_motor->EstaPulsado(KEY_J)){//SI PULSO 'J' MUERE JUGADOR
-            jugador.MuereJugador();
-        }
-        if(jugador.estasMuerto())
-        {
-            if(jugador.estasMuerto() && jugador.finalAnimMuerte())
-            {
-                NoEjecutar();//se dehsabilita ejecucion de updates
-                return;
-            }else{
-                if(jugador.estasMuerto()){
-                    jugador.MuereJugador();
-                }
-            }
-        }
 
         //En esta parte muere enemigo
         if(enemigos.size() > 0){
@@ -1669,12 +1630,6 @@ std::vector<Enemigo* >  Nivel::getEnemigos()
     return enemigos;
 }
 
-Jugador Nivel::getJugador()
-{
-    return jugador;
-}
-
-
 void Nivel::Ejecutar()
 {
     ejecutar = true;
@@ -1710,7 +1665,7 @@ bool Nivel::EstaLimpio()
     return limpio;
 }
 
-Jugador*  Nivel::GetJugador()
+Jugador* Nivel::GetJugador()
 {
     return &jugador;
 }
