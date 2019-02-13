@@ -328,7 +328,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
 {
 
     //se recomiendan usar modos especificos para ahorrar costes.
-    Ray * rayo = crearRayo(x,y,z,rotation,longitud);
+    Ray * rayo = crearRayo(x,y,z,(-1*(rotation-180)),longitud);
 
     RaycastInfo intersection;
 

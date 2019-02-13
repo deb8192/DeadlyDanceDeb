@@ -44,6 +44,7 @@ class Arbol
         const char* ATACAR = "ataca";
         const char* VER = "ve";
         const char* PIDE_AYUDA = "pide-ayuda";
+        const char* MERODEA = "merodea";
 
         const char* JUGADOR = "jugador";
         const char* ZONA_COFRES = "zona-cofres";
