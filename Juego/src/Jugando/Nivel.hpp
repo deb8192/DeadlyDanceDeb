@@ -141,6 +141,7 @@ class Nivel
 
         //Comprobacion de powerup
         int powerupYES = -1;
+        int int_cpw_aux = 0; //no repetir el mismo objeto si esta uno encima de otro
 
 };
 #endif

@@ -155,8 +155,8 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
                 motora->getEvent(nameid)->start();
 
             }
-            break;            
-    
+            break;
+
         default:
             break;
     }
@@ -777,7 +777,7 @@ void Nivel::InteractuarNivel()
 /************** Update* ************
 *  Bucle de actualizacion del juego
 *  Entradas:
-* 
+*
 *  Salidas:
 * */
 void Nivel::update()
@@ -980,7 +980,8 @@ void Nivel::update()
 void Nivel::activarPowerUp()
 {
     int int_cpw = _fisicas->collideColectablePowerup();
-    if(int_cpw >= 0)
+
+    if(int_cpw >= 0 && int_cpw != int_cpw_aux)
     {
         MotorGrafico* _motor = MotorGrafico::GetInstance();
         bool locoges = false; //Comprobar si lo puedes coger
@@ -1013,6 +1014,8 @@ void Nivel::activarPowerUp()
             _fisicas->EraseColectablePowerup(int_cpw);
         }
     }
+
+    int_cpw_aux = int_cpw;
 }
 
 void Nivel::updateAt(int* danyo, MotorGrafico* _motor)
@@ -1130,6 +1133,7 @@ void Nivel::updateIA()
                     //Se crea un power-up?
                     srand(time(NULL));
                     int secreapower = rand() % 101; //Entre 0 y 100
+                    cout << "secreapower:" << secreapower << endl;
 
                     if(secreapower <= 100){ //20% de posibilidades
                       //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
