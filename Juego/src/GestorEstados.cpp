@@ -85,7 +85,7 @@ void GestorEstados::ProcesarPilaEstados()
     if ( eliminando && !_estados.empty())
     {
         _estados.top()->Vaciar();
-        delete(_estados.top());
+        //delete(_estados.top());
         _estados.pop();
         
         if (!_estados.empty())

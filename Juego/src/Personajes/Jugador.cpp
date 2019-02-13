@@ -199,17 +199,18 @@ void Jugador::UpdateTimeMove(float updTime)
     moveTime += updTime;
 }
 
-bool Jugador::estasMuerto(){
-    //cout << "Muere jugador??: " << vida << endl;
-    if(vida <= 0){
-        setAnimacion(5);
+bool Jugador::EstaMuerto()
+{
+    if(vida <= 0)
+    {
+        //setAnimacion(5);
         return true;
     }
     return false;
 }
 
-bool Jugador::finalAnimMuerte(){
-
+bool Jugador::finalAnimMuerte()
+{
     Times* _tiempo = Times::GetInstance();
     if(_tiempo->CalcularTiempoPasado(tiempoPasadoMuerte) >= animacionMuerteTiem && tiempoPasadoMuerte != 0){//sino se cumple no ha acabado
         return true;
@@ -217,14 +218,14 @@ bool Jugador::finalAnimMuerte(){
     return false;
 }
 
-void Jugador::MuereJugador(){
+void Jugador::MuereJugador()
+{
     Times* _tiempo = Times::GetInstance();
     MotorGrafico* _motor = MotorGrafico::GetInstance();
 
     if(tiempoPasadoMuerte == 0){
         _motor->colorearJugador(255,0,0,0);//negro
         tiempoPasadoMuerte = _tiempo->GetTiempo(1);
-        _motor->botonesMuerteJugador();//PINTAR BOTON 'REINICIAR JUEGO' Y 'IR A MENU'
     }
     if(_tiempo->CalcularTiempoPasado(tiempoPasadoMuerte) < animacionMuerteTiem){
         if(_tiempo->CalcularTiempoPasado(tiempoPasadoMuerte) >= 1000.0f){
@@ -913,7 +914,9 @@ void Jugador::setPosicionesFisicas(float nx,float ny,float nz)
 
 void Jugador::setVida(int vid)
 {
+    cout << vida <<"  -  "<<vid<<"  CAMBIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO "<<endl;
     vida = vid;
+    cout << vida<<endl;
 }
 
 void Jugador::setTipo(int tip)

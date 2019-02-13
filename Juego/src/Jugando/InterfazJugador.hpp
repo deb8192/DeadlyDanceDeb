@@ -11,7 +11,7 @@ class InterfazJugador
         static InterfazJugador* getInstance() //esto se utiliza para crear el objeto una sola vez
         {
             if(_unica_instancia == 0)
-            _unica_instancia = new InterfazJugador();
+                _unica_instancia = new InterfazJugador();
             return _unica_instancia;  
         }
         //fin singleton public

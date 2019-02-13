@@ -30,8 +30,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
         void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
 
-        //Metodos Muere jugador y enemigo
-        bool estasMuerto();
+        //Metodos Muere jugador
+        bool EstaMuerto();  // Comprueba si vida <= 0
         bool finalAnimMuerte();
         void MuereJugador();//muere jugador (el tiempo controla los cambio de color del jugador)
 

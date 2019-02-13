@@ -32,7 +32,7 @@ class Nivel
         static Nivel* getInstance() //esto se utiliza para crear el objeto una sola vez
         {
             if(_unica_instancia == 0)
-            _unica_instancia = new Nivel();
+                _unica_instancia = new Nivel();
             return _unica_instancia;
         }
         //fin singleton public
@@ -68,7 +68,6 @@ class Nivel
         Enemigo* getEnemigoPideAyuda();
         Sala* getPrimeraSala();
         std::vector<Enemigo*>  getEnemigos();
-        Jugador getJugador();
         void setThen();
 
         //Funciones de interacciones

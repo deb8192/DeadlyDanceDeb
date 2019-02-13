@@ -28,7 +28,7 @@ bool InterfazJugador::getEstado()
     return estado;
 }
 
-int * InterfazJugador::getUpdate()
+int* InterfazJugador::getUpdate()
 {
     int * datos = new int[5];
     

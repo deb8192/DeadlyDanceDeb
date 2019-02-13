@@ -1,5 +1,6 @@
 #include "Jugando.hpp"
 #include "../Juego.hpp"
+#include "Nivel.hpp"
 
 // para clases singleton deben tener un indicador de que se ha creado el unico objeto
 Jugando* Jugando::_unicaInstancia = 0;
@@ -34,36 +35,55 @@ void Jugando::Render()
 void Jugando::Update()
 {
     _motor->clearDebug();
-    Nivel* _nivel = Nivel::getInstance();
-    SenseEventos* sense = SenseEventos::getInstance();
-    sense->update();//se actualizan sentidos
-    _nivel->update();//se actualiza posiciones y interpolado
 
     //Actualiza el motor de audio
-    MotorAudioSystem* motora = MotorAudioSystem::getInstance();
-    motora->update(false);
+    MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
+    _motora->update(false);
+
+    SenseEventos* _sense = SenseEventos::getInstance();
+    _sense->update();//se actualizan sentidos
+
+    Nivel* _nivel = Nivel::getInstance();
+    if (_nivel->GetJugador()->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
+    {
+        _nivel->GetJugador()->MuereJugador(); // Animacion de muerte
+        Juego::GetInstance()->estado.CambioEstadoMuerte();
+    }
+    _nivel->update();//se actualiza posiciones y interpolado
 }
 
 void Jugando::UpdateIA()
 {
     Nivel* _nivel = Nivel::getInstance();
+
+    /* *********** Teclas para probar cosas *************** */
+    if (_motor->EstaPulsado(KEY_J))
+    {
+        _motor->ResetKey(KEY_J);
+        _nivel->GetJugador()->QuitarVida(20);
+    }
+    /* **************************************************** */
     _nivel->updateIA();
 }
 
 void Jugando::ManejarEventos() {
     // ESC o P para abrir menu de pausa
-    if ( _motor->EstaPulsado(KEY_ESC) || 
+    if (_motor->EstaPulsado(KEY_ESC) || 
         _motor->EstaPulsado(KEY_P)) {
         
         _motor->ResetKey(KEY_ESC);
         _motor->ResetKey(KEY_P);
-        menuPausa();
+        Juego::GetInstance()->estado.CambioEstadoPausa();
     }
 
-    if ( _motor->EstaPulsado(KEY_K)) {
-        
+    Nivel* _nivel = Nivel::getInstance();
+
+    /* *********** Teclas para probar cosas *************** */
+
+    if (_motor->EstaPulsado(KEY_K))
+    {
         _motor->ResetKey(KEY_K);
-        menuMuerto();
+        _nivel->GetJugador()->setVida(0);
     }
 
     //para modo debug
@@ -79,20 +99,9 @@ void Jugando::ManejarEventos() {
         _motor->activarPathfinding();
         _motor->ResetKey(KEY_C);
     }
-
-    Nivel* _nivel = Nivel::getInstance();
+    /* **************************************************** */
+    
     _nivel->InteractuarNivel();
-}
-
-void Jugando::menuPausa()
-{
-    Juego::GetInstance()->estado.CambioEstadoPausa();
-}
-
-void Jugando::menuMuerto()
-{
-    // TO DO: Borrar cosas
-    Juego::GetInstance()->estado.CambioEstadoMuerte();
 }
 
 void Jugando::Pausar()
