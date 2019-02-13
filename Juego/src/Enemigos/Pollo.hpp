@@ -14,7 +14,7 @@ class Pollo : public Enemigo
 
     private:
         bool funciona;
-        int* _ordenes;
+        short int* _ordenes;
 
 };
 

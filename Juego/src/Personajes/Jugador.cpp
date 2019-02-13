@@ -388,10 +388,11 @@ int Jugador::AtacarEspecial()
         setAnimacion(3);
         if(atackEspTime <= 0)
         {
+            int distancia = 5;
             animacion = 3;
-            atespx = 5 * sin(PI * getRY() / PIRADIAN) + getX();
+            atespx = distancia * sin(PI * getRY() / PIRADIAN) + getX();
             atespy = getY();
-            atespz = 5 * cos(PI * getRY() / PIRADIAN) + getZ();
+            atespz = distancia * cos(PI * getRY() / PIRADIAN) + getZ();
             atgx = getRX();
             atgy = getRY();
             atgz = getRZ();
@@ -463,10 +464,10 @@ void Jugador::AtacarEspecialUpdate(int*danyo)
     //Si el ataque especial es el del Heavy, es cuerpo a cuerpo
     if(strcmp(_armaEspecial->getNombre(), NOMBREHEAVY) == 0)
     {
-
+        int distancia = 5;
         //Calculo de la posicion del arma delante  int getAnimacion();del jugador
-        atespx = 5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
-        atespz = 5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
+        atespx = distancia * sin(PI * this->getRY() / PIRADIAN) + this->getX();
+        atespz = distancia * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
         _armaEspecial->initPosicionesFisicas(atespx/2, this->getY()/2, atespz/2);
         _armaEspecial->setNewPosiciones(atespx, this->getY(), atespz);
         _armaEspecial->setNewRotacion(getRX(), this->getRY(), getRZ());
