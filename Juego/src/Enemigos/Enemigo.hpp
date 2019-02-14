@@ -120,12 +120,13 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             bool Acciones(int);//esto es para recorrer el arbol
             bool pedirAyuda();//pide ayuda
             bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
-            bool Merodear(int tipo);//para dar vueltas por una zona, segun el enemigo tendra diferentes merodeos
+            bool Merodear(int direccion);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         //fin comportamientos bases
 
         //activar ia
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
         Arbol *getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
+        void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
         short int* RunIA(bool);//corre la ia del enemigo
         //fin ia
 

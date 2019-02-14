@@ -246,3 +246,8 @@ void Pollo::UpdatePollo(int i)
         }
     }
 }
+
+void Pollo::SetNuevasOrdenes(short int newOrden)
+{
+    _ordenes[0] = newOrden;
+}

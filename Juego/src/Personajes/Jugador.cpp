@@ -349,6 +349,7 @@ void Jugador::AtacarUpdate(int danyo)
           {
             float variacion = rand() % 7 - 3;
             danyo += (int) variacion;
+            //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
             nivel->getEnemigos().at(atacados.at(i))->QuitarVida(danyo);
             cout<<"Enemigo: "<< nivel->getEnemigos().at(atacados.at(i))->getID() << endl;
             cout<<"Daño "<<danyo<<endl;

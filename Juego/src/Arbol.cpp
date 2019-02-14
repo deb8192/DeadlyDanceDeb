@@ -158,8 +158,15 @@ Composicion * Arbol::devolverPadre()
     }
 }
 
-//EN LA COMPOSICION NO DETECTA EL FALSO, HAY QUE ARREGLARLO
-//AHORA PETA
+/***************** ContinuarSiguenteNodo *******************
+ * Funcion que recorre el arbol de comportamiento de cada
+ * enemigo cada vez que se le llame, continuando desde el ultimo
+ * nodo en ejecucion si lo hay o comenzando desde la raiz
+ * 
+ * Entradas:
+ *          bool exito: valor booleano que indica si 
+ *              la ultima accion ha tenido exito o no
+*/
 short int* Arbol::ContinuarSiguienteNodo(bool exito)
 {
     Composicion *comp = nullptr;
