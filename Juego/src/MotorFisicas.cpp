@@ -548,6 +548,7 @@ void MotorFisicas::updateAtaquEspecEnemigos(float x, float y, float z, unsigned 
 vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z)
 {
     vector<unsigned int> atacados;
+    atacados.resize(enemigos.size());
     if(armaAtEsp != nullptr)
     {
         rp3d::Vector3 posiciones(x,y,z);
