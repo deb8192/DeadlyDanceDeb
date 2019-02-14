@@ -13,7 +13,7 @@ class Juego
         ~Juego();
         static Juego* GetInstance() //esto se utiliza para crear el objeto una sola vez
         {
-            if (_unicaInstancia == 0) {
+            if (!_unicaInstancia) {
                 _unicaInstancia = new Juego();
             }
             return _unicaInstancia;

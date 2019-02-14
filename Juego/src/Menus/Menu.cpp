@@ -1,16 +1,20 @@
 #include "Menu.hpp"
 #include "../Juego.hpp"
-#include "../Jugando/Nivel.hpp"
 #include "../CargadorPuzzles.hpp"
 
 Menu::Menu()
 {
+    _motor = MotorGrafico::GetInstance();
+    _motora = MotorAudioSystem::getInstance();
 }
 
 Menu::~Menu()
 {
     cout << "Borrando menu" <<endl;
-    delete _motor;
+
+    // Punteros a clases singleton
+    _motora = nullptr;
+    _motor = nullptr;
 }
 
 void Menu::Iniciar()
@@ -18,12 +22,10 @@ void Menu::Iniciar()
     cout << "\e[42m Menu \e[0m" << endl;
 
     //Motor de audio inicializar
-    _motora = MotorAudioSystem::getInstance();
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     _motora->getEvent("Menu")->start(); //Reproducir musica Menu
 
     //Motor grafico, inicializar
-    _motor = MotorGrafico::GetInstance();
     _motor->FondoEscena(255,100,101,140);
     _motor->ActivarFuenteDefault();
 
@@ -98,10 +100,6 @@ void Menu::jugar()
     cout << "\e[42m jugar \e[0m" << endl;
 
     _motora->getEvent("Menu")->stop(); //Detener musica Menu
-    
-    Nivel* _nivel = Nivel::getInstance();//se recoge la instancia de nivel
-    _nivel->CargarNivel(5);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-
     Juego::GetInstance()->estado.CambioEstadoJugar();
 }
 

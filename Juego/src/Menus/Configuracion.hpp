@@ -5,6 +5,7 @@
 
 class Configuracion: public Estado {
     public:
+        Configuracion();
         ~Configuracion();
         short Tipo() { return 4; };
         void Iniciar();
@@ -15,6 +16,7 @@ class Configuracion: public Estado {
 
     private:
         void atras();
-
+        
+        MotorGrafico* _motor;
 };
 #endif /* CONFIGURACION_HPP */

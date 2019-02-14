@@ -1,22 +1,40 @@
 #include "Jugando.hpp"
 #include "../Juego.hpp"
-#include "Nivel.hpp"
 
-// para clases singleton deben tener un indicador de que se ha creado el unico objeto
-Jugando* Jugando::_unicaInstancia = 0;
-// fin indicador singleton
+//singleton
+Jugando* Jugando::_unica_instancia = 0;
+//fin indicador singleton
+
+Jugando::Jugando()
+{
+    reiniciando = false;
+    _motor = MotorGrafico::GetInstance();
+    _nivel = Nivel::getInstance();
+    _motora = MotorAudioSystem::getInstance();
+    _sense = SenseEventos::getInstance();
+
+    //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
+    _nivel->CargarNivel(5);
+}
 
 Jugando::~Jugando()
 {
     cout << "Borrando Jugando" << endl;
-    delete _motor;
-    //delete _unicaInstancia;
+    reiniciando = false;
+
+    // Punteros a clases singleton
+    _sense = nullptr;
+    _motora = nullptr;
+    _nivel = nullptr;
+    _motor = nullptr;
+
+    // Liberar memoria
+    delete _unica_instancia;
 }
 
 void Jugando::Iniciar()
 {
     cout << "\e[42m Entrando en Estado - Jugando \e[0m" << endl;
-    _motor = MotorGrafico::GetInstance();
     reiniciando = false;
     _motor->CrearCamara();
     _motor->FondoEscena(255,0,0,0);
@@ -26,7 +44,6 @@ void Jugando::Render()
 {
     _motor->FondoEscena(255,0,0,0); // Borra
 
-    Nivel* _nivel = Nivel::getInstance();
     _nivel->Draw();
 
     _motor->RenderEscena();               // Vuelve a pintar
@@ -37,13 +54,10 @@ void Jugando::Update()
     _motor->clearDebug();
 
     //Actualiza el motor de audio
-    MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
     _motora->update(false);
 
-    SenseEventos* _sense = SenseEventos::getInstance();
     _sense->update();//se actualizan sentidos
 
-    Nivel* _nivel = Nivel::getInstance();
     if (_nivel->GetJugador()->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
         _nivel->GetJugador()->MuereJugador(); // Animacion de muerte
@@ -54,8 +68,6 @@ void Jugando::Update()
 
 void Jugando::UpdateIA()
 {
-    Nivel* _nivel = Nivel::getInstance();
-
     /* *********** Teclas para probar cosas *************** */
     if (_motor->EstaPulsado(KEY_J))
     {
@@ -75,8 +87,6 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_P);
         Juego::GetInstance()->estado.CambioEstadoPausa();
     }
-
-    Nivel* _nivel = Nivel::getInstance();
 
     /* *********** Teclas para probar cosas *************** */
 

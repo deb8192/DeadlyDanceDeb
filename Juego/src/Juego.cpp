@@ -12,10 +12,12 @@ Juego::Juego()
 
 Juego::~Juego()
 {
-    delete _motor;
-    //_motor = NULL;
+    // Punteros a clases singleton
+    _tiempo = nullptr;
+    _motor = nullptr;
+
+    // Liberar memoria
     delete _unicaInstancia;
-    //_unicaInstancia = NULL;
 }
 
 void Juego::inicializarVentana()

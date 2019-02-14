@@ -10,9 +10,9 @@ Times::Times()
 }
 
 //destructor de la clase
-Times::~Times(void)
+Times::~Times()
 {
-
+    delete _unica_instancia;
 }
 
 //modificas los valores de frames y de numero de calculas de ia por cada ciclo

@@ -29,7 +29,7 @@ void GestorEstados::EstadoMenu()
     anyadir(new Menu(), true);
 }
 
-// Carga el juego, se llama desde Menu
+// Elimina Menu y carga el juego
 void GestorEstados::CambioEstadoJugar()
 {
     eliminar();

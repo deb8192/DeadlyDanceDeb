@@ -5,6 +5,7 @@
 
 class EstadoMuerte: public Estado {
     public:
+        EstadoMuerte();
         ~EstadoMuerte();
         short Tipo() { return 7; };
         void Iniciar();
@@ -19,5 +20,7 @@ class EstadoMuerte: public Estado {
         void menuPrincipal();
         void reiniciarPartida();
         void salir();
+
+        MotorGrafico* _motor;
 };
 #endif /* ESTADO_MUERTE_HPP */
