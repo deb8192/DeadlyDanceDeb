@@ -2,16 +2,20 @@
 #include "../Juego.hpp"
 #include "../Jugando/Jugando.hpp"
 
+Pausa::Pausa()
+{
+    _motor = MotorGrafico::GetInstance();
+}
+
 Pausa::~Pausa()
 {
     cout << "Borrando pausa" <<endl;
-    delete _motor;
+    _motor = nullptr;
 }
 
 void Pausa::Iniciar()
 {
     cout << "\e[42m Pausa \e[0m" << endl;
-    _motor = MotorGrafico::GetInstance();
     _motor->FondoEscena(255,0,0,0);
     _motor->ActivarFuenteDefault();
     _motor->CrearTexto("Pausa - ESC o P = Atras", 0, 0, 400, 20);

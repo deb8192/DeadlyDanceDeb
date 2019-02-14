@@ -2,17 +2,19 @@
 #define JUGANDO_HPP
 
 #include "../Estado.hpp"
+#include "Nivel.hpp"
 
 class Jugando: public Estado {
     public:
-        //singleton public
+        Jugando();
         ~Jugando();
+
+        //clase singleton en public
         static Jugando* GetInstance() //esto se utiliza para crear el objeto una sola vez
         {
-            if (_unicaInstancia == 0) {
-                _unicaInstancia = new Jugando();
-            }
-            return _unicaInstancia;
+            if(!_unica_instancia)
+                _unica_instancia = new Jugando();
+            return _unica_instancia;  
         }
         //fin singleton public
 
@@ -28,9 +30,15 @@ class Jugando: public Estado {
         void Reiniciar();
 
     private:
-    static Jugando* _unicaInstancia;
+        //clase singleton 
+        static Jugando* _unica_instancia;
+        //fin clase singleton private
 
-    bool reiniciando;
-    
+        bool reiniciando;
+
+        MotorAudioSystem* _motora;
+        SenseEventos* _sense;
+        MotorGrafico* _motor;
+        Nivel* _nivel;
 };
 #endif /* JUGANDO_HPP */

@@ -5,7 +5,7 @@
 
 class Pausa: public Estado {
     public:
-
+        Pausa();
         ~Pausa();
         short Tipo() { return 6; };
         void Iniciar();
@@ -21,5 +21,7 @@ class Pausa: public Estado {
         void reiniciarPartida();
         void atras();
         void salir();
+
+        MotorGrafico* _motor;
 };
 #endif /* PAUSA_HPP */

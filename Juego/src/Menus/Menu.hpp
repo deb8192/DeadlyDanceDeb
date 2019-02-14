@@ -3,6 +3,7 @@
 
 #include "../Estado.hpp"
 #include "../Motores/MotorAudio.hpp"
+#include "../Jugando/Nivel.hpp"
 
 class Menu: public Estado {
     public:
@@ -28,6 +29,8 @@ class Menu: public Estado {
         void creditos();
         void salir();
 
+        MotorGrafico* _motor;
         MotorAudioSystem* _motora;//instancia de la fachada audio
+        Nivel* _nivel;
 };
 #endif /* MENU_HPP */

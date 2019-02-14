@@ -28,10 +28,10 @@ class Nivel
     public:
 
         //singleton public
-        ~Nivel(void);
+        ~Nivel();
         static Nivel* getInstance() //esto se utiliza para crear el objeto una sola vez
         {
-            if(_unica_instancia == 0)
+            if(!_unica_instancia)
                 _unica_instancia = new Nivel();
             return _unica_instancia;
         }

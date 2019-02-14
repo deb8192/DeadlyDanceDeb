@@ -1,15 +1,18 @@
 #include "Creditos.hpp"
 #include "../Juego.hpp"
 
+Creditos::Creditos()
+{
+    _motor = MotorGrafico::GetInstance();
+}
+
 Creditos::~Creditos()
 {
-    delete _motor;
+    _motor = nullptr;
 }
 
 void Creditos::Iniciar()
-{
-    _motor = MotorGrafico::GetInstance();
-   
+{  
     _motor->FondoEscena(255,200,200,200);
     _motor->ActivarFuenteDefault();
     _motor->CrearTexto("Creditos - ESC para salir", 0, 0, 300, 20); // Parametros: texto, x1, y1, x2, y2

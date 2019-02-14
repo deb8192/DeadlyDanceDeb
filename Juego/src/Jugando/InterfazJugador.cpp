@@ -13,6 +13,11 @@ InterfazJugador::InterfazJugador()
     arma = 0;// no tiene arma
 }
 
+InterfazJugador::~InterfazJugador()
+{
+    delete _unica_instancia;
+}
+
 void InterfazJugador::activar()
 {
     estado = true;

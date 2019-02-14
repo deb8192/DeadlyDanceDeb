@@ -1,15 +1,19 @@
 #include "Configuracion.hpp"
 #include "../Juego.hpp"
 
+Configuracion::Configuracion()
+{
+    _motor = MotorGrafico::GetInstance();
+}
+
 Configuracion::~Configuracion()
 {
-    delete _motor;
+    // Punteros a clases singleton
+    _motor = nullptr;
 }
 
 void Configuracion::Iniciar()
 {
-    _motor = MotorGrafico::GetInstance();
-   
     _motor->FondoEscena(255,250,200,100);
     _motor->ActivarFuenteDefault();
     _motor->CrearTexto("Configuracion - ESC para salir", 0, 0, 300, 20); // Parametros: texto, x1, y1, x2, y2

@@ -5,6 +5,7 @@
 
 class Creditos: public Estado {
     public:
+        Creditos();
         ~Creditos();
         short Tipo() { return 5; };
         void Iniciar();
@@ -15,6 +16,7 @@ class Creditos: public Estado {
 
     private:
         void atras();
+        MotorGrafico* _motor;
 
 };
 #endif /* CREDITOS_HPP */

@@ -1,18 +1,20 @@
 #include "Cinematica.hpp"
 #include "../Juego.hpp"
 
+Cinematica::Cinematica()
+{
+    _motor = MotorGrafico::GetInstance();
+}
+
 Cinematica::~Cinematica()
 {
     cout << "Borrando cinematica" <<endl;
-    delete _motor;
+    _motor = nullptr;
 }
 
 void Cinematica::Iniciar()
 {
-    _motor = MotorGrafico::GetInstance();
-
-     // Crear la camara aqui si la necesita
-   
+     // Crear la camara aqui si la necesita  
     _motor->FondoEscena(255,0,0,0);
 }
 

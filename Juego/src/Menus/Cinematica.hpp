@@ -5,6 +5,7 @@
 
 class Cinematica: public Estado {
     public:
+        Cinematica();
         ~Cinematica();
         short Tipo() { return 1; };
         void Iniciar();
@@ -14,5 +15,6 @@ class Cinematica: public Estado {
         void Vaciar();
 
     private:
+        MotorGrafico* _motor;
 };
 #endif /* CINEMATICA_HPP */

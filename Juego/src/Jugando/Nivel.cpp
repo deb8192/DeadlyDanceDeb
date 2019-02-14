@@ -24,6 +24,11 @@ Nivel::Nivel()
     lastDrawTime = drawTime;
 }
 
+Nivel::~Nivel()
+{
+    delete _unica_instancia;
+}
+
 void Nivel::LimpiarNivel()
 {
 

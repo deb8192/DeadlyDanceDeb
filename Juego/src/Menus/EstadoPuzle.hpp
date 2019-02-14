@@ -5,6 +5,7 @@
 
 class EstadoPuzle: public Estado {
     public:
+        EstadoPuzle();
         ~EstadoPuzle();
         short Tipo() { return 3; };
         void Iniciar();
@@ -16,5 +17,6 @@ class EstadoPuzle: public Estado {
     private:
         void atras();
 
+        MotorGrafico* _motor;
 };
 #endif /* ESTADO_PUZLE_HPP */

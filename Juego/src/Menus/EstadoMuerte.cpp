@@ -1,15 +1,19 @@
 #include "EstadoMuerte.hpp"
 #include "../Juego.hpp"
 
+EstadoMuerte::EstadoMuerte()
+{
+    _motor = MotorGrafico::GetInstance();
+}
+
 EstadoMuerte::~EstadoMuerte()
 {
-    delete _motor;
+    _motor = nullptr;
 }
 
 void EstadoMuerte::Iniciar()
 {
     cout << "\e[42m EstadoMuerte \e[0m" << endl;
-    _motor = MotorGrafico::GetInstance();
     _motor->FondoEscena(255,0,0,0);
     _motor->ActivarFuenteDefault();
     _motor->CrearTexto("Muerto - ESC = M. principal", 0, 0, 400, 20);

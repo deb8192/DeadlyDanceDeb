@@ -1,15 +1,18 @@
 #include "EstadoPuzle.hpp"
 #include "../Juego.hpp"
 
+EstadoPuzle::EstadoPuzle()
+{
+    _motor = MotorGrafico::GetInstance();
+}
+
 EstadoPuzle::~EstadoPuzle()
 {
-    delete _motor;
+    _motor = nullptr;
 }
 
 void EstadoPuzle::Iniciar()
 {
-    _motor = MotorGrafico::GetInstance();
-   
     _motor->FondoEscena(255,5,100,50);
     _motor->ActivarFuenteDefault();
     _motor->CrearTexto("EstadoPuzle - ESC para salir", 0, 0, 300, 20); // Parametros: texto, x1, y1, x2, y2
