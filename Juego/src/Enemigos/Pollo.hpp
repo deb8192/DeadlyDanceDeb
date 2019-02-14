@@ -11,6 +11,7 @@ class Pollo : public Enemigo
         Pollo();
         void RunIA();
         void UpdatePollo(int i);
+        void SetNuevasOrdenes(short int i);
 
     private:
         bool funciona, atacado, hecho;

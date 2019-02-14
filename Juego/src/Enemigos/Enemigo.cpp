@@ -234,6 +234,11 @@ void Enemigo::setVelocidad(float newVelocidad)
     velocidad = newVelocidad;
 }
 
+void Enemigo::UpdateIA()
+{
+    
+}
+
 int Enemigo::Atacar(int i)
 {
     int danyo = 0;
