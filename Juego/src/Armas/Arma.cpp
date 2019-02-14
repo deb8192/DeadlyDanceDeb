@@ -34,6 +34,29 @@ Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt, const cha
     //motor->CargarArmaEspecial(0,0,0,ruta,"");
 }
 
+Arma::~Arma()
+{
+    potenciaAtaque = 0.0f;
+    if(_nombreArma != nullptr)
+    {
+        delete _nombreArma;
+        _nombreArma = nullptr;
+    }
+    if(ruta_objeto != nullptr)
+    {
+        delete ruta_objeto;
+        ruta_objeto = nullptr;
+    }
+    if(ruta_textura != nullptr)
+    {
+        delete ruta_textura;
+        ruta_textura = nullptr;
+    }
+    ancho = 0.0f;
+    largo = 0.0f;
+    alto = 0.0f;
+}
+
 /*************** moverseEntidad *****************
  * Funcion con la que el arma se desplazaran
  * por el escenario mediante una interpolacion desde

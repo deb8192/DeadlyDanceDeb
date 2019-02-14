@@ -31,8 +31,16 @@ Jugador::~Jugador()
     ax = 1.0f;
     az = 20.0f;
     deg = 0.0f;
-    _armaEquipada=nullptr;
-    _armaEspecial=nullptr;
+    if(_armaEquipada != nullptr)
+    {
+        delete _armaEquipada;
+        _armaEquipada=nullptr;
+    }
+    if(_armaEspecial != nullptr)
+    {
+        delete _armaEspecial;
+        _armaEspecial=nullptr;
+    }
     //const char* _rutaArmaEspecial = "assets/models/Arma.obj";
     //const char* _nombreJugador = "Heavy";
     danyo_arma = 10.0f;
@@ -730,9 +738,9 @@ float* Jugador::GetDatosAtEsp()
     atesp[0] = _armaEspecial->getX();
     atesp[1] = _armaEspecial->getY();
     atesp[2] = _armaEspecial->getZ();
-    atesp[3] = _armaEspecial->getRX();;
-    atesp[4] = _armaEspecial->getRY();;
-    atesp[5] = _armaEspecial->getRZ();;
+    atesp[3] = _armaEspecial->getRX();
+    atesp[4] = _armaEspecial->getRY();
+    atesp[5] = _armaEspecial->getRZ();
 
     return atesp;
 }
