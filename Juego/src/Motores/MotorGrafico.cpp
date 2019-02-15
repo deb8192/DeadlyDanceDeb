@@ -450,7 +450,7 @@ void MotorGrafico::CargarEnemigos(int accion, int x,int y,int z, int ancho, int 
     }
 }
 
-void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura)
 {
     IAnimatedMesh* jugador = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!jugador)

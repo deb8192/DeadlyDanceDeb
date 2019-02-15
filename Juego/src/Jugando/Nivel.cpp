@@ -17,8 +17,8 @@ Nivel::Nivel()
     id = 0;
     ejecutar = false;
     _destinoPathFinding = nullptr;
-    _motora = MotorAudioSystem::GetInstance();
-    _motor = MotorGrafico::getInstance();
+    _motora = MotorAudioSystem::getInstance();
+    _motor = MotorGrafico::GetInstance();
     _fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     _controladorTiempo = Times::GetInstance();//obtenemos la instancia de la clase Times
     drawTime = 0.0f;

@@ -57,15 +57,19 @@ Jugador::~Jugador()
     dinero = 0;
 }
 
-Jugador::Jugador(int,int,int,int,int,int,std::string malla)
+Jugador::Jugador(int nVida, int nX,int nY,int nZ,int ancho,int largo,int alto, const char* ruta_objeto, const char* ruta_textura)
 {
+     MotorGrafico* _motor = MotorGrafico::GetInstance();
 
-    vida = 100;//esto lo hereda de la interfaz por el protected
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
-    _motor->crearJugador(malla);
+    vida = nVida;
+    dinero = 0;
+    posActual.x = nX;
+    posActual.y = nY;
+    posActual.z = nZ;
 
-    posActual.x = 1;
-    posActual.z = 20;
+    _motor->CargarJugador(nX,nY,nZ,ancho,largo,alto,ruta_objeto,ruta_textura);
+
+
     animacion = 0;
     //_armaEquipada = NULL;
 
