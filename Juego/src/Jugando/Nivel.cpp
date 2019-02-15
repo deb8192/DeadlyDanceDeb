@@ -2,13 +2,12 @@
 #include "../Pathfinder.hpp"
 #include <math.h>
 #include "reactphysics3d.h"
+#include "../ConstantesComunes.hpp"
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 Nivel* Nivel::_unica_instancia = 0;
 //fin indicador singleton
 
-#define PIRADIAN 180.0f
-#define PI 3.14159265358979323846
 #define PALANCA "palanca"
 
 Nivel::Nivel()
@@ -167,7 +166,7 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
     enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     enemigos.back()->Enemigo::initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     enemigos.back()->setVida(75);
-    enemigos.back()->setVelocidad(1.0f);
+    enemigos.back()->setVelocidadMaxima(1.0f);
     enemigos.back()->setBarraAtEs(0);
     enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
     enemigos.back()->setAtaque(10);
@@ -177,6 +176,7 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
     enemigos.back()->setProAtaCritico(10);
     //enemigos.back()->genemigos.back()rarSonido(20,5);
     enemigos.back()->setRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+    enemigos.back()->setVectorOrientacion();
     enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     
@@ -428,6 +428,7 @@ void Nivel::EraseJugador(){
 
 void Nivel::CogerObjeto()
 {
+    Constantes constantes;
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     MotorGrafico* _motor = MotorGrafico::getInstance();
 
@@ -443,7 +444,7 @@ void Nivel::CogerObjeto()
                 Arma* nuArma = new Arma(recolectables[rec_col]->getAtaque(),recolectables[rec_col]->getNombre(),recolectables[rec_col]->getAncho(),recolectables[rec_col]->getLargo(),recolectables[rec_col]->getAlto(),recolectables[rec_col]->getObjeto(),recolectables[rec_col]->getTextura());
                 jugador.setArma(nuArma);
                 //PROVISIONAL
-                jugador.getArma()->setRotacion(0.0, PIRADIAN, 0.0);
+                jugador.getArma()->setRotacion(0.0, constantes.PI_RADIAN, 0.0);
                 //!PROVISIONAL
                 //lo cargamos por primera vez en el motor de graficos
                 _motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), recolectables[rec_col]->getObjeto(), recolectables[rec_col]->getTextura());
@@ -464,7 +465,7 @@ void Nivel::CogerObjeto()
                 _motor->EraseArma();
                 jugador.setArma(nuArma);
                 //PROVISIONAL
-                jugador.getArma()->setRotacion(0.0, PIRADIAN, 0.0);
+                jugador.getArma()->setRotacion(0.0, constantes.PI_RADIAN, 0.0);
                 //!PROVISIONAL
                 //lo cargamos por primera vez en el motor de graficos
                 _motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), recolectables[rec_col]->getObjeto(), recolectables[rec_col]->getTextura());
@@ -785,7 +786,7 @@ void Nivel::InteractuarNivel()
 * */
 void Nivel::update()
 {
-
+    Constantes constantes;
     MotorGrafico* _motor = MotorGrafico::getInstance();
 
     if(_motor->estaPulsado(KEY_J))
@@ -818,8 +819,8 @@ void Nivel::update()
 
         if(jugador.getArma() != nullptr)
         {
-            float posArmaX = 5*  sin(PI*  jugador.getRY() / PIRADIAN) + jugador.getX();
-            float posArmaZ = 5*  cos(PI*  jugador.getRY() / PIRADIAN) + jugador.getZ();;
+            float posArmaX = 5*  sin(constantes.PI*  jugador.getRY() / constantes.PI_RADIAN) + jugador.getX();
+            float posArmaZ = 5*  cos(constantes.PI*  jugador.getRY() / constantes.PI_RADIAN) + jugador.getZ();;
             //iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
             jugador.getArma()->setPosiciones(posArmaX, jugador.getY()+3, posArmaZ);
             _motor->llevarObjeto(posArmaX, jugador.getY()+3,posArmaZ, jugador.getRX(), jugador.getRY(), jugador.getRZ() );
@@ -861,7 +862,6 @@ void Nivel::update()
                 _motor->estaPulsado(4)
             );
 
-            _motor->clearDebug2();   //Pruebas debug
             for(unsigned int i = 0; i < enemigos.size(); i++)
             {
                 _fisicas->updateEnemigos(enemigos.at(i)->getFisX(),
@@ -869,8 +869,6 @@ void Nivel::update()
                     enemigos.at(i)->getFisZ(),
                     i
                 );
-                _motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),5, 5, 5, 2);
-
             }
 
             _fisicas->updateJugador(jugador.getX(),
@@ -912,7 +910,7 @@ void Nivel::update()
         //actualizamos los enemigos
         if(enemigos.size() > 0)//posiciones interpolacion
         {
-            float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
+            //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
             for(std::size_t i=0;i<enemigos.size();i++)
             {
                 //ESTE BUCLE SE VA A IR TODO SEGURAMENTE DESDE AQUI
@@ -974,20 +972,30 @@ void Nivel::update()
                 //!ESTE BUCLE SE VA A IR TODO SEGURAMENTE HASTA AQUI*/
 
                 cout<< "Ejecuto nodo actual de la ia: " << i << endl;
-                if(enemigos[i]!= nullptr && enemigos[i]->GetEnemigo() == 0)
+                if(enemigos[i] != nullptr)
                 {
-                    Pollo* enemPollo = (Pollo*) enemigos[i];
-                    enemPollo->UpdatePollo(i);
+                    enemigos[i]->UpdateBehavior(i);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    
+                    //Este bloque se da si el enemigo esta en el proceso de merodear
                     if(enemigos.at(i)->getTimeMerodear() > 0.0f)
                     {
+                        if(enemigos.at(i)->getTimeMerodear() == 1.5f)
+                        {
+                            //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                            enemigos.at(i)->setLastTimeMerodear(_controladorTiempo->GetTiempo(2));
+                        }
                         float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
                         tiempoActual = _controladorTiempo->GetTiempo(2);
                         tiempoMerodear = enemigos.at(i)->getTimeMerodear();
                         tiempoMerodear -= (tiempoActual - enemigos.at(i)->getLastTimeMerodear());
-                        enemigos.at(i)->setLastTimeMerodear(tiempoActual);
+                        if(tiempoActual > enemigos.at(i)->getLastTimeMerodear())
+                        {
+                            //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeMerodear
+                            //por lo que guardamos en lastTimeMerodear a tiempoActual
+                            enemigos.at(i)->setLastTimeMerodear(tiempoActual);
+                        }
                         enemigos.at(i)->setTimeMerodear(tiempoMerodear);
                     }
-                    //colisiones con todos los objetos y enemigos que no se traspasan
                     //AUN NO FUNCIONA
                     /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
                     {
@@ -1246,15 +1254,17 @@ void Nivel::updateIA()
                     {
                         //si no esta muerto ni piensa morirse XD ejecutamos ia
                         cout<< "Ejecuto ia: " << i << endl;
-                        if(enemigos[i]->GetEnemigo() == 0)
+                        if(enemigos[i] != nullptr)
                         {
-                            Pollo* enemPollo = (Pollo*) enemigos[i];
-                            enemPollo->RunIA();
-                            enemPollo->UpdatePollo(i);
+                            enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                            enemigos[i]->UpdateBehavior(i);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                            
+                            //Este bloque se da si el enemigo esta en el proceso de merodear
                             if(enemigos.at(i)->getTimeMerodear() > 0.0f)
                             {
                                 if(enemigos.at(i)->getTimeMerodear() == 1.5f)
                                 {
+                                    //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
                                     enemigos.at(i)->setLastTimeMerodear(_controladorTiempo->GetTiempo(2));
                                 }
                                 float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
@@ -1263,6 +1273,8 @@ void Nivel::updateIA()
                                 tiempoMerodear -= (tiempoActual - enemigos.at(i)->getLastTimeMerodear());
                                 if(tiempoActual > enemigos.at(i)->getLastTimeMerodear())
                                 {
+                                    //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeMerodear
+                                    //por lo que guardamos en lastTimeMerodear a tiempoActual
                                     enemigos.at(i)->setLastTimeMerodear(tiempoActual);
                                 }
                                 enemigos.at(i)->setTimeMerodear(tiempoMerodear);
@@ -1483,50 +1495,50 @@ void Nivel::updateRecorridoPathfinding(Enemigo*  enem)
                 {
                     if(moveDer)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidad());
-                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidad(), 0.0, auxiliadores.front()->getVelocidad());
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidadMaxima(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidadMaxima());
+                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidadMaxima(), 0.0, auxiliadores.front()->getVelocidadMaxima());
                         cout<<"Posicion del enemigo: x="<<auxiliadores.front()->getNewX()<<" z=" << auxiliadores.front()->getNewY();
                     }
                     else if(moveIzq)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidad());
-                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidad()), 0.0, auxiliadores.front()->getVelocidad());
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidadMaxima(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidadMaxima());
+                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidadMaxima()), 0.0, auxiliadores.front()->getVelocidadMaxima());
                     }
                     else
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidad());
-                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, auxiliadores.front()->getVelocidad());
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() + auxiliadores.front()->getVelocidadMaxima());
+                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, auxiliadores.front()->getVelocidadMaxima());
                     }
                 }
                 else if(moveArb)
                 {
                     if(moveDer)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidad());
-                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidad(), 0.0, -(auxiliadores.front()->getVelocidad()));
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidadMaxima(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidadMaxima());
+                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidadMaxima(), 0.0, -(auxiliadores.front()->getVelocidadMaxima()));
                     }
                     else if(moveIzq)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidad());
-                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidad()), 0.0, -(auxiliadores.front()->getVelocidad()));
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidadMaxima(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidadMaxima());
+                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidadMaxima()), 0.0, -(auxiliadores.front()->getVelocidadMaxima()));
                     }
                     else
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidad());
-                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, -(auxiliadores.front()->getVelocidad()));
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ() - auxiliadores.front()->getVelocidadMaxima());
+                        auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, -(auxiliadores.front()->getVelocidadMaxima()));
                     }
                 }
                 else
                 {
                     if(moveDer)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ());
-                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidad(), 0.0, 0.0);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() + auxiliadores.front()->getVelocidadMaxima(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ());
+                        auxiliadores.front()->setPosicionesFisicas(auxiliadores.front()->getVelocidadMaxima(), 0.0, 0.0);
                     }
                     else if(moveIzq)
                     {
-                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidad(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ());
-                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidad()), 0.0, 0.0);
+                        auxiliadores.front()->setNewPosiciones(auxiliadores.front()->getNewX() - auxiliadores.front()->getVelocidadMaxima(), auxiliadores.front()->getNewY(), auxiliadores.front()->getNewZ());
+                        auxiliadores.front()->setPosicionesFisicas(- (auxiliadores.front()->getVelocidadMaxima()), 0.0, 0.0);
                     }
                 }
             }
@@ -1586,6 +1598,7 @@ void Nivel::Draw()
                 enemigos.at(i)->getRZ(),
                 i
             );
+            _motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),5, 5, 5, 2);
         }
         //Dibujado de las puertas
         for(unsigned int i = 0; i < interactuables.size(); i++)
@@ -1666,8 +1679,6 @@ void Nivel::Draw()
             }
         }
 
-        _motor->clearDebug2(); //Pruebas debug
-
         //Dibujado de ataques
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
@@ -1695,6 +1706,8 @@ void Nivel::Draw()
                 zonas.at(i)->getLargo()
             );
         }
+
+        _motor->clearDebug2(); //Pruebas debug
     }
 }
 

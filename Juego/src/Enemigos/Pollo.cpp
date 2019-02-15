@@ -1,14 +1,15 @@
 #include "Pollo.hpp"
+#include "../ConstantesComunes.hpp"
 #include "../Jugando/Nivel.hpp"
 #include "cmath"
 
-#define PIRADIAN 180.0f
-
 Pollo::Pollo() : Enemigo()
 {
+    Constantes constantes;
     funciona = true;
     atacado = false;
     _ordenes = nullptr;
+    maxRotacion = constantes.PI_MEDIOS; 
 }
 
 Pollo::~Pollo()
@@ -51,13 +52,14 @@ void Pollo::RunIA()
 
 void Pollo::UpdatePollo(int i)
 {
+    Constantes constantes;
 
     funciona = true;
     if(_ordenes != nullptr)
     {
         switch (_ordenes[0])
         {
-            case MOVERSE: //El Pollo se mueve
+            case EN_MOVERSE: //El Pollo se mueve
                 {
                     Nivel* _nivel;
                     bool trueX = false;
@@ -84,7 +86,7 @@ void Pollo::UpdatePollo(int i)
                     {
                         trueX = true;
                         rotacion = 90.0f;
-                        datosDesplazamiento.velocidadX = this->getVelocidad(); 
+                        datosDesplazamiento.velocidadX = this->getVelocidadMaxima(); 
                     }
 
                     //Se mueve a la izquierda
@@ -92,7 +94,7 @@ void Pollo::UpdatePollo(int i)
                     {
                         trueX = true;
                         rotacion = -90.0f;
-                        datosDesplazamiento.velocidadX = -this->getVelocidad(); 
+                        datosDesplazamiento.velocidadX = -this->getVelocidadMaxima(); 
                     }
 
                     //Se mueve hacia arriba
@@ -110,7 +112,7 @@ void Pollo::UpdatePollo(int i)
                             else
                                 rotacion += 45.0f;
 
-                            datosDesplazamiento.velocidadZ = this->getVelocidad() * 0.5; 
+                            datosDesplazamiento.velocidadZ = this->getVelocidadMaxima() * 0.5; 
                             datosDesplazamiento.velocidadX *= 0.5;
                         }
 
@@ -118,7 +120,7 @@ void Pollo::UpdatePollo(int i)
                         else
                         {
                             rotacion = 0.0f;
-                            datosDesplazamiento.velocidadZ = this->getVelocidad(); 
+                            datosDesplazamiento.velocidadZ = this->getVelocidadMaxima(); 
                         }
                     }
                     else if(_nivel->GetJugador()->getNewZ() < this->getNewZ() - datosDesplazamiento.distancia)
@@ -135,15 +137,15 @@ void Pollo::UpdatePollo(int i)
                             //Se mueve hacia abajo a la izquierda
                             else
                                 rotacion -= 45.0f;
-                            datosDesplazamiento.velocidadZ = -this->getVelocidad() * 0.5; 
+                            datosDesplazamiento.velocidadZ = -this->getVelocidadMaxima() * 0.5; 
                             datosDesplazamiento.velocidadX *= 0.5;
                         }
 
                         //Se mueve hacia abajo
                         else
                         {
-                            rotacion = 180.0f;
-                            datosDesplazamiento.velocidadZ = -this->getVelocidad(); 
+                            rotacion = constantes.PI_RADIAN;
+                            datosDesplazamiento.velocidadZ = -this->getVelocidadMaxima(); 
                         }
                     }
 
@@ -177,7 +179,7 @@ void Pollo::UpdatePollo(int i)
                 }
                 break;
         
-            case ATACAR: //El Pollo ataca
+            case EN_ATACAR: //El Pollo ataca
                 {
                     if(!atacado)
                     {
@@ -201,7 +203,7 @@ void Pollo::UpdatePollo(int i)
                 }
                 break;
             
-            case VER: //El Pollo ve al jugador
+            case EN_VER: //El Pollo ve al jugador
                 {
                     short int jugador = 1;
                     cout<<"Comprueba si ve al jugador"<<endl;
@@ -215,26 +217,25 @@ void Pollo::UpdatePollo(int i)
                     }
                 }
                 break;
-            case PIDE_AYUDA: //El Pollo pide ayuda
+            case EN_PIDE_AYUDA: //El Pollo pide ayuda
                 {
                     cout<<"Pide ayuda a los aliados"<<endl;
                     this->pedirAyuda();
                     funciona = true;
                 }
                 break;
-            case MERODEA: //El Pollo merodea
+            case EN_MERODEA: //El Pollo merodea
                 {
                     cout<<"Merodea"<<endl;
                     if(!hecho)
                     {
-                        direccion = rand() % 8 + 0;
-                        this->Merodear(direccion);
+                        this->Merodear(maxRotacion);
                         this->setTimeMerodear(1.5f);
                         hecho = true;
                     }
                     else 
                     {
-                        this->Merodear(direccion);
+                        this->Merodear(maxRotacion);
                     }
                     funciona = true;
                 }

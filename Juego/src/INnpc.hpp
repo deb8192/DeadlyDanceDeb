@@ -9,6 +9,14 @@ class INnpc {
 
 public:
 
+    typedef struct
+        {
+            float vX = 0.0f;
+            float vY = 0.0f;
+            float vZ = 0.0f;
+            float modulo = 0.0f;
+        }VectorEspacial;
+
     virtual int Atacar(int)=0;//efectua un ataque normal, llama al motor para ejecutar la animacion.
     //virtual void AtacarEspecial()=0;//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
     virtual int AtacarEspecial()=0;//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
@@ -46,6 +54,8 @@ public:
 
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:
+    VectorEspacial vectorOrientacion; //vector para indicar la velocidad vectorial del npc
+    float velocidadMaxima; //Valor de la velocidad maxima del npc
     int tipo;//tipo de enemigo(mayor de cero) o jugador(0)
     int vida;//vida de la entida
     int barraAtEs;//barra que va de 0 a 100, cuando se 100 se puede ejecutar ataque especial.

@@ -1,17 +1,19 @@
 #include "Enemigo.hpp"
+#include "Pollo.hpp"
 #include "../Jugando/Nivel.hpp"
+#include "../ConstantesComunes.hpp"
 //#include "MotorGrafico.hpp"
 //#include "MotorFisicas.hpp"
 //#include "MotorAudio.hpp"
 //#include "Times.hpp"
 
-#define PI 3.14159265358979323846
-#define PIRADIAN 180.0f
-
 Enemigo::Enemigo()
 {
     tiempoMerodear = 0.0f;
     lastTiempoMerodear = 0.0f;
+    vectorOrientacion.vX = 0.0f;
+    vectorOrientacion.vY = 0.0f;
+    vectorOrientacion.vZ = 0.0f;
 }
 
 Enemigo::~Enemigo(){
@@ -127,9 +129,9 @@ float Enemigo::getAtZ()
     return atz;
 }
 
-float Enemigo::getVelocidad()
+float Enemigo::getVelocidadMaxima()
 {
-    return velocidad;
+    return velocidadMaxima;
 }
 
 void Enemigo::definirSala(Sala * sala)
@@ -229,18 +231,49 @@ void Enemigo::setPosicionesFisicas(float nx,float ny,float nz)
 }
 
 
-void Enemigo::setVelocidad(float newVelocidad)
+void Enemigo::setVelocidadMaxima(float newVelocidad)
 {
-    velocidad = newVelocidad;
+    velocidadMaxima = newVelocidad;
+}
+
+short int Enemigo::randomBinomial()
+{
+    return rand() - rand();
 }
 
 void Enemigo::UpdateIA()
 {
-    
+    switch (tipoEnemigo)
+    {
+        case 0:
+        {
+            Pollo *pollo = (Pollo*) this;
+            pollo->RunIA();
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+void Enemigo::UpdateBehavior(short int i)
+{
+    switch (tipoEnemigo)
+    {
+        case 0:
+        {
+            Pollo *pollo = (Pollo*) this;
+            pollo->UpdatePollo(i);
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 int Enemigo::Atacar(int i)
 {
+    Constantes constantes;
     int danyo = 0;
     if(vida > 0 && atacktime == 0)
     {
@@ -249,9 +282,9 @@ int Enemigo::Atacar(int i)
 
       //Calcular posiciones
       int distance = 4;
-      atx = distance * sin(PI * this->getRY() / 180.0f) + this->getX();
+      atx = distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getX();
       aty = this->getY();
-      atz = distance * cos(PI * this->getRY() / 180.0f) + this->getZ();
+      atz = distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getZ();
       atgx = this->getRX();
       atgy = this->getRY();
       atgz = this->getRZ();
@@ -284,6 +317,7 @@ int Enemigo::Atacar(int i)
  */
 int Enemigo::AtacarEspecial()
 {
+    Constantes constantes;
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
     MotorFisicas* fisicas = MotorFisicas::getInstance();
@@ -297,9 +331,9 @@ int Enemigo::AtacarEspecial()
         //Calcular posiciones si se inicia el ataque especial
         if(atackEspTime <= 0)
         {
-            atespx = 6.5 * sin(PI * getRY() / PIRADIAN) + getX();
+            atespx = 6.5 * sin(constantes.PI * getRY() / constantes.PI_RADIAN) + getX();
             atespy = getY();
-            atespz = 6.5 * cos(PI * getRY() / PIRADIAN) + getZ();
+            atespz = 6.5 * cos(constantes.PI * getRY() / constantes.PI_RADIAN) + getZ();
             atgx = getRX();
             atgy = getRY();
             atgz = getRZ();
@@ -611,6 +645,13 @@ void Enemigo::setLastRotacion(float nrx, float nry, float nrz)
     rotPasada.z = nrz;
 }
 
+void Enemigo::setVectorOrientacion()
+{
+    Constantes constantes;
+    vectorOrientacion.vX = sin(constantes.PI * rotFutura.y / constantes.PI_RADIAN) + this->getX();
+    vectorOrientacion.vY = 0.0f;
+    vectorOrientacion.vZ = cos(constantes.PI * rotFutura.y / constantes.PI_RADIAN) + this->getZ();
+}
 
 void Enemigo::setTimeMerodear(float t)
 {
@@ -800,46 +841,63 @@ short int* Enemigo::RunIA(bool funciona)
         return true;
     }
 
-    bool Enemigo::Merodear(int direccion)
+    bool Enemigo::Merodear(short int maxRotacion)
     {
-        switch (direccion){
+        //MERODEAR DE VERDAD
+        Constantes constantes;
+        struct 
+        {
+            float x = 0.0f;
+            float y = 0.0f;
+            float z = 0.0f;
+        }
+        velocidad;
+        this->setNewRotacion(rotActual.x, maxRotacion * randomBinomial(), rotActual.z);
+        this->setVectorOrientacion();
+        velocidad.x = vectorOrientacion.vX * velocidadMaxima;
+        velocidad.z = vectorOrientacion.vZ * velocidadMaxima;
+
+        this->setNewPosiciones(posActual.x + velocidad.x, posActual.y, posActual.z + velocidad.z);
+
+        //!MERODEAR DE VERDAD
+        /*switch (direccion){
             case 0:
-                this->setNewPosiciones(posActual.x, posActual.y, posActual.z + velocidad);
+                this->setNewPosiciones(posActual.x, posActual.y, posActual.z + velocidadMaxima);
                 this->setNewRotacion(rotActual.x, 0.0f, rotActual.z);
             break;
             case 1:
-                this->setNewPosiciones(posActual.x + velocidad * 0.5, posActual.y, posActual.z + velocidad * 0.5);
+                this->setNewPosiciones(posActual.x + velocidadMaxima * 0.5, posActual.y, posActual.z + velocidadMaxima * 0.5);
                 this->setNewRotacion(rotActual.x, 45.0f, rotActual.z);
             break;
             case 2:
-                this->setNewPosiciones(posActual.x + velocidad, posActual.y, posActual.z);
+                this->setNewPosiciones(posActual.x + velocidadMaxima, posActual.y, posActual.z);
                 this->setNewRotacion(rotActual.x, 90.0f, rotActual.z);
             break;
             case 3:
-                this->setNewPosiciones(posActual.x + velocidad * 0.5, posActual.y, posActual.z - velocidad * 0.5);
+                this->setNewPosiciones(posActual.x + velocidadMaxima * 0.5, posActual.y, posActual.z - velocidadMaxima * 0.5);
                 this->setNewRotacion(rotActual.x, 135.0f, rotActual.z);
             break;
             case 4:
-                this->setNewPosiciones(posActual.x, posActual.y, posActual.z - velocidad);
-                this->setNewRotacion(rotActual.x, 180.0f, rotActual.z);
+                this->setNewPosiciones(posActual.x, posActual.y, posActual.z - velocidadMaxima);
+                this->setNewRotacion(rotActual.x, constantes.PI_RADIAN, rotActual.z);
             break;
             case 5:
-                this->setNewPosiciones(posActual.x - velocidad * 0.5, posActual.y, posActual.z - velocidad * 0.5);
+                this->setNewPosiciones(posActual.x - velocidadMaxima * 0.5, posActual.y, posActual.z - velocidadMaxima * 0.5);
                 this->setNewRotacion(rotActual.x, 225.0f, rotActual.z);
             break;
             case 6:
-                this->setNewPosiciones(posActual.x - velocidad, posActual.y, posActual.z);
+                this->setNewPosiciones(posActual.x - velocidadMaxima, posActual.y, posActual.z);
                 this->setNewRotacion(rotActual.x, 270.0f, rotActual.z);
             break;
             case 7:
-                this->setNewPosiciones(posActual.x - velocidad * 0.5, posActual.y, posActual.z + velocidad * 0.5);
+                this->setNewPosiciones(posActual.x - velocidadMaxima * 0.5, posActual.y, posActual.z + velocidadMaxima * 0.5);
                 this->setNewRotacion(rotActual.x, 315.0f, rotActual.z);
             break;
             default:
-                this->setNewPosiciones(posActual.x, posActual.y, posActual.z + velocidad);
+                this->setNewPosiciones(posActual.x, posActual.y, posActual.z + velocidadMaxima);
                 this->setNewRotacion(rotActual.x, 0.0f, rotActual.z);
             break;
-        }
+        }*/
 
 	return false;
     }

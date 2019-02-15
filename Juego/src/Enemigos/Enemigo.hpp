@@ -50,6 +50,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setRotacion(float nrx, float nry, float nrz);
         void setNewRotacion(float nrx, float nry, float nrz);
         void setLastRotacion(float nrx, float nry, float nrz);
+        void setVectorOrientacion();
         void setPosicionesFisicas(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
         void setVida(int vid);
@@ -70,7 +71,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setLastTimeAtEsp(float time);
         void setRotation(float rot);
         void setPosAtaques(int p);
-        void setVelocidad(float velocidad); //modifica la velocidad de desplazamiento
+        void setVelocidadMaxima(float velocidad); //modifica la VelocidadMaxima de desplazamiento
         void SetEnemigo(int);
 
         int getID();
@@ -109,7 +110,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getAtX();
         float getAtY();
         float getAtZ();
-        float getVelocidad(); //modifica la velocidad de desplazamiento
+        float getVelocidadMaxima(); //se obtiene la VelocidadMaxima de desplazamiento
         int GetEnemigo();
 
         //comportamientos bases
@@ -120,13 +121,15 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             bool Acciones(int);//esto es para recorrer el arbol
             bool pedirAyuda();//pide ayuda
             bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
-            bool Merodear(int direccion);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
+            bool Merodear(short int maxRotacion);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         //fin comportamientos bases
 
-        //activar ia
+        //ia
+        short int randomBinomial();//devuelve un valor random entre -1 y 1
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
         Arbol *getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
+        void UpdateBehavior(short int i); //actualiza el comportamiento actual del pollo
         short int* RunIA(bool);//corre la ia del enemigo
         //fin ia
 
@@ -135,24 +138,24 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         //Comparadores de la lectura de las acciones y objetivos de las tareas
         enum accionesEnemigo 
         {  
-            MOVERSE = 0,
-            ATACAR,
-            VER,
-            PIDE_AYUDA,
-            MERODEA
+            EN_MOVERSE = 0,
+            EN_ATACAR,
+            EN_VER,
+            EN_PIDE_AYUDA,
+            EN_MERODEA
         };
 
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
         float atacktime = 0.0f;
         float tiempoMerodear, lastTiempoMerodear;
-        float velocidad;  //Velocidad de desplazamiento del enemigo
         Arma *armaEspecial;
         const char * rutaArmaEspecial = "assets/models/objeto.obj";
-        int tipoEnemigo;
+        int tipoEnemigo;//Tipo del enemigo: pollo, murcielago, guardian, boss
         Arbol *arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
         bool accionRealizada; //
+        VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
 };
 
 #endif

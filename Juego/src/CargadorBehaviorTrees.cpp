@@ -1,7 +1,6 @@
 #include "CargadorBehaviorTrees.hpp"
+#include "ConstantesComunes.hpp"
 #include <sstream>
-
-
 
 CargadorBehaviorTrees::CargadorBehaviorTrees()
 {
@@ -15,10 +14,11 @@ CargadorBehaviorTrees::~CargadorBehaviorTrees()
 }
 
 void CargadorBehaviorTrees::generarTarea(pugi::xml_node tool, const char ** atributos, int tarea, unsigned int i, int tipo)
-{
-    if((tool.first_child() != NULL) && (std::strcmp(tool.first_child().name(), PIZARRA) == 0))
+{   
+    Constantes constantes;
+    if((tool.first_child() != NULL) && (std::strcmp(tool.first_child().name(), constantes.PIZARRA) == 0))
     {
-        atributos[i] = VERDADERO;
+        atributos[i] = constantes.VERDADERO;
         i++;
         for (pugi::xml_attribute attr = tool.first_child().first_attribute(); attr; attr = attr.next_attribute())
         {
@@ -26,18 +26,18 @@ void CargadorBehaviorTrees::generarTarea(pugi::xml_node tool, const char ** atri
             i++;
         }
 
-        if(std::strcmp(atributos[5], LEE) == 0)
+        if(std::strcmp(atributos[5], constantes.LEE) == 0)
         {
             tarea = 1;
         }
-        else if(std::strcmp(atributos[5], ESCRIBE) == 0)
+        else if(std::strcmp(atributos[5], constantes.ESCRIBE) == 0)
         {
             tarea = 2;
         }
     }
     else
     {
-        atributos[i] = FALSO;
+        atributos[i] = constantes.FALSO;
         i++;
         while(i < sizeof(atributos))
         {
@@ -70,6 +70,7 @@ Nodo* CargadorBehaviorTrees::anyadirHijo(Arbol *arbol, Nodo* padre, Nodo* nodo, 
  *      tree: nodo del archivo xml
  */
 Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tree, Nodo *nodo, Nodo *padre, int nivel) {
+    Constantes constantes;
     unsigned int i = 0;
     const char** atributos = (const char**) malloc(8 * sizeof(const char*));
     int IDInt = 0;
@@ -82,7 +83,7 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
     {
         while(tool != NULL)
         {
-            if(std::strcmp(tool.name(), PIZARRA)  == 0)
+            if(std::strcmp(tool.name(), constantes.PIZARRA)  == 0)
             {
                 tool = tool.next_sibling();
             }
@@ -102,18 +103,18 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
             IDInt = std::stoi(s);
             
             //Se crea el arbol.
-            if(std::strcmp(tool.name(), RAIZ) == 0)
+            if(std::strcmp(tool.name(), constantes.RAIZ) == 0)
             {
                 //Se crea la raiz y el arbol
-                if((std::strcmp(atributos[1], SELECTOR)  == 0) || (std::strcmp(atributos[1], SECUENCIA) == 0) || (std::strcmp(atributos[1], TAREA) == 0))
+                if((std::strcmp(atributos[1], constantes.SELECTOR)  == 0) || (std::strcmp(atributos[1], constantes.SECUENCIA) == 0) || (std::strcmp(atributos[1], constantes.TAREA) == 0))
                 {
-                    if(std::strcmp(atributos[1], TAREA) == 0)
+                    if(std::strcmp(atributos[1], constantes.TAREA) == 0)
                     {
                         generarTarea(tool, atributos, tarea, i, tipo);
                     }
                     else
                     {
-                        atributos[i] = FALSO;
+                        atributos[i] = constantes.FALSO;
                         i++;
                         while(i < sizeof(atributos))
                         {
@@ -122,11 +123,11 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                         }
                         tarea = 0;
                     }
-                    if(std::strcmp(atributos[1], SECUENCIA) == 0)
+                    if(std::strcmp(atributos[1], constantes.SECUENCIA) == 0)
                     {
                         tipo = 2;
                     }
-                    else if(std::strcmp(atributos[1], SELECTOR) == 0)
+                    else if(std::strcmp(atributos[1], constantes.SELECTOR) == 0)
                     {
                         tipo = 3;
                     }
@@ -135,13 +136,13 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                     raiz = new Composicion(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3], atributos[4], tarea, atributos[6], false);
                     padre = raiz;
                 }
-                else if((std::strcmp(atributos[1], SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], SEC_ALEATORIA) == 0))
+                else if((std::strcmp(atributos[1], constantes.SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], constantes.SEC_ALEATORIA) == 0))
                 {
-                    if(std::strcmp(atributos[1], SEL_ALEATORIO)  == 0)
+                    if(std::strcmp(atributos[1], constantes.SEL_ALEATORIO)  == 0)
                     {
                         tipo = 4;
                     } 
-                    else if(std::strcmp(atributos[1], SEC_ALEATORIA)  == 0)
+                    else if(std::strcmp(atributos[1], constantes.SEC_ALEATORIA)  == 0)
                     {
                         tipo = 5;
                     }
@@ -151,17 +152,17 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                 arbol = new Arbol(raiz, raiz->getNombre());
             }
             //Se crean el resto de nodos del arbol
-            else if(std::strcmp(tool.name(), COMPOSICION) == 0)
+            else if(std::strcmp(tool.name(), constantes.COMPOSICION) == 0)
             {
-                if((std::strcmp(atributos[1], SELECTOR)  == 0) || (std::strcmp(atributos[1], SECUENCIA) == 0) || (std::strcmp(atributos[1], TAREA) == 0))
+                if((std::strcmp(atributos[1], constantes.SELECTOR)  == 0) || (std::strcmp(atributos[1], constantes.SECUENCIA) == 0) || (std::strcmp(atributos[1], constantes.TAREA) == 0))
                 {
-                    if(std::strcmp(atributos[1], TAREA) == 0)
+                    if(std::strcmp(atributos[1], constantes.TAREA) == 0)
                     {
                         generarTarea(tool, atributos, tarea, i, tipo);
                     }
                     else
                     {
-                        atributos[i] = FALSO;
+                        atributos[i] = constantes.FALSO;
                         i++;
                         while(i < sizeof(atributos))
                         {
@@ -170,24 +171,24 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                         }
                         tarea = 0;
                     }
-                    if(std::strcmp(atributos[1], SECUENCIA) == 0)
+                    if(std::strcmp(atributos[1], constantes.SECUENCIA) == 0)
                     {
                         tipo = 2;
                     }
-                    else if(std::strcmp(atributos[1], SELECTOR) == 0)
+                    else if(std::strcmp(atributos[1], constantes.SELECTOR) == 0)
                     {
                         tipo = 3;
                     }
                     nodo = nullptr;
                     nodo = new Composicion(tool.name(), IDInt, tipo, nivel, padre, atributos[2], atributos[3], atributos[4], tarea, atributos[6], false);
             }
-            else if((std::strcmp(atributos[1], SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], SEC_ALEATORIA) == 0))
+            else if((std::strcmp(atributos[1], constantes.SEL_ALEATORIO)  == 0) || (std::strcmp(atributos[1], constantes.SEC_ALEATORIA) == 0))
             {
-                    if(std::strcmp(atributos[1], SEL_ALEATORIO)  == 0)
+                    if(std::strcmp(atributos[1], constantes.SEL_ALEATORIO)  == 0)
                     {
                         tipo = 4;
                     } 
-                    else if(std::strcmp(atributos[1], SEC_ALEATORIA)  == 0)
+                    else if(std::strcmp(atributos[1], constantes.SEC_ALEATORIA)  == 0)
                     {
                         tipo = 5;
                     }
@@ -200,7 +201,7 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                 padre = CargadorBehaviorTrees::anyadirHijo(arbol, padre, nodo, nivel);            
                 padre = nodo;
             }
-            else if(std::strcmp(tool.name(), DECORADOR) == 0)
+            else if(std::strcmp(tool.name(), constantes.DECORADOR) == 0)
             {
                 tipo = 6;
                 nodo = nullptr;
@@ -210,7 +211,7 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                 padre = CargadorBehaviorTrees::anyadirHijo(arbol, padre, nodo, nivel);
                 padre = nodo;
             }
-            else if(std::strcmp(tool.name(), HOJA) == 0)
+            else if(std::strcmp(tool.name(), constantes.HOJA) == 0)
             {
                 
                 generarTarea(tool, atributos, tarea, i, tipo);
