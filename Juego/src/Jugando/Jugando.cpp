@@ -8,9 +8,10 @@ Jugando* Jugando::_unica_instancia = 0;
 Jugando::Jugando()
 {
     reiniciando = false;
+    _nivel = Nivel::getInstance();//<- Este se borrara
     _motor = MotorGrafico::GetInstance();
-    _nivel = Nivel::getInstance();
     _motora = MotorAudioSystem::getInstance();
+    _fisicas = MotorFisicas::getInstance();
     _sense = SenseEventos::getInstance();
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
@@ -24,9 +25,10 @@ Jugando::~Jugando()
 
     // Punteros a clases singleton
     _sense = nullptr;
+    _fisicas = nullptr;
     _motora = nullptr;
-    _nivel = nullptr;
     _motor = nullptr;
+    _nivel = nullptr;
 
     // Liberar memoria
     delete _unica_instancia;
@@ -44,7 +46,7 @@ void Jugando::Render()
 {
     _motor->FondoEscena(255,0,0,0); // Borra
 
-    _nivel->Draw();
+    _nivel->Render();
 
     _motor->RenderEscena();               // Vuelve a pintar
 }
@@ -110,8 +112,8 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_C);
     }
     /* **************************************************** */
-    
-    _nivel->InteractuarNivel();
+    // KEY_E
+    _nivel->ManejarEventos();
 }
 
 void Jugando::Pausar()

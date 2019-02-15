@@ -7,7 +7,7 @@ class EstadoMuerte: public Estado {
     public:
         EstadoMuerte();
         ~EstadoMuerte();
-        short Tipo() { return 7; };
+        
         void Iniciar();
         void Render();
         void Update();

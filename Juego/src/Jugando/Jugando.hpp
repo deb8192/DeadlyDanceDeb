@@ -18,7 +18,6 @@ class Jugando: public Estado {
         }
         //fin singleton public
 
-        short Tipo() { return 2; };
         void Iniciar();
         void Render();
         void Update();
@@ -39,6 +38,7 @@ class Jugando: public Estado {
         MotorAudioSystem* _motora;
         SenseEventos* _sense;
         MotorGrafico* _motor;
+        MotorFisicas* _fisicas;
         Nivel* _nivel;
 };
 #endif /* JUGANDO_HPP */

@@ -7,7 +7,7 @@ class Pausa: public Estado {
     public:
         Pausa();
         ~Pausa();
-        short Tipo() { return 6; };
+        
         void Iniciar();
         void Render();
         void Update();

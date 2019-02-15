@@ -7,7 +7,7 @@ class Configuracion: public Estado {
     public:
         Configuracion();
         ~Configuracion();
-        short Tipo() { return 4; };
+        
         void Iniciar();
         void Render();
         void Update();

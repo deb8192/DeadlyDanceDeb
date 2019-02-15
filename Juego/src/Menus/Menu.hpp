@@ -10,7 +10,6 @@ class Menu: public Estado {
         Menu();
         ~Menu();
 
-        short Tipo() { return 1; };
         void Iniciar();
         void Render();
         void Update();

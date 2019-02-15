@@ -14,10 +14,11 @@ Nivel* Nivel::_unica_instancia = 0;
 Nivel::Nivel()
 {
    _primeraSala = nullptr;
-    //fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     id = 0;
     ejecutar = false;
     _destinoPathFinding = nullptr;
+    _motora = MotorAudioSystem::GetInstance();
+    _motor = MotorGrafico::getInstance();
     _fisicas = MotorFisicas::getInstance();//cogemos la instancia del motor de las fisicas
     _controladorTiempo = Times::GetInstance();//obtenemos la instancia de la clase Times
     drawTime = 0.0f;
@@ -103,10 +104,6 @@ bool Nivel::CargarNivel(int level)
 {
     NoEjecutar();//se impide entrar en bucles del juego
 
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
-
     _motor->BorrarScena();//borramos la scena
 
     //pre limpiamos todo
@@ -138,7 +135,6 @@ bool Nivel::CargarNivel(int level)
 void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int*  propiedades, Sala*  sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     //accion indicara futuramente que tipo de enemigo sera (herencia)
-    MotorGrafico* _motor = MotorGrafico::GetInstance();//cogemos instancia del motor para crear la figura 3d
     switch (enemigo)
     {
         case 0:
@@ -152,12 +148,11 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
                 enemigos.back()->setID(id);//le damos el id unico en esta partida al enemigo
 
                 //Cargar sonido evento en una instancia con la id del enemigo como nombre
-                MotorAudioSystem* motora = MotorAudioSystem::getInstance();
                 std::string nameid = std::to_string(id); //pasar id a string
-                motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
-                motora->getEvent(nameid)->setPosition(x,y,z);
-                motora->getEvent(nameid)->setVolume(0.4f);
-                motora->getEvent(nameid)->start();
+                _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+                _motora->getEvent(nameid)->setPosition(x,y,z);
+                _motora->getEvent(nameid)->setVolume(0.4f);
+                _motora->getEvent(nameid)->start();
 
             }
             break;
@@ -184,7 +179,6 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
     enemigos.back()->setRotation(0.0f);//le ponemos hacia donde mira cuando se carga
 
     _motor->CargarEnemigos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2);
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,1,1,1,7); //Para ataques
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,4,4,4,8); //Para ataques especiales
@@ -238,10 +232,8 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
     jugador.setPosiciones(x,y,z);
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
 
     _motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     cout << x << " " << y << " " << z << " " << endl;
     _motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
     _fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
@@ -250,7 +242,6 @@ void Nivel::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, in
 
 void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int*  propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
     int posicionObjeto;
 
     //Arma
@@ -290,7 +281,6 @@ void Nivel::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, 
         posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     }
 
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
@@ -316,7 +306,6 @@ void Nivel::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto,
 void Nivel::cargarCofres(int num)
 {
   long unsigned int num_cofres = num;
-  MotorGrafico* _motor = MotorGrafico::GetInstance();
 
   if(!zonas.empty())
   {
@@ -365,7 +354,6 @@ void Nivel::cargarCofres(int num)
         interactuables.push_back(inter);
 
         //Fisicas del cofre
-        MotorFisicas* _fisicas = MotorFisicas::getInstance();
         _fisicas->crearCuerpo(3,newx/2,newy/2,newz/2,2,2,4,2,3);
 
         //borrar del Array
@@ -384,14 +372,12 @@ void Nivel::cargarCofres(int num)
 
 Sala*  Nivel::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
     Sala*  sala = new Sala(ancho,largo,alto,x,y,z,centro);
     //int*  datos = sala->getSizes(); //para comprobar la informacion de la sala
     //cout << "\e[36m datos de la sala: \e[0m" << datos[0] << " " << datos[1]  << " " << datos[2] << " " << datos[3] << " " << datos[4] << endl;
     int id = _motor->CargarPlataformas(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     sala->definirID(id);
 
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,6);
 
     if(_primeraSala == nullptr)
@@ -404,13 +390,11 @@ Sala*  Nivel::CrearPlataforma(int accion, int x,int y,int z, int ancho, int larg
 
 void Nivel::CrearLuz(int x,int y,int z)
 {
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
     _motor->CargarLuces(x,y,z);
 }
 
 void Nivel::EraseEnemigo(std::size_t i){
     //Eliminar sonido
-    MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
     std::string nameid = std::to_string(enemigos[i]->getID()); //pasar id a string
     _motora->getEvent(nameid)->stop();
 
@@ -430,9 +414,6 @@ void Nivel::EraseJugador(){
 
 void Nivel::CogerObjeto()
 {
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
-
     long unsigned int rec_col = _fisicas->collideColectable();
         jugador.setAnimacion(4);
 
@@ -497,24 +478,20 @@ void Nivel::CogerObjeto()
 
 void Nivel::DejarObjeto()
 {
-    MotorFisicas*  _fisicas = MotorFisicas::getInstance();
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
+    if(jugador.getArma() != nullptr)//si tiene arma equipada
+    {
+        //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
+        Recolectable* nuRec = new Recolectable(0, jugador.getArma()->getAtaque(),jugador.getArma()->getNombre(),jugador.getArma()->getAncho(),jugador.getArma()->getLargo(), jugador.getArma()->getAlto(),jugador.getArma()->getObjeto(),jugador.getArma()->getTextura());
+        nuRec->setPosiciones(jugador.getX(),jugador.getY(), jugador.getZ());
+        _motor->EraseArma();
+        _fisicas->EraseArma();
+        jugador.setArma(NULL);
 
-        if(jugador.getArma() != nullptr)//si tiene arma equipada
-        {
-            //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-            Recolectable* nuRec = new Recolectable(0, jugador.getArma()->getAtaque(),jugador.getArma()->getNombre(),jugador.getArma()->getAncho(),jugador.getArma()->getLargo(), jugador.getArma()->getAlto(),jugador.getArma()->getObjeto(),jugador.getArma()->getTextura());
-            nuRec->setPosiciones(jugador.getX(),jugador.getY(), jugador.getZ());
-            _motor->EraseArma();
-            _fisicas->EraseArma();
-            jugador.setArma(NULL);
-
-            //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
-            recolectables.push_back(nuRec);
-            _fisicas->setFormaRecolectable(recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
-            _motor->CargarRecolectable(recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
-        }
-
+        //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
+        recolectables.push_back(nuRec);
+        _fisicas->setFormaRecolectable(recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
+        _motor->CargarRecolectable(recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
+    }
 }
 
 /*********** AccionarMecanismo* **********
@@ -586,7 +563,6 @@ void Nivel::crearObjetoCofre(Interactuable* newobjeto)
 
 void Nivel::AccionarMecanismo(int int_col)
 {
-    MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
     unsigned int i = 0;
     bool coincide = false;
     //Si es una puerta sin llave o palanca asociada
@@ -735,10 +711,8 @@ void Nivel::AccionarMecanismo(int int_col)
 * Detecta las posiciones de los objetos recolectables y de interaccion
 * y si está pulsado E interactua y si no lo pinta de color para destacarlo
 */
-void Nivel::InteractuarNivel()
+void Nivel::ManejarEventos()
 {
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
     //lo siguiente es para saber que objeto colisiona con jugador
     int rec_col = _fisicas->collideColectable();
     int int_col = _fisicas->collideInteractuable();
@@ -787,13 +761,8 @@ void Nivel::InteractuarNivel()
 * */
 void Nivel::update()
 {
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
-
     if(ejecutar)
     {
-        MotorFisicas* _fisicas = MotorFisicas::getInstance();
-        MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
-
         //animacion
         _motor->cambiarAnimacionJugador(jugador.getAnimacion());
 
@@ -988,7 +957,6 @@ void Nivel::activarPowerUp()
 
     if(int_cpw >= 0 && int_cpw != int_cpw_aux)
     {
-        MotorGrafico* _motor = MotorGrafico::GetInstance();
         bool locoges = false; //Comprobar si lo puedes coger
 
         //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
@@ -1125,7 +1093,6 @@ void Nivel::updateIA()
     if(ejecutar)
     {
         //cout<< "Ejecuto ia " << endl;
-        MotorGrafico* _motor = MotorGrafico::GetInstance();
 
         //En esta parte muere enemigo
         if(enemigos.size() > 0){
@@ -1485,11 +1452,10 @@ void Nivel::updateRecorridoPathfinding(Enemigo*  enem)
     contadorEnem++;
 }
 
-void Nivel::Draw()
+void Nivel::Render()
 {
     if(ejecutar)
     {
-        MotorGrafico* _motor = MotorGrafico::GetInstance();
         //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
         if(drawTime == 0.0)
         {
@@ -1651,7 +1617,6 @@ void Nivel::NoEjecutar()
 
 void Nivel::borrarEnemigos()
 {
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     //actualizamos el jugador
     if(enemigos.size() > 0)
     {

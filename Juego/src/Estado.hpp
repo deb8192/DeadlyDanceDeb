@@ -8,7 +8,6 @@ using namespace idsEventos;
 class Estado {
     public:
         //funciones que tiene la interfaz como virtual (porque no existen pero deberian)
-        virtual short Tipo() = 0;
         virtual void Iniciar() = 0;
         virtual void Render() = 0;
         virtual void Update() = 0;

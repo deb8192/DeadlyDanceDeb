@@ -7,7 +7,7 @@ class Creditos: public Estado {
     public:
         Creditos();
         ~Creditos();
-        short Tipo() { return 5; };
+        
         void Iniciar();
         void Render();
         void Update();

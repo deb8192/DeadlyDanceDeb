@@ -8,6 +8,7 @@ Creditos::Creditos()
 
 Creditos::~Creditos()
 {
+    // Punteros a clases singleton
     _motor = nullptr;
 }
 

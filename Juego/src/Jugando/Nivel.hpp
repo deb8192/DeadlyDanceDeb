@@ -61,7 +61,7 @@ class Nivel
         void updateAt(int* , MotorGrafico* );
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 15 veces
         void updateRecorridoPathfinding(Enemigo* );
-        void Draw();//dibuja y actualiza las posiciones del interpolado
+        void Render();//dibuja y actualiza las posiciones del interpolado
 
         void setEnemigoPideAyuda(Enemigo* );
 
@@ -73,7 +73,7 @@ class Nivel
         //Funciones de interacciones
         void CogerObjeto();
         void DejarObjeto();
-        void InteractuarNivel();
+        void ManejarEventos();
         void AccionarMecanismo(int);    //Activa mecanismos y o puertas
         void crearObjetoCofre(Interactuable* newobjeto);
         void activarPowerUp();
@@ -113,6 +113,9 @@ class Nivel
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala* _primeraSala;// la primera sala del arbol
         Sala* _destinoPathFinding; //sala que se rellena al llamar a pathfinding y se vacía al terminar el recorrido del enemigo
+        
+        MotorAudioSystem* _motora;
+        MotorGrafico* _motor;
         MotorFisicas* _fisicas;//motor de fisicas
         int id;//id para las figuras
 
