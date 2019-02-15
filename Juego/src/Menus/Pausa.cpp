@@ -10,6 +10,7 @@ Pausa::Pausa()
 Pausa::~Pausa()
 {
     cout << "Borrando pausa" <<endl;
+    // Punteros a clases singleton
     _motor = nullptr;
 }
 

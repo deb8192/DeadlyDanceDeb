@@ -7,7 +7,7 @@ class EstadoPuzle: public Estado {
     public:
         EstadoPuzle();
         ~EstadoPuzle();
-        short Tipo() { return 3; };
+        
         void Iniciar();
         void Render();
         void Update();
