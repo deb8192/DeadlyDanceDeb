@@ -22,4 +22,4 @@ class CargadorNiveles
         int* lista;
 };
 
-#endif
+#endif /* CargadorNiveles_HPP */

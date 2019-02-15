@@ -22,7 +22,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
         ~Jugador();
-        Jugador(int,int,int,int,int,int,std::string malla);//defines tu la informacion del jugador
+        Jugador(int,int,int,int,int,int,int,const char*,const char*);//defines tu la informacion del jugador
 
         //Metodos de desplazamiento
         void movimiento(bool noMueve,bool a, bool s, bool d, bool w);
