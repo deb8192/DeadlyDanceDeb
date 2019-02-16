@@ -16,7 +16,10 @@ class Pausa: public Estado {
 
     private:
         void pintarBotones();
+        // Para Salir y Menu principal, borra GUI y Escena
         void borrarEscenaResetearEvento(short id);
+        // Para Atras y Reiniciar partida, borra solo GUI
+        void borrarGUIResetearEvento(short id);
         void menuPrincipal();
         void reiniciarPartida();
         void atras();
