@@ -58,18 +58,15 @@ void Jugando::Render()
 void Jugando::Update()
 {
     _motor->clearDebug();
+    _motora->update(false); //Actualiza el motor de audio
+    _sense->update(); //Se actualizan sentidos
 
-    //Actualiza el motor de audio
-    _motora->update(false);
-
-    _sense->update();//se actualizan sentidos
-
-    /*if (_nivel->GetJugador()->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
+    if (jugador.EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
-        _nivel->GetJugador()->MuereJugador(); // Animacion de muerte
+        jugador.MuereJugador(); // Animacion de muerte
         Juego::GetInstance()->estado.CambioEstadoMuerte();
     }
-    _nivel->update();//se actualiza posiciones y interpolado*/
+    //_nivel->update();//se actualiza posiciones y interpolado
 }
 
 void Jugando::UpdateIA()
@@ -78,7 +75,7 @@ void Jugando::UpdateIA()
     if (_motor->EstaPulsado(KEY_J))
     {
         _motor->ResetKey(KEY_J);
-        //_nivel->GetJugador()->QuitarVida(20);
+        jugador.QuitarVida(20);
     }
     /* **************************************************** */
     //_nivel->updateIA();
@@ -99,7 +96,7 @@ void Jugando::ManejarEventos() {
     if (_motor->EstaPulsado(KEY_K))
     {
         _motor->ResetKey(KEY_K);
-        //_nivel->GetJugador()->setVida(0);
+        jugador.setVida(0);
     }
 
     //para modo debug

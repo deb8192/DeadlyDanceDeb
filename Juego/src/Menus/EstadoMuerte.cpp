@@ -51,7 +51,7 @@ void EstadoMuerte::ManejarEventos()
     
     if (_motor->OcurreEvento(GUI_ID_REINICIAR_BUTTON))
     {
-        borrarEscenaResetearEvento(GUI_ID_REINICIAR_BUTTON);
+        borrarGUIResetearEvento(GUI_ID_REINICIAR_BUTTON);
         reiniciarPartida();
     }
 }
@@ -63,10 +63,19 @@ void EstadoMuerte::pintarBotones()
     _motor->CrearBoton(300,280,500,310, GUI_ID_SALIR_BUTTON, L"salir del juego", L"Cierra el juego");
 }
 
+// Para Salir y Menu principal, borra GUI y Escena
 void EstadoMuerte::borrarEscenaResetearEvento(short id)
 {
     // Limpiamos el gui y la escena
     _motor->BorrarScena();
+    _motor->BorrarGui();
+    _motor->ResetEvento(id);
+}
+
+// Para Atras y Reiniciar partida, borra solo GUI
+void EstadoMuerte::borrarGUIResetearEvento(short id)
+{
+    // Limpiamos el gui
     _motor->BorrarGui();
     _motor->ResetEvento(id);
 }
