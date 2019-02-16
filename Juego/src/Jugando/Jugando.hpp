@@ -53,7 +53,7 @@ class Jugando: public Estado {
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         Sala* _primeraSala;// la primera sala del arbol
         
-        bool reiniciando;
+        bool reiniciando; // Se utiliza solo en Reanudar por el cambio entre Estados
         Jugador jugador;
 
         int id;//id para las figuras

@@ -141,6 +141,8 @@ void Jugando::Vaciar()
 void Jugando::Reiniciar()
 {
     reiniciando = true;
+
+    jugador.setVida(100);
 }
 
 

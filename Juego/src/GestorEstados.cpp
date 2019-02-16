@@ -23,12 +23,6 @@ void GestorEstados::CambioEstadoMenu()
     anyadir(new Menu(), false);
 }
 
-// Carga el Menu principal, se llama desde Pausa
-void GestorEstados::EstadoMenu()
-{
-    anyadir(new Menu(), true);
-}
-
 // Elimina Menu y carga el juego
 void GestorEstados::CambioEstadoJugar()
 {
@@ -40,6 +34,20 @@ void GestorEstados::CambioEstadoJugar()
 void GestorEstados::QuitarPausa()
 {
     eliminar();
+}
+
+// Se llama desde Pausa y EstadoMuerte
+void GestorEstados::ReiniciarPartida()
+{
+    Jugando::GetInstance()->Reiniciar();
+    eliminar();
+}
+
+// Se llama desde Pausa y EstadoMuerte
+void GestorEstados::CambioDeJuegoAMenu()
+{
+    VaciarPila();
+    anyadir(new Menu(), true);
 }
 
 void GestorEstados::CambioEstadoPuzle()
