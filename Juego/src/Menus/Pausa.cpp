@@ -51,7 +51,7 @@ void Pausa::ManejarEventos()
     
     if (_motor->OcurreEvento(GUI_ID_REINICIAR_BUTTON))
     {
-        borrarEscenaResetearEvento(GUI_ID_REINICIAR_BUTTON);
+        borrarGUIResetearEvento(GUI_ID_REINICIAR_BUTTON);
         reiniciarPartida();
     }
 
@@ -60,7 +60,7 @@ void Pausa::ManejarEventos()
         _motor->EstaPulsado(KEY_ESC) || 
         _motor->EstaPulsado(KEY_P)) {
         
-        borrarEscenaResetearEvento(GUI_ID_ATRAS_BUTTON);
+        borrarGUIResetearEvento(GUI_ID_ATRAS_BUTTON);
         _motor->ResetKey(KEY_ESC);
         _motor->ResetKey(KEY_P);
         atras();
@@ -75,10 +75,19 @@ void Pausa::pintarBotones()
     _motor->CrearBoton(300,320,500,350, GUI_ID_SALIR_BUTTON, L"Salir del juego", L"Cierra el juego");
 }
 
+// Para Salir y Menu principal, borra GUI y Escena
 void Pausa::borrarEscenaResetearEvento(short id)
 {
     // Limpiamos el gui y la escena
     _motor->BorrarScena();
+    _motor->BorrarGui();
+    _motor->ResetEvento(id);
+}
+
+// Para Atras y Reiniciar partida, borra solo GUI
+void Pausa::borrarGUIResetearEvento(short id)
+{
+    // Limpiamos el gui
     _motor->BorrarGui();
     _motor->ResetEvento(id);
 }
