@@ -95,21 +95,18 @@ void Pausa::borrarGUIResetearEvento(short id)
 // Vuelve al menu principal
 void Pausa::menuPrincipal()
 {
-    // Elimina el estadode pausa y juego antes de anyadir el menu
-    Juego::GetInstance()->estado.VaciarPila();
-    Juego::GetInstance()->estado.EstadoMenu();
+    // Elimina todos los estados y anyade el de menu
+    Juego::GetInstance()->estado.CambioDeJuegoAMenu();
 }
 
 // Elimina el estado pausa e indica al juego que se tiene que reiniciar
 void Pausa::reiniciarPartida()
 {
-    Juego::GetInstance()->estado.QuitarPausa();
-    Jugando::GetInstance()->Reiniciar();
+    Juego::GetInstance()->estado.ReiniciarPartida();
 }
 
 void Pausa::atras()
 {
-    // TO DO: puede ser que haya que reanudar algo como el tiempo
     Juego::GetInstance()->estado.QuitarPausa();
 }
 

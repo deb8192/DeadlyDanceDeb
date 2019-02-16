@@ -18,8 +18,9 @@ public:
     
     void CambioEstadoCinematica();
     void QuitarPausa();
+    void ReiniciarPartida();
+    void CambioDeJuegoAMenu();
     void CambioEstadoMenu();
-    void EstadoMenu();
     void CambioEstadoJugar();
     void CambioEstadoPuzle();
     void CambioEstadoConfig();

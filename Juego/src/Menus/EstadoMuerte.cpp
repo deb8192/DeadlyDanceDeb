@@ -80,22 +80,20 @@ void EstadoMuerte::borrarGUIResetearEvento(short id)
     _motor->ResetEvento(id);
 }
 
-// Vuelve al menu principal
 void EstadoMuerte::menuPrincipal()
 {
-    Juego::GetInstance()->estado.CambioEstadoMenu();
+    // Elimina todos los estados y anyade el de menu
+    Juego::GetInstance()->estado.CambioDeJuegoAMenu();
 }
 
 void EstadoMuerte::reiniciarPartida()
 {
-    // TO DO: llamar a reiniciar
-    Juego::GetInstance()->estado.CambioEstadoJugar();
+    Juego::GetInstance()->estado.ReiniciarPartida();
 }
 
 void EstadoMuerte::salir()
 {
-    // TO DO: vaciar memoria antes
-    Vaciar();
+    Juego::GetInstance()->estado.VaciarPila();
     _motor->CerrarJuego();
 }
 
