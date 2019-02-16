@@ -37,13 +37,13 @@ void CargadorNiveles::CargarNivelXml(int level)
     Sala* sala = crearSala(anterior.back(),nullptr);//pasamos la primera parte para que busque plataformas
 
 
-    /*for (pugi::xml_node hijo = doc.child("Level").child("Light"); hijo; hijo = hijo.next_sibling("Light"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    for (pugi::xml_node hijo = doc.child("Level").child("Light"); hijo; hijo = hijo.next_sibling("Light"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         int x = hijo.attribute("X").as_int();//nos devuelve un int
         int z = hijo.attribute("Y").as_int();//nos devuelve un int
         int y = hijo.attribute("Z").as_int();//nos devuelve un int 
-        _nivel->CrearLuz(x,y,z); //cargamos el objeto
-    }*/
+        _jugando->CrearLuz(x,y,z); //cargamos el objeto
+    }
     
     for (pugi::xml_node plat = anterior.back().child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
@@ -208,7 +208,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         const char* textura = obj.attribute("Texture").value(); //nos da un char[] = string
         const char* modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
         _nivel->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
-    }
+    }*/
     for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         //carga de las zonas
@@ -222,8 +222,8 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int largo = zon.attribute("largo").as_int();//nos devuelve un int
         int alto = zon.attribute("ancho").as_int();//nos devuelve un int
         const char* tipo = zon.attribute("tipo").value(); //nos da un char[] = string
-        _nivel->CrearZona(accion,x,y,z,ancho,largo,alto,tipo,propiedades); //cargamos el enemigo
-    }*/
+        _jugando->CrearZona(accion,x,y,z,ancho,largo,alto,tipo,propiedades); //cargamos el enemigo
+    }
 
     return padren;
 }

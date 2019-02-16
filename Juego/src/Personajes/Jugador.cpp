@@ -57,18 +57,17 @@ Jugador::~Jugador()
     dinero = 0;
 }
 
-Jugador::Jugador(int nVida, int nX,int nY,int nZ,int ancho,int largo,int alto, const char* ruta_objeto, const char* ruta_textura)
+Jugador::Jugador(int nX,int nY,int nZ,int ancho,int largo,int alto, const char* ruta_objeto, const char* ruta_textura)
 {
-     MotorGrafico* _motor = MotorGrafico::GetInstance();
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
 
-    vida = nVida;
+    vida = 0; // se cambia con setVida en jugando.cpp
     dinero = 0;
     posActual.x = nX;
     posActual.y = nY;
     posActual.z = nZ;
 
     _motor->CargarJugador(nX,nY,nZ,ancho,largo,alto,ruta_objeto,ruta_textura);
-
 
     animacion = 0;
     //_armaEquipada = NULL;
@@ -147,7 +146,6 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     px += componente*sin(deg*DEGTORAD);
     pz += componente*cos(deg*DEGTORAD);
 
-
     //cout << "deg: " << deg << ", px:" << px << ", pz:" << pz << endl;
     //ahora actualizas movimiento y rotacion
     //has obtenido la arcotangente que te da el angulo de giro en grados
@@ -203,6 +201,7 @@ void Jugador::UpdateTimeMove(float updTime)
     moveTime += updTime;
 }
 
+// Se llama en update de jugando
 bool Jugador::EstaMuerto()
 {
     if(vida <= 0)
