@@ -918,9 +918,7 @@ void Jugador::setPosicionesFisicas(float nx,float ny,float nz)
 
 void Jugador::setVida(int vid)
 {
-    cout << vida <<"  -  "<<vid<<"  CAMBIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO "<<endl;
     vida = vid;
-    cout << vida<<endl;
 }
 
 void Jugador::setTipo(int tip)
