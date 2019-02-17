@@ -115,7 +115,7 @@ void GestorEstados::ProcesarPilaEstados()
 {
     if ( eliminando && !_estados.empty())
     {
-        _estados.top()->Vaciar();
+        _estados.top()->Vaciar();// Esta es temporal
         delete(_estados.top());
         _estados.top() = nullptr;
         _estados.pop();
@@ -146,9 +146,6 @@ void GestorEstados::ProcesarPilaEstados()
         _estados.top()->Iniciar();
         anyadiendo = false;
     }
-
-    short int tam = _estados.size();
-    cout << "Tam pila: "<<tam<<endl;
 }
 
 Estado* &GestorEstados::GetEstadoActivo()
