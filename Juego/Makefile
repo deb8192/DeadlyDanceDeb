@@ -174,5 +174,5 @@ val: $(BEGIN)
 	#CUIDADO hay que tener valgrind para instalarlo "sudo pacman -S valgrind"
 	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia
 	export LD_LIBRARY_PATH="$(LIBRERIAS_CARPETAS)";\
-	valgrind ./$(EXEC)
+	valgrind --error-limit=no ./$(EXEC)
 		
