@@ -168,7 +168,7 @@ void Pollo::UpdatePollo(short *i)
                     z += datosDesplazamiento.velocidadZ;
                     this->setNewRotacion(this->Enemigo::getRX(), rotacion, this->Enemigo::getRZ());
                     this->setNewPosiciones(x, y, z);
-                    this->setPosicionesFisicas(datosDesplazamiento.velocidadX, datosDesplazamiento.velocidadY, datosDesplazamiento.velocidadZ);
+                    this->setPosicionesFisicas(x / constantes.DOS, y / constantes.DOS, z / constantes.DOS);
                     
                     //Se comprueba si la distancia entre el enemigo y el jugador es menor o igual a la distancia maxima que que indica la variable "distancia"
                     if(abs(_nivel->GetJugador()->getZ() - this->getZ()) <= abs(datosDesplazamiento.distancia))
@@ -245,7 +245,7 @@ void Pollo::UpdatePollo(short *i)
                     if(!hecho)
                     {
                         //Merodea estableciendo un nuevo angulo de rotacion
-                        rotation = this->randomBinomial() * maxRotacion;
+                        this->setRotation(this->randomBinomial() * maxRotacion);
                         this->Merodear();
                         this->setTimeMerodear(1.5f);
                         hecho = true;

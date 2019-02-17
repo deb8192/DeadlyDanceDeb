@@ -164,7 +164,7 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
     enemigos.back()->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-    enemigos.back()->Enemigo::initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     enemigos.back()->setVida(75);
     enemigos.back()->setVelocidadMaxima(1.0f);
     enemigos.back()->setBarraAtEs(0);
@@ -997,11 +997,15 @@ void Nivel::update()
                         enemigos.at(i)->setTimeMerodear(tiempoMerodear);
                     }
                     //AUN NO FUNCIONA
-                    /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
+                    if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
                     {
                         //colisiona
-                        enemPollo->Enemigo::setNewPosiciones(enemPollo->Enemigo::getX(), enemPollo->Enemigo::getY(), enemPollo->Enemigo::getZ());
-                    }*/
+                        enemigos.at(i)->setPosiciones(enemigos.at(i)->getLastX(), enemigos.at(i)->getY(), enemigos.at(i)->getLastZ());//colisiona
+                        enemigos.at(i)->setNewPosiciones(enemigos.at(i)->getLastX(), enemigos.at(i)->getLastY(), enemigos.at(i)->getLastZ());//colisiona
+                        enemigos.at(i)->initPosicionesFisicas(enemigos.at(i)->getNewX() / constantes.DOS, enemigos.at(i)->getNewY() / constantes.DOS, enemigos.at(i)->getNewZ() / constantes.DOS);//colisiona
+                        enemigos.at(i)->setNewRotacion(enemigos.at(i)->getRX(), enemigos.at(i)->getRY() - constantes.PI_MEDIOS, enemigos.at(i)->getRZ());
+                        enemigos.at(i)->setRotation(enemigos.at(i)->GetRotation() / constantes.DOS);
+                    }
                 }
                 //enemigos[i]->queVes();
             }
@@ -1100,7 +1104,7 @@ void Nivel::updateAt(int* danyo, MotorGrafico* _motor)
 
         //clear
         if(jugador.getTimeAt() <= 0.0f){
-        _motor->clearDebug2();
+        //_motor->clearDebug2();
         }
 
     }
@@ -1121,7 +1125,6 @@ void Nivel::updateAtEsp(MotorGrafico* _motor)
         {
             jugador.setTimeAtEsp(1.5f);
             jugador.setLastTimeAtEsp(_controladorTiempo->GetTiempo(2));
-
         }
     }
     else
@@ -1157,6 +1160,7 @@ void Nivel::updateAtEsp(MotorGrafico* _motor)
 
 void Nivel::updateIA()
 {
+    Constantes constantes;
     //bool quehay = ejecutar;
     if(ejecutar)
     {
@@ -1280,11 +1284,15 @@ void Nivel::updateIA()
                                 enemigos.at(i)->setTimeMerodear(tiempoMerodear);
                             }
                             //AUN NO FUNCIONA
-                            /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
+                            if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
                             {
                                 //colisiona
-                                enemPollo->Enemigo::setNewPosiciones(enemPollo->Enemigo::getX(), enemPollo->Enemigo::getY(), enemPollo->Enemigo::getZ());
-                            }*/
+                                enemigos.at(i)->setPosiciones(enemigos.at(i)->getLastX(), enemigos.at(i)->getY(), enemigos.at(i)->getLastZ());//colisiona
+                                enemigos.at(i)->setNewPosiciones(enemigos.at(i)->getLastX(), enemigos.at(i)->getLastY(), enemigos.at(i)->getLastZ());//colisiona                                
+                        enemigos.at(i)->initPosicionesFisicas(enemigos.at(i)->getNewX() / constantes.DOS, enemigos.at(i)->getNewY() / constantes.DOS, enemigos.at(i)->getNewZ() / constantes.DOS);//colisiona
+                                enemigos.at(i)->setNewRotacion(enemigos.at(i)->getRX(), enemigos.at(i)->getRY() - constantes.PI_MEDIOS, enemigos.at(i)->getRZ());
+                                enemigos.at(i)->setRotation(enemigos.at(i)->GetRotation() / constantes.DOS);
+                            }
                         }
                         else
                             enemigos[i]->RunIA(true);
@@ -1563,6 +1571,7 @@ void Nivel::Draw()
     if(ejecutar)
     {
         MotorGrafico* _motor = MotorGrafico::getInstance();
+        _motor->clearDebug2();
         //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
         if(drawTime == 0.0)
         {
@@ -1598,7 +1607,7 @@ void Nivel::Draw()
                 enemigos.at(i)->getRZ(),
                 i
             );
-            _motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getFisX(), enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),5, 5, 5, 2);
+            _motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX() * 2, enemigos.at(i)->getFisY() * 2, enemigos.at(i)->getFisZ() * 2, enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),3 , 3, 3, 2);
         }
         //Dibujado de las puertas
         for(unsigned int i = 0; i < interactuables.size(); i++)
@@ -1633,8 +1642,6 @@ void Nivel::Draw()
                     jugador.getRY(),
                     jugador.getRZ());
 
-                _motor->clearDebug2(); //Pruebas debug
-
                 _motor->dibujarObjetoTemporal(
                     jugador.getArmaEspecial()->getFisX()*2,
                     jugador.getY(),
@@ -1663,12 +1670,10 @@ void Nivel::Draw()
                     jugador.GetDatosAtEsp()[4],
                     jugador.GetDatosAtEsp()[5]);
 
-                _motor->clearDebug2(); //Pruebas debug
-
                 _motor->dibujarObjetoTemporal(
-                    jugador.getArmaEspecial()->getX(),
+                    jugador.getArmaEspecial()->getFisX()*2,
                     jugador.getArmaEspecial()->getY(),
-                    jugador.getArmaEspecial()->getZ(),
+                    jugador.getArmaEspecial()->getFisZ()*2,
                     jugador.GetDatosAtEsp()[3],
                     jugador.GetDatosAtEsp()[4],
                     jugador.GetDatosAtEsp()[5],
@@ -1707,7 +1712,7 @@ void Nivel::Draw()
             );
         }
 
-        _motor->clearDebug2(); //Pruebas debug
+        //_motor->clearDebug2(); //Pruebas debug
     }
 }
 
