@@ -123,8 +123,6 @@ void Menu::creditos()
 
 void Menu::salir()
 {
-    // TO DO: vaciar memoria antes
-    Juego::GetInstance()->estado.VaciarPila();
     _motor->CerrarJuego();
 }
 

@@ -93,7 +93,6 @@ void EstadoMuerte::reiniciarPartida()
 
 void EstadoMuerte::salir()
 {
-    Juego::GetInstance()->estado.VaciarPila();
     _motor->CerrarJuego();
 }
 

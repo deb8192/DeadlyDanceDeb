@@ -8,6 +8,20 @@
 #include "Menus/EstadoMuerte.hpp"
 #include "Jugando/Jugando.hpp"
 
+GestorEstados::GestorEstados()
+{
+
+}
+
+GestorEstados::~GestorEstados() {
+    _estado = nullptr;
+    while (_estados.size() > 0) {
+        delete(_estados.top());
+        _estados.top() = nullptr;
+        _estados.pop();
+    }
+}
+
 // Primer estado que se anyade en la pila al abrir el juego
 void GestorEstados::CambioEstadoCinematica()
 {
@@ -23,11 +37,10 @@ void GestorEstados::CambioEstadoMenu()
     anyadir(new Menu(), false);
 }
 
-// Elimina Menu y carga el juego
+// Deja el Menu y carga el juego
 void GestorEstados::CambioEstadoJugar()
 {
-    eliminar();
-    anyadir(Jugando::GetInstance(), true);
+    anyadir(Jugando::GetInstance(), false);
 }
 
 // Elimina la Pausa y deja paso al estado jugando
@@ -46,8 +59,18 @@ void GestorEstados::ReiniciarPartida()
 // Se llama desde Pausa y EstadoMuerte
 void GestorEstados::CambioDeJuegoAMenu()
 {
-    VaciarPila();
-    anyadir(new Menu(), true);
+    // Pausa o Muerte
+    _estados.top()->Vaciar();
+    delete(_estados.top());
+    _estados.top() = nullptr;
+    _estados.pop();
+
+    //Jugando (singleton)
+    _estados.top() = nullptr;
+    _estados.pop();
+
+    //Menu
+    _estados.top()->Reanudar();
 }
 
 void GestorEstados::CambioEstadoPuzle()
@@ -123,6 +146,9 @@ void GestorEstados::ProcesarPilaEstados()
         _estados.top()->Iniciar();
         anyadiendo = false;
     }
+
+    short int tam = _estados.size();
+    cout << "Tam pila: "<<tam<<endl;
 }
 
 Estado* &GestorEstados::GetEstadoActivo()
@@ -142,22 +168,4 @@ void GestorEstados::SaltarAlMenu()
         _estados.pop();
     }
     _estados.top()->Reanudar();
-}
-
-// Al salir del juego, vaciamos todos los estados pausados
-void GestorEstados::VaciarPila()
-{
-    cout << "sale"<<endl;
-    short int tam = _estados.size();
-    for (short int est=0; est<tam-1; est++)
-    {
-        _estados.top()->Vaciar();
-        delete(_estados.top());
-        _estados.top() = nullptr;
-        _estados.pop();
-    }
-    _estados.top()->Vaciar();
-    delete(_estados.top());
-    _estados.top() = nullptr;
-    cout << "sale2"<<endl;
 }

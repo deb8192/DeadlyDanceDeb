@@ -112,7 +112,6 @@ void Pausa::atras()
 
 void Pausa::salir()
 {
-    Juego::GetInstance()->estado.VaciarPila();
     _motor->CerrarJuego();
 }
 

@@ -6,15 +6,8 @@
 class GestorEstados
 {
 public:
-    GestorEstados() { }
-    ~GestorEstados() {
-        _estado = nullptr;
-        while (_estados.size() > 0) {
-            delete(_estados.top());
-            _estados.top() = nullptr;
-            _estados.pop();
-        }
-    }
+    GestorEstados();
+    ~GestorEstados();
     
     void CambioEstadoCinematica();
     void QuitarPausa();
@@ -31,7 +24,6 @@ public:
     void ProcesarPilaEstados();
     Estado* &GetEstadoActivo();
     void SaltarAlMenu();
-    void VaciarPila();
 
 private:
     stack<Estado*> _estados;
