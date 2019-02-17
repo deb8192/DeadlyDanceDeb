@@ -9,7 +9,16 @@ typedef struct
     const float PI_RADIAN = 180.0f;
     const float PI_MEDIOS = 90.0f;
     const float PI_CUARTOS = 45.0f;
-    const float ZERO = 0.0f;
+    const short CERO = 0;
+    const short UNO = 1;
+    const short DOS = 2;
+    const short TRES = 3;
+    const short CUATRO = 4;
+    const short CINCO = 5;
+    const short SEIS = 6;
+    const short SIETE = 7;
+    const short OCHO = 8;
+    const short NUEVE = 9;
     const float DEG_TO_RAD = 0.0174532925199432957f;
     const float RAD_TO_DEG = 57.295779513082320876f;
 

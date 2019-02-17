@@ -22,14 +22,6 @@
             </Leaf>
             <Leaf id="11" type="tarea" action="busca" target="pos-ayuda"></Leaf>
         </Composition>
-        <Composition id="12" type="secuencia">
-            <Leaf id="13" type="tarea" action="oye" target="jugador">
-                <Blackboard task="escribe" info="pos-jugador"></Blackboard>
-            </Leaf>
-            <Leaf id="14" tarea="busca" target="pos-jugador">
-                <Blackboard task="lee" info="pos-jugador"></Blackboard>
-            </Leaf>
-        </Composition>
-        <Leaf id="15" type="tarea" action="merodea" target=""></Leaf>
+        <Leaf id="12" type="tarea" action="merodea" target=""></Leaf>
     </Root>
 </BehaviorTree>

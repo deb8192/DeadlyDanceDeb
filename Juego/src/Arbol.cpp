@@ -161,6 +161,57 @@ Composicion * Arbol::devolverPadre()
     }
 }
 
+void Arbol::CambiarNodo(const short *_nodo)
+{
+    Constantes constantes;
+    ID = *_nodo;
+    Nodo *_actual = raiz;
+    size_t i = 0;
+    bool recorre = true;
+    Decorador *_deco;
+    Composicion *_comp;
+    vector <Nodo*> hijos;
+    while(_actual->getID() != ID && recorre)
+    {
+        if(strcmp(_actual->getNombre(), constantes.DECORADOR) == 0)
+        {
+            _deco = (Decorador*) _actual;
+            hijos.resize(_deco->getHijos().size());
+            hijos = _deco->getHijos();
+        }
+        else if(strcmp(_actual->getNombre(), constantes.COMPOSICION) == 0 || strcmp(_actual->getNombre(), constantes.RAIZ) == 0)
+        {
+            _comp = (Composicion*) _actual;
+            hijos.resize(_comp->getHijos().size());
+            hijos = _comp->getHijos();
+        }
+        if(i < hijos.size())
+        {
+            if(hijos.at(i)->getID() <= ID && hijos.at(i + constantes.UNO)->getID() > ID)
+            {
+                _actual = hijos.at(i);
+                if(_actual->getID() == ID)
+                {
+                    nodoEnEjecucionDirecta = _actual;
+                    recorre = false;
+                }
+                i = 0;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        else
+        {
+            recorre = false;
+        }
+    }
+    _actual = nullptr;
+    _deco = nullptr;
+    _comp = nullptr;
+}
+
 /***************** ContinuarSiguenteNodo *******************
  * Funcion que recorre el arbol de comportamiento de cada
  * enemigo cada vez que se le llame, continuando desde el ultimo

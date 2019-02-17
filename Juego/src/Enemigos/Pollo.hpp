@@ -10,8 +10,8 @@ class Pollo : public Enemigo
         ~Pollo();
         Pollo();
         void RunIA();
-        void UpdatePollo(int i);
-        void SetNuevasOrdenes(short int i);
+        void UpdatePollo(short *i);
+        void SetNuevasOrdenes(short i);
 
     private:
         bool funciona, atacado, hecho;
