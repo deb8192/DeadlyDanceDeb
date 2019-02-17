@@ -4,6 +4,7 @@
 #include <vector>
 #include "TEntidad.hpp"
 
+
 class TNodo
 {
     private:

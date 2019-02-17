@@ -4,6 +4,7 @@
 
 namespace CatOpengl
 {
+    class Gestor;
     //apartado dedicado a inicializar las opciones de la grafica como puede ser las ventanas
     namespace Video
     {
@@ -12,7 +13,7 @@ namespace CatOpengl
     //apartado dedicado a elementos interactivos como pueden ser botones, imagenes, hud.
     namespace Gui
     {
-
+        
     };
     //apartado a la scena 3d del motor, sirve para crear/borrar objetos asi como para moverlos
     namespace Scena
@@ -40,3 +41,7 @@ using CatOpengl::Shaders::Shader;
 using CatOpengl::Scena::FormaPrimitiva;
 
 #include "FormaPrimitiva.hpp"
+
+using CatOpengl::Gestor;
+
+#include "Gestor.hpp"

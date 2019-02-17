@@ -25,7 +25,7 @@ void TMalla::cargarMalla()
 // sobrecarga metodos TEntidad
 void TMalla::beginDraw()
 {
-    std::cout << didentidad << std::endl;
+    std::cout << didentidad << " se debe pintar-> " << ejecucion << std::endl;
 }
 
 void TMalla::endDraw()
