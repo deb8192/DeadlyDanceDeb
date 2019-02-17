@@ -43,11 +43,11 @@ void Juego::Iniciar()
         // Comprueba si hay que anyadir o eliminar un estado
         estado.ProcesarPilaEstados();
 
-        // Comprueba los eventos de teclado o botones
-        estado.GetEstadoActivo()->ManejarEventos();
-
         if(_tiempo->EjecutoDraw())// Actualiza 60 veces por segundo
 		{
+            // Comprueba los eventos de teclado o botones
+            estado.GetEstadoActivo()->ManejarEventos();
+
 			if(_tiempo->EjecutoUpdate())// Actualiza 15 veces por segundo
 			{
 				if(_tiempo->EjecutoIA())// Actualiza 4 veces por segundo

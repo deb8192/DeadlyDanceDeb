@@ -18,9 +18,18 @@ Sala::Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type)
     }
 }
 
- Sala::~Sala(void)
+ Sala::~Sala()
  {
-    /*Sala *nula;
+    ancho = 0;
+    largo = 0;
+    alto = 0;
+    x = 0;
+    y = 0;
+    z = 0;
+    tipocentro = 0;
+    posicion_en_grafica = 0;
+
+    /*Sala* nula;
     nula=(Sala*)0x100000000;
     if(entradas.size()>0)
     {
@@ -61,19 +70,19 @@ Sala::Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type)
     }*/
  }
 
-void Sala::agregarEntrada(Sala * plataforma)
+void Sala::agregarEntrada(Sala* plataforma)
 {
     entradas.push_back(plataforma);
 }
 
-void Sala::agregarSalida(Sala * plataforma)
+void Sala::agregarSalida(Sala* plataforma)
 {
     salidas.push_back(plataforma);
 }
 
-int * Sala::getSizes()
+int* Sala::getSizes()
 {
-    int * valores = new int[6];
+    int* valores = new int[6];
     valores[0] = ancho;
     valores[1] = largo;
     valores[2] = x; 

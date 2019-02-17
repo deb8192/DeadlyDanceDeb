@@ -33,7 +33,8 @@ void Cinematica::Update()
 void Cinematica::ManejarEventos()
 {
     // ESC para saltar la cinematica
-    if (_motor->EstaPulsado(KEY_ESC)) {
+    if ((_motor->EstaPulsado(KEY_ESC)) ||
+        (_motor->EstaPulsado(KEY_ESPACIO))) {
         
         _motor->ResetKey(KEY_ESC);
         Juego::GetInstance()->estado.CambioEstadoMenu();

@@ -8,10 +8,10 @@ class GestorEstados
 public:
     GestorEstados() { }
     ~GestorEstados() {
+        _estado = nullptr;
         while (_estados.size() > 0) {
-            _estado = _estados.top();
-            //delete _estado;
-            _estado = 0;
+            delete(_estados.top());
+            _estados.top() = nullptr;
             _estados.pop();
         }
     }
