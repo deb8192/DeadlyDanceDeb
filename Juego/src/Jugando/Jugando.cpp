@@ -42,7 +42,7 @@ void Jugando::Iniciar()
     _controladorTiempo = Times::GetInstance();
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-    //CargarNivel(5);
+    CargarNivel(5, 1); //(level, player) 1 = heavy / 2 = bailaora
 
     reiniciando = false;
     ValoresPorDefecto();
@@ -64,7 +64,7 @@ void Jugando::ValoresPorDefecto()
 void Jugando::ValoresPorDefectoJugador()
 {
     jugadorInmovil = false;
-    /*jugador.setVida(100);
+    jugador.setVida(100);
     jugador.setBarraAtEs(100);
     jugador.setAtaque(15);
     jugador.setArma(NULL);
@@ -72,7 +72,11 @@ void Jugando::ValoresPorDefectoJugador()
     jugador.setTimeAtEsp(0.0f);
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
-    jugador.setPosiciones(xIni, yIni, zIni);*/
+    jugador.setPosiciones(xIni, yIni, zIni);
+    jugador.setNewPosiciones(xIni, yIni, zIni);
+    jugador.initPosicionesFisicas(xIni/2, yIni/2, zIni/2);
+    //jugador.setRotacion(xIni, yIni, zIni);
+    //jugador.setNewRotacion(xIni, yIni, zIni);
 }
 
 void Jugando::ManejarEventos() {
@@ -90,7 +94,7 @@ void Jugando::ManejarEventos() {
     if (_motor->EstaPulsado(KEY_K))
     {
         _motor->ResetKey(KEY_K);
-        //jugador.setVida(0);
+        jugador.setVida(0);
     }
 
     //para modo debug
@@ -117,18 +121,18 @@ void Jugando::Update()
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
 
-    /*if (jugador.EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
+    if (jugador.EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
         jugador.MuereJugador(); // Animacion de muerte
         Juego::GetInstance()->estado.CambioEstadoMuerte();
-    }*/
+    }
     //_nivel->update();//se actualiza posiciones y interpolado
 
     //animacion
-    //_motor->cambiarAnimacionJugador(jugador.getAnimacion());
+    _motor->cambiarAnimacionJugador(jugador.getAnimacion());
 
     // Adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
-    /*_fisicas->colisionChecker(_motor->EstaPulsado(KEY_A),
+    _fisicas->colisionChecker(_motor->EstaPulsado(KEY_A),
         _motor->EstaPulsado(KEY_S),
         _motor->EstaPulsado(KEY_D),
         _motor->EstaPulsado(KEY_W),
@@ -148,7 +152,7 @@ void Jugando::Update()
     _fisicas->updateJugador(jugador.getX(),
         jugador.getY(),
         jugador.getZ()
-    );*/
+    );
     
     // Armas
 
@@ -162,7 +166,7 @@ void Jugando::UpdateIA()
     if (_motor->EstaPulsado(KEY_J))
     {
         _motor->ResetKey(KEY_J);
-        //jugador.QuitarVida(20);
+        jugador.QuitarVida(20);
     }
     /* **************************************************** */
     //_nivel->updateIA();
@@ -181,7 +185,7 @@ void Jugando::Render()
     drawTime = _controladorTiempo->GetTiempo(2);
 
     //Dibujado del personaje
-    /*jugador.moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
+    jugador.moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
     jugador.RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
     jugador.UpdateTimeMove(drawTime - lastDrawTime);
     _motor->mostrarJugador(jugador.getX(),
@@ -190,8 +194,8 @@ void Jugando::Render()
         jugador.getRX(),
         jugador.getRY(),
         jugador.getRZ()
-    );*/
-
+    );
+cout << jugador.getX() <<" Vida: "<<jugador.getVida()<< endl;
     //Dibujado de los enemigos
 
     //Dibujado de las puertas
@@ -224,6 +228,15 @@ void Jugando::Reanudar()
 { 
     if (reiniciando) {
         cout << "REINICIAR JUEGO" << endl;
+
+        // valores por defecto del jugador
+        ValoresPorDefectoJugador();
+
+        cout << "Cambia: "<<jugador.getX() << endl;
+
+        // Resto de valores del juego
+        ValoresPorDefecto();
+
         reiniciando = false;
     } else {
         cout << "Reanudando el juego" << endl;
@@ -239,12 +252,6 @@ void Jugando::Vaciar()
 void Jugando::Reiniciar()
 {
     reiniciando = true;
-
-    // valores por defecto del jugador
-    ValoresPorDefectoJugador();
-
-    // Resto de valores del juego
-    ValoresPorDefecto();
 }
 
 
@@ -255,8 +262,8 @@ void Jugando::Reiniciar()
 
 
 
-/*bool Jugando::CargarNivel(int level)
-{*/
+bool Jugando::CargarNivel(int nivel, int tipoJug)
+{
     // Codigo de Nivel.cpp
     /*
     _motor->BorrarScena();//borramos la scena
@@ -273,7 +280,7 @@ void Jugando::Reiniciar()
     }*/
 
     //cargamos el nivel
-    //cargador.CargarNivelXml(level); //se llama al constructor vacio
+    cargador.CargarNivelXml(nivel, tipoJug); //se llama al constructor vacio
     
     // Codigo de Nivel.cpp
     //Cargar objetos con el nivel completo
@@ -286,12 +293,12 @@ void Jugando::Reiniciar()
     _motor->cargarInterfaz();
     //esta ya todo ejecutamos ia y interpolado
     Ejecutar();*/
-    /*
+    
     return true;
-}*/
+}
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
-/*void Jugando::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, 
+void Jugando::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, 
     int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades)
 {
     cout << "Creo el jugador"<<endl;
@@ -306,7 +313,7 @@ void Jugando::Reiniciar()
     cout << "jugador creado en: "<<x<<", "<<y<<", "<<z<<", "<<endl;
     //TO DO: propiedades no se usa
     //_motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
-}*/
+}
 
 /*Sala* Jugando::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
@@ -325,12 +332,12 @@ void Jugando::Reiniciar()
     return _sala;
 }*/
 
-/*void Jugando::CrearLuz(int x,int y,int z)
+void Jugando::CrearLuz(int x,int y,int z)
 {
     _motor->CargarLuces(x,y,z);
 }
 
-void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int*  propiedades)//lo utilizamos para crear zonas
+/*void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int*  propiedades)//lo utilizamos para crear zonas
 {
    *//*//Crear zona
    Zona* zon = new Zona(ancho,largo,alto,tipo);

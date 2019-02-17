@@ -40,10 +40,10 @@ class Jugando: public Estado {
         void ValoresPorDefecto();
         void ValoresPorDefectoJugador();
 
-        //bool CargarNivel(int level); //Niveles en assets/maps/xml/
-        //void CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char *ruta_textura, int* propiedades);//lo utilizamos para crear su objeto
+        bool CargarNivel(int nivel, int tipoJug); //Niveles en assets/maps/xml/
+        void CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char *ruta_textura, int* propiedades);//lo utilizamos para crear su objeto
         //Sala* CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        //void CrearLuz(int x,int y,int z);
+        void CrearLuz(int x,int y,int z);
         //void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int* propiedades); //lo usamos para crear zonas
         
 
@@ -58,14 +58,14 @@ class Jugando: public Estado {
         MotorFisicas* _fisicas;
         Times* _controladorTiempo;
 
-        //CargadorNiveles cargador;//nos ayuda a cargar los niveles
+        CargadorNiveles cargador;//nos ayuda a cargar los niveles
         //Sala* _primeraSala;// la primera sala del arbol
         
         //TO DO: cambiar a lista
         //std::vector<Zona*> zonas; //Array de zonas
 
         bool reiniciando; // Se utiliza solo en Reanudar por el cambio entre Estados
-        //Jugador jugador;
+        Jugador jugador;
         bool jugadorInmovil; // Para las colisiones
         float xIni, yIni, zIni; // Para reiniciar posJugador
         float drawTime, lastDrawTime;

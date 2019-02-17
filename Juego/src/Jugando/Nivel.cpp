@@ -117,7 +117,7 @@ bool Nivel::CargarNivel(int level)
        _primeraSala = nullptr;
     }
     //cargamos el nivel
-    cargador.CargarNivelXml(level);
+    cargador.CargarNivelXml(level, 1);
     //Cargar objetos con el nivel completo
     this->cargarCofres(2); //Cargamos los cofres del nivel
 

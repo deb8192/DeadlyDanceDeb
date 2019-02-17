@@ -12,7 +12,7 @@ class CargadorNiveles
 {
     public:
         CargadorNiveles();
-        void CargarNivelXml(int); //esta funcion carga el nivel desde xml
+        void CargarNivelXml(int, int); //esta funcion carga el nivel desde xml
         void GuardarNivelXml(int); //esta funcion guarda el nivel en xml
         void GuardarNivelBin(int); //esta funcion guarda el nivel en formato bin con el numero que le pases
         void CargarNivelBin(int); //esta funcion carga el nivel desde un archivo binario  

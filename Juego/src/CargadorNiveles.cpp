@@ -6,7 +6,7 @@ CargadorNiveles::CargadorNiveles()
     
 }
 
-void CargadorNiveles::CargarNivelXml(int level)
+void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
 {
     Jugando* _jugando = Jugando::GetInstance();
 
@@ -42,7 +42,7 @@ void CargadorNiveles::CargarNivelXml(int level)
         int x = hijo.attribute("X").as_int();//nos devuelve un int
         int z = hijo.attribute("Y").as_int();//nos devuelve un int
         int y = hijo.attribute("Z").as_int();//nos devuelve un int 
-        //_jugando->CrearLuz(x,y,z); //cargamos el objeto
+        _jugando->CrearLuz(x,y,z); //cargamos el objeto
     }
     
     for (pugi::xml_node plat = anterior.back().child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -167,7 +167,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int alto = 5;//nos devuelve un int
         const char* Playertextura = plat.attribute("StarTexture").value(); //nos da un char[] = string
         const char* Playermodelo  =  plat.attribute("StarModel").value(); //nos da un char[] = string
-        //_jugando->CrearJugador(accion,Playerx,Playerz,Playery,ancho,largo,alto,Playermodelo,Playertextura,propiedades);
+        _jugando->CrearJugador(accion,Playerx,Playerz,Playery,ancho,largo,alto,Playermodelo,Playertextura,propiedades);
     }
 
     /*for (pugi::xml_node enem = plat.child("Enemy"); enem; enem = enem.next_sibling("Enemy"))//esto nos devuelve todos los hijos que esten al nivel del anterior
