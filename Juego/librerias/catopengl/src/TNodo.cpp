@@ -125,7 +125,9 @@ void TNodo::setPadre(TNodo * papa)
 //SALIDAS: Llama a todas las funciones no hay salida aparte de lo que hace la funcion internamente
 void TNodo::draw()
 {
+    
     std::cout << " Pintando nodo " << std::endl;
+
     if(entidad && entidad != nullptr)
     {
         entidad->beginDraw();
@@ -135,4 +137,12 @@ void TNodo::draw()
     {
         hijos[i]->draw();
     }
+
+    if(entidad && entidad != nullptr)
+    {
+        entidad->endDraw();
+    }
+
+
+
 }

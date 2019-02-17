@@ -27,7 +27,7 @@ float * TLuz::getIntensidad()
 
 void TLuz::beginDraw()
 {
-    std::cout << didentidad << std::endl;
+    std::cout << didentidad << " se debe pintar-> " << ejecucion << std::endl;
 }
 
 void TLuz::endDraw()

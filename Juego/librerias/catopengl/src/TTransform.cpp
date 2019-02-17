@@ -63,7 +63,7 @@ void TTransform::escalar(float x,float y,float z)
 
 void TTransform::beginDraw()
 {
-    std::cout << didentidad << std::endl;
+    std::cout << didentidad << " se debe pintar-> " << ejecucion << std::endl;
     glm::mat4 * nuevo = new glm::mat4;
     TEntidad::matriz_compartida = nuevo;
     TEntidad::pila_compartida->push(nuevo);
