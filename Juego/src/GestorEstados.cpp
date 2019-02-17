@@ -93,7 +93,8 @@ void GestorEstados::ProcesarPilaEstados()
     if ( eliminando && !_estados.empty())
     {
         _estados.top()->Vaciar();
-        //delete(_estados.top());
+        delete(_estados.top());
+        _estados.top() = nullptr;
         _estados.pop();
         
         if (!_estados.empty())
@@ -136,6 +137,7 @@ void GestorEstados::SaltarAlMenu()
     for (short int est=0; est<tam-1; est++)
     {
         _estados.top()->Vaciar();
+        _estados.top() = nullptr;
         _estados.pop();
     }
     _estados.top()->Reanudar();
@@ -144,11 +146,15 @@ void GestorEstados::SaltarAlMenu()
 // Al salir del juego, vaciamos todos los estados pausados
 void GestorEstados::VaciarPila()
 {
+    cout << "sale"<<endl;
     short int tam = _estados.size();
     for (short int est=0; est<tam-1; est++)
     {
         _estados.top()->Vaciar();
+        _estados.top() = nullptr;
         _estados.pop();
     }
     _estados.top()->Vaciar();
+    _estados.top() = nullptr;
+    cout << "sale2"<<endl;
 }

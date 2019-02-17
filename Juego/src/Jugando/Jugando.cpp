@@ -2,7 +2,7 @@
 #include "../Juego.hpp"
 
 //singleton
-Jugando* Jugando::_unica_instancia = 0;
+Jugando* Jugando::_unicaInstancia = 0;
 //fin indicador singleton
 
 Jugando::Jugando()
@@ -26,8 +26,9 @@ Jugando::~Jugando()
     _motor = nullptr;
 
     // Liberar memoria
-    delete _primeraSala;
-    delete _unica_instancia;
+    //cargador = nullptr;
+    //delete _primeraSala;
+    delete _unicaInstancia;
 }
 
 void Jugando::Iniciar()
@@ -41,7 +42,7 @@ void Jugando::Iniciar()
     _controladorTiempo = Times::GetInstance();
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-    CargarNivel(5);
+    //CargarNivel(5);
 
     reiniciando = false;
     ValoresPorDefecto();
@@ -54,15 +55,16 @@ void Jugando::Iniciar()
 void Jugando::ValoresPorDefecto()
 {
     id = 0;
-    _primeraSala = nullptr;
-    drawTime = 0.0f;
+    //_primeraSala = nullptr;
+    //drawTime = 0.0f;
+    drawTime = _controladorTiempo->GetTiempo(2);
     lastDrawTime = drawTime;
 }
 
 void Jugando::ValoresPorDefectoJugador()
 {
     jugadorInmovil = false;
-    jugador.setVida(100);
+    /*jugador.setVida(100);
     jugador.setBarraAtEs(100);
     jugador.setAtaque(15);
     jugador.setArma(NULL);
@@ -70,7 +72,7 @@ void Jugando::ValoresPorDefectoJugador()
     jugador.setTimeAtEsp(0.0f);
     jugador.setDanyoCritico(50);
     jugador.setProAtaCritico(10);
-    jugador.setPosiciones(xIni, yIni, zIni);
+    jugador.setPosiciones(xIni, yIni, zIni);*/
 }
 
 void Jugando::ManejarEventos() {
@@ -88,7 +90,7 @@ void Jugando::ManejarEventos() {
     if (_motor->EstaPulsado(KEY_K))
     {
         _motor->ResetKey(KEY_K);
-        jugador.setVida(0);
+        //jugador.setVida(0);
     }
 
     //para modo debug
@@ -107,9 +109,26 @@ void Jugando::ManejarEventos() {
     /* **************************************************** */
     // KEY_E
     //_nivel->ManejarEventos();
+}
+
+void Jugando::Update()
+{
+    _motor->clearDebug();
+    _motora->update(false); //Actualiza el motor de audio
+    _sense->update(); //Se actualizan sentidos
+
+    /*if (jugador.EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
+    {
+        jugador.MuereJugador(); // Animacion de muerte
+        Juego::GetInstance()->estado.CambioEstadoMuerte();
+    }*/
+    //_nivel->update();//se actualiza posiciones y interpolado
+
+    //animacion
+    //_motor->cambiarAnimacionJugador(jugador.getAnimacion());
 
     // Adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
-    _fisicas->colisionChecker(_motor->EstaPulsado(KEY_A),
+    /*_fisicas->colisionChecker(_motor->EstaPulsado(KEY_A),
         _motor->EstaPulsado(KEY_S),
         _motor->EstaPulsado(KEY_D),
         _motor->EstaPulsado(KEY_W),
@@ -117,6 +136,7 @@ void Jugando::ManejarEventos() {
         jugador.getNewY(),
         jugador.getNewZ()
     );
+    
     // Actualizar movimiento del jugador
     jugador.movimiento(jugadorInmovil,
         _motor->EstaPulsado(KEY_A),
@@ -126,27 +146,10 @@ void Jugando::ManejarEventos() {
     );
 
     _fisicas->updateJugador(jugador.getX(),
-            jugador.getY(),
-            jugador.getZ()
-        );
-}
-
-void Jugando::Update()
-{
-    _motor->clearDebug();
-    _motora->update(false); //Actualiza el motor de audio
-    _sense->update(); //Se actualizan sentidos
-
-    if (jugador.EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
-    {
-        jugador.MuereJugador(); // Animacion de muerte
-        Juego::GetInstance()->estado.CambioEstadoMuerte();
-    }
-    //_nivel->update();//se actualiza posiciones y interpolado
-
-    //animacion
-    _motor->cambiarAnimacionJugador(jugador.getAnimacion());
-
+        jugador.getY(),
+        jugador.getZ()
+    );*/
+    
     // Armas
 
     //Comprueba la activacion de un powerup
@@ -159,7 +162,7 @@ void Jugando::UpdateIA()
     if (_motor->EstaPulsado(KEY_J))
     {
         _motor->ResetKey(KEY_J);
-        jugador.QuitarVida(20);
+        //jugador.QuitarVida(20);
     }
     /* **************************************************** */
     //_nivel->updateIA();
@@ -170,15 +173,15 @@ void Jugando::Render()
     _motor->FondoEscena(255,0,0,0); // Borra toda la pantalla
 
     //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
-    if (drawTime == 0.0f)
+    /*if (drawTime == 0.0f)
     {
         drawTime = _controladorTiempo->GetTiempo(2);
-    }
+    }*/
     lastDrawTime = drawTime;
     drawTime = _controladorTiempo->GetTiempo(2);
 
     //Dibujado del personaje
-    jugador.moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
+    /*jugador.moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
     jugador.RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
     jugador.UpdateTimeMove(drawTime - lastDrawTime);
     _motor->mostrarJugador(jugador.getX(),
@@ -187,7 +190,7 @@ void Jugando::Render()
         jugador.getRX(),
         jugador.getRY(),
         jugador.getRZ()
-    );
+    );*/
 
     //Dibujado de los enemigos
 
@@ -198,7 +201,7 @@ void Jugando::Render()
     //Ataque especial bailaora
 
     //Dibujado zonas
-    for(unsigned int i = 0; i < zonas.size(); i++)
+    /*for(unsigned int i = 0; i < zonas.size(); i++)
     {
         _motor->dibujarZona(zonas.at(i)->getX(),
             zonas.at(i)->getY(),
@@ -207,7 +210,7 @@ void Jugando::Render()
             zonas.at(i)->getAlto(),
             zonas.at(i)->getLargo()
         );
-    }
+    }*/
 
     _motor->RenderEscena();               // Vuelve a pintar
 }
@@ -252,8 +255,8 @@ void Jugando::Reiniciar()
 
 
 
-bool Jugando::CargarNivel(int level)
-{
+/*bool Jugando::CargarNivel(int level)
+{*/
     // Codigo de Nivel.cpp
     /*
     _motor->BorrarScena();//borramos la scena
@@ -270,7 +273,7 @@ bool Jugando::CargarNivel(int level)
     }*/
 
     //cargamos el nivel
-    cargador.CargarNivelXml(level); //se llama al constructor vacio
+    //cargador.CargarNivelXml(level); //se llama al constructor vacio
     
     // Codigo de Nivel.cpp
     //Cargar objetos con el nivel completo
@@ -283,12 +286,12 @@ bool Jugando::CargarNivel(int level)
     _motor->cargarInterfaz();
     //esta ya todo ejecutamos ia y interpolado
     Ejecutar();*/
-    
+    /*
     return true;
-}
+}*/
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
-void Jugando::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, 
+/*void Jugando::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, 
     int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades)
 {
     cout << "Creo el jugador"<<endl;
@@ -300,12 +303,12 @@ void Jugando::CrearJugador(int accion, int x,int y,int z, int ancho, int largo,
     ValoresPorDefectoJugador();
     _fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
     
-    cout << "jugador creado"<<endl;
+    cout << "jugador creado en: "<<x<<", "<<y<<", "<<z<<", "<<endl;
     //TO DO: propiedades no se usa
     //_motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
-}
+}*/
 
-Sala* Jugando::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+/*Sala* Jugando::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
 {
     Sala* _sala = new Sala(ancho,largo,alto,x,y,z,centro);
     //int*  datos = sala->getSizes(); //para comprobar la informacion de la sala
@@ -320,16 +323,16 @@ Sala* Jugando::CrearPlataforma(int accion, int x,int y,int z, int ancho, int lar
     }
 
     return _sala;
-}
+}*/
 
-void Jugando::CrearLuz(int x,int y,int z)
+/*void Jugando::CrearLuz(int x,int y,int z)
 {
     _motor->CargarLuces(x,y,z);
 }
 
 void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int*  propiedades)//lo utilizamos para crear zonas
 {
-   //Crear zona
+   *//*//Crear zona
    Zona* zon = new Zona(ancho,largo,alto,tipo);
 
    //ID propia y posicion
@@ -338,5 +341,5 @@ void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alt
    zon->setPosiciones(x,y,z);
 
    //guardarla en el nivel
-   zonas.push_back(zon);
- }
+   zonas.push_back(zon);*/
+ //}
