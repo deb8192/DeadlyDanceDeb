@@ -22,7 +22,15 @@ MotorGrafico::MotorGrafico()
 
 MotorGrafico::~MotorGrafico()
 {
-
+    _device = nullptr;
+    _driver = nullptr;
+    _smgr   = nullptr;
+    _guienv = nullptr;
+    _geometryCreator = nullptr;
+    _collmgr = nullptr;
+    _camera  = nullptr;
+    _font    = nullptr;
+    _skin    = nullptr;
 }
 
 void MotorGrafico::LimpiarMotorGrafico()
@@ -1537,11 +1545,4 @@ bool MotorGrafico::finalCinematica()
     }
 
     return false;
-}
-
-void MotorGrafico::botonesMuerteJugador(){
-    _guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_REINICIAR_BUTTON,L"Reiniciar Juego", L"Empieza a jugar");
-    //_guienv->addButton(rect<s32>(300,200,500,230), 0, GUI_ID_REINICIAR_HANOI,L"Reiniciar", L"Reinicia el juego");
-    _guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_MENU_BUTTON,L"Menu", L"Vuelve al menú");
-    //_guienv->addButton(rect<s32>(300,240,500,270), 0, GUI_ID_MENU_BUTTON,L"Menu", L"Menu del juego");
 }

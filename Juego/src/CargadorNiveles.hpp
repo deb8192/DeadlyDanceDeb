@@ -19,7 +19,7 @@ class CargadorNiveles
         
     private:
         Sala* crearSala(pugi::xml_node hijo, Sala* padre);//se llama recursivamente si hay salas
-        int* lista;
+        //int* lista; //comentado por Marines porq no se usa
 };
 
 #endif /* CargadorNiveles_HPP */

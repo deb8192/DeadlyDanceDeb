@@ -27,8 +27,7 @@ using namespace idsEventos;
         public: //clases accesibles desde fuera
 
             //clase singleton en public
-            ~MotorGrafico(void);
-            void LimpiarMotorGrafico();
+            ~MotorGrafico();
             static MotorGrafico* GetInstance() //esto se utiliza para crear el objeto una sola vez
             {
                 if(_unica_instancia == 0)
@@ -36,6 +35,8 @@ using namespace idsEventos;
                 return _unica_instancia;
             }
             //fin singleton public
+
+            void LimpiarMotorGrafico();//revisar
 
             bool CrearVentana(short tipo);//nos crea la ventana del juego. Tipo define lo grande que es por defecto 1024 x 768
             bool VentanaAbierta(); //sirve para saber si la ventana esta activa
@@ -80,13 +81,13 @@ using namespace idsEventos;
             //btHingeConstraint(btRigidBody& rbA,const btTransform& rbAFrame, const btTransform& rbBFrame);
 
             //cargadores de objetos
-            int CargarPlataformas(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);//carga el objeto en scena lo mete en el array
+            int CargarPlataformas(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
 
-            void CargarEnemigos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
-            void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
-            int CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura);
-            void CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void CargarEnemigos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
+            void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
+            int CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
+            void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
 
             //colision rayo
             bool colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);
@@ -112,8 +113,8 @@ using namespace idsEventos;
             void debugBox(int x,int y, int z,int ancho, int alto, int largo);
             void debugVision(float x, float y, float z, float rotacion, float longitud);
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
-            void CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
-            void CargarRecolectable(int id, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void CargarArmaJugador(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
+            void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
 
             IAnimatedMeshSceneNode* getArmaEspecial();
 
@@ -154,8 +155,6 @@ using namespace idsEventos;
 
             void updateMotorCinematica();
             bool finalCinematica();
-            //Cuando muere jugador aparecen 2 botones (Ir a menu o Reiniciar juego)
-            void botonesMuerteJugador();
 
         private: //clases solo accesibles por MotorGrafico
 
@@ -182,33 +181,33 @@ using namespace idsEventos;
             IGUISkin* _skin;
 
             /** Revisar **/
-            IGUIFont *font2;
+            IGUIFont* font2;
             IAnimatedMeshSceneNode* ninja;
             std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
             std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
             std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
-            IAnimatedMesh *arma;//Malla del arma del jugador
-            IAnimatedMeshSceneNode *Arma_Jugador;//Malla del arma del jugador en escena
-            IAnimatedMesh *armaEsp;//Malla del arma especial del jugador
-            IAnimatedMeshSceneNode *ArmaEspecial_Jugador;//Malla del arma especial del jugador en escena
+            IAnimatedMesh* arma;//Malla del arma del jugador
+            IAnimatedMeshSceneNode* Arma_Jugador;//Malla del arma del jugador en escena
+            IAnimatedMesh* armaEsp;//Malla del arma especial del jugador
+            IAnimatedMeshSceneNode* ArmaEspecial_Jugador;//Malla del arma especial del jugador en escena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> PowerUP_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
-            IAnimatedMeshSceneNode *Jugador_Scena;//Jugador en scena
+            IAnimatedMeshSceneNode* Jugador_Scena;//Jugador en scena
             //debug
-            IAnimatedMesh * linea;
-            IAnimatedMesh * conovision;
+            IAnimatedMesh*  linea;
+            IAnimatedMesh*  conovision;
             bool debugGrafico, pathfinding;//nos sirven para saber si tenemos activado el debug grafico y el pathfinding
-            scene::ISceneNode *n;//box
+            scene::ISceneNode* n;//box
 
             core::aabbox3d<f32> bounding_jugador;
 
             IAnimatedMeshSceneNode* tmpobjt_en_scena;
-            IAnimatedMesh * sphere;
-            IAnimatedMesh * cube;
-            IAnimatedMesh * capsule;
+            IAnimatedMesh* sphere;
+            IAnimatedMesh* cube;
+            IAnimatedMesh* capsule;
 
             // Objetos y funciones para puzzles
             IGUIStaticText* myTextBox;
@@ -227,7 +226,7 @@ using namespace idsEventos;
             short x_linea1, x_linea2;
 
             IGUIImage* img;
-            ITexture * puzzles_particle_texture;
+            ITexture*  puzzles_particle_texture;
             vector<IGUIImage*> imagenes;
 
             enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
@@ -248,21 +247,21 @@ using namespace idsEventos;
             IGUIImage* espadaI;
             IGUIImage* dagaI;
             IGUIStaticText* moneyI;
-            ITexture * vida_textura;
-            ITexture * energia_textura;
-            ITexture * dinero_textura;
-            ITexture * arma_textura;
-            ITexture * barraVida_textura;
-            ITexture * barraEnergia_textura;
-            ITexture * manos_textura;
-            ITexture * llave_textura;
-            ITexture * espada_textura;
-            ITexture * daga_textura;
+            ITexture* vida_textura;
+            ITexture* energia_textura;
+            ITexture* dinero_textura;
+            ITexture* arma_textura;
+            ITexture* barraVida_textura;
+            ITexture* barraEnergia_textura;
+            ITexture* manos_textura;
+            ITexture* llave_textura;
+            ITexture* espada_textura;
+            ITexture* daga_textura;
             //cinematicas
             int frame_actual = 0;//numero de frame actual
-            IGUIImage * actual;//frame actual
+            IGUIImage* actual;//frame actual
             float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
-            ITexture * actualTexture;//textura actual
+            ITexture* actualTexture;//textura actual
     };
 
 #endif /* MotorGrafico_HPP */

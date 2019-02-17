@@ -63,6 +63,8 @@ void CargadorNiveles::CargarNivelXml(int level)
             padre.pop_back();
         }
     }
+    // Puntero a clase singleton
+    _jugando = nullptr;
     cout << "se acaba" <<endl;
 }
 
