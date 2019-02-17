@@ -137,6 +137,7 @@ void GestorEstados::SaltarAlMenu()
     for (short int est=0; est<tam-1; est++)
     {
         _estados.top()->Vaciar();
+        delete(_estados.top());
         _estados.top() = nullptr;
         _estados.pop();
     }
@@ -151,10 +152,12 @@ void GestorEstados::VaciarPila()
     for (short int est=0; est<tam-1; est++)
     {
         _estados.top()->Vaciar();
+        delete(_estados.top());
         _estados.top() = nullptr;
         _estados.pop();
     }
     _estados.top()->Vaciar();
+    delete(_estados.top());
     _estados.top() = nullptr;
     cout << "sale2"<<endl;
 }
