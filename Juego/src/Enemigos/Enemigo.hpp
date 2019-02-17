@@ -50,6 +50,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setRotacion(float nrx, float nry, float nrz);
         void setNewRotacion(float nrx, float nry, float nrz);
         void setLastRotacion(float nrx, float nry, float nrz);
+        void setRotation(float rot);
         void setVectorOrientacion();
         void setPosicionesFisicas(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
@@ -69,7 +70,6 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setLastTimeAt(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
-        void setRotation(float rot);
         void setPosAtaques(int p);
         void setVelocidadMaxima(float velocidad); //modifica la VelocidadMaxima de desplazamiento
         void SetEnemigo(int);
@@ -107,6 +107,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getRX();
         float getRY();
         float getRZ();
+        float GetRotation();
         float getAtX();
         float getAtY();
         float getAtZ();

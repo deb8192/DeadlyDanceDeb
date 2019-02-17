@@ -116,6 +116,11 @@ float Enemigo::getRZ()
     return rotActual.z;
 }
 
+float Enemigo::GetRotation()
+{
+    return rotation;
+}
+
 float Enemigo::getAtX()
 {
     return atx;
@@ -864,7 +869,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         velocidad.z = vectorOrientacion.vZ * velocidadMaxima;
 
         this->setNewPosiciones(posActual.x + velocidad.x, posActual.y, posActual.z + velocidad.z);
-        this->initPosicionesFisicas(posFutura.x, posFutura.y, posFutura.z);
+        this->initPosicionesFisicas(posFutura.x/2, posFutura.y/2, posFutura.z/2);
 
 	return false;
     }

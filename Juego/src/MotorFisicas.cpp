@@ -281,7 +281,7 @@ bool MotorFisicas::enemyCollideObstacle(unsigned int enemigo)
     //tampoco debe intersectar en el espacio con los enemigos
     for(long unsigned int i = 0; i < enemigos.size();i++)
     {
-        if(enemigo != i)
+        if(enemigo != i && enemigos[i])
         {
             if(space->testOverlap(enemigos[enemigo],enemigos[i]))
             {
