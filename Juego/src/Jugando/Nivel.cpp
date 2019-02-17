@@ -911,7 +911,7 @@ void Nivel::update()
         if(enemigos.size() > 0)//posiciones interpolacion
         {
             //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
-            for(std::size_t i=0;i<enemigos.size();i++)
+            for(short i=0;(unsigned)i<enemigos.size();i++)
             {
                 //ESTE BUCLE SE VA A IR TODO SEGURAMENTE DESDE AQUI
                 /*int danyo_jug = 0;
@@ -974,7 +974,7 @@ void Nivel::update()
                 cout<< "Ejecuto nodo actual de la ia: " << i << endl;
                 if(enemigos[i] != nullptr)
                 {
-                    enemigos[i]->UpdateBehavior(i);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    enemigos[i]->UpdateBehavior(&i);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                     
                     //Este bloque se da si el enemigo esta en el proceso de merodear
                     if(enemigos.at(i)->getTimeMerodear() > 0.0f)
@@ -1183,7 +1183,7 @@ void Nivel::updateIA()
         //En esta parte muere enemigo
         if(enemigos.size() > 0){
             //comprobando los enemigos para saber si estan muertos
-            for(std::size_t i=0;i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+            for(short i=0;(unsigned)i<enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
 
                 if(enemigos[i]->estasMuerto() && enemigos[i]->finalAnimMuerte()){
 
@@ -1257,7 +1257,7 @@ void Nivel::updateIA()
                         if(enemigos[i] != nullptr)
                         {
                             enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
-                            enemigos[i]->UpdateBehavior(i);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                            enemigos[i]->UpdateBehavior(&i);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                             
                             //Este bloque se da si el enemigo esta en el proceso de merodear
                             if(enemigos.at(i)->getTimeMerodear() > 0.0f)

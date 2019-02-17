@@ -121,16 +121,17 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             bool Acciones(int);//esto es para recorrer el arbol
             bool pedirAyuda();//pide ayuda
             bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
-            bool Merodear(short int maxRotacion);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
+            bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         //fin comportamientos bases
 
         //ia
-        short int randomBinomial();//devuelve un valor random entre -1 y 1
+        float randomBinomial();//devuelve un valor random entre -1 y 1
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
         Arbol *getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
-        void UpdateBehavior(short int i); //actualiza el comportamiento actual del pollo
-        short int* RunIA(bool);//corre la ia del enemigo
+        void UpdateBehavior(short *i); //actualiza el comportamiento actual del pollo
+        short * RunIA(bool);//corre la ia del enemigo
+        void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
         //fin ia
 
     protected:
@@ -145,6 +146,12 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_MERODEA
         };
 
+        enum modosEnemigo 
+        {  
+            MODO_DEFAULT = 0,
+            MODO_ATAQUE,
+        };
+
         Sala * estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
         float atacktime = 0.0f;
@@ -155,6 +162,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Arbol *arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
         bool accionRealizada; //
+        short modo;
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
 };
 

@@ -9,7 +9,8 @@ Pollo::Pollo() : Enemigo()
     funciona = true;
     atacado = false;
     _ordenes = nullptr;
-    maxRotacion = constantes.PI_MEDIOS; 
+    maxRotacion = constantes.PI_CUARTOS; 
+    rotation = 0.0f;
 }
 
 Pollo::~Pollo()
@@ -27,8 +28,16 @@ Pollo::~Pollo()
 */
 void Pollo::RunIA()
 {
+    Constantes constantes;
     if(this->getTimeMerodear() <= 0)
     {
+        if(modo == constantes.UNO)
+        {
+            if(_ordenes[0] != EN_MOVERSE && _ordenes[0] != EN_ATACAR)
+            {
+                this->ForzarCambioNodo(&constantes.CUATRO);
+            }
+        }
         if(atacado)
         {
             atacado = false;
@@ -39,6 +48,7 @@ void Pollo::RunIA()
         }
         _ordenes = this->Enemigo::RunIA(funciona);
     }
+        
 }
 
 /***************** UpdatePollo *****************
@@ -50,12 +60,12 @@ void Pollo::RunIA()
  * Salidas:
 */ 
 
-void Pollo::UpdatePollo(int i)
+void Pollo::UpdatePollo(short *i)
 {
     Constantes constantes;
 
     funciona = true;
-    if(_ordenes != nullptr)
+    if(modo == constantes.UNO && _ordenes != nullptr)
     {
         switch (_ordenes[0])
         {
@@ -186,7 +196,7 @@ void Pollo::UpdatePollo(int i)
                         cout<<"intenta atacar"<<endl;
                         Nivel* _nivel;
                         int danyo;
-                        danyo = this->Atacar(i);
+                        danyo = this->Atacar(*i);
                         _nivel = Nivel::getInstance();
                         if(danyo > 0)
                         {
@@ -202,12 +212,16 @@ void Pollo::UpdatePollo(int i)
                     }
                 }
                 break;
-            
+        }
+    }
+
+    else if(_ordenes != nullptr)
+    {
+        switch (_ordenes[0])
+        {          
             case EN_VER: //El Pollo ve al jugador
                 {
-                    short int jugador = 1;
-                    cout<<"Comprueba si ve al jugador"<<endl;
-                    if(this->ver(jugador))
+                    if(this->ver(constantes.UNO))
                     {
                         funciona = true;
                     }
@@ -219,6 +233,8 @@ void Pollo::UpdatePollo(int i)
                 break;
             case EN_PIDE_AYUDA: //El Pollo pide ayuda
                 {
+                    modo = MODO_ATAQUE;
+                    this->setTimeMerodear(constantes.CERO);
                     cout<<"Pide ayuda a los aliados"<<endl;
                     this->pedirAyuda();
                     funciona = true;
@@ -226,16 +242,33 @@ void Pollo::UpdatePollo(int i)
                 break;
             case EN_MERODEA: //El Pollo merodea
                 {
-                    cout<<"Merodea"<<endl;
                     if(!hecho)
                     {
-                        this->Merodear(maxRotacion);
+                        //Merodea estableciendo un nuevo angulo de rotacion
+                        rotation = this->randomBinomial() * maxRotacion;
+                        this->Merodear();
                         this->setTimeMerodear(1.5f);
                         hecho = true;
+                        //Comprueba si ve al jugador para atacarle en caso necesario
+                        if(this->ver(constantes.UNO))
+                        {
+                            modo = MODO_ATAQUE;
+                        }
                     }
                     else 
                     {
-                        this->Merodear(maxRotacion);
+                        //Merodea poniendo en positivo o negativo el angulo actual de rotacion
+                        int rota = rand() % 3 - 1;
+                        if (rota != 0)
+                        {
+                            rotation *= rota;
+                        }
+                        this->Merodear();
+                        //Comprueba si ve al jugador para atacarle en caso necesario
+                        if(this->ver(constantes.UNO))
+                        { 
+                            modo = MODO_ATAQUE;
+                        }
                     }
                     funciona = true;
                 }
@@ -248,7 +281,7 @@ void Pollo::UpdatePollo(int i)
     }
 }
 
-void Pollo::SetNuevasOrdenes(short int newOrden)
+void Pollo::SetNuevasOrdenes(short newOrden)
 {
     _ordenes[0] = newOrden;
 }
