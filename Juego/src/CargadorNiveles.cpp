@@ -208,7 +208,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         const char* modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
         _jugando->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
     }*/
-    /*for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         //carga de las zonas
         int* propiedades;
@@ -222,7 +222,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int alto = zon.attribute("ancho").as_int();//nos devuelve un int
         const char* tipo = zon.attribute("tipo").value(); //nos da un char[] = string
         _jugando->CrearZona(accion,x,y,z,ancho,largo,alto,tipo,propiedades); //cargamos el enemigo
-    }*/
+    }
 
     return padren;
 }
