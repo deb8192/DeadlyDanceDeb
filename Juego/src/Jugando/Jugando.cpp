@@ -131,6 +131,7 @@ void Jugando::Update()
     if (jugador.EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
         jugador.MuereJugador(); // Animacion de muerte
+        DesactivarDebug();
         Juego::GetInstance()->estado.CambioEstadoMuerte();
     }
     //_nivel->update();//se actualiza posiciones y interpolado
@@ -230,6 +231,7 @@ void Jugando::Render()
 void Jugando::Pausar()
 { 
     cout << "Pausando el juego" << endl;
+    DesactivarDebug();
 }
 
 void Jugando::Reanudar()
@@ -237,6 +239,8 @@ void Jugando::Reanudar()
     if (reiniciando) {
         cout << "REINICIAR JUEGO" << endl;
 
+        DesactivarDebug();
+        
         // valores por defecto del jugador
         ValoresPorDefectoJugador();
 
@@ -360,4 +364,13 @@ void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alt
    // con move, zon se queda vacio
    zonas.push_back(move(zon));
    zon = nullptr;
+ }
+
+// Desactiva el modo debug en MotorGrafico
+ void Jugando::DesactivarDebug()
+ {
+     if (_motor->GetDebugActivado())
+     {
+        _motor->activarDebugGrafico();
+     }
  }

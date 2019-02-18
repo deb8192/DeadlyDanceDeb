@@ -71,6 +71,7 @@ using namespace idsEventos;
 
             void CrearCamara(); // crea una camara para ver el escenario
 
+            bool GetDebugActivado(); // para saber si esta activado
 
             //----------------- Revisar
 

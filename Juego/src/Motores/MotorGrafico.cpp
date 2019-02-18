@@ -383,6 +383,11 @@ void MotorGrafico::CrearCamara()
   //camera->setFarValue(100.0f);
 }
 
+bool MotorGrafico::GetDebugActivado()
+{
+    return debugGrafico;
+}
+
 
 // ------------------------------------ Revisar
 

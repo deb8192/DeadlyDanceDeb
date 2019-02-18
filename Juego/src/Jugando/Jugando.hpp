@@ -48,6 +48,7 @@ class Jugando: public Estado {
         void CrearLuz(int x,int y,int z);
         void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int* propiedades); //lo usamos para crear zonas
         
+        void DesactivarDebug();
 
     private:
         //clase singleton 
