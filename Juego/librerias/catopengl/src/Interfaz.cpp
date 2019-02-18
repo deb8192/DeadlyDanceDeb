@@ -105,6 +105,7 @@ unsigned short Interfaz::AddLuz()
 
 unsigned short Interfaz::AddMalla()
 {
+
     return -1;
 }
 
@@ -126,4 +127,64 @@ void Interfaz::Draw()
 unsigned short Interfaz::generarId()
 {
     return ids++;
+}
+
+Interfaz::Nodo * Interfaz::buscarNodo(unsigned short id)
+{
+    unsigned short Iarriba = ((unsigned short)(nodos.size()-1));
+    unsigned short Iabajo = 0;
+    unsigned short Icentro;
+    while (Iabajo <= Iarriba)
+    {
+        Icentro = (Iarriba + Iabajo)/2;
+        if (nodos[Icentro]->id == id)
+        {
+            return nodos[Icentro];
+        }
+        else
+        {
+            if (id < nodos[Icentro]->id)
+            {
+                Iarriba=Icentro-1;
+            }
+            else
+            {
+                Iabajo=Icentro+1;
+            }
+        }
+    }
+    return nullptr;
+}
+
+void Interfaz::Trasladar(unsigned char id,float x,float y,float z)
+{
+    Nodo * nodo = buscarNodo(id);
+
+    if(nodo != nullptr) 
+    {
+        //std::cout << "funciona trasladar" << " " << id << std::endl;
+        nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+    }
+}   
+
+void Interfaz::Rotar(unsigned char id,float x,float y,float z)
+{
+    Nodo * nodo = buscarNodo(id);
+
+    if(nodo != nullptr)
+    {
+        //std::cout << "funciona rotar" << " " << id << std::endl;
+        nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+    }
+}
+
+void Interfaz::Escalar(unsigned char id,float x,float y,float z)
+{
+    Nodo * nodo = buscarNodo(id);
+
+    if(nodo != nullptr)
+    {
+        //std::cout << "funciona escalar" << " " << id << std::endl;
+        nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+    }
 }
