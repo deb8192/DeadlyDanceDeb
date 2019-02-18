@@ -2,17 +2,19 @@
 #define Nivel_HPP
 
 #include "../Personajes/Jugador.hpp"
-#include "../Enemigos/Enemigo.hpp"
 #include "../CargadorNiveles.hpp"
 #include "../Enemigos/Pollo.hpp"
-#include "../Objetos/Interactuable.hpp"
-#include "../Objetos/Recolectable.hpp"
 #include "Zona.hpp"
 #include "../Motores/MotorAudio.hpp"
 #include "../Motores/MotorGrafico.hpp"
-#include "../Pathfinder.hpp"
 #include "../Times.hpp"
+
+#include "../Enemigos/Enemigo.hpp"
+#include "../Objetos/Interactuable.hpp"
+#include "../Objetos/Recolectable.hpp"
+#include "../Pathfinder.hpp"
 #include "../Armas/Arma.hpp"
+
 #include <cstring>
 #include <stdlib.h>
 #include <time.h>
@@ -36,9 +38,7 @@ class Nivel
             return _unica_instancia;
         }
         //fin singleton public
-        void LimpiarNivel();
-
-        //void LimpiarNivel();
+        
         bool CargarNivel(int);//carga eñ nivel siempre que exista dicho nivel en assets/maps/xml/
 
         //cargar objetos
@@ -52,45 +52,48 @@ class Nivel
         void CrearLuz(int x,int y,int z);
         void cargarCofres(int num);
 
-        void EraseEnemigo(std::size_t i);
-        void EraseJugador();
-
         //Bucle de actualizacion y dibujado de objetos
+        void ManejarEventos();
         void update();//se actualiza todo lo de nivel (interpola(cy-y)^2) cion, posiciones, iluminacion)
+        
         void updateAtEsp(MotorGrafico* );//se actualiza la ejecucion de los ataques
         void updateAt(int* , MotorGrafico* );
         void updateIA();//se actualiza la IA esto se llamara 4 veces por segundo o 15 veces
         void updateRecorridoPathfinding(Enemigo* );
         void Render();//dibuja y actualiza las posiciones del interpolado
 
-        void setEnemigoPideAyuda(Enemigo* );
+        void LimpiarNivel();
 
+        void setEnemigoPideAyuda(Enemigo* );
         Enemigo* getEnemigoPideAyuda();
         Sala* getPrimeraSala();
         std::vector<Enemigo*>  getEnemigos();
-        void setThen();
+        
 
         //Funciones de interacciones
         void CogerObjeto();
         void DejarObjeto();
-        void ManejarEventos();
         void AccionarMecanismo(int);    //Activa mecanismos y o puertas
         void crearObjetoCofre(Interactuable* newobjeto);
         void activarPowerUp();
 
         Jugador* GetJugador();
+        void Ejecutar();//activa ejecutar update y updateia
+        void NoEjecutar();//desactiva ejecutar update y updateia
+        void ActivarLimpieza();//se pone para limpiar el nivel
+        bool EstaLimpio();//devuelve si esta limpio el nivel
+        void borrarEnemigos();//borra todos los enemigos
 
+        // Estas desaparecen
+        void setThen();
         int getjix();
         int getjiy();
         int getjiz();
         void setjix(int);
         void setjiy(int);
         void setjiz(int);
-        void Ejecutar();//activa ejecutar update y updateia
-        void NoEjecutar();//desactiva ejecutar update y updateia
-        void ActivarLimpieza();//se pone para limpiar el nivel
-        bool EstaLimpio();//devuelve si esta limpio el nivel
-        void borrarEnemigos();//borra todos los enemigos
+        void EraseEnemigo(std::size_t i);
+        void EraseJugador();
 
     private:
 

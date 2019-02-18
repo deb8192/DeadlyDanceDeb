@@ -59,15 +59,11 @@ Jugador::~Jugador()
 
 Jugador::Jugador(int nX,int nY,int nZ,int ancho,int largo,int alto, const char* ruta_objeto, const char* ruta_textura)
 {
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
-
     vida = 0; // se cambia con setVida en jugando.cpp
     dinero = 0;
     posActual.x = nX;
     posActual.y = nY;
     posActual.z = nZ;
-
-    _motor->CargarJugador(nX,nY,nZ,ancho,largo,alto,ruta_objeto,ruta_textura);
 
     animacion = 0;
     //_armaEquipada = NULL;
@@ -224,15 +220,15 @@ bool Jugador::finalAnimMuerte()
 void Jugador::MuereJugador()
 {
     Times* _tiempo = Times::GetInstance();
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
+    //MotorGrafico* _motor = MotorGrafico::GetInstance();
 
     if(tiempoPasadoMuerte == 0){
-        _motor->colorearJugador(255,0,0,0);//negro
+        //_motor->colorearJugador(255,0,0,0);//negro
         tiempoPasadoMuerte = _tiempo->GetTiempo(1);
     }
     if(_tiempo->CalcularTiempoPasado(tiempoPasadoMuerte) < animacionMuerteTiem){
         if(_tiempo->CalcularTiempoPasado(tiempoPasadoMuerte) >= 1000.0f){
-            _motor->colorearJugador(255,255,0,0);//rojo
+            //_motor->colorearJugador(255,255,0,0);//rojo
         }
     }
 }

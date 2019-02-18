@@ -10,6 +10,8 @@
 #include "../Personajes/Jugador.hpp"
 #include "Zona.hpp"
 
+//#include <list>
+
 class Jugando: public Estado {
     public:
         Jugando();
@@ -44,7 +46,7 @@ class Jugando: public Estado {
         void CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char *ruta_textura, int* propiedades);//lo utilizamos para crear su objeto
         //Sala* CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
-        //void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int* propiedades); //lo usamos para crear zonas
+        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int* propiedades); //lo usamos para crear zonas
         
 
     private:
@@ -62,7 +64,8 @@ class Jugando: public Estado {
         //Sala* _primeraSala;// la primera sala del arbol
         
         //TO DO: cambiar a lista
-        //std::vector<Zona*> zonas; //Array de zonas
+        std::vector<Zona*> zonas; //Array de zonas
+        //list<Zona*> zonas;
 
         bool reiniciando; // Se utiliza solo en Reanudar por el cambio entre Estados
         Jugador jugador;

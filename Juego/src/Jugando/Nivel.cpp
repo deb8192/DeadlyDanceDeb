@@ -862,7 +862,7 @@ void Nivel::update()
         //actualizamos los enemigos
         if(enemigos.size() > 0)//posiciones interpolacion
         {
-            float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
+            float tiempoActual = 0.0f, tiempoAtaqueEsp = 0.0f;
             for(std::size_t i=0;i<enemigos.size();i++)
             {
                 //ESTE BUCLE SE VA A IR TODO SEGURAMENTE DESDE AQUI

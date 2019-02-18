@@ -26,7 +26,14 @@ Jugando::~Jugando()
     _motor = nullptr;
 
     // Liberar memoria
-    //cargador = nullptr;
+    short tam = zonas.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete zonas.at(i);
+    }
+    zonas.clear();
+    //TO DO: borrarlas de MotorGrafico
+
     //delete _primeraSala;
     delete _unicaInstancia;
 }
@@ -195,7 +202,8 @@ void Jugando::Render()
         jugador.getRY(),
         jugador.getRZ()
     );
-cout << jugador.getX() <<" Vida: "<<jugador.getVida()<< endl;
+    cout << jugador.getX() <<" Vida: "<<jugador.getVida()<< endl;
+    
     //Dibujado de los enemigos
 
     //Dibujado de las puertas
@@ -205,7 +213,7 @@ cout << jugador.getX() <<" Vida: "<<jugador.getVida()<< endl;
     //Ataque especial bailaora
 
     //Dibujado zonas
-    /*for(unsigned int i = 0; i < zonas.size(); i++)
+    for(unsigned int i=0; i < zonas.size(); i++)
     {
         _motor->dibujarZona(zonas.at(i)->getX(),
             zonas.at(i)->getY(),
@@ -214,9 +222,9 @@ cout << jugador.getX() <<" Vida: "<<jugador.getVida()<< endl;
             zonas.at(i)->getAlto(),
             zonas.at(i)->getLargo()
         );
-    }*/
+    }
 
-    _motor->RenderEscena();               // Vuelve a pintar
+    _motor->RenderEscena();  // Vuelve a pintar
 }
 
 void Jugando::Pausar()
@@ -307,6 +315,7 @@ void Jugando::CrearJugador(int accion, int x,int y,int z, int ancho, int largo,
     xIni = x;
     yIni = y;
     zIni = z;
+    _motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     ValoresPorDefectoJugador();
     _fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
     
@@ -337,9 +346,9 @@ void Jugando::CrearLuz(int x,int y,int z)
     _motor->CargarLuces(x,y,z);
 }
 
-/*void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int*  propiedades)//lo utilizamos para crear zonas
+void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int*  propiedades)//lo utilizamos para crear zonas
 {
-   *//*//Crear zona
+   //Crear zona
    Zona* zon = new Zona(ancho,largo,alto,tipo);
 
    //ID propia y posicion
@@ -348,5 +357,7 @@ void Jugando::CrearLuz(int x,int y,int z)
    zon->setPosiciones(x,y,z);
 
    //guardarla en el nivel
-   zonas.push_back(zon);*/
- //}
+   // con move, zon se queda vacio
+   zonas.push_back(move(zon));
+   zon = nullptr;
+ }
