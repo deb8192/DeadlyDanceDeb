@@ -24,7 +24,5 @@ class Pausa: public Estado {
         void reiniciarPartida();
         void atras();
         void salir();
-
-        MotorGrafico* _motor;
 };
 #endif /* PAUSA_HPP */

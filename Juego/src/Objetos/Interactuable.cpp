@@ -3,6 +3,24 @@
 
 Interactuable::Interactuable()
 {
+    // Local
+    codigoObjeto=0;
+    accionado=0;
+    posicionArrayObjetos=0;
+    //_desplazamientos -> array de float*
+
+    // Revisar si se puedehacer destructor general
+    // INobjetos
+   /* ancho=0; largo=0; alto=0;
+    nombreObjeto = nullptr;
+    ruta_objeto = nullptr;
+    ruta_textura = nullptr;
+
+    delete cadena_objeto;
+    delete cadena_textura;
+    delete cadena_nombre;*/
+
+    // IDrawable
 
 }
 
@@ -235,6 +253,21 @@ float Interactuable::getLastY()
 float Interactuable::getLastZ()
 {
     return posPasada.z;
+}
+
+float Interactuable::getIniX()
+{
+    return posIni.x;
+}
+
+float Interactuable::getIniY()
+{
+    return posIni.y;
+}
+
+float Interactuable::getIniZ()
+{
+    return posIni.z;
 }
 
 float Interactuable::getFisX()

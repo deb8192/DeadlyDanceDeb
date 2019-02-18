@@ -9,6 +9,13 @@ Enemigo::Enemigo()
 
 }
 
+Enemigo::Enemigo(float nx, float ny, float nz)
+{
+    posIni.x = nx;
+    posIni.y = ny;
+    posIni.z = nz;
+}
+
 Enemigo::~Enemigo()
 {
     //Inicializo variables y punteros
@@ -76,6 +83,21 @@ float Enemigo::getLastY()
 float Enemigo::getLastZ()
 {
     return posPasada.z;
+}
+
+float Enemigo::getIniX()
+{
+    return posIni.x;
+}
+
+float Enemigo::getIniY()
+{
+    return posIni.y;
+}
+
+float Enemigo::getIniZ()
+{
+    return posIni.z;
 }
 
 float Enemigo::getFisX()

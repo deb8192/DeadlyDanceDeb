@@ -9,10 +9,10 @@ class Sala
     public:
         Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type);//se le pasa el el ancho(x) y largo(y)
         ~Sala();//destructor
-        void agregarEntrada(Sala*  plataforma);//agrega una plataforma de entrada a esta sala(su puntero)
-        void agregarSalida(Sala*  plataforma);//agrega una paltaforma de salida a esta sala(su puntero)
-        int* getSizes ();//nos devuelve un array donde la primera posicion es el ancho la segunda la altura, tercera posicion en x, cuarta posicion en y
-        int getType ();//nos devuelve el tipo de centro que tiene la plataforma o sala
+        void agregarEntrada(Sala* plataforma);//agrega una plataforma de entrada a esta sala(su puntero)
+        void agregarSalida(Sala* plataforma);//agrega una paltaforma de salida a esta sala(su puntero)
+        int* getSizes();//nos devuelve un array donde la primera posicion es el ancho la segunda la altura, tercera posicion en x, cuarta posicion en y
+        int getType();//nos devuelve el tipo de centro que tiene la plataforma o sala
         std::vector<Sala*> getEntradas();//devuelve las plataformas de entrada
         std::vector<Sala*> getSalidas();//devuelve las plataformas de salida
         void definirID(int);//nos define que id tiene en el motor grafico su modelo CUIDADO: si se elimina alguna plataforma este id no se actualiza solo sera un id erroneo

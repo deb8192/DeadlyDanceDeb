@@ -40,6 +40,9 @@ public:
     virtual float getLastX()=0;
     virtual float getLastY()=0;
     virtual float getLastZ()=0;
+    virtual float getIniX()=0;
+    virtual float getIniY()=0;
+    virtual float getIniZ()=0;
     virtual float getFisX()=0;
     virtual float getFisY()=0;
     virtual float getFisZ()=0;
@@ -51,6 +54,7 @@ public:
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:
     //posiciones del objeto drawable
+    Posiciones posIni;
     Posiciones posActual;
     Posiciones posPasada; //Posiciones antiguas de la interpolacion
     Posiciones posFutura; //Posiciones finales de la interpolacion
@@ -61,7 +65,7 @@ protected:
     Posiciones rotFutura;
     
     float moveTime, rotateTime; //variables para controlar la interpolacion del movimiento y la rotacion;
-    float rotation = 0.0f; //en grados por defecto
+    float rotation; //en grados por defecto
     int id = -1;
     int animacion = 0;  //nos sirve para cambiar de animacion //por defecto en reposo
     int animacionAnterior = 0; //nos sirve para saber si debemos cambiar de animacion por la nueva

@@ -16,7 +16,5 @@ class EstadoPuzle: public Estado {
         
     private:
         void atras();
-
-        MotorGrafico* _motor;
 };
 #endif /* ESTADO_PUZLE_HPP */

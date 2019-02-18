@@ -23,7 +23,5 @@ class EstadoMuerte: public Estado {
         void menuPrincipal();
         void reiniciarPartida();
         void salir();
-
-        MotorGrafico* _motor;
 };
 #endif /* ESTADO_MUERTE_HPP */

@@ -61,6 +61,11 @@ Jugador::Jugador(int nX,int nY,int nZ,int ancho,int largo,int alto, const char* 
 {
     vida = 0; // se cambia con setVida en jugando.cpp
     dinero = 0;
+
+    posIni.x = nX;
+    posIni.y = nY;
+    posIni.z = nZ;
+
     posActual.x = nX;
     posActual.y = nY;
     posActual.z = nZ;
@@ -689,6 +694,21 @@ float Jugador::getLastY()
 float Jugador::getLastZ()
 {
     return posPasada.z;
+}
+
+float Jugador::getIniX()
+{
+    return posIni.x;
+}
+
+float Jugador::getIniY()
+{
+    return posIni.y;
+}
+
+float Jugador::getIniZ()
+{
+    return posIni.z;
 }
 
 float Jugador::getFisX()

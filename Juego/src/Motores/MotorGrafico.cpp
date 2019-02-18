@@ -391,19 +391,6 @@ bool MotorGrafico::GetDebugActivado()
 
 // ------------------------------------ Revisar
 
-/******----------------Crear Jugador------------------******
- * Metodo que sirve para generar la malla 3D de un jugador
- * al iniciar estado Juego.
- * Entradas:
- *      malla: string con la direccion del modelo 3D
- */
-
-void MotorGrafico::crearJugador(std::string malla)
-{
-    ninja = _smgr->addAnimatedMeshSceneNode(_smgr->getMesh(malla.c_str()));
-    ninja->setScale(core::vector3df(0.1,0.1,0.1));
-}
-
 int MotorGrafico::CargarPlataformas(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto,const char *ruta_textura)
 {
     IAnimatedMesh* objeto = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
@@ -463,14 +450,18 @@ void MotorGrafico::CargarEnemigos(int accion, int x,int y,int z, int ancho, int 
     }
 }
 
+/******----------------Crear Jugador------------------******
+ * Metodo que sirve para generar la malla 3D de un jugador
+ * al iniciar estado Juego.
+ * Entradas:
+ *      ruta_objeto: string con la direccion del modelo 3D
+ *      ruta_textura: string con la ruta de la textura
+ */
 void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura)
 {
     IAnimatedMesh* jugador = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
-	if (!jugador)
-	{
-		//error
-	}
-    else
+	// Si se ha podido crear el objeto, se mete en escena
+    if (jugador)
     {
         IAnimatedMeshSceneNode* jugador_en_scena = _smgr->addAnimatedMeshSceneNode(jugador); //metemos el objeto en el escenario para eso lo pasamos al escenario
         //cout << x << " " << y << " " << z << " " << endl;

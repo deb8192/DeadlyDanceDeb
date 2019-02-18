@@ -8,6 +8,8 @@
 #include "../CargadorNiveles.hpp"
 #include "../Times.hpp"
 #include "../Personajes/Jugador.hpp"
+#include "../Objetos/Interactuable.hpp"
+#include "../Objetos/Recolectable.hpp"
 #include "Zona.hpp"
 
 //#include <list>
@@ -46,6 +48,7 @@ class Jugando: public Estado {
         void CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char *ruta_textura, int* propiedades);//lo utilizamos para crear su objeto
         //Sala* CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
+        void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int* propiedades); //lo usamos para crear zonas
         
         void DesactivarDebug();
@@ -57,21 +60,21 @@ class Jugando: public Estado {
 
         MotorAudioSystem* _motora;
         SenseEventos* _sense;
-        MotorGrafico* _motor;
         MotorFisicas* _fisicas;
         Times* _controladorTiempo;
 
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         //Sala* _primeraSala;// la primera sala del arbol
         
-        //TO DO: cambiar a lista
-        std::vector<Zona*> zonas; //Array de zonas
-        //list<Zona*> zonas;
+        //TO DO: hacerle un reserve y q el vector sea un puntero
+        std::vector<Recolectable*> _recolectables;
+        std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
+        std::vector<Recolectable*> _powerup;
+        std::vector<Zona*> _zonas; //Array de zonas
 
         bool reiniciando; // Se utiliza solo en Reanudar por el cambio entre Estados
         Jugador jugador;
         bool jugadorInmovil; // Para las colisiones
-        float xIni, yIni, zIni; // Para reiniciar posJugador
         float drawTime, lastDrawTime;
 
         int id;//id para las figuras

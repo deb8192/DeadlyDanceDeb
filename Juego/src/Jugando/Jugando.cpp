@@ -23,15 +23,38 @@ Jugando::~Jugando()
     _sense = nullptr;
     _fisicas = nullptr;
     _motora = nullptr;
-    _motor = nullptr;
 
     // Liberar memoria
-    short tam = zonas.size();
+    short tam = _interactuables.size();
     for(short i=0; i < tam; i++)
     {
-        delete zonas.at(i);
+        delete _interactuables.at(i);
     }
-    zonas.clear();
+    _interactuables.clear();
+
+    tam = _recolectables.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _recolectables.at(i);
+    }
+    _recolectables.clear();
+
+    tam = _powerup.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _powerup.at(i);
+    }
+    _powerup.clear();
+
+    tam = _zonas.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _zonas.at(i);
+    }
+    _zonas.clear();
+
+
+
     //TO DO: borrarlas de MotorGrafico
 
     //delete _primeraSala;
@@ -70,6 +93,10 @@ void Jugando::ValoresPorDefecto()
 
 void Jugando::ValoresPorDefectoJugador()
 {
+    float xIni = jugador.getIniX();
+    float yIni = jugador.getIniY();
+    float zIni = jugador.getIniZ();
+    
     jugadorInmovil = false;
     jugador.setVida(100);
     jugador.setBarraAtEs(100);
@@ -82,8 +109,9 @@ void Jugando::ValoresPorDefectoJugador()
     jugador.setPosiciones(xIni, yIni, zIni);
     jugador.setNewPosiciones(xIni, yIni, zIni);
     jugador.initPosicionesFisicas(xIni/2, yIni/2, zIni/2);
-    //jugador.setRotacion(xIni, yIni, zIni);
-    //jugador.setNewRotacion(xIni, yIni, zIni);
+    //TO DO: revisar que lo haga bien
+    //jugador.setRotacion(0,180,0);
+    //jugador.setNewRotacion(0,180,0);
 }
 
 void Jugando::ManejarEventos() {
@@ -214,14 +242,14 @@ void Jugando::Render()
     //Ataque especial bailaora
 
     //Dibujado zonas
-    for(unsigned int i=0; i < zonas.size(); i++)
+    for(unsigned int i=0; i < _zonas.size(); i++)
     {
-        _motor->dibujarZona(zonas.at(i)->getX(),
-            zonas.at(i)->getY(),
-            zonas.at(i)->getZ(),
-            zonas.at(i)->getAncho(),
-            zonas.at(i)->getAlto(),
-            zonas.at(i)->getLargo()
+        _motor->dibujarZona(_zonas.at(i)->getX(),
+            _zonas.at(i)->getY(),
+            _zonas.at(i)->getZ(),
+            _zonas.at(i)->getAncho(),
+            _zonas.at(i)->getAlto(),
+            _zonas.at(i)->getLargo()
         );
     }
 
@@ -316,9 +344,6 @@ void Jugando::CrearJugador(int accion, int x,int y,int z, int ancho, int largo,
     cout << "Creo el jugador"<<endl;
     jugador = Jugador(x, y, z, ancho, largo, alto, ruta_objeto, ruta_textura);
     jugador.setID(++id);
-    xIni = x;
-    yIni = y;
-    zIni = z;
     _motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     ValoresPorDefectoJugador();
     _fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
@@ -350,19 +375,68 @@ void Jugando::CrearLuz(int x,int y,int z)
     _motor->CargarLuces(x,y,z);
 }
 
+void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int*  propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+{
+    int posicionObjeto;
+
+    //Arma
+    if(accion == 2)
+    {
+        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
+        _rec->setID(_recolectables.size());
+        _rec->setPosiciones(x,y,z);
+        _rec->SetPosicionArrayObjetos(posicionObjeto);
+        _recolectables.push_back(move(_rec));
+        _rec = nullptr;
+    }else
+    //Puertas o interruptores
+    if(accion == 3)
+    {
+        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        Interactuable* _inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto);
+        _inter->setID(id++);
+        _inter->setPosiciones(x,y,z);
+        _inter->SetPosicionArrayObjetos(posicionObjeto);
+        _inter->setDesplazamientos(despX,despZ);
+        _inter->setRotacion(0.0,0.0,0.0);
+        _interactuables.push_back(move(_inter));
+        _inter = nullptr;
+    }else
+    //Powerups
+    if(accion == 4)
+    {
+        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
+        _rec->setID(_powerup.size());
+        _rec->setPosiciones(x,y,z);
+        _rec->SetPosicionArrayObjetos(posicionObjeto);
+        _rec->setCantidad(propiedades[0]); //cantidad
+        _powerup.push_back(move(_rec));
+        _rec = nullptr;
+    }else
+    {
+        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+    }
+
+    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
+    //motor->debugBox(x,y,z,ancho,alto,largo);
+    //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
+}
+
 void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int*  propiedades)//lo utilizamos para crear zonas
 {
    //Crear zona
    Zona* zon = new Zona(ancho,largo,alto,tipo);
 
    //ID propia y posicion
-   int calcID = zonas.size();
+   int calcID = _zonas.size();
    zon->setID(calcID);
    zon->setPosiciones(x,y,z);
 
    //guardarla en el nivel
    // con move, zon se queda vacio
-   zonas.push_back(move(zon));
+   _zonas.push_back(move(zon));
    zon = nullptr;
  }
 

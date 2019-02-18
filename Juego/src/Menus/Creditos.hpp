@@ -16,7 +16,5 @@ class Creditos: public Estado {
 
     private:
         void atras();
-        MotorGrafico* _motor;
-
 };
 #endif /* CREDITOS_HPP */

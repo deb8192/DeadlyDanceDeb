@@ -9,8 +9,6 @@ Cinematica::Cinematica()
 Cinematica::~Cinematica()
 {
     cout << "Borrando cinematica" <<endl;
-    // Punteros a clases singleton
-    _motor = nullptr;
 }
 
 void Cinematica::Iniciar()

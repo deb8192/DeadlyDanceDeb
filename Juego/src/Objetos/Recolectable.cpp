@@ -226,6 +226,21 @@ float Recolectable::getLastZ()
     return posPasada.z;
 }
 
+float Recolectable::getIniX()
+{
+    return posIni.x;
+}
+
+float Recolectable::getIniY()
+{
+    return posIni.y;
+}
+
+float Recolectable::getIniZ()
+{
+    return posIni.z;
+}
+
 float Recolectable::getFisX()
 {
     return posFisicas.x;
