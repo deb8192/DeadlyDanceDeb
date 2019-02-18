@@ -28,11 +28,11 @@ class Interfaz
 
         void RemoveObject(unsigned short);//remueve objeto de la escena
 
-        void Trasladar(unsigned char,float,float,float);
+        void Trasladar(unsigned char,float,float,float);//trasladar 
         
-        void Rotar(unsigned char,float,float,float);
+        void Rotar(unsigned char,float,float,float);//rotar
 
-        void Escalar(unsigned char,float,float,float);
+        void Escalar(unsigned char,float,float,float);//escalar
 
     private:
         
