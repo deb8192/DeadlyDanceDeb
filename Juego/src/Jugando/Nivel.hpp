@@ -4,14 +4,14 @@
 #include "../Personajes/Jugador.hpp"
 #include "../CargadorNiveles.hpp"
 #include "../Enemigos/Pollo.hpp"
+#include "../Objetos/Interactuable.hpp"
+#include "../Objetos/Recolectable.hpp"
 #include "Zona.hpp"
 #include "../Motores/MotorAudio.hpp"
 #include "../Motores/MotorGrafico.hpp"
 #include "../Times.hpp"
 
 #include "../Enemigos/Enemigo.hpp"
-#include "../Objetos/Interactuable.hpp"
-#include "../Objetos/Recolectable.hpp"
 #include "../Pathfinder.hpp"
 #include "../Armas/Arma.hpp"
 

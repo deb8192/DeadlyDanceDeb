@@ -224,6 +224,21 @@ float Arma::getLastZ()
     return posPasada.z;
 }
 
+float Arma::getIniX()
+{
+    return posIni.x;
+}
+
+float Arma::getIniY()
+{
+    return posIni.y;
+}
+
+float Arma::getIniZ()
+{
+    return posIni.z;
+}
+
 float Arma::getFisX()
 {
     return posFisicas.x;

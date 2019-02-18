@@ -49,6 +49,9 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
         float getLastX();
         float getLastY();
         float getLastZ();
+        float getIniX();
+        float getIniY();
+        float getIniZ();
         float getFisX();
         float getFisY();
         float getFisZ();

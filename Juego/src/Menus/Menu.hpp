@@ -27,7 +27,6 @@ class Menu: public Estado {
         void creditos();
         void salir();
 
-        MotorGrafico* _motor;
         MotorAudioSystem* _motora;//instancia de la fachada audio
 };
 #endif /* MENU_HPP */

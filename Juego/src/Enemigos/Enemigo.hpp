@@ -13,6 +13,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
     public:
         Enemigo();
+        Enemigo(float nx, float ny, float nz);
         ~Enemigo();
 
         void definirSala(Sala* sala);
@@ -96,6 +97,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getLastX();
         float getLastY();
         float getLastZ();
+        float getIniX();
+        float getIniY();
+        float getIniZ();
         float getFisX();
         float getFisY();
         float getFisZ();

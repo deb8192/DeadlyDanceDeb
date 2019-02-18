@@ -45,6 +45,9 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         float getLastX();
         float getLastY();
         float getLastZ();
+        float getIniX();
+        float getIniY();
+        float getIniZ();
         float getFisX();
         float getFisY();
         float getFisZ();

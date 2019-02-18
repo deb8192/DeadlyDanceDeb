@@ -15,6 +15,5 @@ class Cinematica: public Estado {
         void Vaciar();
 
     private:
-        MotorGrafico* _motor;
 };
 #endif /* CINEMATICA_HPP */

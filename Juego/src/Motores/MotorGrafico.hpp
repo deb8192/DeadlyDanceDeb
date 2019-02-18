@@ -74,9 +74,6 @@ using namespace idsEventos;
             bool GetDebugActivado(); // para saber si esta activado
 
             //----------------- Revisar
-
-            //crea al jugador
-            void crearJugador(std::string malla);
             
             /*IMPORTANTE para bullet motor de fisicas y Joints*/
             //btHingeConstraint(btRigidBody& rbA,const btTransform& rbAFrame, const btTransform& rbBFrame);

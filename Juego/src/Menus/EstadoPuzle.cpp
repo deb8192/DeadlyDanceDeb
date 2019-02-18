@@ -8,8 +8,6 @@ EstadoPuzle::EstadoPuzle()
 
 EstadoPuzle::~EstadoPuzle()
 {
-    // Punteros a clases singleton
-    _motor = nullptr;
 }
 
 void EstadoPuzle::Iniciar()

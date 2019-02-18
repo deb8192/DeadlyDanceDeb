@@ -8,8 +8,6 @@ EstadoMuerte::EstadoMuerte()
 
 EstadoMuerte::~EstadoMuerte()
 {
-    // Punteros a clases singleton
-    _motor = nullptr;
 }
 
 void EstadoMuerte::Iniciar()

@@ -16,7 +16,5 @@ class Configuracion: public Estado {
 
     private:
         void atras();
-        
-        MotorGrafico* _motor;
 };
 #endif /* CONFIGURACION_HPP */

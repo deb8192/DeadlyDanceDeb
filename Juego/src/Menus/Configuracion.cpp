@@ -8,8 +8,6 @@ Configuracion::Configuracion()
 
 Configuracion::~Configuracion()
 {
-    // Punteros a clases singleton
-    _motor = nullptr;
 }
 
 void Configuracion::Iniciar()
