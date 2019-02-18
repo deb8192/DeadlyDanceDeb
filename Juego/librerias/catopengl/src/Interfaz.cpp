@@ -108,6 +108,8 @@ unsigned short Interfaz::AddMalla(const char * archivo)
     unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
     if(id_recurso != 0)
     {
+        //como tenemos id tenemos recursos 
+
         return id_recurso;
     }
     //ahora le pasamos este al cargador para asociar la malla a este id
@@ -169,7 +171,7 @@ void Interfaz::Trasladar(unsigned char id,float x,float y,float z)
     {
 
         //std::cout << "funciona trasladar" << " " << id << std::endl;
-        nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+        //nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
     }
 }   
 
@@ -181,7 +183,7 @@ void Interfaz::Rotar(unsigned char id,float x,float y,float z)
     {
 
         //std::cout << "funciona rotar" << " " << id << std::endl;
-        nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+        //nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
     }
 }
 
@@ -193,6 +195,6 @@ void Interfaz::Escalar(unsigned char id,float x,float y,float z)
     {
 
         //std::cout << "funciona escalar" << " " << id << std::endl;
-        nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+        //nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
     }
 }
