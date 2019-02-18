@@ -66,10 +66,31 @@ unsigned short Gestor::generarId()
 //Uso: cuando se quiere saber si un elemento con un id existe se debe utilizar esta funcion
 //Entradas: id del recurso a buscar
 //Salidas: true si existe, false si no existe
-bool Gestor::buscarRecurso(unsigned short)
+bool Gestor::buscarRecurso(unsigned short id)
 {
     //se realiza una busqueda binaria
-
+    unsigned short Iarriba = ((unsigned short)(archivadores.size()-1));
+    unsigned short Iabajo = 0;
+    unsigned short Icentro;
+    while (Iabajo <= Iarriba)
+    {
+        Icentro = (Iarriba + Iabajo)/2;
+        if (archivadores[Icentro]->id == id)
+        {
+            return true;
+        }
+        else
+        {
+            if (id < archivadores[Icentro]->id)
+            {
+                Iarriba=Icentro-1;
+            }
+            else
+            {
+                Iabajo=Icentro+1;
+            }
+        }
+    }
     return false;
 }
 
@@ -79,6 +100,6 @@ bool Gestor::buscarRecurso(unsigned short)
 unsigned short Gestor::buscarRecurso(char * rutaRecurso)
 {
     //se realiza una busqueda completa hasta que se encuentra (esto queda para OPTIMIZAR)
-
+    
     return 0;
 }

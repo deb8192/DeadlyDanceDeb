@@ -1,6 +1,7 @@
 #include "CatOpengl.hpp"
 
 #include <vector>
+#include <iostream>
 
 #include "TNodo.hpp"
 #include "TTransform.hpp"
@@ -26,7 +27,13 @@ class Interfaz
         void Remove();//borramos el arbol
 
         void RemoveObject(unsigned short);//remueve objeto de la escena
+
+        void Trasladar(unsigned char,float,float,float);
         
+        void Rotar(unsigned char,float,float,float);
+
+        void Escalar(unsigned char,float,float,float);
+
     private:
         
         std::vector<TNodo *> camaras;
@@ -52,4 +59,6 @@ class Interfaz
         std::vector<Nodo *> nodos;//almacena los nodos
 
         CatOpengl::Gestor * gestorDeRecursos;
+
+        Nodo * buscarNodo(unsigned short);
 };
