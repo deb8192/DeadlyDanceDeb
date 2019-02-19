@@ -105,7 +105,7 @@ unsigned short Interfaz::AddLuz()
 
 unsigned short Interfaz::AddMalla(const char * archivo)
 {
-    unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
+    unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo,nullptr);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
     if(id_recurso != 0)
     {
         //como tenemos id tenemos recursos 

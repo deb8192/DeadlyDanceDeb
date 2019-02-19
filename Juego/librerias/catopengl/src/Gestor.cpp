@@ -37,7 +37,8 @@ unsigned short Gestor::ObtenerRecurso(const char * _recurso,TNodo * _nodo)
             Archivador * archivador = new Archivador;
             archivador->id = generarId();
             archivador->_nombre = _recurso;
-
+            archivador->_recursos = new RMalla();
+            archivador->_recursos->CargarRecurso(_recurso);
             //detectar tipo de recurso y crear su clase especializada (imagen,malla o texto plano, faltarian fuentes)
 
             archivadores.push_back(archivador);

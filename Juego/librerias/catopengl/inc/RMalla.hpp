@@ -9,11 +9,16 @@ class RMalla : public Recurso
         
         RMalla();
         void Remove();
+
+        //te carga los datos en la matrix
         bool CargarRecurso(const char *);
-        //datos * GetMalla();
+        
+        //datos * CargarFrames(unsigned short,unsigned short); //le pasas datos[x]
 
     private:
 
+        
+        unsigned short objetos,mallas;
         //datos * para pasarlos a la entidad
         
 };

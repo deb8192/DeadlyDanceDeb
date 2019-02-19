@@ -31,7 +31,7 @@ void TMalla::remove()
 //Salidas: ninguna 
 void TMalla::cargarMalla(unsigned short,unsigned short)
 {
-
+    //aqui llamamos a objetos->ObtenerFrame(1); y se carga en memoria para pintarlo
 }
 
 // sobrecarga metodos TEntidad
