@@ -19,6 +19,7 @@ typedef struct
     const short SIETE = 7;
     const short OCHO = 8;
     const short NUEVE = 9;
+    const short CIEN = 100;
     const float DEG_TO_RAD = 0.0174532925199432957f;
     const float RAD_TO_DEG = 57.295779513082320876f;
 

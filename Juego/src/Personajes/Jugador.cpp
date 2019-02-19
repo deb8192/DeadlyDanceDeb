@@ -311,13 +311,11 @@ void Jugador::AtacarUpdate(int danyo)
     MotorGrafico* _motor = MotorGrafico::getInstance();
     if(this->getArma() == nullptr){
       _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-      _motor->clearDebug2();
       _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,2,1,1,2);
     }
     else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
     {
       _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-      _motor->clearDebug2();
       _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,3,1,3,1);
     }
     else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
@@ -330,7 +328,6 @@ void Jugador::AtacarUpdate(int danyo)
 
 
       _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-      _motor->clearDebug2();
       _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
     }
 

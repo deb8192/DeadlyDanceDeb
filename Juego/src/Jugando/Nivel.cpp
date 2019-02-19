@@ -996,16 +996,36 @@ void Nivel::update()
                         }
                         enemigos.at(i)->setTimeMerodear(tiempoMerodear);
                     }
-                    //AUN NO FUNCIONA
+                    //FUNCIONA REGULAR
                     if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
                     {
                         //colisiona
-                        enemigos.at(i)->setPosiciones(enemigos.at(i)->getLastX(), enemigos.at(i)->getY(), enemigos.at(i)->getLastZ());//colisiona
-                        enemigos.at(i)->setNewPosiciones(enemigos.at(i)->getLastX(), enemigos.at(i)->getLastY(), enemigos.at(i)->getLastZ());//colisiona
-                        enemigos.at(i)->initPosicionesFisicas(enemigos.at(i)->getNewX() / constantes.DOS, enemigos.at(i)->getNewY() / constantes.DOS, enemigos.at(i)->getNewZ() / constantes.DOS);//colisiona
-                        enemigos.at(i)->setNewRotacion(enemigos.at(i)->getRX(), enemigos.at(i)->getRY() - constantes.PI_MEDIOS, enemigos.at(i)->getRZ());
-                        enemigos.at(i)->setRotation(enemigos.at(i)->GetRotation() / constantes.DOS);
+                        struct DatosDesplazamiento
+                        {   
+                            float x = 0.0f;
+                            float y = 0.0f;
+                            float z = 0.0f;
+                        }
+                        velocidad, posicionesPasadas;
+
+                        velocidad.x = (enemigos.at(i)->getNewX() - enemigos.at(i)->getLastX()) * constantes.DOS;
+                        velocidad.y = (enemigos.at(i)->getNewY() - enemigos.at(i)->getLastY()) * constantes.DOS;
+                        velocidad.z = (enemigos.at(i)->getNewZ() - enemigos.at(i)->getLastZ()) * constantes.DOS;
+                        posicionesPasadas.x = enemigos.at(i)->getLastX() - velocidad.x;
+                        posicionesPasadas.y = enemigos.at(i)->getLastY() - velocidad.y;
+                        posicionesPasadas.z = enemigos.at(i)->getLastZ() - velocidad.z;
+
+                        enemigos.at(i)->setPosicionesFisicas(-velocidad.x, 0.0f, -velocidad.z);//colisiona
+                        //enemigos.at(i)->setPosiciones(enemigos.at(i)->getX() - velocidad.x, enemigos.at(i)->getLasY() - velocidad.y, enemigos.at(i)->getLastZ() - velocidad.z);//colisiona         
+                        enemigos.at(i)->setNewPosiciones(enemigos.at(i)->getNewX() - velocidad.x, enemigos.at(i)->getNewY() - velocidad.y, enemigos.at(i)->getNewZ() - velocidad.z);//colisiona                                
+                        enemigos.at(i)->setLastPosiciones(posicionesPasadas.x, posicionesPasadas.y, posicionesPasadas.z);//colisiona                                
+                        if(enemigos.at(i)->GetRotation() != 0.0f)
+                        {
+                            enemigos.at(i)->setNewRotacion(enemigos.at(i)->getRX(), enemigos.at(i)->getRY() - constantes.PI_RADIAN, enemigos.at(i)->getRZ());
+                            enemigos.at(i)->setRotation(0.0f); 
+                        }
                     }
+                    
                 }
                 //enemigos[i]->queVes();
             }
@@ -1261,7 +1281,7 @@ void Nivel::updateIA()
                         if(enemigos[i] != nullptr)
                         {
                             enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
-                            enemigos[i]->UpdateBehavior(&i);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                            /*enemigos[i]->UpdateBehavior(&i);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                             
                             //Este bloque se da si el enemigo esta en el proceso de merodear
                             if(enemigos.at(i)->getTimeMerodear() > 0.0f)
@@ -1287,12 +1307,12 @@ void Nivel::updateIA()
                             if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
                             {
                                 //colisiona
-                                enemigos.at(i)->setPosiciones(enemigos.at(i)->getLastX(), enemigos.at(i)->getY(), enemigos.at(i)->getLastZ());//colisiona
+                                enemigos.at(i)->initPosicionesFisicas(enemigos.at(i)->getLastX()/2, enemigos.at(i)->getLastY()/2, enemigos.at(i)->getLastZ()/2);//colisiona
+                                enemigos.at(i)->setPosiciones(enemigos.at(i)->getLastX(), enemigos.at(i)->getLastY(), enemigos.at(i)->getLastZ());//colisiona        
                                 enemigos.at(i)->setNewPosiciones(enemigos.at(i)->getLastX(), enemigos.at(i)->getLastY(), enemigos.at(i)->getLastZ());//colisiona                                
-                        enemigos.at(i)->initPosicionesFisicas(enemigos.at(i)->getNewX() / constantes.DOS, enemigos.at(i)->getNewY() / constantes.DOS, enemigos.at(i)->getNewZ() / constantes.DOS);//colisiona
                                 enemigos.at(i)->setNewRotacion(enemigos.at(i)->getRX(), enemigos.at(i)->getRY() - constantes.PI_MEDIOS, enemigos.at(i)->getRZ());
                                 enemigos.at(i)->setRotation(enemigos.at(i)->GetRotation() / constantes.DOS);
-                            }
+                            }*/
                         }
                         else
                             enemigos[i]->RunIA(true);
@@ -1607,7 +1627,7 @@ void Nivel::Draw()
                 enemigos.at(i)->getRZ(),
                 i
             );
-            _motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX() * 2, enemigos.at(i)->getFisY() * 2, enemigos.at(i)->getFisZ() * 2, enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),3 , 3, 3, 2);
+            _motor->dibujarObjetoTemporal(enemigos.at(i)->getFisX()*2, enemigos.at(i)->getFisY()*2, enemigos.at(i)->getFisZ()*2, enemigos.at(i)->getRX(), enemigos.at(i)->getRY(), enemigos.at(i)->getRZ(),3 , 3, 3, 2);
         }
         //Dibujado de las puertas
         for(unsigned int i = 0; i < interactuables.size(); i++)
@@ -1623,6 +1643,8 @@ void Nivel::Draw()
                 interactuables.at(i)->GetPosicionObjetos()
             );
         }
+
+        
 
         //Dibujado del ataque especial
         //Ataque especial Heavy
@@ -1685,7 +1707,7 @@ void Nivel::Draw()
         }
 
         //Dibujado de ataques
-        for(unsigned int i = 0; i < enemigos.size(); i++)
+        /*for(unsigned int i = 0; i < enemigos.size(); i++)
         {
             _motor->dibujarObjetoTemporal(
                 enemigos.at(i)->getAtX(),
@@ -1698,7 +1720,7 @@ void Nivel::Draw()
                 4,
                 4,
                 2);
-        }
+        }*/
 
         //Dibujado zonas
         for(unsigned int i = 0; i < zonas.size(); i++)
