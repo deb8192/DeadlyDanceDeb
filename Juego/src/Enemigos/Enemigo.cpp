@@ -862,14 +862,16 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             float y = 0.0f;
             float z = 0.0f;
         }
-        velocidad;
+        velocidad, posiciones;
         this->setNewRotacion(rotActual.x, rotActual.y + rotation, rotActual.z);
         this->setVectorOrientacion();
         velocidad.x = vectorOrientacion.vX * velocidadMaxima;
         velocidad.z = vectorOrientacion.vZ * velocidadMaxima;
+        posiciones.x = posFutura.x + velocidad.x;
+        posiciones.z = posFutura.z + velocidad.z;
 
-        this->setNewPosiciones(posActual.x + velocidad.x, posActual.y, posActual.z + velocidad.z);
-        this->initPosicionesFisicas(posFutura.x/2, posFutura.y/2, posFutura.z/2);
+        this->setNewPosiciones(posiciones.x, posFutura.y, posiciones.z);
+        this->setPosicionesFisicas(velocidad.x, 0.0f, velocidad.z);
 
 	return false;
     }

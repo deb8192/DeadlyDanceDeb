@@ -9,13 +9,13 @@ class INnpc {
 
 public:
 
-    typedef struct
+    typedef struct VectorEspacial
         {
             float vX = 0.0f;
             float vY = 0.0f;
             float vZ = 0.0f;
             float modulo = 0.0f;
-        }VectorEspacial;
+        };
 
     virtual int Atacar(int)=0;//efectua un ataque normal, llama al motor para ejecutar la animacion.
     //virtual void AtacarEspecial()=0;//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
