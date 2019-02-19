@@ -131,14 +131,14 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
     Nivel* nivel_instancia = Nivel::getInstance();
     Sala* padren = nullptr;//sala hijo
     
-    int accion = plat.attribute("accion").as_float(); //lo vamos a usar para decidir herencia y fisicas
-    int x = plat.attribute("X").as_float();//nos devuelve un int
-    int y = plat.attribute("Y").as_float();//nos devuelve un int
-    int z = plat.attribute("Z").as_float();//nos devuelve un int
-    int ancho = plat.attribute("ancho").as_float();//nos devuelve un int
-    int largo = plat.attribute("largo").as_float();//nos devuelve un int
-    int alto = plat.attribute("alto").as_float();//nos devuelve un int 
-    int centro = plat.attribute("TypeCenter").as_float();//nos devuelve el tipo de centro de masas del objeto
+    int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
+    int x = plat.attribute("X").as_int();//nos devuelve un int
+    int y = plat.attribute("Y").as_int();//nos devuelve un int
+    int z = plat.attribute("Z").as_int();//nos devuelve un int
+    int ancho = plat.attribute("ancho").as_int();//nos devuelve un int
+    int largo = plat.attribute("largo").as_int();//nos devuelve un int
+    int alto = plat.attribute("alto").as_int();//nos devuelve un int 
+    int centro = plat.attribute("TypeCenter").as_int();//nos devuelve el tipo de centro de masas del objeto
     bool jugadorEstasAqui = plat.attribute("UserStar").as_bool();//nos devuelve true si es donde empieza el jugador 
     const char* textura = plat.attribute("Texture").value(); //nos da un char[] = string
     const char* modelo  =  plat.attribute("Model").value(); //nos da un char[] = string
@@ -155,9 +155,9 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         //cogemos las posiciones del jugador en el escenario
         int* propiedades;
         propiedades = new int [6];
-        int accion = plat.attribute("accion").as_float(); //lo vamos a usar para decidir herencia y fisicas
-        int Playerx = plat.attribute("StarX").as_float();//nos devuelve un int
-        int Playery = plat.attribute("StarY").as_float();//nos devuelve un int
+        int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
+        int Playerx = plat.attribute("StarX").as_int();//nos devuelve un int
+        int Playery = plat.attribute("StarY").as_int();//nos devuelve un int
         int Playerz = plat.attribute("StarZ").as_int();//nos devuelve un int 
         int ancho = 1;//nos devuelve un int
         int largo = 1;//nos devuelve un int 
