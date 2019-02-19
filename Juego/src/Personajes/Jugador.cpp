@@ -1,13 +1,14 @@
 #include "Jugador.hpp"
+#include "../ConstantesComunes.hpp"
 #include "../Jugando/Nivel.hpp"
 #include <stdlib.h>
 #include "../MotorAudio.hpp"
 #include "../Times.hpp"
 
-#define PI 3.14159265358979323846
-#define PIRADIAN 180.0f
-#define DEGTORAD 0.0174532925199432957f
-#define RADTODEG 57.295779513082320876f
+/*#define PI 3.14159265358979323846
+#define PI_RADIAN 180.0f
+#define DEG_TO_RAD 0.0174532925199432957f
+#define RAD_TO_DEG 57.295779513082320876f*/
 #define NOMBREHEAVY "Heavy"
 #define NOMBREBAILAORA "Bailaora"
 
@@ -31,8 +32,16 @@ Jugador::~Jugador()
     ax = 1.0f;
     az = 20.0f;
     deg = 0.0f;
-    _armaEquipada=nullptr;
-    _armaEspecial=nullptr;
+    /*if(_armaEquipada != nullptr)
+    {
+        delete _armaEquipada;*/
+        _armaEquipada=nullptr;
+    /*}
+    if(_armaEspecial != nullptr)
+    {
+        delete _armaEspecial;*/
+        _armaEspecial=nullptr;
+    //}
     //const char* _rutaArmaEspecial = "assets/models/Arma.obj";
     //const char* _nombreJugador = "Heavy";
     danyo_arma = 10.0f;
@@ -82,6 +91,7 @@ Jugador::Jugador(int,int,int,int,int,int,std::string malla)
 
 void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 {
+    Constantes constantes;
     float px = posFutura.x,
           pz = posFutura.z;
 
@@ -128,8 +138,8 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 
     //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
     az < 0 ?
-        deg = PIRADIAN + (RADTODEG * atan(ax/az)) :
-        deg =  RADTODEG * atan(ax/az) ;
+        deg = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(ax/az)) :
+        deg =  constantes.RAD_TO_DEG * atan(ax/az) ;
 
     float componente;
     if((w || s || a || d) && !noMueve)
@@ -140,8 +150,8 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     {
         componente = 0.0;
     }
-    px += componente*sin(deg*DEGTORAD);
-    pz += componente*cos(deg*DEGTORAD);
+    px += componente*sin(deg*constantes.DEG_TO_RAD);
+    pz += componente*cos(deg*constantes.DEG_TO_RAD);
 
 
     //cout << "deg: " << deg << ", px:" << px << ", pz:" << pz << endl;
@@ -235,6 +245,7 @@ void Jugador::MuereJugador(){
 
 int Jugador::Atacar(int i)
 {
+  Constantes constantes;
   int danyo = 0;
   if(vida > 0)
   {
@@ -244,9 +255,9 @@ int Jugador::Atacar(int i)
     //Calcular posiciones que no se modifican
     int distance = 5;
     if(this->getArma() == nullptr)distance= 3;
-    atx = distance * sin(PI * getRY() / 180.0f) + getX();
+    atx = distance * sin(constantes.PI * getRY() / constantes.PI_RADIAN) + getX();
     aty = getY();
-    atz = distance * cos(PI * getRY() / 180.0f) + getZ();
+    atz = distance * cos(constantes.PI * getRY() / constantes.PI_RADIAN) + getZ();
     atgx = getRX();
     atgy = getRY();
     atgz = getRZ();
@@ -292,6 +303,7 @@ int Jugador::Atacar(int i)
 
 void Jugador::AtacarUpdate(int danyo)
 {
+  Constantes constantes;
   if(vida > 0)
   {
     Nivel* nivel = Nivel::getInstance();
@@ -299,25 +311,23 @@ void Jugador::AtacarUpdate(int danyo)
     MotorGrafico* _motor = MotorGrafico::getInstance();
     if(this->getArma() == nullptr){
       _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-      _motor->clearDebug2();
       _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,2,1,1,2);
     }
     else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
     {
       _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-      _motor->clearDebug2();
       _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,3,1,3,1);
     }
     else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
     {
-      atz += (1.5 * cos(PI * atgy / PIRADIAN));
-      atx += (1.5 * sin(PI * atgy / PIRADIAN));
-      atposZ += (1.5 * cos(PI * atgy / PIRADIAN));
-      atposX += (1.5 * sin(PI * atgy / PIRADIAN));
+      int distance = 1.5;
+      atz += (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
+      atx += (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
+      atposZ += (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
+      atposX += (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
 
 
       _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-      _motor->clearDebug2();
       _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
     }
 
@@ -349,6 +359,7 @@ void Jugador::AtacarUpdate(int danyo)
           {
             float variacion = rand() % 7 - 3;
             danyo += (int) variacion;
+            //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
             nivel->getEnemigos().at(atacados.at(i))->QuitarVida(danyo);
             cout<<"Enemigo: "<< nivel->getEnemigos().at(atacados.at(i))->getID() << endl;
             cout<<"Daño "<<danyo<<endl;
@@ -377,6 +388,7 @@ void Jugador::AtacarUpdate(int danyo)
  */
 int Jugador::AtacarEspecial()
 {
+    Constantes constantes;
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
 
@@ -388,10 +400,11 @@ int Jugador::AtacarEspecial()
         setAnimacion(3);
         if(atackEspTime <= 0)
         {
+            int distancia = 5;
             animacion = 3;
-            atespx = 5 * sin(PI * getRY() / PIRADIAN) + getX();
+            atespx = distancia * sin(constantes.PI * getRY() / constantes.PI_RADIAN) + getX();
             atespy = getY();
-            atespz = 5 * cos(PI * getRY() / PIRADIAN) + getZ();
+            atespz = distancia * cos(constantes.PI * getRY() / constantes.PI_RADIAN) + getZ();
             atgx = getRX();
             atgy = getRY();
             atgz = getRZ();
@@ -456,6 +469,7 @@ int Jugador::AtacarEspecial()
  */
 void Jugador::AtacarEspecialUpdate(int*danyo)
 {
+    Constantes constantes;
     MotorGrafico* _motor = MotorGrafico::getInstance();
     MotorFisicas * _fisicas = MotorFisicas::getInstance();
     Nivel* nivel = Nivel::getInstance();
@@ -463,10 +477,10 @@ void Jugador::AtacarEspecialUpdate(int*danyo)
     //Si el ataque especial es el del Heavy, es cuerpo a cuerpo
     if(strcmp(_armaEspecial->getNombre(), NOMBREHEAVY) == 0)
     {
-
+        int distancia = 5;
         //Calculo de la posicion del arma delante  int getAnimacion();del jugador
-        atespx = 5 * sin(PI * this->getRY() / PIRADIAN) + this->getX();
-        atespz = 5 * cos(PI * this->getRY() / PIRADIAN) + this->getZ();
+        atespx = distancia * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getX();
+        atespz = distancia * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getZ();
         _armaEspecial->initPosicionesFisicas(atespx/2, this->getY()/2, atespz/2);
         _armaEspecial->setNewPosiciones(atespx, this->getY(), atespz);
         _armaEspecial->setNewRotacion(getRX(), this->getRY(), getRZ());
@@ -478,9 +492,9 @@ void Jugador::AtacarEspecialUpdate(int*danyo)
         //Formula de ataque circular aumentando la distancia
         incrAtDisCirc += 1.5;
         atespz = this->getZ();
-        atespz += (incrAtDisCirc * cos(PI * atgy / PIRADIAN));
+        atespz += (incrAtDisCirc * cos(constantes.PI * atgy / constantes.PI_RADIAN));
         atespx = this->getX();
-        atespx += (incrAtDisCirc * sin(PI * atgy / PIRADIAN));
+        atespx += (incrAtDisCirc * sin(constantes.PI * atgy / constantes.PI_RADIAN));
         atespposZ = atespz - this->getZ();
         atespposX = atespx - this->getX();
         _armaEspecial->setPosicionesFisicas(atespposZ, 0.0f, atespposZ);
@@ -728,9 +742,9 @@ float* Jugador::GetDatosAtEsp()
     atesp[0] = _armaEspecial->getX();
     atesp[1] = _armaEspecial->getY();
     atesp[2] = _armaEspecial->getZ();
-    atesp[3] = _armaEspecial->getRX();;
-    atesp[4] = _armaEspecial->getRY();;
-    atesp[5] = _armaEspecial->getRZ();;
+    atesp[3] = _armaEspecial->getRX();
+    atesp[4] = _armaEspecial->getRY();
+    atesp[5] = _armaEspecial->getRZ();
 
     return atesp;
 }
