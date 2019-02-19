@@ -11,7 +11,7 @@ class TMalla : public TEntidad
 {
     private:
         //punteros a recursos
-        RMalla * objetos;                                                                               ;//diferentes frames para animaciones
+        RMalla * objetos;//diferentes frames para animaciones
         RImagen * texturas[3];//3: textura, brillos, relieves
         unsigned short frames_totales,mallas_totales,frame_inicial,frame_final,frame_actual,velocidad_animacion;
 
@@ -19,7 +19,7 @@ class TMalla : public TEntidad
         // Constructor y destructor
         TMalla();
         ~TMalla();
-        void remove();
+        void remove(); 
         void cargarMalla(unsigned short,unsigned short);
         
         // sobrecarga metodos TEntidad

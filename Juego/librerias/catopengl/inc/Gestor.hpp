@@ -1,5 +1,7 @@
 #include <string>
 #include <vector>
+#include "Recurso.hpp"
+#include "RMalla.hpp"
 #include "TMalla.hpp"
 #include "TNodo.hpp"
 
@@ -28,7 +30,7 @@ class Gestor
         {
             unsigned short id;//id del archivo 
             const char * _nombre;//nombre del archivo
-            //recurso, clase especializada sea un shader(texto plano),malla(objetos 3d) o imagen(texturas)
+            Recurso * _recursos;
         };
 
         std::vector<Archivador *> archivadores;//contiene los ids,nombres y punteros a los recursos en memoria (disco o ram)
