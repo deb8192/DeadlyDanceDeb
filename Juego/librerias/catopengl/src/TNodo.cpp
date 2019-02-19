@@ -146,3 +146,10 @@ void TNodo::draw()
 
 
 }
+
+//Uso: devuelve la entidad que tiene este nodo
+//Salida: puntero a entidads
+TEntidad * TNodo::GetEntidad()
+{
+    return entidad;
+}

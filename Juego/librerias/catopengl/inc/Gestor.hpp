@@ -1,5 +1,8 @@
 #include <string>
 #include <vector>
+#include "TMalla.hpp"
+#include "TNodo.hpp"
+
 //PARA INFORMACION MAS DETALLADA SOBRE LAS FUNCIONES MIRAR EN EL CPP
 class Gestor
 {
@@ -8,7 +11,7 @@ class Gestor
 
         Gestor();
         
-        unsigned short ObtenerRecurso(const char *);//obtiene el recurso y lo instancia en memoria
+        unsigned short ObtenerRecurso(const char *,TNodo *);//obtiene el recurso y lo instancia en memoria
 
         bool DestruirObjeto(unsigned short);//destruye el objeto de memoria (no lo destruye de opengl, para esto hay que llamar a interfaz.RemoveObject(id a destruir))
 

@@ -18,7 +18,7 @@ void Gestor::Remove()
 //Uso: se utiliza para buscar el recurso si lo encuentra y no lo tiene ya instanciado se instancia en memoria, devolviendo un id este id le sirve al que tiene la interfaz para crear objetos
 //Entradas: recurso -> string de donde esta el archivo (ruta)
 //Salidas: 0 significa que no se ha obtenido el recurso, => 1 significa que esta instanciado en esa direccion de memoria.
-unsigned short Gestor::ObtenerRecurso(const char * _recurso)
+unsigned short Gestor::ObtenerRecurso(const char * _recurso,TNodo * _nodo)
 {
     unsigned short existeArchivador = buscarRecurso(_recurso); 
     
@@ -103,7 +103,7 @@ unsigned short Gestor::buscarRecurso(const char * rutaRecurso)
 {
     //se realiza una busqueda completa hasta que se encuentra (esto queda para OPTIMIZAR)
     std::string cadena_recurso = rutaRecurso;
-    for(int i = 0; i < archivadores.size();i++)
+    for(long unsigned int i = 0; i < archivadores.size();i++)
     {
         std::string cadena_actual = archivadores[i]->_nombre;
 

@@ -1,23 +1,35 @@
 #include "TMalla.hpp"
 
-//constructor y destructor
+//Uso: Constructor
 TMalla::TMalla()
 {
     didentidad = 'M'; //para sabe que funcion hace es informativo
+    frames_totales = 0;
+    mallas_totales = 0;
+    frame_inicial = 0;
+    frame_final = 0;
+    frame_actual = 0;
+    velocidad_animacion = 0;
 }
 
+//Uso: destructor
 TMalla::~TMalla()
 {
 
 }
 
+//Uso: Pone el shader local nullptr
+//Entradas: ninguna
+//Salidas: ninguna
 void TMalla::remove()
 {
     this->~TMalla();
 }
 
-// Propiedades 
-void TMalla::cargarMalla()
+//Uso: Pone el shader local nullptr
+//Entradas: ninguna
+//Salidas: ninguna 
+void TMalla::cargarMalla(unsigned short,unsigned short)
 {
 
 }
@@ -31,4 +43,39 @@ void TMalla::beginDraw()
 void TMalla::endDraw()
 {
 
+}
+
+void TMalla::BucleAnimacion(unsigned short,unsigned short)
+{
+
+}
+
+void TMalla::SiguienteAnimacion()
+{
+
+}
+
+void TMalla::DefinirAnimaciones()
+{
+
+}
+
+unsigned short TMalla::getFrameInicio()
+{
+    return 0;
+}
+
+unsigned short TMalla::getFrameFinal()
+{
+    return 0;
+}
+
+unsigned short TMalla::getFrameActual()
+{
+    return 0;
+}
+
+bool TMalla::setTiempoAnimacion(unsigned short)
+{
+    return false;
 }
