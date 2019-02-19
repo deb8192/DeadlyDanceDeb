@@ -1,5 +1,6 @@
 #include "MotorGrafico.hpp" //se llama a su cabecera para cargar las dependencias
 #include "Times.hpp"
+#include "ConstantesComunes.hpp"
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 MotorGrafico* MotorGrafico::unica_instancia = 0;
@@ -8,9 +9,6 @@ MotorGrafico* MotorGrafico::unica_instancia = 0;
 /*Tipo 1(640x480), Tipo 2(800x600), Tipo 3(1280x1024), Por defecto(1024x768)
 Esta clase define que tipo de pantalla quieres
 */
-
-#define DEGTORAD 0.0174532925199432957f
-#define RADTODEG 57.295779513082320876f
 
 MotorGrafico::MotorGrafico()
 {
@@ -640,6 +638,7 @@ int MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int la
 
 void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
 {
+    Constantes constantes;
     if (!armaEsp)
 	{
 		//error
@@ -651,7 +650,7 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
             this->borrarArmaEspecial();
         }
         ArmaEspecial_Jugador = smgr->addAnimatedMeshSceneNode(armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario
-        ArmaEspecial_Jugador->setPosition(core::vector3df(x + 5*(sin(DEGTORAD*ry)),y,z + 5*(cos(DEGTORAD*ry))));
+        ArmaEspecial_Jugador->setPosition(core::vector3df(x + 5*(sin(constantes.DEG_TO_RAD*ry)),y,z + 5*(cos(constantes.DEG_TO_RAD*ry))));
         ArmaEspecial_Jugador->setRotation(core::vector3df(rx,ry,rz));
         smgr->getMeshManipulator()->setVertexColors(ArmaEspecial_Jugador->getMesh(),SColor(255, 125, 150, 160));
     }
@@ -1206,7 +1205,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
             smgr->getMeshManipulator()->setVertexColors(objeto_en_scena->getMesh(),COLOR);
 
             core::vector3df rotation = objeto_en_scena->getRotation();
-            objeto_en_scena->setRotation(core::vector3df(rotation.X,(-1*(rotacion-180)),rotation.Z));
+            objeto_en_scena->setRotation(core::vector3df(rotation.X,rotacion,rotation.Z));
 
             rotation = objeto_en_scena->getRotation();
 
