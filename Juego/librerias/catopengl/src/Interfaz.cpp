@@ -13,24 +13,22 @@ Interfaz::~Interfaz()
 
 }
 
-void Interfaz::Remove()
-{
-    this->~Interfaz();
-}
-
 unsigned short Interfaz::AddCamara()
 {
 
     TNodo * traslacion = new TNodo;
     TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
     traslacion->setEntidad(traslacionEnt);
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
+    rotacionEnt->escalar(0,0,0);
     escalado->setEntidad(escaladoEnt);
 
     //escalado al ser el nodo padre del objeto en cuestion (sea luz, camara, o malla), debe ser el que se le diga que no se ejecuta
@@ -65,14 +63,17 @@ unsigned short Interfaz::AddLuz()
 {
     TNodo * traslacion = new TNodo;
     TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
     traslacion->setEntidad(traslacionEnt);
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
+    rotacionEnt->escalar(0,0,0);
     escalado->setEntidad(escaladoEnt);
 
     escaladoEnt->Ejecutar();
@@ -105,6 +106,22 @@ unsigned short Interfaz::AddLuz()
 
 unsigned short Interfaz::AddMalla(const char * archivo)
 {
+    
+    TNodo * traslacion = new TNodo;
+    TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
+    traslacion->setEntidad(traslacionEnt);
+
+    TNodo * rotacion = new TNodo;
+    TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0,0);
+    rotacion->setEntidad(rotacionEnt);
+
+    TNodo * escalado = new TNodo;
+    TTransform * escaladoEnt = new TTransform;
+    rotacionEnt->escalar(0,0,0);
+    escalado->setEntidad(escaladoEnt);
+
     unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo,nullptr);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
     if(id_recurso != 0)
     {

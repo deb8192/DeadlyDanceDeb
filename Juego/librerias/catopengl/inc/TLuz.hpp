@@ -14,11 +14,10 @@ class TLuz : public TEntidad
         //constructor y destructor
         TLuz();
         ~TLuz();
-        void remove();
 
         //gestion atributos
         void setIntensidad(float *);
-        float * getIntensidad();
+        float getIntensidad();
         
         //sobrecarga Tentidad
         void beginDraw();

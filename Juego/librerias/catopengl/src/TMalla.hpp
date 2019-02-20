@@ -19,7 +19,6 @@ class TMalla : public TEntidad
         // Constructor y destructor
         TMalla();
         ~TMalla();
-        void remove(); 
         void cargarMalla(unsigned short,unsigned short);
         
         // sobrecarga metodos TEntidad

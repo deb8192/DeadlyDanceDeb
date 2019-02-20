@@ -15,6 +15,8 @@ class Interfaz
     public:
 
         Interfaz();
+
+        ~Interfaz();
         
         unsigned short AddCamara();//creamos una camara
         
@@ -23,8 +25,6 @@ class Interfaz
         unsigned short AddMalla(const char *);//creamos una malla
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
-
-        void Remove();//borramos el arbol
 
         void RemoveObject(unsigned short);//remueve objeto de la escena
 
@@ -43,8 +43,6 @@ class Interfaz
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 
         TNodo * _raiz;
-
-        ~Interfaz();
 
         unsigned short generarId();
 

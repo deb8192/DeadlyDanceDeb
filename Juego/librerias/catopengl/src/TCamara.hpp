@@ -13,7 +13,6 @@ class TCamara : public TEntidad
         //constructor y destructor
         TCamara();
         ~TCamara();
-        void remove();
         
         //gestion de propiedades
         void setPerspectiva();

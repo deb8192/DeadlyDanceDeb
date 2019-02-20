@@ -20,14 +20,6 @@ TMalla::~TMalla()
 
 //Uso: Pone el shader local nullptr
 //Entradas: ninguna
-//Salidas: ninguna
-void TMalla::remove()
-{
-    this->~TMalla();
-}
-
-//Uso: Pone el shader local nullptr
-//Entradas: ninguna
 //Salidas: ninguna 
 void TMalla::cargarMalla(unsigned short,unsigned short)
 {
