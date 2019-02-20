@@ -1,5 +1,5 @@
 #include "Pollo.hpp"
-#include "../Jugando/Nivel.hpp"
+#include "../Jugando/Jugando.hpp"
 #include "cmath"
 
 #define PIRADIAN 180.0f
@@ -36,7 +36,7 @@ void Pollo::UpdatePollo(int i)
         {
             case 0: //El Pollo se mueve
                 {
-                    Nivel* _nivel;
+                    Jugando* _nivel;
                     bool trueX = false;
                     float x = this->Enemigo::getNewX();
                     float y = this->Enemigo::getNewY();
@@ -51,7 +51,7 @@ void Pollo::UpdatePollo(int i)
                     }datosDesplazamiento;
                     
                     cout<<"Se mueve el Pollo"<<endl;
-                    _nivel = Nivel::getInstance();
+                    _nivel = Jugando::GetInstance();
                     if(_nivel->GetJugador()->getNewX() > this->Enemigo::getNewX() + datosDesplazamiento.distancia)
                     {
                         trueX = true;
@@ -127,10 +127,10 @@ void Pollo::UpdatePollo(int i)
             case 1: //El Pollo ataca
                 {
                     cout<<"intenta atacar"<<endl;
-                    Nivel* _nivel;
+                    Jugando* _nivel;
                     int danyo;
                     danyo = this->Enemigo::Atacar(i);
-                    _nivel = Nivel::getInstance();
+                    _nivel = Jugando::GetInstance();
                     if(danyo > 0)
                     {
                         _nivel->GetJugador()->QuitarVida(danyo);

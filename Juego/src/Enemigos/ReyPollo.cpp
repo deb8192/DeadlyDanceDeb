@@ -4,3 +4,8 @@ ReyPollo::ReyPollo()
 {
 
 }
+
+ReyPollo::~ReyPollo()
+{
+
+}

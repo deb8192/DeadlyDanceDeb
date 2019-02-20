@@ -1,5 +1,5 @@
 #include "Jugador.hpp"
-#include "../Jugando/Nivel.hpp"
+#include "../Jugando/Jugando.hpp"
 #include <stdlib.h>
 #include "../Motores/MotorAudio.hpp"
 #include "../Times.hpp"
@@ -28,31 +28,31 @@ Jugador::Jugador()
 Jugador::~Jugador()
 {
     //Poner variables con los valores iniciales que tenían
-    ax = 1.0f;
-    az = 20.0f;
-    deg = 0.0f;
-    _armaEquipada=nullptr;
-    _armaEspecial=nullptr;
+    ax = 0;
+    az = 0;
+    deg = 0;
+    _armaEquipada = nullptr;
+    _armaEspecial = nullptr;
     //const char* _rutaArmaEspecial = "assets/models/Arma.obj";
     //const char* _nombreJugador = "Heavy";
-    danyo_arma = 10.0f;
-    atx=0.0;
-    atespx=0.0;
-    aty=0.0;
-    atespy=0.0;
-    atz=0.0;
-    atespz=0.0;
-    atgx=0.0;
-    atgy=0.0;
-    atgz=0.0;
-    incrAtDisCirc=0.0;
-    atposX=0.0;
-    atespposX=0.0;
-    atposY=0.0;
-    atespposY=0.0;
-    atposZ=0.0;
-    atespposZ=0.0;
-    tipo_arma = 2;
+    danyo_arma = 0;
+    atx = 0;
+    atespx = 0;
+    aty = 0;
+    atespy = 0;
+    atz = 0;
+    atespz = 0;
+    atgx = 0;
+    atgy = 0;
+    atgz = 0;
+    incrAtDisCirc = 0;
+    atposX = 0;
+    atespposX = 0;
+    atposY = 0;
+    atespposY = 0;
+    atposZ = 0;
+    atespposZ = 0;
+    tipo_arma = 0;
     //vector <unsigned int> atacados_normal;
     dinero = 0;
 }
@@ -299,7 +299,7 @@ void Jugador::AtacarUpdate(int danyo)
 {
   if(vida > 0)
   {
-    Nivel* nivel = Nivel::getInstance();
+    Jugando* nivel = Jugando::GetInstance();
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     MotorGrafico* _motor = MotorGrafico::GetInstance();
     if(this->getArma() == nullptr){
@@ -462,8 +462,8 @@ int Jugador::AtacarEspecial()
 void Jugador::AtacarEspecialUpdate(int*danyo)
 {
     MotorGrafico* _motor = MotorGrafico::GetInstance();
-    MotorFisicas * _fisicas = MotorFisicas::getInstance();
-    Nivel* nivel = Nivel::getInstance();
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    Jugando* nivel = Jugando::GetInstance();
 
     //Si el ataque especial es el del Heavy, es cuerpo a cuerpo
     if(strcmp(_armaEspecial->getNombre(), NOMBREHEAVY) == 0)

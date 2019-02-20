@@ -40,12 +40,6 @@ void Pausa::ManejarEventos()
         borrarEscenaResetearEvento(GUI_ID_SALIR_BUTTON);
         salir();
     }
-
-    if (_motor->OcurreEvento(GUI_ID_MENU_BUTTON))
-    {
-        borrarEscenaResetearEvento(GUI_ID_MENU_BUTTON);
-        menuPrincipal();
-    }
     
     if (_motor->OcurreEvento(GUI_ID_REINICIAR_BUTTON))
     {
@@ -62,6 +56,12 @@ void Pausa::ManejarEventos()
         _motor->ResetKey(KEY_ESC);
         _motor->ResetKey(KEY_P);
         atras();
+    }
+
+    if (_motor->OcurreEvento(GUI_ID_MENU_BUTTON))
+    {
+        borrarEscenaResetearEvento(GUI_ID_MENU_BUTTON);
+        menuPrincipal();
     }
 }
 

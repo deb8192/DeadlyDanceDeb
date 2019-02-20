@@ -8,12 +8,10 @@ Recolectable::Recolectable()
 
 Recolectable::~Recolectable()
 {
-
-}
-
-void Recolectable::remove()
-{
-    this->~Recolectable();
+    potenciaAtaque = 0;
+    codigoObjeto = 0;
+    posicionArrayObjetos = 0;
+    cantidad = 0;
 }
 
 Recolectable::Recolectable(int codigo, int ataque, const char* nombre, int anc, int lar, int alt, const char* objeto, const char* textura)
