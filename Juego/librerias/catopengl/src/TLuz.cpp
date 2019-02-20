@@ -10,24 +10,19 @@ TLuz::~TLuz()
 
 }
 
-void TLuz::remove()
-{
-    this->~TLuz();
-}
-
 void TLuz::setIntensidad(float *)
 {
 
 }
 
-float * TLuz::getIntensidad()
+float TLuz::getIntensidad()
 {
-
+    return 0.0f;
 }
 
 void TLuz::beginDraw()
 {
-    std::cout << didentidad << " se debe pintar-> " << ejecucion << std::endl;
+    std::cout << didentidad << " se debe pintar-> " << pila_compartida->size()  << std::endl;
 }
 
 void TLuz::endDraw()

@@ -10,7 +10,8 @@ void RImagen::Remove()
 
 }
 
-bool RImagen::CargarRecurso(char const *)
+bool RImagen::CargarRecurso(char const * _recurso)
 {
+    
     return false;
 }

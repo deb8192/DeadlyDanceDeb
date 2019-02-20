@@ -15,8 +15,6 @@ class TEntidad
 
         virtual void endDraw()=0;
 
-        virtual void remove()=0;
-
         void NoEjecutar();
 
         void Ejecutar();

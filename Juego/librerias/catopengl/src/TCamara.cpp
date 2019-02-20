@@ -10,11 +10,6 @@ TCamara::~TCamara()
 {
 
 }
-        
-void TCamara::remove()
-{
-    this->~TCamara();
-}
 
 //gestion de propiedades
 void TCamara::setPerspectiva()
@@ -29,7 +24,7 @@ void TCamara::setParalela()
 
 void TCamara::beginDraw()
 {
-    std::cout << didentidad << " se debe pintar-> " << ejecucion << std::endl;
+    std::cout << didentidad << " se debe pintar-> " << pila_compartida->size() << std::endl;
 }
 
 void TCamara::endDraw()
