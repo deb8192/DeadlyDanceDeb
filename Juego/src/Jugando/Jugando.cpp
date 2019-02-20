@@ -117,7 +117,8 @@ void Jugando::ValoresPorDefecto()
 {
     id = 0;
     //_primeraSala = nullptr;
-    drawTime = _controladorTiempo->GetTiempo(2);
+    //drawTime = _controladorTiempo->GetTiempo(2);
+    drawTime = 0.0f;
     lastDrawTime = drawTime;
     atacktime = 0.0f;
     cambia = 0;
@@ -558,10 +559,10 @@ void Jugando::Render()
     _motor->FondoEscena(255,0,0,0); // Borra toda la pantalla
 
     //Para evitar un tran salto en el principio de la ejecucion se actualiza el valor de drawTime
-    /*if (drawTime == 0.0f)
+    if (drawTime == 0.0f)
     {
         drawTime = _controladorTiempo->GetTiempo(2);
-    }*/
+    }
     lastDrawTime = drawTime;
     drawTime = _controladorTiempo->GetTiempo(2);
 
