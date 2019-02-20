@@ -8,6 +8,7 @@ Creditos::Creditos()
 
 Creditos::~Creditos()
 {
+    _motor = nullptr;
 }
 
 void Creditos::Iniciar()

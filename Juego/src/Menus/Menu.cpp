@@ -10,10 +10,9 @@ Menu::Menu()
 
 Menu::~Menu()
 {
-    cout << "Borrando menu" <<endl;
-
     // Punteros a clases singleton
     _motora = nullptr;
+    _motor = nullptr;
 }
 
 void Menu::Iniciar()

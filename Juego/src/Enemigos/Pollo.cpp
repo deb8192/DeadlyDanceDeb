@@ -12,7 +12,8 @@ Pollo::Pollo() : Enemigo()
 
 Pollo::~Pollo()
 {
-
+    funciona = false;
+    _ordenes = nullptr;
 }
 
 /***************** RunIA *****************

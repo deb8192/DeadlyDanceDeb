@@ -8,6 +8,7 @@ EstadoMuerte::EstadoMuerte()
 
 EstadoMuerte::~EstadoMuerte()
 {
+    _motor = nullptr;
 }
 
 void EstadoMuerte::Iniciar()

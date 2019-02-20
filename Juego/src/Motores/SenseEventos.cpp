@@ -53,7 +53,7 @@ void SenseEventos::update()
     tiempoInicio = clock();
 }
 
-void SenseEventos::agregarEvento(EventoSonido*  evento)
+void SenseEventos::agregarEvento(EventoSonido* evento)
 {
     sonidos.push_back(evento);//se agrega elemento
 }

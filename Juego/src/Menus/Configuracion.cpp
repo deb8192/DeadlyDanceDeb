@@ -8,6 +8,7 @@ Configuracion::Configuracion()
 
 Configuracion::~Configuracion()
 {
+    _motor = nullptr;
 }
 
 void Configuracion::Iniciar()

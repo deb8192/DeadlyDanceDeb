@@ -18,7 +18,7 @@ class InterfazJugador
         //fin singleton public
         void activar();//activa la interfaz
         void desactivar();//desactiva la interfaz
-        int*  getUpdate();//obtiene array de los valores que tienen [estado,vida,ataqueEspecial,dinero,arma]
+        int* getUpdate();//obtiene array de los valores que tienen [estado,vida,ataqueEspecial,dinero,arma]
         bool getEstado();//devuelve si debe ser visible o no la interfaz
         void setVida(int);//0 a 100, si te sales o bajas se queda en los limites
         void setAtaqueEspecial(int);//0 a 100

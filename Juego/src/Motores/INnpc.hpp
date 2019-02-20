@@ -8,31 +8,7 @@ using namespace std;
 class INnpc {
 
 public:
-    virtual ~INnpc() {
-        tipo = 0;
-        vida = 0;
-        barraAtEs = 0;
-        ataque = 0;
-        suerte = 0;
-        danyoCritico = 0;
-        proAtaCritico = 0;
-        //int buffos[4];
-        malla = "";
-        atackTime = 0;
-        atackEspTime = 0;
-         lastAtackTime = 0;
-        lastAtackEspTime = 0;
-        animacionMuerteTiem = 0;
-        tiempoPasadoMuerte = 0;
-        tiempoAtaque = 0;
-        tiempoPasadoAtaque = 0;
-        tiempoAtaEsp = 0;
-        tiempoPasadoAtaEsp = 0;
-        tiempoCogerObjeto = 0;
-        tiempoPasadoCogerObjeto = 0;
-        tiempoEnMorir = 0;
-        tiempoPasadoEnMorir = 0;
-    };
+    virtual ~INnpc() {};
     
     virtual int Atacar(int)=0;//efectua un ataque normal, llama al motor para ejecutar la animacion.
     //virtual void AtacarEspecial()=0;//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra

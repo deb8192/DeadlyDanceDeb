@@ -44,6 +44,7 @@ Jugando::~Jugando()
     _sense = nullptr;
     _fisicas = nullptr;
     _motora = nullptr;
+    _motor = nullptr;
 
     // Liberar memoria
     short tam = _enemigos.size();
