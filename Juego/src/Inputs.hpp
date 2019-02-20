@@ -1,13 +1,14 @@
+#ifndef Inputs_HPP
+#define Inputs_CPP
+
 #include <irrlicht/irrlicht.h>
 #include <iostream>
+#include "Eventos.hpp"
 
 using namespace std;
 using namespace irr;
 using namespace gui;
-//using namespace idsEventos;
-
-#ifndef Inputs_HPP
-#define Inputs_CPP
+using namespace idsEventos;
 
     class Inputs: public IEventReceiver
     {

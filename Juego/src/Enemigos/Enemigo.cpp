@@ -1,5 +1,5 @@
 #include "Enemigo.hpp"
-#include "../Jugando/Nivel.hpp"
+#include "../Jugando/Jugando.hpp"
 
 #define PI 3.14159265358979323846
 #define PIRADIAN 180.0f
@@ -749,7 +749,7 @@ int* Enemigo::RunIA(bool funciona)
 
     bool Enemigo::pedirAyuda()
     {
-        Nivel* _nivel = Nivel::getInstance();
+        Jugando* _nivel = Jugando::GetInstance();
         MotorGrafico* _motor = MotorGrafico::GetInstance();
         //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
         if(_nivel->getEnemigoPideAyuda() == nullptr && _motor->getPathfindingActivado())
@@ -768,7 +768,7 @@ int* Enemigo::RunIA(bool funciona)
         generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
         MotorGrafico* _motor = MotorGrafico::GetInstance();
         if(_motor->getPathfindingActivado()){
-            Nivel* _nivel = Nivel::getInstance();
+            Jugando* _nivel = Jugando::GetInstance();
             _nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
         }
         //cout << " contesta a la llamada de auxilio "<< endl;

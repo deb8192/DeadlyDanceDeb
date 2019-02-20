@@ -3,35 +3,24 @@
 
 Interactuable::Interactuable()
 {
-    // Local
+    // Inicializar variables locales
     codigoObjeto=0;
     accionado=0;
     posicionArrayObjetos=0;
-    //_desplazamientos -> array de float*
-
-    // Revisar si se puedehacer destructor general
-    // INobjetos
-   /* ancho=0; largo=0; alto=0;
-    nombreObjeto = nullptr;
-    ruta_objeto = nullptr;
-    ruta_textura = nullptr;
-
-    delete cadena_objeto;
-    delete cadena_textura;
-    delete cadena_nombre;*/
-
-    // IDrawable
-
 }
 
 Interactuable::~Interactuable()
 {
+    codigoObjeto=0;
+    accionado=0;
+    posicionArrayObjetos=0;
 
-}
-
-void Interactuable::remove()
-{
-    this->~Interactuable();
+    // TO DO: revisar cuando se cambie
+    for(unsigned short i=0; i<tam-1; ++i)
+    {
+        _desplazamientos[i]=0;
+    }
+    delete[] _desplazamientos;
 }
 
 Interactuable::Interactuable(int codigo, const char* nombre, int anc, int lar, int alt, const char* objeto, const char* textura, int posicion)

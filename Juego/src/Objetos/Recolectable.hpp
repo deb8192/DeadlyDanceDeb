@@ -66,7 +66,6 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         float getAlto();
         int getCantidad();
 
-
     private:
 
         //creo que lo mejor esque el objeto que recojas tenga ya su valor de daño

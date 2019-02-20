@@ -145,13 +145,13 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
     bool jugadorEstasAqui = plat.attribute("UserStar").as_bool();//nos devuelve true si es donde empieza el jugador 
     const char* textura = plat.attribute("Texture").value(); //nos da un char[] = string
     const char* modelo  =  plat.attribute("Model").value(); //nos da un char[] = string
-    /*padren = _jugando->CrearPlataforma(accion,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
+    padren = _jugando->CrearPlataforma(accion,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
 
     if(padre != nullptr && padren != nullptr)
     {
         padre->agregarSalida(padren);
         padren->agregarEntrada(padre);
-    }*/
+    }
 
     if(jugadorEstasAqui)
     {
@@ -170,7 +170,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         _jugando->CrearJugador(accion,Playerx,Playerz,Playery,ancho,largo,alto,Playermodelo,Playertextura,propiedades);
     }
 
-    /*for (pugi::xml_node enem = plat.child("Enemy"); enem; enem = enem.next_sibling("Enemy"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    for (pugi::xml_node enem = plat.child("Enemy"); enem; enem = enem.next_sibling("Enemy"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         //aqui va la carga de enemigos
         int* propiedades;
@@ -186,7 +186,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         const char* textura = enem.attribute("Texture").value(); //nos da un char[] = string
         const char* modelo  =  enem.attribute("Model").value(); //nos da un char[] = string
         _jugando->CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,modelo,textura,propiedades,padren); //cargamos el enemigo
-    }*/
+    }
     for (pugi::xml_node obj = plat.child("Object"); obj; obj = obj.next_sibling("Object"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         //aqui va la carga de objetos

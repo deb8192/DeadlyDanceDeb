@@ -1,7 +1,4 @@
 #include "Inputs.hpp"
-#include "Eventos.hpp"
-//se llama a su cabezera para cargar las dependencias
-//#include "eventos.hpp"
 
 	bool Inputs::OnEvent(const SEvent& event)
 	{

@@ -4,7 +4,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #define MotorGrafico_HPP
 
 #include <irrlicht/irrlicht.h> //la utilizaremos para las funcionalidades del motor
-#include "../Eventos.hpp" //este archivo contiene los ids de los eventos
+//#include "../Eventos.hpp" //este archivo contiene los ids de los eventos
 #include "../Inputs.hpp" //
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
