@@ -8,10 +8,62 @@ Recolectable::Recolectable()
 
 Recolectable::~Recolectable()
 {
+    // Recolectable
     potenciaAtaque = 0;
     codigoObjeto = 0;
     posicionArrayObjetos = 0;
     cantidad = 0;
+
+    // INobjetos
+    delete nombreObjeto;
+    delete ruta_objeto;
+    delete ruta_textura;
+    delete cadena_objeto;
+    delete cadena_textura;
+    delete cadena_nombre;
+    ancho = 0;
+    largo = 0;
+    alto  = 0;
+
+    // INdrawable
+    posIni.x = 0;
+    posIni.y = 0;
+    posIni.z = 0;
+    
+    posActual.x = 0;
+    posActual.y = 0;
+    posActual.z = 0;
+
+    posPasada.x = 0;
+    posPasada.y = 0;
+    posPasada.z = 0;
+
+    posFutura.x = 0;
+    posFutura.y = 0;
+    posFutura.z = 0;
+
+    posFisicas.x = 0;
+    posFisicas.y = 0;
+    posFisicas.z = 0;
+
+    rotActual.x = 0;
+    rotActual.y = 0;
+    rotActual.z = 0;
+
+    rotPasada.x = 0;
+    rotPasada.y = 0;
+    rotPasada.z = 0;
+
+    rotFutura.x = 0;
+    rotFutura.y = 0;
+    rotFutura.z = 0;
+    
+    moveTime = 0;
+    rotateTime = 0;
+    rotation = 0;
+    id = 0;
+    animacion = 0;
+    animacionAnterior = 0;
 }
 
 Recolectable::Recolectable(int codigo, int ataque, const char* nombre, int anc, int lar, int alt, const char* objeto, const char* textura)

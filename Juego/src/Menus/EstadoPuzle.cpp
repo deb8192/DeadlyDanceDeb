@@ -8,6 +8,7 @@ EstadoPuzle::EstadoPuzle()
 
 EstadoPuzle::~EstadoPuzle()
 {
+    _motor = nullptr;
 }
 
 void EstadoPuzle::Iniciar()

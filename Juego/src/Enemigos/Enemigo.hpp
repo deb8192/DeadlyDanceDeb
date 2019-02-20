@@ -110,14 +110,14 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int GetEnemigo();
 
         //comportamientos bases
-            bool ver(int tipo);//1 si ve al jugador
-            bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
-            bool buscar();//por defecto devuelve true
-            bool perseguir();//por defecto devuelve true
-            bool Acciones(int);//esto es para recorrer el arbol
-            bool pedirAyuda();//pide ayuda
-            bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
-            bool Merodear(int tipo);//para dar vueltas por una zona, segun el enemigo tendra diferentes merodeos
+        bool ver(int tipo);//1 si ve al jugador
+        bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
+        bool buscar();//por defecto devuelve true
+        bool perseguir();//por defecto devuelve true
+        bool Acciones(int);//esto es para recorrer el arbol
+        bool pedirAyuda();//pide ayuda
+        bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
+        bool Merodear(int tipo);//para dar vueltas por una zona, segun el enemigo tendra diferentes merodeos
         //fin comportamientos bases
 
         //activar ia
@@ -129,7 +129,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
     protected:
         Sala* _estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
-        float atacktime = 0.0f;
+        float atacktime;
         float velocidad;  //Velocidad de desplazamiento del enemigo
         Arma* _armaEspecial;
         const char* _rutaArmaEspecial = "assets/models/objeto.obj";

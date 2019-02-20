@@ -15,6 +15,11 @@ InterfazJugador::InterfazJugador()
 
 InterfazJugador::~InterfazJugador()
 {
+    vida = 0;
+    ataqueEspecial = 0;
+    dinero = 0;
+    arma = 0;
+    estado = false;
     delete _unica_instancia;
 }
 

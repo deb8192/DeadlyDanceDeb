@@ -9,7 +9,7 @@ Pausa::Pausa()
 
 Pausa::~Pausa()
 {
-    cout << "Borrando pausa" <<endl;
+    _motor = nullptr;
 }
 
 void Pausa::Iniciar()

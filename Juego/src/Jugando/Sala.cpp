@@ -29,6 +29,7 @@ Sala::Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type)
     tipocentro = 0;
     posicion_en_grafica = 0;
 
+    // TO DO:
     /*Sala* nula;
     nula=(Sala*)0x100000000;
     if(entradas.size()>0)

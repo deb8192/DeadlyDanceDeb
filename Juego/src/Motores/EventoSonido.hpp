@@ -5,9 +5,9 @@
 class EventoSonido
 {
     public:
-        
-        ~EventoSonido();
         EventoSonido(int inten,double durac,int nx,int ny,int nz,int prop,int tip);//intensidad, duracion(en segundos) 
+        ~EventoSonido();
+        
         int* getPropiedades();
         void restarTiempo(double tiempo);
         double getDuracion();
@@ -22,6 +22,7 @@ class EventoSonido
         int x,y,z;
         int propietario;
         int tipo;
+
 };
 
 #endif

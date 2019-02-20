@@ -6,11 +6,12 @@
 
 Enemigo::Enemigo()
 {
-
+    atacktime = 0.0f;
 }
 
 Enemigo::Enemigo(float nx, float ny, float nz)
 {
+    atacktime = 0.0f;
     posIni.x = nx;
     posIni.y = ny;
     posIni.z = nz;
@@ -18,26 +19,84 @@ Enemigo::Enemigo(float nx, float ny, float nz)
 
 Enemigo::~Enemigo()
 {
-    //Inicializo variables y punteros
-    //Sala* _estoy;//sala en la que esta el enemigo
-    atx=0.0;
-    atespx=0.0;
-    aty=0.0;
-    atespy=0.0;
-    atz=0.0;
-    atespz=0.0;
-    atgx=0.0;
-    atgy=0.0;
-    atgz=0.0;
-    incrAtDisCirc=0.0;
-    atespposX=0.0;
-    atespposY=0.0;
-    atespposZ=0.0;
-    atacktime = 0.0f;
-    //Arma* _armaEspecial;
-    //const char * _rutaArmaEspecial = "assets/models/objeto.obj";
-    //Arbol2 * arbol;//este arbol es la ia para hacerlo funcionar debes llamar a RunIA() desde nivel, cuidado porque si es nullptr puede dar errores.
-    pos_ataques=0; //para controlar el array de ataques en colisiones
+    // Enemigo
+    atx = 0; atespx = 0; aty = 0; atespy = 0;
+    atz = 0; atespz = 0; atgx = 0; atgy = 0; atgz = 0;
+    atespposX = 0; atespposY = 0; atespposZ = 0;
+    incrAtDisCirc = 0;
+    atacktime = 0;
+    velocidad = 0;
+    tipoEnemigo = 0;
+    pos_ataques = 0;
+    accionRealizada = false;
+    
+    // INnpc
+    tipo = 0;
+    vida = 0;
+    barraAtEs = 0;
+    ataque = 0;
+    suerte = 0;
+    danyoCritico = 0;
+    proAtaCritico = 0;
+    //TO DO: int buffos[4];
+    malla = "";
+    atackTime = 0;
+    atackEspTime = 0;
+    lastAtackTime = 0;
+    lastAtackEspTime = 0;
+    animacionMuerteTiem = 0;
+    tiempoPasadoMuerte = 0;
+    tiempoAtaque = 0;
+    tiempoPasadoAtaque = 0;
+    tiempoAtaEsp = 0;
+    tiempoPasadoAtaEsp = 0;
+    tiempoCogerObjeto = 0;
+    tiempoPasadoCogerObjeto = 0;
+    tiempoEnMorir = 0;
+    tiempoPasadoEnMorir = 0;
+
+    // INdrawable
+    posIni.x = 0;
+    posIni.y = 0;
+    posIni.z = 0;
+    
+    posActual.x = 0;
+    posActual.y = 0;
+    posActual.z = 0;
+
+    posPasada.x = 0;
+    posPasada.y = 0;
+    posPasada.z = 0;
+
+    posFutura.x = 0;
+    posFutura.y = 0;
+    posFutura.z = 0;
+
+    posFisicas.x = 0;
+    posFisicas.y = 0;
+    posFisicas.z = 0;
+
+    rotActual.x = 0;
+    rotActual.y = 0;
+    rotActual.z = 0;
+
+    rotPasada.x = 0;
+    rotPasada.y = 0;
+    rotPasada.z = 0;
+
+    rotFutura.x = 0;
+    rotFutura.y = 0;
+    rotFutura.z = 0;
+    
+    moveTime = 0;
+    rotateTime = 0;
+    rotation = 0;
+    id = 0;
+    animacion = 0;
+    animacionAnterior = 0;
+
+    // INsentidos
+    //de momento nada
 }
 
 float Enemigo::getX()

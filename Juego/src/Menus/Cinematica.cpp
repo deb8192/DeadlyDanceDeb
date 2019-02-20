@@ -8,7 +8,7 @@ Cinematica::Cinematica()
 
 Cinematica::~Cinematica()
 {
-    cout << "Borrando cinematica" <<endl;
+    _motor = nullptr;
 }
 
 void Cinematica::Iniciar()

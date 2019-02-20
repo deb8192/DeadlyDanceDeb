@@ -9,23 +9,13 @@ using namespace std;
 class INobjetos
 {
     public:
-        virtual ~INobjetos() {
-            delete nombreObjeto;
-            delete ruta_objeto;
-            delete ruta_textura;
-            delete cadena_objeto;
-            delete cadena_textura;
-            delete cadena_nombre;
-            ancho = 0;
-            largo = 0;
-            alto  = 0;
-        };
+        virtual ~INobjetos() {};
 
     /*el protected es para que tenga acceso sus descendientes o parientes*/
     protected:    	
-    	const char* nombreObjeto;
-        const char* ruta_objeto; 
-        const char* ruta_textura;
+    	const char * nombreObjeto;
+        const char * ruta_objeto; 
+        const char * ruta_textura;
         char* cadena_objeto; 
         char* cadena_textura;
         char* cadena_nombre;
