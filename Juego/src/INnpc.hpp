@@ -9,7 +9,7 @@ class INnpc {
 
 public:
 
-    typedef struct VectorEspacial
+    using VectorEspacial = struct
         {
             float vX = 0.0f;
             float vY = 0.0f;
