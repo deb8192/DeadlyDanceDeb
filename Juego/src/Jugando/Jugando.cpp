@@ -17,7 +17,6 @@ Jugando::Jugando()
 
 Jugando::~Jugando()
 {
-    cout << "Borrando Jugando" << endl;
     reiniciando = false;
     jugadorInmovil = false;
     drawTime = 0;

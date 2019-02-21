@@ -9,16 +9,93 @@ using namespace std;
 #define PI 3.14159265358979323846
 #define PIRADIAN 180.0f
 
-MotorFisicas* MotorFisicas::unica_instancia = 0;
+MotorFisicas* MotorFisicas::_unica_instancia = 0;
 //fin indicador singleton
 
 MotorFisicas::MotorFisicas()
 {
+    armaAtEsp = nullptr;
+    jugadorAtack = nullptr;
+    arma = nullptr;
+    
     config.defaultVelocitySolverNbIterations = 20;
     config.isSleepingEnabled = false;
     space = new CollisionWorld(config);
     jugador = nullptr;
 }
+
+MotorFisicas::~MotorFisicas()
+{
+    //TO DO: revisar
+    //WorldSettings config;
+    //std::vector<unsigned int> relacionInteractuablesObstaculos
+
+    jugador = nullptr;
+    armaAtEsp = nullptr;
+    jugadorAtack = nullptr;
+    arma = nullptr;
+
+    // Liberar memoria
+    short tam = enemigos.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete enemigos.at(i);
+    }
+    enemigos.clear();
+
+    tam = enemigosAtack.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete enemigosAtack.at(i);
+    }
+    enemigosAtack.clear();
+
+    tam = armaAtEspEne.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete armaAtEspEne.at(i);
+    }
+    armaAtEspEne.clear();
+
+    tam = recolectables.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete recolectables.at(i);
+    }
+    recolectables.clear();
+
+    tam = recolectables_powerup.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete recolectables_powerup.at(i);
+    }
+    recolectables_powerup.clear();
+
+    tam = interactuables.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete interactuables.at(i);
+    }
+    interactuables.clear();
+
+    tam = obstaculos.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete obstaculos.at(i);
+    }
+    obstaculos.clear();
+
+    tam = plataformas.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete plataformas.at(i);
+    }
+    plataformas.clear();
+
+    delete space;
+    delete _unica_instancia;
+}
+
 
 void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator)
 {
@@ -324,6 +401,7 @@ bool MotorFisicas::enemyCollidePlatform(unsigned int enemigo)
 
 }
 
+// TO DO revisar
 int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,float longitud,int modo)
 {
 
@@ -334,7 +412,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
 
     int * jug;
     int * ene;
-    int * obj;
+    //int * obj;
 
     //creamos un puntero para saber si colisiona con el jugador (si es el jugador devolvera que no colisiona con el)
     if(modo == 1)
@@ -344,7 +422,8 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
     }
 
     //creamos un puntero que devuelve solamente los objetos con los que colisiona
-    if(modo == 2)
+    // Ya no utilizar - MI
+    /*if(modo == 2)
     {
         obj = new int[objetos.size()+1];
         obj[0] = (objetos.size()+1);//dimension
@@ -355,7 +434,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
                 obj[a] = 0;
             }
         }
-    }
+    }*/
 
     //creamos un puntero que devuelve solo los enemigos con los que colisiona por defecto si este rayo sale de un enemigo no lo detecta como colision
     if(modo == 3)
@@ -402,7 +481,8 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
         }
     }
 
-    if(modo == 0 || modo == 2)
+    // Ya no utilizar - MI
+    /*if(modo == 0 || modo == 2)
     {
         if(objetos.size() > 0)//posiciones interpolacion
         {
@@ -415,7 +495,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
                         obj[i+1] = 1;
             }
         }
-    }
+    }*/
 
     //por ultimo destruimos el objeto
     delete rayo;
@@ -426,7 +506,8 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
         case 1:
             return jug;
         case 2:
-            return obj;
+            //return obj;
+            return nullptr;
         case 3:
             return ene;
     }

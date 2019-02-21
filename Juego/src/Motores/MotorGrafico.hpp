@@ -31,7 +31,7 @@ using namespace idsEventos;
             static MotorGrafico* GetInstance() //esto se utiliza para crear el objeto una sola vez
             {
                 if(_unica_instancia == 0)
-                _unica_instancia = new MotorGrafico();
+                    _unica_instancia = new MotorGrafico();
                 return _unica_instancia;
             }
             //fin singleton public
@@ -85,36 +85,57 @@ using namespace idsEventos;
             void CargarEnemigos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
             int CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
+            void CargarArmaJugador(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
-
-            //colision rayo
-            bool colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);
-
-            //debug grafico
-            void activarDebugGrafico();//se activa o desactiva el modo debug grafico
-            void activarPathfinding(); //Temporal, se activa o desactiva el pathfinding
-            void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
-            void dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo);
-            void dibujarZona(int x, int y, int z, float ancho, float alto, float profund);
-            void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
-            void clearDebug2();
-            void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea
+            void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
+            void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
+            
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
             void borrarArmaEspecial();
+
+            //debug grafico
+            void activarDebugGrafico();//se activa o desactiva el modo debug grafico
+            void activarPathfinding(); //Temporal, se activa o desactiva el pathfinding
+            void clearDebug();//borra toda la informacion de debug en cada update para ver los cambios
+            void clearDebug2();
+            void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
+            void dibujarZona(int x, int y, int z, float ancho, float alto, float profund);
+            void dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo);
+            
+            //colision rayo
+            bool colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);
+            //void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea
+            
             void colorearJugador(int a, int r, int g, int b);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
+            //void colorearObjeto(int a, int r, int g, int b, int obj);
+            
+            IAnimatedMeshSceneNode* getArmaEspecial();
+            void EraseColectable(long unsigned int idx);
+            void ErasePowerUP(long unsigned int idx);
+            void EraseEnemigo(std::size_t i);
+            void EraseJugador();
+            void EraseArma();
+            //int getEnemigos_Scena();
+            //int getObjetos_Scena();
 
-            void colorearObjeto(int a, int r, int g, int b, int obj);
             void debugBox(int x,int y, int z,int ancho, int alto, int largo);
             void debugVision(float x, float y, float z, float rotacion, float longitud);
-            void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
-            void CargarArmaJugador(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
-            void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
+            
+            
+            //interfaz TO DO: revisar
+            void cargarInterfaz();
+            void destruirInterfaz();
+            void updateInterfaz();
 
-            IAnimatedMeshSceneNode* getArmaEspecial();
+            //animaciones
+            void cambiarAnimacionJugador(int);//nos sirve para cambiar de animacion al jugador
+
+            //getters & setters
+            bool getPathfindingActivado();
 
             // Funciones para puzzles
             void PosicionCamaraEnPuzzles();
@@ -130,26 +151,6 @@ using namespace idsEventos;
             void MoverFichas(short pila);
             void RecolocarFicha(short y, short z);
             void ReiniciarHanoi();
-
-            int getEnemigos_Scena();
-            void EraseColectable(long unsigned int idx);
-            int getObjetos_Scena();
-            void EraseEnemigo(std::size_t i);
-            void EraseJugador();
-            void EraseArma();
-            void ErasePowerUP(long unsigned int idx);
-
-            //interfaz
-            void cargarInterfaz();
-            void destruirInterfaz();
-            void updateInterfaz();
-
-            //animaciones
-            void cambiarAnimacionJugador(int);//nos sirve para cambiar de animacion al jugador
-
-            //getters & setters
-            bool getPathfindingActivado();
-
 
             void updateMotorCinematica();
             bool finalCinematica();
@@ -174,65 +175,59 @@ using namespace idsEventos;
             ICameraSceneNode* _camera;
 
             // Ventana
-            short width, height;
+            unsigned short width, height;
             IGUIFont* _font;
             IGUISkin* _skin;
 
             /** Revisar **/
             IGUIFont* font2;
-            IAnimatedMeshSceneNode* ninja;
             std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
             std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
             std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
-            IAnimatedMesh* arma;//Malla del arma del jugador
-            IAnimatedMeshSceneNode* Arma_Jugador;//Malla del arma del jugador en escena
-            IAnimatedMesh* armaEsp;//Malla del arma especial del jugador
-            IAnimatedMeshSceneNode* ArmaEspecial_Jugador;//Malla del arma especial del jugador en escena
+            
+            IAnimatedMeshSceneNode* _armaEnEscena;//Malla del arma del jugador en escena
+            IAnimatedMesh* _armaEsp;//Malla del arma especial del jugador
+            IAnimatedMeshSceneNode* _armaEspJugador;//Malla del arma especial del jugador en escena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> PowerUP_Scena;//Objetos en scena
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
-            IAnimatedMeshSceneNode* Jugador_Scena;//Jugador en scena
+            IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena
             //debug
-            IAnimatedMesh*  linea;
-            IAnimatedMesh*  conovision;
+            IAnimatedMesh* _linea;
+             IAnimatedMesh* _conoVision;
             bool debugGrafico, pathfinding;//nos sirven para saber si tenemos activado el debug grafico y el pathfinding
-            scene::ISceneNode* n;//box
+            ISceneNode* _caja;//box
 
-            core::aabbox3d<f32> bounding_jugador;
-
-            IAnimatedMeshSceneNode* tmpobjt_en_scena;
-            IAnimatedMesh* sphere;
-            IAnimatedMesh* cube;
-            IAnimatedMesh* capsule;
+            IAnimatedMeshSceneNode* _tmpObjEscena;
 
             // Objetos y funciones para puzzles
-            IGUIStaticText* myTextBox;
+            IGUIStaticText* _myTextBox;
 
-            IMesh* fichaMesh;                         // Malla
-            IMeshSceneNode* ficha;                    // Nodo
+            IMesh* _fichaMesh;                         // Malla
+            IMeshSceneNode* _ficha;                    // Nodo
             std::vector<IMeshSceneNode*> fichasMesh;  // Lista de nodos (fichas)
 
             // Para seleccionar nodos
             position2di initialCursorPosition;        // Posicion del clic raton
             position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
-            ISceneNode* nodoSeleccionado = 0;
+            ISceneNode* _nodoSeleccionado;
 
             // Ventana
             short WIDTH_AUX, WIDTH, HEIGHT;
             short x_linea1, x_linea2;
 
-            IGUIImage* img;
-            ITexture*  puzzles_particle_texture;
-            vector<IGUIImage*> imagenes;
+            IGUIImage* _img;
+            ITexture*  _puzParticleTexture;
+            //vector<IGUIImage*> imagenes; <- Pendiente de utilizar en puzzles
 
             enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
             enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
 
-            void CrearMeshFicha(float tamanyo, int r, int g, int b);
             void CargarIMG(short x, short y);
-
+            void CrearMeshFicha(float tamanyo, int r, int g, int b);
+            
             //interfaz
             IGUIImage* vidaI;
             IGUIImage* energiaI;
@@ -255,8 +250,9 @@ using namespace idsEventos;
             ITexture* llave_textura;
             ITexture* espada_textura;
             ITexture* daga_textura;
+
             //cinematicas
-            int frame_actual = 0;//numero de frame actual
+            int frame_actual;//numero de frame actual
             IGUIImage* actual;//frame actual
             float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
             ITexture* actualTexture;//textura actual
