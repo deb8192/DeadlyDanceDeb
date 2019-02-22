@@ -8,8 +8,8 @@ class Ventana
         Ventana();//sirve para inicializar la ventana
         void Remove();//elimina la ventana
         bool CrearVentana(int ,int ,bool ,const char * );//creamos la ventana
-        void UpdateFase1();//actualiza las teclas y limpia la pantalla
-        void UpdateFase2();//renderizada la informacion y cambia los buffers
+        void UpdateLimpiar();//actualiza las teclas y limpia la pantalla
+        void UpdateDraw();//renderizada la informacion y cambia los buffers
         bool SigueAbierta();//nos sirve para saber si la ventana sigue en ejecucion
         void Drop();//borramos la informacion de glfw
 

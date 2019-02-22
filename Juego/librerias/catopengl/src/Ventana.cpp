@@ -76,17 +76,17 @@ void Ventana::draw()
 {
     //Comprobar y llamar eventos, cambiar buffers
     glfwSwapBuffers(_window);             //Intercambia los buffer de la ventana
-    glfwPollEvents();  
+    glfwPollEvents();
 }
 
 //USO: sirve para unificar el update general de la ventana(se llaman a las diferentes funciones necesarias para actualizar la ventana)
-void Ventana::UpdateFase1()
+void Ventana::UpdateLimpiar()
 {
     limpiar();
 }
 
 //USO: llamamos a pintar buffers
-void Ventana::UpdateFase2()
+void Ventana::UpdateDraw()
 {
     draw();
 }
