@@ -8,9 +8,7 @@ using namespace idsEventos;
 class Estado {
     public:
         //funciones que tiene la interfaz como virtual (porque no existen pero deberian)
-        virtual ~Estado() {
-            _motor = nullptr;
-        };
+        virtual ~Estado() = default;
         virtual void Iniciar() = 0;
         virtual void Render() = 0;
         virtual void Update() = 0;

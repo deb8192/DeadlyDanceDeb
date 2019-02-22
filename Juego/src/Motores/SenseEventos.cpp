@@ -2,21 +2,41 @@
 #include "MotorGrafico.hpp"
 #include "MotorFisicas.hpp"
 
-SenseEventos* SenseEventos::unica_instancia = 0;
+SenseEventos* SenseEventos::_unica_instancia = 0;
 
 SenseEventos::SenseEventos()
 {
     tiempoFinal = 0.0;
     tiempoInicio = 0.0;
+
+    /*_motor = MotorGrafico::GetInstance();
+    _fisicas = MotorFisicas::getInstance();*/
 }
 
-SenseEventos::~SenseEventos(void)
+SenseEventos::~SenseEventos()
 {
+    tiempoInicio = 0.0;
+    tiempoInicio = 0.0;
 
+    // Punteros a clases singleton
+    /*_motor = nullptr;
+    _fisicas = nullptr;*/
+
+    // Liberar memoria
+    short tam = sonidos.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete sonidos.at(i);
+    }
+    sonidos.clear();
+
+    delete _unica_instancia;
 }
 
 void SenseEventos::update()
 {
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
+
     //nos recorremos los eventos de sonido
     tiempoFinal = clock();
     
@@ -41,10 +61,10 @@ void SenseEventos::update()
             }
             else
             {
-                int * propie = sonidos[i]->getPropiedades();
+                int* propie = sonidos[i]->getPropiedades();
                 float inten = sonidos[i]->getIntensidad();
-                MotorGrafico * motor = MotorGrafico::GetInstance();
-                motor->dibujarCirculoEventoSonido(propie[2],propie[3],propie[4],inten);
+                
+                _motor->dibujarCirculoEventoSonido(propie[2],propie[3],propie[4],inten);
                 delete [] propie;
             }
             
@@ -67,7 +87,7 @@ void SenseEventos::agregarEvento(EventoSonido* evento)
         {
             if(sonidos[i]->getDuracion() != 0)
             {
-                int * propie = sonidos[i]->getPropiedades();
+                int* propie = sonidos[i]->getPropiedades();
                 int cx = propie[2];
                 int cy = propie[3];
                 float inter = sqrt( (pow((cx-x),2)) + (pow((cy-y),2)) );
@@ -86,22 +106,21 @@ void SenseEventos::agregarEvento(EventoSonido* evento)
 
 //para la vista devuelve los objetos que ve
 int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista, int modo, bool perifericos)
-{ 
+{
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
 
-    MotorFisicas * fisicas = MotorFisicas::getInstance();
-    MotorGrafico * motor = MotorGrafico::GetInstance();
-
-    int * perDer;
-    int * perIzq;
-    int * recto = fisicas->colisionRayoUnCuerpo(x,y,z,rot,vista,modo);//mira directa
-    motor->debugVision(x,y,z,rot,vista);
-    motor->debugVision(x,y,z,rot+30,vista/2);
-    motor->debugVision(x,y,z,rot-30,vista/2);
+    int* perDer;
+    int* perIzq;
+    int* recto = _fisicas->colisionRayoUnCuerpo(x,y,z,rot,vista,modo);//mira directa
+    _motor->debugVision(x,y,z,rot,vista);
+    _motor->debugVision(x,y,z,rot+30,vista/2);
+    _motor->debugVision(x,y,z,rot-30,vista/2);
 
     if(perifericos)
     {
-            perDer = fisicas->colisionRayoUnCuerpo(x,y,z,rot+30,vista/2,modo);//mira periferica derecha
-            perIzq = fisicas->colisionRayoUnCuerpo(x,y,z,rot-30,vista/2,modo);//mira periferica izquierda
+            perDer = _fisicas->colisionRayoUnCuerpo(x,y,z,rot+30,vista/2,modo);//mira periferica derecha
+            perIzq = _fisicas->colisionRayoUnCuerpo(x,y,z,rot-30,vista/2,modo);//mira periferica izquierda
             
             //Si lo ve por uno de los perifericos lo pone a 1
             if(modo == 1)//jugador
