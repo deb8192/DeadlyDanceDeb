@@ -33,7 +33,7 @@ void TTransform::invertir()
 }
 
 void TTransform::trasladar(float x,float y,float z)
-{                  
+{   
     identidad();                                                                  
     *matriz = glm::translate(*matriz, glm::vec3(x,y,z));
 }
@@ -53,15 +53,28 @@ void TTransform::escalar(float x,float y,float z)
 
 void TTransform::beginDraw()
 {
-    std::cout << didentidad << " se debe pintar-> " << pila_compartida->size() << std::endl;
+    matriz_compartida = nullptr;
+    
+    //std::cout << " p " <<  pila_compartida->size() << std::endl;
     TEntidad::pila_compartida->push(matriz);
+    //std::cout << " c " <<  cola_compartida->size() << std::endl;
+    TEntidad::cola_compartida->push(matriz);
 }
 
 //Uso: desapila 
 void TTransform::endDraw()
 {  
+    matriz_compartida = nullptr;
+
     if(pila_compartida->size() > 0)
     {
+        //std::cout << " p " <<  pila_compartida->size() << std::endl;
         TEntidad::pila_compartida->pop();
+    }
+
+    if(cola_compartida->size() > 0)
+    {
+        //std::cout << " c " << cola_compartida->size() << std::endl;
+        TEntidad::cola_compartida->pop();
     }
 }

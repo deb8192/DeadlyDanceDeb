@@ -122,13 +122,33 @@ unsigned short Interfaz::AddMalla(const char * archivo)
     rotacionEnt->escalar(0,0,0);
     escalado->setEntidad(escaladoEnt);
 
-    unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo,nullptr);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
+    TNodo * malla = new TNodo;
+    TMalla * mallaEn = new TMalla;
+    malla->setEntidad(mallaEn);
+
+    escalado->addHijo(rotacion);
+    rotacion->addHijo(traslacion);
+    traslacion->addHijo(malla);
+
+    unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo,malla);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
+    
     if(id_recurso != 0)
     {
-        //como tenemos id tenemos recursos 
+        if(_raiz != nullptr)
+        {
+            _raiz->addHijo(escalado);//se agrega al arbol
+            unsigned short idnuevo = generarId();//se genera un id 
+        
+            Nodo * nodo = new Nodo(); 
+            nodo->id = idnuevo;//se pone el id
+            nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+            nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
+            nodos.push_back(nodo);//se agrega a la lista de nodos general
 
-        return id_recurso;
+            return idnuevo;
+        }
     }
+
     //ahora le pasamos este al cargador para asociar la malla a este id
     return 0;
 }
@@ -186,21 +206,25 @@ void Interfaz::Trasladar(unsigned char id,float x,float y,float z)
 
     if(nodo != nullptr) 
     {
-
-        //std::cout << "funciona trasladar" << " " << id << std::endl;
-        //nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+        TNodo * tnodo = nodo->recurso->GetNieto(1);
+        if(tnodo != nullptr)
+        {
+            tnodo->GetEntidad()->trasladar(x,y,z);  
+        }
     }
 }   
 
-void Interfaz::Rotar(unsigned char id,float x,float y,float z)
+void Interfaz::Rotar(unsigned char id,float grados,float x,float y,float z)
 {
     Nodo * nodo = buscarNodo(id);
 
     if(nodo != nullptr)
     {
-
-        //std::cout << "funciona rotar" << " " << id << std::endl;
-        //nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+        TNodo * tnodo = nodo->recurso->GetHijo(1);
+        if(tnodo != nullptr)
+        {
+            tnodo->GetEntidad()->rotar(grados,x,y,z);
+        }
     }
 }
 
@@ -210,8 +234,6 @@ void Interfaz::Escalar(unsigned char id,float x,float y,float z)
 
     if(nodo != nullptr)
     {
-
-        //std::cout << "funciona escalar" << " " << id << std::endl;
-        //nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+        nodo->recurso->GetEntidad()->escalar(x,y,z);
     }
 }
