@@ -10,11 +10,14 @@ class Pollo : public Enemigo
         ~Pollo();
         Pollo();
         void RunIA();
-        void UpdatePollo(int i);
+        void UpdatePollo(short *i);
+        void SetNuevasOrdenes(short i);
 
     private:
-        bool funciona;
-        int* _ordenes;
+        bool funciona, atacado, hecho;
+        short int* _ordenes;
+        short int maxRotacion;
+        short int direccion;
 
 };
 
