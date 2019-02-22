@@ -3,9 +3,9 @@ CC_FLAGS = -w #comandos extras para el compilador
 RUTACPP = src/ #variable donde iran las clases que utilizamos
 # $(CXX) - Es la variable de entorno del compilador si estas con g++ o gcc te lo detecta solo+
 CXXFLAGS = -g -Wall # lo que hace es que crea archivos debug para que se pueda comprobar la informacion
-CABECERAS =-I"../glew/inc/" -I"../glad/inc/" -I"../glfw/inc/" -I"../stb_image/inc/" -I"../glm/" #nos dice donde estan los includes
-LIBRERIAS =-L"../glew/lib/" -L"../glad/lib/" -L"../glfw/lib/" #nos dice donde estan las librerias
-LIBRERIAS_ESPECIFICAS = ../glew/lib/libGLEW.a ../glad/lib/libglad.a ../glfw/lib/libglfw3.a #librerias necesarias
+CABECERAS =-I"../glew/inc/" -I"../glad/inc/" -I"../glfw/inc/" -I"../stb_image/inc/" -I"../glm/" -I"../assimp/inc/" #nos dice donde estan los includes
+LIBRERIAS =-L"../glew/lib/" -L"../glad/lib/" -L"../glfw/lib/" -L"../assimp/lib/"  #nos dice donde estan las librerias
+LIBRERIAS_ESPECIFICAS = ../glew/lib/libGLEW.a ../glad/lib/libglad.a ../glfw/lib/libglfw3.a ../assimp/lib/libIrrXML.a #librerias necesarias
 irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor -lGL -lIrrlicht   #porque nombre llamarla
 SHELL = /bin/bash
 # ${CXXFLAGS} - Son las opciones del compilador
