@@ -30,7 +30,7 @@ class Interfaz
 
         void Trasladar(unsigned char,float,float,float);//trasladar 
         
-        void Rotar(unsigned char,float,float,float);//rotar
+        void Rotar(unsigned char,float,float,float,float);//rotar
 
         void Escalar(unsigned char,float,float,float);//escalar
 

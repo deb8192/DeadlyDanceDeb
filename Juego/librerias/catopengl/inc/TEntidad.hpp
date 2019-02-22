@@ -15,6 +15,12 @@ class TEntidad
 
         virtual void endDraw()=0;
 
+        //para TTransform
+        virtual void escalar(float,float,float);
+        virtual void rotar(float,float,float,float);
+        virtual void trasladar(float,float,float);
+        //fin TTransform
+
         void NoEjecutar();
 
         void Ejecutar();

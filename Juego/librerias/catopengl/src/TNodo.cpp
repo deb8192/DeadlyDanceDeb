@@ -1,5 +1,5 @@
 #include "TNodo.hpp"
-#include "iostream"
+#include <iostream>
 
 //USO::inicializa las variables de entidad y padre a nullptr
 TNodo::TNodo()
@@ -13,7 +13,7 @@ TNodo::~TNodo()
 {
     if(entidad != nullptr)
     {
-        entidad->remove();
+        delete entidad;
     }
     
     entidad = nullptr;
@@ -125,20 +125,21 @@ void TNodo::setPadre(TNodo * papa)
 //SALIDAS: Llama a todas las funciones no hay salida aparte de lo que hace la funcion internamente
 void TNodo::draw()
 {
-    
-    std::cout << " Pintando nodo " << std::endl;
 
-    if(entidad && entidad != nullptr)
+    if(entidad != nullptr)
     {
         entidad->beginDraw();
     }
 
     for(std::size_t i=0 ; i < hijos.size() ; i++)
     {
-        hijos[i]->draw();
+        if(hijos[i] != nullptr)
+        {
+            hijos[i]->draw();
+        }
     }
 
-    if(entidad && entidad != nullptr)
+    if(entidad != nullptr)
     {
         entidad->endDraw();
     }
@@ -153,3 +154,31 @@ TEntidad * TNodo::GetEntidad()
 {
     return entidad;
 }
+
+//Uso:: devuelve el nodo hijo que le pidas, estan en orden de insercion
+//Entradas: se empieza desde el hijo 1
+//Salida: TNodo puntero
+TNodo * TNodo::GetHijo(unsigned short numeroDeHijo)
+{
+    if(((long unsigned int)(numeroDeHijo-1)) < hijos.size())
+    {
+        return hijos[(numeroDeHijo-1)];
+    }
+    
+    return nullptr;
+}
+
+TNodo * TNodo::GetNieto(unsigned short numeroDeHijo)
+{
+    if(((long unsigned int)(numeroDeHijo-1)) < hijos.size())
+    {
+        TNodo * hijo = hijos[(numeroDeHijo-1)];
+        if(hijo != nullptr)
+        {
+            return hijo->GetHijo(1);
+        }
+    }
+    
+    return nullptr;
+}
+
