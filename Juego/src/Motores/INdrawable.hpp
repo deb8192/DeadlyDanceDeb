@@ -15,7 +15,7 @@ public:
         float z = 0.0f;
     };
 
-    virtual ~INdrawable() {};
+    virtual ~INdrawable() = default;
     virtual void moverseEntidad(float)=0;//Realiza el desplazamiento mediante la interpolacion
     virtual void RotarEntidad(float)=0;//Realiza la rotacion mediante la interpolacion
     virtual void UpdateTimeMove(float time)=0;//actualiza el tiempo del movimiento de la interpolacion

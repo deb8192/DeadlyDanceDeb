@@ -7,7 +7,7 @@
 class INsentidos
 {
     public:
-        //virtual ~INsentidos() { }; //Activar cuando haya variables en protected
+        //virtual ~INsentidos() = default; //Activar cuando haya variables en protected
         
         virtual void generarSonido(int intensidad,double duracion,int tipo)=0;//genera un sonido
 

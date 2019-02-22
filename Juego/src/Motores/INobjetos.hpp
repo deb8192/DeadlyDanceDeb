@@ -9,7 +9,7 @@ using namespace std;
 class INobjetos
 {
     public:
-        virtual ~INobjetos() {};
+        virtual ~INobjetos() = default;
 
     /*el protected es para que tenga acceso sus descendientes o parientes*/
     protected:    	
