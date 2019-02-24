@@ -36,6 +36,8 @@ class Mesh
         Mesh(vector<Vertex> vert, vector<unsigned int> indx, vector<Texture> text);
         ~Mesh();
 
+        void Draw(Shader* shader);
+
         vector<Vertex> vertices;
         vector<unsigned int> indices;
         vector<Texture> textures;

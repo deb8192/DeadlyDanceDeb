@@ -14,24 +14,26 @@ TCamara::~TCamara()
 //gestion de propiedades
 void TCamara::setPerspectiva()
 {
-
+    glm::mat4 projection;
+    projection = glm::perspective(glm::radians(45.0f), (float)800/(float)600, 0.1f, 100.0f);
 }
 
 void TCamara::setParalela()
 {
-
+    glm::mat4 projection;
+    projection = glm::ortho(0.0f, (float)800, (float)600, 0.0f, 0.1f, 100.0f);
 }
 
 void TCamara::beginDraw()
 {
-    //comprobamos que la cola o pila no haya tenido cambios, si los tiene se vuelve a calcular 
+    //comprobamos que la cola o pila no haya tenido cambios, si los tiene se vuelve a calcular
     if(matriz_compartida == nullptr)
     {
         glm::mat4 * _matriz_resultado = nullptr;
         std::queue<glm::mat4 *> * cola_compartidaAuxiliar = new std::queue<glm::mat4 *>; //creamos una cola nueva para ir encolando  los elementos que desencolamos de la cola compartida(se aplicaria parecido con una pila)
         while(cola_compartida->size() > 0)
         {
-            
+
             glm::mat4 * nodo = cola_compartida->front();
             cola_compartidaAuxiliar->push(nodo);
             //cogemos el primer valor de la pila
@@ -55,13 +57,13 @@ void TCamara::beginDraw()
         {
             //enviar a uniform
             std::cout << (*_matriz_resultado)[0][0] << " " << (*_matriz_resultado)[1][1] << " " << (*_matriz_resultado)[2][2] << " " << (*_matriz_resultado)[3][3] << std::endl;
-        }    
+        }
     }
     else
     {
         //se le da al uniform
     }
-    
+
 }
 
 void TCamara::endDraw()
