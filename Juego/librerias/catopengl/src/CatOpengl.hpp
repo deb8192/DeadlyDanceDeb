@@ -26,7 +26,7 @@ namespace CatOpengl
     //apartado dedicado al gestor de shaders (crear, cargar, vincular)
     namespace Shaders
     {
-        class Shader;
+        //class Shader;
     };
 }
 
@@ -34,9 +34,9 @@ using CatOpengl::Video::Ventana;
 
 #include "Ventana.hpp"
 
-using CatOpengl::Shaders::Shader;
+//using CatOpengl::Shaders::Shader;
 
-#include "Shader.hpp" 
+//#include "Shader.hpp" 
 
 using CatOpengl::Scena::FormaPrimitiva;
 

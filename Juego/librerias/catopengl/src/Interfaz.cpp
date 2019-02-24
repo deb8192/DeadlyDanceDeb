@@ -2,10 +2,12 @@
 
 Interfaz::Interfaz()
 {
-    _raiz = new TNodo();
+    _raiz = new TNodo();//se crea un nodo raiz(sin entidad) para agregar ramas (camaras,mallas,luces)
     camaras.reserve(3);//dos camaras maximas
     luces.reserve(40);//30 luces como maximo
     gestorDeRecursos = new CatOpengl::Gestor;
+    ventana_inicializada = true;//se pone para que entra a inicializar por defecto
+    window = nullptr;//se pone para saber que no esta inicializada
 }
 
 Interfaz::~Interfaz()
@@ -15,6 +17,12 @@ Interfaz::~Interfaz()
 
 unsigned short Interfaz::AddCamara()
 {
+    
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
 
     TNodo * traslacion = new TNodo;
     TTransform * traslacionEnt = new TTransform;
@@ -36,6 +44,7 @@ unsigned short Interfaz::AddCamara()
 
     TNodo * camara = new TNodo;
     TCamara * camaraEn = new TCamara;
+    camaraEn->SetShader(shaders[0]);
     camara->setEntidad(camaraEn);
 
     escalado->addHijo(rotacion);
@@ -61,6 +70,12 @@ unsigned short Interfaz::AddCamara()
 
 unsigned short Interfaz::AddLuz()
 {
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
     TNodo * traslacion = new TNodo;
     TTransform * traslacionEnt = new TTransform;
     traslacionEnt->trasladar(0,0,0);
@@ -80,6 +95,7 @@ unsigned short Interfaz::AddLuz()
     
     TNodo * luz = new TNodo;
     TLuz * luzEn = new TLuz;
+    luzEn->SetShader(shaders[0]);
     luz->setEntidad(luzEn);
 
     escalado->addHijo(rotacion);
@@ -106,7 +122,12 @@ unsigned short Interfaz::AddLuz()
 
 unsigned short Interfaz::AddMalla(const char * archivo)
 {
-    
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
     TNodo * traslacion = new TNodo;
     TTransform * traslacionEnt = new TTransform;
     traslacionEnt->trasladar(0,0,0);
@@ -124,6 +145,7 @@ unsigned short Interfaz::AddMalla(const char * archivo)
 
     TNodo * malla = new TNodo;
     TMalla * mallaEn = new TMalla;
+    mallaEn->SetShader(shaders[0]);
     malla->setEntidad(mallaEn);
 
     escalado->addHijo(rotacion);
@@ -166,16 +188,27 @@ unsigned short Interfaz::AddMalla(const char * archivo)
 
 void Interfaz::Draw()
 {
+    
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+    
+    window->UpdateLimpiar();
+    
     if(_raiz != nullptr)
     {
         if(camaras.size() > 0)
         {
             //primero calculamos las matrices de view y projection
-
+            
             //esto seria lo ultimo vamos a las model
             _raiz->draw();
         }
     }
+
+    window->UpdateDraw();
 }
 
 unsigned short Interfaz::generarId()
@@ -245,5 +278,33 @@ void Interfaz::Escalar(unsigned char id,float x,float y,float z)
     if(nodo != nullptr)
     {
         nodo->recurso->GetEntidad()->escalar(x,y,z);
+    }
+}
+
+bool Interfaz::VentanaEstaAbierta()
+{
+    return window->SigueAbierta();
+}
+
+void Interfaz::ventanaInicializar()
+{
+    if(window == nullptr)
+    {
+        window = new Ventana();
+    }
+    //se inicializa por defecto a estos valores la ventana, se puede cambiar los valores por defecto llamando a las funciones de ventana
+    window->CrearVentana(600,800,true," Sin titulo ");
+
+    shaders[0] = new Shader("assets/shaders/shaderlucesvs.glsl","assets/shaders/shaderlucesfs.glsl");
+    shaders[1] = new Shader("assets/shaders/shaderdefectovs.glsl","assets/shaders/shaderdefectofs.glsl");
+}
+
+void Interfaz::ventanaLimpiar()
+{
+    if(window != nullptr && VentanaEstaAbierta())
+    {
+        window->Drop();
+        window = nullptr;
+        ventana_inicializada = true;
     }
 }

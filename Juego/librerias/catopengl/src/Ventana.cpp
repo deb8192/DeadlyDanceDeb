@@ -22,8 +22,6 @@ void Ventana::Remove()
 //USO: se utiliza para crear una ventana
 bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
 {
-    std::cout << "valores: " << h << " " << w << "" << titulo << std::endl;
-
     // Inicializar GLFW
     // glfwWindowHint para configurar GLFW, mirar en la documentacion los distintos hint
     glfwInit();
