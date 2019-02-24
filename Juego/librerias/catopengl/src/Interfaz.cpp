@@ -152,30 +152,20 @@ unsigned short Interfaz::AddMalla(const char * archivo)
     rotacion->addHijo(traslacion);
     traslacion->addHijo(malla);
 
-    std::cout << "00" << std::endl;
     unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo,malla);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
-    std::cout << "0" << std::endl;
 
     if(id_recurso != 0)
     {
         if(_raiz != nullptr)
         {
-            std::cout << "1" << std::endl;
             _raiz->addHijo(escalado);//se agrega al arbol
-            std::cout << "2" << std::endl;
             unsigned short idnuevo = generarId();//se genera un id 
-            std::cout << "3" << std::endl;
             
             Nodo * nodo = new Nodo(); 
-            std::cout << "4" << std::endl;
             nodo->id = idnuevo;//se pone el id
-            std::cout << "5" << std::endl;
             nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
-            std::cout << "6" << std::endl;
             nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
-            std::cout << "7" << std::endl;
             nodos.push_back(nodo);//se agrega a la lista de nodos general
-            std::cout << "8" << std::endl;
 
             return idnuevo;
         }
@@ -197,6 +187,22 @@ void Interfaz::Draw()
     
     window->UpdateLimpiar();
     
+    shaders[0]->Use();
+    //CAMARA
+    //Aplicar proyeccion en la escena
+    glm::mat4 projection = glm::mat4(1.0f);
+    projection = glm::perspective(glm::radians(45.0f), (float)800/(float)600, 0.1f, 100.0f);
+    //projection = glm::ortho(0.0f, (float)800, (float)600, 0.0f, 0.1f, 100.0f);
+    shaders[0]->setMat4("projection",projection);
+    //Posiciones de la camara
+    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 5.0f);      //Posicion de la camara en el mundo 3D
+    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);   //Objetivo donde apunta la camara, en este caso al origen
+    glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);       //Up Axis
+    //Funcion lookAt, calculo de la matriz final
+    glm::mat4 view;
+    view = glm::lookAt(cameraPos,cameraTarget,cameraUp);    //lookAt(Posicion, Objetivo, Up Axis)
+    shaders[0]->setMat4("view", view);
+
     if(_raiz != nullptr)
     {
         if(camaras.size() > 0)

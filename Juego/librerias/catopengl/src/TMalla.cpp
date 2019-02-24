@@ -29,7 +29,8 @@ void TMalla::cargarMalla(unsigned short,unsigned short)
 // sobrecarga metodos TEntidad
 void TMalla::beginDraw()
 {
-    std::cout << didentidad << " se debe pintar-> " << ejecucion << std::endl;
+   std::cout << "ads" << std::endl;
+   objetos->Draw(shader);
 }
 
 void TMalla::endDraw()
@@ -70,4 +71,9 @@ unsigned short TMalla::getFrameActual()
 bool TMalla::setTiempoAnimacion(unsigned short)
 {
     return false;
+}
+
+void TMalla::setRecursoObjeto(RMalla * objeto)
+{
+    objetos = objeto;
 }
