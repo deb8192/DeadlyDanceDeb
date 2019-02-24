@@ -48,3 +48,63 @@ void Mesh::setupMesh()
     //Cerrar el enlace
     glBindVertexArray(0);
 }
+
+//Renderizar la Malla
+void Mesh::Draw(Shader* shader)
+{
+    //Enlazar las texturas apropiadas
+    unsigned int diffuseNr  = 1;
+    unsigned int specularNr = 1;
+    unsigned int normalNr   = 1;
+    unsigned int heightNr   = 1;
+
+    //Solucion al problema del numero indeterminado de texturas que puede tener una malla (definirlas como "uniform sampler2D texture_diffuseN" donde N es el numero de textura)
+    for(unsigned int i = 0; i < textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i); //Activa la unidad de textura adecuada antes de vincular
+        //recuperar el n�mero de textura (la N en diffuse_textureN)
+        string number;
+        string name = textures[i].type;
+        if(name == "texture_diffuse")
+        {
+            //number = std::to_string(diffuseNr++); //transformar unsigned int a string
+            stringstream ss; //Borrar cuando funcione tostring
+            ss << diffuseNr++;
+            number = ss.str();
+        }
+        else if(name == "texture_specular")
+        {
+            //number = std::to_string(specularNr++);
+            stringstream ss; //Borrar cuando funcione tostring
+            ss << specularNr++;
+            number = ss.str();
+        }
+        else if(name == "texture_normal")
+        {
+            //number = std::to_string(normalNr++);
+            stringstream ss; //Borrar cuando funcione tostring
+            ss << normalNr++;
+            number = ss.str();
+        }
+        else if(name == "texture_height")
+        {
+            //number = std::to_string(heightNr++);
+            stringstream ss; //Borrar cuando funcione tostring
+            ss << heightNr++;
+            number = ss.str();
+        }
+
+        //Ahora ajuste el sampler a la unidad de textura correcta
+        //glUniform1i(glGetUniformLocation(shader->ID, (name + number).c_str()), i);
+        //Finalmente enlazamos la textura
+        glBindTexture(GL_TEXTURE_2D, textures[i].id);
+    }
+
+    //Dibujar malla
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+
+    //Dejar en valor predeterminado antes de terminar
+    glActiveTexture(GL_TEXTURE0);
+}

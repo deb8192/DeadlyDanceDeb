@@ -9,6 +9,7 @@
 #include "TLuz.hpp"
 #include "TCamara.hpp"
 #include "TMalla.hpp"
+#include "Shader.hpp"
 
 class Interfaz
 {
@@ -34,17 +35,23 @@ class Interfaz
 
         void Escalar(unsigned char,float,float,float);//escalar
 
+        bool VentanaEstaAbierta();//devuelve true si esta en ejecucion devuelve false si no lo esta
+
     private:
         
-        std::vector<TNodo *> camaras;
+        CatOpengl::Video::Ventana * window;
+
+        Shader * shaders[4];//cuatro programas de shader(vertex y fragment cada uno)
         
-        std::vector<TNodo *> luces;
+        std::vector<TNodo *> camaras;//registro de camaras 
+        
+        std::vector<TNodo *> luces;//registro de luces
  
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 
-        TNodo * _raiz;
+        TNodo * _raiz; //puntero a raiz de arbol de escena
 
-        unsigned short generarId();
+        unsigned short generarId(); //genera un id 
 
         //nos sirve para buscar rapidamente un objeto y llamar a su funcion de pintado(esto se hace con una busqueda binaria)
         struct Nodo 
@@ -59,4 +66,11 @@ class Interfaz
         CatOpengl::Gestor * gestorDeRecursos;
 
         Nodo * buscarNodo(unsigned short);
+
+        bool ventana_inicializada = true;//nos sirve para saber si tenemos que llamar a inicializar ventana
+        
+        void ventanaInicializar();
+
+        void ventanaLimpiar();
+
 };
