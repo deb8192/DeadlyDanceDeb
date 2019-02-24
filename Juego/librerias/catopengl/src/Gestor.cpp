@@ -2,7 +2,7 @@
 
 Gestor::Gestor()
 {
-    archivadores.reserve(40);//se reserva para cuarenta inicialmente (lo que veo mucho)
+    archivadores.reserve(100);//se reserva para cuarenta inicialmente (lo que veo mucho)
 }
 
 Gestor::~Gestor()
@@ -20,8 +20,8 @@ void Gestor::Remove()
 //Salidas: 0 significa que no se ha obtenido el recurso, => 1 significa que esta instanciado en esa direccion de memoria.
 unsigned short Gestor::ObtenerRecurso(const char * _recurso,TNodo * _nodo)
 {
-    unsigned short existeArchivador = buscarRecurso(_recurso); 
-    
+    unsigned short existeArchivador = buscarRecurso(_recurso);
+
     //comprobamos si existe
     if(existeArchivador > 0)
     {
@@ -33,7 +33,7 @@ unsigned short Gestor::ObtenerRecurso(const char * _recurso,TNodo * _nodo)
         //comprobamos que no vamos a salirnos del limite de objetos que son 65535
         if((ids+1) <= 65535)
         {
-           
+
             Archivador * archivador = new Archivador;
             archivador->id = generarId();
             archivador->_nombre = _recurso;
@@ -42,11 +42,11 @@ unsigned short Gestor::ObtenerRecurso(const char * _recurso,TNodo * _nodo)
             //detectar tipo de recurso y crear su clase especializada (imagen,malla o texto plano, faltarian fuentes)
 
             archivadores.push_back(archivador);
-            
+
             return archivador->id;
         }
     }
-    
+
     return 0;
 }
 

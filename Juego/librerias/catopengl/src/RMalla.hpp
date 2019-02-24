@@ -25,8 +25,9 @@ class RMalla : public Recurso
 
         //te carga los datos en la matrix
         bool CargarRecurso(const char *);
-
+        void Draw(Shader *shader);
         //datos * CargarFrames(unsigned short,unsigned short); //le pasas datos[x]
+
 
     private:
 

@@ -12,6 +12,13 @@ void RMalla::Remove()
 
 }
 
+// draws the model, and thus all its meshes
+void RMalla::Draw(Shader *shader)
+{
+    for(unsigned int i = 0; i < meshes.size(); i++)
+        meshes[i]->Draw(shader);
+}
+
 //**Carga de frames**
 // bool RMalla::CargarAnimacion(const char * _ruta)
 // {
