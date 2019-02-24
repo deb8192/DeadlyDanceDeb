@@ -73,4 +73,6 @@ class Interfaz
 
         void ventanaLimpiar();
 
+        float x,y,z;
+
 };

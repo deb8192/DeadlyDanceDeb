@@ -8,6 +8,9 @@ Interfaz::Interfaz()
     gestorDeRecursos = new CatOpengl::Gestor;
     ventana_inicializada = true;//se pone para que entra a inicializar por defecto
     window = nullptr;//se pone para saber que no esta inicializada
+    x = 0.0f;
+    y = 0.0f;
+    z = 0.0f;
 }
 
 Interfaz::~Interfaz()
@@ -179,6 +182,8 @@ unsigned short Interfaz::AddMalla(const char * archivo)
 void Interfaz::Draw()
 {
     
+
+
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -195,7 +200,10 @@ void Interfaz::Draw()
     //projection = glm::ortho(0.0f, (float)800, (float)600, 0.0f, 0.1f, 100.0f);
     shaders[0]->setMat4("projection",projection);
     //Posiciones de la camara
-    glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, 5.0f);      //Posicion de la camara en el mundo 3D
+    float radius = 10.0f;                                   //Distancia desde el centro del circulo
+    float camX = sin(glfwGetTime()) * radius;               //Calculo de X
+    float camZ = cos(glfwGetTime()) * radius;               //Calculo de Z
+    glm::vec3 cameraPos = glm::vec3(camX, 0.0f, camZ);      //Posicion de la camara en el mundo 3D
     glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);   //Objetivo donde apunta la camara, en este caso al origen
     glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);       //Up Axis
     //Funcion lookAt, calculo de la matriz final
@@ -210,7 +218,10 @@ void Interfaz::Draw()
             //primero calculamos las matrices de view y projection
             
             //esto seria lo ultimo vamos a las model
+            
+            glm::mat4 model = glm::mat4(1.0f);
             _raiz->draw();
+            shaders[0]->setMat4("model", model);
         }
     }
 
@@ -314,3 +325,4 @@ void Interfaz::ventanaLimpiar()
         ventana_inicializada = true;
     }
 }
+
