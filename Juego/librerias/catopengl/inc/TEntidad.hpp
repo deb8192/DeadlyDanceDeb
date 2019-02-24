@@ -6,6 +6,7 @@
 #include <glm.hpp>
 #include <queue>
 #include "Shader.hpp"
+#include "RMalla.hpp"
 
 class TEntidad
 {
@@ -20,6 +21,9 @@ class TEntidad
         virtual void rotar(float,float,float,float);
         virtual void trasladar(float,float,float);
         //fin TTransform
+
+        //para sincornizar recursos
+        virtual void setRecursoObjeto(RMalla *);
 
         void NoEjecutar();
 

@@ -21,6 +21,9 @@ class TMalla : public TEntidad
         ~TMalla();
         void cargarMalla(unsigned short,unsigned short);
         
+        // Recibir recurso
+        void setRecursoObjeto(RMalla *);//recibe un puntero de la malla
+
         // sobrecarga metodos TEntidad
         void beginDraw();
         void endDraw();

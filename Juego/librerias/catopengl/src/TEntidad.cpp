@@ -63,3 +63,8 @@ void TEntidad::trasladar(float,float,float)
 {
 
 }
+
+void TEntidad::setRecursoObjeto(RMalla * valor)
+{
+
+}
