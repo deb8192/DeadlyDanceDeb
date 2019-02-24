@@ -130,20 +130,30 @@ unsigned short Interfaz::AddMalla(const char * archivo)
     rotacion->addHijo(traslacion);
     traslacion->addHijo(malla);
 
+    std::cout << "00" << std::endl;
     unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo,malla);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
-    
+    std::cout << "0" << std::endl;
+
     if(id_recurso != 0)
     {
         if(_raiz != nullptr)
         {
+            std::cout << "1" << std::endl;
             _raiz->addHijo(escalado);//se agrega al arbol
+            std::cout << "2" << std::endl;
             unsigned short idnuevo = generarId();//se genera un id 
-        
+            std::cout << "3" << std::endl;
+            
             Nodo * nodo = new Nodo(); 
+            std::cout << "4" << std::endl;
             nodo->id = idnuevo;//se pone el id
+            std::cout << "5" << std::endl;
             nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+            std::cout << "6" << std::endl;
             nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
+            std::cout << "7" << std::endl;
             nodos.push_back(nodo);//se agrega a la lista de nodos general
+            std::cout << "8" << std::endl;
 
             return idnuevo;
         }
