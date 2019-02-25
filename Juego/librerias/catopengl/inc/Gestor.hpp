@@ -3,6 +3,7 @@
 #include "Recurso.hpp"
 #include "RMalla.hpp"
 #include "TMalla.hpp"
+#include "TEntidad.hpp"
 #include "TNodo.hpp"
 
 //PARA INFORMACION MAS DETALLADA SOBRE LAS FUNCIONES MIRAR EN EL CPP
