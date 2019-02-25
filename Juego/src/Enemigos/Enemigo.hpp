@@ -140,11 +140,12 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         //Comparadores de la lectura de las acciones y objetivos de las tareas
         enum accionesEnemigo 
         {  
-            EN_MOVERSE = 0,
+            EN_PERSIGUE = 0,
             EN_ATACAR,
             EN_VER,
             EN_PIDE_AYUDA,
-            EN_MERODEA
+            EN_MERODEA,
+            EN_OIR
         };
 
         enum modosEnemigo 

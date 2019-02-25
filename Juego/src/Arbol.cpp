@@ -442,7 +442,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 const char* accion = hoja->GetAccion();
 
                 //La accion es moverse
-                if(strcmp(accion, constantes.MOVERSE) == 0)
+                if(strcmp(accion, constantes.PERSIGUE) == 0)
                 {
                     arrayTareaObjetivo[0] = 0;
                 }
@@ -465,6 +465,11 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 else if(strcmp(accion, constantes.MERODEA) == 0)
                 {
                     arrayTareaObjetivo[0] = 4;
+                }
+                //La accion es oir
+                else if(strcmp(accion, constantes.OIR) == 0)
+                {
+                    arrayTareaObjetivo[0] = 5;
                 }
                 else
                 {
@@ -493,7 +498,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     //Se indican la tarea y el objetivo a ejecutar
                     //Tarea
                     const char* accion = compo->GetAccion();
-                    if(strcmp(accion, constantes.MOVERSE) == 0)
+                    if(strcmp(accion, constantes.PERSIGUE) == 0)
                     {
                         arrayTareaObjetivo[0] = 0;
                     }
