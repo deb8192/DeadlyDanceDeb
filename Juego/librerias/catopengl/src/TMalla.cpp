@@ -20,14 +20,6 @@ TMalla::~TMalla()
 
 //Uso: Pone el shader local nullptr
 //Entradas: ninguna
-//Salidas: ninguna
-void TMalla::remove()
-{
-    this->~TMalla();
-}
-
-//Uso: Pone el shader local nullptr
-//Entradas: ninguna
 //Salidas: ninguna 
 void TMalla::cargarMalla(unsigned short,unsigned short)
 {
@@ -37,7 +29,7 @@ void TMalla::cargarMalla(unsigned short,unsigned short)
 // sobrecarga metodos TEntidad
 void TMalla::beginDraw()
 {
-    std::cout << didentidad << " se debe pintar-> " << ejecucion << std::endl;
+   objetos->Draw(shader);
 }
 
 void TMalla::endDraw()
@@ -78,4 +70,9 @@ unsigned short TMalla::getFrameActual()
 bool TMalla::setTiempoAnimacion(unsigned short)
 {
     return false;
+}
+
+void TMalla::setRecursoObjeto(RMalla * objeto)
+{
+    objetos = objeto;
 }

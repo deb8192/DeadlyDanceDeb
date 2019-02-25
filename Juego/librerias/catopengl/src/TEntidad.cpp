@@ -48,3 +48,23 @@ void TEntidad::RemoveShader()
 {
     shader = nullptr;
 }
+
+void TEntidad::escalar(float,float,float)
+{
+
+}
+
+void TEntidad::rotar(float,float,float,float)
+{
+
+}
+
+void TEntidad::trasladar(float,float,float)
+{
+
+}
+
+void TEntidad::setRecursoObjeto(RMalla * valor)
+{
+
+}

@@ -3,7 +3,6 @@
 //USO: inicializa las variables
 Ventana::Ventana()
 {
-    std::cout << "inicializar ventana" << std::endl;
     _window = nullptr;
 }
 
@@ -22,8 +21,6 @@ void Ventana::Remove()
 //USO: se utiliza para crear una ventana
 bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
 {
-    std::cout << "valores: " << h << " " << w << "" << titulo << std::endl;
-
     // Inicializar GLFW
     // glfwWindowHint para configurar GLFW, mirar en la documentacion los distintos hint
     glfwInit();
@@ -76,17 +73,17 @@ void Ventana::draw()
 {
     //Comprobar y llamar eventos, cambiar buffers
     glfwSwapBuffers(_window);             //Intercambia los buffer de la ventana
-    glfwPollEvents();  
+    glfwPollEvents();
 }
 
 //USO: sirve para unificar el update general de la ventana(se llaman a las diferentes funciones necesarias para actualizar la ventana)
-void Ventana::UpdateFase1()
+void Ventana::UpdateLimpiar()
 {
     limpiar();
 }
 
 //USO: llamamos a pintar buffers
-void Ventana::UpdateFase2()
+void Ventana::UpdateDraw()
 {
     draw();
 }

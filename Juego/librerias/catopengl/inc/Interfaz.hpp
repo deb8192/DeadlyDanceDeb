@@ -9,12 +9,15 @@
 #include "TLuz.hpp"
 #include "TCamara.hpp"
 #include "TMalla.hpp"
+#include "Shader.hpp"
 
 class Interfaz
 {
     public:
 
         Interfaz();
+
+        ~Interfaz();
         
         unsigned short AddCamara();//creamos una camara
         
@@ -24,29 +27,31 @@ class Interfaz
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
-        void Remove();//borramos el arbol
-
         void RemoveObject(unsigned short);//remueve objeto de la escena
 
-        void Trasladar(unsigned char,float,float,float);//trasladar 
+        void Trasladar(unsigned short,float,float,float);//trasladar 
         
-        void Rotar(unsigned char,float,float,float);//rotar
+        void Rotar(unsigned short,float,float,float,float);//rotar
 
-        void Escalar(unsigned char,float,float,float);//escalar
+        void Escalar(unsigned short,float,float,float);//escalar
+
+        bool VentanaEstaAbierta();//devuelve true si esta en ejecucion devuelve false si no lo esta
 
     private:
         
-        std::vector<TNodo *> camaras;
+        CatOpengl::Video::Ventana * window;
+
+        Shader * shaders[4];//cuatro programas de shader(vertex y fragment cada uno)
         
-        std::vector<TNodo *> luces;
+        std::vector<TNodo *> camaras;//registro de camaras 
+        
+        std::vector<TNodo *> luces;//registro de luces
  
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 
-        TNodo * _raiz;
+        TNodo * _raiz; //puntero a raiz de arbol de escena
 
-        ~Interfaz();
-
-        unsigned short generarId();
+        unsigned short generarId(); //genera un id 
 
         //nos sirve para buscar rapidamente un objeto y llamar a su funcion de pintado(esto se hace con una busqueda binaria)
         struct Nodo 
@@ -61,4 +66,13 @@ class Interfaz
         CatOpengl::Gestor * gestorDeRecursos;
 
         Nodo * buscarNodo(unsigned short);
+
+        bool ventana_inicializada = true;//nos sirve para saber si tenemos que llamar a inicializar ventana
+        
+        void ventanaInicializar();
+
+        void ventanaLimpiar();
+
+        float x,y,z;
+
 };

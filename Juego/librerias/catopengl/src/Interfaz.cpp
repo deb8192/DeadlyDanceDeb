@@ -2,10 +2,15 @@
 
 Interfaz::Interfaz()
 {
-    _raiz = new TNodo();
+    _raiz = new TNodo();//se crea un nodo raiz(sin entidad) para agregar ramas (camaras,mallas,luces)
     camaras.reserve(3);//dos camaras maximas
     luces.reserve(40);//30 luces como maximo
     gestorDeRecursos = new CatOpengl::Gestor;
+    ventana_inicializada = true;//se pone para que entra a inicializar por defecto
+    window = nullptr;//se pone para saber que no esta inicializada
+    x = 0.0f;
+    y = 0.0f;
+    z = 0.0f;
 }
 
 Interfaz::~Interfaz()
@@ -13,24 +18,28 @@ Interfaz::~Interfaz()
 
 }
 
-void Interfaz::Remove()
-{
-    this->~Interfaz();
-}
-
 unsigned short Interfaz::AddCamara()
 {
+    
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
 
     TNodo * traslacion = new TNodo;
     TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
     traslacion->setEntidad(traslacionEnt);
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
+    rotacionEnt->escalar(0,0,0);
     escalado->setEntidad(escaladoEnt);
 
     //escalado al ser el nodo padre del objeto en cuestion (sea luz, camara, o malla), debe ser el que se le diga que no se ejecuta
@@ -38,6 +47,7 @@ unsigned short Interfaz::AddCamara()
 
     TNodo * camara = new TNodo;
     TCamara * camaraEn = new TCamara;
+    camaraEn->SetShader(shaders[0]);
     camara->setEntidad(camaraEn);
 
     escalado->addHijo(rotacion);
@@ -63,22 +73,32 @@ unsigned short Interfaz::AddCamara()
 
 unsigned short Interfaz::AddLuz()
 {
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
     TNodo * traslacion = new TNodo;
     TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
     traslacion->setEntidad(traslacionEnt);
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
+    rotacionEnt->escalar(0,0,0);
     escalado->setEntidad(escaladoEnt);
 
     escaladoEnt->Ejecutar();
     
     TNodo * luz = new TNodo;
     TLuz * luzEn = new TLuz;
+    luzEn->SetShader(shaders[0]);
     luz->setEntidad(luzEn);
 
     escalado->addHijo(rotacion);
@@ -105,13 +125,55 @@ unsigned short Interfaz::AddLuz()
 
 unsigned short Interfaz::AddMalla(const char * archivo)
 {
-    unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo,nullptr);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
+    TNodo * traslacion = new TNodo;
+    TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
+    traslacion->setEntidad(traslacionEnt);
+
+    TNodo * rotacion = new TNodo;
+    TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0,0);
+    rotacion->setEntidad(rotacionEnt);
+
+    TNodo * escalado = new TNodo;
+    TTransform * escaladoEnt = new TTransform;
+    rotacionEnt->escalar(0,0,0);
+    escalado->setEntidad(escaladoEnt);
+
+    TNodo * malla = new TNodo;
+    TMalla * mallaEn = new TMalla;
+    mallaEn->SetShader(shaders[0]);
+    malla->setEntidad(mallaEn);
+
+    escalado->addHijo(rotacion);
+    rotacion->addHijo(traslacion);
+    traslacion->addHijo(malla);
+
+    unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo,malla);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
+
     if(id_recurso != 0)
     {
-        //como tenemos id tenemos recursos 
+        if(_raiz != nullptr)
+        {
+            _raiz->addHijo(escalado);//se agrega al arbol
+            unsigned short idnuevo = generarId();//se genera un id 
+            
+            Nodo * nodo = new Nodo(); 
+            nodo->id = idnuevo;//se pone el id
+            nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+            nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
+            nodos.push_back(nodo);//se agrega a la lista de nodos general
 
-        return id_recurso;
+            return idnuevo;
+        }
     }
+
     //ahora le pasamos este al cargador para asociar la malla a este id
     return 0;
 }
@@ -119,16 +181,32 @@ unsigned short Interfaz::AddMalla(const char * archivo)
 
 void Interfaz::Draw()
 {
+    
+
+
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+    
+    window->UpdateLimpiar();
+
     if(_raiz != nullptr)
     {
         if(camaras.size() > 0)
         {
             //primero calculamos las matrices de view y projection
-
+            
             //esto seria lo ultimo vamos a las model
+            
+            glm::mat4 model = glm::mat4(1.0f);
             _raiz->draw();
+            shaders[0]->setMat4("model", model);
         }
     }
+
+    window->UpdateDraw();
 }
 
 unsigned short Interfaz::generarId()
@@ -163,38 +241,69 @@ Interfaz::Nodo * Interfaz::buscarNodo(unsigned short id)
     return nullptr;
 }
 
-void Interfaz::Trasladar(unsigned char id,float x,float y,float z)
+void Interfaz::Trasladar(unsigned short id,float x,float y,float z)
 {
     Nodo * nodo = buscarNodo(id);
 
     if(nodo != nullptr) 
     {
-
-        //std::cout << "funciona trasladar" << " " << id << std::endl;
-        //nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+        TNodo * tnodo = nodo->recurso->GetNieto(1);
+        if(tnodo != nullptr)
+        {
+            tnodo->GetEntidad()->trasladar(x,y,z);  
+        }
     }
 }   
 
-void Interfaz::Rotar(unsigned char id,float x,float y,float z)
+void Interfaz::Rotar(unsigned short id,float grados,float x,float y,float z)
 {
     Nodo * nodo = buscarNodo(id);
 
     if(nodo != nullptr)
     {
-
-        //std::cout << "funciona rotar" << " " << id << std::endl;
-        //nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+        TNodo * tnodo = nodo->recurso->GetHijo(1);
+        if(tnodo != nullptr)
+        {
+            tnodo->GetEntidad()->rotar(grados,x,y,z);
+        }
     }
 }
 
-void Interfaz::Escalar(unsigned char id,float x,float y,float z)
+void Interfaz::Escalar(unsigned short id,float x,float y,float z)
 {
     Nodo * nodo = buscarNodo(id);
 
     if(nodo != nullptr)
     {
-
-        //std::cout << "funciona escalar" << " " << id << std::endl;
-        //nodo->recurso;//faltan funciones para cambiar parametros de Transformaciones
+        nodo->recurso->GetEntidad()->escalar(x,y,z);
     }
 }
+
+bool Interfaz::VentanaEstaAbierta()
+{
+    return window->SigueAbierta();
+}
+
+void Interfaz::ventanaInicializar()
+{
+    if(window == nullptr)
+    {
+        window = new Ventana();
+    }
+    //se inicializa por defecto a estos valores la ventana, se puede cambiar los valores por defecto llamando a las funciones de ventana
+    window->CrearVentana(600,800,true," Sin titulo ");
+
+    shaders[0] = new Shader("assets/shaders/shaderlucesvs.glsl","assets/shaders/shaderlucesfs.glsl");
+    shaders[1] = new Shader("assets/shaders/shaderdefectovs.glsl","assets/shaders/shaderdefectofs.glsl");
+}
+
+void Interfaz::ventanaLimpiar()
+{
+    if(window != nullptr && VentanaEstaAbierta())
+    {
+        window->Drop();
+        window = nullptr;
+        ventana_inicializada = true;
+    }
+}
+

@@ -3,6 +3,7 @@
 
 TTransform::TTransform()
 {
+    matriz = new glm::mat4(1.0f);
     didentidad = 'T'; //para sabe que funcion hace
 }
 
@@ -11,65 +12,69 @@ TTransform::~TTransform()
 
 }
 
-void TTransform::remove()
-{
-    this->~TTransform();
-}
-
 void TTransform::identidad()
 {
-    matriz = glm::mat4(1.0f);
+   *matriz = glm::mat4(1.0f);
 }
 
-void TTransform::cargar(glm::mat4 newmat)
+void TTransform::cargar(glm::mat4 * newmat)
 {
     matriz = newmat;
 }
 
 void TTransform::trasponer()
 {
-    matriz = glm::transpose(matriz);
+    *matriz = glm::transpose(*matriz);
 }
 
 void TTransform::invertir()
 {
-    matriz = glm::inverse(matriz);
-}
-
-void TTransform::multiplicarVector(glm::vec4 newvec)
-{
-
-}
-
-void TTransform::multiplicarMatriz(glm::mat4 newmat)
-{
-
+    *matriz = glm::inverse(*matriz);
 }
 
 void TTransform::trasladar(float x,float y,float z)
-{
-    matriz = glm::translate(matriz, glm::vec3(x,y,z));
+{   
+    identidad();                                                                
+    *matriz = glm::translate(*matriz, glm::vec3(x,y,z));
 }
 
+//
 void TTransform::rotar(float g,float x,float y,float z)
 {
-    matriz = glm::rotate(matriz, glm::radians(g), glm::vec3(x,y,z));
+    identidad();
+    *matriz = glm::rotate(*matriz, glm::radians(g), glm::vec3(x,y,z));
 }
 
 void TTransform::escalar(float x,float y,float z)
 {
-    matriz = glm::scale(matriz, glm::vec3(x,y,z));
+    identidad();
+    *matriz = glm::scale(*matriz, glm::vec3(x,y,z));
 }
 
 void TTransform::beginDraw()
 {
-    std::cout << didentidad << " se debe pintar-> " << ejecucion << std::endl;
-    glm::mat4 * nuevo = new glm::mat4;
-    TEntidad::matriz_compartida = nuevo;
-    TEntidad::pila_compartida->push(nuevo);
+    matriz_compartida = nullptr;
+    
+    //std::cout << " p " <<  pila_compartida->size() << std::endl;
+    TEntidad::pila_compartida->push(matriz);
+    //std::cout << " c " <<  cola_compartida->size() << std::endl;
+    TEntidad::cola_compartida->push(matriz);
 }
 
+//Uso: desapila 
 void TTransform::endDraw()
-{
+{  
+    matriz_compartida = nullptr;
 
+    if(pila_compartida->size() > 0)
+    {
+        //std::cout << " p " <<  pila_compartida->size() << std::endl;
+        TEntidad::pila_compartida->pop();
+    }
+
+    if(cola_compartida->size() > 0)
+    {
+        //std::cout << " c " << cola_compartida->size() << std::endl;
+        TEntidad::cola_compartida->pop();
+    }
 }

@@ -19,9 +19,11 @@ class TMalla : public TEntidad
         // Constructor y destructor
         TMalla();
         ~TMalla();
-        void remove(); 
         void cargarMalla(unsigned short,unsigned short);
         
+        // Recibir recurso
+        void setRecursoObjeto(RMalla *);//recibe un puntero de la malla
+
         // sobrecarga metodos TEntidad
         void beginDraw();
         void endDraw();
