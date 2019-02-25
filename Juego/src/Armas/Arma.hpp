@@ -1,9 +1,8 @@
 #ifndef Arma_HPP
 #define Arma_HPP
 #include <iostream>
-#include "../INobjetos.hpp"
-#include "../INdrawable.hpp"
-//#include "MotorGrafico.hpp"
+#include "../Motores/INobjetos.hpp"
+#include "../Motores/INdrawable.hpp"
 
 using namespace std;
 
@@ -50,6 +49,9 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
         float getLastX();
         float getLastY();
         float getLastZ();
+        float getIniX();
+        float getIniY();
+        float getIniZ();
         float getFisX();
         float getFisY();
         float getFisZ();
@@ -64,9 +66,7 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
 
     private:
         int potenciaAtaque;
-        const char* _nombreArma;  
-        //MotorGrafico*  motor;
-      //  core::vector3df dir; 
+        const char* _nombreArma;
 };
 
 #endif /* Arma_HPP */

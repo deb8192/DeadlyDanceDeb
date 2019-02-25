@@ -25,6 +25,7 @@ SOURCESJ = $(shell ls src/Jugando/*.cpp)
 SOURCESPU = $(shell ls src/Puzzles/*.cpp)
 SOURCESO = $(shell ls src/Objetos/*.cpp)
 SOURCESA = $(shell ls src/Armas/*.cpp)
+SOURCESMO = $(shell ls src/Motores/*.cpp)
 
 SOURCESHEADER = $(shell ls src/*.hpp)
 SOURCESHEADERM = $(shell ls src/Menus/*.hpp)
@@ -34,6 +35,7 @@ SOURCESHEADERJ = $(shell ls src/Jugando/*.hpp)
 SOURCESHEADERPU = $(shell ls src/Puzzles/*.hpp)
 SOURCESHEADERO = $(shell ls src/Objetos/*.hpp)
 SOURCESHEADERA = $(shell ls src/Armas/*.hpp)
+SOURCESHEADERMO = $(shell ls src/Motores/*.hpp)
 
 #OSOURCES = $(wildcard obj/*.o) #se elimina por problemas de no refrescarse
 
@@ -45,6 +47,7 @@ OSOURCESJV2 = $(shell ls obj/Jugando/*.o)
 OSOURCESPU2 = $(shell ls obj/Puzzles/*.o)
 OSOURCESO2 = $(shell ls obj/Objetos/*.o)
 OSOURCESA2 = $(shell ls obj/Armas/*.o)
+OSOURCESMO2 = $(shell ls obj/Motores/*.o)
 
 OBJECTS = $(SOURCES:.cpp=.o)
 OBJECTSM = $(SOURCESM:.cpp=.o)
@@ -54,6 +57,7 @@ OBJECTSJ = $(SOURCESJ:.cpp=.o)
 OBJECTSPU = $(SOURCESPU:.cpp=.o)
 OBJECTSO = $(SOURCESO:.cpp=.o)
 OBJECTSA = $(SOURCESA:.cpp=.o)
+OBJECTSMO = $(SOURCESMO:.cpp=.o)
 
 RECUR = Recursiva
 RECUR2 = Recursiva2
@@ -68,6 +72,7 @@ BUSQJ = $(shell find ./obj/Jugando  -maxdepth 1 -name "*.o" | wc -l)
 BUSQPU = $(shell find ./obj/Puzzles  -maxdepth 1 -name "*.o" | wc -l)
 BUSQO = $(shell find ./obj/Objetos  -maxdepth 1 -name "*.o" | wc -l)
 BUSQA = $(shell find ./obj/Armas  -maxdepth 1 -name "*.o" | wc -l)
+BUSQMO = $(shell find ./obj/Motores  -maxdepth 1 -name "*.o" | wc -l)
 
 BUSQ2 = $(shell find ./src  -maxdepth 1 -name "*.o" | wc -l)
 BUSQ2M = $(shell find ./src/Menus  -maxdepth 1 -name "*.o" | wc -l)
@@ -77,6 +82,7 @@ BUSQ2J = $(shell find ./src/Jugando  -maxdepth 1 -name "*.o" | wc -l)
 BUSQ2PU = $(shell find ./src/Puzzles  -maxdepth 1 -name "*.o" | wc -l)
 BUSQ2O = $(shell find ./src/Objetos  -maxdepth 1 -name "*.o" | wc -l)
 BUSQ2A = $(shell find ./src/Armas  -maxdepth 1 -name "*.o" | wc -l)
+BUSQ2MO = $(shell find ./src/Motores  -maxdepth 1 -name "*.o" | wc -l)
 
 # Aqui es donde se hace la magia y se unifican las clases en una sola, basicamente se le pasa las clases de objeto (.o) para unificarlas
 $(BEGIN): 
@@ -93,13 +99,13 @@ $(BEGIN):
 	$(MAKE) $(EXEC)
 	@echo -e '\e[45m Finalizado Ejecucion Makefile \e[0m';
 
-$(PARALLEL): $(OBJECTS) $(OBJECTSP) $(OBJECTSE) $(OBJECTSM) $(OBJECTSJ) $(OBJECTSPU) $(OBJECTSO) $(OBJECTSA) |
+$(PARALLEL): $(OBJECTS) $(OBJECTSP) $(OBJECTSE) $(OBJECTSM) $(OBJECTSJ) $(OBJECTSPU) $(OBJECTSO) $(OBJECTSA) $(OBJECTSMO) |
 
 #Finalizado Comprobaciones
 
-$(EXEC): $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2)
+$(EXEC): $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2)
 	#Comprobando ejecutable si esta actualizado
-	$(CXX) $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(irrlichtN) $(LIBRERIAS) $(LIBRERIAS_ESPECIFICAS)  -o $(EXEC)
+	$(CXX) $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2) $(irrlichtN) $(LIBRERIAS) $(LIBRERIAS_ESPECIFICAS)  -o $(EXEC)
 	#Ejecutable Actualizado
 
 $(PRECA):
@@ -111,6 +117,7 @@ $(PRECA):
 	if [ $(BUSQ2PU) -gt 0 ] ; then mv src/Puzzles/*.o obj/Puzzles/ ; fi
 	if [ $(BUSQ2O) -gt 0 ] ; then mv src/Objetos/*.o obj/Objetos/ ; fi
 	if [ $(BUSQ2A) -gt 0 ] ; then mv src/Armas/*.o obj/Armas/ ; fi
+	if [ $(BUSQ2MO) -gt 0 ] ; then mv src/Motores/*.o obj/Motores/ ; fi
 
 $(RECUR):
 	if [ $(BUSQ) -gt 0 ] ; then mv obj/*.o src/ ; fi
@@ -121,6 +128,7 @@ $(RECUR):
 	if [ $(BUSQPU) -gt 0 ] ; then mv obj/Puzzles/*.o src/Puzzles/ ; fi
 	if [ $(BUSQO) -gt 0 ] ; then mv obj/Objetos/*.o src/Objetos/ ; fi
 	if [ $(BUSQA) -gt 0 ] ; then mv obj/Armas/*.o src/Armas/ ; fi
+	if [ $(BUSQMO) -gt 0 ] ; then mv obj/Motores/*.o src/Motores/ ; fi
 
 # si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
 
@@ -141,6 +149,7 @@ $(RECUR2):
 	 if [ $(BUSQ2PU) -gt 0 ] ; then mv src/Puzzles/*.o obj/Puzzles/ ; fi
 	 if [ $(BUSQ2O) -gt 0 ] ; then mv src/Objetos/*.o obj/Objetos/ ; fi
 	 if [ $(BUSQ2A) -gt 0 ] ; then mv src/Armas/*.o obj/Armas/ ; fi
+	 if [ $(BUSQ2MO) -gt 0 ] ; then mv src/Motores/*.o obj/Motores/ ; fi
 
 $(LG):
 	@echo -e '\e[45m Iniciando Compilacion Libreria Grafica \e[0m'; \
@@ -153,7 +162,7 @@ $(LG):
 
 # Limpia los .o y el ejecutable creado, si se ponen archivos autogenerados deben ponerse aqui para que se quiten
 clean:
-	rm -f $(EXEC) $(OSOURCESV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESMV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2)
+	rm -f $(EXEC) $(OSOURCESV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESMV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2)
 	rm -f src/*.o
 # si ejecutas "make run" despues de compilar ejecutara automaticamente el ejecutable
 run: $(BEGIN)
@@ -165,5 +174,5 @@ val: $(BEGIN)
 	#CUIDADO hay que tener valgrind para instalarlo "sudo pacman -S valgrind"
 	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia
 	export LD_LIBRARY_PATH="$(LIBRERIAS_CARPETAS)";\
-	valgrind ./$(EXEC)
+	valgrind --error-limit=no ./$(EXEC)
 		

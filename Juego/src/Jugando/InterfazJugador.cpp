@@ -1,7 +1,7 @@
 #include "InterfazJugador.hpp"
 
 //singleton
-InterfazJugador* InterfazJugador::unica_instancia = 0;
+InterfazJugador* InterfazJugador::_unica_instancia = 0;
 //fin indicador singleton
 
 InterfazJugador::InterfazJugador()
@@ -11,6 +11,16 @@ InterfazJugador::InterfazJugador()
     dinero = 0;//no tiene dinero
     estado = false;
     arma = 0;// no tiene arma
+}
+
+InterfazJugador::~InterfazJugador()
+{
+    vida = 0;
+    ataqueEspecial = 0;
+    dinero = 0;
+    arma = 0;
+    estado = false;
+    delete _unica_instancia;
 }
 
 void InterfazJugador::activar()
@@ -28,7 +38,7 @@ bool InterfazJugador::getEstado()
     return estado;
 }
 
-int * InterfazJugador::getUpdate()
+int* InterfazJugador::getUpdate()
 {
     int * datos = new int[5];
     

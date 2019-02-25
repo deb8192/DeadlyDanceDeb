@@ -8,14 +8,14 @@ Decorador::Decorador()
     
 }
 
-Decorador::Decorador(const char* name, int idxml, int type, int level, Nodo *father, const char* end, const char* alternative) : Nodo(name, idxml, type, level, father)
+Decorador::Decorador(const char* name, int idxml, int type, int level, Nodo* father, const char* end, const char* alternative) : Nodo(name, idxml, type, level, father)
 {
     std::string finalDec(end);
-    char * cadena_fin = new char[sizeof(finalDec)];
+    char*  cadena_fin = new char[sizeof(finalDec)];
     strcpy(cadena_fin, finalDec.c_str());
 
     std::string finalAlt(alternative);
-    char * cadena_alt = new char[sizeof(finalAlt)];
+    char*  cadena_alt = new char[sizeof(finalAlt)];
     strcpy(cadena_alt, finalAlt.c_str());
 
     fin = cadena_fin;

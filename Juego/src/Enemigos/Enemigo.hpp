@@ -1,8 +1,8 @@
 #ifndef Enemigo_HPP
 #define Enemigo_HPP
-#include "../INnpc.hpp"
-#include "../INdrawable.hpp"
-#include "../INsentidos.hpp"
+#include "../Motores/INnpc.hpp"
+#include "../Motores/INdrawable.hpp"
+#include "../Motores/INsentidos.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/Sala.hpp"
 #include <vector>
@@ -13,9 +13,10 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
     public:
         Enemigo();
+        Enemigo(float nx, float ny, float nz);
         ~Enemigo();
 
-        void definirSala(Sala * sala);
+        void definirSala(Sala* sala);
 
         //sentidos metodos
         void generarSonido(int intensidad,double duracion,int tipo);//la intensidad es el alcance y la duracion es cuanto dura el sonido, el tipo 1 son sonidos del jugador, 2 es pedir ayuda de los enemigos
@@ -101,6 +102,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getLastX();
         float getLastY();
         float getLastZ();
+        float getIniX();
+        float getIniY();
+        float getIniZ();
         float getFisX();
         float getFisY();
         float getFisZ();
@@ -115,20 +119,20 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int GetEnemigo();
 
         //comportamientos bases
-            bool ver(int tipo);//1 si ve al jugador
-            bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
-            bool buscar();//por defecto devuelve true
-            bool perseguir();//por defecto devuelve true
-            bool Acciones(int);//esto es para recorrer el arbol
-            bool pedirAyuda();//pide ayuda
-            bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
-            bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
+        bool ver(int tipo);//1 si ve al jugador
+        bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
+        bool buscar();//por defecto devuelve true
+        bool perseguir();//por defecto devuelve true
+        bool Acciones(int);//esto es para recorrer el arbol
+        bool pedirAyuda();//pide ayuda
+        bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
+        bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         //fin comportamientos bases
 
         //ia
         float randomBinomial();//devuelve un valor random entre -1 y 1
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
-        Arbol *getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
+        Arbol* getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
         void UpdateBehavior(short *i); //actualiza el comportamiento actual del pollo
         short * RunIA(bool);//corre la ia del enemigo
@@ -136,7 +140,6 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         //fin ia
 
     protected:
-
         //Comparadores de la lectura de las acciones y objetivos de las tareas
         enum accionesEnemigo 
         {  
@@ -153,14 +156,14 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             MODO_ATAQUE,
         };
 
-        Sala * estoy;//sala en la que esta el enemigo
+        Sala* _estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
-        float atacktime = 0.0f;
+        float atacktime;
         float tiempoMerodear, lastTiempoMerodear;
-        Arma *armaEspecial;
-        const char * rutaArmaEspecial = "assets/models/objeto.obj";
+        Arma* _armaEspecial;
+        const char* _rutaArmaEspecial = "assets/models/objeto.obj";
         int tipoEnemigo;//Tipo del enemigo: pollo, murcielago, guardian, boss
-        Arbol *arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
+        Arbol* arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
         bool accionRealizada; //
         short modo;
