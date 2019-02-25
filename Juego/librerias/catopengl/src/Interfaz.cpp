@@ -191,25 +191,6 @@ void Interfaz::Draw()
     }
     
     window->UpdateLimpiar();
-    
-    shaders[0]->Use();
-    //CAMARA
-    //Aplicar proyeccion en la escena
-    glm::mat4 projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(45.0f), (float)800/(float)600, 0.1f, 100.0f);
-    //projection = glm::ortho(0.0f, (float)800, (float)600, 0.0f, 0.1f, 100.0f);
-    shaders[0]->setMat4("projection",projection);
-    //Posiciones de la camara
-    float radius = 10.0f;                                   //Distancia desde el centro del circulo
-    float camX = sin(glfwGetTime()) * radius;               //Calculo de X
-    float camZ = cos(glfwGetTime()) * radius;               //Calculo de Z
-    glm::vec3 cameraPos = glm::vec3(camX, 0.0f, camZ);      //Posicion de la camara en el mundo 3D
-    glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 0.0f);   //Objetivo donde apunta la camara, en este caso al origen
-    glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);       //Up Axis
-    //Funcion lookAt, calculo de la matriz final
-    glm::mat4 view;
-    view = glm::lookAt(cameraPos,cameraTarget,cameraUp);    //lookAt(Posicion, Objetivo, Up Axis)
-    shaders[0]->setMat4("view", view);
 
     if(_raiz != nullptr)
     {
@@ -260,7 +241,7 @@ Interfaz::Nodo * Interfaz::buscarNodo(unsigned short id)
     return nullptr;
 }
 
-void Interfaz::Trasladar(unsigned char id,float x,float y,float z)
+void Interfaz::Trasladar(unsigned short id,float x,float y,float z)
 {
     Nodo * nodo = buscarNodo(id);
 
@@ -274,7 +255,7 @@ void Interfaz::Trasladar(unsigned char id,float x,float y,float z)
     }
 }   
 
-void Interfaz::Rotar(unsigned char id,float grados,float x,float y,float z)
+void Interfaz::Rotar(unsigned short id,float grados,float x,float y,float z)
 {
     Nodo * nodo = buscarNodo(id);
 
@@ -288,7 +269,7 @@ void Interfaz::Rotar(unsigned char id,float grados,float x,float y,float z)
     }
 }
 
-void Interfaz::Escalar(unsigned char id,float x,float y,float z)
+void Interfaz::Escalar(unsigned short id,float x,float y,float z)
 {
     Nodo * nodo = buscarNodo(id);
 
