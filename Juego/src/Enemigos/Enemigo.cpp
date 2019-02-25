@@ -39,7 +39,7 @@ Enemigo::~Enemigo()
     atespposZ = 0;
     incrAtDisCirc = 0;
     atacktime = 0;
-    velocidad = 0;
+    velocidadMaxima = 0;
     tipoEnemigo = 0;
     pos_ataques = 0;
     accionRealizada = false;

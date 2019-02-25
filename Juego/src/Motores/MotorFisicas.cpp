@@ -1,6 +1,6 @@
 #include "MotorFisicas.hpp" //se llama a su cabezera para cargar las dependencias
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
-#include "ConstantesComunes.hpp"
+#include "../ConstantesComunes.hpp"
 #include <iostream>
 
 using namespace std;

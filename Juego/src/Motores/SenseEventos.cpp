@@ -120,8 +120,8 @@ int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista
 
     if(perifericos)
     {
-        perDer = fisicas->colisionRayoUnCuerpo(x,y,z,(-1*(rot-180))+30,vista/2,modo);//mira periferica derecha
-        perIzq = fisicas->colisionRayoUnCuerpo(x,y,z,(-1*(rot-180))-30,vista/2,modo);//mira periferica izquierda
+        perDer = _fisicas->colisionRayoUnCuerpo(x,y,z,(-1*(rot-180))+30,vista/2,modo);//mira periferica derecha
+        perIzq = _fisicas->colisionRayoUnCuerpo(x,y,z,(-1*(rot-180))-30,vista/2,modo);//mira periferica izquierda
         
         //Si lo ve por uno de los perifericos lo pone a 1
         if(modo == 1)//jugador
