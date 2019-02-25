@@ -1,10 +1,6 @@
 #include "Arma.hpp"
+#include "../ConstantesComunes.hpp"
 #include <math.h>
-
-
-#define DEGTORAD 0.0174532925199432957f
-#define RADTODEG 57.295779513082320876f
-#define PIRADIAN 180.0f
 
 Arma::Arma()
 {
@@ -40,18 +36,30 @@ Arma::~Arma()
 
     // Arma
     potenciaAtaque = 0;
-    _nombreArma = nullptr;
+    if(_nombreArma != nullptr)
+    {
+        delete _nombreArma;
+        _nombreArma = nullptr;
+    }
 
     // INobjetos
     delete nombreObjeto;
-    delete ruta_objeto;
-    delete ruta_textura;
+    if(ruta_objeto != nullptr)
+    {
+        delete ruta_objeto;
+        ruta_objeto = nullptr;
+    }
+    if(ruta_textura != nullptr)
+    {
+        delete ruta_textura;
+        ruta_textura = nullptr;
+    }
     delete cadena_objeto;
     delete cadena_textura;
     delete cadena_nombre;
     ancho = 0;
     largo = 0;
-    alto  = 0;
+    alto = 0;
 
     // INdrawable
     posIni.x = 0;
@@ -121,6 +129,7 @@ void Arma::moverseEntidad(float updTime)
  */
 void Arma::RotarEntidad(float updTime)
 {
+    Constantes constantes;
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
     float pt = moveTime / updTime;
@@ -132,12 +141,12 @@ void Arma::RotarEntidad(float updTime)
 
     if(rotFutura.y == 0.0 && rotFutura.y < rotPasada.y)
     {
-        rotPasada.y = 2 * PIRADIAN - rotPasada.y;
+        rotPasada.y = 2 * constantes.PI_RADIAN - rotPasada.y;
     }
 
     else if(rotFutura.y == 0.0 && rotPasada.y < 0.0)
     {
-        rotPasada.y = rotPasada.y + 2 * PIRADIAN;
+        rotPasada.y = rotPasada.y + 2 * constantes.PI_RADIAN;
     }
 
     rotActual.x = rotPasada.x * (1 - pt) + rotFutura.x * pt;
@@ -212,9 +221,10 @@ void Arma::setPosicionesFisicas(float nx,float ny,float nz)
 
 void Arma::setPosicionesArmaEsp(float nx,float ny,float nz, float nry)
 {
-    float mx = nx + 6.5*(sin(DEGTORAD*nry));
+    Constantes constantes;
+    float mx = nx + 6.5*(sin(constantes.DEG_TO_RAD*nry));
     float my = ny;
-    float mz = nz + 6.5*(cos(DEGTORAD*nry));
+    float mz = nz + 6.5*(cos(constantes.DEG_TO_RAD*nry));
 
     this->setPosiciones((int)mx,(int)my,(int)mz);
 }
