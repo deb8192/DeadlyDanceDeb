@@ -473,7 +473,7 @@ int Jugador::AtacarEspecial()
         {
             int distancia = 5;
             animacion = 3;
-            atespx = distancia * sin(constantes.PI * getRY() / constantes.PI_RADIAN) + getX();atespy = getY();
+            atespx = distancia * sin(constantes.PI * getRY() / constantes.PI_RADIAN) + getX();
             atespy = getY();
             atespz = distancia * cos(constantes.PI * getRY() / constantes.PI_RADIAN) + getZ();
             atgx = getRX();

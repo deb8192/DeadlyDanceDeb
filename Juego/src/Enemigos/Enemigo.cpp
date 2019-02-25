@@ -1,4 +1,5 @@
 #include "Enemigo.hpp"
+#include "Pollo.hpp"
 #include "../Jugando/Jugando.hpp"
 #include "../ConstantesComunes.hpp"
 

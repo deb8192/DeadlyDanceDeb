@@ -71,7 +71,6 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setLastTimeAt(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
-        void setRotation(float rot);
         void setPosAtaques(int p);
         void setVelocidadMaxima(float velocidad); //modifica la VelocidadMaxima de desplazamiento
         void SetEnemigo(int);
