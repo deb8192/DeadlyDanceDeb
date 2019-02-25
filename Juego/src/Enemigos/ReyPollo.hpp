@@ -6,8 +6,8 @@
 class ReyPollo: public Enemigo
 {
     public:
-        ~ReyPollo();
         ReyPollo();
+        ~ReyPollo();
         
     private:
     

@@ -9,13 +9,13 @@ using namespace std;
 class INobjetos
 {
     public:
-
+        virtual ~INobjetos() = default;
 
     /*el protected es para que tenga acceso sus descendientes o parientes*/
     protected:    	
-    	const char* nombreObjeto;
-        const char* ruta_objeto; 
-        const char* ruta_textura;
+    	const char * nombreObjeto;
+        const char * ruta_objeto; 
+        const char * ruta_textura;
         char* cadena_objeto; 
         char* cadena_textura;
         char* cadena_nombre;

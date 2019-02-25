@@ -7,13 +7,13 @@
     class Times
     {
         public:
-            
             //clase singleton en public
-            ~Times(void);
+            ~Times();
+
             static Times* GetInstance() //esto se utiliza para crear el objeto una sola vez
             {
-                if(_unica_instancia == 0)
-                _unica_instancia = new Times();
+                if(!_unica_instancia)
+                    _unica_instancia = new Times();
                 return _unica_instancia;  
             }
             //fin singleton public
@@ -37,6 +37,7 @@
             Times();
             static Times* _unica_instancia;
             //fin clase singleton private
+
             float tiempo_actual;
             float tiempo_frame;
             float frame_actual;
