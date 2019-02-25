@@ -3,7 +3,6 @@
 //USO: inicializa las variables
 Ventana::Ventana()
 {
-    std::cout << "inicializar ventana" << std::endl;
     _window = nullptr;
 }
 

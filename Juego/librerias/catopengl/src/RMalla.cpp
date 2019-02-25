@@ -17,7 +17,6 @@ void RMalla::Draw(Shader *shader)
 {
     for(unsigned int i = 0; i < meshes.size(); i++)
     {
-        std::cout << meshes.size() << std::endl;
         meshes[i]->Draw(shader);
     }
 }

@@ -29,11 +29,11 @@ class Interfaz
 
         void RemoveObject(unsigned short);//remueve objeto de la escena
 
-        void Trasladar(unsigned char,float,float,float);//trasladar 
+        void Trasladar(unsigned short,float,float,float);//trasladar 
         
-        void Rotar(unsigned char,float,float,float,float);//rotar
+        void Rotar(unsigned short,float,float,float,float);//rotar
 
-        void Escalar(unsigned char,float,float,float);//escalar
+        void Escalar(unsigned short,float,float,float);//escalar
 
         bool VentanaEstaAbierta();//devuelve true si esta en ejecucion devuelve false si no lo esta
 

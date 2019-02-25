@@ -29,7 +29,6 @@ void TMalla::cargarMalla(unsigned short,unsigned short)
 // sobrecarga metodos TEntidad
 void TMalla::beginDraw()
 {
-   std::cout << "ads" << std::endl;
    objetos->Draw(shader);
 }
 

@@ -34,7 +34,7 @@ void TTransform::invertir()
 
 void TTransform::trasladar(float x,float y,float z)
 {   
-    identidad();                                                                  
+    identidad();                                                                
     *matriz = glm::translate(*matriz, glm::vec3(x,y,z));
 }
 
