@@ -23,7 +23,7 @@ Jugador::Jugador()
     tiempoPasadoCogerObjeto=0;
     tiempoEnMorir=2000.0f;//tiempo en milisegundos
     tiempoPasadoEnMorir=0;
-}
+}   
 
 Jugador::~Jugador()
 {
@@ -120,10 +120,25 @@ Jugador::~Jugador()
     id = 0;
     animacion = 0;
     animacionAnterior = 0;
+
+    _motor = nullptr;
+
+    // Liberar memoria
+    delete playerTextura;
+    delete playerModelo;
 }
 
-Jugador::Jugador(int nX,int nY,int nZ,int ancho,int largo,int alto, const char* ruta_objeto, const char* ruta_textura)
+Jugador::Jugador(int nX,int nY,int nZ, int ancho, 
+    int largo, int alto, int accion)
 {
+    _motor = MotorGrafico::GetInstance();
+
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
+    this->ancho = ancho;
+    this->largo = largo;
+    this->alto = alto;
+
     vida = 0; // se cambia con setVida en jugando.cpp
     dinero = 0;
 
@@ -290,7 +305,6 @@ bool Jugador::finalAnimMuerte()
 void Jugador::MuereJugador()
 {
     Times* _tiempo = Times::GetInstance();
-    //MotorGrafico* _motor = MotorGrafico::GetInstance();
 
     if(tiempoPasadoMuerte == 0){
         //_motor->colorearJugador(255,0,0,0);//negro
@@ -366,7 +380,6 @@ void Jugador::AtacarUpdate(int danyo)
   {
     Jugando* nivel = Jugando::GetInstance();
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
     if(this->getArma() == nullptr){
       _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
       _motor->clearDebug2();
@@ -526,7 +539,6 @@ int Jugador::AtacarEspecial()
  */
 void Jugador::AtacarEspecialUpdate(int*danyo)
 {
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     Jugando* nivel = Jugando::GetInstance();
 
@@ -1148,4 +1160,27 @@ void Jugador::setAnimacion(int est)
 void Jugador::setID(int nid)
 {
     id = nid;
+}
+
+const char* Jugador::GetTextura()
+{
+    return playerTextura;
+}
+
+const char* Jugador::GetModelo()
+{
+    return playerModelo;
+}
+
+int Jugador::GetAncho()
+{
+    return ancho;
+}
+int Jugador::GetLargo()
+{
+    return largo;
+}
+int Jugador::GetAlto()
+{
+    return alto;
 }

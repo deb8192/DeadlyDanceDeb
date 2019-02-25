@@ -37,6 +37,7 @@ Jugando::~Jugando()
     // Punteros sin new
     _enemPideAyuda = nullptr;
     _destinoPathFinding = nullptr;
+    _jugador = nullptr;
 
     // Punteros a clases singleton
     _controladorTiempo = nullptr;
@@ -132,25 +133,25 @@ void Jugando::ValoresPorDefecto()
 
 void Jugando::ValoresPorDefectoJugador()
 {
-    float xIni = jugador.getIniX();
-    float yIni = jugador.getIniY();
-    float zIni = jugador.getIniZ();
+    float xIni = _jugador->getIniX();
+    float yIni = _jugador->getIniY();
+    float zIni = _jugador->getIniZ();
     
     jugadorInmovil = false;
-    jugador.setVida(100);
-    jugador.setBarraAtEs(100);
-    jugador.setAtaque(15);
-    jugador.setArma(NULL);
-    jugador.setArmaEspecial(100);
-    jugador.setTimeAtEsp(0.0f);
-    jugador.setDanyoCritico(50);
-    jugador.setProAtaCritico(10);
-    jugador.setPosiciones(xIni, yIni, zIni);
-    jugador.setNewPosiciones(xIni, yIni, zIni);
-    jugador.initPosicionesFisicas(xIni/2, yIni/2, zIni/2);
+    _jugador->setVida(100);
+    _jugador->setBarraAtEs(100);
+    _jugador->setAtaque(15);
+    _jugador->setArma(NULL);
+    _jugador->setArmaEspecial(100);
+    _jugador->setTimeAtEsp(0.0f);
+    _jugador->setDanyoCritico(50);
+    _jugador->setProAtaCritico(10);
+    _jugador->setPosiciones(xIni, yIni, zIni);
+    _jugador->setNewPosiciones(xIni, yIni, zIni);
+    _jugador->initPosicionesFisicas(xIni/2, yIni/2, zIni/2);
     //TO DO: revisar que lo haga bien
-    //jugador.setRotacion(0,180,0);
-    //jugador.setNewRotacion(0,180,0);
+    //_jugador->setRotacion(0,180,0);
+    //_jugador->setNewRotacion(0,180,0);
 }
 
 // Desactiva el modo debug en MotorGrafico
@@ -177,7 +178,7 @@ void Jugando::ManejarEventos() {
     if (_motor->EstaPulsado(KEY_K))
     {
         _motor->ResetKey(KEY_K);
-        jugador.setVida(0);
+        _jugador->setVida(0);
     }
 
     //para modo debug
@@ -257,25 +258,25 @@ void Jugando::Update()
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
 
-    if (jugador.EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
+    if (_jugador->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
-        jugador.MuereJugador(); // Animacion de muerte
+        _jugador->MuereJugador(); // Animacion de muerte
         DesactivarDebug();
         Juego::GetInstance()->estado.CambioEstadoMuerte();
     }
 
     // ********** se actualiza posiciones e interpolado **********
     //animacion
-    _motor->cambiarAnimacionJugador(jugador.getAnimacion());
+    _motor->cambiarAnimacionJugador(_jugador->getAnimacion());
 
-    if(jugador.getArma() != nullptr)
+    if(_jugador->getArma() != nullptr)
     {
-        float posArmaX = 5 * sin(PI * jugador.getRY() / PIRADIAN) + jugador.getX();
-        float posArmaZ = 5 * cos(PI * jugador.getRY() / PIRADIAN) + jugador.getZ();;
+        float posArmaX = 5 * sin(PI * _jugador->getRY() / PIRADIAN) + _jugador->getX();
+        float posArmaZ = 5 * cos(PI * _jugador->getRY() / PIRADIAN) + _jugador->getZ();;
         //iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
-        jugador.getArma()->setPosiciones(posArmaX, jugador.getY()+3, posArmaZ);
-        _motor->llevarObjeto(posArmaX, jugador.getY()+3,posArmaZ, jugador.getRX(), jugador.getRY(), jugador.getRZ() );
-        _fisicas->llevarBox(posArmaX, jugador.getY()+3,posArmaZ, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(), jugador.getArma()->getAlto());
+        _jugador->getArma()->setPosiciones(posArmaX, _jugador->getY()+3, posArmaZ);
+        _motor->llevarObjeto(posArmaX, _jugador->getY()+3,posArmaZ, _jugador->getRX(), _jugador->getRY(), _jugador->getRZ() );
+        _fisicas->llevarBox(posArmaX, _jugador->getY()+3,posArmaZ, _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto());
     }
 
     //Comprueba la activacion de un powerup
@@ -286,9 +287,9 @@ void Jugando::Update()
         _motor->EstaPulsado(KEY_S),
         _motor->EstaPulsado(KEY_D),
         _motor->EstaPulsado(KEY_W),
-        jugador.getNewX(),
-        jugador.getNewY(),
-        jugador.getNewZ()
+        _jugador->getNewX(),
+        _jugador->getNewY(),
+        _jugador->getNewZ()
     );
 
     //colisiones con todos los objetos y enemigos que no se traspasan
@@ -296,7 +297,7 @@ void Jugando::Update()
     {
         //colisiona
         jugadorInmovil = true;
-        jugador.setNewPosiciones(jugador.getX(), jugador.getY(), jugador.getZ());
+        _jugador->setNewPosiciones(_jugador->getX(), _jugador->getY(), _jugador->getZ());
     }
     else
     {
@@ -305,7 +306,7 @@ void Jugando::Update()
     }
     
     // Actualizar movimiento del jugador
-    jugador.movimiento(jugadorInmovil,
+    _jugador->movimiento(jugadorInmovil,
         _motor->EstaPulsado(KEY_A),
         _motor->EstaPulsado(KEY_S),
         _motor->EstaPulsado(KEY_D),
@@ -326,9 +327,9 @@ void Jugando::Update()
             _enemigos.at(i)->getRZ(),5, 5, 5, 2);
     }
 
-    _fisicas->updateJugador(jugador.getX(),
-        jugador.getY(),
-        jugador.getZ()
+    _fisicas->updateJugador(_jugador->getX(),
+        _jugador->getY(),
+        _jugador->getZ()
     );
 
     if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
@@ -341,13 +342,13 @@ void Jugando::Update()
     this->updateAt(&danyo2);
 
     //Si se realiza el ataque se comprueban las colisiones
-    if(jugador.getTimeAtEsp() > 0.0)
+    if(_jugador->getTimeAtEsp() > 0.0)
     {
-        jugador.AtacarEspecialUpdate(&danyo);
+        _jugador->AtacarEspecialUpdate(&danyo);
     }
-    else if(jugador.getTimeAt() > 0.0)
+    else if(_jugador->getTimeAt() > 0.0)
     {
-        jugador.AtacarUpdate(danyo2);
+        _jugador->AtacarUpdate(danyo2);
     }
     else //En caso contrario se colorean los enemigos de color gris
     {
@@ -358,7 +359,7 @@ void Jugando::Update()
     }
 
     //Posicion de escucha
-    _motora->setListenerPosition(jugador.getX(),jugador.getY(),jugador.getZ());
+    _motora->setListenerPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
 
     //actualizamos los enemigos
     if(_enemigos.size() > 0)//posiciones interpolacion
@@ -409,16 +410,16 @@ void Jugando::Update()
                 //Si el enemigo ha realizado danyo
                 if(danyo_jug > 0)
                 {
-                    jugador.QuitarVida(danyo_jug);
-                    cout<< "Vida jugador: "<< jugador.getVida() << endl;
+                    _jugador->QuitarVida(danyo_jug);
+                    cout<< "Vida jugador: "<< _jugador->getVida() << endl;
                 }*/
             }
             else //Se le quita vida con el danyo del ataque especial
             {
                 if(danyo_jug > 0)
                 {
-                    jugador.QuitarVida(danyo_jug);
-                    cout<< "Vida jugador tras ataque especial: "<< jugador.getVida() << endl;
+                    _jugador->QuitarVida(danyo_jug);
+                    cout<< "Vida jugador tras ataque especial: "<< _jugador->getVida() << endl;
                 }
             }
             //!ESTE BUCLE SE VA A IR TODO SEGURAMENTE HASTA AQUI
@@ -445,7 +446,7 @@ void Jugando::Update()
 
    // TO DO:
    //actualizamos la interfaz de jugador
-    jugador.updateInterfaz();
+    _jugador->updateInterfaz();
     //actualizamos la interfaz en motor grafico
     _motor->updateInterfaz();
 }
@@ -456,7 +457,7 @@ void Jugando::UpdateIA()
     if (_motor->EstaPulsado(KEY_J))
     {
         _motor->ResetKey(KEY_J);
-        jugador.QuitarVida(20);
+        _jugador->QuitarVida(20);
     }
     /* **************************************************** */
     
@@ -567,17 +568,16 @@ void Jugando::Render()
     drawTime = _controladorTiempo->GetTiempo(2);
 
     //Dibujado del personaje
-    jugador.moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
-    jugador.RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-    jugador.UpdateTimeMove(drawTime - lastDrawTime);
-    _motor->mostrarJugador(jugador.getX(),
-        jugador.getY(),
-        jugador.getZ(),
-        jugador.getRX(),
-        jugador.getRY(),
-        jugador.getRZ()
+    _jugador->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
+    _jugador->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
+    _jugador->UpdateTimeMove(drawTime - lastDrawTime);
+    _motor->mostrarJugador(_jugador->getX(),
+        _jugador->getY(),
+        _jugador->getZ(),
+        _jugador->getRX(),
+        _jugador->getRY(),
+        _jugador->getRZ()
     );
-    cout << jugador.getX() <<" Vida: "<<jugador.getVida()<< endl;
     
     //Dibujado de los enemigos
     for(unsigned int i = 0; i < _enemigos.size(); i++)
@@ -611,68 +611,15 @@ void Jugando::Render()
         );
     }
 
-    //Dibujado del ataque especial
-    //Ataque especial Heavy
-    if(jugador.getTimeAtEsp() > 0.0f)
+    //Dibujado del ataque especial del jugador
+    if(_jugador->getTimeAtEsp() > 0.0f)
     {
-        if(strcmp(jugador.getArmaEspecial()->getNombre(), "Heavy") == 0)
-        {
-            jugador.getArmaEspecial()->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
-            jugador.getArmaEspecial()->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-            jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
-
-            _motor->mostrarArmaEspecial(
-                jugador.GetDatosAtEsp()[0],
-                jugador.getY(),
-                jugador.GetDatosAtEsp()[2],
-                jugador.getRX(),
-                jugador.getRY(),
-                jugador.getRZ());
-
-            _motor->clearDebug2(); //Pruebas debug
-
-            _motor->dibujarObjetoTemporal(
-                jugador.getArmaEspecial()->getFisX()*2,
-                jugador.getY(),
-                jugador.getArmaEspecial()->getFisZ()*2,
-                jugador.getRX(),
-                jugador.getRY(),
-                jugador.getRZ(),
-                8,
-                1,
-                8,
-                2);
-        }
-
+        _jugador->RenderAtaqueEsp(_controladorTiempo->GetUpdateTime(),
+            (drawTime - lastDrawTime));
+        ////Ataque especial heavy
+        //if(strcmp(_jugador->getArmaEspecial()->getNombre(), "Heavy") == 0)
         //Ataque especial bailaora
-        else if(strcmp(jugador.getArmaEspecial()->getNombre(), "Bailaora") == 0)
-        {
-            jugador.getArmaEspecial()->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
-            jugador.getArmaEspecial()->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-            jugador.getArmaEspecial()->UpdateTimeMove(drawTime - lastDrawTime);
-
-            _motor->mostrarArmaEspecial(
-                jugador.GetDatosAtEsp()[0],
-                jugador.GetDatosAtEsp()[1],
-                jugador.GetDatosAtEsp()[2],
-                jugador.GetDatosAtEsp()[3],
-                jugador.GetDatosAtEsp()[4],
-                jugador.GetDatosAtEsp()[5]);
-
-            _motor->clearDebug2(); //Pruebas debug
-
-            _motor->dibujarObjetoTemporal(
-                jugador.getArmaEspecial()->getX(),
-                jugador.getArmaEspecial()->getY(),
-                jugador.getArmaEspecial()->getZ(),
-                jugador.GetDatosAtEsp()[3],
-                jugador.GetDatosAtEsp()[4],
-                jugador.GetDatosAtEsp()[5],
-                8,
-                1,
-                8,
-                3);
-        }
+        //else if(strcmp(_jugador->getArmaEspecial()->getNombre(), "Bailaora") == 0)
     }
 
     //Dibujado zonas
@@ -706,7 +653,7 @@ void Jugando::Reanudar()
         // valores por defecto del jugador
         ValoresPorDefectoJugador();
 
-        cout << "Cambia: "<<jugador.getX() << endl;
+        cout << "Cambia: "<<_jugador->getX() << endl;
 
         // Resto de valores del juego
         ValoresPorDefecto();
@@ -743,19 +690,22 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _motor->BorrarScena();//borramos la scena
 
     //pre limpiamos todo
-    _motor->LimpiarMotorGrafico();
+   // _motor->LimpiarMotorGrafico();
     //LimpiarNivel();
     _fisicas->limpiarFisicas();
     //limpiammos la sala
-    if(_primeraSala != nullptr)
+    /*if(_primeraSala != nullptr)
     {
        _primeraSala->~Sala();
        _primeraSala = nullptr;
-    }
+    }*/
 
     //cargamos el nivel
     cargador.CargarNivelXml(nivel, tipoJug); //se llama al constructor vacio
     
+    CrearJugador();
+    
+
     //Cargar objetos con el nivel completo
     this->cargarCofres(2); //Cargamos los cofres del nivel
 
@@ -769,18 +719,21 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
-void Jugando::CrearJugador(int accion, int x,int y,int z, int ancho, int largo, 
-    int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades)
+void Jugando::CrearJugador()
 {
     cout << "Creo el jugador"<<endl;
-    jugador = Jugador(x, y, z, ancho, largo, alto, ruta_objeto, ruta_textura);
-    jugador.setID(++id);
-    _motor->CargarJugador(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+    _jugador = cargador.GetJugador();
+    _jugador->setID(++id);
     ValoresPorDefectoJugador();
-    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
-    _motor->CargarArmaEspecial(x,y,z,jugador.getRutaArmaEsp(),"");
 
-    cout << "jugador creado en: "<<x<<", "<<y<<", "<<z<<", "<<endl;
+    _motor->CargarJugador(_jugador->getX(),_jugador->getY(), _jugador->getZ(),
+        _jugador->GetAncho(), _jugador->GetLargo(), _jugador->GetAlto(),
+        _jugador->GetModelo(), _jugador->GetTextura());
+
+    _motor->CargarArmaEspecial(_jugador->getX(),_jugador->getY(),
+        _jugador->getZ(), _jugador->getRutaArmaEsp(),"");
+
+    //cout << "jugador creado en: "<<x<<", "<<y<<", "<<z<<", "<<endl;
     //TO DO: propiedades no se usa
 }
 
@@ -992,47 +945,47 @@ void Jugando::cargarCofres(int num)
  void Jugando::CogerObjeto()
 {
     long unsigned int rec_col = _fisicas->collideColectable();
-    jugador.setAnimacion(4);
+    _jugador->setAnimacion(4);
 
     //En caso de no ser llaves
     if(_recolectables.at(rec_col)->getCodigo() == 0)
     {
-        if(jugador.getArma() == nullptr)//si no tiene arma equipada
+        if(_jugador->getArma() == nullptr)//si no tiene arma equipada
         {
             //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)_recolectables[rec_col];
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),_recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),_recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),_recolectables[rec_col]->getObjeto(),_recolectables[rec_col]->getTextura());
-            jugador.setArma(nuArma);
+            _jugador->setArma(nuArma);
             //PROVISIONAL
-            jugador.getArma()->setRotacion(0.0, PIRADIAN, 0.0);
+            _jugador->getArma()->setRotacion(0.0, PIRADIAN, 0.0);
             //!PROVISIONAL
             //lo cargamos por primera vez en el motor de graficos
-            _motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), _recolectables[rec_col]->getObjeto(), _recolectables[rec_col]->getTextura());
+            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->getObjeto(), _recolectables[rec_col]->getTextura());
             //lo cargamos por primera vez en el motor de fisicas
-            _fisicas->crearCuerpo(0,jugador.getX()/2,jugador.getY()/2,jugador.getZ()/2,2,_recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(), 6);
+            _fisicas->crearCuerpo(0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,2,_recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(), 6);
             //borramos el recolectable de nivel, _motor grafico y motor fisicas
             _recolectables.erase(_recolectables.begin() + rec_col);
             _motor->EraseColectable(rec_col);
             _fisicas->EraseColectable(rec_col);
             atacktime = 0.0f; //Reiniciar tiempo de ataques
         }
-        else if(jugador.getArma() != nullptr)//si tiene arma equipada
+        else if(_jugador->getArma() != nullptr)//si tiene arma equipada
         {
             //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-            Recolectable* nuRec = new Recolectable(0, jugador.getArma()->getAtaque(),jugador.getArma()->getNombre(),jugador.getArma()->getAncho(),jugador.getArma()->getLargo(), jugador.getArma()->getAlto(),jugador.getArma()->getObjeto(),jugador.getArma()->getTextura());
-            nuRec->setPosiciones(jugador.getX(),jugador.getY(), jugador.getZ());
+            Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),_jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),_jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),_jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura());
+            nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),_recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),_recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),_recolectables[rec_col]->getObjeto(),_recolectables[rec_col]->getTextura());
             _motor->EraseArma();
-            jugador.setArma(nuArma);
+            _jugador->setArma(nuArma);
             
             //PROVISIONAL
-            jugador.getArma()->setRotacion(0.0, PIRADIAN, 0.0);
+            _jugador->getArma()->setRotacion(0.0, PIRADIAN, 0.0);
             
             //!PROVISIONAL
             //lo cargamos por primera vez en el motor de graficos
-            _motor->CargarArmaJugador(jugador.getX(), jugador.getY(), jugador.getZ(), _recolectables[rec_col]->getObjeto(), _recolectables[rec_col]->getTextura());
+            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->getObjeto(), _recolectables[rec_col]->getTextura());
             
             //lo cargamos en el motor de fisicas
-            _fisicas->setFormaArma(jugador.getX()/2, jugador.getY()/2, jugador.getZ()/2, jugador.getArma()->getAncho(), jugador.getArma()->getLargo(),jugador.getArma()->getAlto());
+            _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2, _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),_jugador->getArma()->getAlto());
             
             //borramos el recolectable anterior de nivel, _motor grafico y motor fisicas
             _recolectables.erase(_recolectables.begin() + rec_col);
@@ -1049,7 +1002,7 @@ void Jugando::cargarCofres(int num)
     else if(_recolectables.at(rec_col)->getCodigo() > 0)
     {
         Llave* llave = new Llave(_recolectables.at(rec_col)->getCodigo());
-        jugador.AnnadirLlave(llave);
+        _jugador->AnnadirLlave(llave);
         
         //borramos el recolectable de nivel, _motor grafico y motor fisicas
         _recolectables.erase(_recolectables.begin() + rec_col);
@@ -1060,14 +1013,14 @@ void Jugando::cargarCofres(int num)
 
 void Jugando::DejarObjeto()
 {
-    if(jugador.getArma() != nullptr)//si tiene arma equipada
+    if(_jugador->getArma() != nullptr)//si tiene arma equipada
     {
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-        Recolectable* nuRec = new Recolectable(0, jugador.getArma()->getAtaque(),jugador.getArma()->getNombre(),jugador.getArma()->getAncho(),jugador.getArma()->getLargo(), jugador.getArma()->getAlto(),jugador.getArma()->getObjeto(),jugador.getArma()->getTextura());
-        nuRec->setPosiciones(jugador.getX(),jugador.getY(), jugador.getZ());
+        Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),_jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),_jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),_jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura());
+        nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
         _motor->EraseArma();
         _fisicas->EraseArma();
-        jugador.setArma(NULL);
+        _jugador->setArma(NULL);
 
         //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
         _recolectables.push_back(nuRec);
@@ -1194,9 +1147,9 @@ void Jugando::AccionarMecanismo(int int_col)
         i = 0;
         coincide = false;
         //PRUEBAS CON LLAVES
-        while(i < jugador.GetLlaves().size() && !coincide)
+        while(i < _jugador->GetLlaves().size() && !coincide)
         {
-            if(jugador.GetLlaves().at(i)->GetCodigoPuerta() == _interactuables.at(int_col)->getCodigo())
+            if(_jugador->GetLlaves().at(i)->GetCodigoPuerta() == _interactuables.at(int_col)->getCodigo())
             {
                 coincide = true;
             }
@@ -1295,22 +1248,22 @@ void Jugando::activarPowerUp()
         bool locoges = false; //Comprobar si lo puedes coger
 
         //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
-        if(_powerup.at(int_cpw)->getAtaque() == 0 && jugador.getVida() < 100)
+        if(_powerup.at(int_cpw)->getAtaque() == 0 && _jugador->getVida() < 100)
         {
-            cout << "PowerUP! Curado 20 de vida. TOTAL:" << jugador.getVida() << endl;
-            jugador.RecuperarVida(20);
+            cout << "PowerUP! Curado 20 de vida. TOTAL:" << _jugador->getVida() << endl;
+            _jugador->RecuperarVida(20);
             locoges = true;
         }
-        else if(_powerup.at(int_cpw)->getAtaque() == 1 && jugador.getBarraAtEs() < 100)
+        else if(_powerup.at(int_cpw)->getAtaque() == 1 && _jugador->getBarraAtEs() < 100)
         {
-            cout << "PowerUP! 50 de energia. TOTAL:" << jugador.getBarraAtEs() << endl;
-            jugador.AumentarBarraAtEs(50);
+            cout << "PowerUP! 50 de energia. TOTAL:" << _jugador->getBarraAtEs() << endl;
+            _jugador->AumentarBarraAtEs(50);
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->getAtaque() == 2)
         {
             cout << "Recoges " << _powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
-            jugador.AumentarDinero(_powerup.at(int_cpw)->getCantidad());
+            _jugador->AumentarDinero(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
 
@@ -1329,22 +1282,22 @@ void Jugando::updateAt(int* danyo)
 {
     float tiempoActual = 0.0f;
     float tiempoAtaque = 0.0f;
-    if((_motor->EstaPulsado(KEY_ESPACIO) || _motor->EstaPulsado(LMOUSE_DOWN)) && jugador.getTimeAt() <= 0.0f)
+    if((_motor->EstaPulsado(KEY_ESPACIO) || _motor->EstaPulsado(LMOUSE_DOWN)) && _jugador->getTimeAt() <= 0.0f)
     {
-        *danyo = jugador.Atacar(0);
+        *danyo = _jugador->Atacar(0);
         _motor->ResetKey(KEY_ESPACIO);
         _motor->ResetEvento(LMOUSE_DOWN);
         //atacktime = 1.5f;
-        jugador.setTimeAt(1.5f);
-        jugador.setLastTimeAt(_controladorTiempo->GetTiempo(2));
+        _jugador->setTimeAt(1.5f);
+        _jugador->setLastTimeAt(_controladorTiempo->GetTiempo(2));
     } else {
-        if(jugador.getTimeAt() > 0.0f)
+        if(_jugador->getTimeAt() > 0.0f)
         {
             tiempoActual = _controladorTiempo->GetTiempo(2);
-            tiempoAtaque = jugador.getTimeAt();
-            tiempoAtaque -= (tiempoActual - jugador.getLastTimeAt());
-            jugador.setLastTimeAt(tiempoActual);
-            jugador.setTimeAt(tiempoAtaque);
+            tiempoAtaque = _jugador->getTimeAt();
+            tiempoAtaque -= (tiempoActual - _jugador->getLastTimeAt());
+            _jugador->setLastTimeAt(tiempoActual);
+            _jugador->setTimeAt(tiempoAtaque);
         }
         if(atacktime > 0.5f)
         {
@@ -1363,7 +1316,7 @@ void Jugando::updateAt(int* danyo)
         }
 
         //clear
-        if(jugador.getTimeAt() <= 0.0f){
+        if(_jugador->getTimeAt() <= 0.0f){
             _motor->clearDebug2();
         }
     }
@@ -1374,16 +1327,16 @@ void Jugando::updateAtEsp()
     float tiempoActual = 0.0f;
     float tiempoAtaqueEsp = 0.0f;
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((_motor->EstaPulsado(RMOUSE_DOWN)||_motor->EstaPulsado(KEY_Q)) && jugador.getTimeAtEsp() <= 0.0)
+    if((_motor->EstaPulsado(RMOUSE_DOWN)||_motor->EstaPulsado(KEY_Q)) && _jugador->getTimeAtEsp() <= 0.0)
     {
-        danyo = jugador.AtacarEspecial();
+        danyo = _jugador->AtacarEspecial();
         _motor->ResetKey(KEY_Q);
         _motor->ResetEvento(RMOUSE_DOWN);
         _motor->colorearJugador(255, 55, 0, 255);
         if(danyo > 0)
         {
-            jugador.setTimeAtEsp(1.5f);
-            jugador.setLastTimeAtEsp(_controladorTiempo->GetTiempo(2));
+            _jugador->setTimeAtEsp(1.5f);
+            _jugador->setLastTimeAtEsp(_controladorTiempo->GetTiempo(2));
 
         }
     }
@@ -1393,24 +1346,24 @@ void Jugando::updateAtEsp()
         {
             danyo = 0;
         }
-        if(jugador.getTimeAtEsp() > 0.f)
+        if(_jugador->getTimeAtEsp() > 0.f)
         {
             tiempoActual = _controladorTiempo->GetTiempo(2);
-            tiempoAtaqueEsp = jugador.getTimeAtEsp();
-            tiempoAtaqueEsp -= (tiempoActual - jugador.getLastTimeAtEsp());
-            jugador.setLastTimeAtEsp(tiempoActual);
-            jugador.setTimeAtEsp(tiempoAtaqueEsp);
-            danyo = jugador.AtacarEspecial();
+            tiempoAtaqueEsp = _jugador->getTimeAtEsp();
+            tiempoAtaqueEsp -= (tiempoActual - _jugador->getLastTimeAtEsp());
+            _jugador->setLastTimeAtEsp(tiempoActual);
+            _jugador->setTimeAtEsp(tiempoAtaqueEsp);
+            danyo = _jugador->AtacarEspecial();
         }
-        /*if(jugador.getTimeAtEsp() > 0.f && ((int) (jugador.getTimeAtEsp()*  100) % 10 >= 4) && ((int) (jugador.getTimeAtEsp()*  100) % 10 <= 4))
+        /*if(_jugador->getTimeAtEsp() > 0.f && ((int) (_jugador->getTimeAtEsp()*  100) % 10 >= 4) && ((int) (_jugador->getTimeAtEsp()*  100) % 10 <= 4))
         {
-            danyo = jugador.AtacarEspecial();
+            danyo = _jugador->AtacarEspecial();
         }*/
-        if(jugador.getTimeAtEsp() == 1.0f)
+        if(_jugador->getTimeAtEsp() == 1.0f)
         {
             _motor->colorearEnemigo(255,255,255,255,0);
         }
-        if(jugador.getTimeAtEsp() <= 0.5f && _motor->getArmaEspecial()) //Zona de pruebas
+        if(_jugador->getTimeAtEsp() <= 0.5f && _motor->getArmaEspecial()) //Zona de pruebas
         {
             _motor->borrarArmaEspecial();
             _motor->colorearJugador(255, 150, 150, 150);
@@ -1708,7 +1661,8 @@ std::vector<Enemigo*>  Jugando::getEnemigos()
     return _enemigos;
 }
 
+// Por ahora solo se llama desde Pollo.cpp
 Jugador* Jugando::GetJugador()
 {
-    return &jugador;
+    return _jugador;
 }
