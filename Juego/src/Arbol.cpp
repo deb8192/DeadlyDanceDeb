@@ -1,10 +1,11 @@
 #include "Arbol.hpp"
+#include "ConstantesComunes.hpp"
 
 Arbol::Arbol(Nodo *root, const char* name)
 {
     raiz = root;
     nodoEnEjecucionDirecta = nullptr;
-    arrayTareaObjetivo = new int [2];
+    arrayTareaObjetivo = new short int [2];
     ID = 0;
 }
 
@@ -16,6 +17,7 @@ Arbol::Arbol(Nodo *root, const char* name)
  */
 Nodo* Arbol::anyadirHijo(Nodo * nod)
 {
+    Constantes constantes;
     unsigned int i = 0;
     bool desciende = true;
     Nodo* buscador = raiz;
@@ -42,18 +44,15 @@ Nodo* Arbol::anyadirHijo(Nodo * nod)
             finderB = nullptr;
 
             //Si el nodo actual encontrado "buscador" es una composicion entra
-            if(strcmp(buscador->getNombre(), RAIZ) == 0 || strcmp(buscador->getNombre(), COMPOSICION) == 0)
+            if(strcmp(buscador->getNombre(), constantes.RAIZ) == 0 || strcmp(buscador->getNombre(), constantes.COMPOSICION) == 0)
             {
-                cout<<typeid(buscador).name()<<endl;
                 finderA = (Composicion*) buscador;
             }
 
             //Si el nodo actual encontrado "buscador" es un decorador entra
-            else if(strcmp(buscador->getNombre(), DECORADOR) == 0)
+            else if(strcmp(buscador->getNombre(), constantes.DECORADOR) == 0)
             {
-                cout<<typeid(buscador).name()<<endl;
                 finderB = (Decorador*) buscador;
-                
             }  
             //Si no hay nodos en ese nivel o dichos nodos no tienen hijos hijos, desactiva el descenso para retroceder en las ramas del arbol 
             if((finderA == nullptr || finderA->getHijos().size() <= 0) && (finderB == nullptr || finderB->getHijos().size() <= 0))
@@ -84,7 +83,7 @@ Nodo* Arbol::anyadirHijo(Nodo * nod)
                         if(nod->getNivel() - buscador->getNivel() == 1)
                         {
                             //El padre es un decorador y se anade su nuevo hijo al mismo
-                            if(strcmp(buscador->getNombre(), DECORADOR) == 0)
+                            if(strcmp(buscador->getNombre(), constantes.DECORADOR) == 0)
                             {
                                 Decorador* padre = finderB;
                                 padre->addHijo((Nodo*) nod);
@@ -94,7 +93,7 @@ Nodo* Arbol::anyadirHijo(Nodo * nod)
                                 return (Nodo*) padre;
                             }
                             //El padre es una composicion y se anade su nuevo hijo a la misma
-                            else if(strcmp(buscador->getNombre(), COMPOSICION) == 0)
+                            else if(strcmp(buscador->getNombre(), constantes.COMPOSICION) == 0)
                             {
                                 Composicion* padre = finderA;
                                 padre->addHijo((Nodo*) nod);
@@ -117,14 +116,14 @@ Nodo* Arbol::anyadirHijo(Nodo * nod)
                 }
                 if(nod->getNivel() - buscador->getNivel() == 1)
                 {
-                    if(strcmp(buscador->getNombre(), DECORADOR) == 0)
+                    if(strcmp(buscador->getNombre(), constantes.DECORADOR) == 0)
                     {
                         Decorador* padre = (Decorador*) buscador;
                         padre->addHijo((Nodo*) nod);
                         desciende = false;
                         return (Nodo*) padre;
                     }
-                    else if(strcmp(buscador->getNombre(), COMPOSICION) == 0)
+                    else if(strcmp(buscador->getNombre(), constantes.COMPOSICION) == 0)
                     {
                         Composicion* padre = (Composicion*) buscador;
                         padre->addHijo((Nodo*) nod);
@@ -150,8 +149,9 @@ void Arbol::finBucleDecorador()
 
 Composicion * Arbol::devolverPadre()
 {
+    Constantes constantes;
     nodoEnEjecucionDirecta = nodoEnEjecucionDirecta->getPadre();
-    if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+    if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0)
     {
         return (Composicion *) nodoEnEjecucionDirecta;
     }
@@ -161,9 +161,69 @@ Composicion * Arbol::devolverPadre()
     }
 }
 
-//EN LA COMPOSICION NO DETECTA EL FALSO, HAY QUE ARREGLARLO
-int* Arbol::ContinuarSiguienteNodo(bool exito)
+void Arbol::CambiarNodo(const short *_nodo)
 {
+    Constantes constantes;
+    ID = *_nodo;
+    Nodo *_actual = raiz;
+    size_t i = 0;
+    bool recorre = true;
+    Decorador *_deco;
+    Composicion *_comp;
+    vector <Nodo*> hijos;
+    while(_actual->getID() != ID && recorre)
+    {
+        if(strcmp(_actual->getNombre(), constantes.DECORADOR) == 0)
+        {
+            _deco = (Decorador*) _actual;
+            hijos.resize(_deco->getHijos().size());
+            hijos = _deco->getHijos();
+        }
+        else if(strcmp(_actual->getNombre(), constantes.COMPOSICION) == 0 || strcmp(_actual->getNombre(), constantes.RAIZ) == 0)
+        {
+            _comp = (Composicion*) _actual;
+            hijos.resize(_comp->getHijos().size());
+            hijos = _comp->getHijos();
+        }
+        if(i < hijos.size())
+        {
+            if(hijos.at(i)->getID() <= ID && hijos.at(i + constantes.UNO)->getID() > ID)
+            {
+                _actual = hijos.at(i);
+                if(_actual->getID() == ID)
+                {
+                    nodoEnEjecucionDirecta = _actual;
+                    recorre = false;
+                }
+                i = 0;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        else
+        {
+            recorre = false;
+        }
+    }
+    _actual = nullptr;
+    _deco = nullptr;
+    _comp = nullptr;
+}
+
+/***************** ContinuarSiguenteNodo *******************
+ * Funcion que recorre el arbol de comportamiento de cada
+ * enemigo cada vez que se le llame, continuando desde el ultimo
+ * nodo en ejecucion si lo hay o comenzando desde la raiz
+ * 
+ * Entradas:
+ *          bool exito: valor booleano que indica si 
+ *              la ultima accion ha tenido exito o no
+*/
+short int* Arbol::ContinuarSiguienteNodo(bool exito)
+{
+    Constantes constantes;
     Composicion *comp = nullptr;
     Composicion *compo = nullptr;
     Decorador *deco = nullptr;
@@ -174,24 +234,24 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
     //Si el arbol de esta recorrendo
     if(nodoEnEjecucionDirecta != nullptr)
     {        
-        if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), RAIZ) == 0)
+        if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.RAIZ) == 0)
         {
             comp = (Composicion*) nodoEnEjecucionDirecta;
             compo = comp;
         }
-        else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
+        else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.DECORADOR) == 0)
         {
             deco = (Decorador*) nodoEnEjecucionDirecta;
         }
         //El bucle continua mientras el nodo actual no sea una tarea o tenga hijos para descender
-        while(((nodoEnEjecucionDirecta != nullptr && std::strcmp(nodoEnEjecucionDirecta->getNombre(), HOJA) != 0) && 
-        (compo != nullptr && strcmp(compo->GetAccion(), FALSO) == 0) && desciende) || primeraVez)
+        while(((nodoEnEjecucionDirecta != nullptr && std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.HOJA) != 0) && 
+        (compo != nullptr && strcmp(compo->GetAccion(), constantes.FALSO) == 0) && desciende) || primeraVez)
         {
-            if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), RAIZ) == 0)
+            if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.RAIZ) == 0)
             {
                 comp = (Composicion*) nodoEnEjecucionDirecta;
             }
-            else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
+            else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.DECORADOR) == 0)
             {
                 deco = (Decorador*) nodoEnEjecucionDirecta;
             }
@@ -219,11 +279,11 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                     if(i < comp->getHijos().size())
                     {
                         nodoEnEjecucionDirecta = comp->getHijos().at(i);
-                        if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+                        if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0)
                         {
                             comp = (Composicion*) nodoEnEjecucionDirecta;
                         }
-                        else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
+                        else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.DECORADOR) == 0)
                         {
                             deco = (Decorador*) nodoEnEjecucionDirecta;
                         }
@@ -242,8 +302,12 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                         ID = 0;
                     }
                 }
-                else if((comp->getTipo() == 2 && !exito) || (comp->getTipo() == 3 && exito && ID > comp->getHijos().front()->getID()))
+                //Si la composicion es una secuencia y la accion anterior no ha tenido exito
+                //o si es un selector y la accion anterior ha tenido exito, se asciende para seleccionar otro nodo no hijo
+                else if((comp->getTipo() == 2 && !exito) || (comp->getTipo() == 3 && exito && ID >= comp->getHijos().front()->getID()))
                 {
+                    //Se iguala el ID al ultimo de los hijos para continuar
+                    //la lectura del arbol en otra rama y no bajar a los hijos restantes
                     ID = comp->getHijos().back()->getID();
                     if(nodoEnEjecucionDirecta->getPadre() != nullptr)
                     {
@@ -268,11 +332,11 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                     //Se detecta que tipo de final tiene el bucle del decorador
                     const char * finalDecorador = deco->GetFin();
 
-                    if(strcmp(finalDecorador, VERDADERO) == 0)
+                    if(strcmp(finalDecorador, constantes.VERDADERO) == 0)
                     {
                         finBucle.push_back(0);
                     }
-                    else if(strcmp(finalDecorador, RANDOM) == 0)
+                    else if(strcmp(finalDecorador, constantes.RANDOM) == 0)
                     {
                         finBucle.push_back(1);
                         contadorRandom = rand() % 5 + 1;
@@ -327,11 +391,11 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                 if(i < deco->getHijos().size())
                 {
                     nodoEnEjecucionDirecta = deco->getHijos().at(i);
-                    if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+                    if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0)
                     {
                         comp = (Composicion*) nodoEnEjecucionDirecta;
                     }
-                    else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), DECORADOR) == 0)
+                    else if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.DECORADOR) == 0)
                     {
                         deco = (Decorador*) nodoEnEjecucionDirecta;
                     }
@@ -370,19 +434,37 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
         }
         if(nodoEnEjecucionDirecta != nullptr)
         {
-            if(strcmp(nodoEnEjecucionDirecta->getNombre(), HOJA) == 0)
+            if(strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.HOJA) == 0)
             {
                 Hoja  *hoja = (Hoja*) nodoEnEjecucionDirecta;
                 //Se indican la tarea y el objetivo a ejecutar
                 //Tarea
                 const char* accion = hoja->GetAccion();
-                if(strcmp(accion, MOVERSE) == 0)
+
+                //La accion es moverse
+                if(strcmp(accion, constantes.MOVERSE) == 0)
                 {
                     arrayTareaObjetivo[0] = 0;
                 }
-                else if(strcmp(accion, ATACAR) == 0)
+                //La accion es atacar
+                else if(strcmp(accion, constantes.ATACAR) == 0)
                 {
                     arrayTareaObjetivo[0] = 1;
+                }
+                //La accion es ver
+                else if(strcmp(accion, constantes.VER) == 0)
+                {
+                    arrayTareaObjetivo[0] = 2;
+                }
+                //La accion es pedir ayuda
+                else if(strcmp(accion, constantes.PIDE_AYUDA) == 0)
+                {
+                    arrayTareaObjetivo[0] = 3;
+                }
+                //La accion es merodear
+                else if(strcmp(accion, constantes.MERODEA) == 0)
+                {
+                    arrayTareaObjetivo[0] = 4;
                 }
                 else
                 {
@@ -391,11 +473,11 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
 
                 //Objetivo
                 const char* objetivo = hoja->GetObjetivo();
-                if(strcmp(objetivo, JUGADOR) == 0)
+                if(strcmp(objetivo, constantes.JUGADOR) == 0)
                 {
                     arrayTareaObjetivo[1] = 0;
                 }
-                else if(strcmp(objetivo, ZONA_COFRES) == 0)
+                else if(strcmp(objetivo, constantes.ZONA_COFRES) == 0)
                 {
                     arrayTareaObjetivo[1] = 1;
                 }
@@ -404,18 +486,18 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
                     arrayTareaObjetivo[1] = -1;
                 }
             }
-            else if(strcmp(nodoEnEjecucionDirecta->getNombre(), COMPOSICION) == 0)
+            else if(strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0)
             {
-                /*if(strcmp(compo->GetAccion(), FALSO) != 0)
+                /*if(strcmp(compo->GetAccion(), constantes.FALSO) != 0)
                 {
                     //Se indican la tarea y el objetivo a ejecutar
                     //Tarea
                     const char* accion = compo->GetAccion();
-                    if(strcmp(accion, MOVERSE) == 0)
+                    if(strcmp(accion, constantes.MOVERSE) == 0)
                     {
                         arrayTareaObjetivo[0] = 0;
                     }
-                    else if(strcmp(accion, ATACAR) == 0)
+                    else if(strcmp(accion, constantes.ATACAR) == 0)
                     {
                         arrayTareaObjetivo[0] = 1;
                     }
@@ -426,11 +508,11 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
 
                     //Objetivo
                     const char* objetivo = comp->GetObjetivo();
-                    if(strcmp(objetivo, JUGADOR) == 0)
+                    if(strcmp(objetivo, constantes.JUGADOR) == 0)
                     {
                         arrayTareaObjetivo[1] = 0;
                     }
-                    else if(strcmp(objetivo, ZONA_COFRES) == 0)
+                    else if(strcmp(objetivo, constantes.ZONA_COFRES) == 0)
                     {
                         arrayTareaObjetivo[1] = 1;
                     }
@@ -474,7 +556,7 @@ int* Arbol::ContinuarSiguienteNodo(bool exito)
             ID++;
             arrayTareaObjetivo[0] = -1;
             arrayTareaObjetivo[1] = -1;
-            return arrayTareaObjetivo;
+            return this->ContinuarSiguienteNodo(exito);
         }
     }  
     return arrayTareaObjetivo;
