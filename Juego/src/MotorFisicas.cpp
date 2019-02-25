@@ -512,8 +512,10 @@ void MotorFisicas::updatePuerta(float x, float y, float z, float rx, float ry, f
     Constantes constantes;
     if(obstaculos.at(i) != nullptr)
     {
-        rp3d::Vector3 posiciones(x+(ry/abs(ry)*desplazamientos[0]),y,z-(ry/abs(ry))*desplazamientos[1]);
-        rp3d::Quaternion orientacion = rp3d::Quaternion(x * sin((rx * constantes.DEG_TO_RAD) / 2.0), y * sin((ry * constantes.DEG_TO_RAD) / 2.0), z * sin((rz * constantes.DEG_TO_RAD) / 2.0), (cos(ry * constantes.DEG_TO_RAD) / 2.0)*(ry/abs(ry)));
+        rp3d::Vector3 posiciones(x,y,z);
+        //rp3d::Vector3 posiciones(x+(ry/abs(ry)*desplazamientos[0]),y,z-(ry/abs(ry))*desplazamientos[1]);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        //rp3d::Quaternion orientacion = rp3d::Quaternion(x * sin((rx * constantes.DEG_TO_RAD) / 2.0), y * sin((ry * constantes.DEG_TO_RAD) / 2.0), z * sin((rz * constantes.DEG_TO_RAD) / 2.0), (cos(ry * constantes.DEG_TO_RAD) / 2.0)*(ry/abs(ry)));
         Transform transformacion(posiciones,orientacion);
         obstaculos.at(i)->setTransform(transformacion);
     }

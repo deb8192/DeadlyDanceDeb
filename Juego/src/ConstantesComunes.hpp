@@ -2,7 +2,7 @@
 #define ConstantesComunes_HPP
 
 //esto contiene todas las constantes y variables de texto para comparativas en el programa (es comodo si se quiere utilizar en el algun sitio)
-typedef struct
+using Constantes = struct
 {
     /** Angulos en grados y radianes y relacion para sus cambios de escala **/
     const float PI = 3.14159265358979323846;
@@ -43,14 +43,19 @@ typedef struct
     const char* RANDOM = "random";
 
     //Comparadores de la lectura de las acciones de las tareas
-    const char* MOVERSE = "moverse";
+    const char* PERSIGUE = "persigue";
     const char* ATACAR = "ataca";
     const char* VER = "ve";
     const char* PIDE_AYUDA = "pide-ayuda";
     const char* MERODEA = "merodea";
+    const char* OIR = "oye";
 
     //Comparadores de la lectura de los objetivos de las tareas
     const char* JUGADOR = "jugador";
     const char* ZONA_COFRES = "zona-cofres";
-} Constantes;
+
+    /**************************** String cargado mapas ************************/
+    const char* ZCHEST = "zChest";
+    const char* ZDARK = "zDark";
+};
 #endif

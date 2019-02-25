@@ -5,7 +5,6 @@
 #include "../Personajes/Jugador.hpp"
 #include "../Enemigos/Enemigo.hpp"
 #include "../CargadorNiveles.hpp"
-#include "../Enemigos/Pollo.hpp"
 #include "../Objetos/Interactuable.hpp"
 #include "../Objetos/Recolectable.hpp"
 #include "Zona.hpp"
@@ -52,7 +51,7 @@ class Nivel
         void CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char *ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
 
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int* propiedades); //lo usamos para crear zonas
+        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalEleme, int* propiedades); //lo usamos para crear zonas
         Sala* CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void cargarCofres(int num);

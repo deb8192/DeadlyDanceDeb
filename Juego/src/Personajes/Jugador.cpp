@@ -565,6 +565,27 @@ void Jugador::AumentarDinero(int can)
    dinero += can;
 }
 
+void Jugador::generarSonido(int intensidad,double duracion,int tipo)
+{
+    Constantes constantes;
+    eventoSonido * sonid = new eventoSonido(intensidad, duracion, posActual.x, posActual.y, posActual.z, constantes.DOS, tipo);
+    SenseEventos * eventos = SenseEventos::getInstance();
+    eventos->agregarEvento(sonid);
+}
+
+void Jugador::queEscuchas()
+{
+    SenseEventos * eventos = SenseEventos::getInstance();
+    std::vector<eventoSonido *> listaSonidos =  eventos->listarSonidos(posActual.x, posActual.y);//le pasamos nuestra x e y
+    //int cuantos = listaSonidos.size();
+    //cout << "Esta escuchando " << cuantos << " sonidos" << endl;
+}
+
+void Jugador::queVes()
+{
+    /*codigo*/
+}
+
 void Jugador::Interactuar(int id, int id2)
 {
 

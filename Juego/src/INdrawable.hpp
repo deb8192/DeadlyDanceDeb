@@ -10,11 +10,11 @@ class INdrawable
 
 public:
     // Estructura con el alias "Posiciones"
-    typedef struct {
+    using Posiciones = struct {
         float x = 0.0f;
         float y = 0.0f;
         float z = 0.0f;
-    } Posiciones;
+    };
 
     virtual void moverseEntidad(float)=0;//Realiza el desplazamiento mediante la interpolacion
     virtual void RotarEntidad(float)=0;//Realiza la rotacion mediante la interpolacion

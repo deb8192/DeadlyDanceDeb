@@ -11,7 +11,7 @@
             </Leaf>
             <Decorator id="5" type="iterador" end="true">
                 <Composition id="6" type="secuencia">   
-                    <Leaf id="7" type="tarea" action="moverse" target="jugador"></Leaf>
+                    <Leaf id="7" type="tarea" action="persigue" target="jugador"></Leaf>
                     <Leaf id="8" type="tarea" action="ataca" target="jugador"></Leaf>
                 </Composition>
             </Decorator>
@@ -20,7 +20,7 @@
             <Leaf id="10" type="tarea" action="oye" target="ayuda">
                 <Blackboard task="lee" info="pos-ayuda"></Blackboard>
             </Leaf>
-            <Leaf id="11" type="tarea" action="busca" target="pos-ayuda"></Leaf>
+            <Leaf id="11" type="tarea" action="acude" target="pos-ayuda"></Leaf>
         </Composition>
         <Leaf id="12" type="tarea" action="merodea" target=""></Leaf>
     </Root>
