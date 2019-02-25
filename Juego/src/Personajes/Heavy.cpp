@@ -28,8 +28,6 @@ void Heavy::RenderAtaqueEsp(float updateTime, float drawTime)
         getRY(),
         getRZ());
 
-    _motor->clearDebug2(); //Pruebas debug
-
     _motor->dibujarObjetoTemporal(
         getArmaEspecial()->getFisX()*2,
         getY(),
