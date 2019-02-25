@@ -1,10 +1,10 @@
 #include "Pollo.hpp"
-#include "../Jugando/Jugando.hpp"
 #include "../ConstantesComunes.hpp"
 #include "cmath"
 
 Pollo::Pollo() : Enemigo()
 {
+    _nivel = Jugando::GetInstance();
     Constantes constantes;
     funciona = true;
     atacado = false;
@@ -63,7 +63,6 @@ void Pollo::RunIA()
 void Pollo::UpdatePollo(short *i)
 {
     Constantes constantes;
-
     funciona = true;
     if(modo == constantes.UNO && _ordenes != nullptr)
     {
@@ -71,7 +70,6 @@ void Pollo::UpdatePollo(short *i)
         {
             case EN_MOVERSE: //El Pollo se mueve
                 {
-                    Jugando* _nivel;
                     bool trueX = false;
                     bool trueZ = false;
                     float x = this->getNewX();
@@ -89,7 +87,6 @@ void Pollo::UpdatePollo(short *i)
                     }datosDesplazamiento;
                     
                     cout<<"Se mueve el Pollo"<<endl;
-                    _nivel = Jugando::GetInstance();
                     
                     //Se mueve a la derecha
                     if(_nivel->GetJugador()->getNewX() > this->getNewX() + datosDesplazamiento.distancia)
@@ -180,10 +177,9 @@ void Pollo::UpdatePollo(short *i)
                     if(!atacado)
                     {
                         cout<<"intenta atacar"<<endl;
-                        Nivel* _nivel;
                         int danyo;
                         danyo = this->Atacar(*i);
-                        _nivel = Nivel::getInstance();
+                        
                         if(danyo > 0)
                         {
                             _nivel->GetJugador()->QuitarVida(danyo);

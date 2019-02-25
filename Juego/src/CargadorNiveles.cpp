@@ -172,8 +172,8 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
     if(jugadorEstasAqui)
     {
         //cogemos las posiciones del jugador en el escenario
-        int* propiedades;
-        propiedades = new int [6];
+        /*int* propiedades;
+        propiedades = new int [6];*/
         int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
         int Playerx = plat.attribute("StarX").as_int();//nos devuelve un int
         int Playery = plat.attribute("StarY").as_int();//nos devuelve un int

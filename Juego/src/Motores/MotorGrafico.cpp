@@ -1,6 +1,6 @@
 #include "MotorGrafico.hpp" //se llama a su cabecera para cargar las dependencias
 #include "../Times.hpp"
-#include "ConstantesComunes.hpp"
+#include "../ConstantesComunes.hpp"
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 MotorGrafico* MotorGrafico::_unica_instancia = 0;
