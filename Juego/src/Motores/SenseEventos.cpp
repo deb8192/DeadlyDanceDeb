@@ -107,6 +107,7 @@ void SenseEventos::agregarEvento(EventoSonido* evento)
 //para la vista devuelve los objetos que ve
 int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista, int modo, bool perifericos)
 {
+    rot += 90;
     MotorGrafico* _motor = MotorGrafico::GetInstance();
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
 
@@ -119,33 +120,33 @@ int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista
 
     if(perifericos)
     {
-            perDer = _fisicas->colisionRayoUnCuerpo(x,y,z,rot+30,vista/2,modo);//mira periferica derecha
-            perIzq = _fisicas->colisionRayoUnCuerpo(x,y,z,rot-30,vista/2,modo);//mira periferica izquierda
-            
-            //Si lo ve por uno de los perifericos lo pone a 1
-            if(modo == 1)//jugador
+        perDer = fisicas->colisionRayoUnCuerpo(x,y,z,(-1*(rot-180))+30,vista/2,modo);//mira periferica derecha
+        perIzq = fisicas->colisionRayoUnCuerpo(x,y,z,(-1*(rot-180))-30,vista/2,modo);//mira periferica izquierda
+        
+        //Si lo ve por uno de los perifericos lo pone a 1
+        if(modo == 1)//jugador
+        {
+            if(recto[0] != 1 && (perDer[0] == 1 || perIzq[0] == 1))
             {
-                if(recto[0] != 1 && (perDer[0] == 1 || perIzq[0] == 1))
-                {
-                    recto[0] = 1;
-                }
+                recto[0] = 1;
             }
+        }
 
-            if(modo == 2)//objetos
-            {
+        if(modo == 2)//objetos
+        {
+            //for recorriendose cada valor comparando 
+            //indice 0 contiene el numero de valores
+        }
+
+        if(modo == 3)//enemigos
+        {
                 //for recorriendose cada valor comparando 
                 //indice 0 contiene el numero de valores
-            }
+        }
 
-            if(modo == 3)//enemigos
-            {
-                 //for recorriendose cada valor comparando 
-                 //indice 0 contiene el numero de valores
-            }
-
-            //eliminamos los punteros ya no son necesarios
-            delete [] perDer;
-            delete [] perIzq;
+        //eliminamos los punteros ya no son necesarios
+        delete [] perDer;
+        delete [] perIzq;
     }
 
     //a continuacion devolvemos listado de las cosas que se ven

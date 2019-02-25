@@ -1,13 +1,9 @@
 #include "MotorFisicas.hpp" //se llama a su cabezera para cargar las dependencias
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
+#include "ConstantesComunes.hpp"
 #include <iostream>
 
 using namespace std;
-
-#define DEGTORAD 0.0174532925199432957f
-#define RADTODEG 57.295779513082320876f
-#define PI 3.14159265358979323846
-#define PIRADIAN 180.0f
 
 MotorFisicas* MotorFisicas::_unica_instancia = 0;
 //fin indicador singleton
@@ -262,12 +258,13 @@ void MotorFisicas::setFormaRecolectable(int id, float px, float py, float pz, in
 
 Ray * MotorFisicas::crearRayo(float x, float y, float z, float rotation, float longitud)
 {
+    Constantes constantes;
     rp3d::Vector3 inicio(x,y,z);//posicion inicial desde donde sale el rayo(desde el centro de la entidad o objeto)
 
     //calculamos segun la magnitud y la direccion donde debe apuntar el rayo
 
     float nx,ny,nz;
-    float rad = PI/180*(rotation);
+    float rad = constantes.PI/constantes.PI_RADIAN*(rotation);
 
     ny = y;
     nx = (cos(rad)*longitud)+x;//calculamos cuanto hay que sumarle a la posicion x
@@ -361,7 +358,7 @@ bool MotorFisicas::enemyCollideObstacle(unsigned int enemigo)
     //tampoco debe intersectar en el espacio con los enemigos
     for(long unsigned int i = 0; i < enemigos.size();i++)
     {
-        if(enemigo != i)
+        if(enemigo != i && enemigos[i])
         {
             if(space->testOverlap(enemigos[enemigo],enemigos[i]))
             {
@@ -406,7 +403,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
 {
 
     //se recomiendan usar modos especificos para ahorrar costes.
-    Ray * rayo = crearRayo(x,y,z,rotation,longitud);
+    Ray * rayo = crearRayo(x,y,z,(-1*(rotation-180)),longitud);
 
     RaycastInfo intersection;
 
@@ -593,10 +590,11 @@ void MotorFisicas::updateEnemigos(float x, float y, float z, unsigned int i)
 
 void MotorFisicas::updatePuerta(float x, float y, float z, float rx, float ry, float rz, float * desplazamientos, unsigned int i)
 {
+    Constantes constantes;
     if(obstaculos.at(i) != nullptr)
     {
         rp3d::Vector3 posiciones(x+(ry/abs(ry)*desplazamientos[0]),y,z-(ry/abs(ry))*desplazamientos[1]);
-        rp3d::Quaternion orientacion = rp3d::Quaternion(x * sin((rx * DEGTORAD) / 2.0), y * sin((ry * DEGTORAD) / 2.0), z * sin((rz * DEGTORAD) / 2.0), (cos(ry * DEGTORAD) / 2.0)*(ry/abs(ry)));
+        rp3d::Quaternion orientacion = rp3d::Quaternion(x * sin((rx * constantes.DEG_TO_RAD) / 2.0), y * sin((ry * constantes.DEG_TO_RAD) / 2.0), z * sin((rz * constantes.DEG_TO_RAD) / 2.0), (cos(ry * constantes.DEG_TO_RAD) / 2.0)*(ry/abs(ry)));
         Transform transformacion(posiciones,orientacion);
         obstaculos.at(i)->setTransform(transformacion);
     }
@@ -629,6 +627,7 @@ void MotorFisicas::updateAtaquEspecEnemigos(float x, float y, float z, unsigned 
 vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z)
 {
     vector<unsigned int> atacados;
+    atacados.resize(enemigos.size());
     if(armaAtEsp != nullptr)
     {
         rp3d::Vector3 posiciones(x,y,z);

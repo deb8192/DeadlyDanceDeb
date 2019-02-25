@@ -29,12 +29,10 @@ void Bailaora::RenderAtaqueEsp(float updateTime, float drawTime)
         GetDatosAtEsp()[4],
         GetDatosAtEsp()[5]);
 
-    _motor->clearDebug2(); //Pruebas debug
-
     _motor->dibujarObjetoTemporal(
-        getArmaEspecial()->getX(),
+        getArmaEspecial()->getFisX()*2,
         getArmaEspecial()->getY(),
-        getArmaEspecial()->getZ(),
+        getArmaEspecial()->getFisZ()*2,
         GetDatosAtEsp()[3],
         GetDatosAtEsp()[4],
         GetDatosAtEsp()[5],
