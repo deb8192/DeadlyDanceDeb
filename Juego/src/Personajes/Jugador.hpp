@@ -22,7 +22,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
         ~Jugador();
-        Jugador(int,int,int,int,int,int,const char*,const char*);//defines tu la informacion del jugador
+        Jugador(int nX,int nY,int nZ,int ancho,int largo,int alto,int accion);//defines tu la informacion del jugador
 
         //Metodos de desplazamiento
         void movimiento(bool noMueve,bool a, bool s, bool d, bool w);
@@ -132,7 +132,15 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int getAnimacion();
         vector <Llave*> GetLlaves();
 
-    private:
+        const char* GetTextura();
+        const char* GetModelo();
+        int GetAncho();
+        int GetLargo();
+        int GetAlto();
+
+        virtual void RenderAtaqueEsp(float updateTime, float drawTime) = 0;
+
+    protected:
         float ax = 1.0f,
               az = 20.0f,
               deg;
@@ -150,6 +158,12 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int tipo_arma = 2;
         vector <unsigned int> atacados_normal;
         int dinero = 0;
+
+        const char* playerTextura;
+        const char* playerModelo;
+        int ancho; int largo; int alto;
+
+        MotorGrafico* _motor;
 };
 
 #endif /* Jugador_HPP */

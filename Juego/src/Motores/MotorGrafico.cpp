@@ -606,7 +606,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         //const SColor COLOR  = SColor(255,0,0,255);
         //smgr->getMeshManipulator()->setVertexColors(_jugEscena->getMesh(),COLOR);
     }
-    jugador = nullptr;
+    //jugador = nullptr;
 }
 
 int MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)

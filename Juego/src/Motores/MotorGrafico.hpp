@@ -196,7 +196,7 @@ using namespace idsEventos;
             IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena
             //debug
             IAnimatedMesh* _linea;
-             IAnimatedMesh* _conoVision;
+            IAnimatedMesh* _conoVision;
             bool debugGrafico, pathfinding;//nos sirven para saber si tenemos activado el debug grafico y el pathfinding
             ISceneNode* _caja;//box
 

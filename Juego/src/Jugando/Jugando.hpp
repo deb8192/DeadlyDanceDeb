@@ -53,7 +53,7 @@ class Jugando: public Estado {
         void InteractuarNivel();
 
         bool CargarNivel(int nivel, int tipoJug); //Niveles en assets/maps/xml/
-        void CrearJugador(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char *ruta_textura, int* propiedades);//lo utilizamos para crear su objeto
+        void CrearJugador();//lo utilizamos para crear su objeto
         void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         Sala* CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
@@ -76,7 +76,7 @@ class Jugando: public Estado {
         void setEnemigoPideAyuda(Enemigo* );
         Enemigo* getEnemigoPideAyuda();
         std::vector<Enemigo*> getEnemigos();
-        Jugador* GetJugador();
+        Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp
 
     private:
         //clase singleton 
@@ -106,7 +106,7 @@ class Jugando: public Estado {
         std::vector<Zona*> _zonas; //Array de zonas
 
         bool reiniciando; // Se utiliza solo en Reanudar por el cambio entre Estados
-        Jugador jugador;
+        Jugador* _jugador;
         bool jugadorInmovil; // Para las colisiones
         float drawTime, lastDrawTime;
         float atacktime; //tiempo de ejecucion del ataque
