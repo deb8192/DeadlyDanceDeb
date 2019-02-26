@@ -9,7 +9,7 @@ class Pollo : public Enemigo
 {
     public:
         ~Pollo();
-        Pollo();
+        Pollo(float nX, float nY, float nZ);
         void RunIA();
         void UpdatePollo(short *i);
         void SetNuevasOrdenes(short i);

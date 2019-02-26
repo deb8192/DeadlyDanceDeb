@@ -12,6 +12,7 @@
 #include "../Objetos/Llave.hpp"
 #include "../Motores/MotorFisicas.hpp"
 #include "../Motores/MotorGrafico.hpp"
+#include "../Motores/MotorAudio.hpp"
 #include "../Jugando/InterfazJugador.hpp"
 
 using namespace std;
@@ -40,8 +41,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         void AtacarUpdate(int danyo);
         void AtacarEspecialUpdate(int* danyo);
-        void QuitarVida(int);//quita vida a la entidad
-        void RecuperarVida(int);//le suma vida a la entidad
+        void ModificarVida(int);//suma o resta vida a la entidad
         void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
         void AumentarDinero(int); //aumenta el dinero
@@ -49,9 +49,6 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         //Metodos jugador
         void AnnadirLlave(Llave* llave);
         void EliminarLlave(Llave* llave);
-
-        //interfaz
-        void updateInterfaz();//nos sirve para actualizar la info de la interfaz
 
         //Animacion
         bool terminaAnimacion();
@@ -127,6 +124,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getLastTimeAt();
         const char* getRutaArmaEsp();
         int getDinero();
+        void setDinero(int monedas);
 
         //Jugador
         int getAnimacion();
@@ -164,6 +162,9 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int ancho; int largo; int alto;
 
         MotorGrafico* _motor;
+        MotorFisicas* _fisicas;
+        MotorAudioSystem* _motora;
+        InterfazJugador* _interfaz;
 };
 
 #endif /* Jugador_HPP */

@@ -75,8 +75,15 @@ Interactuable::~Interactuable()
     animacionAnterior = 0;
 }
 
-Interactuable::Interactuable(int codigo, const char* nombre, int anc, int lar, int alt, const char* objeto, const char* textura, int posicion)
+Interactuable::Interactuable(int codigo, const char* nombre,
+    int anc, int lar, int alt, const char* objeto,
+    const char* textura, int posicion, float x, float y, float z)
 {
+    // INdrawable
+    posIni.x = x;
+    posIni.y = y;
+    posIni.z = z;
+    
     std::string name_objeto(objeto);
     cadena_objeto = new char[sizeof(name_objeto)];
     strcpy(cadena_objeto, name_objeto.c_str());

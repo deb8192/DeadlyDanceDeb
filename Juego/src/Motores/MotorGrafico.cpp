@@ -1112,7 +1112,7 @@ void MotorGrafico::destruirInterfaz()
 
 }
 
-void MotorGrafico::updateInterfaz()
+void MotorGrafico::RenderInterfaz()
 {
     //vamos a conseguir los datos de la interfaz
     InterfazJugador * interfaz = InterfazJugador::getInstance();
@@ -1120,21 +1120,21 @@ void MotorGrafico::updateInterfaz()
     if(interfaz->getEstado())
     {
         if(vidaI)
-        vidaI->setVisible(true);
+            vidaI->setVisible(true);
         if(energiaI)
-        energiaI->setVisible(true);
+            energiaI->setVisible(true);
         if(dineroI)
-        dineroI->setVisible(true);
+            dineroI->setVisible(true);
         if(armaI)
-        armaI->setVisible(true);
+            armaI->setVisible(true);
         if(BarraEnergiaI)
-        BarraEnergiaI->setVisible(true);
+            BarraEnergiaI->setVisible(true);
         if(BarraVidaI)
-        BarraVidaI->setVisible(true);
+            BarraVidaI->setVisible(true);
         if(moneyI)
-        moneyI->setVisible(true);
+            moneyI->setVisible(true);
 
-        int * datos = interfaz->getUpdate();
+        int* datos = interfaz->getUpdate();
         //vamos a calcular vida
         if(BarraVidaI)
         {
@@ -1175,32 +1175,32 @@ void MotorGrafico::updateInterfaz()
         switch(datos[4])
         {
             case 0:
-            //son las manos
-            manosI->setVisible(true);
-            dagaI->setVisible(false);
-            espadaI->setVisible(false);
-            llaveI->setVisible(false);
+                //son las manos
+                manosI->setVisible(true);
+                dagaI->setVisible(false);
+                espadaI->setVisible(false);
+                llaveI->setVisible(false);
             break;
             case 1:
-            //es una llave
-            manosI->setVisible(false);
-            dagaI->setVisible(false);
-            espadaI->setVisible(false);
-            llaveI->setVisible(true);
+                //es una llave
+                manosI->setVisible(false);
+                dagaI->setVisible(false);
+                espadaI->setVisible(false);
+                llaveI->setVisible(true);
             break;
             case 2:
-            //objeto ataque directo
-            manosI->setVisible(false);
-            dagaI->setVisible(false);
-            espadaI->setVisible(true);
-            llaveI->setVisible(false);
+                //objeto ataque directo
+                manosI->setVisible(false);
+                dagaI->setVisible(false);
+                espadaI->setVisible(true);
+                llaveI->setVisible(false);
             break;
             case 3:
-            //objeto ataque a distancia
-            manosI->setVisible(false);
-            dagaI->setVisible(true);
-            espadaI->setVisible(false);
-            llaveI->setVisible(false);
+                //objeto ataque a distancia
+                manosI->setVisible(false);
+                dagaI->setVisible(true);
+                espadaI->setVisible(false);
+                llaveI->setVisible(false);
             break;
         }
         delete [] datos;
@@ -1208,29 +1208,28 @@ void MotorGrafico::updateInterfaz()
     else
     {
         if(vidaI)
-        vidaI->setVisible(false);
+            vidaI->setVisible(false);
         if(energiaI)
-        energiaI->setVisible(false);
+            energiaI->setVisible(false);
         if(dineroI)
-        dineroI->setVisible(false);
+            dineroI->setVisible(false);
         if(armaI)
-        armaI->setVisible(false);
+            armaI->setVisible(false);
         if(BarraEnergiaI)
-        BarraEnergiaI->setVisible(false);
+            BarraEnergiaI->setVisible(false);
         if(BarraVidaI)
-        BarraVidaI->setVisible(false);
+            BarraVidaI->setVisible(false);
         if(manosI)
-        manosI->setVisible(false);
+            manosI->setVisible(false);
         if(dagaI)
-        dagaI->setVisible(false);
+            dagaI->setVisible(false);
         if(espadaI)
-        espadaI->setVisible(false);
+            espadaI->setVisible(false);
         if(llaveI)
-        llaveI->setVisible(false);
+            llaveI->setVisible(false);
         if(moneyI)
-        moneyI->setVisible(false);
+            moneyI->setVisible(false);
     }
-
 }
 
 void MotorGrafico::cambiarAnimacionJugador(int estado)

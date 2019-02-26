@@ -129,7 +129,7 @@ using namespace idsEventos;
             //interfaz TO DO: revisar
             void cargarInterfaz();
             void destruirInterfaz();
-            void updateInterfaz();
+            void RenderInterfaz();//TO DO: ¿separar graficos?
 
             //animaciones
             void cambiarAnimacionJugador(int);//nos sirve para cambiar de animacion al jugador
