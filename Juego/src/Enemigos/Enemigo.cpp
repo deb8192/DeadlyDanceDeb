@@ -14,12 +14,20 @@ Enemigo::Enemigo()
     modo = MODO_DEFAULT;
 }
 
-Enemigo::Enemigo(float nx, float ny, float nz)
+Enemigo::Enemigo(float nX, float nY, float nZ)
 {
+    tiempoMerodear = 0.0f;
+    lastTiempoMerodear = 0.0f;
+    vectorOrientacion.vX = 0.0f;
+    vectorOrientacion.vY = 0.0f;
+    vectorOrientacion.vZ = 0.0f;
+    vectorOrientacion.modulo = 0.0f;
+    modo = MODO_DEFAULT;
+
     atacktime = 0.0f;
-    posIni.x = nx;
-    posIni.y = ny;
-    posIni.z = nz;
+    posIni.x = nX;
+    posIni.y = nY;
+    posIni.z = nZ;
 }
 
 Enemigo::~Enemigo()

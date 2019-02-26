@@ -13,7 +13,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
     public:
         Enemigo();
-        Enemigo(float nx, float ny, float nz);
+        Enemigo(float nX, float nY, float nZ);
         ~Enemigo();
 
         void definirSala(Sala* sala);
