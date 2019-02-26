@@ -6,6 +6,7 @@ Arma::Arma()
 {
 
 }
+
 Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt, const char* objeto, const char* textura)
 {
     std::string name_objeto(objeto);
@@ -32,12 +33,17 @@ Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt, const cha
 
 Arma::~Arma()
 {
-    potenciaAtaque = 0.0f;
+
+    // Arma
+    potenciaAtaque = 0;
     if(_nombreArma != nullptr)
     {
         delete _nombreArma;
         _nombreArma = nullptr;
     }
+
+    // INobjetos
+    delete nombreObjeto;
     if(ruta_objeto != nullptr)
     {
         delete ruta_objeto;
@@ -48,9 +54,52 @@ Arma::~Arma()
         delete ruta_textura;
         ruta_textura = nullptr;
     }
-    ancho = 0.0f;
-    largo = 0.0f;
-    alto = 0.0f;
+    delete cadena_objeto;
+    delete cadena_textura;
+    delete cadena_nombre;
+    ancho = 0;
+    largo = 0;
+    alto = 0;
+
+    // INdrawable
+    posIni.x = 0;
+    posIni.y = 0;
+    posIni.z = 0;
+    
+    posActual.x = 0;
+    posActual.y = 0;
+    posActual.z = 0;
+
+    posPasada.x = 0;
+    posPasada.y = 0;
+    posPasada.z = 0;
+
+    posFutura.x = 0;
+    posFutura.y = 0;
+    posFutura.z = 0;
+
+    posFisicas.x = 0;
+    posFisicas.y = 0;
+    posFisicas.z = 0;
+
+    rotActual.x = 0;
+    rotActual.y = 0;
+    rotActual.z = 0;
+
+    rotPasada.x = 0;
+    rotPasada.y = 0;
+    rotPasada.z = 0;
+
+    rotFutura.x = 0;
+    rotFutura.y = 0;
+    rotFutura.z = 0;
+    
+    moveTime = 0;
+    rotateTime = 0;
+    rotation = 0;
+    id = 0;
+    animacion = 0;
+    animacionAnterior = 0;
 }
 
 /*************** moverseEntidad *****************
@@ -243,6 +292,21 @@ float Arma::getLastY()
 float Arma::getLastZ()
 {
     return posPasada.z;
+}
+
+float Arma::getIniX()
+{
+    return posIni.x;
+}
+
+float Arma::getIniY()
+{
+    return posIni.y;
+}
+
+float Arma::getIniZ()
+{
+    return posIni.z;
 }
 
 float Arma::getFisX()

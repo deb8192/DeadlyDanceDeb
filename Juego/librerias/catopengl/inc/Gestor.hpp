@@ -44,4 +44,7 @@ class Gestor
 
         unsigned short buscarRecurso(const char *);//nos busca por la ruta del recurso si existe te devuelve su archivador si no te devuelve 0
 
+        Archivador * recuperarRecurso(unsigned short);//sirve para devolver el archivador 
+
+        
 };

@@ -39,7 +39,7 @@ unsigned short Interfaz::AddCamara()
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(0,0,0);
+    rotacionEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
     //escalado al ser el nodo padre del objeto en cuestion (sea luz, camara, o malla), debe ser el que se le diga que no se ejecuta
@@ -91,7 +91,7 @@ unsigned short Interfaz::AddLuz()
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(0,0,0);
+    rotacionEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
     escaladoEnt->Ejecutar();
@@ -143,7 +143,7 @@ unsigned short Interfaz::AddMalla(const char * archivo)
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(0,0,0);
+    rotacionEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
     TNodo * malla = new TNodo;
@@ -197,12 +197,9 @@ void Interfaz::Draw()
         if(camaras.size() > 0)
         {
             //primero calculamos las matrices de view y projection
-            
+            //¿¿¿¿¿¿????????
             //esto seria lo ultimo vamos a las model
-            
-            glm::mat4 model = glm::mat4(1.0f);
             _raiz->draw();
-            shaders[0]->setMat4("model", model);
         }
     }
 

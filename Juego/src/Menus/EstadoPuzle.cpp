@@ -1,154 +1,34 @@
-#include "Estado.hpp"
-//#include "MotorGrafico.hpp"
-#include "SenseEventos.hpp"
-#include "Jugando/Nivel.hpp"
-#include "Enemigos/Enemigo.hpp"
-#include "MotorAudio.hpp"
+#include "EstadoPuzle.hpp"
+#include "../Juego.hpp"
 
-#include "math.h" // Para los colores random
-using namespace idsEventos;
-
-void Menu::Draw()
+EstadoPuzle::EstadoPuzle()
 {
-    //contiene los pintados del menu
+    _motor = MotorGrafico::GetInstance();
 }
 
-void Menu::Clean()
+EstadoPuzle::~EstadoPuzle()
 {
-    //se pintan los menus
+    _motor = nullptr;
 }
 
-void Menu::Update()
+void EstadoPuzle::Iniciar()
 {
-
-    MotorGrafico *motor = MotorGrafico::getInstance();
-    motor->updateMotorMenu();
-
-    //Actualiza el motor de audio
-    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
-    motora->update(false);
+    _motor->FondoEscena(255,5,100,50);
+    _motor->ActivarFuenteDefault();
+    _motor->CrearTexto("EstadoPuzle - ESC para salir", 0, 0, 300, 20); // Parametros: texto, x1, y1, x2, y2
 }
 
-void Menu::Init()
+// Actualiza lo que se ve por pantalla
+void EstadoPuzle::Render()
 {
-
+    _motor->FondoEscena(255,5,100,50); // Borra
+    _motor->RenderEscena();               // Vuelve a pintar
 }
 
-int Menu::Esta()
-{
-    return 1;
-}
-
-void Menu::Input()
-{
-
-}
-
-//Funcion de dibujado
-void Jugando::Draw()
-{
-    MotorGrafico *motor = MotorGrafico::getInstance();
-    Nivel * nivel = Nivel::getInstance();
-    nivel->Draw();
-    motor->updateMotorJuego();// se actualiza lo que se ve por pantalla
-}
-
-void Jugando::Clean()
-{
-    //se borran los objetos y escenarios
-}
-
-void Jugando::Init()
-{
-    MotorGrafico *motor = MotorGrafico::getInstance();
-    motor->CrearCamara();
-}
-
-void Jugando::Input()
-{
-    Nivel *nivel = Nivel::getInstance();
-    nivel->InteractuarNivel();
-}
-
-void Jugando::Update()
-{
-    MotorGrafico *motor = MotorGrafico::getInstance();
-    //MotorFisicas *fisicas = MotorFisicas::getInstance();
-    motor->clearDebug();
-    Nivel *nivel = Nivel::getInstance();
-    SenseEventos *sense = SenseEventos::getInstance();
-    sense->update();//se actualizan sentidos
-    nivel->update();//se actualiza posiciones y interpolado
-    //motor->updateMotorJuego();// se actualiza lo que se ve por pantalla
-
-    //Actualiza el motor de audio
-    MotorAudioSystem *motora = MotorAudioSystem::getInstance();
-    motora->update(false);
-    //vuelve al menu
-    if(motor->ocurreEvento(GUI_ID_MENU_BUTTON))
-    {
-        // Se resetea en el Update de Juego
-        // Borrar escena y GUI
-        motor->borrarScena();
-        motor->borrarGui();
-        //nivel->LimpiarNivel();
-        // Cargar GUI de menu
-        motor->PintarBotonesMenu();
-        return;
-    }
-}
-int Jugando::Esta()
-{
-    return 2;
-}
-
-void Cinematica::Draw()
-{
-    MotorGrafico *motor = MotorGrafico::getInstance();
-    motor->updateMotorCinematica();
-}
-
-void Cinematica::Clean()
-{
-    //em
-}
-
-void Cinematica::Input()
-{
-
-}
-
-void Cinematica::Update()
-{
-    //em
-}
-void Cinematica::Init()
-{
-
-}
-int Cinematica::Esta()
-{
-    return 3;
-}
-
-// Clase Puzzles
-void Puzzles::Init(){}
-
-void Puzzles::AsignarPuzzle(Puzzle p)
-{
-    puzzle = p;
-}
-
-void Puzzles::Draw(){}
-
-void Puzzles::Clean(){}
-
-void Puzzles::Input(){}
-
-void Puzzles::Update()
+void EstadoPuzle::Update()
 {
     //cout << "Paso mas de 1 vez por aqui" <<endl;
-    MotorGrafico *motor = MotorGrafico::getInstance();
+    /*MotorGrafico *motor = MotorGrafico::getInstance();
     motor->updateMotorPuzzles(GetTipo());
 
     // Boton atras, vuelve al menu
@@ -177,15 +57,31 @@ void Puzzles::Update()
         case P_HANOI:
             ComprobarEventosHanoi();
             break;
+    }*/
+}
+
+void EstadoPuzle::ManejarEventos()
+{
+    if (_motor->EstaPulsado(KEY_ESC)) {
+        _motor->ResetKey(KEY_ESC);
+        atras();
     }
 }
 
-int Puzzles::Esta()
+// Vuelve al menu principal
+void EstadoPuzle::atras()
 {
-    return 4;
+    _motor->BorrarScena();
+    _motor->BorrarGui();
+    Juego::GetInstance()->estado.SaltarAlMenu();
 }
 
-short Puzzles::GetTipo()
+// Elimina la memoria antes de volver al menu
+void EstadoPuzle::Vaciar() {
+    cout << "Vaciando puzzles" <<endl;
+}
+
+/*short Puzzles::GetTipo()
 {
     return puzzle.GetTipo();
 }
@@ -599,25 +495,4 @@ void Puzzles::ComprobarGanar()
     } else {
         cout << "Salta la araña" << endl;
     }
-}
-
-void Puzzles::UpdateIA()
-{
-
-}
-
-void Cinematica::UpdateIA()
-{
-
-}
-
-void Jugando::UpdateIA()
-{
-    Nivel *nivel = Nivel::getInstance();
-    nivel->updateIA();
-}
-
-void Menu::UpdateIA()
-{
-
-}
+}*/
