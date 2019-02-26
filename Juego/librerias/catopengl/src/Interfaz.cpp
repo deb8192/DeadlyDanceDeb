@@ -20,7 +20,7 @@ Interfaz::~Interfaz()
 
 unsigned short Interfaz::AddCamara()
 {
-    
+
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -60,7 +60,7 @@ unsigned short Interfaz::AddCamara()
         _raiz->addHijo(escalado);
 
         unsigned short idnuevo = generarId();
-        Nodo * nodo = new Nodo(); 
+        Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodos.push_back(nodo);//se agrega a la lista de nodos general
@@ -95,7 +95,7 @@ unsigned short Interfaz::AddLuz()
     escalado->setEntidad(escaladoEnt);
 
     escaladoEnt->Ejecutar();
-    
+
     TNodo * luz = new TNodo;
     TLuz * luzEn = new TLuz;
     luzEn->SetShader(shaders[0]);
@@ -109,14 +109,14 @@ unsigned short Interfaz::AddLuz()
     {
         luces.push_back(escalado);
         _raiz->addHijo(escalado);
-        
+
         unsigned short idnuevo = generarId();
-        
-        Nodo * nodo = new Nodo(); 
+
+        Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodos.push_back(nodo);//se agrega a la lista de nodos general
-        
+
         return idnuevo;
     }
 
@@ -162,9 +162,9 @@ unsigned short Interfaz::AddMalla(const char * archivo)
         if(_raiz != nullptr)
         {
             _raiz->addHijo(escalado);//se agrega al arbol
-            unsigned short idnuevo = generarId();//se genera un id 
-            
-            Nodo * nodo = new Nodo(); 
+            unsigned short idnuevo = generarId();//se genera un id
+
+            Nodo * nodo = new Nodo();
             nodo->id = idnuevo;//se pone el id
             nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
             nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
@@ -181,7 +181,7 @@ unsigned short Interfaz::AddMalla(const char * archivo)
 
 void Interfaz::Draw()
 {
-    
+
 
 
     if(ventana_inicializada)
@@ -189,8 +189,59 @@ void Interfaz::Draw()
         ventanaInicializar();
         ventana_inicializada = false;
     }
-    
+
+    glm::vec3 pointLightPositions[] = {  //Posiciones de 4 cubos de luz
+        glm::vec3( 0.7f,  0.2f,  2.0f),
+        glm::vec3( 2.3f, -3.3f, -4.0f),
+        glm::vec3(-4.0f,  2.0f, -12.0f),
+        glm::vec3( 0.0f,  0.0f, -3.0f)
+    };
+
     window->UpdateLimpiar();
+
+    shaders[0]->Use();
+    shaders[0]->setInt("material.diffuse", 0);
+    shaders[0]->setInt("material.specular", 1);
+    shaders[0]->setFloat("material.shininess", 32.0f);
+    //Luz direccional (Luz que llega a todos sitios y mira siempre en la misma direccion, como la luz del sol)
+    shaders[0]->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f); //Enviar la direccion donde mira la luz direccional
+    shaders[0]->setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+    shaders[0]->setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+    shaders[0]->setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+
+    //Punto de luz 1
+    shaders[0]->setVec3("pointLights[0].position", pointLightPositions[0]);
+    shaders[0]->setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
+    shaders[0]->setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
+    shaders[0]->setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+    //Propiedades de atenuacion de la luz (segun la distancia mirar en: http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation)
+    shaders[0]->setFloat("pointLights[0].constant", 1.0f);
+    shaders[0]->setFloat("pointLights[0].linear", 0.09);
+    shaders[0]->setFloat("pointLights[0].quadratic", 0.032);
+    //Punto de luz 2
+    shaders[0]->setVec3("pointLights[1].position", pointLightPositions[1]);
+    shaders[0]->setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
+    shaders[0]->setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
+    shaders[0]->setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
+    shaders[0]->setFloat("pointLights[1].constant", 1.0f);
+    shaders[0]->setFloat("pointLights[1].linear", 0.09);
+    shaders[0]->setFloat("pointLights[1].quadratic", 0.032);
+    //Punto de luz 3
+    shaders[0]->setVec3("pointLights[2].position", pointLightPositions[2]);
+    shaders[0]->setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
+    shaders[0]->setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
+    shaders[0]->setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
+    shaders[0]->setFloat("pointLights[2].constant", 1.0f);
+    shaders[0]->setFloat("pointLights[2].linear", 0.09);
+    shaders[0]->setFloat("pointLights[2].quadratic", 0.032);
+    //Punto de luz 4
+    shaders[0]->setVec3("pointLights[3].position", pointLightPositions[3]);
+    shaders[0]->setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
+    shaders[0]->setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
+    shaders[0]->setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
+    shaders[0]->setFloat("pointLights[3].constant", 1.0f);
+    shaders[0]->setFloat("pointLights[3].linear", 0.09);
+    shaders[0]->setFloat("pointLights[3].quadratic", 0.032);
 
     if(_raiz != nullptr)
     {
@@ -242,15 +293,15 @@ void Interfaz::Trasladar(unsigned short id,float x,float y,float z)
 {
     Nodo * nodo = buscarNodo(id);
 
-    if(nodo != nullptr) 
+    if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso->GetNieto(1);
         if(tnodo != nullptr)
         {
-            tnodo->GetEntidad()->trasladar(x,y,z);  
+            tnodo->GetEntidad()->trasladar(x,y,z);
         }
     }
-}   
+}
 
 void Interfaz::Rotar(unsigned short id,float grados,float x,float y,float z)
 {
@@ -303,4 +354,3 @@ void Interfaz::ventanaLimpiar()
         ventana_inicializada = true;
     }
 }
-

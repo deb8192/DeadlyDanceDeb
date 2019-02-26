@@ -24,7 +24,7 @@ TCamara::~TCamara()
 void TCamara::setPerspectiva()
 {
     projection = glm::mat4(1.0f);
-    projection = glm::perspective(glm::radians(90.0f),width/height,cercano,lejano);
+    projection = glm::perspective(glm::radians(45.0f),width/height,cercano,lejano);
 }
 
 void TCamara::setParalela()
@@ -59,7 +59,7 @@ void TCamara::beginDraw()
                 {
                     posicion = glm::vec3((*nodo)[3][0],(*nodo)[3][1],(*nodo)[3][2]);
                 }
-                
+
                 if(cola_compartida->size() == 2)
                 {
                     rotacion = (*nodo);
@@ -73,16 +73,16 @@ void TCamara::beginDraw()
 
         delete cola_compartida;//borramos la cola anterior porque esta vacia
         cola_compartida = cola_compartidaAuxiliar;//ponemos la nueva cola que tiene los elementos situados como la anterior
-        
+
         //Funcion lookAt, calculo de la matriz final
         glm::mat4 view;
 
         view = glm::lookAt(posicion,cameraTarget,cameraUp);    //lookAt(Posicion, Objetivo, Up Axis)
 
-        view = view * rotacion; //aplicamos la rotacion a la matriz de la vista 
+        view = view * rotacion; //aplicamos la rotacion a la matriz de la vista
 
         shader->Use();//preparamos el shader
-        
+
         //enviamos projection
         shader->setMat4("projection",projection);
         //enviamos view
@@ -98,11 +98,11 @@ void TCamara::beginDraw()
     {
         //Funcion lookAt, calculo de la matriz final
         glm::mat4 view;
-        
+
         view = glm::lookAt(glm::vec3(10.0f,0.0f,0.0f),cameraTarget,cameraUp);    //lookAt(Posicion, Objetivo, Up Axis)
 
         shader->Use();//preparamos el shader
-        
+
         //enviamos projection
         shader->setMat4("projection",projection);
         //enviamos view
