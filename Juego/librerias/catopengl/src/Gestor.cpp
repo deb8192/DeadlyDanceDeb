@@ -26,6 +26,14 @@ unsigned short Gestor::ObtenerRecurso(const char * _recurso,TNodo * _nodo)
     if(existeArchivador > 0)
     {
         //existe archivador por lo que devolvemos el id
+        Archivador * _archivador = recuperarRecurso(existeArchivador);
+        
+        if(_archivador != nullptr)
+        {
+            RMalla * malla = dynamic_cast<RMalla*>(_archivador->_recursos);//obtenemos recurso
+            _nodo->GetEntidad()->setRecursoObjeto(malla);
+        }
+
         return existeArchivador;
     }//no existe lo creamos
     else
@@ -123,4 +131,32 @@ unsigned short Gestor::buscarRecurso(const char * rutaRecurso)
     }
 
     return 0;
+}
+
+Gestor::Archivador * Gestor::recuperarRecurso(unsigned short id)
+{
+    //se realiza una busqueda binaria
+    unsigned short Iarriba = ((unsigned short)(archivadores.size()-1));
+    unsigned short Iabajo = 0;
+    unsigned short Icentro;
+    while (Iabajo <= Iarriba)
+    {
+        Icentro = (Iarriba + Iabajo)/2;
+        if (archivadores[Icentro]->id == id)
+        {
+            return archivadores[Icentro];
+        }
+        else
+        {
+            if (id < archivadores[Icentro]->id)
+            {
+                Iarriba=Icentro-1;
+            }
+            else
+            {
+                Iabajo=Icentro+1;
+            }
+        }
+    }
+    return nullptr;   
 }

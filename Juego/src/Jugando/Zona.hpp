@@ -10,7 +10,7 @@ class Zona
 
     public:
         //Constructor y destructor
-        Zona(int anc, int lar, int alt, const char *tip);
+        Zona(int anc, int lar, int alt, const char* tip);
         ~Zona();
         
         //set atributos
@@ -32,7 +32,7 @@ class Zona
         const char* getTipo();
 
     private:
-        const char *tipo;
+        const char* tipo;
         float ancho, largo, alto;
         float x = 0.0f;
         float y = 0.0f;
