@@ -18,9 +18,9 @@ class Interfaz
         Interfaz();
 
         ~Interfaz();
-        
+
         unsigned short AddCamara();//creamos una camara
-        
+
         unsigned short AddLuz();//creamos una luz
 
         unsigned short AddMalla(const char *);//creamos una malla
@@ -29,8 +29,8 @@ class Interfaz
 
         void RemoveObject(unsigned short);//remueve objeto de la escena
 
-        void Trasladar(unsigned short,float,float,float);//trasladar 
-        
+        void Trasladar(unsigned short,float,float,float);//trasladar
+
         void Rotar(unsigned short,float,float,float,float);//rotar
 
         void Escalar(unsigned short,float,float,float);//escalar
@@ -38,23 +38,23 @@ class Interfaz
         bool VentanaEstaAbierta();//devuelve true si esta en ejecucion devuelve false si no lo esta
 
     private:
-        
+
         CatOpengl::Video::Ventana * window;
 
         Shader * shaders[4];//cuatro programas de shader(vertex y fragment cada uno)
-        
-        std::vector<TNodo *> camaras;//registro de camaras 
-        
+
+        std::vector<TNodo *> camaras;//registro de camaras
+
         std::vector<TNodo *> luces;//registro de luces
- 
+
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 
         TNodo * _raiz; //puntero a raiz de arbol de escena
 
-        unsigned short generarId(); //genera un id 
+        unsigned short generarId(); //genera un id
 
         //nos sirve para buscar rapidamente un objeto y llamar a su funcion de pintado(esto se hace con una busqueda binaria)
-        struct Nodo 
+        struct Nodo
         {
             TNodo * recurso;//nodo que almacena escalado del objeto
             unsigned short id;//almacena el id a nivel local
@@ -68,7 +68,7 @@ class Interfaz
         Nodo * buscarNodo(unsigned short);
 
         bool ventana_inicializada = true;//nos sirve para saber si tenemos que llamar a inicializar ventana
-        
+
         void ventanaInicializar();
 
         void ventanaLimpiar();

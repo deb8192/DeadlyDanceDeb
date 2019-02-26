@@ -16,9 +16,7 @@ void RMalla::Remove()
 void RMalla::Draw(Shader *shader)
 {
     for(unsigned int i = 0; i < meshes.size(); i++)
-    {
         meshes[i]->Draw(shader);
-    }
 }
 
 //**Carga de frames**
@@ -77,6 +75,9 @@ bool RMalla::CargarRecurso(const char * _ruta)
     //Leer fichero de assimp
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+
+    directory = path.substr(0, path.find_last_of('/'));
+
     //Mirar errores en la lectura
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
@@ -90,6 +91,11 @@ bool RMalla::CargarRecurso(const char * _ruta)
     for(unsigned int i=0; i < meshes.size(); i++)
     {
         cout << " |- Malla " << i << ": " << meshes.at(i) << endl;
+    }
+
+    for(unsigned int i=0; i < textures_loaded.size(); i++)
+    {
+        cout << " |- Textura " << i << ": " << textures_loaded.at(i) << endl;
     }
 
     mallas = meshes.size();
@@ -228,6 +234,8 @@ unsigned int RMalla::TextureFromFile(const char *path, const std::string &direct
 {
     std::string filename = std::string(path);
     filename = directory + '/' + filename;
+
+    std::cout << " filename: " << filename << std::endl;
 
     unsigned int textureID;
     glGenTextures(1, &textureID);
