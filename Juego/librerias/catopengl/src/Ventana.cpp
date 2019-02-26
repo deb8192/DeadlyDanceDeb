@@ -54,6 +54,9 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     //Se llama a la funcion "framebuffer_size_callback" cada vez que el usuario cambia el tamanyo de ventana
     glfwSetFramebufferSizeCallback(_window,this->redimensionar);
 
+    //*********** APLICAR PROFUNDIDAD Z-BUFFER ***********
+    glEnable(GL_DEPTH_TEST);   //Necesario para el zoom/fov
+
     return true;
 }
 
@@ -120,5 +123,5 @@ void Ventana::limpiar()
 
     //Comandos de render
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Designamos a el glClearColor un color
-    glClear(GL_COLOR_BUFFER_BIT);         //Borrarmos en el buffer con el glClearColor designado
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);         //Borrarmos en el buffer con el glClearColor designado
 }
