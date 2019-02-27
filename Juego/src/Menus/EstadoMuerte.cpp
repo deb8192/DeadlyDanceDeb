@@ -72,12 +72,13 @@ void EstadoMuerte::borrarEscenaResetearEvento(short id)
     
 }
 
-// Para Atras y Reiniciar partida, borra solo GUI
+// Para Atras y Reiniciar partida, borra solo los botones del GUI
 void EstadoMuerte::borrarGUIResetearEvento(short id)
 {
-     _motor->ResetEvento(id);
-    // Limpiamos el gui
-    _motor->BorrarGui();
+    _motor->BorrarBoton(GUI_ID_REINICIAR_BUTTON);
+    _motor->BorrarBoton(GUI_ID_MENU_BUTTON);
+    _motor->BorrarBoton(GUI_ID_SALIR_BUTTON);
+    _motor->ResetEvento(id);
 }
 
 void EstadoMuerte::menuPrincipal()

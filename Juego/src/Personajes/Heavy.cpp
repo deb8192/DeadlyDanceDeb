@@ -1,7 +1,7 @@
 #include "Heavy.hpp"
 
-Heavy::Heavy(int nX,int nY,int nZ,int ancho,int largo,int alto,int accion)
-: Jugador(nX,nY,nZ,ancho,largo,alto,accion)
+Heavy::Heavy(int nX,int nY,int nZ,int ancho,int largo,int alto,int accion, int maxVida)
+: Jugador(nX,nY,nZ,ancho,largo,alto,accion,maxVida)
 {
     cout << "Soy Heavy!!!!!!!!" <<endl;
 

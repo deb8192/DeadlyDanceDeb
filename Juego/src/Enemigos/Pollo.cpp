@@ -2,7 +2,8 @@
 #include "../ConstantesComunes.hpp"
 #include "cmath"
 
-Pollo::Pollo() : Enemigo()
+Pollo::Pollo(float nX, float nY, float nZ, int maxVida)
+: Enemigo(nX,nY,nZ,maxVida)
 {
     _nivel = Jugando::GetInstance();
     Constantes constantes;
@@ -182,7 +183,7 @@ void Pollo::UpdatePollo(short *i)
                         
                         if(danyo > 0)
                         {
-                            _nivel->GetJugador()->QuitarVida(danyo);
+                            _nivel->GetJugador()->ModificarVida(-danyo);
                             cout<<"Ataca por la IA" <<endl;
                             funciona = true;
                             atacado = true;
