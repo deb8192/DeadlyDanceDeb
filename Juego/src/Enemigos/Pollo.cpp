@@ -2,8 +2,8 @@
 #include "../ConstantesComunes.hpp"
 #include "cmath"
 
-Pollo::Pollo(float nX, float nY, float nZ)
-: Enemigo(nX,nY,nZ)
+Pollo::Pollo(float nX, float nY, float nZ, int maxVida)
+: Enemigo(nX,nY,nZ,maxVida)
 {
     _nivel = Jugando::GetInstance();
     Constantes constantes;

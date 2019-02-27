@@ -188,11 +188,11 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         switch (tipoJug)
         {
             case 2:
-                _jugador = new Bailaora(Playerx,Playerz,Playery,ancho,largo,alto,accion);
+                _jugador = new Bailaora(Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
                 break;
         
             default:
-                _jugador = new Heavy(Playerx,Playerz,Playery,ancho,largo,alto,accion);
+                _jugador = new Heavy(Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
                 break;
         }
     }

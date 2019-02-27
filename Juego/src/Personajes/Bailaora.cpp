@@ -1,7 +1,7 @@
 #include "Bailaora.hpp"
 
-Bailaora::Bailaora(int nX,int nY,int nZ,int ancho,int largo,int alto,int accion)
-: Jugador(nX,nY,nZ,ancho,largo,alto,accion)
+Bailaora::Bailaora(int nX,int nY,int nZ,int ancho,int largo,int alto,int accion,int maxVida)
+: Jugador(nX,nY,nZ,ancho,largo,alto,accion,maxVida)
 {
     cout << "Soy Bailaora!!!!!!!!" <<endl;
 

@@ -44,6 +44,7 @@ Jugando::~Jugando()
     _fisicas = nullptr;
     _motora = nullptr;
     _motor = nullptr;
+    _interfaz = nullptr;
 
     // Liberar memoria
     short tam = _enemigos.size();
@@ -101,13 +102,16 @@ void Jugando::Iniciar()
     _fisicas = MotorFisicas::getInstance();
     _sense = SenseEventos::getInstance();
     _controladorTiempo = Times::GetInstance();
+    _interfaz = InterfazJugador::getInstance();
+
+    _motor->CargarInterfaz();
     
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
     CargarNivel(5, 1); //(level, player) 1 = heavy / 2 = bailaora
 
     reiniciando = false;
+    
     ValoresPorDefecto();
-    ValoresPorDefectoJugador();
 
     _motor->CrearCamara();
     _motor->FondoEscena(255,0,0,0);
@@ -128,6 +132,9 @@ void Jugando::ValoresPorDefecto()
     danyo2 = 0;
     contadorEnem = 0;
     int_cpw_aux = 0;
+
+    // Activamos la interfaz
+    _interfaz->activar();
 }
 
 void Jugando::ValoresPorDefectoJugador()
@@ -138,7 +145,7 @@ void Jugando::ValoresPorDefectoJugador()
     
     jugadorInmovil = false;
     _jugador->setDinero(0);
-    _jugador->setVida(100);
+    _jugador->setVida(_jugador->getVidaIni());
     _jugador->setBarraAtEs(100);
     _jugador->setAtaque(15);
     _jugador->setArma(NULL);
@@ -163,6 +170,9 @@ void Jugando::PosicionesIniEnemigos()
         Enemigo* _ene = _enemigos.at(i);
         _ene->setPosiciones(_ene->getIniX(), 
             _ene->getIniY(), _ene->getIniZ());
+        
+        _ene->setVida(_ene->getVidaIni());
+
         _ene = nullptr;
     }
 }
@@ -671,7 +681,7 @@ void Jugando::Render()
     }
     //_motor->clearDebug2(); //Pruebas debug
 
-    _motor->RenderInterfaz();
+    _motor->RenderInterfaz(_interfaz->getEstado());
 
     _motor->RenderEscena();  // Vuelve a pintar
 }
@@ -688,7 +698,7 @@ void Jugando::Reanudar()
         cout << "REINICIAR JUEGO" << endl;
 
         DesactivarDebug();
-        
+
         // valores por defecto del jugador
         ValoresPorDefectoJugador();
 
@@ -750,7 +760,6 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
     _motora->getEvent("AmbienteGritos")->start(); //Reproducir ambiente
 
-    _motor->cargarInterfaz();
     //esta ya todo ejecutamos ia y interpolado
     return true;
 }
@@ -783,7 +792,8 @@ void Jugando::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho
         case 0:
         {
             //TO DO: revisar creacion de tipos de enemigos
-            Pollo* _ene = new Pollo(x,y,z);//aqui va el tipo de enemigo que es hacer ifs y meter una variable nueva de tipo para saber que tipo es
+            //75 = vida
+            Pollo* _ene = new Pollo(x,y,z, 75);//aqui va el tipo de enemigo que es hacer ifs y meter una variable nueva de tipo para saber que tipo es
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
@@ -808,7 +818,6 @@ void Jugando::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho
     _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-    _enemigos.back()->setVida(75);
     _enemigos.back()->setVelocidadMaxima(1.0f);
     _enemigos.back()->setBarraAtEs(0);
     _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
@@ -1303,13 +1312,13 @@ void Jugando::activarPowerUp()
         else if(_powerup.at(int_cpw)->getAtaque() == 1 && _jugador->getBarraAtEs() < 100)
         {
             cout << "PowerUP! 50 de energia. TOTAL:" << _jugador->getBarraAtEs() << endl;
-            _jugador->AumentarBarraAtEs(50);
+            _jugador->ModificarBarraAtEs(50);
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->getAtaque() == 2)
         {
             cout << "Recoges " << _powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
-            _jugador->AumentarDinero(_powerup.at(int_cpw)->getCantidad());
+            _jugador->ModificarDinero(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
 

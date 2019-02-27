@@ -6,7 +6,7 @@
 class Heavy : public Jugador
 {
     public:
-        Heavy(int nX,int nY,int nZ,int ancho,int largo,int alto,int accion);
+        Heavy(int nX,int nY,int nZ,int ancho,int largo,int alto,int accion, int maxVida);
         ~Heavy();
 
         void RenderAtaqueEsp(float updateTime, float drawTime);

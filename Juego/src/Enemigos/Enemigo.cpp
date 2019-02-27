@@ -14,8 +14,10 @@ Enemigo::Enemigo()
     modo = MODO_DEFAULT;
 }
 
-Enemigo::Enemigo(float nX, float nY, float nZ)
+Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida)
 {
+    vidaIni = maxVida;
+    vida = vidaIni;
     tiempoMerodear = 0.0f;
     lastTiempoMerodear = 0.0f;
     vectorOrientacion.vX = 0.0f;
@@ -488,11 +490,6 @@ int Enemigo::AtacarEspecial()
     return danyo;
 }
 
-void Enemigo::QuitarVida(int can)
-{
-    vida-=can;
-}
-
 bool Enemigo::estasMuerto(){
     //cout << "Muere enemigo??: " << vida << endl;
     if(vida <= 0){
@@ -525,16 +522,6 @@ void Enemigo::MuereEnemigo(int enemi){
     MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
     _motora->getEvent("Chicken2")->setPosition(this->getX(),this->getY(),this->getZ());
     _motora->getEvent("Chicken2")->start();
-}
-
-void Enemigo::RecuperarVida(int can)
-{
-
-}
-
-void Enemigo::AumentarBarraAtEs(int can)
-{
-    barraAtEs += can;
 }
 
 void Enemigo::Interactuar(int id, int id2)
@@ -593,6 +580,24 @@ void Enemigo::UpdateTimeRotate(float updTime)
     rotateTime += updTime;
 }
 
+/******----------------Modificar Vida------------------******
+ * Metodo que sirve para modificar la vida del jugador
+ * a lo largo del juego.
+ * Entradas:
+ *      vid: valor negativo o positivo en el que se 
+ *          incrementa o decrementa la vida
+ * Salida:
+ * 
+ */
+void Enemigo::ModificarVida(int vid)
+{
+    vida += vid;
+    if (vida > vidaIni)
+        vida = vidaIni;
+    else if (vida < 0)
+        vida = 0;
+}
+
 void Enemigo::setVida(int vid)
 {
     vida = vid;
@@ -601,6 +606,22 @@ void Enemigo::setVida(int vid)
 void Enemigo::setTipo(int tip)
 {
 
+}
+
+/*************** Modificar BarraAtEs *****************
+ *  Funcion que actualiza la barra del ataque especial
+ *  Entradas: 
+ *      bar: valor en positivo o negativo
+ *  Salidas:
+ * 
+ */
+void Enemigo::ModificarBarraAtEs(int bar)
+{
+    /*barraAtEs += bar;
+    if(barraAtEs < 0)
+        barraAtEs = 0;
+    if(barraAtEs > 100)
+        barraAtEs = 100;*/
 }
 
 void Enemigo::setBarraAtEs(int bar)
@@ -666,6 +687,11 @@ void Enemigo::setLastTimeAtEsp(float time)
 void Enemigo::setSala(Sala* sala)
 {
     _estoy = sala;
+}
+
+int Enemigo::getVidaIni()
+{
+    return vidaIni;
 }
 
 int Enemigo::getVida()

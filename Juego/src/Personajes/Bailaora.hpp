@@ -6,7 +6,7 @@
 class Bailaora : public Jugador
 {
     public:
-        Bailaora(int nX,int nY,int nZ, int ancho, int largo, int alto, int accion);
+        Bailaora(int nX,int nY,int nZ, int ancho, int largo, int alto, int accion, int maxVida);
         ~Bailaora();
 
         void RenderAtaqueEsp(float updateTime, float drawTime);
