@@ -54,16 +54,12 @@ int Pathfinder::calcularCostes(struct NodeRecord nodo, Sala* destino)
 
     //Se saca la distancia entre las salas (vector)
 
-    cout << "Datos " << datosDestino[2] << " " << datosOrigen[2] <<endl;
-    cout << "Datos " << datosDestino[3] << " " << datosOrigen[3] <<endl;
-    cout << "Datos " << datosDestino[4] << " " << datosOrigen[4] <<endl;
-    cout << "Coste " << nodo.costSoFar <<endl;
-    double costeX = abs(datosDestino[2] - datosOrigen[2]);
-    double costeY = abs(datosDestino[3] - datosOrigen[3]);
-    double costeZ = abs(datosDestino[4] - datosOrigen[4]);
+    float costeX = abs(datosDestino[2] - datosOrigen[2]);
+    float costeY = abs(datosDestino[3] - datosOrigen[3]);
+    float costeZ = abs(datosDestino[4] - datosOrigen[4]);
 
     //Se obtiene la distancia en un valor (modulo del vector)
-    double coste = pow(costeX, 2) + pow(costeY, 2) + pow(costeZ, 2);
+    float coste = pow(costeX, 2) + pow(costeY, 2) + pow(costeZ, 2);
     coste = sqrt(coste);
 
     int costeFinal = nodo.costSoFar + (int) coste;
@@ -193,7 +189,7 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *st
                 //Se comprueba si la sala actual esta en la lista cerrada
                 estaCerrado = comprobarListas(sala, listaCerrada);
 
-                //Se comprueba si la sala actual esta en la lista cerrada
+                //Se comprueba si la sala actual esta en la lista abierta
                 estaAbierto = comprobarListas(sala, listaAbierta);
 
                 //Si estaCerrado >= 0, la sala se encuentra en la lista cerrada
@@ -219,6 +215,7 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *st
                     //sacamos el nodo de la lista cerrada
                     if(endNodo.costSoFar > costeLlegada)
                     {
+                        //listaCerrada.erase(listaCerrada.begin() + estaCerrado);
                         endNodo.estimatedTotalCost -= endNodo.costSoFar;
                     }
                 }

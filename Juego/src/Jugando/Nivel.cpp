@@ -969,7 +969,7 @@ void Nivel::update()
                         enemigos.at(i)->setTimeMerodear(tiempoMerodear);
                     }
                     //FUNCIONA REGULAR
-                    if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
+                    /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
                     {
                         //colisiona
                         struct DatosDesplazamiento
@@ -996,7 +996,7 @@ void Nivel::update()
                             enemigos.at(i)->setNewRotacion(enemigos.at(i)->getRX(), enemigos.at(i)->getRY() - constantes.PI_RADIAN, enemigos.at(i)->getRZ());
                             enemigos.at(i)->setRotation(0.0f); 
                         }
-                    }
+                    }*/
                     
                 }
                 //enemigos[i]->queVes();
@@ -1712,6 +1712,10 @@ Jugador Nivel::getJugador()
     return jugador;
 }
 
+vector<Zona*> Nivel::GetZonas()
+{
+    return zonas;
+}
 
 void Nivel::Ejecutar()
 {

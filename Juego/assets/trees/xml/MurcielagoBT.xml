@@ -25,15 +25,15 @@
             </Leaf>
             <Leaf id="13" type="tarea" action="acude" target="pos-ayuda"></Leaf>
         </Composition>
-        <Composition id="14" type="tarea" action="comprueba" target="zona-oscura">
-            <Composition id="15" type="selector">
-                <Composition id="16" type="secuencia">
-                    <Leaf id="17" type="tarea" action="esta" target="zona-oscura"></Leaf>
-                    <Leaf id="18" type="tarea" action="recupera" target="vida"></Leaf>
-                </Composition>
-                <Leaf id="19" type="tarea" action="busca" target="zona-oscura"></Leaf>
-            </Composition>
-        </Composition>
+    	<Composition id="14" type="selector">
+	    <Composition id="15" type="secuencia">
+		<Leaf id="16" type="tarea" action="esta" target="zona-oscura"></Leaf>
+		<Leaf id="17" type="tarea" action="recupera" target="vida"></Leaf>
+	    </Composition>
+	    <Decorator id="18" type="iterador" end="true">
+	    	<Leaf id="19" type="tarea" action="busca" target="zona-oscura"></Leaf>
+            </Decorator>
+	</Composition>
         <Leaf id="20" type="tarea" action="merodea" target=""></Leaf>
     </Root>
 </BehaviorTree>

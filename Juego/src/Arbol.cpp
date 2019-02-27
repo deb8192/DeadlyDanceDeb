@@ -245,7 +245,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
         }
         //El bucle continua mientras el nodo actual no sea una tarea o tenga hijos para descender
         while(((nodoEnEjecucionDirecta != nullptr && std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.HOJA) != 0) && 
-        (compo != nullptr && strcmp(compo->GetAccion(), constantes.FALSO) == 0) && desciende) || primeraVez)
+        ((compo != nullptr && strcmp(compo->GetAccion(), constantes.FALSO) == 0) || compo == nullptr) && desciende) || primeraVez)
         {
             if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.RAIZ) == 0)
             {
@@ -470,6 +470,11 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 else if(strcmp(accion, constantes.OIR) == 0)
                 {
                     arrayTareaObjetivo[0] = 5;
+                }
+                //La accion es buscar
+                else if(strcmp(accion, constantes.BUSCAR) == 0)
+                {
+                    arrayTareaObjetivo[0] = 6;
                 }
                 else
                 {
