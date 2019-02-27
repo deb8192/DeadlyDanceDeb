@@ -13,7 +13,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
     public:
         Enemigo();
-        Enemigo(float nx, float ny, float nz);
+        Enemigo(float nX, float nY, float nZ, int maxVida);
         ~Enemigo();
 
         void definirSala(Sala* sala);
@@ -30,12 +30,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int Atacar(int i);//efectua un ataque normal, llama al motor para ejecutar la animacion.
         //void AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
-        void QuitarVida(int);//quita vida a la entidad
         bool estasMuerto();//llama desde Nivel
         bool finalAnimMuerte();// si la animacion de muerte acaba, entonces en nivel lo mataremos del todo
         void MuereEnemigo(int enemi);//Animacion de muertes
-        void RecuperarVida(int);//le suma vida a la entidad
-        void AumentarBarraAtEs(int);//aumenta el valor de la barra de ataque critico
         void Interactuar(int, int);//llama a la mecanica de interactuar
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
@@ -55,8 +52,11 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setVectorOrientacion();
         void setPosicionesFisicas(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
+
+        void ModificarVida(int vid);
         void setVida(int vid);
         void setTipo(int tip);
+        void ModificarBarraAtEs(int bar);
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
         void setArmaEspecial(int ataque);
@@ -76,6 +76,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void SetEnemigo(int);
 
         int getID();
+        int getVidaIni();
         int getVida();
         int getTipo();
         int getBarraAtEs();

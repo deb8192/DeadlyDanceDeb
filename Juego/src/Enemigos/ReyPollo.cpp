@@ -1,6 +1,7 @@
 #include "ReyPollo.hpp"
 
-ReyPollo::ReyPollo()
+ReyPollo::ReyPollo(float nX, float nY, float nZ, int maxVida)
+: Enemigo(nX,nY,nZ,maxVida)
 {
 
 }

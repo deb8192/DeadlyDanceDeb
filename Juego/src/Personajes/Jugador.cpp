@@ -1,7 +1,6 @@
 #include "Jugador.hpp"
 #include "../Jugando/Jugando.hpp"
 #include <stdlib.h>
-#include "../Motores/MotorAudio.hpp"
 #include "../Times.hpp"
 #include "../ConstantesComunes.hpp"
 
@@ -119,6 +118,8 @@ Jugador::~Jugador()
     animacionAnterior = 0;
 
     _motor = nullptr;
+    _motora = nullptr;
+    _fisicas = nullptr;
 
     // Liberar memoria
     delete playerTextura;
@@ -126,18 +127,24 @@ Jugador::~Jugador()
 }
 
 Jugador::Jugador(int nX,int nY,int nZ, int ancho, 
-    int largo, int alto, int accion)
+    int largo, int alto, int accion, int maxVida)
 {
     _motor = MotorGrafico::GetInstance();
+    _fisicas = MotorFisicas::getInstance();
+    _motora = MotorAudioSystem::getInstance();
+    _interfaz = InterfazJugador::getInstance();
 
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
     this->ancho = ancho;
     this->largo = largo;
     this->alto = alto;
 
-    vida = 0; // se cambia con setVida en jugando.cpp
+    vidaIni = maxVida;
+    vida = vidaIni;
+
+    // Valores por defecto, se cambian con sets en jugando.cpp
     dinero = 0;
+    _armaEquipada = NULL;
 
     posIni.x = nX;
     posIni.y = nY;
@@ -148,7 +155,6 @@ Jugador::Jugador(int nX,int nY,int nZ, int ancho,
     posActual.z = nZ;
 
     animacion = 0;
-    //_armaEquipada = NULL;
 
     //tiempos de animacion
     tiempoAtaque=2000.0f;//tiempo en milisegundos
@@ -321,53 +327,51 @@ int Jugador::Atacar(int i)
     int danyo = 0;
     if(vida > 0)
     {
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
+        //Calcular posiciones que no se modifican
+        int distance = 5;
+        if(this->getArma() == nullptr)distance= 3;
+        atx = distance * sin(constantes.PI * getRY() / constantes.PI_RADIAN) + getX();
+        aty = getY();
+        atz = distance * cos(constantes.PI * getRY() / constantes.PI_RADIAN) + getZ();
+        atgx = getRX();
+        atgy = getRY();
+        atgz = getRZ();
 
-    //Calcular posiciones que no se modifican
-    int distance = 5;
-    if(this->getArma() == nullptr)distance= 3;
-    atx = distance * sin(constantes.PI * getRY() / constantes.PI_RADIAN) + getX();
-    aty = getY();
-    atz = distance * cos(constantes.PI * getRY() / constantes.PI_RADIAN) + getZ();
-    atgx = getRX();
-    atgy = getRY();
-    atgz = getRZ();
+        //Posiciones en el mundo 3D
+        atposX = (atx/2);
+        atposY = (getY()/2);
+        atposZ = (atz/2);
 
-    //Posiciones en el mundo 3D
-    atposX = (atx/2);
-    atposY = (getY()/2);
-    atposZ = (atz/2);
-
-    //ATAQUE SIN ARMA
-    if(this->getArma() == nullptr){
-        setAnimacion(2);
-        _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,2,1,4);
-        danyo = 50.0f;
-        _motora->getEvent("SinArma")->setVolume(0.8f);
-        _motora->getEvent("SinArma")->start();
+        //ATAQUE SIN ARMA
+        if(this->getArma() == nullptr)
+        {
+            setAnimacion(2);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,2,1,4);
+            danyo = 50.0f;
+            _motora->getEvent("SinArma")->setVolume(0.8f);
+            _motora->getEvent("SinArma")->start();
+        }
+        //ATAQUE CUERPO A CUERPO
+        else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
+        {
+            //Crear cuerpo de colision de ataque delante del jugador
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4);
+            danyo = 70.0f;
+            _motora->getEvent("GolpeGuitarra")->setVolume(0.8f);
+            _motora->getEvent("GolpeGuitarra")->start();
+        }
+        //ATAQUE A DISTANCIA
+        else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
+        {
+            //Crear cuerpo de colision de ataque delante del jugador
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4);
+            danyo = 55.0f;
+            _motora->getEvent("Arpa")->setVolume(0.8f);
+            _motora->getEvent("Arpa")->start();
+        }
+        atacados_normal.clear(); //Reiniciar vector con enemigos atacados
     }
-    //ATAQUE CUERPO A CUERPO
-    else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
-    {
-        //Crear cuerpo de colision de ataque delante del jugador
-        _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4);
-        danyo = 70.0f;
-        _motora->getEvent("GolpeGuitarra")->setVolume(0.8f);
-        _motora->getEvent("GolpeGuitarra")->start();
-    }
-    //ATAQUE A DISTANCIA
-    else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
-    {
-        //Crear cuerpo de colision de ataque delante del jugador
-        _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4);
-        danyo = 55.0f;
-        _motora->getEvent("Arpa")->setVolume(0.8f);
-        _motora->getEvent("Arpa")->start();
-    }
-    atacados_normal.clear(); //Reiniciar vector con enemigos atacados
-    }
-    else{
+    else {
         cout << "No supera las restricciones"<<endl;
     }
     return danyo;
@@ -379,7 +383,6 @@ void Jugador::AtacarUpdate(int danyo)
     if(vida > 0)
     {
         Jugando* nivel = Jugando::GetInstance();
-        MotorFisicas* _fisicas = MotorFisicas::getInstance();
         if(this->getArma() == nullptr) {
             _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
             _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,2,1,1,2);
@@ -430,7 +433,7 @@ void Jugador::AtacarUpdate(int danyo)
                     float variacion = rand() % 7 - 3;
                     danyo += (int) variacion;
                     //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
-                    nivel->getEnemigos().at(atacados.at(i))->QuitarVida(danyo);
+                    nivel->getEnemigos().at(atacados.at(i))->ModificarVida(-danyo);
                     cout<<"Enemigo: "<< nivel->getEnemigos().at(atacados.at(i))->getID() << endl;
                     cout<<"Daño "<<danyo<<endl;
                     danyo -= (int) variacion;
@@ -484,9 +487,6 @@ int Jugador::AtacarEspecial()
             _armaEspecial->setNewPosiciones(atespx, atespy, atespz);
             _armaEspecial->setNewRotacion(getRX(), getRY(), getRZ());
 
-            MotorFisicas* _fisicas = MotorFisicas::getInstance();
-            MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
-
             //Posiciones en el mundo 3D
             _armaEspecial->initPosicionesFisicas(atespx/2, getY()/2, atespz/2);
 
@@ -527,7 +527,7 @@ int Jugador::AtacarEspecial()
         //Se aplican todas las modificaciones en la variable danyo
         danyoF = ataque * critico * aumentosAtaque;
         danyo = roundf(danyoF * por10) / por10;
-        barraAtEs = 0;
+        setBarraAtEs(0);
         return danyo;
     }
     return danyo;
@@ -541,7 +541,6 @@ int Jugador::AtacarEspecial()
 void Jugador::AtacarEspecialUpdate(int*danyo)
 {
     Constantes constantes;
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     Jugando* nivel = Jugando::GetInstance();
 
     //Si el ataque especial es el del Heavy, es cuerpo a cuerpo
@@ -596,7 +595,7 @@ void Jugador::AtacarEspecialUpdate(int*danyo)
         {
             float variacion = rand() % 7 - 3;
             *danyo += (int) variacion;
-            nivel->getEnemigos().at(atacados.at(i))->QuitarVida(*danyo);
+            nivel->getEnemigos().at(atacados.at(i))->ModificarVida(-(*danyo));
             cout<<"Daño "<<*danyo<<endl;
             *danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
@@ -604,35 +603,6 @@ void Jugador::AtacarEspecialUpdate(int*danyo)
             _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }
-}
-
-void Jugador::QuitarVida(int can)
-{
-  vida-=can;
-  this->AumentarBarraAtEs(can);
-}
-
-void Jugador::RecuperarVida(int can)
-{
-  if(vida < 100)
-  {
-    vida += can;
-    if(vida > 100)vida = 100;
-  }
-}
-
-void Jugador::AumentarBarraAtEs(int can)
-{
-  if(barraAtEs < 100)
-  {
-    barraAtEs += can;
-    if(barraAtEs > 100)barraAtEs = 100;
-  }
-}
-
-void Jugador::AumentarDinero(int can)
-{
-   dinero += can;
 }
 
 void Jugador::Interactuar(int id, int id2)
@@ -674,14 +644,6 @@ void Jugador::EliminarLlave(Llave* llave)
             encontrado = true;
         }
     }
-}
-
-void Jugador::updateInterfaz()
-{
-    InterfazJugador* interfaz = InterfazJugador::getInstance();
-    interfaz->setVida(vida);
-    interfaz->setAtaqueEspecial(getBarraAtEs());
-    interfaz->setDinero(dinero);
 }
 
 bool Jugador::terminaAnimacion()
@@ -834,6 +796,11 @@ float* Jugador::GetDatosAtEsp()
     return atesp;
 }
 
+int Jugador::getVidaIni()
+{
+    return vidaIni;
+}
+
 int Jugador::getVida()
 {
     return vida;
@@ -844,6 +811,7 @@ int Jugador::getTipo()
     return -1;
 }
 
+// TO DO: revisar la parte del else
 int Jugador::getBarraAtEs()
 {
     if(barraAtEs >= 0 && barraAtEs <= 100)
@@ -933,6 +901,31 @@ int Jugador::getDinero()
     return dinero;
 }
 
+/******----------------Modificar Dinero------------------******
+ * Metodo que sirve para modificar la cantidad de monedas
+ * que tiene el jugador a lo largo del juego
+ * Entradas:
+ *      monedas: valor negativo o positivo en el que se 
+ *          incrementa o decrementa el dinero
+ * Salida:
+ * 
+ */
+void Jugador::ModificarDinero(int monedas)
+{
+    dinero += monedas;
+    if(dinero > 9999)
+        dinero = 9999;
+    else if (dinero < 0) 
+        dinero = 0;
+    _interfaz->setDinero(dinero);
+}
+
+void Jugador::setDinero(int monedas)
+{
+    dinero = monedas;
+    _interfaz->setDinero(dinero);
+}
+
 int Jugador::getAnimacion()
 {
     return animacion;
@@ -1010,9 +1003,35 @@ void Jugador::setPosicionesFisicas(float nx,float ny,float nz)
     posFisicas.z += nz;
 }
 
+/******----------------Modificar Vida------------------******
+ * Metodo que sirve para modificar la vida del jugador
+ * a lo largo del juego.
+ * Entradas:
+ *      vid: valor negativo o positivo en el que se 
+ *          incrementa o decrementa la vida
+ * Salida:
+ * 
+ */
+void Jugador::ModificarVida(int vid)
+{
+    if (vid < 0) // QuitarVida, aumenta barra ataque especial
+    {
+        ModificarBarraAtEs(abs(vid));
+    }
+
+    vida += vid;
+    if (vida > vidaIni)
+        vida = vidaIni;
+    else if (vida < 0)
+        vida = 0;
+    _interfaz->setVida(vida);
+}
+
+// Asigna directamente el valor
 void Jugador::setVida(int vid)
 {
     vida = vid;
+    _interfaz->setVida(vida);
 }
 
 void Jugador::setTipo(int tip)
@@ -1020,19 +1039,27 @@ void Jugador::setTipo(int tip)
 
 }
 
+/*************** Modificar BarraAtEs *****************
+ *  Funcion que actualiza la barra del ataque especial
+ *  Entradas: 
+ *      bar: valor en positivo o negativo
+ *  Salidas:
+ * 
+ */
+void Jugador::ModificarBarraAtEs(int bar)
+{
+    barraAtEs += bar;
+    if(barraAtEs < 0)
+        barraAtEs = 0;
+    if(barraAtEs > 100)
+        barraAtEs = 100;
+    _interfaz->setAtaqueEspecial(barraAtEs);
+}
+
 void Jugador::setBarraAtEs(int bar)
 {
-    if(bar >= 0 && bar <= 100)
-    {
-        barraAtEs = bar;
-    }
-    else
-    {
-        if(bar < 0)
-         barraAtEs = 0;
-        if(bar > 100)
-         barraAtEs = 100;
-    }
+    barraAtEs = bar;
+    _interfaz->setAtaqueEspecial(barraAtEs);
 }
 
 void Jugador::setAtaque(int ataq)
@@ -1043,37 +1070,33 @@ void Jugador::setAtaque(int ataq)
 void Jugador::setArma(Arma* arma)
 {
     _armaEquipada = arma;
-    if(this->getArma() != nullptr)
+
+    if(_armaEquipada)
     {
         if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)//entonces es la guitarra cuerpo a cuerpo
         {
-            InterfazJugador* interfaz = InterfazJugador::getInstance();
-            interfaz->setArma(2);
+            _interfaz->setArma(2);
         }
 
         if(strcmp(this->getArma()->getNombre(),"arpa") == 0)//entonces es la guitarra cuerpo a cuerpo
         {
-            InterfazJugador* interfaz = InterfazJugador::getInstance();
-            interfaz->setArma(3);
+            _interfaz->setArma(3);
         }
 
         if(strcmp(this->getArma()->getNombre(),"llave") == 0)//entonces es la guitarra cuerpo a cuerpo
         {
-            InterfazJugador* interfaz = InterfazJugador::getInstance();
-            interfaz->setArma(1);
+            _interfaz->setArma(1);
         }
 
         // if(strcmp(this->getArma()->getNombre(),"dinero") == 0)//entonces es la guitarra cuerpo a cuerpo
         // {
-        //     InterfazJugador* interfaz = InterfazJugador::getInstance();
         //     dinero = dinero+1;
-        //     interfaz->setArma(0);
+        //     _interfaz->setArma(0);
         // }
     }
     else
     {
-        InterfazJugador* interfaz = InterfazJugador::getInstance();
-        interfaz->setArma(0);
+        _interfaz->setArma(0);
     }
 }
 
