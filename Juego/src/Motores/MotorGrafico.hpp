@@ -9,7 +9,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
 #include <vector>//para los objetos en escena
-#include "../Jugando/InterfazJugador.hpp"//para la interfaz
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;
@@ -127,9 +126,13 @@ using namespace idsEventos;
             
             
             //interfaz TO DO: revisar
-            void cargarInterfaz();
-            void destruirInterfaz();
-            void RenderInterfaz();//TO DO: ¿separar graficos?
+            void CargarInterfaz();
+            void DestruirInterfaz();
+            void SetVida(int vida);
+            void SetBarraEnergia(int barra);
+            void SetDinero(int dinero);
+            void SetArma(int arma);
+            void RenderInterfaz(bool activada);//TO DO: ¿separar graficos?
 
             //animaciones
             void cambiarAnimacionJugador(int);//nos sirve para cambiar de animacion al jugador
@@ -151,6 +154,8 @@ using namespace idsEventos;
             void MoverFichas(short pila);
             void RecolocarFicha(short y, short z);
             void ReiniciarHanoi();
+
+            void BorrarBoton(s32 id);
 
             void updateMotorCinematica();
             bool finalCinematica();

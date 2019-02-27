@@ -6,7 +6,7 @@
 class ReyPollo: public Enemigo
 {
     public:
-        ReyPollo(float nX, float nY, float nZ);
+        ReyPollo(float nX, float nY, float nZ, int maxVida);
         ~ReyPollo();
         
     private:

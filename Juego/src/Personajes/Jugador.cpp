@@ -127,7 +127,7 @@ Jugador::~Jugador()
 }
 
 Jugador::Jugador(int nX,int nY,int nZ, int ancho, 
-    int largo, int alto, int accion)
+    int largo, int alto, int accion, int maxVida)
 {
     _motor = MotorGrafico::GetInstance();
     _fisicas = MotorFisicas::getInstance();
@@ -139,8 +139,12 @@ Jugador::Jugador(int nX,int nY,int nZ, int ancho,
     this->largo = largo;
     this->alto = alto;
 
-    vida = 0; // se cambia con setVida en jugando.cpp
+    vidaIni = maxVida;
+    vida = vidaIni;
+
+    // Valores por defecto, se cambian con sets en jugando.cpp
     dinero = 0;
+    _armaEquipada = NULL;
 
     posIni.x = nX;
     posIni.y = nY;
@@ -151,7 +155,6 @@ Jugador::Jugador(int nX,int nY,int nZ, int ancho,
     posActual.z = nZ;
 
     animacion = 0;
-    //_armaEquipada = NULL;
 
     //tiempos de animacion
     tiempoAtaque=2000.0f;//tiempo en milisegundos
@@ -430,7 +433,7 @@ void Jugador::AtacarUpdate(int danyo)
                     float variacion = rand() % 7 - 3;
                     danyo += (int) variacion;
                     //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
-                    nivel->getEnemigos().at(atacados.at(i))->QuitarVida(danyo);
+                    nivel->getEnemigos().at(atacados.at(i))->ModificarVida(-danyo);
                     cout<<"Enemigo: "<< nivel->getEnemigos().at(atacados.at(i))->getID() << endl;
                     cout<<"Daño "<<danyo<<endl;
                     danyo -= (int) variacion;
@@ -524,7 +527,6 @@ int Jugador::AtacarEspecial()
         //Se aplican todas las modificaciones en la variable danyo
         danyoF = ataque * critico * aumentosAtaque;
         danyo = roundf(danyoF * por10) / por10;
-        //barraAtEs = 0;
         setBarraAtEs(0);
         return danyo;
     }
@@ -593,7 +595,7 @@ void Jugador::AtacarEspecialUpdate(int*danyo)
         {
             float variacion = rand() % 7 - 3;
             *danyo += (int) variacion;
-            nivel->getEnemigos().at(atacados.at(i))->QuitarVida(*danyo);
+            nivel->getEnemigos().at(atacados.at(i))->ModificarVida(-(*danyo));
             cout<<"Daño "<<*danyo<<endl;
             *danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
@@ -601,40 +603,6 @@ void Jugador::AtacarEspecialUpdate(int*danyo)
             _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }
-}
-
-// can es un numero positivo o negativo
-void Jugador::ModificarVida(int can)
-{
-    if (can < 0) // QuitarVida
-    {
-        vida+=can;
-        this->AumentarBarraAtEs(can);
-    }
-    else // RecuperarVida
-    {
-        if(vida < 100)
-        {
-            vida += can;
-            if(vida > 100)vida = 100;
-        }
-    }
-    _interfaz->setVida(vida);
-}
-
-void Jugador::AumentarBarraAtEs(int can)
-{
-  if(barraAtEs < 100)
-  {
-    barraAtEs += can;
-    if(barraAtEs > 100)barraAtEs = 100;
-  }
-  _interfaz->setAtaqueEspecial(barraAtEs);
-}
-
-void Jugador::AumentarDinero(int can)
-{
-   dinero += can;
 }
 
 void Jugador::Interactuar(int id, int id2)
@@ -828,6 +796,11 @@ float* Jugador::GetDatosAtEsp()
     return atesp;
 }
 
+int Jugador::getVidaIni()
+{
+    return vidaIni;
+}
+
 int Jugador::getVida()
 {
     return vida;
@@ -928,9 +901,28 @@ int Jugador::getDinero()
     return dinero;
 }
 
-void Jugador::setDinero(int monedas)
+/******----------------Modificar Dinero------------------******
+ * Metodo que sirve para modificar la cantidad de monedas
+ * que tiene el jugador a lo largo del juego
+ * Entradas:
+ *      monedas: valor negativo o positivo en el que se 
+ *          incrementa o decrementa el dinero
+ * Salida:
+ * 
+ */
+void Jugador::ModificarDinero(int monedas)
 {
     dinero += monedas;
+    if(dinero > 9999)
+        dinero = 9999;
+    else if (dinero < 0) 
+        dinero = 0;
+    _interfaz->setDinero(dinero);
+}
+
+void Jugador::setDinero(int monedas)
+{
+    dinero = monedas;
     _interfaz->setDinero(dinero);
 }
 
@@ -1011,6 +1003,31 @@ void Jugador::setPosicionesFisicas(float nx,float ny,float nz)
     posFisicas.z += nz;
 }
 
+/******----------------Modificar Vida------------------******
+ * Metodo que sirve para modificar la vida del jugador
+ * a lo largo del juego.
+ * Entradas:
+ *      vid: valor negativo o positivo en el que se 
+ *          incrementa o decrementa la vida
+ * Salida:
+ * 
+ */
+void Jugador::ModificarVida(int vid)
+{
+    if (vid < 0) // QuitarVida, aumenta barra ataque especial
+    {
+        ModificarBarraAtEs(abs(vid));
+    }
+
+    vida += vid;
+    if (vida > vidaIni)
+        vida = vidaIni;
+    else if (vida < 0)
+        vida = 0;
+    _interfaz->setVida(vida);
+}
+
+// Asigna directamente el valor
 void Jugador::setVida(int vid)
 {
     vida = vid;
@@ -1022,19 +1039,26 @@ void Jugador::setTipo(int tip)
 
 }
 
+/*************** Modificar BarraAtEs *****************
+ *  Funcion que actualiza la barra del ataque especial
+ *  Entradas: 
+ *      bar: valor en positivo o negativo
+ *  Salidas:
+ * 
+ */
+void Jugador::ModificarBarraAtEs(int bar)
+{
+    barraAtEs += bar;
+    if(barraAtEs < 0)
+        barraAtEs = 0;
+    if(barraAtEs > 100)
+        barraAtEs = 100;
+    _interfaz->setAtaqueEspecial(barraAtEs);
+}
+
 void Jugador::setBarraAtEs(int bar)
 {
-    if(bar >= 0 && bar <= 100)
-    {
-        barraAtEs = bar;
-    }
-    else
-    {
-        if(bar < 0)
-         barraAtEs = 0;
-        if(bar > 100)
-         barraAtEs = 100;
-    }
+    barraAtEs = bar;
     _interfaz->setAtaqueEspecial(barraAtEs);
 }
 
@@ -1047,7 +1071,7 @@ void Jugador::setArma(Arma* arma)
 {
     _armaEquipada = arma;
 
-    if(this->getArma() != nullptr)
+    if(_armaEquipada)
     {
         if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)//entonces es la guitarra cuerpo a cuerpo
         {

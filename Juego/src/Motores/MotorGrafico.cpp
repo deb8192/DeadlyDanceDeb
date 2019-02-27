@@ -581,12 +581,14 @@ void MotorGrafico::CargarEnemigos(int accion, int x,int y,int z, int ancho, int 
     }
 }
 
-/******----------------Crear Jugador------------------******
+/******----------------Cargar Jugador------------------******
  * Metodo que sirve para generar la malla 3D de un jugador
  * al iniciar estado Juego.
  * Entradas:
  *      ruta_objeto: string con la direccion del modelo 3D
  *      ruta_textura: string con la ruta de la textura
+ * Salida:
+ * 
  */
 void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura)
 {
@@ -1011,11 +1013,8 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
     }
 }
 
-void MotorGrafico::cargarInterfaz()
+void MotorGrafico::CargarInterfaz()
 {
-    //activamos la interfaz
-    InterfazJugador * interfaz = InterfazJugador::getInstance();
-    interfaz->activar();//activamos la interfaz por defecto
     //creamos texturas
     vida_textura = _driver->getTexture("assets/images/51.png");
     energia_textura = _driver->getTexture("assets/images/21.png");
@@ -1053,10 +1052,9 @@ void MotorGrafico::cargarInterfaz()
     moneyI->setOverrideColor(COLOR);
     if(font2)
         moneyI->setOverrideFont(font2);
-
 }
 
-void MotorGrafico::destruirInterfaz()
+void MotorGrafico::DestruirInterfaz()
 {
     if(vidaI)
     {
@@ -1109,15 +1107,90 @@ void MotorGrafico::destruirInterfaz()
     _driver->removeTexture(llave_textura);
     _driver->removeTexture(espada_textura);
     _driver->removeTexture(daga_textura);
-
 }
 
-void MotorGrafico::RenderInterfaz()
+void MotorGrafico::SetVida(int vida)
 {
-    //vamos a conseguir los datos de la interfaz
-    InterfazJugador * interfaz = InterfazJugador::getInstance();
+    if(BarraVidaI)
+    {
+        float unidad = ((float)121/100);
+        float resultado = unidad*(float)vida;
+        if(resultado <= 0)
+        {
+            BarraVidaI->setMaxSize(dimension2du(1,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
+        }
+        else
+        {
+            BarraVidaI->setMaxSize(dimension2du(resultado,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
+        }
+    }
+}
 
-    if(interfaz->getEstado())
+void MotorGrafico::SetBarraEnergia(int barra)
+{
+    if(BarraEnergiaI)
+	{
+		float unidad = ((float)63/100);
+		float resultado = unidad*(float)barra;
+		//cout << barra << " " << unidad << " " << resultado << endl ;
+		if(resultado <= 0)
+		{
+			BarraEnergiaI->setMaxSize(dimension2du(1,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
+		}
+		else
+		{
+			BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
+		}
+	}
+}
+
+void MotorGrafico::SetDinero(int dinero)
+{
+    if(moneyI)
+    {
+        stringw str = L"";
+        str += dinero;
+        moneyI->setText(str.c_str());
+    }
+}
+
+void MotorGrafico::SetArma(int arma)
+{
+    switch(arma)
+    {
+        case 1: //es una llave
+            manosI->setVisible(false);
+            dagaI->setVisible(false);
+            espadaI->setVisible(false);
+            llaveI->setVisible(true);
+            break;
+
+        case 2: //objeto ataque directo
+            manosI->setVisible(false);
+            dagaI->setVisible(false);
+            espadaI->setVisible(true);
+            llaveI->setVisible(false);
+            break;
+        
+        case 3: //objeto ataque a distancia
+            manosI->setVisible(false);
+            dagaI->setVisible(true);
+            espadaI->setVisible(false);
+            llaveI->setVisible(false);
+            break;
+        
+        default: //son las manos
+            manosI->setVisible(true);
+            dagaI->setVisible(false);
+            espadaI->setVisible(false);
+            llaveI->setVisible(false);
+            break;
+    }
+}
+
+void MotorGrafico::RenderInterfaz(bool activada)
+{
+    if (activada)
     {
         if(vidaI)
             vidaI->setVisible(true);
@@ -1133,77 +1206,6 @@ void MotorGrafico::RenderInterfaz()
             BarraVidaI->setVisible(true);
         if(moneyI)
             moneyI->setVisible(true);
-
-        int* datos = interfaz->getUpdate();
-        //vamos a calcular vida
-        if(BarraVidaI)
-        {
-            float unidad = ((float)121/100);
-            float resultado = unidad*(float)datos[1];
-            if(resultado <= 0)
-            {
-                BarraVidaI->setMaxSize(dimension2du(1,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
-            }
-            else
-            {
-                BarraVidaI->setMaxSize(dimension2du(resultado,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
-            }
-        }
-
-        if(moneyI)
-        {
-            stringw str = L"";
-            str += datos[3];
-            moneyI->setText(str.c_str());
-        }
-
-        if(BarraEnergiaI)
-        {
-            float unidad = ((float)63/100);
-            float resultado = unidad*(float)datos[2];
-            //cout << datos[2] << " " << unidad << " " << resultado << endl ;
-            if(resultado <= 0)
-            {
-                BarraEnergiaI->setMaxSize(dimension2du(1,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
-            }
-            else
-            {
-                BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
-            }
-        }
-
-        switch(datos[4])
-        {
-            case 0:
-                //son las manos
-                manosI->setVisible(true);
-                dagaI->setVisible(false);
-                espadaI->setVisible(false);
-                llaveI->setVisible(false);
-            break;
-            case 1:
-                //es una llave
-                manosI->setVisible(false);
-                dagaI->setVisible(false);
-                espadaI->setVisible(false);
-                llaveI->setVisible(true);
-            break;
-            case 2:
-                //objeto ataque directo
-                manosI->setVisible(false);
-                dagaI->setVisible(false);
-                espadaI->setVisible(true);
-                llaveI->setVisible(false);
-            break;
-            case 3:
-                //objeto ataque a distancia
-                manosI->setVisible(false);
-                dagaI->setVisible(true);
-                espadaI->setVisible(false);
-                llaveI->setVisible(false);
-            break;
-        }
-        delete [] datos;
     }
     else
     {
@@ -1571,6 +1573,12 @@ void MotorGrafico::ReiniciarHanoi()
         fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
         posY++;
     }
+}
+
+void MotorGrafico::BorrarBoton(s32 id)
+{
+    _guienv->getRootGUIElement()->
+        getElementFromId(id)->remove();
 }
 
 void MotorGrafico::updateMotorCinematica()

@@ -13,6 +13,7 @@
 #include "../Objetos/Recolectable.hpp"
 #include "Zona.hpp"
 #include "../Armas/Arma.hpp"
+#include "../Jugando/InterfazJugador.hpp"
 
 //cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA()
 #include "../CargadorBehaviorTrees.hpp"
@@ -88,6 +89,7 @@ class Jugando: public Estado {
         SenseEventos* _sense;
         MotorFisicas* _fisicas;
         Times* _controladorTiempo;
+        InterfazJugador* _interfaz;
 
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         CargadorBehaviorTrees cargadorIA; //Variable para crear la IA de los enemigos
