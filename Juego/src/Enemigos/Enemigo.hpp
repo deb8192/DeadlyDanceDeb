@@ -5,6 +5,7 @@
 #include "../INsentidos.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/Sala.hpp"
+#include "../Jugando/Zona.hpp"
 #include <vector>
 #include "../Arbol.hpp"
 
@@ -114,17 +115,6 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getVelocidadMaxima(); //se obtiene la VelocidadMaxima de desplazamiento
         int GetEnemigo();
 
-        //comportamientos bases
-            bool ver(int tipo);//1 si ve al jugador
-            bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
-            bool buscar();//por defecto devuelve true
-            bool perseguir();//por defecto devuelve true
-            bool Acciones(int);//esto es para recorrer el arbol
-            bool pedirAyuda();//pide ayuda
-            bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
-            bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
-        //fin comportamientos bases
-
         //ia
         float randomBinomial();//devuelve un valor random entre -1 y 1
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
@@ -137,6 +127,19 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
     protected:
 
+        //comportamientos bases
+        bool ver(int tipo);//1 si ve al jugador
+        bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
+        bool buscar();//por defecto devuelve true
+        bool perseguir();//por defecto devuelve true TO IMPROVE
+        bool buscar(VectorEspacial*);//busca un objetivo
+        bool Acciones(int);//esto es para recorrer el arbol
+        bool pedirAyuda();//pide ayuda
+        bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
+        bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
+        //fin comportamientos bases
+
+        Zona* getZonaMasCercana(vector <Zona*> zonas, short enemigo);
         //Comparadores de la lectura de las acciones y objetivos de las tareas
         enum accionesEnemigo 
         {  
@@ -145,13 +148,15 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_VER,
             EN_PIDE_AYUDA,
             EN_MERODEA,
-            EN_OIR
+            EN_OIR,
+            EN_BUSCA
         };
 
         enum modosEnemigo 
         {  
             MODO_DEFAULT = 0,
             MODO_ATAQUE,
+            MODO_HUIDA
         };
 
         Sala * estoy;//sala en la que esta el enemigo

@@ -1,6 +1,7 @@
 #include "Murcielago.hpp"
 #include "../ConstantesComunes.hpp"
 #include "../Jugando/Nivel.hpp"
+#include "../Jugando/Zona.hpp"
 #include "cmath"
 
 Murcielago::Murcielago() : Enemigo()
@@ -11,6 +12,7 @@ Murcielago::Murcielago() : Enemigo()
     _ordenes = new short [constantes.DOS];
     maxRotacion = constantes.PI_CUARTOS; 
     rotation = constantes.CERO;
+    zonaElegida = nullptr;
 }
 
 Murcielago::~Murcielago()
@@ -97,7 +99,6 @@ void Murcielago::UpdateMurcielago(short *i)
                         float velocidadZ = 0.0;
                     }datosDesplazamiento;
                     
-                    cout<<"Se mueve el Murcielago"<<endl;
                     _nivel = Nivel::getInstance();
 
                     //Se mueve a la derecha
@@ -196,7 +197,6 @@ void Murcielago::UpdateMurcielago(short *i)
                 {
                     if(!atacado)
                     {
-                        cout<<"intenta atacar"<<endl;
                         Nivel* _nivel;
                         int danyo;
                         danyo = this->Atacar(*i);
@@ -241,6 +241,28 @@ void Murcielago::UpdateMurcielago(short *i)
                     cout<<"Pide ayuda a los aliados"<<endl;
                     this->pedirAyuda();
                     funciona = true;
+                }
+                break;
+            case EN_BUSCA:  //El murcielago busca una zona oscura
+                {
+                    VectorEspacial coordenadasZonaDestino;
+                    //Se obtienen las coordenadas de la zona de destino en caso de no tener zona
+                    if(zonaElegida == nullptr)
+                    {
+                        Nivel* _nivel;
+                        _nivel = Nivel::getInstance();
+                        vector<Zona*> zonas = _nivel->GetZonas();
+                        zonas.reserve(zonas.size());
+                        zonaElegida = this->getZonaMasCercana(zonas, constantes.CERO);
+                    }
+                    coordenadasZonaDestino.vX = zonaElegida->getX();
+                    coordenadasZonaDestino.vY = zonaElegida->getY();
+                    coordenadasZonaDestino.vZ = zonaElegida->getZ();
+                    funciona = this->buscar(&coordenadasZonaDestino);
+                    if(funciona)
+                    {
+                        zonaElegida->annadirElemento();
+                    }
                 }
                 break;
             case EN_MERODEA: //El Murcielago merodea

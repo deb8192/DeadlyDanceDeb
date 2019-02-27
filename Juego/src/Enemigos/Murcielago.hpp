@@ -18,6 +18,8 @@ class Murcielago : public Enemigo
         short int* _ordenes;
         short int maxRotacion;
         short int direccion;
+        Zona* zonaElegida;
+
 
 };
 

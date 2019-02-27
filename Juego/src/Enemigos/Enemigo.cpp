@@ -3,6 +3,7 @@
 #include "Murcielago.hpp"
 #include "../Jugando/Nivel.hpp"
 #include "../ConstantesComunes.hpp"
+#include "cmath"
 //#include "MotorGrafico.hpp"
 //#include "MotorFisicas.hpp"
 //#include "MotorAudio.hpp"
@@ -734,6 +735,33 @@ int Enemigo::GetEnemigo()
 {
     return tipoEnemigo;
 }
+
+Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, short enemigo)
+{
+    Constantes constantes;
+    Zona* zonaElegida = nullptr;
+    VectorEspacial distanciaZonaActual, distanciaZonaElegida;
+    vector<Zona*> zonasCompletas;
+    zonasCompletas.reserve(zonas.size());
+
+    unsigned short i = 0;
+    while(i < zonas.size() && (zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
+    {
+        distanciaZonaActual.vX = abs(zonas.at(i)->getX() - posActual.x);
+        distanciaZonaActual.vY = abs(zonas.at(i)->getY() - posActual.y);
+        distanciaZonaActual.vZ = abs(zonas.at(i)->getZ() - posActual.z);
+        distanciaZonaActual.modulo = pow(distanciaZonaActual.vX, constantes.DOS) + pow(distanciaZonaActual.vY, constantes.DOS) + pow(distanciaZonaActual.vZ, constantes.DOS);
+        distanciaZonaActual.modulo = sqrt(distanciaZonaActual.modulo);
+
+        if(zonaElegida == nullptr || distanciaZonaElegida.modulo > distanciaZonaActual.modulo)
+        {
+            distanciaZonaElegida = distanciaZonaActual;
+            zonaElegida = zonas.at(i);
+        }
+        i++;
+    }
+    return zonaElegida;
+}
 //ia
 
 void Enemigo::setArbol(Arbol ia)
@@ -837,7 +865,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
         return false;
     }
-
+    //ESTO TAL CUAL SE PARECE MAS A BUSCAR, PERSEGUIR PREDICE LA RUTA DEL OBJETIVO DEL ENEMIGO
     bool Enemigo::perseguir()
     {
         Constantes constantes;
@@ -856,7 +884,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             float velocidadZ = 0.0;
         }datosDesplazamiento;
         
-        cout<<"Se mueve el Pollo"<<endl;
         _nivel = Nivel::getInstance();
 
         //Se mueve a la derecha
@@ -934,6 +961,106 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         if(abs(_nivel->GetJugador()->getZ() - this->getZ()) <= abs(datosDesplazamiento.distancia))
         {
             if(abs(_nivel->GetJugador()->getX() - this->getX()) <= abs(datosDesplazamiento.distancia))
+            {
+                funciona = true;
+            }
+            else
+            {
+                funciona = false;
+            }
+        }
+        else
+        {
+            funciona = false;
+        }
+        return funciona;
+    }
+
+    bool Enemigo::buscar(VectorEspacial* objetivo)
+    {
+        Constantes constantes;
+        bool funciona = true;
+        bool trueX = false;
+        bool trueZ = false;
+        float rotacion = constantes.CERO;
+        VectorEspacial datosDesplazamiento;
+        float distancia = 2.0f;
+
+        //Se mueve a la derecha
+        if(objetivo->vX > this->getNewX())
+        {
+            trueX = true;
+            rotacion = constantes.PI_MEDIOS;
+            //datosDesplazamiento.velocidadX = this->getVelocidadMaxima(); 
+        }
+
+        //Se mueve a la izquierda
+        else if(objetivo->vX < this->getNewX())
+        {
+            trueX = true;
+            rotacion = -constantes.PI_MEDIOS;
+        }
+
+        //Se mueve hacia arriba
+        if(objetivo->vZ > this->getNewZ())
+        {
+            trueZ = true;
+            //Desplazamiento en diagonal
+            if(trueX)
+            {
+                //Se mueve hacia arriba a la derecha
+                if(rotacion > 0)
+                    rotacion -= constantes.PI_CUARTOS;
+                
+                //Se mueve hacia arriba a la derecha
+                else
+                    rotacion += constantes.PI_CUARTOS;
+            }
+
+            //Se mueve recto hacia arriba
+            else
+            {
+                rotacion = constantes.CERO;
+            }
+        }
+        else if(objetivo->vZ < this->getNewZ())
+        {
+            trueZ = true;
+            //Desplazamiento en diagonal
+            if(trueX)
+            {
+
+                //Se mueve hacia abajo a la derecha
+                if(rotacion > 0)
+                    rotacion += constantes.PI_CUARTOS;
+
+                //Se mueve hacia abajo a la izquierda
+                else
+                    rotacion -= constantes.PI_CUARTOS;
+            }
+
+            //Se mueve hacia abajo
+            else
+            {
+                rotacion = constantes.PI_RADIAN;
+            }
+        }
+
+        if(trueX || trueZ)
+        {
+            this->Enemigo::setNewRotacion(this->Enemigo::getRX(), rotacion, this->Enemigo::getRZ());
+        }
+        this->setVectorOrientacion();
+        datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima;
+        datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima;
+
+        this->setNewPosiciones(posFutura.x + datosDesplazamiento.vX, posFutura.y, posFutura.z + datosDesplazamiento.vZ);
+        this->setPosicionesFisicas(datosDesplazamiento.vX, constantes.CERO, datosDesplazamiento.vZ);
+        
+        //Se comprueba si la distancia entre el enemigo y el jugador es menor o igual a la distancia maxima que que indica la variable "distancia"
+        if(abs(objetivo->vZ - this->getZ()) <= abs(distancia))
+        {
+            if(abs(objetivo->vX - this->getX()) <= abs(distancia))
             {
                 funciona = true;
             }

@@ -49,6 +49,7 @@ using Constantes = struct
     const char* PIDE_AYUDA = "pide-ayuda";
     const char* MERODEA = "merodea";
     const char* OIR = "oye";
+    const char* BUSCAR = "busca";
 
     //Comparadores de la lectura de los objetivos de las tareas
     const char* JUGADOR = "jugador";

@@ -88,6 +88,7 @@ class Nivel
         int getjix();
         int getjiy();
         int getjiz();
+        vector<Zona*> GetZonas();
         void setjix(int);
         void setjiy(int);
         void setjiz(int);
