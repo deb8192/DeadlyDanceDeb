@@ -55,8 +55,6 @@ void Mesh::Draw(Shader* shader)
     //Enlazar las texturas apropiadas
     unsigned int diffuseNr  = 1;
     unsigned int specularNr = 1;
-    unsigned int normalNr   = 1;
-    unsigned int heightNr   = 1;
 
     //Solucion al problema del numero indeterminado de texturas que puede tener una malla (definirlas como "uniform sampler2D texture_diffuseN" donde N es el numero de textura)
     for(unsigned int i = 0; i < textures.size(); i++)
@@ -79,23 +77,9 @@ void Mesh::Draw(Shader* shader)
             ss << specularNr++;
             number = ss.str();
         }
-        else if(name == "texture_normal")
-        {
-            //number = std::to_string(normalNr++);
-            stringstream ss; //Borrar cuando funcione tostring
-            ss << normalNr++;
-            number = ss.str();
-        }
-        else if(name == "texture_height")
-        {
-            //number = std::to_string(heightNr++);
-            stringstream ss; //Borrar cuando funcione tostring
-            ss << heightNr++;
-            number = ss.str();
-        }
 
         //Ahora ajuste el sampler a la unidad de textura correcta
-        //glUniform1i(glGetUniformLocation(shader->ID, (name + number).c_str()), i);
+        glUniform1i(glGetUniformLocation(shader->ID, (name + number).c_str()), i);
         //Finalmente enlazamos la textura
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }

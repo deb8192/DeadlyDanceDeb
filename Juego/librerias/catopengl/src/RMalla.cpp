@@ -88,15 +88,15 @@ bool RMalla::CargarRecurso(const char * _ruta)
     // procesar recursivamente los nodos
     processNode(scene->mRootNode, scene);
 
-    for(unsigned int i=0; i < meshes.size(); i++)
-    {
-        cout << " |- Malla " << i << ": " << meshes.at(i) << endl;
-    }
-
-    for(unsigned int i=0; i < textures_loaded.size(); i++)
-    {
-        cout << " |- Textura " << i << ": " << textures_loaded.at(i) << endl;
-    }
+    // for(unsigned int i=0; i < meshes.size(); i++)
+    // {
+    //     cout << " |- Malla " << i << ": " << meshes.at(i) << endl;
+    // }
+    //
+    // for(unsigned int i=0; i < textures_loaded.size(); i++)
+    // {
+    //     cout << " |- Textura " << i << ": " << textures_loaded.at(i) << endl;
+    // }
 
     mallas = meshes.size();
 
@@ -184,12 +184,6 @@ Mesh * RMalla::processMesh(aiMesh *mesh, const aiScene *scene)
     // Especular: texture_specularN
     vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    // Normal: texture_normalN
-    std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
-    textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-    // Pesos: texture_heightN
-    std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
-    textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
 
     //Devolver un objeto mesh creado a partir de los datos mesh extraídos
     Mesh * newmesh = new Mesh(vertices, indices, textures);

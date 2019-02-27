@@ -79,10 +79,20 @@ void main()
 
     //Fase 2: Puntos de Luz
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
-        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+    {
+        vec3 pointres = CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+        if(pointres.x > 0 && pointres.y > 0 && pointres.z > 0)
+        {
+            result += pointres;
+        }
+    }
 
-    //Fase 3: Foco de Luz/Spotlight
-    //result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
+    //Foco de luz
+    vec3 spotres = CalcSpotLight(spotLight, norm, FragPos, viewDir);
+    if(spotres.x > 0 && spotres.y > 0 && spotres.z > 0)
+    {
+        result += spotres;
+    }
 
     FragColor = vec4(result, 1.0);
 }
@@ -96,7 +106,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     float diff = max(dot(normal, lightDir), 0.0);               //Impacto difuso real (usamos max para que el color nunca sea negativo si sube de 90 grados)
 
     //Luz Especular
-    vec3 reflectDir = reflect(-lightDir, normal);               //Reflejo (la direccion de la luz es negativa porque va desde la luz hasta la vista no hacia el fragment como en la difusa)
+    vec3 reflectDir = reflect(lightDir, normal);               //Reflejo (la direccion de la luz es negativa porque va desde la luz hasta la vista no hacia el fragment como en la difusa)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);    //Calculo del componente especular (max para asegurar que no sea negativo), material.shininess es el valor del brillo cambialo para mas o menos brillo (32,64,128,etc...)
 
     //Combinar resultados
@@ -115,7 +125,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float diff = max(dot(normal, lightDir), 0.0);               //Impacto difuso real (usamos max para que el color nunca sea negativo si sube de 90 grados)
 
     //Luz Especular
-    vec3 reflectDir = reflect(-lightDir, normal);               //Reflejo (la direccion de la luz es negativa porque va desde la luz hasta la vista no hacia el fragment como en la difusa)
+    vec3 reflectDir = reflect(lightDir, normal);               //Reflejo (la direccion de la luz es negativa porque va desde la luz hasta la vista no hacia el fragment como en la difusa)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);     //Calculo del componente especular (max para asegurar que no sea negativo), material.shininess es el valor del brillo cambialo para mas o menos brillo (32,64,128,etc...)
 
     //Calculos de distancia y atenuacion de la luz
@@ -143,7 +153,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float diff = max(dot(normal, lightDir), 0.0);
 
     //Luz Especular
-    vec3 reflectDir = reflect(-lightDir, normal);
+    vec3 reflectDir = reflect(lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
     //Calculos de distancia y atenuacion de la luz
