@@ -823,6 +823,25 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         return false;//cambiamos de rama si no se encuentra la tarea
     }
 
+
+    void Enemigo::alinearse(VectorEspacial* target)
+    {
+        Constantes constantes;
+        VectorEspacial distancia;
+        distancia.vX = target->vX - this->getX();
+        distancia.vY = target->vY - this->getY();
+        distancia.vZ = target->vZ - this->getZ();
+        distancia.modulo = pow(distancia.vX, constantes.DOS) + pow(distancia.vY, constantes.DOS) + pow(distancia.vZ, constantes.DOS);
+        distancia.modulo = sqrt(distancia.modulo);
+
+        distancia.vZ < 0 ?
+        rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(distancia.vZ/distancia.vX)) :
+        rotation = constantes.RAD_TO_DEG * atan(distancia.vZ/distancia.vX) ;
+
+        this->setNewRotacion(rotActual.x, rotActual.y + rotation, rotActual.z);
+        this->setVectorOrientacion();
+    }
+
     bool Enemigo::ver(int tipo)
     {
         //vamos a  ver si vemos al jugador
@@ -980,77 +999,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     {
         Constantes constantes;
         bool funciona = true;
-        bool trueX = false;
-        bool trueZ = false;
-        float rotacion = constantes.CERO;
         VectorEspacial datosDesplazamiento;
         float distancia = 2.0f;
 
-        //Se mueve a la derecha
-        if(objetivo->vX > this->getNewX())
-        {
-            trueX = true;
-            rotacion = constantes.PI_MEDIOS;
-            //datosDesplazamiento.velocidadX = this->getVelocidadMaxima(); 
-        }
+        this->alinearse(objetivo);
 
-        //Se mueve a la izquierda
-        else if(objetivo->vX < this->getNewX())
-        {
-            trueX = true;
-            rotacion = -constantes.PI_MEDIOS;
-        }
-
-        //Se mueve hacia arriba
-        if(objetivo->vZ > this->getNewZ())
-        {
-            trueZ = true;
-            //Desplazamiento en diagonal
-            if(trueX)
-            {
-                //Se mueve hacia arriba a la derecha
-                if(rotacion > 0)
-                    rotacion -= constantes.PI_CUARTOS;
-                
-                //Se mueve hacia arriba a la derecha
-                else
-                    rotacion += constantes.PI_CUARTOS;
-            }
-
-            //Se mueve recto hacia arriba
-            else
-            {
-                rotacion = constantes.CERO;
-            }
-        }
-        else if(objetivo->vZ < this->getNewZ())
-        {
-            trueZ = true;
-            //Desplazamiento en diagonal
-            if(trueX)
-            {
-
-                //Se mueve hacia abajo a la derecha
-                if(rotacion > 0)
-                    rotacion += constantes.PI_CUARTOS;
-
-                //Se mueve hacia abajo a la izquierda
-                else
-                    rotacion -= constantes.PI_CUARTOS;
-            }
-
-            //Se mueve hacia abajo
-            else
-            {
-                rotacion = constantes.PI_RADIAN;
-            }
-        }
-
-        if(trueX || trueZ)
-        {
-            this->Enemigo::setNewRotacion(this->Enemigo::getRX(), rotacion, this->Enemigo::getRZ());
-        }
-        this->setVectorOrientacion();
         datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima;
         datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima;
 
