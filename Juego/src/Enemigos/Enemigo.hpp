@@ -128,6 +128,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
     protected:
 
         //comportamientos bases
+        void alinearse(VectorEspacial*);
         bool ver(int tipo);//1 si ve al jugador
         bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
         bool buscar();//por defecto devuelve true
