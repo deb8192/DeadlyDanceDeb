@@ -14,7 +14,7 @@ class Murcielago : public Enemigo
         void SetNuevasOrdenes(short i);
 
     private:
-        bool funciona, atacado, hecho;
+        bool funciona, atacado, hecho, enZonaOscura;
         short int* _ordenes;
         short int maxRotacion;
         short int direccion;
