@@ -14,6 +14,7 @@ class TLuz : public TEntidad
         glm::vec3 diffuse;
         glm::vec3 specular;
         glm::vec3 direction;
+        float linear, quadratic;
 
     public:
 
@@ -29,6 +30,7 @@ class TLuz : public TEntidad
         void setSpecular(float,float,float);
         void setNumberoflight(int);
         void setDirection(float,float,float);
+        void setLightRange(float);
 
         //sobrecarga Tentidad
         void beginDraw();
