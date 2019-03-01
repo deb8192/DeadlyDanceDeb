@@ -16,6 +16,7 @@ TLuz::TLuz(int t)
         setAmbient(0.05f, 0.05f, 0.05f);
         setDiffuse(0.8f, 0.8f, 0.8f);
         setSpecular(1.0f, 1.0f, 1.0f);
+        setLightRange(50.0f);
     }
     else if(t == 2)
     {
@@ -23,6 +24,7 @@ TLuz::TLuz(int t)
         setDiffuse(1.0f, 1.0f, 1.0f);
         setSpecular(1.0f, 1.0f, 1.0f);
         setDirection(0.0f, -1.0f, 0.0f);
+        setLightRange(50.0f);
     }
 
 }
@@ -99,18 +101,21 @@ void TLuz::beginDraw()
             shader->setVec3("pointLights[" + n + "].specular", specular);
             shader->setVec3("pointLights[" + n + "].position", posicion);
             shader->setFloat("pointLights[" + n + "].constant", 1.0f);
-            shader->setFloat("pointLights[" + n + "].linear", 0.022f);
-            shader->setFloat("pointLights[" + n + "].quadratic", 0.0019f);
+            shader->setFloat("pointLights[" + n + "].linear", linear);
+            shader->setFloat("pointLights[" + n + "].quadratic", quadratic);
         }
         else if(tipo_luz == 2)
         {
             shader->setVec3("spotLight.position", posicion);    //Enviar la posicion
             shader->setVec3("spotLight.direction", direction);  //Enviar la direccion
-            // shader->setFloat("spotLight.constant", 1.0f);
-            // shader->setFloat("spotLight.linear", 0.09f);
-            // shader->setFloat("spotLight.quadratic", 0.032f);
-            // shader->setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));       //Punto de corte
-            // shader->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));  //Punto de corte con el cono externo
+            shader->setVec3("spotLight.ambient", ambient);
+            shader->setVec3("spotLight.diffuse", diffuse);
+            shader->setVec3("spotLight.specular", specular);
+            shader->setFloat("spotLight.constant", 1.0f);
+            shader->setFloat("spotLight.linear", linear);
+            shader->setFloat("spotLight.quadratic", quadratic);
+            shader->setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));       //Punto de corte
+            shader->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));  //Punto de corte con el cono externo
         }
 
         if(_matriz_resultado != nullptr)//si la matriz de resultado es nula es que no hay nada en la cola por lo que no hay nada que enviar al shader
@@ -138,45 +143,60 @@ void TLuz::beginDraw()
             shader->setVec3("pointLights[" + n + "].specular", specular);
             shader->setVec3("pointLights[" + n + "].position", glm::vec3(0.0f,0.0f,0.0f));
             shader->setFloat("pointLights[" + n + "].constant", 1.0f);
-            shader->setFloat("pointLights[" + n + "].linear", 0.022f);
-            shader->setFloat("pointLights[" + n + "].quadratic", 0.0019f);
+            shader->setFloat("pointLights[" + n + "].linear", linear);
+            shader->setFloat("pointLights[" + n + "].quadratic", quadratic);
         }
         else if(tipo_luz == 2)
         {
             shader->setVec3("spotLight.position", glm::vec3(0.0f,0.0f,0.0f));  //Enviar la posicion
             shader->setVec3("spotLight.direction", direction);                 //Enviar la direccion
-            // shader->setFloat("spotLight.constant", 1.0f);
-            // shader->setFloat("spotLight.linear", 0.09f);
-            // shader->setFloat("spotLight.quadratic", 0.032f);
-            // shader->setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));       //Punto de corte
-            // shader->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));  //Punto de corte con el cono externo
+            shader->setVec3("spotLight.ambient", ambient);
+            shader->setVec3("spotLight.diffuse", diffuse);
+            shader->setVec3("spotLight.specular", specular);
+            shader->setFloat("spotLight.constant", 1.0f);
+            shader->setFloat("spotLight.linear", linear);
+            shader->setFloat("spotLight.quadratic", quadratic);
+            shader->setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));       //Punto de corte
+            shader->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));  //Punto de corte con el cono externo
         }
     }
 }
 
+//Color luz ambiental
 void TLuz::setAmbient(float r,float g,float b)
 {
     ambient = glm::vec3(r,g,b);
 }
 
+//Color luz difusa
 void TLuz::setDiffuse(float r,float g,float b)
 {
     diffuse = glm::vec3(r,g,b);
 }
 
+//Color luz especular
 void TLuz::setSpecular(float r,float g,float b)
 {
     specular = glm::vec3(r,g,b);
 }
 
+//numero de luz
 void TLuz::setNumberoflight(int n)
 {
     numberoflight = n;
 }
 
+//Direccion de la luz
 void TLuz::setDirection(float x,float y,float z)
 {
     direction = glm::vec3(x,y,z);
+}
+
+//Atenuacion por distancia de la luz
+void TLuz::setLightRange(float range)
+{
+    linear = 4.5f / range;
+    quadratic = 75.0f / (range*range);
 }
 
 void TLuz::endDraw()
