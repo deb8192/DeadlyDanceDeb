@@ -8,7 +8,7 @@ Murcielago::Murcielago() : Enemigo()
 {
     Constantes constantes;
     funciona = true;
-    atacado = false;
+    atacado = enZonaOscura = false;
     _ordenes = new short [constantes.DOS];
     maxRotacion = constantes.PI_CUARTOS; 
     rotation = constantes.CERO;
@@ -78,118 +78,15 @@ void Murcielago::UpdateMurcielago(short *i)
     funciona = true;
     if(modo == constantes.UNO && _ordenes != nullptr)
     {
+        if(enZonaOscura)
+        {
+            enZonaOscura = false;
+        }
         switch (_ordenes[0])
         {
             case EN_PERSIGUE: //El Murcielago se mueve
                 {
-                    Nivel* _nivel;
-                    bool trueX = false;
-                    bool trueZ = false;
-                    float x = this->getNewX();
-                    float y = this->getNewY();
-                    float z = this->getNewZ();
-                    float rotacion = constantes.CERO;
-                    
-                    //Struct para indicar la velocidad de desplazamiento y la
-                    //distancia de los enemigos al jugador
-                    struct Datos{
-                        float distancia = 4.0;
-                        float velocidadX = 0.0;
-                        float velocidadY = 0.0;
-                        float velocidadZ = 0.0;
-                    }datosDesplazamiento;
-                    
-                    _nivel = Nivel::getInstance();
-
-                    //Se mueve a la derecha
-                    if(_nivel->GetJugador()->getNewX() > this->getNewX() + datosDesplazamiento.distancia)
-                    {
-                        trueX = true;
-                        rotacion = constantes.PI_MEDIOS;
-                        //datosDesplazamiento.velocidadX = this->getVelocidadMaxima(); 
-                    }
-
-                    //Se mueve a la izquierda
-                    else if(_nivel->GetJugador()->getNewX() < this->getNewX() - datosDesplazamiento.distancia)
-                    {
-                        trueX = true;
-                        rotacion = -constantes.PI_MEDIOS;
-                    }
-
-                    //Se mueve hacia arriba
-                    if(_nivel->GetJugador()->getNewZ() > this->getNewZ() + datosDesplazamiento.distancia)
-                    {
-                        trueZ = true;
-                        //Desplazamiento en diagonal
-                        if(trueX)
-                        {
-                            //Se mueve hacia arriba a la derecha
-                            if(rotacion > 0)
-                                rotacion -= constantes.PI_CUARTOS;
-                            
-                            //Se mueve hacia arriba a la derecha
-                            else
-                                rotacion += constantes.PI_CUARTOS;
-                        }
-
-                        //Se mueve recto hacia arriba
-                        else
-                        {
-                            rotacion = constantes.CERO;
-                        }
-                    }
-                    else if(_nivel->GetJugador()->getNewZ() < this->getNewZ() - datosDesplazamiento.distancia)
-                    {
-                        trueZ = true;
-                        //Desplazamiento en diagonal
-                        if(trueX)
-                        {
-
-                            //Se mueve hacia abajo a la derecha
-                            if(rotacion > 0)
-                                rotacion += constantes.PI_CUARTOS;
-
-                            //Se mueve hacia abajo a la izquierda
-                            else
-                                rotacion -= constantes.PI_CUARTOS;
-                        }
-
-                        //Se mueve hacia abajo
-                        else
-                        {
-                            rotacion = constantes.PI_RADIAN;
-                        }
-                    }
-
-                    if(trueX || trueZ)
-                    {
-                        this->Enemigo::setNewRotacion(this->Enemigo::getRX(), rotacion, this->Enemigo::getRZ());
-                    }
-                    this->setVectorOrientacion();
-                    datosDesplazamiento.velocidadX = vectorOrientacion.vX * velocidadMaxima;
-                    datosDesplazamiento.velocidadZ = vectorOrientacion.vZ * velocidadMaxima;
-
-                    x += datosDesplazamiento.velocidadX;
-                    z += datosDesplazamiento.velocidadZ;
-                    this->setNewPosiciones(x, y, z);
-                    this->setPosicionesFisicas(datosDesplazamiento.velocidadX, 0.0f, datosDesplazamiento.velocidadZ);
-                    
-                    //Se comprueba si la distancia entre el enemigo y el jugador es menor o igual a la distancia maxima que que indica la variable "distancia"
-                    if(abs(_nivel->GetJugador()->getZ() - this->getZ()) <= abs(datosDesplazamiento.distancia))
-                    {
-                        if(abs(_nivel->GetJugador()->getX() - this->getX()) <= abs(datosDesplazamiento.distancia))
-                        {
-                            funciona = true;
-                        }
-                        else
-                        {
-                            funciona = false;
-                        }
-                    }
-                    else
-                    {
-                        funciona = false;
-                    }
+                    funciona = this->perseguir();
                 }
                 break;
         
@@ -244,6 +141,7 @@ void Murcielago::UpdateMurcielago(short *i)
                 }
                 break;
             case EN_BUSCA:  //El murcielago busca una zona oscura
+                if(!enZonaOscura)
                 {
                     VectorEspacial coordenadasZonaDestino;
                     //Se obtienen las coordenadas de la zona de destino en caso de no tener zona
@@ -262,43 +160,11 @@ void Murcielago::UpdateMurcielago(short *i)
                     if(funciona)
                     {
                         zonaElegida->annadirElemento();
+                        enZonaOscura = true;
                     }
                 }
                 break;
-            case EN_MERODEA: //El Murcielago merodea
-                {
-                    if(!hecho)
-                    {
-                        //Merodea estableciendo un nuevo angulo de rotacion
-                        this->setRotation(this->randomBinomial() * maxRotacion);
-                        this->Merodear();
-                        this->setTimeMerodear(1.5f);
-                        hecho = true;
-                        //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->oir(constantes.UNO))
-                        {
-                            modo = MODO_ATAQUE;
-                        }
-                    }
-                    else 
-                    {
-                        //Merodea poniendo en positivo o negativo el angulo actual de rotacion
-                        int rota = rand() % 3 - 1;
-                        if (rota != 0)
-                        {
-                            rotation *= rota;
-                        }
-                        this->Merodear();
-                        //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO))
-                        { 
-                            modo = MODO_ATAQUE;
-                        }
-                    }
-                    funciona = true;
-                }
-                break;
-
+            
             default:
                 cout<<"No hace nada"<<endl;
                 break;

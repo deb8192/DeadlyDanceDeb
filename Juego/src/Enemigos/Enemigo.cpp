@@ -835,10 +835,10 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         distancia.modulo = sqrt(distancia.modulo);
 
         distancia.vZ < 0 ?
-        rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(distancia.vZ/distancia.vX)) :
-        rotation = constantes.RAD_TO_DEG * atan(distancia.vZ/distancia.vX) ;
+        rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ)) :
+        rotation = constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ);
 
-        this->setNewRotacion(rotActual.x, rotActual.y + rotation, rotActual.z);
+        this->setNewRotacion(rotActual.x, rotation, rotActual.z);
         this->setVectorOrientacion();
     }
 
@@ -887,99 +887,31 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     //ESTO TAL CUAL SE PARECE MAS A BUSCAR, PERSEGUIR PREDICE LA RUTA DEL OBJETIVO DEL ENEMIGO
     bool Enemigo::perseguir()
     {
+        Nivel *_nivel = Nivel::getInstance();
         Constantes constantes;
         bool funciona = true;
-        Nivel* _nivel;
-        bool trueX = false;
-        bool trueZ = false;
-        float rotacion = constantes.CERO;
-        
-        //Struct para indicar la velocidad de desplazamiento y la
-        //distancia de los enemigos al jugador
-        struct Datos{
-            float distancia = 4.0;
-            float velocidadX = 0.0;
-            float velocidadY = 0.0;
-            float velocidadZ = 0.0;
-        }datosDesplazamiento;
-        
-        _nivel = Nivel::getInstance();
+        VectorEspacial datosDesplazamiento, objetivo;
+        float distancia = 4.0f;
 
-        //Se mueve a la derecha
-        if(_nivel->GetJugador()->getNewX() > this->getNewX() + datosDesplazamiento.distancia)
+        objetivo.vX = _nivel->GetJugador()->getX();
+        objetivo.vY = _nivel->GetJugador()->getY();
+        objetivo.vZ = _nivel->GetJugador()->getZ();
+
+        this->alinearse(&objetivo);
+
+        datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima;
+        datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima;
+
+        if((abs(objetivo.vX - this->getX())) > abs(distancia) || (abs(objetivo.vZ - this->getZ()) > abs(distancia)))
         {
-            trueX = true;
-            rotacion = constantes.PI_MEDIOS;
-            //datosDesplazamiento.velocidadX = this->getVelocidadMaxima(); 
+            this->setNewPosiciones(posFutura.x + datosDesplazamiento.vX, posFutura.y, posFutura.z + datosDesplazamiento.vZ);
+            this->setPosicionesFisicas(datosDesplazamiento.vX, constantes.CERO, datosDesplazamiento.vZ);
         }
-
-        //Se mueve a la izquierda
-        else if(_nivel->GetJugador()->getNewX() < this->getNewX() - datosDesplazamiento.distancia)
-        {
-            trueX = true;
-            rotacion = -constantes.PI_MEDIOS;
-        }
-
-        //Se mueve hacia arriba
-        if(_nivel->GetJugador()->getNewZ() > this->getNewZ() + datosDesplazamiento.distancia)
-        {
-            trueZ = true;
-            //Desplazamiento en diagonal
-            if(trueX)
-            {
-                //Se mueve hacia arriba a la derecha
-                if(rotacion > 0)
-                    rotacion -= constantes.PI_CUARTOS;
                 
-                //Se mueve hacia arriba a la derecha
-                else
-                    rotacion += constantes.PI_CUARTOS;
-            }
-
-            //Se mueve recto hacia arriba
-            else
-            {
-                rotacion = constantes.CERO;
-            }
-        }
-        else if(_nivel->GetJugador()->getNewZ() < this->getNewZ() - datosDesplazamiento.distancia)
-        {
-            trueZ = true;
-            //Desplazamiento en diagonal
-            if(trueX)
-            {
-
-                //Se mueve hacia abajo a la derecha
-                if(rotacion > 0)
-                    rotacion += constantes.PI_CUARTOS;
-
-                //Se mueve hacia abajo a la izquierda
-                else
-                    rotacion -= constantes.PI_CUARTOS;
-            }
-
-            //Se mueve hacia abajo
-            else
-            {
-                rotacion = constantes.PI_RADIAN;
-            }
-        }
-
-        if(trueX || trueZ)
-        {
-            this->Enemigo::setNewRotacion(this->Enemigo::getRX(), rotacion, this->Enemigo::getRZ());
-        }
-        this->setVectorOrientacion();
-        datosDesplazamiento.velocidadX = vectorOrientacion.vX * velocidadMaxima;
-        datosDesplazamiento.velocidadZ = vectorOrientacion.vZ * velocidadMaxima;
-
-        this->setNewPosiciones(posFutura.x + datosDesplazamiento.velocidadX, posFutura.y, posFutura.z + datosDesplazamiento.velocidadZ);
-        this->setPosicionesFisicas(datosDesplazamiento.velocidadX, constantes.CERO, datosDesplazamiento.velocidadZ);
-        
         //Se comprueba si la distancia entre el enemigo y el jugador es menor o igual a la distancia maxima que que indica la variable "distancia"
-        if(abs(_nivel->GetJugador()->getZ() - this->getZ()) <= abs(datosDesplazamiento.distancia))
+        if(abs(objetivo.vZ - this->getZ()) <= abs(distancia))
         {
-            if(abs(_nivel->GetJugador()->getX() - this->getX()) <= abs(datosDesplazamiento.distancia))
+            if(abs(objetivo.vX - this->getX()) <= abs(distancia))
             {
                 funciona = true;
             }

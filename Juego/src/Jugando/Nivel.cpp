@@ -139,7 +139,7 @@ void Nivel::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, 
     MotorGrafico* _motor = MotorGrafico::getInstance();//cogemos instancia del motor para crear la figura 3d
     switch (enemigo)
     {
-        case 0:
+        case 0: 
             {
                 Pollo*  ene = new Pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
                 //ia
