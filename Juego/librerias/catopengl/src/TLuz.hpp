@@ -6,19 +6,30 @@
 class TLuz : public TEntidad
 {
     private:
-    
+
+        int numberoflight;
         float * intensidad;
+        unsigned int tipo_luz;
+        glm::vec3 ambient;
+        glm::vec3 diffuse;
+        glm::vec3 specular;
+        glm::vec3 direction;
 
     public:
 
         //constructor y destructor
-        TLuz();
+        TLuz(int);
         ~TLuz();
 
         //gestion atributos
         void setIntensidad(float *);
         float getIntensidad();
-        
+        void setAmbient(float,float,float);
+        void setDiffuse(float,float,float);
+        void setSpecular(float,float,float);
+        void setNumberoflight(int);
+        void setDirection(float,float,float);
+
         //sobrecarga Tentidad
         void beginDraw();
         void endDraw();

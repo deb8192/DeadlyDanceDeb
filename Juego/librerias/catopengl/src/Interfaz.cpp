@@ -71,7 +71,7 @@ unsigned short Interfaz::AddCamara()
     return 0;
 }
 
-unsigned short Interfaz::AddLuz()
+unsigned short Interfaz::AddLuz(int tipo)
 {
     if(ventana_inicializada)
     {
@@ -97,8 +97,9 @@ unsigned short Interfaz::AddLuz()
     escaladoEnt->Ejecutar();
 
     TNodo * luz = new TNodo;
-    TLuz * luzEn = new TLuz;
+    TLuz * luzEn = new TLuz(tipo);
     luzEn->SetShader(shaders[0]);
+    luzEn->setNumberoflight(luces.size());
     luz->setEntidad(luzEn);
 
     escalado->addHijo(rotacion);
@@ -181,9 +182,6 @@ unsigned short Interfaz::AddMalla(const char * archivo)
 
 void Interfaz::Draw()
 {
-
-
-
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -194,49 +192,6 @@ void Interfaz::Draw()
 
     shaders[0]->Use();
     shaders[0]->setFloat("material.shininess", 32.0f);
-    //Luz direccional (Luz que llega a todos sitios y mira siempre en la misma direccion, como la luz del sol)
-    shaders[0]->setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f); //Enviar la direccion donde mira la luz direccional
-    shaders[0]->setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
-    shaders[0]->setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
-    shaders[0]->setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
-
-    float radius = 3.0f;                                   //Distancia desde el centro del circulo
-    float luzX = sin(glfwGetTime()) * radius;              //Calculo de X
-    float luzZ = cos(glfwGetTime()) * radius;              //Calculo de Z
-
-    //Punto de luz 1
-    shaders[0]->setVec3("pointLights[0].position", glm::vec3(luzX, 0.0f, luzZ));
-    shaders[0]->setVec3("pointLights[0].ambient", 0.05f, 0.05f, 0.05f);
-    shaders[0]->setVec3("pointLights[0].diffuse", 0.8f, 0.8f, 0.8f);
-    shaders[0]->setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-    //Propiedades de atenuacion de la luz (segun la distancia mirar en: http://wiki.ogre3d.org/tiki-index.php?page=-Point+Light+Attenuation)
-    shaders[0]->setFloat("pointLights[0].constant", 1.0f);
-    shaders[0]->setFloat("pointLights[0].linear", 0.022f);
-    shaders[0]->setFloat("pointLights[0].quadratic", 0.0019f);
-    // //Punto de luz 2
-    // shaders[0]->setVec3("pointLights[1].position", glm::vec3(-3.0f, 0.0f, 0.0f));
-    // shaders[0]->setVec3("pointLights[1].ambient", 0.05f, 0.05f, 0.05f);
-    // shaders[0]->setVec3("pointLights[1].diffuse", 0.8f, 0.8f, 0.8f);
-    // shaders[0]->setVec3("pointLights[1].specular", 1.0f, 1.0f, 1.0f);
-    // shaders[0]->setFloat("pointLights[1].constant", 1.0f);
-    // shaders[0]->setFloat("pointLights[1].linear", 0.09);
-    // shaders[0]->setFloat("pointLights[1].quadratic", 0.032);
-    // //Punto de luz 3
-    // shaders[0]->setVec3("pointLights[2].position", glm::vec3(0.0f, 0.0f, 3.0f));
-    // shaders[0]->setVec3("pointLights[2].ambient", 0.05f, 0.05f, 0.05f);
-    // shaders[0]->setVec3("pointLights[2].diffuse", 0.8f, 0.8f, 0.8f);
-    // shaders[0]->setVec3("pointLights[2].specular", 1.0f, 1.0f, 1.0f);
-    // shaders[0]->setFloat("pointLights[2].constant", 1.0f);
-    // shaders[0]->setFloat("pointLights[2].linear", 0.09);
-    // shaders[0]->setFloat("pointLights[2].quadratic", 0.032);
-    // //Punto de luz 4
-    // shaders[0]->setVec3("pointLights[3].position", glm::vec3(0.0f, 0.0f, -3.0f));
-    // shaders[0]->setVec3("pointLights[3].ambient", 0.05f, 0.05f, 0.05f);
-    // shaders[0]->setVec3("pointLights[3].diffuse", 0.8f, 0.8f, 0.8f);
-    // shaders[0]->setVec3("pointLights[3].specular", 1.0f, 1.0f, 1.0f);
-    // shaders[0]->setFloat("pointLights[3].constant", 1.0f);
-    // shaders[0]->setFloat("pointLights[3].linear", 0.09);
-    // shaders[0]->setFloat("pointLights[3].quadratic", 0.032);
 
     if(_raiz != nullptr)
     {

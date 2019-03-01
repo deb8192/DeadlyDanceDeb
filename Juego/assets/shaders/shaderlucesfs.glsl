@@ -8,9 +8,6 @@ struct Material {       //Estructura material
     float shininess;    //Brillo (dispersion de punto de luz especular)
 };
 
-uniform sampler2D texture_diffuse1;
-uniform sampler2D texture_specular1;
-
 //Luz direccional
 struct DirLight {
     vec3 direction;     //Direccion de la luz
@@ -51,7 +48,7 @@ struct SpotLight {
     vec3 specular;      //Influencia de la luz especular en los objetos
 };
 
-#define NR_POINT_LIGHTS 4    //X puntos de luz
+#define NR_POINT_LIGHTS 20    //X puntos de luz maximo
 
 in vec3 Normal;            //Recibimos las normales del vertex
 in vec3 FragPos;           //Recibimos la posicion del fragment actual
@@ -106,13 +103,12 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     float diff = max(dot(normal, lightDir), 0.0);               //Impacto difuso real (usamos max para que el color nunca sea negativo si sube de 90 grados)
 
     //Luz Especular
-    vec3 reflectDir = reflect(lightDir, normal);               //Reflejo (la direccion de la luz es negativa porque va desde la luz hasta la vista no hacia el fragment como en la difusa)
+    vec3 reflectDir = reflect(-lightDir, normal);               //Reflejo (la direccion de la luz es negativa porque va desde la luz hasta la vista no hacia el fragment como en la difusa)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);    //Calculo del componente especular (max para asegurar que no sea negativo), material.shininess es el valor del brillo cambialo para mas o menos brillo (32,64,128,etc...)
 
-    //Combinar resultados
-    vec3 ambient  = light.ambient  * vec3(texture(texture_diffuse1, TexCoords));  //Luz Ambiental
-    vec3 diffuse  = light.diffuse  * diff * vec3(texture(texture_diffuse1, TexCoords));
-    vec3 specular = light.specular * spec * vec3(texture(texture_specular1, TexCoords));
+    vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, TexCoords));  //Luz Ambiental
+    vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.diffuse, TexCoords));
+    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
     return (ambient + diffuse + specular);
 }
 
@@ -125,7 +121,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float diff = max(dot(normal, lightDir), 0.0);               //Impacto difuso real (usamos max para que el color nunca sea negativo si sube de 90 grados)
 
     //Luz Especular
-    vec3 reflectDir = reflect(lightDir, normal);               //Reflejo (la direccion de la luz es negativa porque va desde la luz hasta la vista no hacia el fragment como en la difusa)
+    vec3 reflectDir = reflect(-lightDir, normal);               //Reflejo (la direccion de la luz es negativa porque va desde la luz hasta la vista no hacia el fragment como en la difusa)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);     //Calculo del componente especular (max para asegurar que no sea negativo), material.shininess es el valor del brillo cambialo para mas o menos brillo (32,64,128,etc...)
 
     //Calculos de distancia y atenuacion de la luz
@@ -134,9 +130,9 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
   			            light.quadratic * (distance * distance));
 
     //Combinar resultados
-    vec3 ambient  = light.ambient  * vec3(texture(texture_diffuse1, TexCoords));  //Luz Ambiental
-    vec3 diffuse  = light.diffuse  * diff * vec3(texture(texture_diffuse1, TexCoords));
-    vec3 specular = light.specular * spec * vec3(texture(texture_specular1, TexCoords));
+    vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, TexCoords));  //Luz Ambiental
+    vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.diffuse, TexCoords));
+    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
     //Aplicamos atenuacion a las luces
     ambient  *= attenuation;
     diffuse  *= attenuation;
@@ -153,7 +149,7 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float diff = max(dot(normal, lightDir), 0.0);
 
     //Luz Especular
-    vec3 reflectDir = reflect(lightDir, normal);
+    vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
 
     //Calculos de distancia y atenuacion de la luz
@@ -167,9 +163,9 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
 
     //Combinar resultados
-    vec3 ambient = light.ambient * vec3(texture(texture_diffuse1, TexCoords));
-    vec3 diffuse = light.diffuse * diff * vec3(texture(texture_diffuse1, TexCoords));
-    vec3 specular = light.specular * spec * vec3(texture(texture_specular1, TexCoords));
+    vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
+    vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
+    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
     //Aplicamos atenuacion e intensidad a las luces
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
