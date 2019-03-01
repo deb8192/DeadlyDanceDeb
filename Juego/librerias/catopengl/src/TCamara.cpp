@@ -83,6 +83,8 @@ void TCamara::beginDraw()
 
         shader->Use();//preparamos el shader
 
+        //posicion de la camara al shader
+        shader->setVec3("viewPos", posicion);
         //enviamos projection
         shader->setMat4("projection",projection);
         //enviamos view
