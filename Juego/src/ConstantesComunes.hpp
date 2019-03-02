@@ -50,6 +50,7 @@ using Constantes = struct
     const char* MERODEA = "merodea";
     const char* OIR = "oye";
     const char* BUSCAR = "busca";
+    const char* CURARSE = "curarse";
 
     //Comparadores de la lectura de los objetivos de las tareas
     const char* JUGADOR = "jugador";

@@ -476,6 +476,11 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 {
                     arrayTareaObjetivo[0] = 6;
                 }
+                //La accion es recuperar vida
+                else if(strcmp(accion, constantes.CURARSE) == 0)
+                {
+                    arrayTareaObjetivo[0] = 7;
+                }
                 else
                 {
                     arrayTareaObjetivo[0] = -1;

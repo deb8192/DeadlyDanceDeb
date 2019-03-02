@@ -164,6 +164,15 @@ void Murcielago::UpdateMurcielago(short *i)
                     }
                 }
                 break;
+            case EN_RECUPERA:  //El murcielago recupera vida en una zona oscura
+                if(enZonaOscura)
+                {
+                    uint8 vida = rand() % 5 + 1;
+                    this->RecuperarVida(vida);
+                    funciona = true;
+                }
+                else funciona = false;
+                break;
             
             default:
                 cout<<"No hace nada"<<endl;

@@ -26,14 +26,10 @@
             <Leaf id="13" type="tarea" action="acude" target="pos-ayuda"></Leaf>
         </Composition>
     	<Composition id="14" type="selector">
-	    <Composition id="15" type="secuencia">
-		<Leaf id="16" type="tarea" action="esta" target="zona-oscura"></Leaf>
-		<Leaf id="17" type="tarea" action="recupera" target="vida"></Leaf>
-	    </Composition>
-	    <Decorator id="18" type="iterador" end="true">
-	    	<Leaf id="19" type="tarea" action="busca" target="zona-oscura"></Leaf>
+	    <Leaf id="15" type="tarea" action="curarse" target=""></Leaf>
+	    <Decorator id="16" type="iterador" end="true">
+	    	<Leaf id="17" type="tarea" action="busca" target="zona-oscura"></Leaf>
             </Decorator>
 	</Composition>
-        <Leaf id="20" type="tarea" action="merodea" target=""></Leaf>
     </Root>
 </BehaviorTree>
