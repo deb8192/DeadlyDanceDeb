@@ -150,7 +150,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_PIDE_AYUDA,
             EN_MERODEA,
             EN_OIR,
-            EN_BUSCA
+            EN_BUSCA,
+            EN_RECUPERA
         };
 
         enum modosEnemigo 
