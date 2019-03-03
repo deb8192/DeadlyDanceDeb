@@ -13,6 +13,7 @@
 #include "../Objetos/Recolectable.hpp"
 #include "Zona.hpp"
 #include "../Armas/Arma.hpp"
+#include "../Jugando/InterfazJugador.hpp"
 
 //cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA()
 #include "../CargadorBehaviorTrees.hpp"
@@ -49,17 +50,17 @@ class Jugando: public Estado {
         //Funciones propias
         void ValoresPorDefecto();
         void ValoresPorDefectoJugador();
+        void PosicionesIniEnemigos();
         void DesactivarDebug();
         void InteractuarNivel();
 
         bool CargarNivel(int nivel, int tipoJug); //Niveles en assets/maps/xml/
         void CrearJugador();//lo utilizamos para crear su objeto
-        void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        
         void CrearLuz(int x,int y,int z);
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int* propiedades); //lo usamos para crear zonas
+        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo); //lo usamos para crear zonas
         void cargarCofres(int num);
 
         //Funciones de interacciones
@@ -88,6 +89,7 @@ class Jugando: public Estado {
         SenseEventos* _sense;
         MotorFisicas* _fisicas;
         Times* _controladorTiempo;
+        InterfazJugador* _interfaz;
 
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         CargadorBehaviorTrees cargadorIA; //Variable para crear la IA de los enemigos

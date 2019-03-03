@@ -582,12 +582,14 @@ void MotorGrafico::CargarEnemigos(int accion, int x,int y,int z, int ancho, int 
     }
 }
 
-/******----------------Crear Jugador------------------******
+/******----------------Cargar Jugador------------------******
  * Metodo que sirve para generar la malla 3D de un jugador
  * al iniciar estado Juego.
  * Entradas:
  *      ruta_objeto: string con la direccion del modelo 3D
  *      ruta_textura: string con la ruta de la textura
+ * Salida:
+ * 
  */
 void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura)
 {
@@ -1014,11 +1016,8 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
     }
 }
 
-void MotorGrafico::cargarInterfaz()
+void MotorGrafico::CargarInterfaz()
 {
-    //activamos la interfaz
-    InterfazJugador * interfaz = InterfazJugador::getInstance();
-    interfaz->activar();//activamos la interfaz por defecto
     //creamos texturas
     vida_textura = _driver->getTexture("assets/images/51.png");
     energia_textura = _driver->getTexture("assets/images/21.png");
@@ -1056,10 +1055,9 @@ void MotorGrafico::cargarInterfaz()
     moneyI->setOverrideColor(COLOR);
     if(font2)
         moneyI->setOverrideFont(font2);
-
 }
 
-void MotorGrafico::destruirInterfaz()
+void MotorGrafico::DestruirInterfaz()
 {
     if(vidaI)
     {
@@ -1112,128 +1110,131 @@ void MotorGrafico::destruirInterfaz()
     _driver->removeTexture(llave_textura);
     _driver->removeTexture(espada_textura);
     _driver->removeTexture(daga_textura);
-
 }
 
-void MotorGrafico::updateInterfaz()
+void MotorGrafico::SetVida(int vida)
 {
-    //vamos a conseguir los datos de la interfaz
-    InterfazJugador * interfaz = InterfazJugador::getInstance();
-
-    if(interfaz->getEstado())
+    if(BarraVidaI)
     {
-        if(vidaI)
-        vidaI->setVisible(true);
-        if(energiaI)
-        energiaI->setVisible(true);
-        if(dineroI)
-        dineroI->setVisible(true);
-        if(armaI)
-        armaI->setVisible(true);
-        if(BarraEnergiaI)
-        BarraEnergiaI->setVisible(true);
-        if(BarraVidaI)
-        BarraVidaI->setVisible(true);
-        if(moneyI)
-        moneyI->setVisible(true);
-
-        int * datos = interfaz->getUpdate();
-        //vamos a calcular vida
-        if(BarraVidaI)
+        float unidad = ((float)121/100);
+        float resultado = unidad*(float)vida;
+        if(resultado <= 0)
         {
-            float unidad = ((float)121/100);
-            float resultado = unidad*(float)datos[1];
-            if(resultado <= 0)
-            {
-                BarraVidaI->setMaxSize(dimension2du(1,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
-            }
-            else
-            {
-                BarraVidaI->setMaxSize(dimension2du(resultado,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
-            }
+            BarraVidaI->setMaxSize(dimension2du(1,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
         }
-
-        if(moneyI)
+        else
         {
-            stringw str = L"";
-            str += datos[3];
-            moneyI->setText(str.c_str());
+            BarraVidaI->setMaxSize(dimension2du(resultado,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
         }
+    }
+}
 
-        if(BarraEnergiaI)
-        {
-            float unidad = ((float)63/100);
-            float resultado = unidad*(float)datos[2];
-            //cout << datos[2] << " " << unidad << " " << resultado << endl ;
-            if(resultado <= 0)
-            {
-                BarraEnergiaI->setMaxSize(dimension2du(1,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
-            }
-            else
-            {
-                BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
-            }
-        }
+void MotorGrafico::SetBarraEnergia(int barra)
+{
+    if(BarraEnergiaI)
+	{
+		float unidad = ((float)63/100);
+		float resultado = unidad*(float)barra;
+		//cout << barra << " " << unidad << " " << resultado << endl ;
+		if(resultado <= 0)
+		{
+			BarraEnergiaI->setMaxSize(dimension2du(1,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
+		}
+		else
+		{
+			BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
+		}
+	}
+}
 
-        switch(datos[4])
-        {
-            case 0:
-            //son las manos
-            manosI->setVisible(true);
-            dagaI->setVisible(false);
-            espadaI->setVisible(false);
-            llaveI->setVisible(false);
-            break;
-            case 1:
-            //es una llave
+void MotorGrafico::SetDinero(int dinero)
+{
+    if(moneyI)
+    {
+        stringw str = L"";
+        str += dinero;
+        moneyI->setText(str.c_str());
+    }
+}
+
+void MotorGrafico::SetArma(int arma)
+{
+    switch(arma)
+    {
+        case 1: //es una llave
             manosI->setVisible(false);
             dagaI->setVisible(false);
             espadaI->setVisible(false);
             llaveI->setVisible(true);
             break;
-            case 2:
-            //objeto ataque directo
+
+        case 2: //objeto ataque directo
             manosI->setVisible(false);
             dagaI->setVisible(false);
             espadaI->setVisible(true);
             llaveI->setVisible(false);
             break;
-            case 3:
-            //objeto ataque a distancia
+        
+        case 3: //objeto ataque a distancia
             manosI->setVisible(false);
             dagaI->setVisible(true);
             espadaI->setVisible(false);
             llaveI->setVisible(false);
             break;
-        }
-        delete [] datos;
+        
+        default: //son las manos
+            manosI->setVisible(true);
+            dagaI->setVisible(false);
+            espadaI->setVisible(false);
+            llaveI->setVisible(false);
+            break;
+    }
+}
+
+void MotorGrafico::RenderInterfaz(bool activada)
+{
+    if (activada)
+    {
+        if(vidaI)
+            vidaI->setVisible(true);
+        if(energiaI)
+            energiaI->setVisible(true);
+        if(dineroI)
+            dineroI->setVisible(true);
+        if(armaI)
+            armaI->setVisible(true);
+        if(BarraEnergiaI)
+            BarraEnergiaI->setVisible(true);
+        if(BarraVidaI)
+            BarraVidaI->setVisible(true);
+        if(moneyI)
+            moneyI->setVisible(true);
     }
     else
     {
         if(vidaI)
-        vidaI->setVisible(false);
+            vidaI->setVisible(false);
         if(energiaI)
-        energiaI->setVisible(false);
+            energiaI->setVisible(false);
         if(dineroI)
-        dineroI->setVisible(false);
+            dineroI->setVisible(false);
         if(armaI)
-        armaI->setVisible(false);
+            armaI->setVisible(false);
         if(BarraEnergiaI)
-        BarraEnergiaI->setVisible(false);
+            BarraEnergiaI->setVisible(false);
         if(BarraVidaI)
-        BarraVidaI->setVisible(false);
+            BarraVidaI->setVisible(false);
         if(manosI)
-        manosI->setVisible(false);
+            manosI->setVisible(false);
         if(dagaI)
-        dagaI->setVisible(false);
+            dagaI->setVisible(false);
         if(espadaI)
-        espadaI->setVisible(false);
+            espadaI->setVisible(false);
         if(llaveI)
-        llaveI->setVisible(false);
+            llaveI->setVisible(false);
         if(moneyI)
-        moneyI->setVisible(false);
+            moneyI->setVisible(false);
     }
-
 }
 
 void MotorGrafico::cambiarAnimacionJugador(int estado)
@@ -1302,6 +1303,345 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
             }
         }
     }
+}
+
+bool MotorGrafico::getPathfindingActivado()
+{
+    return pathfinding;
+}
+
+// Funciones para puzzles
+void MotorGrafico::PosicionCamaraEnPuzzles()
+{
+    _camera->setPosition(vector3df(14, 2, 0)); // No cambiar la Y, si nos la seleccion tendra errores
+}
+
+void MotorGrafico::updateMotorPuzzles(short tipo)
+{
+    _driver->beginScene(true, true, SColor(255,255,255,255));//fondo blanco
+    _smgr->drawAll();
+    _guienv->drawAll();
+
+    /* Probando a dibujar objetos 2D
+    //Rectangulo
+    _driver->draw2DRectangle(SColor(255, 255, 128, 64), rect<s32>(40, 40, 200, 200));
+
+    //Poligono
+    _driver->draw2DPolygon(position2d<s32>(100, 300), 50.f, SColor(128, 40, 80, 16), 6);*/
+
+    switch(tipo)
+    {
+        case P_OPCIONES:
+            break;
+        case P_HANOI:
+            // Lineas para dividir la pantalla
+            _driver->draw2DLine(position2d<s32>(x_linea1 , 200),
+                position2d<s32>(x_linea1, 400 ) , SColor(255, 0, 0, 0));
+            _driver->draw2DLine(position2d<s32>(x_linea2 , 200),
+                position2d<s32>(x_linea2, 400 ) , SColor(255, 0, 0, 0));
+            break;
+    }
+
+    _driver->endScene();
+}
+
+void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
+{
+    short height_aux = (HEIGHT/2)+100;
+    short yIMG = height_aux-125;
+    short xIMG = 20;
+    short anchoBtn = 40;
+    short altoBtn = 30;
+
+    // Atras
+    _guienv->addButton(rect<s32>(700,HEIGHT-60,750,HEIGHT-30), 0,
+        GUI_ID_ATRAS_BUTTON,L"Atrás", L"Vuelve al menú");
+
+    // Enunciado
+    std::wstring widestr = std::wstring(enun.begin(), enun.end());
+    const wchar_t* widecstr = widestr.c_str();
+    _guienv->addStaticText(widecstr, rect<s32>(60,20,700,50), false);
+
+    switch(tipo)
+    {
+        case P_OPCIONES: // Opciones
+            _guienv->addStaticText(L"Puzzle Opciones", rect<s32>(0,0,200,20), false);
+            _guienv->addStaticText(L"Ejemplo", rect<s32>(WIDTH-200,20,
+                WIDTH-160,40), false);
+
+            _img = _guienv->addImage(_driver->getTexture("assets/puzzles/particle.bmp"),
+                core::position2d<s32>(WIDTH-200, 40));
+
+            switch(opciones) {
+                case 2:
+                    WIDTH_AUX = WIDTH/4;
+                    // x, y, x2, y2
+                    _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
+                        WIDTH_AUX+anchoBtn,height_aux+altoBtn),
+                        0, GUI_ID_OP1,L"A", L"A");
+                    _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
+                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
+                        0, GUI_ID_OP2,L"B", L"B");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                    break;
+
+                case 3:
+                    WIDTH_AUX = (WIDTH-2)/6;
+                    // x, y, x2, y2
+                    _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
+                        WIDTH_AUX+anchoBtn,height_aux+altoBtn),
+                        0, GUI_ID_OP1,L"A", L"A");
+                    _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
+                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
+                        0, GUI_ID_OP2,L"B", L"B");
+                    _guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
+                        WIDTH_AUX*5+anchoBtn,height_aux+altoBtn),
+                        0, GUI_ID_OP3,L"C", L"C");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
+                    break;
+
+                case 4:
+                    WIDTH_AUX = WIDTH/8;
+                    // x, y, x2, y2
+                    _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
+                        WIDTH_AUX+anchoBtn,height_aux+altoBtn),
+                        0, GUI_ID_OP1,L"A", L"A");
+                    _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
+                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
+                        0, GUI_ID_OP2,L"B", L"B");
+                    _guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
+                        WIDTH_AUX*5+anchoBtn,height_aux+altoBtn),
+                        0, GUI_ID_OP3,L"C", L"C");
+                    _guienv->addButton(rect<s32>(WIDTH_AUX*7,height_aux,
+                        WIDTH_AUX*7+anchoBtn,height_aux+altoBtn),
+                        0, GUI_ID_OP4,L"D", L"D");
+
+                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
+                    CargarIMG(WIDTH_AUX*7-xIMG, yIMG);
+                    break;
+            }
+            break;
+
+        case P_HANOI: // Torres de Hanoi
+            _guienv->addStaticText(L"Torres de Hanoi", rect<s32>(0,0,200,20), false);
+
+            // Reiniciar
+            _guienv->addButton(rect<s32>(700,HEIGHT-90,750,HEIGHT-60), 0,
+                GUI_ID_REINICIAR_HANOI,L"Reiniciar", L"Reinicia el juego");
+
+            _myTextBox = _guienv->addStaticText(L"Pasos: ", rect<s32>(60,(WIDTH/2)-10,100,(WIDTH/2)+30), false);
+
+            WIDTH_AUX = (WIDTH-2)/6;
+            _guienv->addStaticText(L"IZQ", rect<s32>(WIDTH_AUX,100,WIDTH_AUX+anchoBtn,130), false);
+            _guienv->addStaticText(L"CENTRO", rect<s32>(WIDTH_AUX*3,100,WIDTH_AUX*3+anchoBtn,130), false);
+            _guienv->addStaticText(L"DER", rect<s32>(WIDTH_AUX*5,100,WIDTH_AUX*5+anchoBtn,130), false);
+
+            // Para la ventana de 800, 600
+            // Width = 798, dejamos 1 punto a cada lado
+            WIDTH_AUX = (WIDTH-2)/3;    // Dividimos la pantalla en 3 zonas
+            x_linea1 = WIDTH_AUX;
+            x_linea2 = WIDTH_AUX*2;
+            break;
+    }
+}
+
+void MotorGrafico::TextoPasos(short pasos)
+{
+    stringw str = L"Pasos: ";
+    str += pasos;
+    _myTextBox->setText(str.c_str());
+    _myTextBox = nullptr;
+}
+
+// TO DO: Anyadir string img
+void MotorGrafico::CargarIMG(short x, short y)
+{
+    _puzParticleTexture = _driver->getTexture("assets/puzzles/particle.bmp");
+	_img = _guienv->addImage(_puzParticleTexture,core::position2d<s32>(x, y));
+}
+
+void MotorGrafico::CrearMeshFicha(float tamanyo, int r, int g, int b)
+{
+    //_fichaMesh = _geometryCreator->createCubeMesh(vector3df(tamanyo));
+    _fichaMesh = _geometryCreator->createCylinderMesh(
+        tamanyo,    //radius
+        1,          //length
+        50,         //tesselation
+        SColor(0, r, g, b));
+
+    // insensible a la iluminacion
+    _fichaMesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+}
+
+void MotorGrafico::CrearFichas(short posY, float tamanyo,
+    int r, int g, int b)
+{
+    CrearMeshFicha(tamanyo, r, g, b);
+    _ficha = _smgr->addMeshSceneNode(_fichaMesh);
+    _ficha->setPosition(vector3df(0, posY, IZQ));
+    _ficha->setID(tamanyo);
+
+    // La anyadimos a la lista
+    fichasMesh.push_back(move(_ficha));
+    _ficha = nullptr;
+}
+
+short MotorGrafico::GetZonaVentana()
+{
+    short posX = GetPosicionRaton().X;
+    if ((posX > 0) && (posX <= WIDTH)) {
+        if ((posX > 0) && (posX <= WIDTH_AUX)) {
+            return IZQ;
+        } else if ((posX > WIDTH_AUX) && (posX <= WIDTH_AUX*2)) {
+            return CENTRO;
+        } else {
+            return DER;
+        }
+    }
+    return NO_SELECT;// Fuera de ventana
+}
+
+bool MotorGrafico::SeleccionarNodo()
+{
+    // check for a node being selected
+    // Posicion, idBitMask (0=deshabilitada), bNoDebugObjects (true=No tiene en cuenta los objetos de depuracion)
+    _nodoSeleccionado = _collmgr->getSceneNodeFromScreenCoordinatesBB(
+        _device->getCursorControl()->getPosition(),0,true);
+
+    // Si hay un nodo seleccionado
+    if(_nodoSeleccionado)
+    {
+        // Remember where the node and cursor were when it was clicked on
+        initialCursorPosition = _device->getCursorControl()->getPosition();
+        // Calcula la posición de la pantalla 2d desde una posición 3d.
+        initialObjectPosition = _collmgr->getScreenCoordinatesFrom3DPosition(
+            _nodoSeleccionado->getAbsolutePosition(), _camera);
+
+        if (_nodoSeleccionado->getID() != -1) { // Comprobamos que no sea el fondo
+            return true;
+        }
+    } else {
+        _nodoSeleccionado = nullptr;
+    }
+    return false;
+}
+
+void MotorGrafico::DeseleccionarNodo()
+{
+    _nodoSeleccionado = 0;
+}
+
+short MotorGrafico::GetFichaY()
+{
+    return _nodoSeleccionado->getAbsolutePosition().Y;
+}
+
+void MotorGrafico::MoverFichas(short pila)
+{
+    if ((_nodoSeleccionado) && (pila != NO_SELECT))
+    {
+        plane3df const planeXZ(_nodoSeleccionado->getAbsolutePosition(), vector3df(1.f, 0.f, 0.f));
+
+        position2di currentCursorPosition(_device->getCursorControl()->getPosition());
+        position2di effectiveObjectPosition = initialObjectPosition + currentCursorPosition - initialCursorPosition;
+        line3df ray(_collmgr->getRayFromScreenCoordinates(effectiveObjectPosition, _camera));
+        vector3df intersectWithPlane;
+
+        if(planeXZ.getIntersectionWithLine(ray.start, ray.getVector(), intersectWithPlane))
+        {
+            _nodoSeleccionado->setPosition(intersectWithPlane);
+        }
+    }
+}
+
+void MotorGrafico::RecolocarFicha(short y, short z)
+{
+    short x = _nodoSeleccionado->getAbsolutePosition().X;
+    _nodoSeleccionado->setPosition(vector3df(x, y, z));
+}
+
+void MotorGrafico::ReiniciarHanoi()
+{
+	short tam = fichasMesh.size();
+    short posY=0;
+    for (int pos = 0; pos<tam; pos++)
+    {
+        fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
+        posY++;
+    }
+}
+
+void MotorGrafico::BorrarBoton(s32 id)
+{
+    _guienv->getRootGUIElement()->
+        getElementFromId(id)->remove();
+}
+
+void MotorGrafico::updateMotorCinematica()
+{
+    _driver->beginScene(true, true, SColor(0,0,0,0));
+
+    float mile = 1000.0f;
+    float ratio = 30.0f;
+    float tiempo_frame = mile/ratio;
+    int salto = ceil(tiempoUltimoFrame/tiempo_frame);
+    if(frame_actual == 0)
+    {
+        frame_actual = 1;
+    }
+    else
+    {
+        if(tiempoUltimoFrame > tiempo_frame)
+        {
+            //es mayor (va lento)
+            frame_actual = frame_actual+(1+salto);
+        }
+        else
+        {
+            //es menor (va mas rapido)
+            frame_actual = frame_actual+1;
+        }
+    }
+
+    if(frame_actual < 498)
+    {
+        //definimos los strings
+        std::string fram = "";
+        std::string extension = ".jpg";
+        float marcaTiempo = Times::GetInstance()->GetTiempo(1);
+        std::string ruta = "assets/cinematicas/frames/";
+        fram = std::to_string(frame_actual);
+        //creamos la ruta completa
+        std::string ruta_completa = ruta+fram+extension;
+        char buffer[100];
+        strcpy(buffer,ruta_completa.c_str());
+
+        if(actual != nullptr && actualTexture != nullptr)
+        {
+            actual->remove();//remuevo imagen actual
+            _driver->removeTexture(actualTexture);//borras textura
+            actualTexture = _driver->getTexture(buffer);//creas la textura
+            actual = _guienv->addImage(actualTexture,position2d<int>(0,0));//creo imagen actual
+        }
+        else
+        {
+            actualTexture = _driver->getTexture(buffer);//creo textura
+            actual = _guienv->addImage(_driver->getTexture(buffer),position2d<int>(0,0));//creo imagen con textura
+        }
+
+        tiempoUltimoFrame = Times::GetInstance()->CalcularTiempoPasado(marcaTiempo);
+        //cout << tiempoUltimoFrame << " " << salto << endl;
+    }
+    _smgr->drawAll();
+	_guienv->drawAll();
+	_driver->endScene();
 }
 
 bool MotorGrafico::getPathfindingActivado()

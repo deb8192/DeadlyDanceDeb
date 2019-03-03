@@ -45,6 +45,7 @@ Jugando::~Jugando()
     _fisicas = nullptr;
     _motora = nullptr;
     _motor = nullptr;
+    _interfaz = nullptr;
 
     // Liberar memoria
     short tam = _enemigos.size();
@@ -102,13 +103,16 @@ void Jugando::Iniciar()
     _fisicas = MotorFisicas::getInstance();
     _sense = SenseEventos::getInstance();
     _controladorTiempo = Times::GetInstance();
+    _interfaz = InterfazJugador::getInstance();
 
+    _motor->CargarInterfaz();
+    
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
     CargarNivel(5, 1); //(level, player) 1 = heavy / 2 = bailaora
 
     reiniciando = false;
+    
     ValoresPorDefecto();
-    ValoresPorDefectoJugador();
 
     _motor->CrearCamara();
     _motor->FondoEscena(255,0,0,0);
@@ -129,6 +133,9 @@ void Jugando::ValoresPorDefecto()
     danyo2 = 0;
     contadorEnem = 0;
     int_cpw_aux = 0;
+
+    // Activamos la interfaz
+    _interfaz->activar();
 }
 
 void Jugando::ValoresPorDefectoJugador()
@@ -138,7 +145,8 @@ void Jugando::ValoresPorDefectoJugador()
     float zIni = _jugador->getIniZ();
     
     jugadorInmovil = false;
-    _jugador->setVida(100);
+    _jugador->setDinero(0);
+    _jugador->setVida(_jugador->getVidaIni());
     _jugador->setBarraAtEs(100);
     _jugador->setAtaque(15);
     _jugador->setArma(NULL);
@@ -152,6 +160,22 @@ void Jugando::ValoresPorDefectoJugador()
     //TO DO: revisar que lo haga bien
     //_jugador->setRotacion(0,180,0);
     //_jugador->setNewRotacion(0,180,0);
+}
+
+// TO DO: Revisar si el cuerpo fisico tambn se tiene q cambiar
+void Jugando::PosicionesIniEnemigos()
+{
+    short tam = _enemigos.size();
+    for(short i=0; i < tam; i++)
+    {
+        Enemigo* _ene = _enemigos.at(i);
+        _ene->setPosiciones(_ene->getIniX(), 
+            _ene->getIniY(), _ene->getIniZ());
+        
+        _ene->setVida(_ene->getVidaIni());
+
+        _ene = nullptr;
+    }
 }
 
 // Desactiva el modo debug en MotorGrafico
@@ -435,12 +459,6 @@ void Jugando::Update()
         //_enemigos->MuereEnemigo(acumulator);
         //acumulator -= dt;
     //}
-
-   // TO DO:
-   //actualizamos la interfaz de jugador
-    _jugador->updateInterfaz();
-    //actualizamos la interfaz en motor grafico
-    _motor->updateInterfaz();
 }
 
 void Jugando::UpdateIA()
@@ -450,7 +468,7 @@ void Jugando::UpdateIA()
     if (_motor->EstaPulsado(KEY_J))
     {
         _motor->ResetKey(KEY_J);
-        _jugador->QuitarVida(20);
+        _jugador->ModificarVida(-20);
     }
     /* **************************************************** */
     
@@ -693,6 +711,8 @@ void Jugando::Render()
     }
     //_motor->clearDebug2(); //Pruebas debug
 
+    _motor->RenderInterfaz(_interfaz->getEstado());
+
     _motor->RenderEscena();  // Vuelve a pintar
 }
 
@@ -708,7 +728,6 @@ void Jugando::Reanudar()
         cout << "REINICIAR JUEGO" << endl;
 
         DesactivarDebug();
-        
         // valores por defecto del jugador
         ValoresPorDefectoJugador();
 
@@ -716,6 +735,7 @@ void Jugando::Reanudar()
 
         // Resto de valores del juego
         ValoresPorDefecto();
+        PosicionesIniEnemigos();
 
         reiniciando = false;
     } else {
@@ -733,9 +753,6 @@ void Jugando::Reiniciar()
 {
     reiniciando = true;
 }
-
-
-
 
 
 
@@ -772,7 +789,6 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
     _motora->getEvent("AmbienteGritos")->start(); //Reproducir ambiente
 
-    _motor->cargarInterfaz();
     //esta ya todo ejecutamos ia y interpolado
     return true;
 }
@@ -793,23 +809,26 @@ void Jugando::CrearJugador()
         _jugador->getZ(), _jugador->getRutaArmaEsp(),"");
 
     //cout << "jugador creado en: "<<x<<", "<<y<<", "<<z<<", "<<endl;
-    //TO DO: propiedades no se usa
 }
 
-void Jugando::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int*  propiedades, Sala*  sala)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Jugando::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto,
+    const char* ruta_objeto, const char* ruta_textura, Sala* sala)
 {
     //accion indicara futuramente que tipo de enemigo sera (herencia)
     switch (enemigo)
     {
         case 0:
         {
-            Pollo* _ene = new Pollo();//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
+            //TO DO: revisar creacion de tipos de enemigos
+            //75 = vida
+            Pollo* _ene = new Pollo(x,y,z, 75);//aqui va el tipo de enemigo que es hacer ifs y meter una variable nueva de tipo para saber que tipo es
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
-            _enemigos.push_back(_ene);//guardamos el enemigo en el vector
-            id++;//generamos id para la figura
-            _enemigos.back()->setID(id);//le damos el id unico en esta partida al enemigo
+            _ene->setID(++id);//le damos el id unico en esta partida al enemigo
+            _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
+            _ene = nullptr;
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
             std::string nameid = std::to_string(id); //pasar id a string
@@ -828,7 +847,6 @@ void Jugando::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho
     _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-    _enemigos.back()->setVida(75);
     _enemigos.back()->setVelocidadMaxima(1.0f);
     _enemigos.back()->setBarraAtEs(0);
     _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
@@ -849,7 +867,9 @@ void Jugando::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
 }
 
-Sala* Jugando::CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+//lo utilizamos para crear su modelo en motorgrafico y su objeto
+Sala* Jugando::CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro,
+    const char* ruta_objeto, const char* ruta_textura)
 {
     Sala* _sala = new Sala(ancho,largo,alto,x,y,z,centro);
     //int*  datos = sala->getSizes(); //para comprobar la informacion de la sala
@@ -871,7 +891,9 @@ void Jugando::CrearLuz(int x,int y,int z)
     _motor->CargarLuces(x,y,z);
 }
 
-void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int*  propiedades)//lo utilizamos para crear su modelo en motorgrafico y su objeto
+//lo utilizamos para crear su modelo en motorgrafico y su objeto
+void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
+    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades)
 {
     int posicionObjeto;
 
@@ -879,7 +901,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     if(accion == 2)
     {
         posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
+        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z);
         _rec->setID(_recolectables.size());
         _rec->setPosiciones(x,y,z);
         _rec->SetPosicionArrayObjetos(posicionObjeto);
@@ -890,7 +912,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     if(accion == 3)
     {
         posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Interactuable* _inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto);
+        Interactuable* _inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto,x,y,z);
         _inter->setID(id++);
         _inter->setPosiciones(x,y,z);
         _inter->SetPosicionArrayObjetos(posicionObjeto);
@@ -903,7 +925,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     if(accion == 4)
     {
         posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura);
+        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z);
         _rec->setID(_powerup.size());
         _rec->setPosiciones(x,y,z);
         _rec->SetPosicionArrayObjetos(posicionObjeto);
@@ -933,7 +955,8 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
 }
 
-void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, int*  propiedades)//lo utilizamos para crear zonas
+//lo utilizamos para crear zonas
+void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo)
 {
    //Crear zona
    Zona* zon = new Zona(ancho,largo,alto,tipo);
@@ -993,7 +1016,7 @@ void Jugando::cargarCofres(int num)
 
         //Colocar cofre
         int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
-        Interactuable* inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto);
+        Interactuable* inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto,newx,newy,newz);
         inter->setID(id++);
         inter->setPosiciones(newx,newy,newz);
         inter->SetPosicionArrayObjetos(posicionObjeto);
@@ -1046,7 +1069,7 @@ void Jugando::cargarCofres(int num)
         else if(_jugador->getArma() != nullptr)//si tiene arma equipada
         {
             //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-            Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),_jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),_jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),_jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura());
+            Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),_jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),_jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),_jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura(),_jugador->getX(),_jugador->getY(), _jugador->getZ());
             nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),_recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),_recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),_recolectables[rec_col]->getObjeto(),_recolectables[rec_col]->getTextura());
             _motor->EraseArma();
@@ -1090,7 +1113,7 @@ void Jugando::DejarObjeto()
     if(_jugador->getArma() != nullptr)//si tiene arma equipada
     {
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-        Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),_jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),_jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),_jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura());
+        Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),_jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),_jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),_jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura(),_jugador->getX(),_jugador->getY(), _jugador->getZ());
         nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
         _motor->EraseArma();
         _fisicas->EraseArma();
@@ -1120,7 +1143,6 @@ void Jugando::AccionarMecanismo(int int_col)
     //Si es una puerta sin llave o palanca asociada
     if(_interactuables.at(int_col)->getCodigo() == 0)
     {
-        
         //Se acciona o desacciona el mecanismo segun su estado actual
         bool abrir = _interactuables.at(int_col)->accionar();
         unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(int_col);
@@ -1326,19 +1348,19 @@ void Jugando::activarPowerUp()
         if(_powerup.at(int_cpw)->getAtaque() == 0 && _jugador->getVida() < 100)
         {
             cout << "PowerUP! Curado 20 de vida. TOTAL:" << _jugador->getVida() << endl;
-            _jugador->RecuperarVida(20);
+            _jugador->ModificarVida(20);
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->getAtaque() == 1 && _jugador->getBarraAtEs() < 100)
         {
             cout << "PowerUP! 50 de energia. TOTAL:" << _jugador->getBarraAtEs() << endl;
-            _jugador->AumentarBarraAtEs(50);
+            _jugador->ModificarBarraAtEs(50);
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->getAtaque() == 2)
         {
             cout << "Recoges " << _powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
-            _jugador->AumentarDinero(_powerup.at(int_cpw)->getCantidad());
+            _jugador->ModificarDinero(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
 

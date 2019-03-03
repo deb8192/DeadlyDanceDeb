@@ -88,15 +88,15 @@ bool RMalla::CargarRecurso(const char * _ruta)
     // procesar recursivamente los nodos
     processNode(scene->mRootNode, scene);
 
-    // for(unsigned int i=0; i < meshes.size(); i++)
-    // {
-    //     cout << " |- Malla " << i << ": " << meshes.at(i) << endl;
-    // }
-    //
-    // for(unsigned int i=0; i < textures_loaded.size(); i++)
-    // {
-    //     cout << " |- Textura " << i << ": " << textures_loaded.at(i) << endl;
-    // }
+    for(unsigned int i=0; i < meshes.size(); i++)
+    {
+        cout << " |- Malla " << i << ": " << meshes.at(i) << endl;
+    }
+
+    for(unsigned int i=0; i < textures_loaded.size(); i++)
+    {
+        cout << " |- Textura " << i << ": " << textures_loaded.at(i) << endl;
+    }
 
     mallas = meshes.size();
 
