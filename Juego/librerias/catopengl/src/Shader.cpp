@@ -56,13 +56,6 @@ Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
     glDeleteShader(fragment);
 }
 
-/*Shader::Shader(char const * vertex, char const * fragment)
-{
-    GLchar * vs = vertex;
-    GLchar * fs = fragment;
-    this->Shader(vs,fs);
-}*/
-
 Shader::~Shader(){
 
 }
