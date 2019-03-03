@@ -3,7 +3,6 @@
 //USO: inicializa las variables
 Ventana::Ventana()
 {
-    std::cout << "inicializar ventana" << std::endl;
     _window = nullptr;
 }
 
@@ -22,8 +21,6 @@ void Ventana::Remove()
 //USO: se utiliza para crear una ventana
 bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
 {
-    std::cout << "valores: " << h << " " << w << "" << titulo << std::endl;
-
     // Inicializar GLFW
     // glfwWindowHint para configurar GLFW, mirar en la documentacion los distintos hint
     glfwInit();
@@ -57,6 +54,9 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     //Se llama a la funcion "framebuffer_size_callback" cada vez que el usuario cambia el tamanyo de ventana
     glfwSetFramebufferSizeCallback(_window,this->redimensionar);
 
+    //*********** APLICAR PROFUNDIDAD Z-BUFFER ***********
+    glEnable(GL_DEPTH_TEST);   //Necesario para el zoom/fov
+
     return true;
 }
 
@@ -76,17 +76,17 @@ void Ventana::draw()
 {
     //Comprobar y llamar eventos, cambiar buffers
     glfwSwapBuffers(_window);             //Intercambia los buffer de la ventana
-    glfwPollEvents();  
+    glfwPollEvents();
 }
 
 //USO: sirve para unificar el update general de la ventana(se llaman a las diferentes funciones necesarias para actualizar la ventana)
-void Ventana::UpdateFase1()
+void Ventana::UpdateLimpiar()
 {
     limpiar();
 }
 
 //USO: llamamos a pintar buffers
-void Ventana::UpdateFase2()
+void Ventana::UpdateDraw()
 {
     draw();
 }
@@ -123,5 +123,5 @@ void Ventana::limpiar()
 
     //Comandos de render
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Designamos a el glClearColor un color
-    glClear(GL_COLOR_BUFFER_BIT);         //Borrarmos en el buffer con el glClearColor designado
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);         //Borrarmos en el buffer con el glClearColor designado
 }

@@ -1,15 +1,12 @@
 #include "Arma.hpp"
+#include "../ConstantesComunes.hpp"
 #include <math.h>
-
-
-#define DEGTORAD 0.0174532925199432957f
-#define RADTODEG 57.295779513082320876f
-#define PIRADIAN 180.0f
 
 Arma::Arma()
 {
 
 }
+
 Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt, const char* objeto, const char* textura)
 {
     std::string name_objeto(objeto);
@@ -32,6 +29,77 @@ Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt, const cha
     ruta_objeto = cadena_objeto; 
     ruta_textura = cadena_textura;
     //motor->CargarArmaEspecial(0,0,0,ruta,"");
+}
+
+Arma::~Arma()
+{
+
+    // Arma
+    potenciaAtaque = 0;
+    if(_nombreArma != nullptr)
+    {
+        delete _nombreArma;
+        _nombreArma = nullptr;
+    }
+
+    // INobjetos
+    delete nombreObjeto;
+    if(ruta_objeto != nullptr)
+    {
+        delete ruta_objeto;
+        ruta_objeto = nullptr;
+    }
+    if(ruta_textura != nullptr)
+    {
+        delete ruta_textura;
+        ruta_textura = nullptr;
+    }
+    delete cadena_objeto;
+    delete cadena_textura;
+    delete cadena_nombre;
+    ancho = 0;
+    largo = 0;
+    alto = 0;
+
+    // INdrawable
+    posIni.x = 0;
+    posIni.y = 0;
+    posIni.z = 0;
+    
+    posActual.x = 0;
+    posActual.y = 0;
+    posActual.z = 0;
+
+    posPasada.x = 0;
+    posPasada.y = 0;
+    posPasada.z = 0;
+
+    posFutura.x = 0;
+    posFutura.y = 0;
+    posFutura.z = 0;
+
+    posFisicas.x = 0;
+    posFisicas.y = 0;
+    posFisicas.z = 0;
+
+    rotActual.x = 0;
+    rotActual.y = 0;
+    rotActual.z = 0;
+
+    rotPasada.x = 0;
+    rotPasada.y = 0;
+    rotPasada.z = 0;
+
+    rotFutura.x = 0;
+    rotFutura.y = 0;
+    rotFutura.z = 0;
+    
+    moveTime = 0;
+    rotateTime = 0;
+    rotation = 0;
+    id = 0;
+    animacion = 0;
+    animacionAnterior = 0;
 }
 
 /*************** moverseEntidad *****************
@@ -61,6 +129,7 @@ void Arma::moverseEntidad(float updTime)
  */
 void Arma::RotarEntidad(float updTime)
 {
+    Constantes constantes;
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
     float pt = moveTime / updTime;
@@ -72,12 +141,12 @@ void Arma::RotarEntidad(float updTime)
 
     if(rotFutura.y == 0.0 && rotFutura.y < rotPasada.y)
     {
-        rotPasada.y = 2 * PIRADIAN - rotPasada.y;
+        rotPasada.y = 2 * constantes.PI_RADIAN - rotPasada.y;
     }
 
     else if(rotFutura.y == 0.0 && rotPasada.y < 0.0)
     {
-        rotPasada.y = rotPasada.y + 2 * PIRADIAN;
+        rotPasada.y = rotPasada.y + 2 * constantes.PI_RADIAN;
     }
 
     rotActual.x = rotPasada.x * (1 - pt) + rotFutura.x * pt;
@@ -152,9 +221,10 @@ void Arma::setPosicionesFisicas(float nx,float ny,float nz)
 
 void Arma::setPosicionesArmaEsp(float nx,float ny,float nz, float nry)
 {
-    float mx = nx + 6.5*(sin(DEGTORAD*nry));
+    Constantes constantes;
+    float mx = nx + 6.5*(sin(constantes.DEG_TO_RAD*nry));
     float my = ny;
-    float mz = nz + 6.5*(cos(DEGTORAD*nry));
+    float mz = nz + 6.5*(cos(constantes.DEG_TO_RAD*nry));
 
     this->setPosiciones((int)mx,(int)my,(int)mz);
 }
@@ -222,6 +292,21 @@ float Arma::getLastY()
 float Arma::getLastZ()
 {
     return posPasada.z;
+}
+
+float Arma::getIniX()
+{
+    return posIni.x;
+}
+
+float Arma::getIniY()
+{
+    return posIni.y;
+}
+
+float Arma::getIniZ()
+{
+    return posIni.z;
 }
 
 float Arma::getFisX()

@@ -25,7 +25,9 @@ class TNodo
         bool setEntidad(TEntidad *);//se comprueba si es una entidad valida para la posicion
         TNodo * getPadre();//se devuelve el padre
         void setPadre(TNodo*);//se agrega el padre
-        
+        TEntidad * GetEntidad();//se devuelve entidad
+        TNodo * GetHijo(unsigned short);//devuelve el numero de hijo que le pases, si no nullptr
+        TNodo * GetNieto(unsigned short);//devuelve el primer hijo del hijo de este nodo que le pases
         //pintado
         void draw();//se llama a las funciones de pintado
 
