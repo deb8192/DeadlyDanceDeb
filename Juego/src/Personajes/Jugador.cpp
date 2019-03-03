@@ -19,6 +19,10 @@ Jugador::Jugador()
     tiempoPasadoCogerObjeto=0;
     tiempoEnMorir=2000.0f;//tiempo en milisegundos
     tiempoPasadoEnMorir=0;
+    atackTime = 0;
+    atackEspTime = 0;
+    lastAtackTime = 0;
+    lastAtackEspTime = 0;
 }   
 
 Jugador::~Jugador()
@@ -165,6 +169,11 @@ Jugador::Jugador(int nX,int nY,int nZ, int ancho,
     tiempoPasadoCogerObjeto=0;
     tiempoEnMorir=2000.0f;//tiempo en milisegundos
     tiempoPasadoEnMorir=0;
+
+    atackTime = 0;
+    atackEspTime = 0;
+    lastAtackTime = 0;
+    lastAtackEspTime = 0;
 }
 
 void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
