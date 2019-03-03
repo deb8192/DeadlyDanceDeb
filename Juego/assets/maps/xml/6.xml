@@ -11,20 +11,20 @@
 	 <Object Type="0" codigo="0" accion="7" ancho="0" largo="0" alto="24" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/lava.jpg" Model="assets/models/Escenario/RioLava.obj"></Object>
 	
 	<!--Luego se puede colocar cada una en su plataforma correspondiente, esto es lo que falta por colocar-->
-	<!--Puerta--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="232" Y="0" Z="26" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="292" Y="0" Z="90" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="344" Y="0" Z="142" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta2--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="230" Y="0" Z="172" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="336" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta2--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="426" Y="0" Z="344" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta2--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="378" Y="0" Z="440" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta2--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="354" Y="0" Z="388" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="192" Y="0" Z="398" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta2--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="102" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta2--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="102" Y="0" Z="412" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="88" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="158" Y="0" Z="490" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Puerta--><Object Type="2" codigo="0" accion="5"  ancho="4" largo="1" alto="10" RP="90" X="266" Y="0" Z="292" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+	<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="232" Y="0" Z="76" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+	<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="292" Y="0" Z="90" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+	<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="344" Y="0" Z="142" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+	<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="230" Y="0" Z="172" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+	<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="336" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+	<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="426" Y="0" Z="344" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+	<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="378" Y="0" Z="440" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+	<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="354" Y="0" Z="388" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+	<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="192" Y="0" Z="398" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+	<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="102" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+	<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="102" Y="0" Z="412" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+	<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="88" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+	<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="158" Y="0" Z="490" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+	<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="266" Y="0" Z="292" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
 
 	<!--Luego se puede colocar cada una en su plataforma correspondiente, esto es lo que falta por colocar-->
 	<!--Pared-Invisible--><Object Type="1" codigo="0" accion="1" ancho="2" largo="16" alto="24" RP="90" X="-78" Y="0" Z="0" despX="0" despZ="0" Texture="" Model=""></Object>

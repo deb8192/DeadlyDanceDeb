@@ -105,8 +105,7 @@ class Jugando: public Estado {
         
         std::vector<Recolectable*> _recolectables;
         std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
-        std::vector<Interactuable*> puertas; //Objetos interactuables del mapa
-        std::vector<Recolectable*> _powerup;
+         std::vector<Recolectable*> _powerup;
         std::vector<Zona*> _zonas; //Array de zonas
 
         bool reiniciando; // Se utiliza solo en Reanudar por el cambio entre Estados
