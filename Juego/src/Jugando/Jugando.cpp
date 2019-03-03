@@ -1,6 +1,9 @@
 #include "Jugando.hpp"
 #include "../Juego.hpp"
+//FUERA
 #include "../Enemigos/Pollo.hpp"
+#include "../Enemigos/Murcielago.hpp"
+//!FUERA
 #include "../ConstantesComunes.hpp"
 
 //singleton
@@ -295,9 +298,11 @@ void Jugando::Update()
 
     if(_jugador->getArma() != nullptr)
     {
+        //METERLE LA FUNCION AL JUGADOR
         float posArmaX = 5*  sin(constantes.PI*  _jugador->getRY() / constantes.PI_RADIAN) + _jugador->getX();
         float posArmaZ = 5*  cos(constantes.PI*  _jugador->getRY() / constantes.PI_RADIAN) + _jugador->getZ();//iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
         _jugador->getArma()->setPosiciones(posArmaX, _jugador->getY()+3, posArmaZ);
+        //!METERLE LA FUNCION AL JUGADOR
         _motor->llevarObjeto(posArmaX, _jugador->getY()+3,posArmaZ, _jugador->getRX(), _jugador->getRY(), _jugador->getRZ() );
         _fisicas->llevarBox(posArmaX, _jugador->getY()+3,posArmaZ, _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto());
     }
@@ -385,7 +390,6 @@ void Jugando::Update()
         //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
         for(short i=0;(unsigned)i<_enemigos.size();i++)
         {
-            cout<< "Ejecuto nodo actual de la ia: " << i << endl;
             if(_enemigos[i] != nullptr)
             {
                 _enemigos[i]->UpdateBehavior(&i);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
@@ -411,7 +415,7 @@ void Jugando::Update()
                         _enemigos.at(i)->setTimeMerodear(tiempoMerodear);
                     }
                     //FUNCIONA REGULAR
-                    if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
+                    /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
                     {
                         //colisiona
                         struct DatosDesplazamiento
@@ -438,7 +442,7 @@ void Jugando::Update()
                             _enemigos.at(i)->setNewRotacion(_enemigos.at(i)->getRX(), _enemigos.at(i)->getRY() - constantes.PI_RADIAN, _enemigos.at(i)->getRZ());
                             _enemigos.at(i)->setRotation(0.0f); 
                         }
-                    }
+                    }*/
 
             }
             //_enemigos[i]->queVes();
@@ -449,6 +453,15 @@ void Jugando::Update()
     //}
 }
 
+/**************** updateIA ***************
+ * Funcion en la que se actualiza la IA y todos
+ * aquellos eventos que deben ocurrir 4 veces por
+ * segundo
+ *      
+ *      Entradas:
+ *      
+ *      Salidas:
+*/
 void Jugando::UpdateIA()
 {
     Constantes constantes;
@@ -460,6 +473,13 @@ void Jugando::UpdateIA()
     }
     /* **************************************************** */
     
+    //Aquí el jugador genera sonidos al caminar
+    if(!_jugador->EstaMuerto() && (!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
+     || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
+    {
+        _jugador->generarSonido(constantes.CINCO * constantes.SEIS, constantes.DOS, constantes.UNO);
+    }
+
     //En esta parte muere enemigo
     if(_enemigos.size() > 0){
         //comprobando los _enemigos para saber si estan muertos
@@ -533,42 +553,9 @@ void Jugando::UpdateIA()
                 else
                 {
                     //si no esta muerto ni piensa morirse XD ejecutamos ia
-                    cout<< "Ejecuto ia: " << i << endl;
                     if(_enemigos[i] != nullptr)
                     {
                         _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
-                        /*enemigos[i]->UpdateBehavior(&i);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
-                        
-                        //Este bloque se da si el enemigo esta en el proceso de merodear
-                        if(_enemigos.at(i)->getTimeMerodear() > 0.0f)
-                        {
-                            if(_enemigos.at(i)->getTimeMerodear() == 1.5f)
-                            {
-                                //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
-                                _enemigos.at(i)->setLastTimeMerodear(_controladorTiempo->GetTiempo(2));
-                            }
-                            float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
-                            tiempoActual = _controladorTiempo->GetTiempo(2);
-                            tiempoMerodear = _enemigos.at(i)->getTimeMerodear();
-                            tiempoMerodear -= (tiempoActual - _enemigos.at(i)->getLastTimeMerodear());
-                            if(tiempoActual > _enemigos.at(i)->getLastTimeMerodear())
-                            {
-                                //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeMerodear
-                                //por lo que guardamos en lastTimeMerodear a tiempoActual
-                                _enemigos.at(i)->setLastTimeMerodear(tiempoActual);
-                            }
-                            _enemigos.at(i)->setTimeMerodear(tiempoMerodear);
-                        }
-                        //AUN NO FUNCIONA
-                        if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
-                        {
-                            //colisiona
-                            _enemigos.at(i)->initPosicionesFisicas(_enemigos.at(i)->getLastX()/2, _enemigos.at(i)->getLastY()/2, _enemigos.at(i)->getLastZ()/2);//colisiona
-                            _enemigos.at(i)->setPosiciones(_enemigos.at(i)->getLastX(), _enemigos.at(i)->getLastY(), _enemigos.at(i)->getLastZ());//colisiona        
-                            _enemigos.at(i)->setNewPosiciones(_enemigos.at(i)->getLastX(), _enemigos.at(i)->getLastY(), _enemigos.at(i)->getLastZ());//colisiona                                
-                            _enemigos.at(i)->setNewRotacion(_enemigos.at(i)->getRX(), _enemigos.at(i)->getRY() - constantes.PI_MEDIOS, _enemigos.at(i)->getRZ());
-                            _enemigos.at(i)->setRotation(_enemigos.at(i)->GetRotation() / constantes.DOS);
-                        }*/
                     }
                     else
                         _enemigos[i]->RunIA(true);
@@ -626,7 +613,7 @@ void Jugando::Render()
             _enemigos.at(i)->getRZ(),3 , 3, 3, 2);
     }
 
-    //Dibujado de las puertas
+    //Dibujado de las puertas, las palancas, los objetos y los cofres
     for(unsigned int i = 0; i < _interactuables.size(); i++)
     {
         _interactuables.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
@@ -809,6 +796,26 @@ void Jugando::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho
             _motora->getEvent(nameid)->start();
         }
             break;
+        case 1:
+        {
+            Murcielago*  ene = new Murcielago(x,y,z, 125);//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
+            //ia
+            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
+            ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
+            _enemigos.push_back(ene);//guardamos el enemigo en el vector
+            id++;//generamos id para la figura
+            _enemigos.back()->setID(id);//le damos el id unico en esta partida al enemigo
+
+            //Cargar sonido evento en una instancia con la id del enemigo como nombre
+            MotorAudioSystem* motora = MotorAudioSystem::getInstance();
+            std::string nameid = std::to_string(id); //pasar id a string
+            motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+            motora->getEvent(nameid)->setPosition(x,y,z);
+            motora->getEvent(nameid)->setVolume(0.4f);
+            motora->getEvent(nameid)->start();
+
+        }
+            break;
         default:
             break;
     }
@@ -914,7 +921,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
 }
 
 //lo utilizamos para crear zonas
-void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo)
+void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem)
 {
    //Crear zona
    Zona* zon = new Zona(ancho,largo,alto,tipo);
@@ -923,79 +930,84 @@ void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alt
    int calcID = _zonas.size();
    zon->setID(calcID);
    zon->setPosiciones(x,y,z);
+   zon->setTotalElementos(totalElem);
 
    //guardarla en el nivel
-   // con move, zon se queda vacio
-   _zonas.push_back(move(zon));
+   _zonas.push_back(zon);
    zon = nullptr;
 }
 
 //Cargar los cofres del nivel
 void Jugando::cargarCofres(int num)
 {
-  long unsigned int num_cofres = num;
+  Constantes constantes;
+    long unsigned int num_cofres = num;
+    MotorGrafico* _motor = MotorGrafico::GetInstance();
+    unsigned short  totalCofresPonible = 0;
+    vector<short> zonasDisponibles;
+    zonasDisponibles.reserve(num);
 
-  if(!_zonas.empty())
-  {
-    if(_zonas.size() >= num_cofres)
+    //Se comprueba si hay zonas de cofres disponibles
+    if(!_zonas.empty())
     {
-      //Buscar zonas sin proposito y guardar posicion en vector
-      std::vector<int> Zsinprop;
-      for(int i = _zonas.size(); i > 0; i--)
-      {
-        std::string name_tipo(_zonas.at(i-1)->getTipo());
-        char* cadena_tipo = new char[sizeof(name_tipo)];
-        strcpy(cadena_tipo, name_tipo.c_str());
-
-        if(strcmp(cadena_tipo,"zChest") == 0) //Si es zona de cofre
+        //se contabilizan las zonas donde se pueden colocar cofres
+        for(unsigned short i = 0; i < _zonas.size(); i++)
         {
-          if(_zonas.at(i-1)->getProposito() == false) //Y no ha cumplido su proposito
-          {
-            cout << "entra:" << i-1 << endl;
-            Zsinprop.push_back(i-1);
-          }
+            //Se comprueba que es una zona de cofres y que le caben mas cofres
+            if((_zonas.at(i)->getTipo() == constantes.CERO) && (!_zonas.at(i)->getProposito()))
+            {
+                totalCofresPonible += (_zonas[i]->getTotalElementos() - _zonas[i]->getElementosActuales());
+                zonasDisponibles.push_back(i);
+            }
         }
-      }
+        //En caso de haber mas o el mismo numero de huecos para cofres que cofres se accede
+        if(totalCofresPonible >= num_cofres)
+        {
+            //Mientra hay cofres sin colocar, colocar en una zona aleatoria
+            while(num_cofres > 0)
+            {
+                srand(time(NULL));
+                int numAlt = rand() % zonasDisponibles.size();
+                cout << "colocar en: " << zonasDisponibles[numAlt] << endl;
 
-      //Mientra hay cofres sin colocar, colocar en una zona aleatoria
-      while(num_cofres > 0)
-      {
-        srand(time(NULL));
-        int numAlt = rand() % Zsinprop.size();
-        cout << "colocar en: " << Zsinprop[numAlt] << endl;
+                //Buscar zona donde colocar
+                float newx = _zonas[zonasDisponibles[numAlt]]->getX();
+                float newy = _zonas[zonasDisponibles[numAlt]]->getY();
+                float newz = _zonas[zonasDisponibles[numAlt]]->getZ();
 
-        //proposito cumplido
-        _zonas[Zsinprop[numAlt]]->setProposito(true);
+                //Se annade el nuevo elemento al vector de zonas
+                _zonas[zonasDisponibles[numAlt]]->annadirElemento();
 
-        //Buscar zona donde colocar
-        float newx = _zonas[Zsinprop[numAlt]]->getX();
-        float newy = _zonas[Zsinprop[numAlt]]->getY();
-        float newz = _zonas[Zsinprop[numAlt]]->getZ();
+                //Colocar cofre
+                int posicionObjeto = _motor->CargarObjetos(3,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
+                Interactuable*  inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto, newx, newy, newz);
+                inter->setID(id++);
+                inter->setPosiciones(newx,newy,newz);
+                inter->SetPosicionArrayObjetos(posicionObjeto);
+                inter->setRotacion(0.0,0.0,0.0);
+                _interactuables.push_back(inter);
+                inter = nullptr;
 
-        //Colocar cofre
-        int posicionObjeto = _motor->CargarObjetos(3,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
-        Interactuable* inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto,newx,newy,newz);
-        inter->setID(id++);
-        inter->setPosiciones(newx,newy,newz);
-        inter->SetPosicionArrayObjetos(posicionObjeto);
-        inter->setRotacion(0.0,0.0,0.0);
-        _interactuables.push_back(inter);
+                //Fisicas del cofre
+                MotorFisicas* _fisicas = MotorFisicas::getInstance();
+                _fisicas->crearCuerpo(3,newx/2,newy/2,newz/2,2,2,4,2,3);
 
-        //Fisicas del cofre
-        _fisicas->crearCuerpo(3,newx/2,newy/2,newz/2,2,2,4,2,3);
+                //borrar del Array por que el proposito esta cumplido
+                if(_zonas[zonasDisponibles[numAlt]]->getTotalElementos() == _zonas[zonasDisponibles[numAlt]]->getElementosActuales())
+                {
+                    _zonas[zonasDisponibles[numAlt]]->setProposito(true);
+                    zonasDisponibles.erase(zonasDisponibles.begin() + numAlt);
+                }
 
-        //borrar del Array
-        Zsinprop.erase(Zsinprop.begin() + numAlt);
-
-        num_cofres--; //un cofre menos
-      }
-      Zsinprop.resize(0);
+                num_cofres--; //un cofre menos
+            }
+            zonasDisponibles.resize(0);
+        }
+        else
+        {
+            cout << "No hay zonas de cofres suficientes en el nivel" << endl;
+        }
     }
-    else
-    {
-      cout << "No hay zonas de cofres suficientes en el nivel" << endl;
-    }
-  }
 }
 
  void Jugando::CogerObjeto()
@@ -1096,6 +1108,7 @@ void Jugando::DejarObjeto()
 */
 void Jugando::AccionarMecanismo(int int_col)
 {
+    Constantes constantes;
     unsigned int i = 0;
     bool coincide = false;
     //Si es una puerta sin llave o palanca asociada
@@ -1111,8 +1124,8 @@ void Jugando::AccionarMecanismo(int int_col)
             //_motora->getEvent("AbrirPuerta")->setVolume(0.8f);
             _motora->getEvent("AbrirPuerta")->setPosition(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ());
             _motora->getEvent("AbrirPuerta")->start();
-            _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() + 135.0, _interactuables.at(int_col)->getRZ());
-            _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() +135.0, _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos() , posicion);
+            _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
+            _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos() , posicion);
             cout<<"Abre la puerta"<<endl;
         }
         else
@@ -1120,7 +1133,7 @@ void Jugando::AccionarMecanismo(int int_col)
             //Se cierra/desacciona la puerta / el mecanismo
             _motora->getEvent("CerrarPuerta")->setPosition(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ());
             _motora->getEvent("CerrarPuerta")->start();
-            _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - 135.0, _interactuables.at(int_col)->getRZ());
+            _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
             _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), - _interactuables.at(int_col)->getRY(), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
             cout<<"Cierra la puerta"<<endl;
         }
@@ -1147,7 +1160,7 @@ void Jugando::AccionarMecanismo(int int_col)
     {
         i = 0;
         coincide = false;
-        //PRUEBAS CON PALANCAS
+        //Busca la puerta que coincide con la palanca que se esta activando
         while(i < _interactuables.size() && !coincide)
         {
             if(_interactuables.at(i)->getCodigo() == _interactuables.at(int_col)->getCodigo())
@@ -1169,7 +1182,7 @@ void Jugando::AccionarMecanismo(int int_col)
                 //Se abre/acciona la puerta / el mecanismo
                 _motora->getEvent("AbrirPuerta")->setPosition(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ());
                 _motora->getEvent("AbrirPuerta")->start();
-                _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() + 135.0, _interactuables.at(i)->getRZ());
+                _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ());
                 _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX() + 100.0, _interactuables.at(i)->getRY(), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
                 cout<<"Abre la puerta"<<endl;
             }
@@ -1178,7 +1191,7 @@ void Jugando::AccionarMecanismo(int int_col)
                 //Se cierra/desacciona la puerta / el mecanismo
                 _motora->getEvent("CerrarPuerta")->setPosition(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ());
                 _motora->getEvent("CerrarPuerta")->start();
-                _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() - 135.0, _interactuables.at(i)->getRZ());
+                _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ());
                 _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX(), - _interactuables.at(i)->getRY(), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
                 cout<<"Cierra la puerta"<<endl;
             }
@@ -1201,11 +1214,12 @@ void Jugando::AccionarMecanismo(int int_col)
     {
         i = 0;
         coincide = false;
-        //PRUEBAS CON LLAVES
+        //Comprueba las llaves que tiene el jugador
         while(i < _jugador->GetLlaves().size() && !coincide)
         {
             if(_jugador->GetLlaves().at(i)->GetCodigoPuerta() == _interactuables.at(int_col)->getCodigo())
             {
+                //Si el jugador tiene la llave cuyo codigo coincide con la puerta la abre
                 coincide = true;
             }
             i++;
@@ -1221,8 +1235,8 @@ void Jugando::AccionarMecanismo(int int_col)
                 //Se abre/acciona la puerta / el mecanismo
                 _motora->getEvent("AbrirCerradura")->setPosition(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ());
                 _motora->getEvent("AbrirCerradura")->start();
-                _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() + 135.0, _interactuables.at(int_col)->getRZ());
-                _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() +135.0, _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
+                _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
+                _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
                 cout<<"Abre la puerta"<<endl;
             }
             else
@@ -1230,7 +1244,7 @@ void Jugando::AccionarMecanismo(int int_col)
                 //Se cierra/desacciona la puerta / el mecanismo
                 _motora->getEvent("CerrarPuerta")->setPosition(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ());
                 _motora->getEvent("CerrarPuerta")->start();
-                _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - 135.0, _interactuables.at(int_col)->getRZ());
+                _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
                 _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), - _interactuables.at(int_col)->getRY(), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
                 cout<<"Cierra la puerta"<<endl;
             }
@@ -1708,6 +1722,11 @@ void Jugando::setEnemigoPideAyuda(Enemigo* ene)
 Enemigo* Jugando::getEnemigoPideAyuda()
 {
     return _enemPideAyuda;
+}
+
+vector<Zona*> Jugando::GetZonas()
+{
+    return _zonas;
 }
 
 std::vector<Enemigo*>  Jugando::getEnemigos()

@@ -8,6 +8,7 @@
 #include <cstring>
 #include "../Motores/INnpc.hpp"
 #include "../Motores/INdrawable.hpp"
+#include "../Motores/INsentidos.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Objetos/Llave.hpp"
 #include "../Motores/MotorFisicas.hpp"
@@ -18,7 +19,7 @@
 using namespace std;
 
 //aqui definimos la clase del jugador con herencia de la interfaz INnpc
-class Jugador : public INnpc , public INdrawable //multiple herencia a esto se le llama derivacion multiple
+class Jugador : public INnpc , public INdrawable, public INsentidos //multiple herencia a esto se le llama derivacion multiple
 {
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
@@ -42,6 +43,11 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void AtacarUpdate(int danyo);
         void AtacarEspecialUpdate(int* danyo);
         void Interactuar(int, int);//llama a la mecanica de interactuar
+
+        //Metodos de INsentidos
+        void generarSonido(int intensidad, double duracion, int tipo);
+        void queEscuchas();
+        void queVes();
 
         //Metodos jugador
         void AnnadirLlave(Llave* llave);

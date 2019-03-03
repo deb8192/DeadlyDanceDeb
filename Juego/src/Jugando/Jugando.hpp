@@ -60,7 +60,7 @@ class Jugando: public Estado {
         Sala* CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo); //lo usamos para crear zonas
+        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem); //lo usamos para crear zonas
         void cargarCofres(int num);
 
         //Funciones de interacciones
@@ -77,8 +77,9 @@ class Jugando: public Estado {
         void EraseEnemigo(std::size_t i);
         void setEnemigoPideAyuda(Enemigo* );
         Enemigo* getEnemigoPideAyuda();
+        vector<Zona*> GetZonas();
         std::vector<Enemigo*> getEnemigos();
-        Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp
+        Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
 
     private:
         //clase singleton 

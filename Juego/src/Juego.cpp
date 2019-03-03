@@ -34,7 +34,6 @@ void Juego::Iniciar()
     inicializarVentana();
 
     // se debe dar valor a las variables de interpolacion antes del bucle
-	//juego->setNivelThen();
 	_tiempo->SetFrames(60,15,4);//definimos a cuanto queremos que vaya el programa
 
     // te devuelve true si esta en funcionamiento la ventana del juego, te devuelve false si se ha cerrado la ventana
