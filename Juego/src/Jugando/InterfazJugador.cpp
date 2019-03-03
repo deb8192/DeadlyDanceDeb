@@ -17,16 +17,6 @@ InterfazJugador::~InterfazJugador()
     delete _unica_instancia;
 }
 
-InterfazJugador::~InterfazJugador()
-{
-    vida = 0;
-    ataqueEspecial = 0;
-    dinero = 0;
-    arma = 0;
-    estado = false;
-    delete _unica_instancia;
-}
-
 void InterfazJugador::activar()
 {
     estado = true;

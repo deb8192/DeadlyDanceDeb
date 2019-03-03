@@ -10,8 +10,3 @@ ReyPollo::~ReyPollo()
 {
 
 }
-
-ReyPollo::~ReyPollo()
-{
-
-}
