@@ -1,14 +1,31 @@
 #include "CargadorNiveles.hpp"
-#include "Jugando/Nivel.hpp"
+#include "Jugando/Jugando.hpp"
+
+
+#include "Personajes/Heavy.hpp"
+#include "Personajes/Bailaora.hpp"
 
 CargadorNiveles::CargadorNiveles()
 {
-
+    
 }
 
-void CargadorNiveles::CargarNivelXml(int level)
+CargadorNiveles::~CargadorNiveles()
 {
-    Nivel* nivel_instancia = Nivel::getInstance();
+    delete _jugador;
+}
+
+Jugador* CargadorNiveles::GetJugador()
+{
+    return _jugador;
+}
+
+void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
+{
+    Jugando* _jugando = Jugando::GetInstance();
+    
+    this->tipoJug = tipoJug;
+
     //definimos los strings
     std::string nivel = ""; //donde se almacenara el nombre del nivel   
     std::string extension = ".xml"; // extension del archivo a abrir
@@ -41,7 +58,7 @@ void CargadorNiveles::CargarNivelXml(int level)
         int x = hijo.attribute("X").as_int();//nos devuelve un int
         int z = hijo.attribute("Y").as_int();//nos devuelve un int
         int y = hijo.attribute("Z").as_int();//nos devuelve un int 
-        nivel_instancia->CrearLuz(x,y,z); //cargamos el objeto
+        _jugando->CrearLuz(x,y,z); //cargamos el objeto
     }
     
     for (pugi::xml_node plat = anterior.back().child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -62,6 +79,8 @@ void CargadorNiveles::CargarNivelXml(int level)
             padre.pop_back();
         }
     }
+    // Puntero a clase singleton
+    _jugando = nullptr;
     cout << "se acaba" <<endl;
 }
 
@@ -128,13 +147,14 @@ void CargadorNiveles::GuardarNivelBin(int level)
 
 Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
 {
-    Nivel* nivel_instancia = Nivel::getInstance();
+    Jugando* _jugando = Jugando::GetInstance();
     Sala* padren = nullptr;//sala hijo
     
     int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
     int x = plat.attribute("X").as_int();//nos devuelve un int
     int y = plat.attribute("Y").as_int();//nos devuelve un int
     int z = plat.attribute("Z").as_int();//nos devuelve un int
+    int rp = plat.attribute("RP").as_int();//nos devuelve un int
     int ancho = plat.attribute("ancho").as_int();//nos devuelve un int
     int largo = plat.attribute("largo").as_int();//nos devuelve un int
     int alto = plat.attribute("alto").as_int();//nos devuelve un int 
@@ -142,7 +162,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
     bool jugadorEstasAqui = plat.attribute("UserStar").as_bool();//nos devuelve true si es donde empieza el jugador 
     const char* textura = plat.attribute("Texture").value(); //nos da un char[] = string
     const char* modelo  =  plat.attribute("Model").value(); //nos da un char[] = string
-    padren = nivel_instancia->CrearPlataforma(accion,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
+    padren = _jugando->CrearPlataforma(accion,rp,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
 
     if(padre != nullptr && padren != nullptr)
     {
@@ -153,8 +173,8 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
     if(jugadorEstasAqui)
     {
         //cogemos las posiciones del jugador en el escenario
-        int* propiedades;
-        propiedades = new int [6];
+        /*int* propiedades;
+        propiedades = new int [6];*/
         int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
         int Playerx = plat.attribute("StarX").as_int();//nos devuelve un int
         int Playery = plat.attribute("StarY").as_int();//nos devuelve un int
@@ -162,9 +182,23 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int ancho = 1;//nos devuelve un int
         int largo = 1;//nos devuelve un int 
         int alto = 5;//nos devuelve un int
-        const char* Playertextura = plat.attribute("StarTexture").value(); //nos da un char[] = string
-        const char* Playermodelo  =  plat.attribute("StarModel").value(); //nos da un char[] = string
-        nivel_instancia->CrearJugador(accion,Playerx,Playerz,Playery,ancho,largo,alto,Playermodelo,Playertextura,propiedades);
+        //const char* Playertextura = plat.attribute("StarTexture").value(); //nos da un char[] = string
+        //const char* Playermodelo  =  plat.attribute("StarModel").value(); //nos da un char[] = string
+        //_jugando->CrearJugador(accion,Playerx,Playerz,Playery,ancho,largo,alto,Playermodelo,Playertextura,propiedades);
+  
+        // TO DO: revisar lo de propiedades
+        // Textura y modelo estan dentro de sus clases de jugadores
+
+        switch (tipoJug)
+        {
+            case 2:
+                _jugador = new Bailaora(Playerx,Playerz,Playery,ancho,largo,alto,accion);
+                break;
+        
+            default:
+                _jugador = new Heavy(Playerx,Playerz,Playery,ancho,largo,alto,accion);
+                break;
+        }
     }
 
     for (pugi::xml_node enem = plat.child("Enemy"); enem; enem = enem.next_sibling("Enemy"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -182,7 +216,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int enemigo = enem.attribute("enemigo").as_int(); //nos da un char[] = string
         const char* textura = enem.attribute("Texture").value(); //nos da un char[] = string
         const char* modelo  =  enem.attribute("Model").value(); //nos da un char[] = string
-        nivel_instancia->CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,modelo,textura,propiedades,padren); //cargamos el enemigo
+        _jugando->CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,modelo,textura,propiedades,padren); //cargamos el enemigo
     }
     for (pugi::xml_node obj = plat.child("Object"); obj; obj = obj.next_sibling("Object"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
@@ -194,6 +228,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int x = obj.attribute("X").as_int();//nos devuelve un int
         int y = obj.attribute("Y").as_int();//nos devuelve un int
         int z = obj.attribute("Z").as_int();//nos devuelve un int
+        int rp = obj.attribute("RP").as_int();//nos devuelve un int
         int despX = obj.attribute("despX").as_int();//nos devuelve un int
         int despZ = obj.attribute("despZ").as_int();//nos devuelve un int
         int ancho = obj.attribute("ancho").as_int();//nos devuelve un int
@@ -203,7 +238,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         const char* nombre = obj.attribute("nombre").value(); //nos da un char[] = string
         const char* textura = obj.attribute("Texture").value(); //nos da un char[] = string
         const char* modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
-        nivel_instancia->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
+        _jugando->CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,propiedades); //cargamos el enemigo
     }
     for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
@@ -218,7 +253,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int largo = zon.attribute("largo").as_int();//nos devuelve un int
         int alto = zon.attribute("ancho").as_int();//nos devuelve un int
         const char* tipo = zon.attribute("tipo").value(); //nos da un char[] = string
-        nivel_instancia->CrearZona(accion,x,y,z,ancho,largo,alto,tipo,propiedades); //cargamos el enemigo
+        _jugando->CrearZona(accion,x,y,z,ancho,largo,alto,tipo,propiedades); //cargamos el enemigo
     }
 
     return padren;

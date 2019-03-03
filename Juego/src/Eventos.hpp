@@ -15,11 +15,11 @@ namespace idsEventos
 
         // TO DO: poner para que se utilizan
         KEY_ESPACIO,    // ATAQUE NORMAL
-        KEY_ACEPTAR,    // 
+        KEY_ACEPTAR,    // --------------- POR AHORA NO SE SABE
         KEY_C,          // ACTIVAR/DESACTIVAR PATHFINDING
         KEY_E,          // COGER/SOLTAR OBJETOS
-        KEY_I,          // 
-        KEY_J,          //
+        KEY_I,          // --------------- POR AHORA NADA
+        KEY_J,          // BAJAR VIDA
         KEY_Q,          // ATAQUE ESPECIAL
         RMOUSE_DOWN,    // ATAQUE ESPECIAL
         LMOUSE_DOWN,    // ATAQUE NORMAL

@@ -4,10 +4,11 @@
 Zona::Zona(int anc, int lar, int alt, const char *tip)
 {
   std::string name_tipo(tip);
-  char * cadena_tipo = new char[sizeof(name_tipo)];
+  char* cadena_tipo = new char[sizeof(name_tipo)];
   strcpy(cadena_tipo, name_tipo.c_str());
 
   tipo = cadena_tipo;
+  tip = nullptr;
 
   //Si es una zona de cofres el tamanyo de esta estara predefinida
   if(strcmp(cadena_tipo,"zChest") == 0){
@@ -19,13 +20,15 @@ Zona::Zona(int anc, int lar, int alt, const char *tip)
     largo = lar;
     alto = alt;
   }
-
 }
 
 //Destructor
 Zona::~Zona()
 {
-
+  ancho=0; largo=0; alto=0;
+  x=0; y=0; z=0; id=0;
+  proposito = false;
+  delete tipo;
 }
 
 void Zona::setPosiciones(float newx,float newy,float newz)

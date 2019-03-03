@@ -6,12 +6,12 @@
 #include <algorithm>
 #include <ctime>
 #include <cstring>
-#include "../INnpc.hpp"
-#include "../INdrawable.hpp"
+#include "../Motores/INnpc.hpp"
+#include "../Motores/INdrawable.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Objetos/Llave.hpp"
-#include "../MotorFisicas.hpp"
-#include "../MotorGrafico.hpp"
+#include "../Motores/MotorFisicas.hpp"
+#include "../Motores/MotorGrafico.hpp"
 #include "../Jugando/InterfazJugador.hpp"
 
 using namespace std;
@@ -22,7 +22,7 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
         ~Jugador();
-        Jugador(int,int,int,int,int,int,std::string malla);//defines tu la informacion del jugador
+        Jugador(int nX,int nY,int nZ,int ancho,int largo,int alto,int accion);//defines tu la informacion del jugador
 
         //Metodos de desplazamiento
         void movimiento(bool noMueve,bool a, bool s, bool d, bool w);
@@ -30,8 +30,8 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
         void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
 
-        //Metodos Muere jugador y enemigo
-        bool estasMuerto();
+        //Metodos Muere jugador
+        bool EstaMuerto();  // Comprueba si vida <= 0
         bool finalAnimMuerte();
         void MuereJugador();//muere jugador (el tiempo controla los cambio de color del jugador)
 
@@ -97,6 +97,9 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         float getLastX();
         float getLastY();
         float getLastZ();
+        float getIniX();
+        float getIniY();
+        float getIniZ();
         float getFisX();
         float getFisY();
         float getFisZ();
@@ -129,7 +132,15 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int getAnimacion();
         vector <Llave*> GetLlaves();
 
-    private:
+        const char* GetTextura();
+        const char* GetModelo();
+        int GetAncho();
+        int GetLargo();
+        int GetAlto();
+
+        virtual void RenderAtaqueEsp(float updateTime, float drawTime) = 0;
+
+    protected:
         float ax = 1.0f,
               az = 20.0f,
               deg;
@@ -147,6 +158,12 @@ class Jugador : public INnpc , public INdrawable //multiple herencia a esto se l
         int tipo_arma = 2;
         vector <unsigned int> atacados_normal;
         int dinero = 0;
+
+        const char* playerTextura;
+        const char* playerModelo;
+        int ancho; int largo; int alto;
+
+        MotorGrafico* _motor;
 };
 
 #endif /* Jugador_HPP */

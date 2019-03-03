@@ -1,9 +1,8 @@
 #ifndef Recolectable_HPP
 #define Recolectable_HPP
 #include <iostream>
-#include "../INobjetos.hpp"
-#include "../INdrawable.hpp"
-//#include "MotorGrafico.hpp"
+#include "../Motores/INobjetos.hpp"
+#include "../Motores/INdrawable.hpp"
 
 using namespace std;
 
@@ -13,9 +12,7 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
     public:
         Recolectable();//esto le deja a la entidad el constructor por defecto
         ~Recolectable();//destructor del objeto
-        void remove();//destructor estandar para evitar polimorfismo
         Recolectable(int codigo, int ataque, const char* nombre, int anc, int lar, int alt, const char* objeto, const char* textura);
-
 
         //drawable metodos
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
@@ -46,6 +43,9 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         float getLastX();
         float getLastY();
         float getLastZ();
+        float getIniX();
+        float getIniY();
+        float getIniZ();
         float getFisX();
         float getFisY();
         float getFisZ();
@@ -63,7 +63,6 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         float getLargo();
         float getAlto();
         int getCantidad();
-
 
     private:
 

@@ -2,6 +2,7 @@
 #define Pollo_HPP
 
 #include "Enemigo.hpp"
+#include "../Jugando/Jugando.hpp"
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 
 class Pollo : public Enemigo
@@ -10,12 +11,16 @@ class Pollo : public Enemigo
         ~Pollo();
         Pollo();
         void RunIA();
-        void UpdatePollo(int i);
+        void UpdatePollo(short *i);
+        void SetNuevasOrdenes(short i);
 
     private:
-        bool funciona;
-        int* _ordenes;
+        bool funciona, atacado, hecho;
+        short int* _ordenes;
+        short int maxRotacion;
+        short int direccion;
 
+        Jugando* _nivel;
 };
 
 #endif
