@@ -294,100 +294,143 @@ void MotorFisicas::CrearJoint(RigidBody* body1, RigidBody* body2)
 
 int MotorFisicas::GetPuertaX(int i)
 {
-    const float timeStep = 1.0 / 60.0; 
-    // Compute the time interpolation factor 
-    decimal factor = accumulator / timeStep;  
-    // Get the updated transform of the body 
-    rp3d::Transform currTransform = puertas[i]->getTransform();  
-    // Compute the interpolated transform of the rigid body 
-    rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-    // Now you can render your body using the interpolated transform here    
-    float x = interpolatedTransform.getPosition().x;
-    // Update the previous transform 
-    prevTransform[i] = currTransform;
+    if(puertas.size()>i)
+    {
+         const float timeStep = 1.0 / 60.0; 
+        // Compute the time interpolation factor 
+        decimal factor = accumulator / timeStep;  
+        // Get the updated transform of the body 
+        rp3d::Transform currTransform = puertas[i]->getTransform();  
+        // Compute the interpolated transform of the rigid body 
+        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
+        // Now you can render your body using the interpolated transform here    
+        float x = interpolatedTransform.getPosition().x;
+        // Update the previous transform 
+        prevTransform[i] = currTransform;
 
-    return x;
+        return x;
+    }
+    else
+    {
+        return 0;
+    }
+   
 }
 int MotorFisicas::GetPuertaY(int i)
 {
-     const float timeStep = 1.0 / 60.0; 
-    // Compute the time interpolation factor 
-    decimal factor = accumulator / timeStep;  
-    // Get the updated transform of the body 
-    rp3d::Transform currTransform = puertas[i]->getTransform();  
-    // Compute the interpolated transform of the rigid body 
-    rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-    // Now you can render your body using the interpolated transform here    
-    float y = interpolatedTransform.getPosition().y;
-    // Update the previous transform 
-    prevTransform[i] = currTransform;
+    if(puertas.size()>i)
+    {
+         const float timeStep = 1.0 / 60.0; 
+        // Compute the time interpolation factor 
+        decimal factor = accumulator / timeStep;  
+        // Get the updated transform of the body 
+        rp3d::Transform currTransform = puertas[i]->getTransform();  
+        // Compute the interpolated transform of the rigid body 
+        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
+        // Now you can render your body using the interpolated transform here    
+        float y = interpolatedTransform.getPosition().y;
+        // Update the previous transform 
+        prevTransform[i] = currTransform;
 
-    return y;
+        return y;
+    }
+    else
+    {
+        return 0;
+    }
 }
 int MotorFisicas::GetPuertaZ(int i)
 {
-     const float timeStep = 1.0 / 60.0; 
-    // Compute the time interpolation factor 
-    decimal factor = accumulator / timeStep;  
-    // Get the updated transform of the body 
-    rp3d::Transform currTransform = puertas[i]->getTransform();  
-    // Compute the interpolated transform of the rigid body 
-    rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-    // Now you can render your body using the interpolated transform here    
-    float z = interpolatedTransform.getPosition().z;
-    // Update the previous transform 
-    prevTransform[i] = currTransform;
+     if(puertas.size()>i)
+    {
+         const float timeStep = 1.0 / 60.0; 
+        // Compute the time interpolation factor 
+        decimal factor = accumulator / timeStep;  
+        // Get the updated transform of the body 
+        rp3d::Transform currTransform = puertas[i]->getTransform();  
+        // Compute the interpolated transform of the rigid body 
+        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
+        // Now you can render your body using the interpolated transform here    
+        float z = interpolatedTransform.getPosition().z;
+        // Update the previous transform 
+        prevTransform[i] = currTransform;
 
-    return z;
+        return z;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 int MotorFisicas::GetPuertaRX(int i)
 {
-     const float timeStep = 1.0 / 60.0; 
-    // Compute the time interpolation factor 
-    decimal factor = accumulator / timeStep;  
-    // Get the updated transform of the body 
-    rp3d::Transform currTransform = puertas[i]->getTransform();  
-    // Compute the interpolated transform of the rigid body 
-    rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-    // Now you can render your body using the interpolated transform here    
-    float x = interpolatedTransform.getOrientation().x;
-    // Update the previous transform 
-    prevTransform[i] = currTransform;
+    if(puertas.size()>i)
+    {
+         const float timeStep = 1.0 / 60.0; 
+        // Compute the time interpolation factor 
+        decimal factor = accumulator / timeStep;  
+        // Get the updated transform of the body 
+        rp3d::Transform currTransform = puertas[i]->getTransform();  
+        // Compute the interpolated transform of the rigid body 
+        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
+        // Now you can render your body using the interpolated transform here    
+        float rx = interpolatedTransform.getOrientation().x;
+        // Update the previous transform 
+        prevTransform[i] = currTransform;
 
-    return x;
+        return rx;
+    }
+    else
+    {
+        return 0;
+    }
 }
 int MotorFisicas::GetPuertaRY(int i)
 {
-     const float timeStep = 1.0 / 60.0; 
-    // Compute the time interpolation factor 
-    decimal factor = accumulator / timeStep;  
-    // Get the updated transform of the body 
-    rp3d::Transform currTransform = puertas[i]->getTransform();  
-    // Compute the interpolated transform of the rigid body 
-    rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-    // Now you can render your body using the interpolated transform here    
-    float y = interpolatedTransform.getOrientation().y;
-    // Update the previous transform 
-    prevTransform[i] = currTransform;
+     if(puertas.size()>i)
+    {
+         const float timeStep = 1.0 / 60.0; 
+        // Compute the time interpolation factor 
+        decimal factor = accumulator / timeStep;  
+        // Get the updated transform of the body 
+        rp3d::Transform currTransform = puertas[i]->getTransform();  
+        // Compute the interpolated transform of the rigid body 
+        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
+        // Now you can render your body using the interpolated transform here    
+        float ry = interpolatedTransform.getOrientation().y;
+        // Update the previous transform 
+        prevTransform[i] = currTransform;
 
-    return y;
+        return ry;
+    }
+    else
+    {
+        return 0;
+    }
 }
 int MotorFisicas::GetPuertaRZ(int i)
 {
-    const float timeStep = 1.0 / 60.0; 
-    // Compute the time interpolation factor 
-    decimal factor = accumulator / timeStep;  
-    // Get the updated transform of the body 
-    rp3d::Transform currTransform = puertas[i]->getTransform();  
-    // Compute the interpolated transform of the rigid body 
-    rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-    // Now you can render your body using the interpolated transform here    
-    float z = interpolatedTransform.getOrientation().z;
-    // Update the previous transform 
-    prevTransform[i] = currTransform;
+     if(puertas.size()>i)
+    {
+         const float timeStep = 1.0 / 60.0; 
+        // Compute the time interpolation factor 
+        decimal factor = accumulator / timeStep;  
+        // Get the updated transform of the body 
+        rp3d::Transform currTransform = puertas[i]->getTransform();  
+        // Compute the interpolated transform of the rigid body 
+        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
+        // Now you can render your body using the interpolated transform here    
+        float rz = interpolatedTransform.getOrientation().z;
+        // Update the previous transform 
+        prevTransform[i] = currTransform;
 
-    return z;
+        return rz;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, int alt)
