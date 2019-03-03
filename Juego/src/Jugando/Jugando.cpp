@@ -104,7 +104,7 @@ void Jugando::Iniciar()
     _controladorTiempo = Times::GetInstance();
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-    CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
+    CargarNivel(5, 1); //(level, player) 1 = heavy / 2 = bailaora
 
     reiniciando = false;
     ValoresPorDefecto();
@@ -267,8 +267,8 @@ void Jugando::Update()
     }
 
      /*Debo actualizar puertas en vector puertas de nivel segun vector puertas de fisicas*/
-        int i = 0;
-        //for(unsigned int i = 0; i < puertas.size(); i++)        
+        //int i = 0;
+        for(unsigned int i = 0; i < puertas.size(); i++)        
         {
             cout << "PUERTA:: "<< _fisicas->GetPuertaX(i) << "-" << _fisicas->GetPuertaY(i) << "-" << _fisicas->GetPuertaZ(i) << endl;
             cout << "PUERTA:: "<< _fisicas->GetPuertaRX(i) << "-" << _fisicas->GetPuertaRY(i) << "-" << _fisicas->GetPuertaRZ(i) << endl;
