@@ -57,8 +57,7 @@ using namespace reactphysics3d;
             void setFormaRecolectable(int id, float px, float py, float pz, int anc, int lar, int alt);
             void updateAtaqueEspecial(float x, float y, float z, float rx, float ry, float rz);
             void vaciarupdateArma();            
-            void CrearJoint(RigidBody* body1, RigidBody* body2);
-
+            
             bool IfCollision(CollisionBody * body1, CollisionBody * body2);
             CollisionWorld* getWorld();
             CollisionBody* getJugador();
@@ -68,14 +67,7 @@ using namespace reactphysics3d;
             CollisionBody* getAtack();
             CollisionBody* getColectablesPowerup(int n);
             unsigned int GetRelacionInteractuablesObstaculos(int n);
-            void updateJoints(long double currentFrameTime);
-
-            int GetPuertaX(int i);
-            int GetPuertaY(int i);
-            int GetPuertaZ(int i);
-            int GetPuertaRX(int i);
-            int GetPuertaRY(int i);
-            int GetPuertaRZ(int i);
+            
             //para limpiar todas las fisicas
             void limpiarFisicas();
 
@@ -100,9 +92,6 @@ using namespace reactphysics3d;
             std::vector<unsigned int> relacionInteractuablesObstaculos;//vector que contiene en la posicion correspondiente a un interactuable en su vector el valor de su posicion en el vector de obstaculos
             std::vector<CollisionBody *> obstaculos;//Vector de obstaculos que bloquean el movimiento
             std::vector<CollisionBody *> plataformas;//Vector de plataformas para caminar
-            std::vector<RigidBody *> puertas;//Vector de puertas para interactuar
-            std::vector<RigidBody *> ejesPuertas;//Vector de puertas para interactuar
-            std::vector<HingeJoint *> jointsPuertas;
             std::vector<rp3d::Transform> prevTransform;
             
             CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)

@@ -289,17 +289,7 @@ void Jugando::Update()
         DesactivarDebug();
         Juego::GetInstance()->estado.CambioEstadoMuerte();
     }
-
-     /*Debo actualizar puertas en vector puertas de nivel segun vector puertas de fisicas*/
-        //int i = 0;
-        for(unsigned int i = 0; i < puertas.size(); i++)        
-        {
-            cout << "PUERTA:: "<< _fisicas->GetPuertaX(i) << "-" << _fisicas->GetPuertaY(i) << "-" << _fisicas->GetPuertaZ(i) << endl;
-            cout << "PUERTA:: "<< _fisicas->GetPuertaRX(i) << "-" << _fisicas->GetPuertaRY(i) << "-" << _fisicas->GetPuertaRZ(i) << endl;
-             
-            puertas[i]->setPosiciones(_fisicas->GetPuertaX(i)*2,_fisicas->GetPuertaY(i)*0,_fisicas->GetPuertaZ(i)*2);
-            puertas[i]->setRotacion(_fisicas->GetPuertaRX(i),_fisicas->GetPuertaRY(i),_fisicas->GetPuertaRZ(i));
-        }
+    
         
     // ********** se actualiza posiciones e interpolado **********
     //animacion
@@ -603,7 +593,7 @@ void Jugando::Render()
     lastDrawTime = drawTime;
     drawTime = _controladorTiempo->GetTiempo(2);
 
-    _fisicas->updateJoints(drawTime);
+
 
     //Dibujado del personaje
     _jugador->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
@@ -654,22 +644,6 @@ void Jugando::Render()
             _interactuables.at(i)->GetPosicionObjetos()
         );
     }
-
-    //Dibujado de las puertas version joints
-    for(unsigned int i = 0; i < puertas.size(); i++)
-    {
-        puertas.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-        puertas.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
-        _motor->mostrarObjetos(puertas.at(i)->getX(),
-            puertas.at(i)->getY(),
-            puertas.at(i)->getZ(),
-            puertas.at(i)->getRX(),
-            puertas.at(i)->getRY(),
-            puertas.at(i)->getRZ(),
-            puertas.at(i)->GetPosicionObjetos()
-        );
-    }
-
 
     //Dibujado del ataque especial del jugador
     if(_jugador->getTimeAtEsp() > 0.0f)
@@ -932,18 +906,6 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
         _rec->setCantidad(propiedades[0]); //cantidad
         _powerup.push_back(move(_rec));
         _rec = nullptr;
-    }else
-    //puertas version joints
-    if(accion == 5)
-    {
-        posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Interactuable*  inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto,x,y,z);
-        inter->setID(id++);
-        inter->setPosiciones(x,y,z);
-        inter->SetPosicionArrayObjetos(posicionObjeto);
-        inter->setDesplazamientos(despX,despZ);
-        inter->setRotacion(0.0,0.0,0.0);
-        puertas.push_back(inter); 
     }
     else
     {
