@@ -241,8 +241,9 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int ancho = zon.attribute("ancho").as_int();//nos devuelve un int
         int largo = zon.attribute("largo").as_int();//nos devuelve un int
         int alto = zon.attribute("ancho").as_int();//nos devuelve un int
+        short totalElementos = zon.attribute("elementos").as_int();
         const char* tipo = zon.attribute("tipo").value(); //nos da un char[] = string
-        _jugando->CrearZona(accion,x,y,z,ancho,largo,alto,tipo); //cargamos el enemigo
+        _jugando->CrearZona(accion,x,y,z,ancho,largo,alto,tipo,totalElementos); //cargamos el enemigo
     }
 
     return padren;

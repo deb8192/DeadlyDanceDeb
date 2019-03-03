@@ -9,15 +9,20 @@ Pollo::Pollo(float nX, float nY, float nZ, int maxVida)
     Constantes constantes;
     funciona = true;
     atacado = false;
-    _ordenes = nullptr;
+    _ordenes = new short [constantes.DOS];
     maxRotacion = constantes.PI_CUARTOS; 
     rotation = constantes.CERO;
 }
 
 Pollo::~Pollo()
 {
+    Constantes constantes;
     funciona = false;
+    atacado = false;
+    delete[] _ordenes;
     _ordenes = nullptr;
+    maxRotacion = 0;
+    _nivel = nullptr;
 }
 
 /***************** RunIA *****************
@@ -35,7 +40,7 @@ void Pollo::RunIA()
     {
         if(modo == constantes.UNO)
         {
-            if(_ordenes[0] != EN_MOVERSE && _ordenes[0] != EN_ATACAR)
+            if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR)
             {
                 this->ForzarCambioNodo(&constantes.CUATRO);
             }
@@ -69,108 +74,8 @@ void Pollo::UpdatePollo(short *i)
     {
         switch (_ordenes[0])
         {
-            case EN_MOVERSE: //El Pollo se mueve
-                {
-                    bool trueX = false;
-                    bool trueZ = false;
-                    float x = this->getNewX();
-                    float y = this->getNewY();
-                    float z = this->getNewZ();
-                    float rotacion = constantes.CERO;
-
-                    //Struct para indicar la velocidad de desplazamiento y la
-                    //distancia de los enemigos al jugador
-                    struct Datos{
-                        float distancia = 4.0;
-                        float velocidadX = 0.0;
-                        float velocidadY = 0.0;
-                        float velocidadZ = 0.0;
-                    }datosDesplazamiento;
-                    
-                    cout<<"Se mueve el Pollo"<<endl;
-                    
-                    //Se mueve a la derecha
-                    if(_nivel->GetJugador()->getNewX() > this->getNewX() + datosDesplazamiento.distancia)
-                    {
-                        trueX = true;
-                        rotacion = constantes.PI_MEDIOS;
-                        //datosDesplazamiento.velocidadX = this->getVelocidadMaxima();  
-                    }
-                    //Se mueve a la izquierda
-                    else if(_nivel->GetJugador()->getNewX() < this->getNewX() - datosDesplazamiento.distancia)
-                    {
-                        trueX = true;
-                        rotacion = -constantes.PI_MEDIOS;
-                    }
-
-                    //Se mueve hacia arriba
-                    if(_nivel->GetJugador()->getNewZ() > this->getNewZ() + datosDesplazamiento.distancia)
-                    {
-                        trueZ = true;
-                        //Desplazamiento en diagonal
-                        if(trueX)
-                        {
-                            //Se mueve hacia arriba a la derecha
-                            if(rotacion > 0)
-                                rotacion -= constantes.PI_CUARTOS;
-                            //Se mueve hacia arriba a la derecha
-                            else
-                                rotacion += constantes.PI_CUARTOS;
-                        }
-                        else //Se mueve recto hacia arriba
-                        {
-                            rotacion = constantes.CERO;
-                        }
-                    }
-                    else if(_nivel->GetJugador()->getNewZ() < this->getNewZ() - datosDesplazamiento.distancia)
-                    {
-                        trueZ = true;
-                        //Desplazamiento en diagonal
-                        if(trueX)
-                        {
-                            //Se mueve hacia abajo a la derecha
-                            if(rotacion > 0)
-                                rotacion += constantes.PI_CUARTOS;
-                            //Se mueve hacia abajo a la izquierda
-                            else
-                                rotacion -= constantes.PI_CUARTOS;
-                        }
-                        else //Se mueve hacia abajo
-                        {
-                            rotacion = constantes.PI_RADIAN;
-                        }
-                    }
-
-                    if(trueX || trueZ)
-                    {
-                        this->Enemigo::setNewRotacion(this->Enemigo::getRX(), rotacion, this->Enemigo::getRZ());
-                    }
-                    this->setVectorOrientacion();
-                    datosDesplazamiento.velocidadX = vectorOrientacion.vX * velocidadMaxima;
-                    datosDesplazamiento.velocidadZ = vectorOrientacion.vZ * velocidadMaxima;
-
-                    x += datosDesplazamiento.velocidadX;
-                    z += datosDesplazamiento.velocidadZ;
-                    this->setNewPosiciones(x, y, z);
-                    this->setPosicionesFisicas(datosDesplazamiento.velocidadX, 0.0f, datosDesplazamiento.velocidadZ);
-
-                    //Se comprueba si la distancia entre el enemigo y el jugador es menor o igual a la distancia maxima que que indica la variable "distancia"
-                    if(abs(_nivel->GetJugador()->getZ() - this->getZ()) <= abs(datosDesplazamiento.distancia))
-                    {
-                        if(abs(_nivel->GetJugador()->getX() - this->getX()) <= abs(datosDesplazamiento.distancia))
-                        {
-                            funciona = true;
-                        }
-                        else
-                        {
-                            funciona = false;
-                        }
-                    }
-                    else
-                    {
-                        funciona = false;
-                    }
-                }
+            case EN_PERSIGUE: //El Pollo se mueve
+                funciona = this->perseguir();
                 break;
         
             case EN_ATACAR: //El Pollo ataca
