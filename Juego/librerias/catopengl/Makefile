@@ -8,6 +8,7 @@ LIBRERIAS =-L"../glew/lib/" -L"../glad/lib/" -L"../glfw/lib/" -L"../assimp/lib/"
 LIBRERIAS_ESPECIFICAS = ../glew/lib/libGLEW.a ../glad/lib/libglad.a ../glfw/lib/libglfw3.a ../assimp/lib/libIrrXML.a #librerias necesarias
 irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor -lGL -lIrrlicht   #porque nombre llamarla
 SHELL = /bin/bash
+CPUCOUNT=$(shell grep -c "^processor" /proc/cpuinfo)
 # ${CXXFLAGS} - Son las opciones del compilador
 #pwd
 
@@ -58,10 +59,16 @@ $(RECUR2):
 
 # Limpia los .o y el ejecutable creado, si se ponen archivos autogenerados deben ponerse aqui para que se quiten
 clean:
+	@echo Limpiando objetos de libreria grafica
 	rm -f src/*.o
 	rm -f obj/*.o
 
-libreria: $(RECUR) $(OBJECTS) $(PRECA)
+libreria:
+
+	$(MAKE) $(RECUR) 
+	$(MAKE) -j$(CPUCOUNT) $(OBJECTS) 
+	$(MAKE) $(PRECA)
+
 	#vamos a construir la libreria
 	ar -rv lib/libcatopengl.a $(OSOURCESV2)
 	#copiamos cabeceras en inc
