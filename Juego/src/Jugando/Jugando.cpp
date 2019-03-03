@@ -937,7 +937,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     if(accion == 5)
     {
         posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Interactuable*  inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto);
+        Interactuable*  inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto,x,y,z);
         inter->setID(id++);
         inter->setPosiciones(x,y,z);
         inter->SetPosicionArrayObjetos(posicionObjeto);
