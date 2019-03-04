@@ -1,25 +1,25 @@
-/*#include <iostream>
+#include <iostream>
 
 #ifndef Waypoint_HPP
 #define Waypoint_HPP
 
 using namespace std;
 
-class Arbol
+class Waypoint
 {
     public:
+        Waypoint(int x, int y, int z);
+        ~Waypoint();
 
-        Arbol(Nodo *, const char*);
-        Nodo* anyadirHijo(Nodo *);
-        short int* ContinuarSiguienteNodo(bool);
-        Nodo* GetRaiz();
-        Nodo* GetNodoEnEjecucionDirecta();
-        Composicion* devolverPadre();
-        void CambiarNodo(const short *nodo);
     private:
         
+        using PosicionesWaypoint = struct {
+            float x = 0.0f;
+            float y = 0.0f;
+            float z = 0.0f;
+        } posicion;
         vector <Waypoint*> conexiones;
         vector <Sala*> salasDondeEsta;
 
 };
-#endif*/
+#endif
