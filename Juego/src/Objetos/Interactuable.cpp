@@ -109,11 +109,9 @@ Interactuable::Interactuable(int codigo, const char* nombre,
 
 bool Interactuable::accionar()
 {
-    if(accionado)
-    {
-        accionado = false;
-    }
-    else accionado = true;
+    
+    accionado = !accionado;
+    
     return accionado;
 }
 

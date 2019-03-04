@@ -111,7 +111,7 @@ void Jugando::Iniciar()
     _motor->CargarInterfaz();
     
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-    CargarNivel(5, 1); //(level, player) 1 = heavy / 2 = bailaora
+    CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
 
     reiniciando = false;
     
@@ -744,7 +744,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     
 
     //Cargar objetos con el nivel completo
-    this->cargarCofres(2); //Cargamos los cofres del nivel
+    this->cargarCofres(16); //Cargamos los cofres del nivel
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
@@ -1170,7 +1170,8 @@ void Jugando::AccionarMecanismo(int int_col)
             if(_interactuables.at(i)->getCodigo() == _interactuables.at(int_col)->getCodigo())
             {
                 coincide = true;
-                i--;
+               // i--;
+               //para el nivel 5 hay que quitar el comentario
             }
             i++;
         }
@@ -1180,6 +1181,7 @@ void Jugando::AccionarMecanismo(int int_col)
             //Se acciona o desacciona el mecanismo segun su estado actual
             bool activar = _interactuables.at(int_col)->accionar();
             bool abrir = _interactuables.at(i)->accionar();
+            
             unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(i);
             if(abrir)
             {
