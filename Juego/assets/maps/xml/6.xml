@@ -156,8 +156,8 @@
 
 	 <Platform Type="1" accion="0" ancho="24" largo="24" alto="4" RP="0" X="96" Y="0" Z="0" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat1.obj" UserStar="False" StarX="0" StarY="0">
 		<!-- puerta y palanca, la palanca da errores-->
-		<Object Type="1" codigo="8" nombre="palanca" accion="3" ancho="3" largo="1" alto="10" X="101" Y="0" Z="-11" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/Palanca.obj"></Object>	
-		<Object Type="1" codigo="8" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="122" Y="0" Z="12" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+		<Object Type="1" codigo="8" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="101" Y="0" Z="-11" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/Palanca.obj"></Object>	
+		<Object Type="1" codigo="8" accion="3" ancho="4" largo="1" alto="10" RP="90" X="122" Y="0" Z="12" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
 		
 	 <Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="146" Y="0" Z="12" Texture="assets/texture/Puente.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 		<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="122" Y="0" Z="4" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
