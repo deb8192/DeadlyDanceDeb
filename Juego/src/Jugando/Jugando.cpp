@@ -5,8 +5,6 @@
 #include "../Enemigos/Murcielago.hpp"
 //!FUERA
 #include "../ConstantesComunes.hpp"
-#define DEGTORAD 0.0174532925199432957f
-#define RADTODEG 57.295779513082320876f
 //singleton
 Jugando* Jugando::_unicaInstancia = 0;
 //fin indicador singleton
