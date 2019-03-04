@@ -245,7 +245,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
         }
         //El bucle continua mientras el nodo actual no sea una tarea o tenga hijos para descender
         while(((nodoEnEjecucionDirecta != nullptr && std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.HOJA) != 0) && 
-        (compo != nullptr && strcmp(compo->GetAccion(), constantes.FALSO) == 0) && desciende) || primeraVez)
+        ((compo != nullptr && strcmp(compo->GetAccion(), constantes.FALSO) == 0) || compo == nullptr) && desciende) || primeraVez)
         {
             if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0 || std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.RAIZ) == 0)
             {
@@ -442,7 +442,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 const char* accion = hoja->GetAccion();
 
                 //La accion es moverse
-                if(strcmp(accion, constantes.MOVERSE) == 0)
+                if(strcmp(accion, constantes.PERSIGUE) == 0)
                 {
                     arrayTareaObjetivo[0] = 0;
                 }
@@ -465,6 +465,21 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 else if(strcmp(accion, constantes.MERODEA) == 0)
                 {
                     arrayTareaObjetivo[0] = 4;
+                }
+                //La accion es oir
+                else if(strcmp(accion, constantes.OIR) == 0)
+                {
+                    arrayTareaObjetivo[0] = 5;
+                }
+                //La accion es buscar
+                else if(strcmp(accion, constantes.BUSCAR) == 0)
+                {
+                    arrayTareaObjetivo[0] = 6;
+                }
+                //La accion es recuperar vida
+                else if(strcmp(accion, constantes.CURARSE) == 0)
+                {
+                    arrayTareaObjetivo[0] = 7;
                 }
                 else
                 {
@@ -493,7 +508,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     //Se indican la tarea y el objetivo a ejecutar
                     //Tarea
                     const char* accion = compo->GetAccion();
-                    if(strcmp(accion, constantes.MOVERSE) == 0)
+                    if(strcmp(accion, constantes.PERSIGUE) == 0)
                     {
                         arrayTareaObjetivo[0] = 0;
                     }
