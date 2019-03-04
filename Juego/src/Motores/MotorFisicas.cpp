@@ -144,58 +144,7 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
     }
     else if(typeCreator == 3)//objetos
     {
-        if(accion == 5)
-        {             
-            //rp3d::Vector3 posiciones(0.0,0.0,0.0);
-            //rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
-            //Transform transformacion(posiciones,orientacion);
-
-            rp3d::RigidBody* tablon;
-            tablon = world->createRigidBody(transformacion); 
-            rp3d::Vector3 mide(ancho,alto,largo);
-            BoxShape * ocupacion = new BoxShape(mide);
-            tablon->addCollisionShape(ocupacion,transformacion,rp3d::decimal(10));
-            //tablon->setType(BodyType::KINEMATIC);
-            rp3d::Material& material = tablon->getMaterial();
-            material.setBounciness(rp3d::decimal(0));
-            material.setFrictionCoefficient(rp3d::decimal(1));
-            tablon->setIsAllowedToSleep(false);
-            rp3d::Vector3 force(2.0, 0.0, 0.0);
-            tablon->applyForceToCenterOfMass(force);
-            
-            float ex = px;
-            float ez = pz;
-
-            //vamos a idicar donde va el eje segun la rotacion rp de la puerta
-            rp == 90 ? 
-                ex = px-2, ez = pz:
-                ex = px, ez = pz+2;
-
-            rp3d::Vector3 posicionesEje(ex,py,ez);
-            Transform transformacionEje(posicionesEje,orientacion);        
-            rp3d::RigidBody* eje;
-            eje = world->createRigidBody(transformacionEje); 
-            rp3d::Vector3 mides(2,alto,2);
-            BoxShape * ocupas = new BoxShape(mides);
-            eje->addCollisionShape(ocupas,transformacionEje,rp3d::decimal(10));          
-            eje->setType(BodyType::STATIC);
-            
-
-
-           
-            ejesPuertas.push_back(eje);
-            puertas.push_back(tablon);
-            prevTransform.push_back(tablon->getTransform());
-            this->CrearJoint(puertas[puertas.size()-1],ejesPuertas[ejesPuertas.size()-1]);
-            /*relacionInteractuablesObstaculos.push_back(obstaculos.size());
-            obstaculos.push_back(cuerpo);
-            //Se le anade una zona de deteccion mediante colision
-            rp3d::CollisionBody * deteccion;
-            SphereShape * detector = new SphereShape(alto);
-            deteccion = space->createCollisionBody(transformacion);
-            deteccion->addCollisionShape(detector,transformacion);
-            interactuables.push_back(deteccion);*/
-        }
+       
         //Recolectable power ups
         if(accion == 4)
         {
@@ -253,185 +202,6 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
     // std::cout << "pz: " << posiciones.z << std::endl;
 }
 
-
-void MotorFisicas::CrearJoint(RigidBody* body1, RigidBody* body2)
-{
-    // Anchor point in world-space 
-    const rp3d::Vector3 anchorPoint(body2->getTransform().getPosition().x, 0.0, body2->getTransform().getPosition().z); 
- 
-    // Hinge rotation axis in world-space 
-    const rp3d::Vector3 axis(0.0, 1.0, 0.0); 
-
-    // Create the joint info object 
-    rp3d::HingeJointInfo jointInfo(body1, body2, anchorPoint, axis); 
- 
-    // Enable the limits of the joint 
-    jointInfo.isLimitEnabled = true; 
- 
-    // Minimum limit angle 
-    jointInfo.minAngleLimit = -PI / 2.0; 
- 
-    // Maximum limit angle 
-    jointInfo.maxAngleLimit = PI / 2.0;
-
-    // Enable the motor of the joint 
-    jointInfo.isMotorEnabled = true; 
- 
-    // Motor angular speed 
-    jointInfo.motorSpeed = PI / 4.0; 
- 
-    // Maximum allowed torque 
-    jointInfo.maxMotorTorque = 10.0;  
- 
-    // Create the hinge joint in the dynamics world 
-    rp3d::HingeJoint* joint; 
-
-    jointInfo.isCollisionEnabled = false;
-    joint = dynamic_cast<rp3d::HingeJoint*>(world->createJoint(jointInfo));
-    jointsPuertas.push_back(joint);    
-}
-
-
-int MotorFisicas::GetPuertaX(int i)
-{
-    if(puertas.size()>i)
-    {
-         const float timeStep = 1.0 / 60.0; 
-        // Compute the time interpolation factor 
-        decimal factor = accumulator / timeStep;  
-        // Get the updated transform of the body 
-        rp3d::Transform currTransform = puertas[i]->getTransform();  
-        // Compute the interpolated transform of the rigid body 
-        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-        // Now you can render your body using the interpolated transform here    
-        float x = interpolatedTransform.getPosition().x;
-        // Update the previous transform 
-        prevTransform[i] = currTransform;
-
-        return x;
-    }
-    else
-    {
-        return 0;
-    }
-   
-}
-int MotorFisicas::GetPuertaY(int i)
-{
-    if(puertas.size()>i)
-    {
-         const float timeStep = 1.0 / 60.0; 
-        // Compute the time interpolation factor 
-        decimal factor = accumulator / timeStep;  
-        // Get the updated transform of the body 
-        rp3d::Transform currTransform = puertas[i]->getTransform();  
-        // Compute the interpolated transform of the rigid body 
-        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-        // Now you can render your body using the interpolated transform here    
-        float y = interpolatedTransform.getPosition().y;
-        // Update the previous transform 
-        prevTransform[i] = currTransform;
-
-        return y;
-    }
-    else
-    {
-        return 0;
-    }
-}
-int MotorFisicas::GetPuertaZ(int i)
-{
-     if(puertas.size()>i)
-    {
-         const float timeStep = 1.0 / 60.0; 
-        // Compute the time interpolation factor 
-        decimal factor = accumulator / timeStep;  
-        // Get the updated transform of the body 
-        rp3d::Transform currTransform = puertas[i]->getTransform();  
-        // Compute the interpolated transform of the rigid body 
-        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-        // Now you can render your body using the interpolated transform here    
-        float z = interpolatedTransform.getPosition().z;
-        // Update the previous transform 
-        prevTransform[i] = currTransform;
-
-        return z;
-    }
-    else
-    {
-        return 0;
-    }
-}
-
-int MotorFisicas::GetPuertaRX(int i)
-{
-    if(puertas.size()>i)
-    {
-         const float timeStep = 1.0 / 60.0; 
-        // Compute the time interpolation factor 
-        decimal factor = accumulator / timeStep;  
-        // Get the updated transform of the body 
-        rp3d::Transform currTransform = puertas[i]->getTransform();  
-        // Compute the interpolated transform of the rigid body 
-        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-        // Now you can render your body using the interpolated transform here    
-        float rx = interpolatedTransform.getOrientation().x;
-        // Update the previous transform 
-        prevTransform[i] = currTransform;
-
-        return rx;
-    }
-    else
-    {
-        return 0;
-    }
-}
-int MotorFisicas::GetPuertaRY(int i)
-{
-     if(puertas.size()>i)
-    {
-         const float timeStep = 1.0 / 60.0; 
-        // Compute the time interpolation factor 
-        decimal factor = accumulator / timeStep;  
-        // Get the updated transform of the body 
-        rp3d::Transform currTransform = puertas[i]->getTransform();  
-        // Compute the interpolated transform of the rigid body 
-        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-        // Now you can render your body using the interpolated transform here    
-        float ry = interpolatedTransform.getOrientation().y;
-        // Update the previous transform 
-        prevTransform[i] = currTransform;
-
-        return ry;
-    }
-    else
-    {
-        return 0;
-    }
-}
-int MotorFisicas::GetPuertaRZ(int i)
-{
-     if(puertas.size()>i)
-    {
-         const float timeStep = 1.0 / 60.0; 
-        // Compute the time interpolation factor 
-        decimal factor = accumulator / timeStep;  
-        // Get the updated transform of the body 
-        rp3d::Transform currTransform = puertas[i]->getTransform();  
-        // Compute the interpolated transform of the rigid body 
-        rp3d::Transform interpolatedTransform = Transform::interpolateTransforms(prevTransform[i], currTransform, factor);  
-        // Now you can render your body using the interpolated transform here    
-        float rz = interpolatedTransform.getOrientation().z;
-        // Update the previous transform 
-        prevTransform[i] = currTransform;
-
-        return rz;
-    }
-    else
-    {
-        return 0;
-    }
-}
 
 void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, int alt)
 {
@@ -806,39 +576,6 @@ void MotorFisicas::llevarBox(float x, float y, float z, float anc, float lar, fl
 
 }
 
-void MotorFisicas::updateJoints(long double currentFrameTime)
-{
-    /*se debe actualizar dynamic world para que funcione joints y las colisiones de rigidbody*/
-    
-    // Constant physics time step 
-    const float timeStep = 1.0 / 60.0;  
-    // Get the current system time 
-    //long double currentFrameTime = getCurrentSystemTime(); 
-    
-    // Compute the time difference between the two frames 
-    long double deltaTime  = currentFrameTime - previousFrameTime; 
- 
-    // Update the previous time 
-    previousFrameTime = currentFrameTime; 
-    // Add the time difference in the accumulator 
-     if(deltaTime > 0)
-        accumulator += deltaTime; 
-
-    // While there is enough accumulated time to take 
-    // one or several physics steps 
-    while (accumulator >= timeStep)
-    {  
-       
- 
-        // Update the Dynamics world with a constant time step 
-        world->update(timeStep);  
-        // Decrease the accumulated time 
-        accumulator -= timeStep; 
-    }
-
-    
-    
-}
 
 void MotorFisicas::updateJugador(float x, float y, float z)
 {
@@ -881,8 +618,10 @@ void MotorFisicas::updatePuerta(float x, float y, float z, float rx, float ry, f
     Constantes constantes;
     if(obstaculos.at(i) != nullptr)
     {
-        rp3d::Vector3 posiciones(x+(ry/abs(ry)*desplazamientos[0]),y,z-(ry/abs(ry))*desplazamientos[1]);
-        rp3d::Quaternion orientacion = rp3d::Quaternion(x * sin((rx * constantes.DEG_TO_RAD) / 2.0), y * sin((ry * constantes.DEG_TO_RAD) / 2.0), z * sin((rz * constantes.DEG_TO_RAD) / 2.0), (cos(ry * constantes.DEG_TO_RAD) / 2.0)*(ry/abs(ry)));
+        rp3d::Vector3 posiciones(x,y,z);
+        //rp3d::Vector3 posiciones(x+(ry/abs(ry)*desplazamientos[0]),y,z-(ry/abs(ry))*desplazamientos[1]);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        //rp3d::Quaternion orientacion = rp3d::Quaternion(x * sin((rx * constantes.DEG_TO_RAD) / 2.0), y * sin((ry * constantes.DEG_TO_RAD) / 2.0), z * sin((rz * constantes.DEG_TO_RAD) / 2.0), (cos(ry * constantes.DEG_TO_RAD) / 2.0)*(ry/abs(ry)));
         Transform transformacion(posiciones,orientacion);
         obstaculos.at(i)->setTransform(transformacion);
     }

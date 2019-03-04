@@ -19,6 +19,10 @@ Jugador::Jugador()
     tiempoPasadoCogerObjeto=0;
     tiempoEnMorir=2000.0f;//tiempo en milisegundos
     tiempoPasadoEnMorir=0;
+    atackTime = 0;
+    atackEspTime = 0;
+    lastAtackTime = 0;
+    lastAtackEspTime = 0;
 }   
 
 Jugador::~Jugador()
@@ -165,6 +169,11 @@ Jugador::Jugador(int nX,int nY,int nZ, int ancho,
     tiempoPasadoCogerObjeto=0;
     tiempoEnMorir=2000.0f;//tiempo en milisegundos
     tiempoPasadoEnMorir=0;
+
+    atackTime = 0;
+    atackEspTime = 0;
+    lastAtackTime = 0;
+    lastAtackEspTime = 0;
 }
 
 void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
@@ -382,7 +391,7 @@ void Jugador::AtacarUpdate(int danyo)
     Constantes constantes;
     if(vida > 0)
     {
-        Jugando* nivel = Jugando::GetInstance();
+        Jugando* _nivel = Jugando::GetInstance();
         if(this->getArma() == nullptr) {
             _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
             _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,2,1,1,2);
@@ -433,12 +442,12 @@ void Jugador::AtacarUpdate(int danyo)
                     float variacion = rand() % 7 - 3;
                     danyo += (int) variacion;
                     //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
-                    nivel->getEnemigos().at(atacados.at(i))->ModificarVida(-danyo);
-                    cout<<"Enemigo: "<< nivel->getEnemigos().at(atacados.at(i))->getID() << endl;
+                    _nivel->getEnemigos().at(atacados.at(i))->ModificarVida(-danyo);
+                    cout<<"Enemigo: "<< _nivel->getEnemigos().at(atacados.at(i))->getID() << endl;
                     cout<<"Daño "<<danyo<<endl;
                     danyo -= (int) variacion;
                     cout<<"variacion "<<variacion<<endl;
-                    cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
+                    cout<<"Vida enemigo "<<_nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<_nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
                     _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
                     //guardar el atacado para no repetir
                     atacados_normal.push_back(atacados.at(i));
@@ -541,7 +550,7 @@ int Jugador::AtacarEspecial()
 void Jugador::AtacarEspecialUpdate(int*danyo)
 {
     Constantes constantes;
-    Jugando* nivel = Jugando::GetInstance();
+    Jugando* _nivel = Jugando::GetInstance();
 
     //Si el ataque especial es el del Heavy, es cuerpo a cuerpo
     if(strcmp(_armaEspecial->getNombre(), NOMBREHEAVY) == 0)
@@ -595,14 +604,35 @@ void Jugador::AtacarEspecialUpdate(int*danyo)
         {
             float variacion = rand() % 7 - 3;
             *danyo += (int) variacion;
-            nivel->getEnemigos().at(atacados.at(i))->ModificarVida(-(*danyo));
+            _nivel->getEnemigos().at(atacados.at(i))->ModificarVida(-(*danyo));
             cout<<"Daño "<<*danyo<<endl;
             *danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
+            cout<<"Vida enemigo "<<_nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<_nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
             _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }
+}
+
+void Jugador::generarSonido(int intensidad,double duracion,int tipo)
+{
+    Constantes constantes;
+    EventoSonido * sonid = new EventoSonido(intensidad, duracion, posActual.x, posActual.y, posActual.z, constantes.DOS, tipo);
+    SenseEventos * eventos = SenseEventos::getInstance();
+    eventos->agregarEvento(sonid);
+}
+
+void Jugador::queEscuchas()
+{
+    SenseEventos * eventos = SenseEventos::getInstance();
+    std::vector<EventoSonido *> listaSonidos =  eventos->listarSonidos(posActual.x, posActual.y);//le pasamos nuestra x e y
+    //int cuantos = listaSonidos.size();
+    //cout << "Esta escuchando " << cuantos << " sonidos" << endl;
+}
+
+void Jugador::queVes()
+{
+    /*codigo*/
 }
 
 void Jugador::Interactuar(int id, int id2)

@@ -1,7 +1,9 @@
 #include "Enemigo.hpp"
 #include "Pollo.hpp"
+#include "Murcielago.hpp"
 #include "../Jugando/Jugando.hpp"
 #include "../ConstantesComunes.hpp"
+#include "cmath"
 
 Enemigo::Enemigo()
 {
@@ -16,8 +18,6 @@ Enemigo::Enemigo()
 
 Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida)
 {
-    vidaIni = maxVida;
-    vida = vidaIni;
     tiempoMerodear = 0.0f;
     lastTiempoMerodear = 0.0f;
     vectorOrientacion.vX = 0.0f;
@@ -27,6 +27,8 @@ Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida)
     modo = MODO_DEFAULT;
 
     atacktime = 0.0f;
+    vidaIni = maxVida;
+    vida = vidaIni;
     posIni.x = nX;
     posIni.y = nY;
     posIni.z = nZ;
@@ -355,6 +357,13 @@ void Enemigo::UpdateIA()
             pollo->RunIA();
         }
             break;
+        
+        case 1:
+        {
+            Murcielago *murcielago = (Murcielago*) this;
+            murcielago->RunIA();
+        }
+            break;
         default:
             break;
     }
@@ -368,6 +377,13 @@ void Enemigo::UpdateBehavior(short *i)
         {
             Pollo *pollo = (Pollo*) this;
             pollo->UpdatePollo(i);
+        }
+            break;
+        
+        case 1:
+        {
+            Murcielago *murcielago = (Murcielago*) this;
+            murcielago->UpdateMurcielago(i);
         }
             break;
         default:
@@ -840,6 +856,33 @@ int Enemigo::GetEnemigo()
 {
     return tipoEnemigo;
 }
+
+Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, short enemigo)
+{
+    Constantes constantes;
+    Zona* zonaElegida = nullptr;
+    VectorEspacial distanciaZonaActual, distanciaZonaElegida;
+    vector<Zona*> zonasCompletas;
+    zonasCompletas.reserve(zonas.size());
+
+    unsigned short i = 0;
+    while(i < zonas.size() && (zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
+    {
+        distanciaZonaActual.vX = abs(zonas.at(i)->getX() - posActual.x);
+        distanciaZonaActual.vY = abs(zonas.at(i)->getY() - posActual.y);
+        distanciaZonaActual.vZ = abs(zonas.at(i)->getZ() - posActual.z);
+        distanciaZonaActual.modulo = pow(distanciaZonaActual.vX, constantes.DOS) + pow(distanciaZonaActual.vY, constantes.DOS) + pow(distanciaZonaActual.vZ, constantes.DOS);
+        distanciaZonaActual.modulo = sqrt(distanciaZonaActual.modulo);
+
+        if(zonaElegida == nullptr || distanciaZonaElegida.modulo > distanciaZonaActual.modulo)
+        {
+            distanciaZonaElegida = distanciaZonaActual;
+            zonaElegida = zonas.at(i);
+        }
+        i++;
+    }
+    return zonaElegida;
+}
 //ia
 
 void Enemigo::setArbol(Arbol ia)
@@ -901,6 +944,25 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         return false;//cambiamos de rama si no se encuentra la tarea
     }
 
+
+    void Enemigo::alinearse(VectorEspacial* target)
+    {
+        Constantes constantes;
+        VectorEspacial distancia;
+        distancia.vX = target->vX - this->getX();
+        distancia.vY = target->vY - this->getY();
+        distancia.vZ = target->vZ - this->getZ();
+        distancia.modulo = pow(distancia.vX, constantes.DOS) + pow(distancia.vY, constantes.DOS) + pow(distancia.vZ, constantes.DOS);
+        distancia.modulo = sqrt(distancia.modulo);
+
+        distancia.vZ < 0 ?
+        rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ)) :
+        rotation = constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ);
+
+        this->setNewRotacion(rotActual.x, rotation, rotActual.z);
+        this->setVectorOrientacion();
+    }
+
     bool Enemigo::ver(int tipo)
     {
         //vamos a  ver si vemos al jugador
@@ -943,9 +1005,86 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
         return false;
     }
+    //ESTO TAL CUAL SE PARECE MAS A BUSCAR, PERSEGUIR PREDICE LA RUTA DEL OBJETIVO DEL ENEMIGO
+    bool Enemigo::perseguir()
+    {
+        Jugando* _nivel = Jugando::GetInstance();
+        Constantes constantes;
+        bool funciona = true;
+        VectorEspacial datosDesplazamiento, objetivo;
+        float distancia = 4.0f;
+
+        objetivo.vX = _nivel->GetJugador()->getX();
+        objetivo.vY = _nivel->GetJugador()->getY();
+        objetivo.vZ = _nivel->GetJugador()->getZ();
+
+        this->alinearse(&objetivo);
+
+        datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima;
+        datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima;
+
+        if((abs(objetivo.vX - this->getX())) > abs(distancia) || (abs(objetivo.vZ - this->getZ()) > abs(distancia)))
+        {
+            this->setNewPosiciones(posFutura.x + datosDesplazamiento.vX, posFutura.y, posFutura.z + datosDesplazamiento.vZ);
+            this->setPosicionesFisicas(datosDesplazamiento.vX, constantes.CERO, datosDesplazamiento.vZ);
+        }
+                
+        //Se comprueba si la distancia entre el enemigo y el jugador es menor o igual a la distancia maxima que que indica la variable "distancia"
+        if(abs(objetivo.vZ - this->getZ()) <= abs(distancia))
+        {
+            if(abs(objetivo.vX - this->getX()) <= abs(distancia))
+            {
+                funciona = true;
+            }
+            else
+            {
+                funciona = false;
+            }
+        }
+        else
+        {
+            funciona = false;
+        }
+        return funciona;
+    }
+
+    bool Enemigo::buscar(VectorEspacial* objetivo)
+    {
+        Constantes constantes;
+        bool funciona = true;
+        VectorEspacial datosDesplazamiento;
+        float distancia = 4.0f;
+
+        this->alinearse(objetivo);
+
+        datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima;
+        datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima;
+
+        this->setNewPosiciones(posFutura.x + datosDesplazamiento.vX, posFutura.y, posFutura.z + datosDesplazamiento.vZ);
+        this->setPosicionesFisicas(datosDesplazamiento.vX, constantes.CERO, datosDesplazamiento.vZ);
+        
+        //Se comprueba si la distancia entre el enemigo y el jugador es menor o igual a la distancia maxima que que indica la variable "distancia"
+        if(abs(objetivo->vZ - this->getZ()) <= abs(distancia))
+        {
+            if(abs(objetivo->vX - this->getX()) <= abs(distancia))
+            {
+                funciona = true;
+            }
+            else
+            {
+                funciona = false;
+            }
+        }
+        else
+        {
+            funciona = false;
+        }
+        return funciona;
+    }
 
     bool Enemigo::pedirAyuda()
     {
+        
         Jugando* _nivel = Jugando::GetInstance();
         MotorGrafico* _motor = MotorGrafico::GetInstance();
         //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
@@ -962,11 +1101,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
     bool Enemigo::ContestarAyuda()
     {
+        Jugando* _nivel = Jugando::GetInstance();
         //vamos a generar un sonido de ayuda
         generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
         MotorGrafico* _motor = MotorGrafico::GetInstance();
         if(_motor->getPathfindingActivado()){
-            Jugando* _nivel = Jugando::GetInstance();
             _nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
         }
         //cout << " contesta a la llamada de auxilio "<< endl;
