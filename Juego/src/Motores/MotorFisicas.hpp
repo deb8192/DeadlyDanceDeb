@@ -20,7 +20,7 @@ using namespace reactphysics3d;
             }
             //fin singleton public
 
-            void crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
+            void crearCuerpo(int accion, int rp, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             //int crearCuerpo(float px, float py, float pz, int type, float ancho, float largo, float alto);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             void actualizarPosicionCuerpo(float px, float py, float pz,int posicion);//se le pasa las nuevas posiciones del cuerpo del array de cuerpos de la posicion
             Ray* crearRayo(float x, float y, float z, float rotation, float longitud);//crea un rayo en esas posiciones con la longitud
@@ -56,8 +56,8 @@ using namespace reactphysics3d;
             void setFormaArma(float px, float py, float pz, int anc, int lar, int alt);
             void setFormaRecolectable(int id, float px, float py, float pz, int anc, int lar, int alt);
             void updateAtaqueEspecial(float x, float y, float z, float rx, float ry, float rz);
-            void vaciarupdateArma();
-
+            void vaciarupdateArma();            
+            
             bool IfCollision(CollisionBody * body1, CollisionBody * body2);
             CollisionWorld* getWorld();
             CollisionBody* getJugador();
@@ -67,7 +67,7 @@ using namespace reactphysics3d;
             CollisionBody* getAtack();
             CollisionBody* getColectablesPowerup(int n);
             unsigned int GetRelacionInteractuablesObstaculos(int n);
-
+            
             //para limpiar todas las fisicas
             void limpiarFisicas();
 
@@ -79,10 +79,12 @@ using namespace reactphysics3d;
 
             WorldSettings config;
             CollisionWorld * space; //espacio o mundo de fisicas
+            DynamicsWorld * world;
             std::vector<CollisionBody *> enemigos;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             std::vector<CollisionBody *> enemigosAtack; //ataque de enemigos
             std::vector<CollisionBody *> armaAtEspEne;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody * jugador;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
+            RigidBody * jugadorBody; //esto es para que el jugador colisiones con las puertas y funcione los joints
 
             std::vector<CollisionBody *> recolectables;//Vector de elementos que se pueden coger
             std::vector<CollisionBody *> recolectables_powerup;//Vector recolectables_powerup
@@ -90,11 +92,13 @@ using namespace reactphysics3d;
             std::vector<unsigned int> relacionInteractuablesObstaculos;//vector que contiene en la posicion correspondiente a un interactuable en su vector el valor de su posicion en el vector de obstaculos
             std::vector<CollisionBody *> obstaculos;//Vector de obstaculos que bloquean el movimiento
             std::vector<CollisionBody *> plataformas;//Vector de plataformas para caminar
-
+            std::vector<rp3d::Transform> prevTransform;
+            
             CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody * jugadorAtack; //contiene el ataque normal del jugador
             CollisionBody * arma;//arma normal del jugador
-
+            long double accumulator = 0;
+            long double previousFrameTime;
             // Ya no utilizar - MI
             //std::vector<CollisionBody *> objetos;
     };

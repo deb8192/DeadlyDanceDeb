@@ -17,7 +17,12 @@ MotorFisicas::MotorFisicas()
     config.defaultVelocitySolverNbIterations = 20;
     config.isSleepingEnabled = false;
     space = new CollisionWorld(config);
+    // Gravity vector 
+    rp3d::Vector3 gravity(0.0, -9.81, 0.0);  
+    // Create the dynamics world 
+    world = new DynamicsWorld(gravity);
     jugador = nullptr;
+        jugadorBody  = nullptr;
 }
 
 MotorFisicas::~MotorFisicas()
@@ -27,6 +32,7 @@ MotorFisicas::~MotorFisicas()
     //std::vector<unsigned int> relacionInteractuablesObstaculos
 
     jugador = nullptr;
+     jugadorBody  = nullptr;
     armaAtEsp = nullptr;
     jugadorAtack = nullptr;
     arma = nullptr;
@@ -93,7 +99,7 @@ MotorFisicas::~MotorFisicas()
 }
 
 
-void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator)
+void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator)
 {
     rp3d::Vector3 posiciones(px,py,pz);
     rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
@@ -121,6 +127,15 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     }
     if(typeCreator == 1)//jugador
     {
+        rp3d::RigidBody* rigido;
+        rigido = world->createRigidBody(transformacion); 
+        rp3d::Vector3 medicion(2,alto,2);
+        BoxShape * ocupamiento = new BoxShape(medicion);
+        rigido->addCollisionShape(ocupamiento,transformacion,rp3d::decimal(10));
+        rigido->enableGravity(false);
+
+        jugadorBody = rigido;
+        jugadorBody->setType(BodyType::KINEMATIC);
         jugador = cuerpo;
     }
     else if(typeCreator == 2)//enemigos
@@ -129,6 +144,7 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     }
     else if(typeCreator == 3)//objetos
     {
+       
         //Recolectable power ups
         if(accion == 4)
         {
@@ -186,6 +202,7 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
     // std::cout << "pz: " << posiciones.z << std::endl;
 }
 
+
 void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, int alt)
 {
 
@@ -231,6 +248,7 @@ void MotorFisicas::EraseEnemigo(std::size_t i)
 
 void MotorFisicas::EraseJugador(){
     jugador = NULL;
+     jugadorBody  = NULL;
 }
 
 void MotorFisicas::EraseArma()
@@ -533,6 +551,7 @@ void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, floa
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         jugador->setTransform(transformacion);
+        jugadorBody->setTransform(transformacion);
     }
 
 }
@@ -557,6 +576,7 @@ void MotorFisicas::llevarBox(float x, float y, float z, float anc, float lar, fl
 
 }
 
+
 void MotorFisicas::updateJugador(float x, float y, float z)
 {
     if(jugador != nullptr)
@@ -565,6 +585,11 @@ void MotorFisicas::updateJugador(float x, float y, float z)
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         jugador->setTransform(transformacion);
+        //jugadorBody->getTransform(transformacion);
+
+        cout << jugadorBody->getTransform().getPosition().x << endl;
+        cout << jugadorBody->getTransform().getPosition().y << endl;
+        cout << jugadorBody->getTransform().getPosition().z << endl;
 
         /*
         rp3d::Vector3 posiciones(ix,y,iz);
@@ -803,6 +828,8 @@ void MotorFisicas::limpiarFisicas()
             space->destroyCollisionBody(jugador);
         }
         jugador = NULL;
+
+        jugadorBody = NULL;
     }
 
     if(recolectables.size() > 0)

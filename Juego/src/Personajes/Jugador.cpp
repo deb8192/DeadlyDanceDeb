@@ -138,7 +138,7 @@ Jugador::Jugador(int nX,int nY,int nZ, int ancho,
     _motora = MotorAudioSystem::getInstance();
     _interfaz = InterfazJugador::getInstance();
 
-    _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
+    _fisicas->crearCuerpo(accion,0,nX/2,nY/2,nZ/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
     this->ancho = ancho;
     this->largo = largo;
     this->alto = alto;
@@ -355,7 +355,7 @@ int Jugador::Atacar(int i)
         if(this->getArma() == nullptr)
         {
             setAnimacion(2);
-            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,2,1,4);
+            _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,2,2,1,4);
             danyo = 50.0f;
             _motora->getEvent("SinArma")->setVolume(0.8f);
             _motora->getEvent("SinArma")->start();
@@ -364,7 +364,7 @@ int Jugador::Atacar(int i)
         else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
         {
             //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4);
+            _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,1,5,0,0,4);
             danyo = 70.0f;
             _motora->getEvent("GolpeGuitarra")->setVolume(0.8f);
             _motora->getEvent("GolpeGuitarra")->start();
@@ -373,7 +373,7 @@ int Jugador::Atacar(int i)
         else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
         {
             //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4);
+            _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,2,0.5,1,4);
             danyo = 55.0f;
             _motora->getEvent("Arpa")->setVolume(0.8f);
             _motora->getEvent("Arpa")->start();
@@ -503,7 +503,7 @@ int Jugador::AtacarEspecial()
             if(strcmp(_armaEspecial->getNombre(), NOMBREHEAVY) == 0)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                _fisicas->crearCuerpo(0,_armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),2,8,1,8,5);
+                _fisicas->crearCuerpo(0,0,_armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),2,8,1,8,5);
                 _motora->getEvent("Arpa")->setVolume(0.8f);
                 _motora->getEvent("Arpa")->start();
             }
@@ -511,7 +511,7 @@ int Jugador::AtacarEspecial()
             else if(strcmp(_armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                _fisicas->crearCuerpo(0,_armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),2,8,8,8,5);
+                _fisicas->crearCuerpo(0,0,_armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),2,8,8,8,5);
                 _motora->getEvent("Arpa")->start();
             }
         }

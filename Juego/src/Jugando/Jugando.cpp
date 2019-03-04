@@ -5,7 +5,8 @@
 #include "../Enemigos/Murcielago.hpp"
 //!FUERA
 #include "../ConstantesComunes.hpp"
-
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
 //singleton
 Jugando* Jugando::_unicaInstancia = 0;
 //fin indicador singleton
@@ -291,7 +292,8 @@ void Jugando::Update()
         DesactivarDebug();
         Juego::GetInstance()->estado.CambioEstadoMuerte();
     }
-
+    
+        
     // ********** se actualiza posiciones e interpolado **********
     //animacion
     _motor->cambiarAnimacionJugador(_jugador->getAnimacion());
@@ -538,7 +540,7 @@ void Jugando::UpdateIA()
                     }
 
                     //Crear objeto
-                    this->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+                    this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
                 }
 
                 //Borrar enemigo
@@ -577,6 +579,8 @@ void Jugando::Render()
     }
     lastDrawTime = drawTime;
     drawTime = _controladorTiempo->GetTiempo(2);
+
+
 
     //Dibujado del personaje
     _jugador->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
@@ -685,7 +689,6 @@ void Jugando::Reanudar()
         cout << "REINICIAR JUEGO" << endl;
 
         DesactivarDebug();
-
         // valores por defecto del jugador
         ValoresPorDefectoJugador();
 
@@ -840,21 +843,21 @@ void Jugando::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho
     _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     
     _motor->CargarEnemigos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
-    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2);
-    _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
-    _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
+    _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2);
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
-Sala* Jugando::CrearPlataforma(int accion, int x,int y,int z, int ancho, int largo, int alto, int centro,
+Sala* Jugando::CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro,
     const char* ruta_objeto, const char* ruta_textura)
 {
     Sala* _sala = new Sala(ancho,largo,alto,x,y,z,centro);
     //int*  datos = sala->getSizes(); //para comprobar la informacion de la sala
     //cout << "\e[36m datos de la sala: \e[0m" << datos[0] << " " << datos[1]  << " " << datos[2] << " " << datos[3] << " " << datos[4] << endl;
-    int nId = _motor->CargarPlataformas(x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+    int nId = _motor->CargarPlataformas(rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     _sala->definirID(nId);
-    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,6);
+    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,6);
 
     if(!_primeraSala)
     {
@@ -870,7 +873,7 @@ void Jugando::CrearLuz(int x,int y,int z)
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
-void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int x,int y,int z,
+void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
     int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades)
 {
     int posicionObjeto;
@@ -878,7 +881,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     //Arma
     if(accion == 2)
     {
-        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z);
         _rec->setID(_recolectables.size());
         _rec->setPosiciones(x,y,z);
@@ -889,7 +892,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     //Puertas o interruptores
     if(accion == 3)
     {
-        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         Interactuable* _inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto,x,y,z);
         _inter->setID(id++);
         _inter->setPosiciones(x,y,z);
@@ -902,7 +905,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     //Powerups
     if(accion == 4)
     {
-        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z);
         _rec->setID(_powerup.size());
         _rec->setPosiciones(x,y,z);
@@ -910,12 +913,13 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
         _rec->setCantidad(propiedades[0]); //cantidad
         _powerup.push_back(move(_rec));
         _rec = nullptr;
-    }else
+    }
+    else
     {
-        posicionObjeto = _motor->CargarObjetos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+         posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     }
 
-    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3);
+    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3);
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
 }
@@ -979,7 +983,7 @@ void Jugando::cargarCofres(int num)
                 _zonas[zonasDisponibles[numAlt]]->annadirElemento();
 
                 //Colocar cofre
-                int posicionObjeto = _motor->CargarObjetos(3,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
+                int posicionObjeto = _motor->CargarObjetos(3,constantes.CERO,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
                 Interactuable*  inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto, newx, newy, newz);
                 inter->setID(id++);
                 inter->setPosiciones(newx,newy,newz);
@@ -990,7 +994,7 @@ void Jugando::cargarCofres(int num)
 
                 //Fisicas del cofre
                 MotorFisicas* _fisicas = MotorFisicas::getInstance();
-                _fisicas->crearCuerpo(3,newx/2,newy/2,newz/2,2,2,4,2,3);
+                _fisicas->crearCuerpo(3,constantes.CERO,newx/2,newy/2,newz/2,2,2,4,2,3);
 
                 //borrar del Array por que el proposito esta cumplido
                 if(_zonas[zonasDisponibles[numAlt]]->getTotalElementos() == _zonas[zonasDisponibles[numAlt]]->getElementosActuales())
@@ -1029,7 +1033,7 @@ void Jugando::cargarCofres(int num)
             //lo cargamos por primera vez en el motor de graficos
             _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->getObjeto(), _recolectables[rec_col]->getTextura());
             //lo cargamos por primera vez en el motor de fisicas
-            _fisicas->crearCuerpo(0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,2,_recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(), 6);
+            _fisicas->crearCuerpo(0,0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,2,_recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(), 6);
             //borramos el recolectable de nivel, _motor grafico y motor fisicas
             _recolectables.erase(_recolectables.begin() + rec_col);
             _motor->EraseColectable(rec_col);
@@ -1305,7 +1309,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     cout << "Hay " << orocant << " de Oro!" << endl;
     propiedades[0] = orocant; //para pasarlo a crear objeto
   }
-   this->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
 }
 
 void Jugando::activarPowerUp()
