@@ -154,6 +154,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
     int x = plat.attribute("X").as_int();//nos devuelve un int
     int y = plat.attribute("Y").as_int();//nos devuelve un int
     int z = plat.attribute("Z").as_int();//nos devuelve un int
+    int rp = plat.attribute("RP").as_int();//nos devuelve un int
     int ancho = plat.attribute("ancho").as_int();//nos devuelve un int
     int largo = plat.attribute("largo").as_int();//nos devuelve un int
     int alto = plat.attribute("alto").as_int();//nos devuelve un int 
@@ -161,7 +162,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
     bool jugadorEstasAqui = plat.attribute("UserStar").as_bool();//nos devuelve true si es donde empieza el jugador 
     const char* textura = plat.attribute("Texture").value(); //nos da un char[] = string
     const char* modelo  =  plat.attribute("Model").value(); //nos da un char[] = string
-    padren = _jugando->CrearPlataforma(accion,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
+    padren = _jugando->CrearPlataforma(accion,rp,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
 
     if(padre != nullptr && padren != nullptr)
     {
@@ -220,6 +221,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int x = obj.attribute("X").as_int();//nos devuelve un int
         int y = obj.attribute("Y").as_int();//nos devuelve un int
         int z = obj.attribute("Z").as_int();//nos devuelve un int
+        int rp = obj.attribute("RP").as_int();//nos devuelve un int
         int despX = obj.attribute("despX").as_int();//nos devuelve un int
         int despZ = obj.attribute("despZ").as_int();//nos devuelve un int
         int ancho = obj.attribute("ancho").as_int();//nos devuelve un int
@@ -229,7 +231,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         const char* nombre = obj.attribute("nombre").value(); //nos da un char[] = string
         const char* textura = obj.attribute("Texture").value(); //nos da un char[] = string
         const char* modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
-        _jugando->CrearObjeto(codigo,accion,nombre,ataque,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL); //cargamos el enemigo
+        _jugando->CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL); //cargamos el enemigo
     }
     for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {

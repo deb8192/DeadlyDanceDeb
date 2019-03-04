@@ -522,7 +522,7 @@ bool MotorGrafico::GetDebugActivado()
 
 // ------------------------------------ Revisar
 
-int MotorGrafico::CargarPlataformas(int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto,const char *ruta_textura)
+int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto,const char *ruta_textura)
 {
     IAnimatedMesh* objeto = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	if (!objeto)
@@ -534,6 +534,7 @@ int MotorGrafico::CargarPlataformas(int x,int y,int z, int ancho, int largo, int
     {
         IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
         _objetoEnEscena->setPosition(core::vector3df(x,y,z));
+        _objetoEnEscena->setRotation(core::vector3df(0,rp,0));
         _objetoEnEscena->setMaterialTexture(0, _driver->getTexture(ruta_textura));
         Plataformas_Scena.push_back(_objetoEnEscena);
         return (Plataformas_Scena.size()-1);
@@ -609,13 +610,15 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     //jugador = nullptr;
 }
 
-int MotorGrafico::CargarObjetos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
+int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
 {
     IAnimatedMesh* objeto = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
   	if (objeto)
   	{
         IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
         _objetoEnEscena->setPosition(core::vector3df(x,y,z));
+        _objetoEnEscena->setRotation(core::vector3df(0,rp,0));
+        _objetoEnEscena->setMaterialTexture(0, _driver->getTexture(ruta_textura));
 
         if(accion == 4)
         {
@@ -675,8 +678,8 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
     // Centrar la camara
     nodeCamPosition.X = x;
-    nodeCamPosition.Y = y+20;
-    nodeCamPosition.Z = z-20;
+    nodeCamPosition.Y = y+30;
+    nodeCamPosition.Z = z-30;
     nodeCamTarget.X = x;
     nodeCamTarget.Y = y;
     nodeCamTarget.Z = z;
@@ -1307,11 +1310,7 @@ bool MotorGrafico::getPathfindingActivado()
     return pathfinding;
 }
 
-// Funciones para puzzles
-void MotorGrafico::PosicionCamaraEnPuzzles()
-{
-    _camera->setPosition(vector3df(14, 2, 0)); // No cambiar la Y, si nos la seleccion tendra errores
-}
+
 
 void MotorGrafico::updateMotorPuzzles(short tipo)
 {
@@ -1341,6 +1340,22 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
 
     _driver->endScene();
 }
+
+
+
+void MotorGrafico::BorrarBoton(s32 id)
+{
+    _guienv->getRootGUIElement()->
+        getElementFromId(id)->remove();
+}
+
+
+// Funciones para puzzles
+void MotorGrafico::PosicionCamaraEnPuzzles()
+{
+    _camera->setPosition(vector3df(14, 2, 0)); // No cambiar la Y, si nos la seleccion tendra errores
+}
+
 
 void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
 {
@@ -1573,12 +1588,6 @@ void MotorGrafico::ReiniciarHanoi()
         fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
         posY++;
     }
-}
-
-void MotorGrafico::BorrarBoton(s32 id)
-{
-    _guienv->getRootGUIElement()->
-        getElementFromId(id)->remove();
 }
 
 void MotorGrafico::updateMotorCinematica()

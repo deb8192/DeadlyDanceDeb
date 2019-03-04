@@ -175,7 +175,6 @@ Mesh * RMalla::processMesh(aiMesh *mesh, const aiScene *scene)
 
     // Procesar materiales
     aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-
     // Asumimos unas lineas para los nombres de los samplers en los shaders. cada textura difusa tiene que ser nombrada
     // como "texture_diffuseN", donde N es un número secuencial que va de 1 a MAX_SAMPLER_NUMBER.
     // Lo mismo se aplica a otras texturas que se resumen en la siguiente lista:
@@ -196,7 +195,6 @@ Mesh * RMalla::processMesh(aiMesh *mesh, const aiScene *scene)
 vector<Texture> RMalla::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
 {
     vector<Texture> textures;
-
     for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
     {
         aiString str;
@@ -222,7 +220,6 @@ vector<Texture> RMalla::loadMaterialTextures(aiMaterial *mat, aiTextureType type
             textures_loaded.push_back(&texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
         }
     }
-
     return textures;
 }
 
