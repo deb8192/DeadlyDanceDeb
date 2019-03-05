@@ -135,6 +135,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
         //fin ia
 
+        const char* GetTextura();
+        const char* GetModelo();
+
     protected:
         Times* _tiempo;
         MotorAudioSystem* _motora;
@@ -187,6 +190,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool accionRealizada; //
         short modo;
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
+
+        const char* _textura;
+        const char* _modelo;
 };
 
 #endif

@@ -17,6 +17,7 @@ Jugando::~Jugando()
     _enemPideAyuda = nullptr;
     _destinoPathFinding = nullptr;
     _jugador = nullptr;
+    _boss = nullptr;
 
     // Punteros a clases singleton
     _controladorTiempo = nullptr;
@@ -713,6 +714,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _powerup = cargador.GetPowerup();
     _zonas = cargador.GetZonas();
     _enemigos = cargador.GetEnemigos();
+    _boss = cargador.GetBoss();
 
     //Cargar objetos con el nivel completo
     this->cargarCofres(16); //Cargamos los cofres del nivel

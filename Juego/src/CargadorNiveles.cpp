@@ -4,6 +4,7 @@
 #include "Personajes/Bailaora.hpp"
 #include "Enemigos/Pollo.hpp"
 #include "Enemigos/Murcielago.hpp"
+#include "Enemigos/MuerteBoss.hpp"
 
 CargadorNiveles::CargadorNiveles()
 {
@@ -19,6 +20,7 @@ CargadorNiveles::~CargadorNiveles()
     _motora = nullptr;
 
     delete _jugador;
+    delete _boss;
 
     short tam = _enemigos.size();
     for(short i=0; i < tam; i++)
@@ -213,10 +215,6 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre, int* id)
         int ancho = 1;//nos devuelve un int
         int largo = 1;//nos devuelve un int 
         int alto = 5;//nos devuelve un int
-        //const char* Playertextura = plat.attribute("StarTexture").value(); //nos da un char[] = string
-        //const char* Playermodelo  =  plat.attribute("StarModel").value(); //nos da un char[] = string
-        //CrearJugador(accion,Playerx,Playerz,Playery,ancho,largo,alto,Playermodelo,Playertextura);
-  
         // Textura y modelo estan dentro de sus clases de jugadores
 
         switch (tipoJug)
@@ -242,9 +240,14 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre, int* id)
         int largo = enem.attribute("largo").as_int();//nos devuelve un int 
         int alto = enem.attribute("ancho").as_int();//nos devuelve un int
         int enemigo = enem.attribute("enemigo").as_int(); //nos da un char[] = string
-        const char* textura = enem.attribute("Texture").value(); //nos da un char[] = string
         const char* modelo  =  enem.attribute("Model").value(); //nos da un char[] = string
-        CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,modelo,textura,padren,id); //cargamos el enemigo
+        
+        if (enemigo >= 0)
+        {
+            CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,modelo,padren,id); //cargamos el enemigo
+        } else {
+            CrearBoss(accion,x,y,z,ancho,largo,alto,padren,id);
+        }
     }
     for (pugi::xml_node obj = plat.child("Object"); obj; obj = obj.next_sibling("Object"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
@@ -314,6 +317,11 @@ std::vector<Recolectable*> CargadorNiveles::GetPowerup()
     return _powerup;
 }
 
+Enemigo* CargadorNiveles::GetBoss()
+{
+    return _boss;
+}
+
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 Sala* CargadorNiveles::CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro,
     const char* ruta_objeto, const char* ruta_textura)
@@ -340,16 +348,14 @@ void CargadorNiveles::CrearLuz(int x,int y,int z)
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto,
-    const char* ruta_objeto, const char* ruta_textura, Sala* sala, int* id)
+    const char* ruta_objeto, Sala* sala, int* id)
 {
     //accion indicara futuramente que tipo de enemigo sera (herencia)
     switch (enemigo)
     {
         case 0:
         {
-            //TO DO: revisar creacion de tipos de enemigos
-            //75 = vida
-            Pollo* _ene = new Pollo(x,y,z, 75);//aqui va el tipo de enemigo que es hacer ifs y meter una variable nueva de tipo para saber que tipo es
+            Pollo* _ene = new Pollo(x,y,z, 75); // Posiciones, vida
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
@@ -367,9 +373,8 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z, i
             break;
         case 1:
         {
-            Murcielago*  ene = new Murcielago(x,y,z, 125);//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
+            Murcielago* ene = new Murcielago(x,y,z, 125); // Posiciones, vida
             //ia
-            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
             _enemigos.push_back(ene);//guardamos el enemigo en el vector
             _enemigos.back()->setID(++(*id));//le damos el id unico en esta partida al enemigo
@@ -380,9 +385,9 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z, i
             _motora->getEvent(nameid)->setPosition(x,y,z);
             _motora->getEvent(nameid)->setVolume(0.4f);
             _motora->getEvent(nameid)->start();
-
         }
             break;
+
         default:
             break;
     }
@@ -406,10 +411,43 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z, i
     _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     
-    _motor->CargarEnemigos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
+    _motor->CargarEnemigos(x,y,z,ruta_objeto);//creamos la figura
+
     _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2);
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
+}
+
+void CargadorNiveles::CrearBoss(int accion, int x,int y,int z, 
+    int ancho, int largo, int alto, Sala* sala, int* id)
+{
+    _boss = new MuerteBoss(x,y,z, 350); // Posiciones, vida
+    _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
+    _boss->setID(++(*id));//le damos el id unico en esta partida al enemigo
+
+    //_boss->SetEnemigo(enemigo); // No se utiliza por ahora
+    _boss->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _boss->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _boss->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _boss->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    _boss->setVelocidadMaxima(1.0f);
+    _boss->setBarraAtEs(0);
+    _boss->definirSala(sala);//le pasamos la sala en donde esta
+    _boss->setAtaque(20);
+    _boss->setArmaEspecial(100);
+    _boss->setTimeAtEsp(0.0f);
+    _boss->setDanyoCritico(80);
+    _boss->setProAtaCritico(20);
+    _boss->setRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+    _boss->setVectorOrientacion();
+    _boss->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+    _boss->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+
+    _motor->CargarEnemigos(x,y,z,_boss->GetModelo());//creamos la figura
+
+   // _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2);
+    //_fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
+    //_fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
 }
 
 //lo utilizamos para crear zonas

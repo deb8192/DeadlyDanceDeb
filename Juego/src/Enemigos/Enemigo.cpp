@@ -1056,3 +1056,13 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     }
 
 //fin comportamientos bases
+
+const char* Enemigo::GetTextura()
+{
+    return _textura;
+}
+
+const char* Enemigo::GetModelo()
+{
+    return _modelo;
+}
