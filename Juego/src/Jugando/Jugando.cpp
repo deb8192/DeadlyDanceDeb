@@ -1021,13 +1021,17 @@ void Jugando::AccionarMecanismo(int int_col)
         //Busca la puerta que coincide con la palanca que se esta activando
         while(i < _interactuables.size() && !coincide)
         {
-            if(_interactuables.at(i)->getCodigo() == _interactuables.at(int_col)->getCodigo())
+            if((_interactuables.at(i)->getCodigo() != _interactuables.at(int_col)->getCodigo()) ||
+                strcmp(_interactuables.at(i)->getNombre(), "palanca") == 0 ||
+                strcmp(_interactuables.at(i)->getNombre(), "llave") == 0)
+            {
+                i++;
+            }
+            else
             {
                 coincide = true;
-               // i--;
-               //para el nivel 5 hay que quitar el comentario
             }
-            i++;
+            
         }
         if(coincide)
         {
