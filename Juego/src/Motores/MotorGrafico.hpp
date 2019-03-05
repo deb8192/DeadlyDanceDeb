@@ -35,6 +35,7 @@ using namespace idsEventos;
             }
             //fin singleton public
 
+            void LimpiarElementosJuego();
             void LimpiarMotorGrafico();//revisar
 
             bool CrearVentana(short tipo);//nos crea la ventana del juego. Tipo define lo grande que es por defecto 1024 x 768
@@ -157,7 +158,7 @@ using namespace idsEventos;
 
             void BorrarBoton(s32 id);
 
-            void updateMotorCinematica();
+            void RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame);
             bool finalCinematica();
 
         private: //clases solo accesibles por MotorGrafico
@@ -258,9 +259,9 @@ using namespace idsEventos;
 
             //cinematicas
             int frame_actual;//numero de frame actual
-            IGUIImage* actual;//frame actual
+            IGUIImage* _actual;//frame actual
             float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
-            ITexture* actualTexture;//textura actual
+            ITexture* _actualTexture;//textura actual
     };
 
 #endif /* MotorGrafico_HPP */

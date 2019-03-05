@@ -1,5 +1,4 @@
 #include "MotorGrafico.hpp" //se llama a su cabecera para cargar las dependencias
-#include "../Times.hpp"
 #include "../ConstantesComunes.hpp"
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
@@ -14,8 +13,8 @@ MotorGrafico::MotorGrafico()
 {
     input.setDevice(_device);//lo  utilizamos para que los eventos puedan llamar a funciones de
     debugGrafico = false;
-    actual = nullptr;
-    actualTexture = nullptr;
+    _actual = nullptr;
+    _actualTexture = nullptr;
 
     // Para las torres de HANNOI
     _nodoSeleccionado = nullptr;
@@ -29,6 +28,7 @@ MotorGrafico::~MotorGrafico()
     //position2di initialCursorPosition;        // Posicion del clic raton
     //position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
     
+
     // Punteros sin new
     _device = nullptr;
     _driver = nullptr;
@@ -40,6 +40,11 @@ MotorGrafico::~MotorGrafico()
     _font    = nullptr;
     _skin    = nullptr;
 
+    LimpiarElementosJuego();
+}
+
+void MotorGrafico::LimpiarElementosJuego()
+{
     _armaEnEscena = nullptr;
     _armaEsp = nullptr;
     _armaEspJugador = nullptr;
@@ -82,79 +87,74 @@ MotorGrafico::~MotorGrafico()
     daga_textura = nullptr;
 
     // Cinematicas
-    actual = nullptr;
-    actualTexture = nullptr;
+    _actual = nullptr;
+    _actualTexture = nullptr;
     frame_actual = 0;
     tiempoUltimoFrame = 0;
-
 
     width = 0; height = 0;
     debugGrafico = false;
     pathfinding = false;
 
     // Liberar memoria
-    short tam = Plataformas_Scena.size();
+    short tam = Enemigos_Scena.size();
     for(short i=0; i < tam; i++)
     {
-        delete Plataformas_Scena.at(i);
-    }
-    Plataformas_Scena.clear();
-
-    tam = Luces_Scena.size();
-    for(short i=0; i < tam; i++)
-    {
-        delete Luces_Scena.at(i);
-    }
-    Luces_Scena.clear();
-
-    tam = Enemigos_Scena.size();
-    for(short i=0; i < tam; i++)
-    {
-        delete Enemigos_Scena.at(i);
+        Enemigos_Scena.at(i) = nullptr;
     }
     Enemigos_Scena.clear();
 
     tam = Objetos_Scena.size();
     for(short i=0; i < tam; i++)
     {
-        delete Objetos_Scena.at(i);
+        Objetos_Scena.at(i) = nullptr;
     }
     Objetos_Scena.clear();
 
+    /*tam = Plataformas_Scena.size();
+    for(short i=0; i < tam; i++)
+    {
+        if (Plataformas_Scena.at(i))
+            delete Plataformas_Scena.at(i);
+    }
+    Plataformas_Scena.clear();
     tam = Recolectables_Scena.size();
     for(short i=0; i < tam; i++)
     {
         delete Recolectables_Scena.at(i);
     }
     Recolectables_Scena.clear();
-
     tam = PowerUP_Scena.size();
     for(short i=0; i < tam; i++)
     {
         delete PowerUP_Scena.at(i);
     }
     PowerUP_Scena.clear();
-
+    tam = Luces_Scena.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete Luces_Scena.at(i);
+    }
+    Luces_Scena.clear();
     tam = Objetos_Debug.size();
     for(short i=0; i < tam; i++)
     {
         delete Objetos_Debug.at(i);
     }
     Objetos_Debug.clear();
-
     tam = Objetos_Debug2.size();
     for(short i=0; i < tam; i++)
     {
         delete Objetos_Debug2.at(i);
     }
-    Objetos_Debug2.clear();
+    Objetos_Debug2.clear();*/
 
-    tam = fichasMesh.size();
+    /*tam = fichasMesh.size();
     for(short i=0; i < tam; i++)
     {
         delete fichasMesh.at(i);
     }
-    fichasMesh.clear();
+    fichasMesh.clear();*/
     
     //TO DO: Pendiente de utilizar en puzzles
     /*tam = imagenes.size();
@@ -1590,11 +1590,9 @@ void MotorGrafico::ReiniciarHanoi()
     }
 }
 
-void MotorGrafico::updateMotorCinematica()
+void MotorGrafico::RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame)
 {
-    _driver->beginScene(true, true, SColor(0,0,0,0));
-
-    float mile = 1000.0f;
+     float mile = 1000.0f;
     float ratio = 30.0f;
     float tiempo_frame = mile/ratio;
     int salto = ceil(tiempoUltimoFrame/tiempo_frame);
@@ -1615,39 +1613,31 @@ void MotorGrafico::updateMotorCinematica()
             frame_actual = frame_actual+1;
         }
     }
-
     if(frame_actual < 498)
     {
         //definimos los strings
         std::string fram = "";
         std::string extension = ".jpg";
-        float marcaTiempo = Times::GetInstance()->GetTiempo(1);
         std::string ruta = "assets/cinematicas/frames/";
         fram = std::to_string(frame_actual);
         //creamos la ruta completa
         std::string ruta_completa = ruta+fram+extension;
         char buffer[100];
         strcpy(buffer,ruta_completa.c_str());
-
-        if(actual != nullptr && actualTexture != nullptr)
+        if(_actual != nullptr && _actualTexture != nullptr)
         {
-            actual->remove();//remuevo imagen actual
-            _driver->removeTexture(actualTexture);//borras textura
-            actualTexture = _driver->getTexture(buffer);//creas la textura
-            actual = _guienv->addImage(actualTexture,position2d<int>(0,0));//creo imagen actual
+            _actual->remove();//remuevo imagen actual
+            _driver->removeTexture(_actualTexture);//borras textura
+            _actualTexture = _driver->getTexture(buffer);//creas la textura
+            _actual = _guienv->addImage(_actualTexture,position2d<int>(0,0));//creo imagen actual
         }
         else
         {
-            actualTexture = _driver->getTexture(buffer);//creo textura
-            actual = _guienv->addImage(_driver->getTexture(buffer),position2d<int>(0,0));//creo imagen con textura
+            _actualTexture = _driver->getTexture(buffer);//creo textura
+            _actual = _guienv->addImage(_driver->getTexture(buffer),position2d<int>(0,0));//creo imagen con textura
         }
-
-        tiempoUltimoFrame = Times::GetInstance()->CalcularTiempoPasado(marcaTiempo);
         //cout << tiempoUltimoFrame << " " << salto << endl;
     }
-    _smgr->drawAll();
-	_guienv->drawAll();
-	_driver->endScene();
 }
 
 bool MotorGrafico::finalCinematica()
@@ -1655,11 +1645,11 @@ bool MotorGrafico::finalCinematica()
     if(frame_actual >= 498)
     {
         //borramos los datos
-        actual->remove();//remuevo imagen actual
-        _driver->removeTexture(actualTexture);//borras textura
+        _actual->remove();//remuevo imagen actual
+        _driver->removeTexture(_actualTexture);//borras textura
         //borramos los punteros
-        actual = nullptr;
-        actualTexture = nullptr;
+        _actual = nullptr;
+        _actualTexture = nullptr;
         return true;
     }
 

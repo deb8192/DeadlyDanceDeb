@@ -1,11 +1,11 @@
 #include "Murcielago.hpp"
 #include "../ConstantesComunes.hpp"
+#include "../Personajes/Jugador.hpp"
 #include "cmath"
 
 Murcielago::Murcielago(float nX, float nY, float nZ, int maxVida)
 : Enemigo(nX,nY,nZ,maxVida)
 {
-    _nivel = Jugando::GetInstance();
     Constantes constantes;
     funciona = true;
     atacado = enZonaOscura = false;
@@ -17,13 +17,8 @@ Murcielago::Murcielago(float nX, float nY, float nZ, int maxVida)
 
 Murcielago::~Murcielago()
 {
-    Constantes constantes;
-    funciona = false;
-    atacado = false;
     delete[] _ordenes;
     _ordenes = nullptr;
-    maxRotacion = 0;
-    _nivel = nullptr;
 }
 
 /***************** RunIA *****************
@@ -68,8 +63,9 @@ void Murcielago::RunIA()
  * Salidas:
 */ 
 
-void Murcielago::UpdateMurcielago(short *i)
+void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZonas)
 {
+     Jugador* _jugador = (Jugador*)_jug;
     Constantes constantes;
 
     funciona = true;
@@ -83,7 +79,7 @@ void Murcielago::UpdateMurcielago(short *i)
         {
             case EN_PERSIGUE: //El Murcielago se mueve
                 {
-                    funciona = this->perseguir();
+                    funciona = this->perseguir(_jug);
                 }
                 break;
         
@@ -95,7 +91,7 @@ void Murcielago::UpdateMurcielago(short *i)
                         danyo = this->Atacar(*i);
                         if(danyo > 0)
                         {
-                            _nivel->GetJugador()->ModificarVida(-danyo);
+                            _jugador->ModificarVida(-danyo);
                             cout<<"Ataca por la IA" <<endl;
                             funciona = true;
                             atacado = true;
@@ -142,7 +138,8 @@ void Murcielago::UpdateMurcielago(short *i)
                     //Se obtienen las coordenadas de la zona de destino en caso de no tener zona
                     if(zonaElegida == nullptr)
                     {
-                        vector<Zona*> zonas = _nivel->GetZonas();
+                        //TO DO: revisar por constr. copia
+                        vector<Zona*> zonas = _getZonas;
                         zonas.reserve(zonas.size());
                         zonaElegida = this->getZonaMasCercana(zonas, constantes.CERO);
                     }
@@ -160,7 +157,8 @@ void Murcielago::UpdateMurcielago(short *i)
             case EN_RECUPERA:  //El murcielago recupera vida en una zona oscura
                 if(enZonaOscura)
                 {
-                    uint8 vida = rand() % 5 + 1;
+                    //uint8 vida = rand() % 5 + 1;
+                    unsigned short vida = rand() % 5 + 1;
                     this->ModificarVida(vida);
                     funciona = true;
                 }

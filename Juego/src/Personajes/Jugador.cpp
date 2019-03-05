@@ -1,165 +1,19 @@
 #include "Jugador.hpp"
-#include "../Jugando/Jugando.hpp"
 #include <stdlib.h>
 #include "../Times.hpp"
 #include "../ConstantesComunes.hpp"
+#include "../Motores/MotorFisicas.hpp"
 
 #define NOMBREHEAVY "Heavy"
 #define NOMBREBAILAORA "Bailaora"
 
 Jugador::Jugador()
 {
-    animacion = 0;
-    //tiempos de animacion
-    tiempoAtaque=2000.0f;//tiempo en milisegundos
-    tiempoPasadoAtaque=0;
-    tiempoAtaEsp=2000.0f;//tiempo en milisegundos
-    tiempoPasadoAtaEsp=0;
-    tiempoCogerObjeto=1000.0f;//tiempo en milisegundos
-    tiempoPasadoCogerObjeto=0;
-    tiempoEnMorir=2000.0f;//tiempo en milisegundos
-    tiempoPasadoEnMorir=0;
-    atackTime = 0;
-    atackEspTime = 0;
-    lastAtackTime = 0;
-    lastAtackEspTime = 0;
-}   
-
-Jugador::~Jugador()
-{
-    //Poner variables con los valores iniciales que tenían
-    ax = 0;
-    az = 0;
-    deg = 0;
-    _armaEquipada = nullptr;
-    _armaEspecial = nullptr;
-    //const char* _rutaArmaEspecial = "assets/models/Arma.obj";
-    //const char* _nombreJugador = "Heavy";
-    danyo_arma = 0;
-    atx = 0;
-    atespx = 0;
-    aty = 0;
-    atespy = 0;
-    atz = 0;
-    atespz = 0;
-    atgx = 0;
-    atgy = 0;
-    atgz = 0;
-    incrAtDisCirc = 0;
-    atposX = 0;
-    atespposX = 0;
-    atposY = 0;
-    atespposY = 0;
-    atposZ = 0;
-    atespposZ = 0;
-    tipo_arma = 0;
-    //vector <unsigned int> atacados_normal;
-    dinero = 0;
-
-    // INnpc
-    tipo = 0;
-    vida = 0;
-    barraAtEs = 0;
-    ataque = 0;
-    suerte = 0;
-    danyoCritico = 0;
-    proAtaCritico = 0;
-    //TO DO: int buffos[4];
-    malla = "";
-    atackTime = 0;
-    atackEspTime = 0;
-    lastAtackTime = 0;
-    lastAtackEspTime = 0;
-    animacionMuerteTiem = 0;
-    tiempoPasadoMuerte = 0;
-    tiempoAtaque = 0;
-    tiempoPasadoAtaque = 0;
-    tiempoAtaEsp = 0;
-    tiempoPasadoAtaEsp = 0;
-    tiempoCogerObjeto = 0;
-    tiempoPasadoCogerObjeto = 0;
-    tiempoEnMorir = 0;
-    tiempoPasadoEnMorir = 0;
-
-    // INdrawable
-    posIni.x = 0;
-    posIni.y = 0;
-    posIni.z = 0;
-    
-    posActual.x = 0;
-    posActual.y = 0;
-    posActual.z = 0;
-
-    posPasada.x = 0;
-    posPasada.y = 0;
-    posPasada.z = 0;
-
-    posFutura.x = 0;
-    posFutura.y = 0;
-    posFutura.z = 0;
-
-    posFisicas.x = 0;
-    posFisicas.y = 0;
-    posFisicas.z = 0;
-
-    rotActual.x = 0;
-    rotActual.y = 0;
-    rotActual.z = 0;
-
-    rotPasada.x = 0;
-    rotPasada.y = 0;
-    rotPasada.z = 0;
-
-    rotFutura.x = 0;
-    rotFutura.y = 0;
-    rotFutura.z = 0;
-    
-    moveTime = 0;
-    rotateTime = 0;
-    rotation = 0;
-    id = 0;
-    animacion = 0;
-    animacionAnterior = 0;
-
-    _motor = nullptr;
-    _motora = nullptr;
-    _fisicas = nullptr;
-
-    // Liberar memoria
-    delete playerTextura;
-    delete playerModelo;
-}
-
-Jugador::Jugador(int nX,int nY,int nZ, int ancho, 
-    int largo, int alto, int accion, int maxVida)
-{
     _motor = MotorGrafico::GetInstance();
-    _fisicas = MotorFisicas::getInstance();
     _motora = MotorAudioSystem::getInstance();
     _interfaz = InterfazJugador::getInstance();
 
-    _fisicas->crearCuerpo(accion,0,nX/2,nY/2,nZ/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
-    this->ancho = ancho;
-    this->largo = largo;
-    this->alto = alto;
-
-    vidaIni = maxVida;
-    vida = vidaIni;
-
-    // Valores por defecto, se cambian con sets en jugando.cpp
-    dinero = 0;
-    _armaEquipada = NULL;
-
-    posIni.x = nX;
-    posIni.y = nY;
-    posIni.z = nZ;
-
-    posActual.x = nX;
-    posActual.y = nY;
-    posActual.z = nZ;
-
     animacion = 0;
-
     //tiempos de animacion
     tiempoAtaque=2000.0f;//tiempo en milisegundos
     tiempoPasadoAtaque=0;
@@ -170,10 +24,48 @@ Jugador::Jugador(int nX,int nY,int nZ, int ancho,
     tiempoEnMorir=2000.0f;//tiempo en milisegundos
     tiempoPasadoEnMorir=0;
 
-    atackTime = 0;
-    atackEspTime = 0;
-    lastAtackTime = 0;
-    lastAtackEspTime = 0;
+    dinero = 0;
+    _armaEquipada = NULL;
+}
+
+Jugador::Jugador(int nX,int nY,int nZ, int ancho, 
+    int largo, int alto, int accion, int maxVida)
+: Jugador()
+{
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _fisicas->crearCuerpo(accion,0,nX/2,nY/2,nZ/2,3,2,2,2,1);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
+    _fisicas = nullptr;
+    
+    this->ancho = ancho;
+    this->largo = largo;
+    this->alto = alto;
+
+    vidaIni = maxVida;
+    vida = vidaIni;
+
+    posIni.x = nX;
+    posIni.y = nY;
+    posIni.z = nZ;
+
+    posActual.x = nX;
+    posActual.y = nY;
+    posActual.z = nZ;
+}
+
+Jugador::~Jugador()
+{
+    _motor = nullptr;
+    _motora = nullptr;
+    _interfaz = nullptr;
+    
+    _armaEquipada = nullptr;
+    _armaEspecial = nullptr;
+
+    _rutaArmaEspecial = nullptr;
+    _nombreJugador = nullptr;
+
+    // INnpc e INdrawable
+    // Nada
 }
 
 void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
@@ -332,6 +224,7 @@ void Jugador::MuereJugador()
 
 int Jugador::Atacar(int i)
 {
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     Constantes constantes;
     int danyo = 0;
     if(vida > 0)
@@ -386,12 +279,12 @@ int Jugador::Atacar(int i)
     return danyo;
 }
 
-void Jugador::AtacarUpdate(int danyo)
+void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
 {
     Constantes constantes;
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     if(vida > 0)
     {
-        Jugando* _nivel = Jugando::GetInstance();
         if(this->getArma() == nullptr) {
             _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
             _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,2,1,1,2);
@@ -442,12 +335,12 @@ void Jugador::AtacarUpdate(int danyo)
                     float variacion = rand() % 7 - 3;
                     danyo += (int) variacion;
                     //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
-                    _nivel->getEnemigos().at(atacados.at(i))->ModificarVida(-danyo);
-                    cout<<"Enemigo: "<< _nivel->getEnemigos().at(atacados.at(i))->getID() << endl;
+                    _getEnemigos.at(atacados.at(i))->ModificarVida(-danyo);
+                    cout<<"Enemigo: "<< _getEnemigos.at(atacados.at(i))->getID() << endl;
                     cout<<"Daño "<<danyo<<endl;
                     danyo -= (int) variacion;
                     cout<<"variacion "<<variacion<<endl;
-                    cout<<"Vida enemigo "<<_nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<_nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
+                    cout<<"Vida enemigo "<<_getEnemigos.at(atacados.at(i))->getID()<<" "<<_getEnemigos.at(atacados.at(i))->getVida()<<endl;
                     _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
                     //guardar el atacado para no repetir
                     atacados_normal.push_back(atacados.at(i));
@@ -471,6 +364,7 @@ void Jugador::AtacarUpdate(int danyo)
  */
 int Jugador::AtacarEspecial()
 {
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     Constantes constantes;
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
@@ -547,11 +441,11 @@ int Jugador::AtacarEspecial()
  *      Entradas: int danyo
  *      Salidas:
  */
-void Jugador::AtacarEspecialUpdate(int*danyo)
+void Jugador::AtacarEspecialUpdate(int* danyo, std::vector<Enemigo*> &_getEnemigos)
 {
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     Constantes constantes;
-    Jugando* _nivel = Jugando::GetInstance();
-
+    
     //Si el ataque especial es el del Heavy, es cuerpo a cuerpo
     if(strcmp(_armaEspecial->getNombre(), NOMBREHEAVY) == 0)
     {
@@ -604,11 +498,11 @@ void Jugador::AtacarEspecialUpdate(int*danyo)
         {
             float variacion = rand() % 7 - 3;
             *danyo += (int) variacion;
-            _nivel->getEnemigos().at(atacados.at(i))->ModificarVida(-(*danyo));
+            _getEnemigos.at(atacados.at(i))->ModificarVida(-(*danyo));
             cout<<"Daño "<<*danyo<<endl;
             *danyo -= (int) variacion;
             cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<_nivel->getEnemigos().at(atacados.at(i))->getID()<<" "<<_nivel->getEnemigos().at(atacados.at(i))->getVida()<<endl;
+            cout<<"Vida enemigo "<<_getEnemigos.at(atacados.at(i))->getID()<<" "<<_getEnemigos.at(atacados.at(i))->getVida()<<endl;
             _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }

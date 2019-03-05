@@ -1,15 +1,6 @@
 #include "Jugando.hpp"
 #include "../Juego.hpp"
-//FUERA
-#include "../Enemigos/Pollo.hpp"
-#include "../Enemigos/Murcielago.hpp"
-//!FUERA
 #include "../ConstantesComunes.hpp"
-#define DEGTORAD 0.0174532925199432957f
-#define RADTODEG 57.295779513082320876f
-//singleton
-Jugando* Jugando::_unicaInstancia = 0;
-//fin indicador singleton
 
 #define PALANCA "palanca"
 
@@ -20,21 +11,6 @@ Jugando::Jugando()
 
 Jugando::~Jugando()
 {
-    reiniciando = false;
-    jugadorInmovil = false;
-    drawTime = 0;
-    lastDrawTime = 0;
-    atacktime = 0;
-    id = 0;
-    cambia = 0;
-    danyo = 0;
-    danyo2 = 0;
-    contadorEnem = 0;
-    int_cpw_aux = 0;
-
-    //Jugador jugador;
-    //CargadorNiveles cargador;
-    //CargadorBehaviorTrees cargadorIA;
     //vector<Pathfinder::NodeRecord> recorrido;
 
     // Punteros sin new
@@ -50,51 +26,48 @@ Jugando::~Jugando()
     _motor = nullptr;
     _interfaz = nullptr;
 
-    // Liberar memoria
     short tam = _enemigos.size();
     for(short i=0; i < tam; i++)
     {
-        delete _enemigos.at(i);
+        _enemigos.at(i) = nullptr;
     }
     _enemigos.clear();
 
-    tam = _auxiliadores.size();
+    tam = _zonas.size();
     for(short i=0; i < tam; i++)
     {
-        delete _auxiliadores.at(i);
+        _zonas.at(i) = nullptr;
     }
-    _auxiliadores.clear();
+    _zonas.clear();
 
     tam = _interactuables.size();
     for(short i=0; i < tam; i++)
     {
-        delete _interactuables.at(i);
+        _interactuables.at(i) = nullptr;
     }
     _interactuables.clear();
 
     tam = _recolectables.size();
     for(short i=0; i < tam; i++)
     {
-        delete _recolectables.at(i);
+        _recolectables.at(i) = nullptr;
     }
     _recolectables.clear();
 
     tam = _powerup.size();
     for(short i=0; i < tam; i++)
     {
-        delete _powerup.at(i);
+        _powerup.at(i) = nullptr;
     }
     _powerup.clear();
 
-    tam = _zonas.size();
+    // Liberar memoria
+    tam = _auxiliadores.size();
     for(short i=0; i < tam; i++)
     {
-        delete _zonas.at(i);
+        delete _auxiliadores.at(i);
     }
-    _zonas.clear();
-
-    //delete _primeraSala;
-    delete _unicaInstancia;
+    _auxiliadores.clear();
 }
 
 void Jugando::Iniciar()
@@ -369,11 +342,11 @@ void Jugando::Update()
     //Si se realiza el ataque se comprueban las colisiones
     if(_jugador->getTimeAtEsp() > 0.0)
     {
-        _jugador->AtacarEspecialUpdate(&danyo);
+        _jugador->AtacarEspecialUpdate(&danyo, _enemigos);
     }
     else if(_jugador->getTimeAt() > 0.0)
     {
-        _jugador->AtacarUpdate(danyo2);
+        _jugador->AtacarUpdate(danyo2, _enemigos);
     }
     else //En caso contrario se colorean los _enemigos de color gris
     {
@@ -394,7 +367,7 @@ void Jugando::Update()
         {
             if(_enemigos[i] != nullptr)
             {
-                _enemigos[i]->UpdateBehavior(&i);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
 
                     //Este bloque se da si el enemigo esta en el proceso de merodear
                     if(_enemigos.at(i)->getTimeMerodear() > 0.0f)
@@ -704,12 +677,6 @@ void Jugando::Reanudar()
     }
 }
 
-// Elimina los datos en memoria
-void Jugando::Vaciar()
-{
-    cout << "Vaciando el juego" << endl;
-}
-
 void Jugando::Reiniciar()
 {
     reiniciando = true;
@@ -738,10 +705,14 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     }*/
 
     //cargamos el nivel
-    cargador.CargarNivelXml(nivel, tipoJug); //se llama al constructor vacio
+    cargador.CargarNivelXml(nivel, tipoJug, &id); //se llama al constructor vacio
     
     CrearJugador();
-    
+    _recolectables = cargador.GetRecolectables();
+    _interactuables = cargador.GetInteractuables();
+    _powerup = cargador.GetPowerup();
+    _zonas = cargador.GetZonas();
+    _enemigos = cargador.GetEnemigos();
 
     //Cargar objetos con el nivel completo
     this->cargarCofres(16); //Cargamos los cofres del nivel
@@ -770,106 +741,6 @@ void Jugando::CrearJugador()
         _jugador->getZ(), _jugador->getRutaArmaEsp(),"");
 
     //cout << "jugador creado en: "<<x<<", "<<y<<", "<<z<<", "<<endl;
-}
-
-//lo utilizamos para crear su modelo en motorgrafico y su objeto
-void Jugando::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto,
-    const char* ruta_objeto, const char* ruta_textura, Sala* sala)
-{
-    //accion indicara futuramente que tipo de enemigo sera (herencia)
-    switch (enemigo)
-    {
-        case 0:
-        {
-            //TO DO: revisar creacion de tipos de enemigos
-            //75 = vida
-            Pollo* _ene = new Pollo(x,y,z, 75);//aqui va el tipo de enemigo que es hacer ifs y meter una variable nueva de tipo para saber que tipo es
-            //ia
-            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
-            _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
-            _ene->setID(++id);//le damos el id unico en esta partida al enemigo
-            _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
-            _ene = nullptr;
-
-            //Cargar sonido evento en una instancia con la id del enemigo como nombre
-            std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
-            _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(0.4f);
-            _motora->getEvent(nameid)->start();
-        }
-            break;
-        case 1:
-        {
-            Murcielago*  ene = new Murcielago(x,y,z, 125);//aqui va el tipo de enemigo que es hacer ifffffffffsssss y meter una variable nueva de tipo para saber que tipo es
-            //ia
-            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
-            ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
-            _enemigos.push_back(ene);//guardamos el enemigo en el vector
-            id++;//generamos id para la figura
-            _enemigos.back()->setID(id);//le damos el id unico en esta partida al enemigo
-
-            //Cargar sonido evento en una instancia con la id del enemigo como nombre
-            MotorAudioSystem* motora = MotorAudioSystem::getInstance();
-            std::string nameid = std::to_string(id); //pasar id a string
-            motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
-            motora->getEvent(nameid)->setPosition(x,y,z);
-            motora->getEvent(nameid)->setVolume(0.4f);
-            motora->getEvent(nameid)->start();
-
-        }
-            break;
-        default:
-            break;
-    }
-        //fin ia
-    _enemigos.back()->SetEnemigo(enemigo);
-    _enemigos.back()->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-    _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-    _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-    _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-    _enemigos.back()->setVelocidadMaxima(1.0f);
-    _enemigos.back()->setBarraAtEs(0);
-    _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
-    _enemigos.back()->setAtaque(10);
-    _enemigos.back()->setArmaEspecial(100);
-    _enemigos.back()->setTimeAtEsp(0.0f);
-    _enemigos.back()->setDanyoCritico(50);
-    _enemigos.back()->setProAtaCritico(10);
-    //_enemigos.back()->genemigos.back()rarSonido(20,5);
-    _enemigos.back()->setRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
-    _enemigos.back()->setVectorOrientacion();
-    _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
-    _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
-    
-    _motor->CargarEnemigos(accion,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);//creamos la figura pasando el id
-    _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2);
-    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
-    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
-}
-
-//lo utilizamos para crear su modelo en motorgrafico y su objeto
-Sala* Jugando::CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro,
-    const char* ruta_objeto, const char* ruta_textura)
-{
-    Sala* _sala = new Sala(ancho,largo,alto,x,y,z,centro);
-    //int*  datos = sala->getSizes(); //para comprobar la informacion de la sala
-    //cout << "\e[36m datos de la sala: \e[0m" << datos[0] << " " << datos[1]  << " " << datos[2] << " " << datos[3] << " " << datos[4] << endl;
-    int nId = _motor->CargarPlataformas(rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-    _sala->definirID(nId);
-    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,6);
-
-    if(!_primeraSala)
-    {
-       _primeraSala = _sala;
-    }
-
-    return _sala;
-}
-
-void Jugando::CrearLuz(int x,int y,int z)
-{
-    _motor->CargarLuces(x,y,z);
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -922,23 +793,6 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3);
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
-}
-
-//lo utilizamos para crear zonas
-void Jugando::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem)
-{
-   //Crear zona
-   Zona* zon = new Zona(ancho,largo,alto,tipo);
-
-   //ID propia y posicion
-   int calcID = _zonas.size();
-   zon->setID(calcID);
-   zon->setPosiciones(x,y,z);
-   zon->setTotalElementos(totalElem);
-
-   //guardarla en el nivel
-   _zonas.push_back(zon);
-   zon = nullptr;
 }
 
 //Cargar los cofres del nivel
@@ -1728,11 +1582,6 @@ void Jugando::setEnemigoPideAyuda(Enemigo* ene)
 Enemigo* Jugando::getEnemigoPideAyuda()
 {
     return _enemPideAyuda;
-}
-
-vector<Zona*> Jugando::GetZonas()
-{
-    return _zonas;
 }
 
 std::vector<Enemigo*>  Jugando::getEnemigos()
