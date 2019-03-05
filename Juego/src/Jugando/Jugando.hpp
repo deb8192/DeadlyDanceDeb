@@ -14,6 +14,7 @@
 #include "Zona.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/InterfazJugador.hpp"
+#include "Waypoint.hpp"
 
 //cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA()
 #include "../CargadorBehaviorTrees.hpp"
@@ -61,7 +62,9 @@ class Jugando: public Estado {
         void CrearLuz(int x,int y,int z);
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem); //lo usamos para crear zonas
-        void cargarCofres(int num);
+        void cargarCofres(int num); //Lo usamos para cargar los cofres en las distintas zonas de cofres
+        void CrearWaypoint(Sala* sala, int accion, int numero,  int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones); //Lo usamos para crear waypoints
+        void ConectarWaypoints();
 
         //Funciones de interacciones
         void CogerObjeto();
@@ -106,8 +109,9 @@ class Jugando: public Estado {
         
         std::vector<Recolectable*> _recolectables;
         std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
-         std::vector<Recolectable*> _powerup;
+        std::vector<Recolectable*> _powerup;
         std::vector<Zona*> _zonas; //Array de zonas
+        std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
 
         bool reiniciando; // Se utiliza solo en Reanudar por el cambio entre Estados
         Jugador* _jugador;

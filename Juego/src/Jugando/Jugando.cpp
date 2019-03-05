@@ -91,6 +91,13 @@ Jugando::~Jugando()
     }
     _zonas.clear();
 
+    tam = _waypoints.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _waypoints.at(i);
+    }
+    _waypoints.clear();
+
     //delete _primeraSala;
     delete _unicaInstancia;
 }
@@ -1008,6 +1015,50 @@ void Jugando::cargarCofres(int num)
         else
         {
             cout << "No hay zonas de cofres suficientes en el nivel" << endl;
+        }
+    }
+}
+
+void Jugando::CrearWaypoint(Sala* sala, int accion, int ID, int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones)
+{
+    Waypoint* waypoint = new Waypoint(ID, x, y, z, arrayConexiones, sizeConexiones);
+    bool coincide = false;
+    unsigned short i = 0;
+    while(i < _waypoints.size() && !coincide)
+    {
+        if(_waypoints[i]->GetID() == waypoint->GetID())
+        {
+            coincide = true;
+            sala->AgregarWaypoint(_waypoints[i]);
+            delete waypoint;
+        }
+        else {i++;}
+    }
+    if(!coincide)
+    {
+        _waypoints.push_back(waypoint);
+        sala->AgregarWaypoint(_waypoints.back());
+    }
+    waypoint = nullptr;
+}
+
+/************ ConectarWaypoints ************
+ * Funcion establece por cada waypoint sus
+ * conexiones con el resto de waypoints del nivel
+ *      Entradas:
+ * 
+ *      Salidas:
+*/
+void Jugando::ConectarWaypoints()
+{
+    for(uint8 i = 0; i < _waypoints.size(); i++)
+    {
+        for(uint8 j = 0; j < _waypoints.size(); j++)
+        {
+            if(_waypoints[i]->ContainsConection(_waypoints[j]->GetID()) > -1)
+            {
+                _waypoints[i]->AnnadirConexionesWaypoints(_waypoints[j]);
+            }
         }
     }
 }
