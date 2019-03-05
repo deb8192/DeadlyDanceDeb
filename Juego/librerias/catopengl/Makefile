@@ -27,6 +27,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 RECUR = Recursiva
 RECUR2 = Recursiva2
 PRECA = Precaucion
+PARAL = Paralelo
 
 BUSQ = $(shell find ./obj -name "*.o" | wc -l)
 
@@ -42,17 +43,18 @@ $(PRECA):
 $(RECUR):
 	if [ $(BUSQ) -gt 0 ] ; then mv obj/*.o src/ ; fi
 
+$(PARAL): $(OBJECTS) 
+
+
 # si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
 
 %.o: %.cpp %.hpp #para las clases normales
 	#Compilacion objeto con cabecera
 	$(CXX) -c $(CXXFLAGS) $< -o $@ $(CABECERAS)
-	#mv $@ obj/
 
 %.o: %.cpp #esto es para el main sobretodo
 	#Compilacion objeto sin cabecera
 	$(CXX) -c $(CXXFLAGS) $< -o $@ $(CABECERAS)
-	#mv $@ obj/
 
 $(RECUR2):
 	 if [ $(BUSQ2) -gt 0 ] ; then mv src/*.o obj/ ; fi
@@ -66,7 +68,7 @@ clean:
 libreria:
 
 	$(MAKE) $(RECUR) 
-	$(MAKE) -j$(CPUCOUNT) $(OBJECTS) 
+	$(MAKE) -j$(CPUCOUNT) $(PARAL) 
 	$(MAKE) $(PRECA)
 
 	#vamos a construir la libreria
