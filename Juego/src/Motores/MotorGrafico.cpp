@@ -566,16 +566,12 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
     bill->setMaterialTexture(0, _driver->getTexture("assets/models/particlegreen.jpg"));
 }
 
-void MotorGrafico::CargarEnemigos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
 {
     IAnimatedMesh* enemigo = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 
-	if (!enemigo)
+	if (enemigo)
 	{
-		//error
-	}
-    else
-    {
         IAnimatedMeshSceneNode* enemigo_en_scena = _smgr->addAnimatedMeshSceneNode(enemigo); //metemos el objeto en el escenario para eso lo pasamos al escenario
         enemigo_en_scena->setPosition(core::vector3df(x,y,z));
         Enemigos_Scena.push_back(enemigo_en_scena);

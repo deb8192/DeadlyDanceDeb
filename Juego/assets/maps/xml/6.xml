@@ -104,6 +104,7 @@
 	<!--Pared-Invisible--><Object Type="1" accion="1" ancho="2" largo="75" alto="24" RP="90" X="170" Y="0" Z="99" despX="0" despZ="0" Texture="" Model=""></Object>
 	
 	<!--Luego se puede colocar cada una en su plataforma correspondiente, esto es lo que falta por colocar-->
+
 	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="143" Y="0" Z="15" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>	
 	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="10" X="202" Y="0" Z="48" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>
 	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="252" Y="0" Z="20" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>
@@ -344,7 +345,7 @@
 			
 	 <Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="243" Y="0" Z="490" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
 	 <!--Sala final boss -->
-					
+		<!--BossMuerte--><Enemy Type="1" enemigo="-1" accion="1" ancho="1" largo="1" alto="10" X="242" Y="0" Z="490" Texture="" Model=""></Enemy>
 	 </Platform>	
 
 	 </Platform>	
