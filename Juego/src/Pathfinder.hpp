@@ -22,7 +22,7 @@ class Pathfinder
         int comprobarListas(Sala*, vector <struct NodeRecord> lista);
         int  calcularCostes(struct NodeRecord, Sala*);
         bool coincide(Sala*, Sala*);
-        vector <struct NodeRecord> encontrarCamino(Sala*, Sala*);
+        vector <Waypoint*> encontrarCamino(Sala*, Sala*);
         void getSmallest();
     private:
         //clase singleton

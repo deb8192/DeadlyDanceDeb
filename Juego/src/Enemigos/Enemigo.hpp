@@ -54,7 +54,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setRotation(float rot);
         void setVectorOrientacion();
         void setPosicionesFisicas(float nx,float ny,float nz);
-        void initPosicionesAtaque(float nx,float ny,float nz);
+        void initPosicionesFisicasAtaque(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
 
         void ModificarVida(int vid);
@@ -144,6 +144,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool buscar(VectorEspacial*);//busca un objetivo
         bool Acciones(int);//esto es para recorrer el arbol
         bool pedirAyuda();//pide ayuda
+        void AnnadirRecorridoAyuda(vector <Posiciones> recorrido);
         bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
         bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         //fin comportamientos bases
@@ -159,14 +160,16 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_MERODEA,
             EN_OIR,
             EN_BUSCA,
-            EN_RECUPERA
+            EN_RECUPERA,
+            EN_ACUDE_AYUDA
         };
 
         enum modosEnemigo 
         {  
             MODO_DEFAULT = 0,
             MODO_ATAQUE,
-            MODO_HUIDA
+            MODO_HUIDA,
+            MODO_AUXILIAR_ALIADO
         };
 
         Sala* _estoy;//sala en la que esta el enemigo
@@ -181,6 +184,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool accionRealizada; //
         short modo;
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
+        vector <Posiciones> recorridoAyuda;
 };
 
 #endif

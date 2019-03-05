@@ -70,6 +70,12 @@ bool Waypoint::GetCompartido()
     return esCompartido;
 }
 
+
+Posiciones Waypoint::GetPosicionWaypoint()
+{
+    return posicionWaypoint;
+}
+
 vector <Waypoint*> Waypoint::GetConexiones()
 {
     return conexiones;

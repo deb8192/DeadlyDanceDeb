@@ -88,12 +88,14 @@
 							<Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="12" Y="0" Z="164" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>					
 							<Object Type="1" nombre="guitarra" ataque="25"  accion="2" ancho="4" largo="4" alto="10" X="5" Y="0" Z="140" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
 							<Waypoint Type="1" compartido="0" accion="1" id="14" ancho="4" largo="4" alto="1" X="0" Y="0" Z="155" conexiones="13"></Waypoint>
+							<Waypoint Type="1" compartido="1" accion="1" id="15" ancho="4" largo="4" alto="1" X="-22" Y="0" Z="155" conexiones="14,16"></Waypoint>
 
 
 							<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="-45" Y="0" Z="155" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
 								<Object Type="1" codigo="5" accion="3" ancho="4" largo="1" alto="10" X="-45" Y="0" Z="134" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/puerta_del.obj"></Object>
 								<Object Type="1" nombre="arpa" ataque="18" accion="2" ancho="4" largo="4" alto="10" X="15" Y="0" Z="85" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
-								<Waypoint Type="1" compartido="0" accion="1" id="15" ancho="4" largo="4" alto="1" "-45" Y="0" Z="155" conexiones="14"></Waypoint>
+								<Waypoint Type="1" compartido="0" accion="1" id="16" ancho="4" largo="4" alto="1" "-45" Y="0" Z="155" conexiones="15"></Waypoint>
+								<Waypoint Type="1" compartido="1" accion="1" id="15" ancho="4" largo="4" alto="1" X="0" Y="0" Z="155" conexiones="14,16"></Waypoint>
 							
 							</Platform>
 			

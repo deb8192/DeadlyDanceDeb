@@ -835,7 +835,7 @@ void Jugando::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho
     _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-    _enemigos.back()->initPosicionesAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    _enemigos.back()->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _enemigos.back()->setVelocidadMaxima(1.0f);
     _enemigos.back()->setBarraAtEs(0);
     _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
@@ -1054,9 +1054,9 @@ void Jugando::CrearWaypoint(Sala* sala, int accion, int compartido, int ID, int 
 */
 void Jugando::ConectarWaypoints()
 {
-    for(uint8 i = 0; i < _waypoints.size(); i++)
+    for(unsigned short i = 0; i < _waypoints.size(); i++)
     {
-        for(uint8 j = 0; j < _waypoints.size(); j++)
+        for(unsigned short j = 0; j < _waypoints.size(); j++)
         {
             if(_waypoints[i]->ContainsConection(_waypoints[j]->GetID()) > -1)
             {
@@ -1517,6 +1517,20 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
     //Ejecucion del pathfinding si hay una sala de destino guardada
     if(_destinoPathFinding != nullptr)
     {
+        while(!_auxiliadores.empty())
+        {
+            Pathfinder* path = Pathfinder::getInstance();
+            recorrido = path->encontrarCamino(_auxiliadores.front()->getSala(), _destinoPathFinding);
+            vector<Posiciones> posicionesWaypoints;
+            for(unsigned short i = 0; i < recorrido.size(); i++)
+            {
+                posicionesWaypoints.push_back(recorrido->GetPosicionWaypoint())
+            }
+            _auxiliadores->AnnadirRecorridoAyuda(recorrido);
+            _auxiliadores.erase(_auxiliadores.begin());
+        }
+    }
+    /*{
         Pathfinder* path = Pathfinder::getInstance();
         int tipoCentro;
 
@@ -1753,7 +1767,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
                 }
             }
         }
-    }
+    }*/
     contadorEnem++;
 }
 

@@ -1,5 +1,5 @@
 #include <iostream>
-#include <iostream>
+#include "../Motores/INdrawable.hpp"
 #include <vector>
 
 #ifndef Waypoint_HPP
@@ -20,17 +20,18 @@ class Waypoint
         short GetID();
         int* GetIDConexiones();
         bool GetCompartido();
+        Posiciones GetPosicionWaypoint();
         vector <Waypoint*> GetConexiones();
 
     private:
         
-        using PosicionesWaypoint = struct {
+        using Posiciones = struct {
             float x = 0.0f;
             float y = 0.0f;
             float z = 0.0f;
         };
 
-        PosicionesWaypoint posicion;        //Coordenadas en el mapa del waypoint
+        Posiciones posicionWaypoint;        //Coordenadas en el mapa del waypoint
         vector <Waypoint*> conexiones;      //Waypoints con los que se conecta
         short ID;                  //ID del waypoint 
         int* IDConexiones;       //array con los ID de las conexiones que ayuda a rellenar el vector de conexiones
