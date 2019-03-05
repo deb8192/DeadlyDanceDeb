@@ -8,7 +8,7 @@ Waypoint::Waypoint()
     posicion.z = 0.0f;
 }
 
-Waypoint::Waypoint(int ID_lectura, int x, int y, int z, int* arrayConexiones, int sizeConexiones)
+Waypoint::Waypoint(int ID_lectura, int x, int y, int z, int compartido, int* arrayConexiones, int sizeConexiones)
 {
     posicion.x = x;
     posicion.y = y;
@@ -16,6 +16,11 @@ Waypoint::Waypoint(int ID_lectura, int x, int y, int z, int* arrayConexiones, in
     ID = ID_lectura;
     sizeIDConexiones = sizeConexiones;
     IDConexiones = arrayConexiones;
+    if(compartido == 1)
+    {
+        esCompartido = true;
+    }
+    else esCompartido = false;
 }
 
 Waypoint::~Waypoint()
@@ -58,6 +63,11 @@ short Waypoint::GetID()
 int* Waypoint::GetIDConexiones()
 {
     return IDConexiones;
+}
+
+bool Waypoint::GetCompartido()
+{
+    return esCompartido;
 }
 
 vector <Waypoint*> Waypoint::GetConexiones()

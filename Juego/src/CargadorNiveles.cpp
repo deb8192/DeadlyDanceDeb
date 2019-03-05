@@ -261,7 +261,8 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int z = enem.attribute("Z").as_int();//nos devuelve un int 
         int ancho = enem.attribute("ancho").as_int();//nos devuelve un int
         int largo = enem.attribute("largo").as_int();//nos devuelve un int 
-        int alto = enem.attribute("ancho").as_int();//nos devuelve un int
+        int alto = enem.attribute("alto").as_int();//nos devuelve un int 
+        int compartido = 2;//enem.attribute("compartido").as_int();//nos devuelve un int
         char* conexiones = (char *) enem.attribute("conexiones").value(); //nos indica los ID de los waypoints con los que conecta este waypoint
         char* reading =  strtok(conexiones, ",");
         int* arrayConexiones = new int [5];
@@ -272,7 +273,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
             reading = strtok(NULL, ",");
             i++;
         }
-        _jugando->CrearWaypoint(padren,accion,ID,x,y,z,ancho,largo,alto,arrayConexiones,i); //cargamos el waypoint
+        _jugando->CrearWaypoint(padren,accion,compartido,ID,x,y,z,ancho,largo,alto,arrayConexiones,i); //cargamos el waypoint
     }
 
     return padren;

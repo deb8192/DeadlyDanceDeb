@@ -129,6 +129,11 @@ std::vector<Sala*> Sala::getSalidas()
     return salidas;
 }
 
+std::vector<Waypoint*> Sala::GetWaypoints()
+{
+    return _waypoints;
+}
+
 void Sala::definirID(int id)
 {
     posicion_en_grafica = id;

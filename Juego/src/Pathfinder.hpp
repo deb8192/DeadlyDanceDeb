@@ -44,5 +44,6 @@ class Pathfinder
         vector <struct NodeRecord> listaAbierta;
         vector <struct NodeRecord> listaCerrada;
         vector <struct NodeRecord> camino;
+        vector <Waypoint*> waypointsRecorridos;
 };
 #endif

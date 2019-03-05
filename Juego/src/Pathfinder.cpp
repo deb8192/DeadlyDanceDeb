@@ -165,6 +165,11 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *st
             cout << "Nodo " <<actualNodo.nodo->getPosicionEnGrafica() << endl;
             cout << "Nodo " <<start->getPosicionEnGrafica() << endl;
             camino.insert(camino.begin(), actualNodo);
+            waypointsRecorridos.reserve(camino.size() * 3);
+
+            i = 0;
+
+            
 
             return camino;
         }

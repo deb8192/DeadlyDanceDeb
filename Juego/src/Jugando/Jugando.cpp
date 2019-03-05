@@ -116,7 +116,7 @@ void Jugando::Iniciar()
     _motor->CargarInterfaz();
     
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-    CargarNivel(5, 1); //(level, player) 1 = heavy / 2 = bailaora
+    CargarNivel(2, 1); //(level, player) 1 = heavy / 2 = bailaora
 
     reiniciando = false;
     
@@ -649,7 +649,7 @@ void Jugando::Render()
     }
 
     //Dibujado de ataques
-    /*for(unsigned int i = 0; i < _enemigos.size(); i++)
+    for(unsigned int i = 0; i < _enemigos.size(); i++)
     {
         _motor->dibujarObjetoTemporal(
             _enemigos.at(i)->getAtX(),
@@ -662,7 +662,7 @@ void Jugando::Render()
             4,
             4,
             2);
-    }*/
+    }
 
     //Dibujado zonas
     for(unsigned int i=0; i < _zonas.size(); i++)
@@ -1019,9 +1019,9 @@ void Jugando::cargarCofres(int num)
     }
 }
 
-void Jugando::CrearWaypoint(Sala* sala, int accion, int ID, int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones)
+void Jugando::CrearWaypoint(Sala* sala, int accion, int compartido, int ID, int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones)
 {
-    Waypoint* waypoint = new Waypoint(ID, x, y, z, arrayConexiones, sizeConexiones);
+    Waypoint* waypoint = new Waypoint(ID, x, y, z, compartido, arrayConexiones, sizeConexiones);
     bool coincide = false;
     unsigned short i = 0;
     while(i < _waypoints.size() && !coincide)
