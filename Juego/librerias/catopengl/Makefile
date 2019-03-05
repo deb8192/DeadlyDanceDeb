@@ -28,6 +28,7 @@ RECUR = Recursiva
 RECUR2 = Recursiva2
 PRECA = Precaucion
 PARAL = Paralelo
+LIB = Lib
 
 BUSQ = $(shell find ./obj -name "*.o" | wc -l)
 
@@ -38,13 +39,18 @@ $(BEGIN):
 	make libreria
 
 $(PRECA):
-	if [ $(BUSQ2) -gt 0 ] ; then mv src/*.o obj/ ; fi
+	if [ $(BUSQ2) -gt 0 ] ; then mv src/*.o obj/ ; ls obj/*.o ; fi
 
 $(RECUR):
 	if [ $(BUSQ) -gt 0 ] ; then mv obj/*.o src/ ; fi
 
-$(PARAL): $(OBJECTS) 
+$(PARAL): $(OBJECTS) |
 
+$(LIB):
+	#vamos a construir la libreria
+	ar -rv lib/libcatopengl.a $(OSOURCESV2)
+	#copiamos cabeceras en inc
+	cp src/*.hpp inc 
 
 # si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
 
@@ -64,14 +70,15 @@ clean:
 	@echo Limpiando objetos de libreria grafica
 	rm -f src/*.o
 	rm -f obj/*.o
+	rm -f lib/*
 
 libreria:
-
+	
+	@echo -e '\e[41m Paso 1 Recuperacion de objetos \e[0m';
 	$(MAKE) $(RECUR) 
+	@echo -e '\e[41m Paso 2 Compilacion de objetos \e[0m';
 	$(MAKE) -j$(CPUCOUNT) $(PARAL) 
+	@echo -e '\e[41m Paso 3 Reestructurar \e[0m';
 	$(MAKE) $(PRECA)
-
-	#vamos a construir la libreria
-	ar -rv lib/libcatopengl.a $(OSOURCESV2)
-	#copiamos cabeceras en inc
-	cp src/*.hpp inc 
+	@echo -e '\e[41m Paso 3 Construyendo libreria \e[0m';
+	$(MAKE) $(LIB)
