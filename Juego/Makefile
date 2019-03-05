@@ -8,6 +8,7 @@ LIBRERIAS =-L"librerias/reactphysics3d/lib/" -L"librerimmas/fmod/lowlevel/lib/x8
 LIBRERIAS_CARPETAS = "librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib:librerias/glew/lib:librerias/glad/lib:librerias/glfw/lib:librerias/assimp/lib:librerias/catopengl/lib"
 LIBRERIAS_ESPECIFICAS = librerias/fmod/studio/lib/x86_64/libfmodstudio.so librerias/fmod/lowlevel/lib/x86_64/libfmod.so librerias/reactphysics3d/lib/libreactphysics3d.a librerias/glew/lib/libGLEW.a librerias/glad/lib/libglad.a librerias/glfw/lib/libglfw3.a librerias/assimp/lib/libIrrXML.a librerias/catopengl/lib/libcatopengl.a #librerias necesarias
 irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor -lGL -lIrrlicht -lassimp   #porque nombre llamarla
+libSeguimiento = $(shell ls librerias/catopengl/obj/*.o)
 SHELL = /bin/bash
 CPUCOUNT=$(shell grep -c   "^processor" /proc/cpuinfo)
 # ${CXXFLAGS} - Son las opciones del compilador
@@ -103,7 +104,7 @@ $(PARALLEL): $(OBJECTS) $(OBJECTSP) $(OBJECTSE) $(OBJECTSM) $(OBJECTSJ) $(OBJECT
 
 #Finalizado Comprobaciones
 
-$(EXEC): $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2)
+$(EXEC): $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2) $(libSeguimiento)
 	#Comprobando ejecutable si esta actualizado
 	$(CXX) $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2) $(irrlichtN) $(LIBRERIAS) $(LIBRERIAS_ESPECIFICAS)  -o $(EXEC)
 	#Ejecutable Actualizado
