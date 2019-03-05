@@ -6,9 +6,13 @@
 #include "../Armas/Arma.hpp"
 #include "../Jugando/Sala.hpp"
 #include "../Jugando/Zona.hpp"
-//#include "../Jugando/Jugando.hpp"
 #include <vector>
 #include "../Arbol.hpp"
+
+#include "../Times.hpp"
+#include "../Motores/MotorAudio.hpp"
+#include "../Motores/MotorGrafico.hpp"
+#include "../Motores/SenseEventos.hpp"
 
 class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple herencia a esto se le llama derivacion multiple
 {
@@ -126,19 +130,23 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
         Arbol* getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
-        void UpdateBehavior(short *i); //actualiza el comportamiento actual del pollo
+        void UpdateBehavior(short *i, int* _jugador, std::vector<Zona*> &_getZonas); //actualiza el comportamiento actual del pollo
         short * RunIA(bool);//corre la ia del enemigo
         void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
         //fin ia
 
     protected:
+        Times* _tiempo;
+        MotorAudioSystem* _motora;
+        MotorGrafico* _motor;
+        SenseEventos* _eventos;
 
         //comportamientos bases
         void alinearse(VectorEspacial*);
         bool ver(int tipo);//1 si ve al jugador
         bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
         bool buscar();//por defecto devuelve true
-        bool perseguir();//por defecto devuelve true TO IMPROVE
+        bool perseguir(int* _jug);//por defecto devuelve true TO IMPROVE
         bool buscar(VectorEspacial*);//busca un objetivo
         bool Acciones(int);//esto es para recorrer el arbol
         bool pedirAyuda();//pide ayuda

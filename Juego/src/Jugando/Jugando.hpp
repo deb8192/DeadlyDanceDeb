@@ -3,8 +3,6 @@
 
 #include "../Estado.hpp"
 #include "../Motores/SenseEventos.hpp"
-#include "../Motores/MotorAudio.hpp"
-#include "../Motores/MotorGrafico.hpp"
 #include "../CargadorNiveles.hpp"
 #include "../Times.hpp"
 #include "../Personajes/Jugador.hpp"
@@ -26,15 +24,6 @@ class Jugando: public Estado {
         Jugando();
         ~Jugando();
 
-        //clase singleton en public
-        static Jugando* GetInstance() //esto se utiliza para crear el objeto una sola vez
-        {
-            if(!_unicaInstancia)
-                _unicaInstancia = new Jugando();
-            return _unicaInstancia;  
-        }
-        //fin singleton public
-
         // Funciones de Estado
         void Iniciar();
         void ManejarEventos();
@@ -42,7 +31,6 @@ class Jugando: public Estado {
         void UpdateIA(); // Se llama 4 veces por segundo
         void Render();//dibuja y actualiza las posiciones del interpolado
         
-        void Vaciar();
         void Pausar();
         void Reanudar();
         void Reiniciar();
@@ -56,11 +44,7 @@ class Jugando: public Estado {
 
         bool CargarNivel(int nivel, int tipoJug); //Niveles en assets/maps/xml/
         void CrearJugador();//lo utilizamos para crear su objeto
-        void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void CrearLuz(int x,int y,int z);
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem); //lo usamos para crear zonas
         void cargarCofres(int num);
 
         //Funciones de interacciones
@@ -77,14 +61,10 @@ class Jugando: public Estado {
         void EraseEnemigo(std::size_t i);
         void setEnemigoPideAyuda(Enemigo* );
         Enemigo* getEnemigoPideAyuda();
-        vector<Zona*> GetZonas();
         std::vector<Enemigo*> getEnemigos();
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
 
     private:
-        //clase singleton 
-        static Jugando* _unicaInstancia;
-        //fin clase singleton private
 
         MotorAudioSystem* _motora;
         SenseEventos* _sense;

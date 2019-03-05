@@ -45,8 +45,3 @@ void Configuracion::atras()
     _motor->BorrarGui();
     Juego::GetInstance()->estado.SaltarAlMenu();
 }
-
-// Elimina la memoria antes de volver al menu
-void Configuracion::Vaciar() {
-    cout << "Vaciando config" <<endl;
-}

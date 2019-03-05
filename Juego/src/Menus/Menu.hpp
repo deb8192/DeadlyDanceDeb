@@ -13,7 +13,6 @@ class Menu: public Estado {
         void Render();
         void Update();
         void ManejarEventos();
-        void Vaciar();
 
         void Pausar();
         void Reanudar();

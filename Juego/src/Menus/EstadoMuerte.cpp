@@ -83,6 +83,7 @@ void EstadoMuerte::borrarGUIResetearEvento(short id)
 
 void EstadoMuerte::menuPrincipal()
 {
+    _motor->LimpiarElementosJuego();
     // Elimina todos los estados y anyade el de menu
     Juego::GetInstance()->estado.CambioDeJuegoAMenu();
 }
@@ -95,9 +96,4 @@ void EstadoMuerte::reiniciarPartida()
 void EstadoMuerte::salir()
 {
     _motor->CerrarJuego();
-}
-
-void EstadoMuerte::Vaciar()
-{
-    cout << "Vaciando muerte" <<endl;
 }

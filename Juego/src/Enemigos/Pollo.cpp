@@ -1,11 +1,11 @@
 #include "Pollo.hpp"
 #include "../ConstantesComunes.hpp"
+#include "../Personajes/Jugador.hpp"
 #include "cmath"
 
 Pollo::Pollo(float nX, float nY, float nZ, int maxVida)
 : Enemigo(nX,nY,nZ,maxVida)
 {
-    _nivel = Jugando::GetInstance();
     Constantes constantes;
     funciona = true;
     atacado = false;
@@ -16,13 +16,8 @@ Pollo::Pollo(float nX, float nY, float nZ, int maxVida)
 
 Pollo::~Pollo()
 {
-    Constantes constantes;
-    funciona = false;
-    atacado = false;
     delete[] _ordenes;
     _ordenes = nullptr;
-    maxRotacion = 0;
-    _nivel = nullptr;
 }
 
 /***************** RunIA *****************
@@ -66,8 +61,9 @@ void Pollo::RunIA()
  * Salidas:
 */ 
 
-void Pollo::UpdatePollo(short *i)
+void Pollo::UpdatePollo(short *i, int* _jug)
 {
+    Jugador* _jugador = (Jugador*)_jug;
     Constantes constantes;
     funciona = true;
     if(modo == constantes.UNO && _ordenes != nullptr)
@@ -75,7 +71,7 @@ void Pollo::UpdatePollo(short *i)
         switch (_ordenes[0])
         {
             case EN_PERSIGUE: //El Pollo se mueve
-                funciona = this->perseguir();
+                funciona = this->perseguir(_jug);
                 break;
         
             case EN_ATACAR: //El Pollo ataca
@@ -88,7 +84,7 @@ void Pollo::UpdatePollo(short *i)
                         
                         if(danyo > 0)
                         {
-                            _nivel->GetJugador()->ModificarVida(-danyo);
+                            _jugador->ModificarVida(-danyo);
                             cout<<"Ataca por la IA" <<endl;
                             funciona = true;
                             atacado = true;

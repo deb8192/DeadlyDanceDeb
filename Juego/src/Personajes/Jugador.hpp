@@ -6,12 +6,12 @@
 #include <algorithm>
 #include <ctime>
 #include <cstring>
+#include "../Enemigos/Enemigo.hpp"
 #include "../Motores/INnpc.hpp"
 #include "../Motores/INdrawable.hpp"
 #include "../Motores/INsentidos.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Objetos/Llave.hpp"
-#include "../Motores/MotorFisicas.hpp"
 #include "../Motores/MotorGrafico.hpp"
 #include "../Motores/MotorAudio.hpp"
 #include "../Jugando/InterfazJugador.hpp"
@@ -40,8 +40,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         //npc metodos
         int Atacar(int);//efectua un ataque normal, llama al motor para ejecutar la animacion.
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
-        void AtacarUpdate(int danyo);
-        void AtacarEspecialUpdate(int* danyo);
+        void AtacarUpdate(int danyo, vector<Enemigo*> &_getEnemigos);
+        void AtacarEspecialUpdate(int* danyo, vector<Enemigo*> &_getEnemigos);
         void Interactuar(int, int);//llama a la mecanica de interactuar
 
         //Metodos de INsentidos
@@ -170,7 +170,6 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         int ancho; int largo; int alto;
 
         MotorGrafico* _motor;
-        MotorFisicas* _fisicas;
         MotorAudioSystem* _motora;
         InterfazJugador* _interfaz;
 };

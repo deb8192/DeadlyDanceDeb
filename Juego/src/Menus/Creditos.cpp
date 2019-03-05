@@ -45,9 +45,3 @@ void Creditos::atras()
     _motor->BorrarGui();
     Juego::GetInstance()->estado.SaltarAlMenu();
 }
-
-// Elimina la memoria antes de volver al menu
-void Creditos::Vaciar()
-{
-    cout << "Vaciando creditos" <<endl;
-}

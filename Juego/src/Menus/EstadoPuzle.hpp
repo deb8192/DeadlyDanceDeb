@@ -12,7 +12,6 @@ class EstadoPuzle: public Estado {
         void Render();
         void Update();
         void ManejarEventos();
-        void Vaciar();
         
     private:
         void atras();
