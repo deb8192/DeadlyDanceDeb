@@ -306,6 +306,13 @@ void Enemigo::setPosiciones(float nx,float ny,float nz)
     posActual.z = nz;
 }
 
+void Enemigo::setPosicionesAtaque(float nx,float ny,float nz)
+{
+    atx = nx;
+    aty = ny;
+    atz = nz;
+}
+
 void Enemigo::setNewPosiciones(float nx,float ny,float nz)
 {
     moveTime = 0.0;
@@ -320,6 +327,14 @@ void Enemigo::setLastPosiciones(float nx,float ny,float nz)
     posPasada.x = nx;
     posPasada.y = ny;
     posPasada.z = nz;
+}
+
+
+void Enemigo::initPosicionesAtaque(float nx,float ny,float nz)
+{
+    iniAtposX = nx;
+    iniAtposY = ny;
+    iniAtposZ = nz;
 }
 
 void Enemigo::initPosicionesFisicas(float nx,float ny,float nz)
@@ -402,6 +417,10 @@ int Enemigo::Atacar(int i)
 
       //Calcular posiciones
       int distance = 3;
+      atposZ = this->getZ();
+      atposZ += (distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN));
+      atposX = this->getX();
+      atposX += (distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN));
       atx = distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getX();
       aty = this->getY();
       atz = distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getZ();
@@ -409,8 +428,11 @@ int Enemigo::Atacar(int i)
       atgy = this->getRY();
       atgz = this->getRZ();
 
-      //Acutualizar posicion del ataque
-      _fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,i);
+      if(atposX != 0 || atposY != 0)
+      {
+          //Acutualizar posicion del ataque
+      _fisicas->updateAtaqueEnemigos(atposX,iniAtposY,atposZ,i);
+      }
 
       //Colision
       if(_fisicas->IfCollision(_fisicas->getEnemiesAtack(i),_fisicas->getJugador()))

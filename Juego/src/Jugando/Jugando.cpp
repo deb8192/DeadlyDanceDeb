@@ -163,6 +163,7 @@ void Jugando::ValoresPorDefectoJugador()
     _jugador->setDanyoCritico(50);
     _jugador->setProAtaCritico(10);
     _jugador->setPosiciones(xIni, yIni, zIni);
+    _jugador->setPosicionesAtaque(xIni, yIni, zIni);
     _jugador->setNewPosiciones(xIni, yIni, zIni);
     _jugador->initPosicionesFisicas(xIni/2, yIni/2, zIni/2);
     //TO DO: revisar que lo haga bien
@@ -830,9 +831,11 @@ void Jugando::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho
         //fin ia
     _enemigos.back()->SetEnemigo(enemigo);
     _enemigos.back()->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _enemigos.back()->setPosicionesAtaque(x,y,z);
     _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    _enemigos.back()->initPosicionesAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _enemigos.back()->setVelocidadMaxima(1.0f);
     _enemigos.back()->setBarraAtEs(0);
     _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
