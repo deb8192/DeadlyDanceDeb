@@ -36,10 +36,12 @@ class CargadorNiveles
         std::vector<Recolectable*> GetRecolectables();
         std::vector<Interactuable*> GetInteractuables();
         std::vector<Recolectable*> GetPowerup();
+        Enemigo* GetBoss();
 
         Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
-        void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, Sala* sala, int* id);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, Sala* sala, int* id);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        void CrearBoss(int accion, int x,int y,int z,int ancho, int largo, int alto, Sala* sala, int* id);
         void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem); //lo usamos para crear zonas
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, int* id);//lo utilizamos para crear su modelo en motorgrafico y su objeto
 
@@ -52,6 +54,7 @@ class CargadorNiveles
         Sala* _primeraSala;// la primera sala del arbol
 
         CargadorBehaviorTrees cargadorIA; //Variable para crear la IA de los enemigos
+        Enemigo* _boss;
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         std::vector<Recolectable*> _recolectables;
         std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
