@@ -63,7 +63,7 @@ class Jugando: public Estado {
         Enemigo* getEnemigoPideAyuda();
         std::vector<Enemigo*> getEnemigos();
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
-
+        
     private:
 
         MotorAudioSystem* _motora;
@@ -77,6 +77,7 @@ class Jugando: public Estado {
         
         Sala* _primeraSala;// la primera sala del arbol
         
+        Enemigo* _boss;
         //TO DO: hacerle un reserve y q el vector sea un puntero
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         std::vector<Enemigo*> _auxiliadores;  //Enemigos que responden a la ayuda
