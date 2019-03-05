@@ -116,7 +116,7 @@ void Jugando::Iniciar()
     _motor->CargarInterfaz();
     
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-    CargarNivel(2, 1); //(level, player) 1 = heavy / 2 = bailaora
+    CargarNivel(5, 1); //(level, player) 1 = heavy / 2 = bailaora
 
     reiniciando = false;
     

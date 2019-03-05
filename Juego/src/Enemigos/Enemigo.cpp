@@ -417,22 +417,21 @@ int Enemigo::Atacar(int i)
 
       //Calcular posiciones
       int distance = 3;
-      atposZ = this->getZ();
-      atposZ += (distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN));
-      atposX = this->getX();
-      atposX += (distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN));
-      atx = distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getX();
+      atx = this->getX();
+      atx += (distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN));
       aty = this->getY();
-      atz = distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getZ();
+      atz = this->getZ();
+      atz += (distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN));
+      atposZ = iniAtposZ;
+      atposX = iniAtposX;
+      atposZ += atz - posIni.z;
+      atposX += atx - posIni.x;
       atgx = this->getRX();
       atgy = this->getRY();
       atgz = this->getRZ();
 
-      if(atposX != 0 || atposY != 0)
-      {
-          //Acutualizar posicion del ataque
+      //Acutualizar posicion del ataque
       _fisicas->updateAtaqueEnemigos(atposX,iniAtposY,atposZ,i);
-      }
 
       //Colision
       if(_fisicas->IfCollision(_fisicas->getEnemiesAtack(i),_fisicas->getJugador()))
