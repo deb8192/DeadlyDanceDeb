@@ -330,7 +330,7 @@ void Enemigo::setLastPosiciones(float nx,float ny,float nz)
 }
 
 
-void Enemigo::initPosicionesAtaque(float nx,float ny,float nz)
+void Enemigo::initPosicionesFisicasAtaque(float nx,float ny,float nz)
 {
     iniAtposX = nx;
     iniAtposY = ny;
@@ -1118,6 +1118,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
         //cout << " grita pidiendo ayuda "<< endl;
         return false;
+    }
+
+    void Enemigo::AnnadirRecorridoAyuda(vector <Posiciones> recorrido)
+    {
+        recorridoAyuda = recorrido;
     }
 
     bool Enemigo::ContestarAyuda()

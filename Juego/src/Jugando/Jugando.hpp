@@ -104,7 +104,7 @@ class Jugando: public Estado {
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         std::vector<Enemigo*> _auxiliadores;  //Enemigos que responden a la ayuda
         Enemigo* _enemPideAyuda;  //Enemigos que pide ayuda
-        std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
+        std::vector<Waypoint*> recorrido;//Nodos a recorrer en el pathfinding
         Sala* _destinoPathFinding; //sala que se rellena al llamar a pathfinding y se vacía al terminar el recorrido del enemigo
         
         std::vector<Recolectable*> _recolectables;

@@ -481,9 +481,10 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 {
                     arrayTareaObjetivo[0] = 7;
                 }
+                else if(strcmp(accion, constantes.AUXILIAR))
                 else
                 {
-                    arrayTareaObjetivo[0] = -1;
+                    arrayTareaObjetivo[0] = 8;
                 }
 
                 //Objetivo

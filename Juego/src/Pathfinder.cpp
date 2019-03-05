@@ -13,8 +13,6 @@ Pathfinder::Pathfinder()
 
 }
 
-
-
 /********************* ComprobarListas ************************
  * Descripcion: Metodo que indica si una sala se encuentra en
  * cualquiera de las listas de nodos que se pasen
@@ -105,7 +103,7 @@ bool Pathfinder::coincide(Sala *nodoA, Sala *nodoB)
  *      *start: sala desde donde se empieza el camino
  *      *end: sala de destino del camino  
  */
-std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *start, Sala *end)
+std::vector <Waypoint *> Pathfinder::encontrarCamino(Sala *start, Sala *end)
 {
     //Se inicializan todas las variables implicadas en el pathfiding
     if(!camino.empty())
@@ -130,7 +128,7 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *st
 
     bool termina;
     
-    unsigned int i = 0;
+    unsigned int i = 0, j = 0, k = 0;
 
     //Mientras que haya nodos visitados por procesar se busca el camino
     while(listaAbierta.size() > 0 && contador < 25)
@@ -166,12 +164,59 @@ std::vector <struct Pathfinder::NodeRecord> Pathfinder::encontrarCamino(Sala *st
             cout << "Nodo " <<start->getPosicionEnGrafica() << endl;
             camino.insert(camino.begin(), actualNodo);
             waypointsRecorridos.reserve(camino.size() * 3);
-
+            bool encontrado = false;
             i = 0;
+            j = 0;
 
-            
+            //Comenzamos la carga de waypoints con el primero de la sala
+            while(!encontrado && j < camino[0].nodo->GetWaypoints().size())
+            {
+                if(!camino[0].nodo->GetWaypoints()[j]->GetCompartido())
+                {
+                    encontrado = true;
+                    waypointsRecorridos.push_back(camino[0].nodo->GetWaypoints()[j]);
+                }
+                if(!encontrado) j++;
+            }
 
-            return camino;
+            encontrado = false;
+            i = j = 0;
+
+            //Cargamos los siguentes waypoints del resto de salas del camino
+            while(i < camino.size())
+            {
+                while(i + 1 < camino.size() && j < camino[i].nodo->GetWaypoints().size() && !encontrado)
+                {
+                    while(k < camino[i + 1].nodo->GetWaypoints().size() && !encontrado)
+                    {
+                        if(!waypointsRecorridos.back()->GetCompartido())
+                        {
+                            if(camino[i].nodo->GetWaypoints()[j] == camino[i + 1].nodo->GetWaypoints()[k])
+                            {
+                                encontrado = true;
+                                waypointsRecorridos.push_back(camino[i].nodo->GetWaypoints()[j]);
+                            }
+                        }
+                        else
+                        {
+                            if(!camino[i].nodo->GetWaypoints()[j]->GetCompartido())
+                            {
+                                encontrado = true;
+                                waypointsRecorridos.push_back(camino[i].nodo->GetWaypoints()[j]);
+                            }
+                        }
+                        
+                        k++;
+                    }
+                    k = 0;
+                    j++;
+                }
+                encontrado = false;
+                j = 0;
+                i++;
+            }
+
+            return waypointsRecorridos;
         }
         //En caso contrario comprobamos las demas salas conectadas a la sala actual
         else

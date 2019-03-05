@@ -120,6 +120,32 @@ void Pollo::UpdatePollo(short *i)
                 }
                 break;
 
+                case EN_OIR: //El Murcielago oye al jugador
+                {
+                    if(this->oir(constantes.DOS))
+                    {
+                        funciona = true;
+                    }
+                    else 
+                    {
+                        funciona = false;
+                    }
+                }
+                break;
+
+                case EN_ACUDE_AYUDA: //El Murcielago oye al jugador
+                {
+                    if(this->oir(constantes.UNO))
+                    {
+                        funciona = true;
+                    }
+                    else 
+                    {
+                        funciona = false;
+                    }
+                }
+                break;
+
                 case EN_PIDE_AYUDA: //El Pollo pide ayuda
                 {
                     modo = MODO_ATAQUE;
@@ -129,6 +155,10 @@ void Pollo::UpdatePollo(short *i)
                     funciona = true;
                 }
                 break;
+            case EN_OIR
+            {
+
+            }
             case EN_MERODEA: //El Pollo merodea
                 {
                     if(!hecho)
