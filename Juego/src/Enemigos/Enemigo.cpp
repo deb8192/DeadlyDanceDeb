@@ -401,7 +401,7 @@ int Enemigo::Atacar(int i)
       //MotorAudioSystem* _motora = MotorAudioSystem::getInstance();
 
       //Calcular posiciones
-      int distance = 4;
+      int distance = 3;
       atx = distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getX();
       aty = this->getY();
       atz = distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getZ();

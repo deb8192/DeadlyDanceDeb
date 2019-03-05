@@ -11,7 +11,7 @@ class Waypoint
 {
     public:
         Waypoint();
-        Waypoint(int ID_lectura, int x, int y, int z, int* arrayConexiones, int sizeConexiones);
+        Waypoint(int ID_lectura, int x, int y, int z, int compartido, int* arrayConexiones, int sizeConexiones);
         ~Waypoint();
         void AnnadirConexionesWaypoints(Waypoint* waypointNivel);
         short ContainsConection(short id);
@@ -19,6 +19,7 @@ class Waypoint
 
         short GetID();
         int* GetIDConexiones();
+        bool GetCompartido();
         vector <Waypoint*> GetConexiones();
 
     private:
@@ -34,5 +35,6 @@ class Waypoint
         short ID;                  //ID del waypoint 
         int* IDConexiones;       //array con los ID de las conexiones que ayuda a rellenar el vector de conexiones
         short sizeIDConexiones;
+        bool esCompartido;
 };
 #endif
