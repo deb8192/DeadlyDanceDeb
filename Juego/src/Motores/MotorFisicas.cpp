@@ -654,6 +654,15 @@ void MotorFisicas::updateJugador(float x, float y, float z)
     }
 }
 
+void MotorFisicas::updateBoss(float x, float y, float z)
+{
+    rp3d::Vector3 posiciones(x,y,z);
+    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+    Transform transformacion(posiciones,orientacion);
+    _boss->setTransform(transformacion);
+
+}
+
 void MotorFisicas::updateEnemigos(float x, float y, float z, unsigned int i)
 {
     if(enemigos.at(i) != nullptr)

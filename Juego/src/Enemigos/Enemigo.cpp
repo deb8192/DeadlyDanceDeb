@@ -236,6 +236,13 @@ void Enemigo::setPosiciones(float nx,float ny,float nz)
     posActual.z = nz;
 }
 
+void Enemigo::setPosicionesAtaque(float nx,float ny,float nz)
+{
+    atx = nx;
+    aty = ny;
+    atz = nz;
+}
+
 void Enemigo::setNewPosiciones(float nx,float ny,float nz)
 {
     moveTime = 0.0;
@@ -250,6 +257,13 @@ void Enemigo::setLastPosiciones(float nx,float ny,float nz)
     posPasada.x = nx;
     posPasada.y = ny;
     posPasada.z = nz;
+}
+
+void Enemigo::initPosicionesAtaque(float nx,float ny,float nz)
+{
+    iniAtposX = nx;
+    iniAtposY = ny;
+    iniAtposZ = nz;
 }
 
 void Enemigo::initPosicionesFisicas(float nx,float ny,float nz)
@@ -339,25 +353,31 @@ int Enemigo::Atacar(int i)
         MotorFisicas* _fisicas = MotorFisicas::getInstance();
 
         //Calcular posiciones
-        int distance = 4;
-        atx = distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getX();
+        int distance = 3;
+        atx = this->getX();
+        atx += (distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN));
         aty = this->getY();
-        atz = distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getZ();
+        atz = this->getZ();
+        atz += (distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN));
+        atposZ = iniAtposZ;
+        atposX = iniAtposX;
+        atposZ += atz - posIni.z;
+        atposX += atx - posIni.x;
         atgx = this->getRX();
         atgy = this->getRY();
         atgz = this->getRZ();
 
-        if (i >= 0)
+        if (i >= 0) // Comprueba si ataca al boss o a los enemigos
         {
             //Acutualizar posicion del ataque
-            _fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,i);
-
+            _fisicas->updateAtaqueEnemigos(atposX,iniAtposY,atposZ,i);
+            
             //Colision
             if(_fisicas->IfCollision(_fisicas->getEnemiesAtack(i),_fisicas->getJugador()))
             {
-            cout << "Jugador Atacado" << endl;
-            danyo = 10.0f;
-            cout << "danyo del enemigo -> " << danyo << endl;
+                cout << "Jugador Atacado" << endl;
+                danyo = 10.0f;
+                cout << "danyo del enemigo -> " << danyo << endl;
             }
         }
         else

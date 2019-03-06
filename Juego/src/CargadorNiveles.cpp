@@ -393,9 +393,11 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         //fin ia
     _enemigos.back()->SetEnemigo(enemigo);
     _enemigos.back()->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _enemigos.back()->setPosicionesAtaque(x,y,z);
     _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    _enemigos.back()->initPosicionesAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _enemigos.back()->setVelocidadMaxima(1.0f);
     _enemigos.back()->setBarraAtEs(0);
     _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
@@ -426,9 +428,11 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
 
     _boss->SetEnemigo(enemigo); // Se utiliza en UpdateBehavior()
     _boss->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _boss->setPosicionesAtaque(x, y, z);
     _boss->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _boss->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _boss->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    _boss->initPosicionesAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _boss->setVelocidadMaxima(1.0f);
     _boss->setBarraAtEs(0);
     _boss->definirSala(sala);//le pasamos la sala en donde esta
@@ -442,7 +446,7 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
     _boss->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     _boss->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
 
-    _motor->CargarEnemigos(x,y,z,_boss->GetModelo());//creamos la figura
+    _motor->CargarBoss(x,y,z,_boss->GetModelo());//creamos la figura
 
     _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,-1);
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,10); //Para ataque
