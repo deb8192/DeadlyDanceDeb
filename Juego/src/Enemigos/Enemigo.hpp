@@ -60,7 +60,6 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setPosicionesFisicas(float nx,float ny,float nz);
 
         void initPosicionesFisicasAtaque(float nx,float ny,float nz);
-        void initPosicionesAtaque(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
 
         void ModificarVida(int vid);
