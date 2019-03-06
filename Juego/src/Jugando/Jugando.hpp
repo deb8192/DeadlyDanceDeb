@@ -13,8 +13,6 @@
 #include "../Armas/Arma.hpp"
 #include "../Jugando/InterfazJugador.hpp"
 
-//cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA()
-#include "../CargadorBehaviorTrees.hpp"
 #include "../Pathfinder.hpp"
 
 //#include <list>
@@ -74,8 +72,7 @@ class Jugando: public Estado {
         InterfazJugador* _interfaz;
 
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
-        CargadorBehaviorTrees cargadorIA; //Variable para crear la IA de los enemigos
-        
+
         Sala* _primeraSala;// la primera sala del arbol
         
         bool enSalaBoss;
