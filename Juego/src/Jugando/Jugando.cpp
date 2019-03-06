@@ -6,7 +6,7 @@
 
 Jugando::Jugando()
 {
-    
+    _enemPideAyuda = nullptr;
 }
 
 Jugando::~Jugando()
@@ -62,6 +62,13 @@ Jugando::~Jugando()
     }
     _powerup.clear();
 
+    tam = _waypoints.size();
+    for(short i=0; i < tam; i++)
+    {
+        _waypoints.at(i) = nullptr;
+    }
+    _waypoints.clear();
+
     // Liberar memoria
     tam = _auxiliadores.size();
     for(short i=0; i < tam; i++)
@@ -69,6 +76,8 @@ Jugando::~Jugando()
         delete _auxiliadores.at(i);
     }
     _auxiliadores.clear();
+    
+    //delete _primeraSala;
 }
 
 void Jugando::Iniciar()
@@ -406,7 +415,7 @@ void Jugando::Update()
                             _enemigos.at(i)->setTimeMerodear(tiempoMerodear);
                         }
                         //FUNCIONA REGULAR
-                        /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
+                        if((_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i)) && (_enemigos.at(i)->GetModo() != 1 || _enemigos.at(i)->GetModo() != 3))
                         {
                             //colisiona
                             struct DatosDesplazamiento
@@ -417,24 +426,20 @@ void Jugando::Update()
                             }
                             velocidad, posicionesPasadas;
 
-                            velocidad.x = (_enemigos.at(i)->getNewX() - _enemigos.at(i)->getLastX()) * constantes.DOS;
-                            velocidad.y = (_enemigos.at(i)->getNewY() - _enemigos.at(i)->getLastY()) * constantes.DOS;
-                            velocidad.z = (_enemigos.at(i)->getNewZ() - _enemigos.at(i)->getLastZ()) * constantes.DOS;
-                            posicionesPasadas.x = _enemigos.at(i)->getLastX() - velocidad.x;
-                            posicionesPasadas.y = _enemigos.at(i)->getLastY() - velocidad.y;
-                            posicionesPasadas.z = _enemigos.at(i)->getLastZ() - velocidad.z;
+                            velocidad.x = (_enemigos.at(i)->getNewX() - _enemigos.at(i)->getX());
+                            velocidad.y = (_enemigos.at(i)->getNewY() - _enemigos.at(i)->getY());
+                            velocidad.z = (_enemigos.at(i)->getNewZ() - _enemigos.at(i)->getZ());
 
                             _enemigos.at(i)->setPosicionesFisicas(-velocidad.x, 0.0f, -velocidad.z);//colisiona
                             //enemigos.at(i)->setPosiciones(_enemigos.at(i)->getX() - velocidad.x, _enemigos.at(i)->getLasY() - velocidad.y, _enemigos.at(i)->getLastZ() - velocidad.z);//colisiona         
-                            _enemigos.at(i)->setNewPosiciones(_enemigos.at(i)->getNewX() - velocidad.x, _enemigos.at(i)->getNewY() - velocidad.y, _enemigos.at(i)->getNewZ() - velocidad.z);//colisiona                                
-                            _enemigos.at(i)->setLastPosiciones(posicionesPasadas.x, posicionesPasadas.y, posicionesPasadas.z);//colisiona                                
+                            _enemigos.at(i)->setNewPosiciones(_enemigos.at(i)->getX(), _enemigos.at(i)->getY(), _enemigos.at(i)->getZ());//colisiona                                
                             if(_enemigos.at(i)->GetRotation() != 0.0f)
                             {
                                 _enemigos.at(i)->setNewRotacion(_enemigos.at(i)->getRX(), _enemigos.at(i)->getRY() - constantes.PI_RADIAN, _enemigos.at(i)->getRZ());
-                                _enemigos.at(i)->setRotation(0.0f); 
+                                _enemigos.at(i)->setVectorOrientacion(); 
+                                _enemigos.at(i)->setRotation(0.0f);
                             }
-                        }*/
-
+                        }
                 }
                 //_enemigos[i]->queVes();
             }
@@ -788,11 +793,6 @@ void Jugando::Reiniciar()
     reiniciando = true;
 }
 
-
-
-
-
-
 bool Jugando::CargarNivel(int nivel, int tipoJug)
 {
     // Codigo de Nivel.cpp
@@ -820,6 +820,8 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _zonas = cargador.GetZonas();
     _enemigos = cargador.GetEnemigos();
     _boss = cargador.GetBoss();
+    _waypoints = cargador.GetWaypoints();
+    ConectarWaypoints();
 
     //Cargar objetos con el nivel completo
     this->cargarCofres(16); //Cargamos los cofres del nivel
@@ -971,6 +973,27 @@ void Jugando::cargarCofres(int num)
         else
         {
             cout << "No hay zonas de cofres suficientes en el nivel" << endl;
+        }
+    }
+}
+
+/************ ConectarWaypoints ************
+ * Funcion establece por cada waypoint sus
+ * conexiones con el resto de waypoints del nivel
+ *      Entradas:
+ * 
+ *      Salidas:
+*/
+void Jugando::ConectarWaypoints()
+{
+    for(unsigned short i = 0; i < _waypoints.size(); i++)
+    {
+        for(unsigned short j = 0; j < _waypoints.size(); j++)
+        {
+            if(_waypoints[i]->ContainsConection(_waypoints[j]->GetID()) > -1)
+            {
+                _waypoints[i]->AnnadirConexionesWaypoints(_waypoints[j]);
+            }
         }
     }
 }
@@ -1412,17 +1435,19 @@ void Jugando::updateAtEsp()
 
 void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
 {
+    if(auxiliarPathfinding >= 20 || (contadorEnem > 0 && _enem == _enemPideAyuda))
+    {
+        _auxiliadores.clear();
+        this->setEnemigoPideAyuda(nullptr);
+        _destinoPathFinding = nullptr;
+        contadorEnem = 0;
+
+    }
     //Si enem no es nulo se anade a la cola de _enemigos _auxiliadores
     if(_enem != nullptr && _enem != _enemPideAyuda )
     {
         _auxiliadores.push_back(_enem);
-        contadorEnem--;
-    }
-    else if(contadorEnem > 0 && _enem == _enemPideAyuda)
-    {
-        this->setEnemigoPideAyuda(nullptr);
-        _destinoPathFinding = nullptr;
-        contadorEnem = 0;
+        contadorEnem++;
     }
     //Si no hay sala de destino guardada, se guarda en este momento
     else if(_destinoPathFinding == nullptr)
@@ -1432,6 +1457,30 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
     //Ejecucion del pathfinding si hay una sala de destino guardada
     if(_destinoPathFinding != nullptr)
     {
+        while(!_auxiliadores.empty())
+        {
+            if(_destinoPathFinding != _auxiliadores.front()->getSala() && _auxiliadores.front()->GetModo() != 8)
+            {
+                Pathfinder* path = Pathfinder::getInstance();
+                recorrido = path->encontrarCamino(_auxiliadores.front()->getSala(), _destinoPathFinding);
+                vector<INdrawable::Posiciones> posicionesWaypoints;
+                posicionesWaypoints.clear();
+                for(unsigned short i = 0; i < recorrido.size(); i++)
+                {
+                    posicionesWaypoints.push_back(recorrido[i]->GetPosicionWaypoint());
+                    _auxiliadores.front()->setSala(_destinoPathFinding);
+                }
+                _auxiliadores.front()->AnnadirRecorridoAyuda(posicionesWaypoints);
+            }
+            else if(_destinoPathFinding == _auxiliadores.front()->getSala() && _auxiliadores.front()->GetModo() != 1 && _auxiliadores.front()->GetModo() != 3)
+            {
+                _auxiliadores.front()->SetModo(1);
+            }
+            contadorEnem--;
+            _auxiliadores.erase(_auxiliadores.begin());
+        }
+    }
+    /*{
         Pathfinder* path = Pathfinder::getInstance();
         int tipoCentro;
 
@@ -1668,8 +1717,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
                 }
             }
         }
-    }
-    contadorEnem++;
+    }*/
 }
 
 void Jugando::EraseEnemigo(std::size_t i)
