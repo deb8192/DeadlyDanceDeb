@@ -13,7 +13,6 @@ MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
     maxRotacion = constantes.PI_CUARTOS; 
     rotation = constantes.CERO;
 
-    _textura = "assets/texture/HeavyTex.png";
     _modelo = "assets/models/rockero.b3d";
 }
 
@@ -21,8 +20,6 @@ MuerteBoss::~MuerteBoss()
 {
     delete[] _ordenes;
     _ordenes = nullptr;
-
-    _textura = nullptr;
     _modelo = nullptr;
 }
 
@@ -48,9 +45,65 @@ void MuerteBoss::RunIA()
  * Salidas:
 */ 
 
-void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug)
+void MuerteBoss::UpdateMuerteBoss(int* _jug)
 {
-    
+    Jugador* _jugador = (Jugador*)_jug;
+    Constantes constantes;
+    funciona = true;
+    if(modo == constantes.UNO && _ordenes != nullptr)
+    {
+        switch (_ordenes[0])
+        {
+            case EN_PERSIGUE: //El Pollo se mueve
+                funciona = this->perseguir(_jug);
+                break;
+        
+            case EN_ATACAR: //El Pollo ataca
+                {
+                    if(!atacado)
+                    {
+                        cout<<"intenta atacar"<<endl;
+                        int danyo;
+                        danyo = this->Atacar(-1);
+                        
+                        if(danyo > 0)
+                        {
+                            _jugador->ModificarVida(-danyo);
+                            cout<<"Ataca por la IA" <<endl;
+                            funciona = true;
+                            atacado = true;
+                        }
+                        else 
+                        {
+                            funciona = false;
+                        }
+                    }
+                }
+                break;
+        }
+    }
+    else if(_ordenes != nullptr)
+    {
+        switch (_ordenes[0])
+        {          
+            case EN_VER: //El Pollo ve al jugador
+                {
+                    if(this->ver(constantes.UNO))
+                    {
+                        funciona = true;
+                    }
+                    else 
+                    {
+                        funciona = false;
+                    }
+                }
+                break;
+
+            default:
+                cout<<"No hace nada"<<endl;
+                break;
+        }
+    }
 }
 
 void MuerteBoss::SetNuevasOrdenes(short newOrden)
