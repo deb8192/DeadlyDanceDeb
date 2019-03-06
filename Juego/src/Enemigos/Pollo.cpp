@@ -70,7 +70,7 @@ void Pollo::UpdatePollo(short *i)
 {
     Constantes constantes;
     funciona = true;
-    if(modo == constantes.UNO && _ordenes != nullptr)
+    if(modo == MODO_ATAQUE && _ordenes != nullptr)
     {
         switch (_ordenes[0])
         {
@@ -103,6 +103,12 @@ void Pollo::UpdatePollo(short *i)
         }
     }
 
+
+    else if(modo == MODO_AUXILIAR_ALIADO)
+    {
+        this->AuxiliarAliado();
+    }
+
     else if(_ordenes != nullptr)
     {
         switch (_ordenes[0])
@@ -110,32 +116,6 @@ void Pollo::UpdatePollo(short *i)
             case EN_VER: //El Pollo ve al jugador
                 {
                     if(this->ver(constantes.UNO))
-                    {
-                        funciona = true;
-                    }
-                    else 
-                    {
-                        funciona = false;
-                    }
-                }
-                break;
-
-                case EN_OIR: //El Murcielago oye al jugador
-                {
-                    if(this->oir(constantes.DOS))
-                    {
-                        funciona = true;
-                    }
-                    else 
-                    {
-                        funciona = false;
-                    }
-                }
-                break;
-
-                case EN_ACUDE_AYUDA: //El Murcielago oye al jugador
-                {
-                    if(this->oir(constantes.UNO))
                     {
                         funciona = true;
                     }
@@ -155,10 +135,26 @@ void Pollo::UpdatePollo(short *i)
                     funciona = true;
                 }
                 break;
-            case EN_OIR
-            {
+                
+                case EN_OIR: //El Pollo oye un enemigo pedir ayuda
+                {
+                    if(this->oir(constantes.DOS))
+                    {
+                        funciona = true;
+                    }
+                    else 
+                    {
+                        funciona = false;
+                    }
+                }
+                break;
 
-            }
+                case EN_ACUDE_AYUDA: //El Pollo oye un enemigo pedir ayuda
+                {
+                    this->ContestarAyuda();
+                }
+                break;
+
             case EN_MERODEA: //El Pollo merodea
                 {
                     if(!hecho)
@@ -172,6 +168,14 @@ void Pollo::UpdatePollo(short *i)
                         if(this->ver(constantes.UNO))
                         {
                             modo = MODO_ATAQUE;
+                            this->setTimeMerodear(constantes.CERO);
+                            cout<<"Pide ayuda a los aliados"<<endl;
+                            this->pedirAyuda();
+                            funciona = true;
+                        }
+                        else if(this->oir(constantes.DOS))
+                        {
+                            this->ContestarAyuda();
                         }
                     }
                     else 
@@ -187,6 +191,14 @@ void Pollo::UpdatePollo(short *i)
                         if(this->ver(constantes.UNO))
                         { 
                             modo = MODO_ATAQUE;
+                            this->setTimeMerodear(constantes.CERO);
+                            cout<<"Pide ayuda a los aliados"<<endl;
+                            this->pedirAyuda();
+                            funciona = true;
+                        }
+                        else if(this->oir(constantes.DOS))
+                        {
+                            this->ContestarAyuda();
                         }
                     }
                     funciona = true;

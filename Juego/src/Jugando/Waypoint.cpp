@@ -3,16 +3,16 @@
 
 Waypoint::Waypoint()
 {
-    posicion.x = 0.0f;
-    posicion.y = 0.0f;
-    posicion.z = 0.0f;
+    posicionWaypoint.x = 0.0f;
+    posicionWaypoint.y = 0.0f;
+    posicionWaypoint.z = 0.0f;
 }
 
 Waypoint::Waypoint(int ID_lectura, int x, int y, int z, int compartido, int* arrayConexiones, int sizeConexiones)
 {
-    posicion.x = x;
-    posicion.y = y;
-    posicion.z = z;
+    posicionWaypoint.x = x;
+    posicionWaypoint.y = y;
+    posicionWaypoint.z = z;
     ID = ID_lectura;
     sizeIDConexiones = sizeConexiones;
     IDConexiones = arrayConexiones;
@@ -25,13 +25,14 @@ Waypoint::Waypoint(int ID_lectura, int x, int y, int z, int compartido, int* arr
 
 Waypoint::~Waypoint()
 {
-    posicion.x = 0;
-    posicion.y = 0;
-    posicion.z = 0;
+    posicionWaypoint.x = 0;
+    posicionWaypoint.y = 0;
+    posicionWaypoint.z = 0;
     sizeIDConexiones = 0;
     ID = 0;
     delete IDConexiones;
     IDConexiones = nullptr;
+    esCompartido = false;
 }
 
 void Waypoint::AnnadirConexionesWaypoints(Waypoint* waypointNivel)
@@ -71,7 +72,7 @@ bool Waypoint::GetCompartido()
 }
 
 
-Posiciones Waypoint::GetPosicionWaypoint()
+INdrawable::Posiciones Waypoint::GetPosicionWaypoint()
 {
     return posicionWaypoint;
 }

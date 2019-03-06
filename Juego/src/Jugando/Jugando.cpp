@@ -13,7 +13,7 @@ Jugando* Jugando::_unicaInstancia = 0;
 
 Jugando::Jugando()
 {
-    
+    _enemPideAyuda = nullptr;
 }
 
 Jugando::~Jugando()
@@ -423,7 +423,7 @@ void Jugando::Update()
                         _enemigos.at(i)->setTimeMerodear(tiempoMerodear);
                     }
                     //FUNCIONA REGULAR
-                    /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
+                    if((_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i)) && (_enemigos.at(i)->GetModo() != 1 || _enemigos.at(i)->GetModo() != 3))
                     {
                         //colisiona
                         struct DatosDesplazamiento
@@ -434,23 +434,20 @@ void Jugando::Update()
                         }
                         velocidad, posicionesPasadas;
 
-                        velocidad.x = (_enemigos.at(i)->getNewX() - _enemigos.at(i)->getLastX()) * constantes.DOS;
-                        velocidad.y = (_enemigos.at(i)->getNewY() - _enemigos.at(i)->getLastY()) * constantes.DOS;
-                        velocidad.z = (_enemigos.at(i)->getNewZ() - _enemigos.at(i)->getLastZ()) * constantes.DOS;
-                        posicionesPasadas.x = _enemigos.at(i)->getLastX() - velocidad.x;
-                        posicionesPasadas.y = _enemigos.at(i)->getLastY() - velocidad.y;
-                        posicionesPasadas.z = _enemigos.at(i)->getLastZ() - velocidad.z;
+                        velocidad.x = (_enemigos.at(i)->getNewX() - _enemigos.at(i)->getX());
+                        velocidad.y = (_enemigos.at(i)->getNewY() - _enemigos.at(i)->getY());
+                        velocidad.z = (_enemigos.at(i)->getNewZ() - _enemigos.at(i)->getZ());
 
                         _enemigos.at(i)->setPosicionesFisicas(-velocidad.x, 0.0f, -velocidad.z);//colisiona
                         //enemigos.at(i)->setPosiciones(_enemigos.at(i)->getX() - velocidad.x, _enemigos.at(i)->getLasY() - velocidad.y, _enemigos.at(i)->getLastZ() - velocidad.z);//colisiona         
-                        _enemigos.at(i)->setNewPosiciones(_enemigos.at(i)->getNewX() - velocidad.x, _enemigos.at(i)->getNewY() - velocidad.y, _enemigos.at(i)->getNewZ() - velocidad.z);//colisiona                                
-                        _enemigos.at(i)->setLastPosiciones(posicionesPasadas.x, posicionesPasadas.y, posicionesPasadas.z);//colisiona                                
+                        _enemigos.at(i)->setNewPosiciones(_enemigos.at(i)->getX(), _enemigos.at(i)->getY(), _enemigos.at(i)->getZ());//colisiona                                
                         if(_enemigos.at(i)->GetRotation() != 0.0f)
                         {
                             _enemigos.at(i)->setNewRotacion(_enemigos.at(i)->getRX(), _enemigos.at(i)->getRY() - constantes.PI_RADIAN, _enemigos.at(i)->getRZ());
-                            _enemigos.at(i)->setRotation(0.0f); 
+                            _enemigos.at(i)->setVectorOrientacion(); 
+                            _enemigos.at(i)->setRotation(0.0f);
                         }
-                    }*/
+                    }
 
             }
             //_enemigos[i]->queVes();
@@ -720,11 +717,6 @@ void Jugando::Reiniciar()
 {
     reiniciando = true;
 }
-
-
-
-
-
 
 bool Jugando::CargarNivel(int nivel, int tipoJug)
 {
@@ -1497,17 +1489,19 @@ void Jugando::updateAtEsp()
 
 void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
 {
+    if(auxiliarPathfinding >= 20 || (contadorEnem > 0 && _enem == _enemPideAyuda))
+    {
+        _auxiliadores.clear();
+        this->setEnemigoPideAyuda(nullptr);
+        _destinoPathFinding = nullptr;
+        contadorEnem = 0;
+
+    }
     //Si enem no es nulo se anade a la cola de _enemigos _auxiliadores
     if(_enem != nullptr && _enem != _enemPideAyuda )
     {
         _auxiliadores.push_back(_enem);
-        contadorEnem--;
-    }
-    else if(contadorEnem > 0 && _enem == _enemPideAyuda)
-    {
-        this->setEnemigoPideAyuda(nullptr);
-        _destinoPathFinding = nullptr;
-        contadorEnem = 0;
+        contadorEnem++;
     }
     //Si no hay sala de destino guardada, se guarda en este momento
     else if(_destinoPathFinding == nullptr)
@@ -1519,14 +1513,24 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
     {
         while(!_auxiliadores.empty())
         {
-            Pathfinder* path = Pathfinder::getInstance();
-            recorrido = path->encontrarCamino(_auxiliadores.front()->getSala(), _destinoPathFinding);
-            vector<Posiciones> posicionesWaypoints;
-            for(unsigned short i = 0; i < recorrido.size(); i++)
+            if(_destinoPathFinding != _auxiliadores.front()->getSala() && _auxiliadores.front()->GetModo() != 8)
             {
-                posicionesWaypoints.push_back(recorrido->GetPosicionWaypoint())
+                Pathfinder* path = Pathfinder::getInstance();
+                recorrido = path->encontrarCamino(_auxiliadores.front()->getSala(), _destinoPathFinding);
+                vector<INdrawable::Posiciones> posicionesWaypoints;
+                posicionesWaypoints.clear();
+                for(unsigned short i = 0; i < recorrido.size(); i++)
+                {
+                    posicionesWaypoints.push_back(recorrido[i]->GetPosicionWaypoint());
+                    _auxiliadores.front()->setSala(_destinoPathFinding);
+                }
+                _auxiliadores.front()->AnnadirRecorridoAyuda(posicionesWaypoints);
             }
-            _auxiliadores->AnnadirRecorridoAyuda(recorrido);
+            else if(_destinoPathFinding == _auxiliadores.front()->getSala() && _auxiliadores.front()->GetModo() != 1 && _auxiliadores.front()->GetModo() != 3)
+            {
+                _auxiliadores.front()->SetModo(1);
+            }
+            contadorEnem--;
             _auxiliadores.erase(_auxiliadores.begin());
         }
     }
@@ -1768,7 +1772,6 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
             }
         }
     }*/
-    contadorEnem++;
 }
 
 void Jugando::EraseEnemigo(std::size_t i)

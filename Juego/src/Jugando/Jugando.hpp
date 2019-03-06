@@ -89,6 +89,7 @@ class Jugando: public Estado {
         static Jugando* _unicaInstancia;
         //fin clase singleton private
 
+        short auxiliarPathfinding = 0;
         MotorAudioSystem* _motora;
         SenseEventos* _sense;
         MotorFisicas* _fisicas;

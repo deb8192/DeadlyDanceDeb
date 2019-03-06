@@ -110,6 +110,10 @@ std::vector <Waypoint *> Pathfinder::encontrarCamino(Sala *start, Sala *end)
     {
         camino.clear();//Si tiene datos, se vacia
     }
+    if(!waypointsRecorridos.empty())
+    {
+        waypointsRecorridos.clear();//Si tiene datos, se vacia
+    }
     if(!listaAbierta.empty())
     {
         listaAbierta.clear();//Si tiene datos, se vacia
@@ -215,6 +219,14 @@ std::vector <Waypoint *> Pathfinder::encontrarCamino(Sala *start, Sala *end)
                 j = 0;
                 i++;
             }
+            while(j < camino[i - 1].nodo->GetWaypoints().size())
+            {
+                if(!camino[i - 1].nodo->GetWaypoints()[j]->GetCompartido())
+                {
+                    waypointsRecorridos.push_back(camino[i - 1].nodo->GetWaypoints()[j]);
+                }
+                j++;
+            }
 
             return waypointsRecorridos;
         }
@@ -300,5 +312,5 @@ std::vector <Waypoint *> Pathfinder::encontrarCamino(Sala *start, Sala *end)
         }
     }
     
-    return camino;
+    return waypointsRecorridos;
 }

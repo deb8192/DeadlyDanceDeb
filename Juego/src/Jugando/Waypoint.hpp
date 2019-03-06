@@ -20,18 +20,10 @@ class Waypoint
         short GetID();
         int* GetIDConexiones();
         bool GetCompartido();
-        Posiciones GetPosicionWaypoint();
+        INdrawable::Posiciones GetPosicionWaypoint();
         vector <Waypoint*> GetConexiones();
 
-    private:
-        
-        using Posiciones = struct {
-            float x = 0.0f;
-            float y = 0.0f;
-            float z = 0.0f;
-        };
-
-        Posiciones posicionWaypoint;        //Coordenadas en el mapa del waypoint
+        INdrawable::Posiciones posicionWaypoint;        //Coordenadas en el mapa del waypoint
         vector <Waypoint*> conexiones;      //Waypoints con los que se conecta
         short ID;                  //ID del waypoint 
         int* IDConexiones;       //array con los ID de las conexiones que ayuda a rellenar el vector de conexiones
