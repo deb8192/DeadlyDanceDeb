@@ -13,6 +13,7 @@ MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
     maxRotacion = constantes.PI_CUARTOS; 
     rotation = constantes.CERO;
 
+    //TO DO: cambiar por el suyo
     _modelo = "assets/models/guardian_m/G_M.obj";
 }
 
@@ -124,14 +125,10 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
                     {
                         //Merodea estableciendo un nuevo angulo de rotacion
                         this->setRotation(this->randomBinomial() * maxRotacion);
-                        this->Merodear();
+                        //this->Merodear();
                         this->setTimeMerodear(1.5f);
                         hecho = true;
-                        //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO))
-                        {
-                            modo = MODO_ATAQUE;
-                        }
+                        
                     }
                     else 
                     {
@@ -141,7 +138,7 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
                         {
                             rotation *= rota;
                         }
-                        this->Merodear();
+                        //this->Merodear();
                         //Comprueba si ve al jugador para atacarle en caso necesario
                         if(this->ver(constantes.UNO))
                         { 
