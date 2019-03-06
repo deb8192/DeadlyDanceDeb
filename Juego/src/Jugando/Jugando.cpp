@@ -360,7 +360,7 @@ void Jugando::Update()
             );
         }
 
-        if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y _enemigos buscandole.
+        if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
         {
             this->updateRecorridoPathfinding(nullptr);
         }
@@ -448,6 +448,7 @@ void Jugando::Update()
         _fisicas->updateBoss(_boss->getFisX(), _boss->getFisY(),
             _boss->getFisZ()
         );
+        
         //Si se realiza el ataque se comprueban las colisiones
         if(_jugador->getTimeAtEsp() > 0.0)
         {
@@ -458,7 +459,33 @@ void Jugando::Update()
             _jugador->AtacarUpdate(danyo2, _boss);
         }
 
-        _boss->UpdateBehavior(0, (int*)_jugador, _zonas);
+        //actualizamos el boss, posiciones interpolacion
+        //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
+        if(_boss != nullptr)
+        {
+            _boss->UpdateBehavior(0, (int*)_jugador, _zonas); //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+            
+            //Este bloque se da si el boss esta en el proceso de merodear
+            if(_boss->getTimeMerodear() > 0.0f)
+            {
+                if(_boss->getTimeMerodear() == 1.5f)
+                {
+                    //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                    _boss->setLastTimeMerodear(_controladorTiempo->GetTiempo(2));
+                }
+                float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
+                tiempoActual = _controladorTiempo->GetTiempo(2);
+                tiempoMerodear = _boss->getTimeMerodear();
+                tiempoMerodear -= (tiempoActual - _boss->getLastTimeMerodear());
+                if(tiempoActual > _boss->getLastTimeMerodear())
+                {
+                    //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeMerodear
+                    //por lo que guardamos en lastTimeMerodear a tiempoActual
+                    _boss->setLastTimeMerodear(tiempoActual);
+                }
+                _boss->setTimeMerodear(tiempoMerodear);
+            }
+        }
     }
 }
 
