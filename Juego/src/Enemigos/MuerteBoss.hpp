@@ -1,17 +1,17 @@
-#ifndef Pollo_HPP
-#define Pollo_HPP
+#ifndef MuerteBoss_HPP
+#define MuerteBoss_HPP
 
 #include "Enemigo.hpp"
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 
-class Pollo : public Enemigo
+class MuerteBoss : public Enemigo
 {
     public:
-        ~Pollo();
-        Pollo(float nX, float nY, float nZ, int maxVida);
+        ~MuerteBoss();
+        MuerteBoss(float nX, float nY, float nZ, int maxVida);
         void RunIA();
-        void UpdatePollo(short *i, int* _jug);
-        void SetNuevasOrdenes(short i);
+        void UpdateMuerteBoss(int* _jug);
+        void SetNuevasOrdenes(short newOrden);
 
     private:
         bool funciona, atacado, hecho;

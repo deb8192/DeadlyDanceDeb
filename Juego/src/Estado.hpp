@@ -15,9 +15,9 @@ class Estado {
         virtual void UpdateIA() { };//solo va en EstadoJugando
 
         virtual void ManejarEventos() = 0;
-        virtual void Vaciar() = 0;
         virtual void Pausar() { };
         virtual void Reanudar() { };
+        virtual void Reiniciar() { };
 
     protected:
         MotorGrafico* _motor;

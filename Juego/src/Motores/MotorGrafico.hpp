@@ -35,6 +35,7 @@ using namespace idsEventos;
             }
             //fin singleton public
 
+            void LimpiarElementosJuego();
             void LimpiarMotorGrafico();//revisar
 
             bool CrearVentana(short tipo);//nos crea la ventana del juego. Tipo define lo grande que es por defecto 1024 x 768
@@ -81,8 +82,9 @@ using namespace idsEventos;
             int CargarPlataformas(int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
 
-            void CargarEnemigos(int accion, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
-            void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
+            void CargarBoss(int x,int y,int z, const char* ruta_objeto);
+            void CargarEnemigos(int x,int y,int z, const char* ruta_objeto);
+            void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
             void CargarArmaJugador(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
@@ -90,6 +92,7 @@ using namespace idsEventos;
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
             
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
+            void mostrarBoss(float x, float y, float z, float rx, float ry, float rz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
@@ -157,7 +160,7 @@ using namespace idsEventos;
 
             void BorrarBoton(s32 id);
 
-            void updateMotorCinematica();
+            void RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame);
             bool finalCinematica();
 
         private: //clases solo accesibles por MotorGrafico
@@ -199,6 +202,7 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena
+            IAnimatedMeshSceneNode* _bossEscena;//Boss en scena
             //debug
             IAnimatedMesh* _linea;
             IAnimatedMesh* _conoVision;
@@ -258,9 +262,9 @@ using namespace idsEventos;
 
             //cinematicas
             int frame_actual;//numero de frame actual
-            IGUIImage* actual;//frame actual
+            IGUIImage* _actual;//frame actual
             float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
-            ITexture* actualTexture;//textura actual
+            ITexture* _actualTexture;//textura actual
     };
 
 #endif /* MotorGrafico_HPP */

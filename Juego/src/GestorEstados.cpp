@@ -6,6 +6,7 @@
 #include "Menus/Creditos.hpp"
 #include "Menus/Pausa.hpp"
 #include "Menus/EstadoMuerte.hpp"
+#include "Menus/EstadoGanar.hpp"
 #include "Jugando/Jugando.hpp"
 
 GestorEstados::GestorEstados()
@@ -28,9 +29,7 @@ void GestorEstados::CambioEstadoCinematica()
     anyadir(new Cinematica(), true);
 }
 
-/* Carga el Menu principal, se llama desde los estados:
- * Cinematica/Puzles/Config/Creditos
- */
+// Carga el Menu principal, se llama desde Cinematica
 void GestorEstados::CambioEstadoMenu()
 {
     eliminar(); // Elimina el estado superior antes de anyadir el menu
@@ -40,7 +39,7 @@ void GestorEstados::CambioEstadoMenu()
 // Deja el Menu y carga el juego
 void GestorEstados::CambioEstadoJugar()
 {
-    anyadir(Jugando::GetInstance(), false);
+    anyadir(new Jugando(), false);
 }
 
 // Elimina la Pausa y deja paso al estado jugando
@@ -52,25 +51,17 @@ void GestorEstados::QuitarPausa()
 // Se llama desde Pausa y EstadoMuerte
 void GestorEstados::ReiniciarPartida()
 {
-    Jugando::GetInstance()->Reiniciar();
-    eliminar();
+    _estados.pop();
+    _estados.top()->Reiniciar();
+    _estados.top()->Reanudar();
 }
 
 // Se llama desde Pausa y EstadoMuerte
 void GestorEstados::CambioDeJuegoAMenu()
 {
-    // Pausa o Muerte
-    _estados.top()->Vaciar();
-    delete(_estados.top());
-    _estados.top() = nullptr;
-    _estados.pop();
-
-    //Jugando (singleton)
-    _estados.top() = nullptr;
-    _estados.pop();
-
-    //Menu
-    _estados.top()->Reanudar();
+    _estados.pop(); // Pausa o Muerte
+    _estados.pop(); // Jugando
+    _estados.top()->Reanudar(); //Menu
 }
 
 void GestorEstados::CambioEstadoPuzle()
@@ -98,6 +89,11 @@ void GestorEstados::CambioEstadoMuerte()
     anyadir(new EstadoMuerte(), false);
 }
 
+void GestorEstados::CambioEstadoGanar()
+{
+    anyadir(new EstadoGanar(), false);
+}
+
 void GestorEstados::anyadir(Estado* _nuevoEstado, bool reemplazar)
 {
     anyadiendo = true;
@@ -115,7 +111,6 @@ void GestorEstados::ProcesarPilaEstados()
 {
     if ( eliminando && !_estados.empty())
     {
-        _estados.top()->Vaciar();// Esta es temporal
         delete(_estados.top());
         _estados.top() = nullptr;
         _estados.pop();
@@ -159,7 +154,6 @@ void GestorEstados::SaltarAlMenu()
     short int tam = _estados.size();
     for (short int est=0; est<tam-1; est++)
     {
-        _estados.top()->Vaciar();
         delete(_estados.top());
         _estados.top() = nullptr;
         _estados.pop();

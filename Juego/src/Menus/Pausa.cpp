@@ -1,6 +1,5 @@
 #include "Pausa.hpp"
 #include "../Juego.hpp"
-#include "../Jugando/Jugando.hpp"
 
 Pausa::Pausa()
 {
@@ -95,6 +94,7 @@ void Pausa::borrarGUIResetearEvento(short id)
 // Vuelve al menu principal
 void Pausa::menuPrincipal()
 {
+    _motor->LimpiarElementosJuego();
     // Elimina todos los estados y anyade el de menu
     Juego::GetInstance()->estado.CambioDeJuegoAMenu();
 }
@@ -114,8 +114,3 @@ void Pausa::salir()
 {
     _motor->CerrarJuego();
 }
-
-void Pausa::Vaciar()
-{
-    cout << "Vaciando pausa" <<endl;
-};

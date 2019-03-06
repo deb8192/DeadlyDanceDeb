@@ -3,7 +3,6 @@
 
 #include "Enemigo.hpp"
 #include <iostream> //la utilizamos para mostrar el log en la consola.
-#include "../Jugando/Jugando.hpp"
 
 class Murcielago : public Enemigo
 {
@@ -11,7 +10,7 @@ class Murcielago : public Enemigo
         ~Murcielago();
         Murcielago(float nX, float nY, float nZ, int maxVida);
         void RunIA();
-        void UpdateMurcielago(short *i);
+        void UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZonas);
         void SetNuevasOrdenes(short i);
 
     private:
@@ -20,8 +19,6 @@ class Murcielago : public Enemigo
         short int maxRotacion;
         short int direccion;
         Zona* zonaElegida;
-
-        Jugando* _nivel;
 };
 
 #endif
