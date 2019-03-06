@@ -890,6 +890,12 @@ void Jugador::setPosiciones(float nx,float ny,float nz)
     posActual.z = nz;
 }
 
+void Jugador::setPosicionesAtaque(float nx,float ny,float nz)
+{
+    atx = nx;
+    aty = ny;
+    atz = nz;
+}
 
 void Jugador::setLastPosiciones(float nx,float ny,float nz)
 {

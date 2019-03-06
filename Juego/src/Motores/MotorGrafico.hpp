@@ -82,6 +82,7 @@ using namespace idsEventos;
             int CargarPlataformas(int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
 
+            void CargarBoss(int x,int y,int z, const char* ruta_objeto);
             void CargarEnemigos(int x,int y,int z, const char* ruta_objeto);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
@@ -91,6 +92,7 @@ using namespace idsEventos;
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
             
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
+            void mostrarBoss(float x, float y, float z, float rx, float ry, float rz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
@@ -200,6 +202,7 @@ using namespace idsEventos;
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
             std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
             IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena
+            IAnimatedMeshSceneNode* _bossEscena;//Boss en scena
             //debug
             IAnimatedMesh* _linea;
             IAnimatedMesh* _conoVision;

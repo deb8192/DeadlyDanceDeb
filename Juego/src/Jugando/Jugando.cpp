@@ -133,6 +133,7 @@ void Jugando::ValoresPorDefectoJugador()
     _jugador->setDanyoCritico(50);
     _jugador->setProAtaCritico(10);
     _jugador->setPosiciones(xIni, yIni, zIni);
+    _jugador->setPosicionesAtaque(xIni, yIni, zIni);
     _jugador->setNewPosiciones(xIni, yIni, zIni);
     _jugador->initPosicionesFisicas(xIni/2, yIni/2, zIni/2);
     //TO DO: revisar que lo haga bien
@@ -148,6 +149,7 @@ void Jugando::ValoresPorDefectoBoss()
 
     _boss->setVida(_boss->getVidaIni());
     _boss->setPosiciones(xIni, yIni, zIni);
+    _boss->setPosicionesAtaque(xIni, yIni, zIni);
     _boss->setNewPosiciones(xIni, yIni, zIni);
     _boss->initPosicionesFisicas(xIni/2, yIni/2, zIni/2);
 }
@@ -443,6 +445,9 @@ void Jugando::Update()
     }
     else // Actualiza el BOSS
     {
+        _fisicas->updateBoss(_boss->getFisX(), _boss->getFisY(),
+            _boss->getFisZ()
+        );
         //Si se realiza el ataque se comprueban las colisiones
         if(_jugador->getTimeAtEsp() > 0.0)
         {
@@ -484,96 +489,102 @@ void Jugando::UpdateIA()
         _jugador->generarSonido(constantes.CINCO * constantes.SEIS, constantes.DOS, constantes.UNO);
     }
 
-    //En esta parte muere enemigo
-    if(_enemigos.size() > 0){
-        //comprobando los _enemigos para saber si estan muertos
-        for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+    if (!enSalaBoss)
+    {
+        //En esta parte muere enemigo
+        if(_enemigos.size() > 0){
+            //comprobando los _enemigos para saber si estan muertos
+            for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
 
-            if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte()){
+                if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte()){
 
-                //Crear un power-up/dinero
-                //Se crea un power-up?
-                srand(time(NULL));
-                int secreapower = rand() % 101; //Entre 0 y 100
-                cout << "secreapower:" << secreapower << endl;
-
-                if(secreapower <= 100){ //20% de posibilidades
-                    //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
+                    //Crear un power-up/dinero
+                    //Se crea un power-up?
                     srand(time(NULL));
-                    int numpow = 3;
-                    int cualpower = rand() % numpow;
-                    cout << "POWER: " << cualpower << endl;
-                    int ataque;
-                    const char* nombre,*modelo,*textura;
+                    int secreapower = rand() % 101; //Entre 0 y 100
+                    cout << "secreapower:" << secreapower << endl;
 
-                    //DAtos comunes a todos
-                    int x = _enemigos[i]->getX();
-                    int y = _enemigos[i]->getY();
-                    int z = _enemigos[i]->getZ();
-                    int accion = 4;
-                    int ancho = 0.5 ,largo = 0.5,alto = 0.5;
-                    int codigo = -2;
-                    int*  propiedades = new int [6];
+                    if(secreapower <= 100){ //20% de posibilidades
+                        //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
+                        srand(time(NULL));
+                        int numpow = 3;
+                        int cualpower = rand() % numpow;
+                        cout << "POWER: " << cualpower << endl;
+                        int ataque;
+                        const char* nombre,*modelo,*textura;
 
-                    if(cualpower == 0)
-                    {
-                    ataque = 0;
-                    nombre = "vida_up";
-                    modelo = "assets/models/powerup0.obj";
-                    textura = "assets/models/powerup0.mtl";
+                        //DAtos comunes a todos
+                        int x = _enemigos[i]->getX();
+                        int y = _enemigos[i]->getY();
+                        int z = _enemigos[i]->getZ();
+                        int accion = 4;
+                        int ancho = 0.5 ,largo = 0.5,alto = 0.5;
+                        int codigo = -2;
+                        int*  propiedades = new int [6];
+
+                        if(cualpower == 0)
+                        {
+                        ataque = 0;
+                        nombre = "vida_up";
+                        modelo = "assets/models/powerup0.obj";
+                        textura = "assets/models/powerup0.mtl";
+                        }
+                        else if(cualpower == 1)
+                        {
+                        ataque = 1;
+                        nombre = "energy_up";
+                        modelo = "assets/models/powerup1.obj";
+                        textura = "assets/models/powerup1.mtl";
+                        }
+                        else if(cualpower == 2)
+                        {
+                        ataque = 2;
+                        nombre = "gold_up";
+                        modelo = "assets/models/gold.obj";
+                        textura = "assets/models/gold.mtl";
+                        //oro entre 1 y 5 monedas
+                        srand(time(NULL));
+                        int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
+                        propiedades[0] = orocant; //para pasarlo a crear objeto
+                        }
+
+                        //Crear objeto
+                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
                     }
-                    else if(cualpower == 1)
-                    {
-                    ataque = 1;
-                    nombre = "energy_up";
-                    modelo = "assets/models/powerup1.obj";
-                    textura = "assets/models/powerup1.mtl";
+
+                    //Borrar enemigo
+                    _motor->EraseEnemigo(i);
+                    _fisicas->EraseEnemigo(i);
+                    EraseEnemigo(i);
+
+                }else{
+                    if(_enemigos[i]->estasMuerto()){
+                        _enemigos[i]->MuereEnemigo(i);
                     }
-                    else if(cualpower == 2)
+                    else
                     {
-                    ataque = 2;
-                    nombre = "gold_up";
-                    modelo = "assets/models/gold.obj";
-                    textura = "assets/models/gold.mtl";
-                    //oro entre 1 y 5 monedas
-                    srand(time(NULL));
-                    int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
-                    propiedades[0] = orocant; //para pasarlo a crear objeto
-                    }
-
-                    //Crear objeto
-                    this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
-                }
-
-                //Borrar enemigo
-                _motor->EraseEnemigo(i);
-                _fisicas->EraseEnemigo(i);
-                EraseEnemigo(i);
-
-            }else{
-                if(_enemigos[i]->estasMuerto()){
-                    _enemigos[i]->MuereEnemigo(i);
-                }
-                else
-                {
-                    //si no esta muerto ni piensa morirse XD ejecutamos ia
-                    if(_enemigos[i] != nullptr)
-                    {
-                        _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                        //si no esta muerto ni piensa morirse XD ejecutamos ia
+                        if(_enemigos[i] != nullptr)
+                        {
+                            _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                        }
                     }
                 }
             }
         }
     }
-
-    //En esta parte muere el BOSS
-    if (!_boss->estasMuerto())
-    {
-        _boss->UpdateIA();
-    }
     else
     {
-        Juego::GetInstance()->estado.CambioEstadoGanar();
+        //En esta parte muere el BOSS
+        if (!_boss->estasMuerto())
+        {
+            _boss->UpdateIA();
+        }
+        else
+        {
+            //TO DO: borrar fisicas y cosas
+            Juego::GetInstance()->estado.CambioEstadoGanar();
+        }
     }
 }
 
@@ -590,8 +601,6 @@ void Jugando::Render()
     lastDrawTime = drawTime;
     drawTime = _controladorTiempo->GetTiempo(2);
 
-
-
     //Dibujado del personaje
     _jugador->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
     _jugador->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
@@ -604,29 +613,82 @@ void Jugando::Render()
         _jugador->getRZ()
     );
     
-    //Dibujado de los _enemigos
-    for(unsigned int i = 0; i < _enemigos.size(); i++)
+    if (!enSalaBoss)
     {
-        _enemigos.at(i)->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
-        _enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
-        _enemigos.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-        _enemigos.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
-        _motor->mostrarEnemigos(_enemigos.at(i)->getX(),
-            _enemigos.at(i)->getY(),
-            _enemigos.at(i)->getZ(),
-            _enemigos.at(i)->getRX(),
-            _enemigos.at(i)->getRY(),
-            _enemigos.at(i)->getRZ(),
-            i
-        );
-        _motor->dibujarObjetoTemporal(_enemigos.at(i)->getFisX()*2,
-            _enemigos.at(i)->getFisY()*2,
-            _enemigos.at(i)->getFisZ()*2,
-            _enemigos.at(i)->getRX(),
-            _enemigos.at(i)->getRY(),
-            _enemigos.at(i)->getRZ(),3 , 3, 3, 2);
-    }
+        //Dibujado de los enemigos
+        for(unsigned int i = 0; i < _enemigos.size(); i++)
+        {
+            _enemigos.at(i)->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
+            _enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
+            _enemigos.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
+            _enemigos.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
+            _motor->mostrarEnemigos(_enemigos.at(i)->getX(),
+                _enemigos.at(i)->getY(),
+                _enemigos.at(i)->getZ(),
+                _enemigos.at(i)->getRX(),
+                _enemigos.at(i)->getRY(),
+                _enemigos.at(i)->getRZ(),
+                i
+            );
+            _motor->dibujarObjetoTemporal(_enemigos.at(i)->getFisX()*2,
+                _enemigos.at(i)->getFisY()*2,
+                _enemigos.at(i)->getFisZ()*2,
+                _enemigos.at(i)->getRX(),
+                _enemigos.at(i)->getRY(),
+                _enemigos.at(i)->getRZ(),3 , 3, 3, 2);
+        }
 
+        //Dibujado de ataques enemigos
+        for(unsigned int i = 0; i < _enemigos.size(); i++)
+        {
+            _motor->dibujarObjetoTemporal(
+                _enemigos.at(i)->getAtX(),
+                _enemigos.at(i)->getAtY(),
+                _enemigos.at(i)->getAtZ(),
+                _enemigos.at(i)->getRX(),
+                _enemigos.at(i)->getRY(),
+                _enemigos.at(i)->getRZ(),
+                4,
+                4,
+                4,
+                2);
+        }
+    }
+    else
+    {
+        _boss->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
+        _boss->UpdateTimeMove(drawTime - lastDrawTime);
+        _boss->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
+        _boss->UpdateTimeRotate(drawTime - lastDrawTime);
+        _motor->mostrarBoss(_boss->getX(),
+            _boss->getY(),
+            _boss->getZ(),
+            _boss->getRX(),
+            _boss->getRY(),
+            _boss->getRZ()
+        );
+        _motor->dibujarObjetoTemporal(_boss->getFisX()*2,
+            _boss->getFisY()*2,
+            _boss->getFisZ()*2,
+            _boss->getRX(),
+            _boss->getRY(),
+            _boss->getRZ(),3 , 3, 3, 2);
+
+        //Dibujado de ataque boss
+        _motor->dibujarObjetoTemporal(
+            _boss->getAtX(),
+            _boss->getAtY(),
+            _boss->getAtZ(),
+            _boss->getRX(),
+            _boss->getRY(),
+            _boss->getRZ(),
+            4,
+            4,
+            4,
+            2);
+    }
+    
+    
     //Dibujado de las puertas, las palancas, los objetos y los cofres
     for(unsigned int i = 0; i < _interactuables.size(); i++)
     {
@@ -647,26 +709,6 @@ void Jugando::Render()
     {
         _jugador->RenderAtaqueEsp(_controladorTiempo->GetUpdateTime(),
             (drawTime - lastDrawTime));
-        ////Ataque especial heavy
-        //if(strcmp(_jugador->getArmaEspecial()->getNombre(), "Heavy") == 0)
-        //Ataque especial bailaora
-        //else if(strcmp(_jugador->getArmaEspecial()->getNombre(), "Bailaora") == 0)
-    }
-
-    //Dibujado de ataques
-    for(unsigned int i = 0; i < _enemigos.size(); i++)
-    {
-        _motor->dibujarObjetoTemporal(
-            _enemigos.at(i)->getAtX(),
-            _enemigos.at(i)->getAtY(),
-            _enemigos.at(i)->getAtZ(),
-            _enemigos.at(i)->getRX(),
-            _enemigos.at(i)->getRY(),
-            _enemigos.at(i)->getRZ(),
-            4,
-            4,
-            4,
-            2);
     }
 
     //Dibujado zonas

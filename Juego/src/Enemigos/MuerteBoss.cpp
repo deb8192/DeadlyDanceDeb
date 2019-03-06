@@ -13,7 +13,7 @@ MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
     maxRotacion = constantes.PI_CUARTOS; 
     rotation = constantes.CERO;
 
-    _modelo = "assets/models/rockero.b3d";
+    _modelo = "assets/models/guardian_m/G_M.obj";
 }
 
 MuerteBoss::~MuerteBoss()
@@ -25,7 +25,7 @@ MuerteBoss::~MuerteBoss()
 
 /***************** RunIA *****************
  * Funcion que llama a recorrer el arbol
- * de del MuerteBoss comportamiento en Enemigo
+ * de MuerteBoss comportamiento en Enemigo
  * 
  * Entradas:
  * 
@@ -33,7 +33,26 @@ MuerteBoss::~MuerteBoss()
 */
 void MuerteBoss::RunIA()
 {
-    
+    Constantes constantes;
+    if(this->getTimeMerodear() <= 0)
+    {
+        if(modo == constantes.UNO)
+        {
+            if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR)
+            {
+                this->ForzarCambioNodo(&constantes.CUATRO);
+            }
+        }
+        if(atacado)
+        {
+            atacado = false;
+        }
+        if(hecho)
+        {
+            hecho = false;
+        }
+        _ordenes = this->Enemigo::RunIA(funciona);
+    }
 }
 
 /***************** UpdateMuerteBoss *****************
@@ -54,11 +73,11 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
     {
         switch (_ordenes[0])
         {
-            case EN_PERSIGUE: //El Pollo se mueve
+            case EN_PERSIGUE: //La muerte se mueve
                 funciona = this->perseguir(_jug);
                 break;
         
-            case EN_ATACAR: //El Pollo ataca
+            case EN_ATACAR: //La muerte ataca
                 {
                     if(!atacado)
                     {
@@ -86,7 +105,7 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
     {
         switch (_ordenes[0])
         {          
-            case EN_VER: //El Pollo ve al jugador
+            case EN_VER: //La muerte ve al jugador
                 {
                     if(this->ver(constantes.UNO))
                     {
@@ -96,6 +115,40 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
                     {
                         funciona = false;
                     }
+                }
+                break;
+            
+            case EN_MERODEA: //La muerte merodea
+                {
+                    if(!hecho)
+                    {
+                        //Merodea estableciendo un nuevo angulo de rotacion
+                        this->setRotation(this->randomBinomial() * maxRotacion);
+                        this->Merodear();
+                        this->setTimeMerodear(1.5f);
+                        hecho = true;
+                        //Comprueba si ve al jugador para atacarle en caso necesario
+                        if(this->ver(constantes.UNO))
+                        {
+                            modo = MODO_ATAQUE;
+                        }
+                    }
+                    else 
+                    {
+                        //Merodea poniendo en positivo o negativo el angulo actual de rotacion
+                        int rota = rand() % 3 - 1;
+                        if (rota != 0)
+                        {
+                            rotation *= rota;
+                        }
+                        this->Merodear();
+                        //Comprueba si ve al jugador para atacarle en caso necesario
+                        if(this->ver(constantes.UNO))
+                        { 
+                            modo = MODO_ATAQUE;
+                        }
+                    }
+                    funciona = true;
                 }
                 break;
 

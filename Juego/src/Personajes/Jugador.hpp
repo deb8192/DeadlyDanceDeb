@@ -59,6 +59,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         //SETTERS & GETTERS
         //drawable metodos
         void setPosiciones(float nx,float ny,float nz);
+        void setPosicionesAtaque(float nx,float ny,float nz);
         void setNewPosiciones(float nx,float ny,float nz);//modifica las posiciones finales de la interpolacion de la figura
         void setLastPosiciones(float nx,float ny,float nz);
         void setRotacion(float nrx, float nry, float nrz);
