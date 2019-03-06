@@ -62,6 +62,13 @@ Jugando::~Jugando()
     }
     _powerup.clear();
 
+    tam = _waypoints.size();
+    for(short i=0; i < tam; i++)
+    {
+        _waypoints.at(i) = nullptr;
+    }
+    _waypoints.clear();
+
     // Liberar memoria
     tam = _auxiliadores.size();
     for(short i=0; i < tam; i++)
@@ -69,14 +76,7 @@ Jugando::~Jugando()
         delete _auxiliadores.at(i);
     }
     _auxiliadores.clear();
-
-    tam = _waypoints.size();
-    for(short i=0; i < tam; i++)
-    {
-        delete _waypoints.at(i);
-    }
-    _waypoints.clear();
-
+    
     //delete _primeraSala;
 }
 
@@ -820,6 +820,8 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _zonas = cargador.GetZonas();
     _enemigos = cargador.GetEnemigos();
     _boss = cargador.GetBoss();
+    _waypoints = cargador.GetWaypoints();
+    ConectarWaypoints();
 
     //Cargar objetos con el nivel completo
     this->cargarCofres(16); //Cargamos los cofres del nivel
@@ -973,29 +975,6 @@ void Jugando::cargarCofres(int num)
             cout << "No hay zonas de cofres suficientes en el nivel" << endl;
         }
     }
-}
-
-void Jugando::CrearWaypoint(Sala* sala, int accion, int compartido, int ID, int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones)
-{
-    Waypoint* waypoint = new Waypoint(ID, x, y, z, compartido, arrayConexiones, sizeConexiones);
-    bool coincide = false;
-    unsigned short i = 0;
-    while(i < _waypoints.size() && !coincide)
-    {
-        if(_waypoints[i]->GetID() == waypoint->GetID())
-        {
-            coincide = true;
-            sala->AgregarWaypoint(_waypoints[i]);
-            delete waypoint;
-        }
-        else {i++;}
-    }
-    if(!coincide)
-    {
-        _waypoints.push_back(waypoint);
-        sala->AgregarWaypoint(_waypoints.back());
-    }
-    waypoint = nullptr;
 }
 
 /************ ConectarWaypoints ************

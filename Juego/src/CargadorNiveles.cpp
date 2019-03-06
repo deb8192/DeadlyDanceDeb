@@ -58,6 +58,13 @@ CargadorNiveles::~CargadorNiveles()
     }
     _powerup.clear();
 
+    tam = _waypoints.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _waypoints.at(i);
+    }
+    _waypoints.clear();
+    
     delete _primeraSala;
 }
 
@@ -119,10 +126,6 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug, int* id)
             padre.pop_back();
         }
     }
-    /*_jugando->ConectarWaypoints();
-    // Puntero a clase singleton
-    _jugando = nullptr;*/
-    cout << "se acaba" <<endl;
 }
 
 void CargadorNiveles::GuardarNivelXml(int level)
@@ -351,6 +354,11 @@ Enemigo* CargadorNiveles::GetBoss()
     return _boss;
 }
 
+std::vector<Waypoint*> CargadorNiveles::GetWaypoints()
+{
+    return _waypoints;
+}
+
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 Sala* CargadorNiveles::CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro,
     const char* ruta_objeto, const char* ruta_textura)
@@ -551,4 +559,27 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
     _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3);
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
+}
+
+void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int ID, int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones)
+{
+    Waypoint* waypoint = new Waypoint(ID, x, y, z, compartido, arrayConexiones, sizeConexiones);
+    bool coincide = false;
+    unsigned short i = 0;
+    while(i < _waypoints.size() && !coincide)
+    {
+        if(_waypoints[i]->GetID() == waypoint->GetID())
+        {
+            coincide = true;
+            sala->AgregarWaypoint(_waypoints[i]);
+            delete waypoint; // TO DO: revisar
+        }
+        else {i++;}
+    }
+    if(!coincide)
+    {
+        _waypoints.push_back(waypoint);
+        sala->AgregarWaypoint(_waypoints.back());
+    }
+    waypoint = nullptr;
 }
