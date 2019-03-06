@@ -351,9 +351,15 @@ int Enemigo::Atacar(int i)
     if(vida > 0 && atacktime == 0)
     {
         MotorFisicas* _fisicas = MotorFisicas::getInstance();
+        int distance = 0;
 
-        //Calcular posiciones
-        int distance = 3;
+        //Temporal
+        if (i >= 0) {
+            distance = 3;
+        } else {
+            distance = 5;
+        }
+        
         atx = this->getX();
         atx += (distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN));
         aty = this->getY();
