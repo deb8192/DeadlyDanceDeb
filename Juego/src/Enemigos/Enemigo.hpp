@@ -49,6 +49,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         void setID(int);
         void setPosiciones(float nx,float ny,float nz);
+        void setPosicionesAtaque(float nx,float ny,float nz);
         void setNewPosiciones(float nx,float ny,float nz);
         void setLastPosiciones(float nx,float ny,float nz);
         void setRotacion(float nrx, float nry, float nrz);
@@ -57,6 +58,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setRotation(float rot);
         void setVectorOrientacion();
         void setPosicionesFisicas(float nx,float ny,float nz);
+        void initPosicionesAtaque(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
 
         void ModificarVida(int vid);
@@ -135,8 +137,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
         //fin ia
 
-        const char* GetTextura();
-        const char* GetModelo();
+        const char* GetModelo(); // Malla 3D con la textura
 
     protected:
         Times* _tiempo;
@@ -179,7 +180,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         };
 
         Sala* _estoy;//sala en la que esta el enemigo
-        float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc, atespposX, atespposY, atespposZ;
+        float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc,iniAtposX, iniAtposY, iniAtposZ, atposX, atposY, atposZ, atespposX, atespposY, atespposZ;
         float atacktime;
         float tiempoMerodear, lastTiempoMerodear;
         Arma* _armaEspecial;
@@ -191,8 +192,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         short modo;
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
 
-        const char* _textura;
-        const char* _modelo;
+        const char* _modelo; // Malla 3D con la textura
 };
 
 #endif

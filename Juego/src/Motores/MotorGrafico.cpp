@@ -404,6 +404,9 @@ bool MotorGrafico::EstaPulsado(short boton)
         
         case KEY_C:
             return input.IsKeyDown(irr::KEY_KEY_C);//activa pathdinding
+        
+        case KEY_B:
+            return input.IsKeyDown(irr::KEY_KEY_B);
 
         case RMOUSE_PRESSED_DOWN:
             return input.IsMouseClick(irr::EMIE_RMOUSE_PRESSED_DOWN);
@@ -462,6 +465,9 @@ void MotorGrafico::ResetKey(short event)
         break;
         case KEY_C:
             input.ResetKey(irr::KEY_KEY_C);
+        break;
+        case KEY_B:
+            input.ResetKey(irr::KEY_KEY_B);
         break;
         case KEY_Q:
             input.ResetKey(irr::KEY_KEY_Q);
@@ -566,6 +572,17 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
     bill->setMaterialTexture(0, _driver->getTexture("assets/models/particlegreen.jpg"));
 }
 
+void MotorGrafico::CargarBoss(int x,int y,int z, const char* ruta_objeto)
+{
+    IAnimatedMesh* boss = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+
+	if (boss)
+	{
+        _bossEscena = _smgr->addAnimatedMeshSceneNode(boss); //metemos el objeto en el escenario para eso lo pasamos al escenario
+        _bossEscena->setPosition(core::vector3df(x,y,z));
+    }
+}
+
 void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
 {
     IAnimatedMesh* enemigo = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
@@ -587,7 +604,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
  * Salida:
  * 
  */
-void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura)
+void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto)
 {
     IAnimatedMesh* jugador = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	// Si se ha podido crear el objeto, se mete en escena
@@ -686,6 +703,14 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
     _jugEscena->setPosition(core::vector3df(x,y,z));
     _jugEscena->setRotation(core::vector3df(rx,ry-180,rz));
 
+}
+
+void MotorGrafico::mostrarBoss(float x, float y, float z, float rx, float ry, float rz)
+{
+    if(_bossEscena != nullptr){
+        _bossEscena->setPosition(core::vector3df(x,y,z));
+        _bossEscena->setRotation(core::vector3df(rx,ry,rz));
+    }
 }
 
 void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)

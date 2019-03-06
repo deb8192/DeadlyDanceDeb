@@ -10,8 +10,8 @@ class MuerteBoss : public Enemigo
         ~MuerteBoss();
         MuerteBoss(float nX, float nY, float nZ, int maxVida);
         void RunIA();
-        void UpdateMuerteBoss(short *i, int* _jug);
-        void SetNuevasOrdenes(short i);
+        void UpdateMuerteBoss(int* _jug);
+        void SetNuevasOrdenes(short newOrden);
 
     private:
         bool funciona, atacado, hecho;
