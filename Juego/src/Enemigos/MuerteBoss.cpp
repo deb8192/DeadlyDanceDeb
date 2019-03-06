@@ -14,7 +14,7 @@ MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
     rotation = constantes.CERO;
 
     //TO DO: cambiar por el suyo
-    _modelo = "assets/models/guardian_m/G_M.obj";
+    _modelo = "assets/models/guardian_m/GuardianMuerteConTextura.obj";
 }
 
 MuerteBoss::~MuerteBoss()
