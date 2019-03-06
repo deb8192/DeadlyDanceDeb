@@ -422,7 +422,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z, 
     int ancho, int largo, int alto, Sala* sala, int* id)
 {
-    _boss = new MuerteBoss(x,y,z, 350); // Posiciones, vida
+    _boss = new MuerteBoss(x,y,z, 2000); // Posiciones, vida
     _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
     //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
     _boss->setID(++(*id));//le damos el id unico en esta partida al enemigo
