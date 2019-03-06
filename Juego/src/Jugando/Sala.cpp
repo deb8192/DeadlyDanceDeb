@@ -2,6 +2,8 @@
 
 Sala::Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type)
 {
+    Constantes constantes;
+    _waypoints.reserve(constantes.CINCO);
     ancho = anch;
     largo = larg;
     alto = alt;
@@ -20,6 +22,13 @@ Sala::Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type)
 
  Sala::~Sala()
  {
+    // Liberar memoria
+    short tam = _waypoints.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _waypoints.at(i);
+    }
+    _waypoints.clear();
     ancho = 0;
     largo = 0;
     alto = 0;
@@ -80,6 +89,18 @@ void Sala::agregarSalida(Sala* plataforma)
 {
     salidas.push_back(plataforma);
 }
+/*********** AgregarWaypoint ***********
+ * Funcion que annade los waypoints que se pasan
+ * por parametro al vector de waypoints de la sal
+ * 
+ *      Entradas:
+ *                  Waypoint* waypoint: waypoint a annadir al vector
+ *      Salida:
+*/
+void Sala::AgregarWaypoint(Waypoint* waypoint)
+{
+    _waypoints.push_back(waypoint);
+}
 
 int* Sala::getSizes()
 {
@@ -106,6 +127,11 @@ std::vector<Sala*> Sala::getEntradas()
 std::vector<Sala*> Sala::getSalidas()
 {
     return salidas;
+}
+
+std::vector<Waypoint*> Sala::GetWaypoints()
+{
+    return _waypoints;
 }
 
 void Sala::definirID(int id)
