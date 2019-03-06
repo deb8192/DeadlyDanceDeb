@@ -131,7 +131,7 @@ void Murcielago::UpdateMurcielago(short *i)
                     modo = MODO_ATAQUE;
                     this->setTimeMerodear(constantes.CERO);
                     cout<<"Pide ayuda a los aliados"<<endl;
-                    this->pedirAyuda();
+                    //this->pedirAyuda();
                     funciona = true;
                 }
                 break;

@@ -262,7 +262,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int ancho = enem.attribute("ancho").as_int();//nos devuelve un int
         int largo = enem.attribute("largo").as_int();//nos devuelve un int 
         int alto = enem.attribute("alto").as_int();//nos devuelve un int 
-        int compartido = 2;//enem.attribute("compartido").as_int();//nos devuelve un int
+        int compartido = enem.attribute("compartido").as_int();//nos devuelve un int
         char* conexiones = (char *) enem.attribute("conexiones").value(); //nos indica los ID de los waypoints con los que conecta este waypoint
         char* reading =  strtok(conexiones, ",");
         int* arrayConexiones = new int [5];

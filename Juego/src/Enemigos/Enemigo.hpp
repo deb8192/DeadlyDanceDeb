@@ -78,6 +78,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setPosAtaques(int p);
         void setVelocidadMaxima(float velocidad); //modifica la VelocidadMaxima de desplazamiento
         void SetEnemigo(int);
+        void SetModo(int);
 
         int getID();
         int getVidaIni();
@@ -122,6 +123,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getAtZ();
         float getVelocidadMaxima(); //se obtiene la VelocidadMaxima de desplazamiento
         int GetEnemigo();
+        int GetModo();
 
         //ia
         float randomBinomial();//devuelve un valor random entre -1 y 1
@@ -131,6 +133,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void UpdateBehavior(short *i); //actualiza el comportamiento actual del pollo
         short * RunIA(bool);//corre la ia del enemigo
         void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
+        void AnnadirRecorridoAyuda(vector <Posiciones> recorrido);
         //fin ia
 
     protected:
@@ -144,8 +147,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool buscar(VectorEspacial*);//busca un objetivo
         bool Acciones(int);//esto es para recorrer el arbol
         bool pedirAyuda();//pide ayuda
-        void AnnadirRecorridoAyuda(vector <Posiciones> recorrido);
         bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
+        void AuxiliarAliado();//se mueve hacia el proximo waypoint del camino a seguir
         bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         //fin comportamientos bases
 
