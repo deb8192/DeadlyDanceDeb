@@ -1,3 +1,4 @@
+#include <stdlib.h> 
 #include "CargadorNiveles.hpp"
 
 #include "Personajes/Heavy.hpp"
@@ -99,6 +100,7 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug, int* id)
         CrearLuz(x,y,z); //cargamos el objeto
     }*/
     
+    //Se crea el arbol de salas del mapa del nivel
     for (pugi::xml_node plat = anterior.back().child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         cout << "ciclo" <<endl;
@@ -117,6 +119,9 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug, int* id)
             padre.pop_back();
         }
     }
+    /*_jugando->ConectarWaypoints();
+    // Puntero a clase singleton
+    _jugando = nullptr;*/
     cout << "se acaba" <<endl;
 }
 
@@ -281,6 +286,31 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre, int* id)
         short totalElementos = zon.attribute("elementos").as_int();
         const char* tipo = zon.attribute("tipo").value(); //nos da un char[] = string
         CrearZona(accion,x,y,z,ancho,largo,alto,tipo,totalElementos); //cargamos el enemigo
+    }
+
+    for (pugi::xml_node enem = plat.child("Waypoint"); enem; enem = enem.next_sibling("Waypoint"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        //aqui va la carga de waypoints para los enemigos
+        int accion = enem.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
+        int ID = enem.attribute("id").as_int(); //lo vamos a usar para indentificar los waypoints de distintas salas
+        int x = enem.attribute("X").as_int();//nos devuelve un int
+        int y = enem.attribute("Y").as_int();//nos devuelve un int
+        int z = enem.attribute("Z").as_int();//nos devuelve un int 
+        int ancho = enem.attribute("ancho").as_int();//nos devuelve un int
+        int largo = enem.attribute("largo").as_int();//nos devuelve un int 
+        int alto = enem.attribute("alto").as_int();//nos devuelve un int 
+        int compartido = enem.attribute("compartido").as_int();//nos devuelve un int
+        char* conexiones = (char *) enem.attribute("conexiones").value(); //nos indica los ID de los waypoints con los que conecta este waypoint
+        char* reading =  strtok(conexiones, ",");
+        int* arrayConexiones = new int [5];
+        unsigned short i = 0;
+        while(reading != nullptr)
+        {
+            arrayConexiones[i] = atoi(reading);
+            reading = strtok(NULL, ",");
+            i++;
+        }
+        _jugando->CrearWaypoint(padren,accion,compartido,ID,x,y,z,ancho,largo,alto,arrayConexiones,i); //cargamos el waypoint
     }
 
     return padren;
