@@ -1,12 +1,12 @@
-#ifndef PAUSA_HPP
-#define PAUSA_HPP
+#ifndef EstadoGanar_HPP
+#define EstadoGanar_HPP
 
 #include "../Estado.hpp"
 
-class Pausa: public Estado {
+class EstadoGanar: public Estado {
     public:
-        Pausa();
-        ~Pausa();
+        EstadoGanar();
+        ~EstadoGanar();
         
         void Iniciar();
         void Render();
@@ -21,7 +21,6 @@ class Pausa: public Estado {
         void borrarGUIResetearEvento(short id);
         void menuPrincipal();
         void reiniciarPartida();
-        void atras();
         void salir();
 };
-#endif /* PAUSA_HPP */
+#endif /* EstadoGanar_HPP */

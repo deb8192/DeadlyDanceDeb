@@ -124,13 +124,6 @@ void Menu::salir()
     _motor->CerrarJuego();
 }
 
-// Elimina la memoria
-void Menu::Vaciar()
-{
-    // TO DO: vaciar memoria
-    cout << "Vaciando menu" <<endl;
-}
-
 void Menu::Pausar()
 {
     cout << "Pausando menu" <<endl;

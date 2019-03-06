@@ -8,8 +8,9 @@ LIBRERIAS =-L"librerias/reactphysics3d/lib/" -L"librerimmas/fmod/lowlevel/lib/x8
 LIBRERIAS_CARPETAS = "librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib:librerias/glew/lib:librerias/glad/lib:librerias/glfw/lib:librerias/assimp/lib:librerias/catopengl/lib"
 LIBRERIAS_ESPECIFICAS = librerias/fmod/studio/lib/x86_64/libfmodstudio.so librerias/fmod/lowlevel/lib/x86_64/libfmod.so librerias/reactphysics3d/lib/libreactphysics3d.a librerias/glew/lib/libGLEW.a librerias/glad/lib/libglad.a librerias/glfw/lib/libglfw3.a librerias/assimp/lib/libIrrXML.a librerias/catopengl/lib/libcatopengl.a #librerias necesarias
 irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor -lGL -lIrrlicht -lassimp   #porque nombre llamarla
+libSeguimiento = $(shell ls librerias/catopengl/obj/*.o)
 SHELL = /bin/bash
-CPUCOUNT=$(grep -c   "^processor" /proc/cpuinfo)
+CPUCOUNT=$(shell grep -c   "^processor" /proc/cpuinfo)
 # ${CXXFLAGS} - Son las opciones del compilador
 #pwd
 
@@ -91,7 +92,7 @@ $(BEGIN):
 	@echo -e '\e[45m Paso 2 Precuaciones \e[0m';
 	$(MAKE) $(PRECA)
 	$(MAKE) $(RECUR)
-	@echo -e '\e[45m Paso 3 Creando Objetos \e[0m';
+	@echo -e '\e[45m Paso 3 Creando Objetos (con $(CPUCOUNT) hilos) \e[0m';
 	$(MAKE) -j$(CPUCOUNT) $(PARALLEL) 
 	@echo -e '\e[45m Paso 4  \e[0m';
 	$(MAKE) $(RECUR2)
@@ -103,7 +104,7 @@ $(PARALLEL): $(OBJECTS) $(OBJECTSP) $(OBJECTSE) $(OBJECTSM) $(OBJECTSJ) $(OBJECT
 
 #Finalizado Comprobaciones
 
-$(EXEC): $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2)
+$(EXEC): $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2) $(libSeguimiento)
 	#Comprobando ejecutable si esta actualizado
 	$(CXX) $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2) $(irrlichtN) $(LIBRERIAS) $(LIBRERIAS_ESPECIFICAS)  -o $(EXEC)
 	#Ejecutable Actualizado
@@ -164,6 +165,8 @@ $(LG):
 clean:
 	rm -f $(EXEC) $(OSOURCESV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESMV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2)
 	rm -f src/*.o
+	cd librerias/catopengl/; make clean; \
+	
 # si ejecutas "make run" despues de compilar ejecutara automaticamente el ejecutable
 run: $(BEGIN)
 	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia

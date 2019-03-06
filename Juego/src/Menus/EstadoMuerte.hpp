@@ -12,7 +12,6 @@ class EstadoMuerte: public Estado {
         void Render();
         void Update();
         void ManejarEventos();
-        void Vaciar();
 
     private:
         void pintarBotones();

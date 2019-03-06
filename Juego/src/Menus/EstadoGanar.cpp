@@ -1,38 +1,38 @@
-#include "EstadoMuerte.hpp"
+#include "EstadoGanar.hpp"
 #include "../Juego.hpp"
 
-EstadoMuerte::EstadoMuerte()
+EstadoGanar::EstadoGanar()
 {
     _motor = MotorGrafico::GetInstance();
 }
 
-EstadoMuerte::~EstadoMuerte()
+EstadoGanar::~EstadoGanar()
 {
     _motor = nullptr;
 }
 
-void EstadoMuerte::Iniciar()
+void EstadoGanar::Iniciar()
 {
-    cout << "\e[42m EstadoMuerte \e[0m" << endl;
+    cout << "\e[42m EstadoGanar \e[0m" << endl;
     _motor->FondoEscena(255,0,0,0);
     _motor->ActivarFuenteDefault();
-    _motor->CrearTexto("Muerto - ESC = M. principal", 0, 0, 400, 20);
+    _motor->CrearTexto("Partida ganada", 0, 0, 400, 20);
     pintarBotones();
 }
 
 // Actualiza lo que se ve por pantalla
-void EstadoMuerte::Render()
+void EstadoGanar::Render()
 {
     _motor->FondoEscena(255,0,0,0);     // Borra
     _motor->RenderEscena();             // Vuelve a pintar
 }
 
-void EstadoMuerte::Update()
+void EstadoGanar::Update()
 {
     
 }
 
-void EstadoMuerte::ManejarEventos()
+void EstadoGanar::ManejarEventos()
 {
     if (_motor->OcurreEvento(GUI_ID_SALIR_BUTTON))
     {
@@ -40,60 +40,57 @@ void EstadoMuerte::ManejarEventos()
         salir();
     }
 
-    if (_motor->OcurreEvento(GUI_ID_REINICIAR_BUTTON))
+    if (_motor->OcurreEvento(GUI_ID_CONTINUAR))
     {
-        borrarGUIResetearEvento(GUI_ID_REINICIAR_BUTTON);
+        borrarGUIResetearEvento(GUI_ID_CONTINUAR);
         reiniciarPartida();
     }
 
-    if (_motor->OcurreEvento(GUI_ID_MENU_BUTTON) || 
-        _motor->EstaPulsado(KEY_ESC))
+    if (_motor->OcurreEvento(GUI_ID_MENU_BUTTON))
     {
         borrarEscenaResetearEvento(GUI_ID_MENU_BUTTON);
-        _motor->ResetKey(KEY_ESC);
         menuPrincipal();
     }
 }
 
-void EstadoMuerte::pintarBotones()
+void EstadoGanar::pintarBotones()
 {
-    _motor->CrearBoton(300,200,500,230, GUI_ID_REINICIAR_BUTTON, L"Reiniciar partida", L"Reiniciar");
+    _motor->CrearBoton(300,200,500,230, GUI_ID_CONTINUAR, L"Continuar", L"Continua al siguiente nivel");
     _motor->CrearBoton(300,240,500,270, GUI_ID_MENU_BUTTON, L"Menu principal", L"M. principal");
     _motor->CrearBoton(300,280,500,310, GUI_ID_SALIR_BUTTON, L"salir del juego", L"Cierra el juego");
 }
 
 // Para Salir y Menu principal, borra GUI y Escena
-void EstadoMuerte::borrarEscenaResetearEvento(short id)
+void EstadoGanar::borrarEscenaResetearEvento(short id)
 {
     _motor->ResetEvento(id);
     // Limpiamos el gui y la escena
     _motor->BorrarScena();
     _motor->BorrarGui();
-    
 }
 
 // Para Atras y Reiniciar partida, borra solo los botones del GUI
-void EstadoMuerte::borrarGUIResetearEvento(short id)
+void EstadoGanar::borrarGUIResetearEvento(short id)
 {
-    _motor->BorrarBoton(GUI_ID_REINICIAR_BUTTON);
+    _motor->BorrarBoton(GUI_ID_CONTINUAR);
     _motor->BorrarBoton(GUI_ID_MENU_BUTTON);
     _motor->BorrarBoton(GUI_ID_SALIR_BUTTON);
     _motor->ResetEvento(id);
 }
 
-void EstadoMuerte::menuPrincipal()
+void EstadoGanar::menuPrincipal()
 {
     _motor->LimpiarElementosJuego();
     // Elimina todos los estados y anyade el de menu
     Juego::GetInstance()->estado.CambioDeJuegoAMenu();
 }
 
-void EstadoMuerte::reiniciarPartida()
+void EstadoGanar::reiniciarPartida()
 {
     Juego::GetInstance()->estado.ReiniciarPartida();
 }
 
-void EstadoMuerte::salir()
+void EstadoGanar::salir()
 {
     _motor->CerrarJuego();
 }

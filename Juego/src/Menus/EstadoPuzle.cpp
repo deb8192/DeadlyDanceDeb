@@ -76,11 +76,6 @@ void EstadoPuzle::atras()
     Juego::GetInstance()->estado.SaltarAlMenu();
 }
 
-// Elimina la memoria antes de volver al menu
-void EstadoPuzle::Vaciar() {
-    cout << "Vaciando puzzles" <<endl;
-}
-
 /*short Puzzles::GetTipo()
 {
     return puzzle.GetTipo();

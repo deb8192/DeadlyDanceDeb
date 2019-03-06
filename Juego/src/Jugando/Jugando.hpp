@@ -3,8 +3,6 @@
 
 #include "../Estado.hpp"
 #include "../Motores/SenseEventos.hpp"
-#include "../Motores/MotorAudio.hpp"
-#include "../Motores/MotorGrafico.hpp"
 #include "../CargadorNiveles.hpp"
 #include "../Times.hpp"
 #include "../Personajes/Jugador.hpp"
@@ -27,15 +25,6 @@ class Jugando: public Estado {
         Jugando();
         ~Jugando();
 
-        //clase singleton en public
-        static Jugando* GetInstance() //esto se utiliza para crear el objeto una sola vez
-        {
-            if(!_unicaInstancia)
-                _unicaInstancia = new Jugando();
-            return _unicaInstancia;  
-        }
-        //fin singleton public
-
         // Funciones de Estado
         void Iniciar();
         void ManejarEventos();
@@ -43,7 +32,6 @@ class Jugando: public Estado {
         void UpdateIA(); // Se llama 4 veces por segundo
         void Render();//dibuja y actualiza las posiciones del interpolado
         
-        void Vaciar();
         void Pausar();
         void Reanudar();
         void Reiniciar();
@@ -51,18 +39,15 @@ class Jugando: public Estado {
         //Funciones propias
         void ValoresPorDefecto();
         void ValoresPorDefectoJugador();
+        void ValoresPorDefectoBoss();
         void PosicionesIniEnemigos();
         void DesactivarDebug();
         void InteractuarNivel();
 
         bool CargarNivel(int nivel, int tipoJug); //Niveles en assets/maps/xml/
         void CrearJugador();//lo utilizamos para crear su objeto
-        void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void CrearLuz(int x,int y,int z);
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem); //lo usamos para crear zonas
-        void cargarCofres(int num); //Lo usamos para cargar los cofres en las distintas zonas de cofres
+        void cargarCofres(int num);  //Lo usamos para cargar los cofres en las distintas zonas de cofres
         void CrearWaypoint(Sala* sala, int accion, int compartido, int ID,  int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones); //Lo usamos para crear waypoints
         void ConectarWaypoints();
 
@@ -80,14 +65,10 @@ class Jugando: public Estado {
         void EraseEnemigo(std::size_t i);
         void setEnemigoPideAyuda(Enemigo* );
         Enemigo* getEnemigoPideAyuda();
-        vector<Zona*> GetZonas();
         std::vector<Enemigo*> getEnemigos();
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
-
+        
     private:
-        //clase singleton 
-        static Jugando* _unicaInstancia;
-        //fin clase singleton private
 
         short auxiliarPathfinding = 0;
         MotorAudioSystem* _motora;
@@ -101,6 +82,8 @@ class Jugando: public Estado {
         
         Sala* _primeraSala;// la primera sala del arbol
         
+        bool enSalaBoss;
+        Enemigo* _boss;
         //TO DO: hacerle un reserve y q el vector sea un puntero
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         std::vector<Enemigo*> _auxiliadores;  //Enemigos que responden a la ayuda

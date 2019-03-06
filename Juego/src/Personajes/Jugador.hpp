@@ -6,12 +6,12 @@
 #include <algorithm>
 #include <ctime>
 #include <cstring>
+#include "../Enemigos/Enemigo.hpp"
 #include "../Motores/INnpc.hpp"
 #include "../Motores/INdrawable.hpp"
 #include "../Motores/INsentidos.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Objetos/Llave.hpp"
-#include "../Motores/MotorFisicas.hpp"
 #include "../Motores/MotorGrafico.hpp"
 #include "../Motores/MotorAudio.hpp"
 #include "../Jugando/InterfazJugador.hpp"
@@ -40,8 +40,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         //npc metodos
         int Atacar(int);//efectua un ataque normal, llama al motor para ejecutar la animacion.
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
-        void AtacarUpdate(int danyo);
-        void AtacarEspecialUpdate(int* danyo);
+        void AtacarUpdate(int danyo, vector<Enemigo*> &_getEnemigos);
+        void AtacarUpdate(int danyo, Enemigo* &_boss);
         void Interactuar(int, int);//llama a la mecanica de interactuar
 
         //Metodos de INsentidos
@@ -139,15 +139,22 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         int getAnimacion();
         vector <Llave*> GetLlaves();
 
-        const char* GetTextura();
         const char* GetModelo();
         int GetAncho();
         int GetLargo();
         int GetAlto();
+        bool ColisionEntornoEne();
+        bool ColisionEntornoBoss();
 
+        virtual void AtacarEspecialUpdate(int* danyo, vector<Enemigo*> &_getEnemigos) = 0;
+        virtual void AtacarEspecialUpdate(int* danyo, Enemigo* &_boss) = 0;
         virtual void RenderAtaqueEsp(float updateTime, float drawTime) = 0;
 
     protected:
+        void atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos);
+        void atacarEspUpdBossComun(int* danyo, Enemigo* &_boss);
+        virtual void armaAtacarEspecialUpd() = 0;
+
         float ax = 1.0f,
               az = 20.0f,
               deg;
@@ -166,12 +173,10 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         vector <unsigned int> atacados_normal;
         int dinero = 0;
 
-        const char* playerTextura;
-        const char* playerModelo;
+        const char* _modelo;
         int ancho; int largo; int alto;
 
         MotorGrafico* _motor;
-        MotorFisicas* _fisicas;
         MotorAudioSystem* _motora;
         InterfazJugador* _interfaz;
 };
