@@ -12,6 +12,7 @@
 #include "Zona.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/InterfazJugador.hpp"
+#include "Waypoint.hpp"
 
 #include "../Pathfinder.hpp"
 
@@ -44,7 +45,9 @@ class Jugando: public Estado {
         bool CargarNivel(int nivel, int tipoJug); //Niveles en assets/maps/xml/
         void CrearJugador();//lo utilizamos para crear su objeto
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void cargarCofres(int num);
+        void cargarCofres(int num);  //Lo usamos para cargar los cofres en las distintas zonas de cofres
+        void CrearWaypoint(Sala* sala, int accion, int compartido, int ID,  int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones); //Lo usamos para crear waypoints
+        void ConectarWaypoints();
 
         //Funciones de interacciones
         void CogerObjeto();
@@ -65,6 +68,7 @@ class Jugando: public Estado {
         
     private:
 
+        short auxiliarPathfinding = 0;
         MotorAudioSystem* _motora;
         SenseEventos* _sense;
         MotorFisicas* _fisicas;
@@ -81,13 +85,14 @@ class Jugando: public Estado {
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         std::vector<Enemigo*> _auxiliadores;  //Enemigos que responden a la ayuda
         Enemigo* _enemPideAyuda;  //Enemigos que pide ayuda
-        std::vector<Pathfinder::NodeRecord> recorrido;//Nodos a recorrer en el pathfinding
+        std::vector<Waypoint*> recorrido;//Nodos a recorrer en el pathfinding
         Sala* _destinoPathFinding; //sala que se rellena al llamar a pathfinding y se vacía al terminar el recorrido del enemigo
         
         std::vector<Recolectable*> _recolectables;
         std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
-         std::vector<Recolectable*> _powerup;
+        std::vector<Recolectable*> _powerup;
         std::vector<Zona*> _zonas; //Array de zonas
+        std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
 
         bool reiniciando; // Se utiliza solo en Reanudar por el cambio entre Estados
         Jugador* _jugador;
