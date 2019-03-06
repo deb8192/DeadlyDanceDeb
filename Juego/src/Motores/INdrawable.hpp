@@ -10,11 +10,13 @@ class INdrawable
 
 public:
     // Estructura con el alias "Posiciones"
-    using Posiciones = struct {
+    struct estructuraPosiciones{
         float x = 0.0f;
         float y = 0.0f;
         float z = 0.0f;
     };
+
+    using Posiciones = estructuraPosiciones;
 
     virtual ~INdrawable() = default;
     virtual void moverseEntidad(float)=0;//Realiza el desplazamiento mediante la interpolacion

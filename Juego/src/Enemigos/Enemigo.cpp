@@ -259,7 +259,7 @@ void Enemigo::setLastPosiciones(float nx,float ny,float nz)
     posPasada.z = nz;
 }
 
-void Enemigo::initPosicionesAtaque(float nx,float ny,float nz)
+void Enemigo::initPosicionesFisicasAtaque(float nx,float ny,float nz)
 {
     iniAtposX = nx;
     iniAtposY = ny;
@@ -352,26 +352,26 @@ int Enemigo::Atacar(int i)
     {
         MotorFisicas* _fisicas = MotorFisicas::getInstance();
         int distance = 0;
-
         //Temporal
         if (i >= 0) {
             distance = 3;
         } else {
             distance = 5;
         }
-        
-        atx = this->getX();
-        atx += (distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN));
-        aty = this->getY();
-        atz = this->getZ();
-        atz += (distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN));
-        atposZ = iniAtposZ;
-        atposX = iniAtposX;
-        atposZ += atz - posIni.z;
-        atposX += atx - posIni.x;
-        atgx = this->getRX();
-        atgy = this->getRY();
-        atgz = this->getRZ();
+
+      //Calcular posiciones
+      atx = this->getX();
+      atx += (distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN));
+      aty = this->getY();
+      atz = this->getZ();
+      atz += (distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN));
+      atposZ = iniAtposZ;
+      atposX = iniAtposX;
+      atposZ += atz - posIni.z;
+      atposX += atx - posIni.x;
+      atgx = this->getRX();
+      atgy = this->getRY();
+      atgz = this->getRZ();
 
         if (i >= 0) // Comprueba si ataca al boss o a los enemigos
         {
@@ -791,6 +791,11 @@ void Enemigo::SetEnemigo(int enemigo)
     tipoEnemigo = enemigo;
 }
 
+void Enemigo::SetModo(int newModo)
+{
+    modo = newModo;
+}
+
 float Enemigo::getTimeMerodear()
 {
     return tiempoMerodear;
@@ -829,6 +834,11 @@ float Enemigo::getLastTimeAtEsp()
 int Enemigo::GetEnemigo()
 {
     return tipoEnemigo;
+}
+
+int Enemigo::GetModo()
+{
+    return modo;
 }
 
 Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, short enemigo)
@@ -1056,18 +1066,27 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
     bool Enemigo::pedirAyuda()
     {
-        //TO DO: revisar
+       //TO DO: revisar
         //Jugando* _nivel = Jugando::GetInstance();
         //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
-        if(/*_nivel->getEnemigoPideAyuda() == nullptr &&*/ _motor->getPathfindingActivado())
+        /*if(_nivel->getEnemigoPideAyuda() == nullptr)
         {
             //vamos a generar un sonido de ayuda
-            generarSonido(60,1.500,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
-            //_nivel->setEnemigoPideAyuda(this); //En caso de no estar buscando a ningun aliado se anade este como peticionario
+            generarSonido(60,2,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+            _nivel->setEnemigoPideAyuda(this); //En caso de no estar buscando a ningun aliado se anade este como peticionario
             return true;
-        }
+        }*/
         //cout << " grita pidiendo ayuda "<< endl;
         return false;
+    }
+
+    void Enemigo::AnnadirRecorridoAyuda(vector <Posiciones> recorrido)
+    {
+        if(recorrido.size() > 0)
+        {
+            recorridoAyuda = recorrido;
+            modo = MODO_AUXILIAR_ALIADO;
+        }
     }
 
     bool Enemigo::ContestarAyuda()
@@ -1075,12 +1094,34 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         //Jugando* _nivel = Jugando::GetInstance();
         //vamos a generar un sonido de ayuda
         generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
-        if(_motor->getPathfindingActivado()){
-            //_nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
-        }
+        //if(_motor->getPathfindingActivado()){
+            //TO DO: solo esta linea:_nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
+        //}
         //cout << " contesta a la llamada de auxilio "<< endl;
 
         return true;
+    }
+
+    void Enemigo::AuxiliarAliado()
+    {
+        float distancia = 5;
+        VectorEspacial objetivo;
+        objetivo.vX = recorridoAyuda.front().x;
+        objetivo.vY = recorridoAyuda.front().y;
+        objetivo.vZ = recorridoAyuda.front().z;
+        objetivo.modulo = 0;
+        this->buscar(&objetivo);
+        if(abs(objetivo.vZ - this->getZ()) <= abs(distancia))
+        {
+            if(abs(objetivo.vX - this->getX()) <= abs(distancia))
+            {
+                recorridoAyuda.erase(recorridoAyuda.begin());
+                if(recorridoAyuda.empty())
+                {
+                    modo = MODO_ATAQUE;
+                }
+            }
+        }
     }
 
     bool Enemigo::Merodear()

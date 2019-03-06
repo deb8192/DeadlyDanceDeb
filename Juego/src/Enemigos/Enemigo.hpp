@@ -58,7 +58,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setRotation(float rot);
         void setVectorOrientacion();
         void setPosicionesFisicas(float nx,float ny,float nz);
-        void initPosicionesAtaque(float nx,float ny,float nz);
+
+        void initPosicionesFisicasAtaque(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
 
         void ModificarVida(int vid);
@@ -82,6 +83,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setPosAtaques(int p);
         void setVelocidadMaxima(float velocidad); //modifica la VelocidadMaxima de desplazamiento
         void SetEnemigo(int);
+        void SetModo(int);
 
         int getID();
         int getVidaIni();
@@ -126,6 +128,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getAtZ();
         float getVelocidadMaxima(); //se obtiene la VelocidadMaxima de desplazamiento
         int GetEnemigo();
+        int GetModo();
 
         //ia
         float randomBinomial();//devuelve un valor random entre -1 y 1
@@ -135,6 +138,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void UpdateBehavior(short *i, int* _jugador, std::vector<Zona*> &_getZonas); //actualiza el comportamiento actual del pollo
         short * RunIA(bool);//corre la ia del enemigo
         void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
+        void AnnadirRecorridoAyuda(vector <Posiciones> recorrido);
         //fin ia
 
         const char* GetModelo(); // Malla 3D con la textura
@@ -155,6 +159,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool Acciones(int);//esto es para recorrer el arbol
         bool pedirAyuda();//pide ayuda
         bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
+        void AuxiliarAliado();//se mueve hacia el proximo waypoint del camino a seguir
         bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         //fin comportamientos bases
 
@@ -169,14 +174,16 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_MERODEA,
             EN_OIR,
             EN_BUSCA,
-            EN_RECUPERA
+            EN_RECUPERA,
+            EN_ACUDE_AYUDA
         };
 
         enum modosEnemigo 
         {  
             MODO_DEFAULT = 0,
             MODO_ATAQUE,
-            MODO_HUIDA
+            MODO_HUIDA,
+            MODO_AUXILIAR_ALIADO
         };
 
         Sala* _estoy;//sala en la que esta el enemigo
@@ -191,7 +198,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool accionRealizada; //
         short modo;
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
-
+        vector <Posiciones> recorridoAyuda;
         const char* _modelo; // Malla 3D con la textura
 };
 
