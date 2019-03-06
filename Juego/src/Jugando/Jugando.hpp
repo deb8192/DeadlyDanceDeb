@@ -46,7 +46,6 @@ class Jugando: public Estado {
         void CrearJugador();//lo utilizamos para crear su objeto
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void cargarCofres(int num);  //Lo usamos para cargar los cofres en las distintas zonas de cofres
-        void CrearWaypoint(Sala* sala, int accion, int compartido, int ID,  int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones); //Lo usamos para crear waypoints
         void ConectarWaypoints();
 
         //Funciones de interacciones
