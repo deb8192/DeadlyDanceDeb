@@ -628,6 +628,21 @@ void Jugando::Render()
     lastDrawTime = drawTime;
     drawTime = _controladorTiempo->GetTiempo(2);
 
+    //Dibujado de las puertas, las palancas, los objetos y los cofres
+    for(unsigned int i = 0; i < _interactuables.size(); i++)
+    {
+        _interactuables.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
+        _interactuables.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
+        _motor->mostrarObjetos(_interactuables.at(i)->getX(),
+            _interactuables.at(i)->getY(),
+            _interactuables.at(i)->getZ(),
+            _interactuables.at(i)->getRX(),
+            _interactuables.at(i)->getRY(),
+            _interactuables.at(i)->getRZ(),
+            _interactuables.at(i)->GetPosicionObjetos()
+        );
+    }
+    
     //Dibujado del personaje
     _jugador->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
     _jugador->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
@@ -713,22 +728,6 @@ void Jugando::Render()
             4,
             4,
             2);
-    }
-    
-    
-    //Dibujado de las puertas, las palancas, los objetos y los cofres
-    for(unsigned int i = 0; i < _interactuables.size(); i++)
-    {
-        _interactuables.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-        _interactuables.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
-        _motor->mostrarObjetos(_interactuables.at(i)->getX(),
-            _interactuables.at(i)->getY(),
-            _interactuables.at(i)->getZ(),
-            _interactuables.at(i)->getRX(),
-            _interactuables.at(i)->getRY(),
-            _interactuables.at(i)->getRZ(),
-            _interactuables.at(i)->GetPosicionObjetos()
-        );
     }
 
     //Dibujado del ataque especial del jugador
