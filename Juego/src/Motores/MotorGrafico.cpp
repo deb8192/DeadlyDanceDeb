@@ -404,6 +404,9 @@ bool MotorGrafico::EstaPulsado(short boton)
         
         case KEY_C:
             return input.IsKeyDown(irr::KEY_KEY_C);//activa pathdinding
+        
+        case KEY_B:
+            return input.IsKeyDown(irr::KEY_KEY_B);
 
         case RMOUSE_PRESSED_DOWN:
             return input.IsMouseClick(irr::EMIE_RMOUSE_PRESSED_DOWN);
@@ -462,6 +465,9 @@ void MotorGrafico::ResetKey(short event)
         break;
         case KEY_C:
             input.ResetKey(irr::KEY_KEY_C);
+        break;
+        case KEY_B:
+            input.ResetKey(irr::KEY_KEY_B);
         break;
         case KEY_Q:
             input.ResetKey(irr::KEY_KEY_Q);
@@ -587,7 +593,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
  * Salida:
  * 
  */
-void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura)
+void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto)
 {
     IAnimatedMesh* jugador = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 	// Si se ha podido crear el objeto, se mete en escena

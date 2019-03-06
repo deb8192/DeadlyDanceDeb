@@ -1,6 +1,7 @@
 #include "Enemigo.hpp"
 #include "Pollo.hpp"
 #include "Murcielago.hpp"
+#include "MuerteBoss.hpp"
 #include "../ConstantesComunes.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "cmath"
@@ -294,6 +295,10 @@ void Enemigo::UpdateIA()
         }
             break;
         default:
+        {
+            MuerteBoss* _boss = (MuerteBoss*) this;
+            _boss->RunIA();
+        }
             break;
     }
 }
@@ -317,6 +322,10 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
         }
             break;
         default:
+        {
+            MuerteBoss* _boss = (MuerteBoss*) this;
+            _boss->UpdateMuerteBoss(_jugador);
+        }
             break;
     }
 }
@@ -327,27 +336,43 @@ int Enemigo::Atacar(int i)
     int danyo = 0;
     if(vida > 0 && atacktime == 0)
     {
-      MotorFisicas* _fisicas = MotorFisicas::getInstance();
+        MotorFisicas* _fisicas = MotorFisicas::getInstance();
 
-      //Calcular posiciones
-      int distance = 4;
-      atx = distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getX();
-      aty = this->getY();
-      atz = distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getZ();
-      atgx = this->getRX();
-      atgy = this->getRY();
-      atgz = this->getRZ();
+        //Calcular posiciones
+        int distance = 4;
+        atx = distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getX();
+        aty = this->getY();
+        atz = distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getZ();
+        atgx = this->getRX();
+        atgy = this->getRY();
+        atgz = this->getRZ();
 
-      //Acutualizar posicion del ataque
-      _fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,i);
+        if (i >= 0)
+        {
+            //Acutualizar posicion del ataque
+            _fisicas->updateAtaqueEnemigos(atx/2,aty/2,atz/2,i);
 
-      //Colision
-      if(_fisicas->IfCollision(_fisicas->getEnemiesAtack(i),_fisicas->getJugador()))
-      {
-        cout << "Jugador Atacado" << endl;
-        danyo = 10.0f;
-        cout << "danyo del enemigo -> " << danyo << endl;
-      }
+            //Colision
+            if(_fisicas->IfCollision(_fisicas->getEnemiesAtack(i),_fisicas->getJugador()))
+            {
+            cout << "Jugador Atacado" << endl;
+            danyo = 10.0f;
+            cout << "danyo del enemigo -> " << danyo << endl;
+            }
+        }
+        else
+        {
+            //Acutualizar posicion del ataque
+            _fisicas->updateAtaqueBoss(atx/2,aty/2,atz/2);
+
+            //Colision
+            if(_fisicas->IfCollision(_fisicas->getBossAtack(),_fisicas->getJugador()))
+            {
+                cout << "Jugador Atacado por Boss" << endl;
+                danyo = 10.0f;
+                cout << "danyo del boss -> " << danyo << endl;
+            }
+        }
     }
     else
     {
@@ -1056,11 +1081,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     }
 
 //fin comportamientos bases
-
-const char* Enemigo::GetTextura()
-{
-    return _textura;
-}
 
 const char* Enemigo::GetModelo()
 {

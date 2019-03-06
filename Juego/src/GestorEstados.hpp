@@ -20,6 +20,7 @@ public:
     void CambioEstadoCreditos();
     void CambioEstadoPausa();
     void CambioEstadoMuerte();
+    void CambioEstadoGanar();
 
     void ProcesarPilaEstados();
     Estado* &GetEstadoActivo();

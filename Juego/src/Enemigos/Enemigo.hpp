@@ -135,8 +135,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
         //fin ia
 
-        const char* GetTextura();
-        const char* GetModelo();
+        const char* GetModelo(); // Malla 3D con la textura
 
     protected:
         Times* _tiempo;
@@ -191,8 +190,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         short modo;
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
 
-        const char* _textura;
-        const char* _modelo;
+        const char* _modelo; // Malla 3D con la textura
 };
 
 #endif

@@ -12,12 +12,15 @@ Pollo::Pollo(float nX, float nY, float nZ, int maxVida)
     _ordenes = new short [constantes.DOS];
     maxRotacion = constantes.PI_CUARTOS; 
     rotation = constantes.CERO;
+
+    _modelo = "assets/models/Pollo.obj";
 }
 
 Pollo::~Pollo()
 {
     delete[] _ordenes;
     _ordenes = nullptr;
+    _modelo = nullptr;
 }
 
 /***************** RunIA *****************

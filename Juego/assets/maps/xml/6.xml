@@ -105,23 +105,23 @@
 	
 	<!--Luego se puede colocar cada una en su plataforma correspondiente, esto es lo que falta por colocar-->
 
-	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="143" Y="0" Z="15" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>	
-	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="10" X="202" Y="0" Z="48" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>
-	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="252" Y="0" Z="20" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>
-	<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="10" X="254" Y="0" Z="142" Texture="assets/texture/Murcielago.mtl" Model="assets/models/Murcielago.obj"></Enemy>
-	<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="330" Y="0" Z="95" Texture="assets/texture/Murcielago.mtl" Model="assets/models/Murcielago.obj"></Enemy>
-	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="356" Y="0" Z="122" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>									
-	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="250" Y="0" Z="311" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>
-	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="232" Y="0" Z="330" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>									
-	<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="211" Y="0" Z="307" Texture="assets/texture/Murcielago.mtl" Model="assets/models/Murcielago.obj"></Enemy>					
-	<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="250" Y="0" Z="362" Texture="assets/texture/Murcielago.mtl" Model="assets/models/Murcielago.obj"></Enemy>					
-	<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="232" Y="0" Z="380" Texture="assets/texture/Murcielago.mtl" Model="assets/models/Murcielago.obj"></Enemy>	
-	<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="211" Y="0" Z="358" Texture="assets/texture/Murcielago.mtl" Model="assets/models/Murcielago.obj"></Enemy>									
-	<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="422" Y="0" Z="366" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>	
-	<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="404" Y="0" Z="402" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>										
-	<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="142" Y="0" Z="348" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>						
-	<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="136" Y="0" Z="366" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>						
-	<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="115" Y="0" Z="344" Texture="assets/texture/Pollo.mtl" Model="assets/models/Pollo.obj"></Enemy>	 				
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="143" Y="0" Z="15" Texture="" Model=""></Enemy>	
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="10" X="202" Y="0" Z="48" Texture="" Model=""></Enemy>
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="252" Y="0" Z="20" Texture="" Model=""></Enemy>
+	<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="10" X="254" Y="0" Z="142" Texture="" Model=""></Enemy>
+	<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="330" Y="0" Z="95" Texture="" Model=""></Enemy>
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="356" Y="0" Z="122" Texture="" Model=""></Enemy>									
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="250" Y="0" Z="311" Texture="" Model=""></Enemy>
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="232" Y="0" Z="330" Texture="" Model=""></Enemy>									
+	<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="211" Y="0" Z="307" Texture="" Model=""></Enemy>					
+	<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="250" Y="0" Z="362" Texture="" Model=""></Enemy>					
+	<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="232" Y="0" Z="380" Texture="" Model=""></Enemy>	
+	<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="211" Y="0" Z="358" Texture="" Model=""></Enemy>									
+	<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="422" Y="0" Z="366" Texture="" Model=""></Enemy>	
+	<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="404" Y="0" Z="402" Texture="" Model=""></Enemy>										
+	<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="142" Y="0" Z="348" Texture="" Model=""></Enemy>						
+	<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="136" Y="0" Z="366" Texture="" Model=""></Enemy>						
+	<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="115" Y="0" Z="344" Texture="" Model=""></Enemy>	 				
 																											
 	<!--Luego se puede colocar cada una en su plataforma correspondiente, esto es lo que falta por colocar-->
 	<!--Objeto--><Object Type="1" nombre="guitarra" ataque="15"  accion="2" ancho="4" largo="4" alto="10" X="43" Y="0" Z="50" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
@@ -345,7 +345,7 @@
 			
 	 <Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="243" Y="0" Z="490" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
 	 <!--Sala final boss -->
-		<!--BossMuerte--><Enemy Type="1" enemigo="-1" accion="1" ancho="1" largo="1" alto="10" X="242" Y="0" Z="490" Texture="" Model=""></Enemy>
+	 <!--BossMuerte--><Enemy Type="1" enemigo="-1" accion="1" ancho="1" largo="1" alto="10" X="242" Y="0" Z="490" Texture="" Model=""></Enemy>
 	 </Platform>	
 
 	 </Platform>	
