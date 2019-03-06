@@ -6,6 +6,7 @@
 #include "Menus/Creditos.hpp"
 #include "Menus/Pausa.hpp"
 #include "Menus/EstadoMuerte.hpp"
+#include "Menus/EstadoGanar.hpp"
 #include "Jugando/Jugando.hpp"
 
 GestorEstados::GestorEstados()
@@ -86,6 +87,11 @@ void GestorEstados::CambioEstadoPausa()
 void GestorEstados::CambioEstadoMuerte()
 {
     anyadir(new EstadoMuerte(), false);
+}
+
+void GestorEstados::CambioEstadoGanar()
+{
+    anyadir(new EstadoGanar(), false);
 }
 
 void GestorEstados::anyadir(Estado* _nuevoEstado, bool reemplazar)

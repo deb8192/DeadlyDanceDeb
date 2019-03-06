@@ -110,6 +110,7 @@ void Jugando::ValoresPorDefecto()
     danyo2 = 0;
     contadorEnem = 0;
     int_cpw_aux = 0;
+    enSalaBoss = false;
 
     // Activamos la interfaz
     _interfaz->activar();
@@ -132,11 +133,25 @@ void Jugando::ValoresPorDefectoJugador()
     _jugador->setDanyoCritico(50);
     _jugador->setProAtaCritico(10);
     _jugador->setPosiciones(xIni, yIni, zIni);
+    _jugador->setPosicionesAtaque(xIni, yIni, zIni);
     _jugador->setNewPosiciones(xIni, yIni, zIni);
     _jugador->initPosicionesFisicas(xIni/2, yIni/2, zIni/2);
     //TO DO: revisar que lo haga bien
     //_jugador->setRotacion(0,180,0);
     //_jugador->setNewRotacion(0,180,0);
+}
+
+void Jugando::ValoresPorDefectoBoss()
+{
+    float xIni = _boss->getIniX();
+    float yIni = _boss->getIniY();
+    float zIni = _boss->getIniZ();
+
+    _boss->setVida(_boss->getVidaIni());
+    _boss->setPosiciones(xIni, yIni, zIni);
+    _boss->setPosicionesAtaque(xIni, yIni, zIni);
+    _boss->setNewPosiciones(xIni, yIni, zIni);
+    _boss->initPosicionesFisicas(xIni/2, yIni/2, zIni/2);
 }
 
 // TO DO: Revisar si el cuerpo fisico tambn se tiene q cambiar
@@ -194,6 +209,16 @@ void Jugando::ManejarEventos() {
     {
         _motor->activarPathfinding();
         _motor->ResetKey(KEY_C);
+    }
+
+    if(_motor->EstaPulsado(KEY_B))
+    {
+        unsigned short desplaza = 10;
+        _jugador->setPosiciones(_boss->getIniX()+desplaza, _boss->getIniY(), _boss->getIniZ());
+        _jugador->setNewPosiciones(_boss->getIniX()+desplaza, _boss->getIniY(), _boss->getIniZ());
+        _jugador->initPosicionesFisicas((_boss->getIniX()+desplaza)/2, _boss->getIniY()/2, _boss->getIniZ()/2);
+        enSalaBoss = true;
+        _motor->ResetKey(KEY_B);
     }
     /* **************************************************** */
     
@@ -296,17 +321,12 @@ void Jugando::Update()
         _jugador->getNewZ()
     );
 
-    //colisiones con todos los objetos y _enemigos que no se traspasan
-    if(_fisicas->collideObstacle() || !_fisicas->collidePlatform())
-    {
-        //colisiona
-        jugadorInmovil = true;
-        _jugador->setNewPosiciones(_jugador->getX(), _jugador->getY(), _jugador->getZ());
-    }
-    else
-    {
-        //no colisiona
-        jugadorInmovil = false;
+    if (enSalaBoss) {
+        //colisiones con todos los objetos y el boss
+        jugadorInmovil = _jugador->ColisionEntornoBoss();
+    } else {
+        //colisiones con todos los objetos y enemigos que no se traspasan
+        jugadorInmovil = _jugador->ColisionEntornoEne();
     }
     
     // Actualizar movimiento del jugador
@@ -317,116 +337,156 @@ void Jugando::Update()
         _motor->EstaPulsado(KEY_W)
     );
 
-    for(unsigned int i = 0; i < _enemigos.size(); i++)
-    {
-        _fisicas->updateEnemigos(_enemigos.at(i)->getFisX(),
-            _enemigos.at(i)->getFisY(),
-            _enemigos.at(i)->getFisZ(),
-            i
-        );
-    }
-
     _fisicas->updateJugador(_jugador->getX(),
         _jugador->getY(),
         _jugador->getZ()
     );
 
-    if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y _enemigos buscandole.
-    {
-        this->updateRecorridoPathfinding(nullptr);
-    }
+    //Posicion de escucha
+    _motora->setListenerPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
     
     //Actualizar ataque especial
     this->updateAtEsp();
     this->updateAt(&danyo2);
-
-    //Si se realiza el ataque se comprueban las colisiones
-    if(_jugador->getTimeAtEsp() > 0.0)
-    {
-        _jugador->AtacarEspecialUpdate(&danyo, _enemigos);
-    }
-    else if(_jugador->getTimeAt() > 0.0)
-    {
-        _jugador->AtacarUpdate(danyo2, _enemigos);
-    }
-    else //En caso contrario se colorean los _enemigos de color gris
+    
+    if (!enSalaBoss)
     {
         for(unsigned int i = 0; i < _enemigos.size(); i++)
         {
-            _motor->colorearEnemigo(255, 150, 150, 150, i);
+            _fisicas->updateEnemigos(_enemigos.at(i)->getFisX(),
+                _enemigos.at(i)->getFisY(),
+                _enemigos.at(i)->getFisZ(),
+                i
+            );
         }
-    }
 
-    //Posicion de escucha
-    _motora->setListenerPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
-
-    //actualizamos los _enemigos
-    if(_enemigos.size() > 0)//posiciones interpolacion
-    {
-        //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
-        for(short i=0;(unsigned)i<_enemigos.size();i++)
+        if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
         {
-            if(_enemigos[i] != nullptr)
+            this->updateRecorridoPathfinding(nullptr);
+        }
+    
+        //Si se realiza el ataque se comprueban las colisiones
+        if(_jugador->getTimeAtEsp() > 0.0)
+        {
+            _jugador->AtacarEspecialUpdate(&danyo, _enemigos);
+        }
+        else if(_jugador->getTimeAt() > 0.0)
+        {
+            _jugador->AtacarUpdate(danyo2, _enemigos);
+        }
+
+        //actualizamos los enemigos
+        if(_enemigos.size() > 0)//posiciones interpolacion
+        {
+            //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
+            for(short i=0;(unsigned)i<_enemigos.size();i++)
             {
-                _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                if(_enemigos[i] != nullptr)
+                {
+                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
 
-                    //Este bloque se da si el enemigo esta en el proceso de merodear
-                    if(_enemigos.at(i)->getTimeMerodear() > 0.0f)
-                    {
-                        if(_enemigos.at(i)->getTimeMerodear() == 1.5f)
+                        //Este bloque se da si el enemigo esta en el proceso de merodear
+                        if(_enemigos.at(i)->getTimeMerodear() > 0.0f)
                         {
-                            //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
-                            _enemigos.at(i)->setLastTimeMerodear(_controladorTiempo->GetTiempo(2));
+                            if(_enemigos.at(i)->getTimeMerodear() == 1.5f)
+                            {
+                                //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                                _enemigos.at(i)->setLastTimeMerodear(_controladorTiempo->GetTiempo(2));
+                            }
+                            float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
+                            tiempoActual = _controladorTiempo->GetTiempo(2);
+                            tiempoMerodear = _enemigos.at(i)->getTimeMerodear();
+                            tiempoMerodear -= (tiempoActual - _enemigos.at(i)->getLastTimeMerodear());
+                            if(tiempoActual > _enemigos.at(i)->getLastTimeMerodear())
+                            {
+                                //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeMerodear
+                                //por lo que guardamos en lastTimeMerodear a tiempoActual
+                                _enemigos.at(i)->setLastTimeMerodear(tiempoActual);
+                            }
+                            _enemigos.at(i)->setTimeMerodear(tiempoMerodear);
                         }
-                        float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
-                        tiempoActual = _controladorTiempo->GetTiempo(2);
-                        tiempoMerodear = _enemigos.at(i)->getTimeMerodear();
-                        tiempoMerodear -= (tiempoActual - _enemigos.at(i)->getLastTimeMerodear());
-                        if(tiempoActual > _enemigos.at(i)->getLastTimeMerodear())
+                        //FUNCIONA REGULAR
+                        /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
                         {
-                            //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeMerodear
-                            //por lo que guardamos en lastTimeMerodear a tiempoActual
-                            _enemigos.at(i)->setLastTimeMerodear(tiempoActual);
-                        }
-                        _enemigos.at(i)->setTimeMerodear(tiempoMerodear);
-                    }
-                    //FUNCIONA REGULAR
-                    /*if(_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i))
-                    {
-                        //colisiona
-                        struct DatosDesplazamiento
-                        {   
-                            float x = 0.0f;
-                            float y = 0.0f;
-                            float z = 0.0f;
-                        }
-                        velocidad, posicionesPasadas;
+                            //colisiona
+                            struct DatosDesplazamiento
+                            {   
+                                float x = 0.0f;
+                                float y = 0.0f;
+                                float z = 0.0f;
+                            }
+                            velocidad, posicionesPasadas;
 
-                        velocidad.x = (_enemigos.at(i)->getNewX() - _enemigos.at(i)->getLastX()) * constantes.DOS;
-                        velocidad.y = (_enemigos.at(i)->getNewY() - _enemigos.at(i)->getLastY()) * constantes.DOS;
-                        velocidad.z = (_enemigos.at(i)->getNewZ() - _enemigos.at(i)->getLastZ()) * constantes.DOS;
-                        posicionesPasadas.x = _enemigos.at(i)->getLastX() - velocidad.x;
-                        posicionesPasadas.y = _enemigos.at(i)->getLastY() - velocidad.y;
-                        posicionesPasadas.z = _enemigos.at(i)->getLastZ() - velocidad.z;
+                            velocidad.x = (_enemigos.at(i)->getNewX() - _enemigos.at(i)->getLastX()) * constantes.DOS;
+                            velocidad.y = (_enemigos.at(i)->getNewY() - _enemigos.at(i)->getLastY()) * constantes.DOS;
+                            velocidad.z = (_enemigos.at(i)->getNewZ() - _enemigos.at(i)->getLastZ()) * constantes.DOS;
+                            posicionesPasadas.x = _enemigos.at(i)->getLastX() - velocidad.x;
+                            posicionesPasadas.y = _enemigos.at(i)->getLastY() - velocidad.y;
+                            posicionesPasadas.z = _enemigos.at(i)->getLastZ() - velocidad.z;
 
-                        _enemigos.at(i)->setPosicionesFisicas(-velocidad.x, 0.0f, -velocidad.z);//colisiona
-                        //enemigos.at(i)->setPosiciones(_enemigos.at(i)->getX() - velocidad.x, _enemigos.at(i)->getLasY() - velocidad.y, _enemigos.at(i)->getLastZ() - velocidad.z);//colisiona         
-                        _enemigos.at(i)->setNewPosiciones(_enemigos.at(i)->getNewX() - velocidad.x, _enemigos.at(i)->getNewY() - velocidad.y, _enemigos.at(i)->getNewZ() - velocidad.z);//colisiona                                
-                        _enemigos.at(i)->setLastPosiciones(posicionesPasadas.x, posicionesPasadas.y, posicionesPasadas.z);//colisiona                                
-                        if(_enemigos.at(i)->GetRotation() != 0.0f)
-                        {
-                            _enemigos.at(i)->setNewRotacion(_enemigos.at(i)->getRX(), _enemigos.at(i)->getRY() - constantes.PI_RADIAN, _enemigos.at(i)->getRZ());
-                            _enemigos.at(i)->setRotation(0.0f); 
-                        }
-                    }*/
+                            _enemigos.at(i)->setPosicionesFisicas(-velocidad.x, 0.0f, -velocidad.z);//colisiona
+                            //enemigos.at(i)->setPosiciones(_enemigos.at(i)->getX() - velocidad.x, _enemigos.at(i)->getLasY() - velocidad.y, _enemigos.at(i)->getLastZ() - velocidad.z);//colisiona         
+                            _enemigos.at(i)->setNewPosiciones(_enemigos.at(i)->getNewX() - velocidad.x, _enemigos.at(i)->getNewY() - velocidad.y, _enemigos.at(i)->getNewZ() - velocidad.z);//colisiona                                
+                            _enemigos.at(i)->setLastPosiciones(posicionesPasadas.x, posicionesPasadas.y, posicionesPasadas.z);//colisiona                                
+                            if(_enemigos.at(i)->GetRotation() != 0.0f)
+                            {
+                                _enemigos.at(i)->setNewRotacion(_enemigos.at(i)->getRX(), _enemigos.at(i)->getRY() - constantes.PI_RADIAN, _enemigos.at(i)->getRZ());
+                                _enemigos.at(i)->setRotation(0.0f); 
+                            }
+                        }*/
 
+                }
+                //_enemigos[i]->queVes();
             }
-            //_enemigos[i]->queVes();
+        }
+            //_enemigos->MuereEnemigo(acumulator);
+            //acumulator -= dt;
+        //}
+    }
+    else // Actualiza el BOSS
+    {
+        _fisicas->updateBoss(_boss->getFisX(), _boss->getFisY(),
+            _boss->getFisZ()
+        );
+        
+        //Si se realiza el ataque se comprueban las colisiones
+        if(_jugador->getTimeAtEsp() > 0.0)
+        {
+            _jugador->AtacarEspecialUpdate(&danyo, _boss);
+        }
+        else if(_jugador->getTimeAt() > 0.0)
+        {
+            _jugador->AtacarUpdate(danyo2, _boss);
+        }
+
+        //actualizamos el boss, posiciones interpolacion
+        //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
+        if(_boss != nullptr)
+        {
+            _boss->UpdateBehavior(0, (int*)_jugador, _zonas); //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+            
+            //Este bloque se da si el boss esta en el proceso de merodear
+            if(_boss->getTimeMerodear() > 0.0f)
+            {
+                if(_boss->getTimeMerodear() == 1.5f)
+                {
+                    //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                    _boss->setLastTimeMerodear(_controladorTiempo->GetTiempo(2));
+                }
+                float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
+                tiempoActual = _controladorTiempo->GetTiempo(2);
+                tiempoMerodear = _boss->getTimeMerodear();
+                tiempoMerodear -= (tiempoActual - _boss->getLastTimeMerodear());
+                if(tiempoActual > _boss->getLastTimeMerodear())
+                {
+                    //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeMerodear
+                    //por lo que guardamos en lastTimeMerodear a tiempoActual
+                    _boss->setLastTimeMerodear(tiempoActual);
+                }
+                _boss->setTimeMerodear(tiempoMerodear);
+            }
         }
     }
-        //_enemigos->MuereEnemigo(acumulator);
-        //acumulator -= dt;
-    //}
 }
 
 /**************** updateIA ***************
@@ -456,87 +516,101 @@ void Jugando::UpdateIA()
         _jugador->generarSonido(constantes.CINCO * constantes.SEIS, constantes.DOS, constantes.UNO);
     }
 
-    //En esta parte muere enemigo
-    if(_enemigos.size() > 0){
-        //comprobando los _enemigos para saber si estan muertos
-        for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+    if (!enSalaBoss)
+    {
+        //En esta parte muere enemigo
+        if(_enemigos.size() > 0){
+            //comprobando los _enemigos para saber si estan muertos
+            for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
 
-            if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte()){
+                if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte()){
 
-                //Crear un power-up/dinero
-                //Se crea un power-up?
-                srand(time(NULL));
-                int secreapower = rand() % 101; //Entre 0 y 100
-                cout << "secreapower:" << secreapower << endl;
-
-                if(secreapower <= 100){ //20% de posibilidades
-                    //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
+                    //Crear un power-up/dinero
+                    //Se crea un power-up?
                     srand(time(NULL));
-                    int numpow = 3;
-                    int cualpower = rand() % numpow;
-                    cout << "POWER: " << cualpower << endl;
-                    int ataque;
-                    const char* nombre,*modelo,*textura;
+                    int secreapower = rand() % 101; //Entre 0 y 100
+                    cout << "secreapower:" << secreapower << endl;
 
-                    //DAtos comunes a todos
-                    int x = _enemigos[i]->getX();
-                    int y = _enemigos[i]->getY();
-                    int z = _enemigos[i]->getZ();
-                    int accion = 4;
-                    int ancho = 0.5 ,largo = 0.5,alto = 0.5;
-                    int codigo = -2;
-                    int*  propiedades = new int [6];
+                    if(secreapower <= 100){ //20% de posibilidades
+                        //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
+                        srand(time(NULL));
+                        int numpow = 3;
+                        int cualpower = rand() % numpow;
+                        cout << "POWER: " << cualpower << endl;
+                        int ataque;
+                        const char* nombre,*modelo,*textura;
 
-                    if(cualpower == 0)
-                    {
-                    ataque = 0;
-                    nombre = "vida_up";
-                    modelo = "assets/models/powerup0.obj";
-                    textura = "assets/models/powerup0.mtl";
+                        //DAtos comunes a todos
+                        int x = _enemigos[i]->getX();
+                        int y = _enemigos[i]->getY();
+                        int z = _enemigos[i]->getZ();
+                        int accion = 4;
+                        int ancho = 0.5 ,largo = 0.5,alto = 0.5;
+                        int codigo = -2;
+                        int*  propiedades = new int [6];
+
+                        if(cualpower == 0)
+                        {
+                        ataque = 0;
+                        nombre = "vida_up";
+                        modelo = "assets/models/powerup0.obj";
+                        textura = "assets/models/powerup0.mtl";
+                        }
+                        else if(cualpower == 1)
+                        {
+                        ataque = 1;
+                        nombre = "energy_up";
+                        modelo = "assets/models/powerup1.obj";
+                        textura = "assets/models/powerup1.mtl";
+                        }
+                        else if(cualpower == 2)
+                        {
+                        ataque = 2;
+                        nombre = "gold_up";
+                        modelo = "assets/models/gold.obj";
+                        textura = "assets/models/gold.mtl";
+                        //oro entre 1 y 5 monedas
+                        srand(time(NULL));
+                        int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
+                        propiedades[0] = orocant; //para pasarlo a crear objeto
+                        }
+
+                        //Crear objeto
+                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
                     }
-                    else if(cualpower == 1)
-                    {
-                    ataque = 1;
-                    nombre = "energy_up";
-                    modelo = "assets/models/powerup1.obj";
-                    textura = "assets/models/powerup1.mtl";
-                    }
-                    else if(cualpower == 2)
-                    {
-                    ataque = 2;
-                    nombre = "gold_up";
-                    modelo = "assets/models/gold.obj";
-                    textura = "assets/models/gold.mtl";
-                    //oro entre 1 y 5 monedas
-                    srand(time(NULL));
-                    int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
-                    propiedades[0] = orocant; //para pasarlo a crear objeto
-                    }
 
-                    //Crear objeto
-                    this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
-                }
+                    //Borrar enemigo
+                    _motor->EraseEnemigo(i);
+                    _fisicas->EraseEnemigo(i);
+                    EraseEnemigo(i);
 
-                //Borrar enemigo
-                _motor->EraseEnemigo(i);
-                _fisicas->EraseEnemigo(i);
-                EraseEnemigo(i);
-
-            }else{
-                if(_enemigos[i]->estasMuerto()){
-                    _enemigos[i]->MuereEnemigo(i);
-                }
-                else
-                {
-                    //si no esta muerto ni piensa morirse XD ejecutamos ia
-                    if(_enemigos[i] != nullptr)
-                    {
-                        _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                }else{
+                    if(_enemigos[i]->estasMuerto()){
+                        _enemigos[i]->MuereEnemigo(i);
                     }
                     else
-                        _enemigos[i]->RunIA(true);
+                    {
+                        //si no esta muerto ni piensa morirse XD ejecutamos ia
+                        if(_enemigos[i] != nullptr)
+                        {
+                            _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                        }
+                    }
                 }
             }
+        }
+    }
+    else
+    {
+        //En esta parte muere el BOSS
+        if (!_boss->estasMuerto())
+        {
+            _boss->UpdateIA();
+        }
+        else
+        {
+            //TO DO: borrar fisicas y cosas
+            Juego::GetInstance()->estado.CambioEstadoGanar();
         }
     }
 }
@@ -554,43 +628,6 @@ void Jugando::Render()
     lastDrawTime = drawTime;
     drawTime = _controladorTiempo->GetTiempo(2);
 
-
-
-    //Dibujado del personaje
-    _jugador->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
-    _jugador->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-    _jugador->UpdateTimeMove(drawTime - lastDrawTime);
-    _motor->mostrarJugador(_jugador->getX(),
-        _jugador->getY(),
-        _jugador->getZ(),
-        _jugador->getRX(),
-        _jugador->getRY(),
-        _jugador->getRZ()
-    );
-    
-    //Dibujado de los _enemigos
-    for(unsigned int i = 0; i < _enemigos.size(); i++)
-    {
-        _enemigos.at(i)->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
-        _enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
-        _enemigos.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-        _enemigos.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
-        _motor->mostrarEnemigos(_enemigos.at(i)->getX(),
-            _enemigos.at(i)->getY(),
-            _enemigos.at(i)->getZ(),
-            _enemigos.at(i)->getRX(),
-            _enemigos.at(i)->getRY(),
-            _enemigos.at(i)->getRZ(),
-            i
-        );
-        _motor->dibujarObjetoTemporal(_enemigos.at(i)->getFisX()*2,
-            _enemigos.at(i)->getFisY()*2,
-            _enemigos.at(i)->getFisZ()*2,
-            _enemigos.at(i)->getRX(),
-            _enemigos.at(i)->getRY(),
-            _enemigos.at(i)->getRZ(),3 , 3, 3, 2);
-    }
-
     //Dibujado de las puertas, las palancas, los objetos y los cofres
     for(unsigned int i = 0; i < _interactuables.size(); i++)
     {
@@ -605,33 +642,100 @@ void Jugando::Render()
             _interactuables.at(i)->GetPosicionObjetos()
         );
     }
+    
+    //Dibujado del personaje
+    _jugador->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
+    _jugador->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
+    _jugador->UpdateTimeMove(drawTime - lastDrawTime);
+    _motor->mostrarJugador(_jugador->getX(),
+        _jugador->getY(),
+        _jugador->getZ(),
+        _jugador->getRX(),
+        _jugador->getRY(),
+        _jugador->getRZ()
+    );
+    
+    if (!enSalaBoss)
+    {
+        //Dibujado de los enemigos
+        for(unsigned int i = 0; i < _enemigos.size(); i++)
+        {
+            _enemigos.at(i)->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
+            _enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
+            _enemigos.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
+            _enemigos.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
+            _motor->mostrarEnemigos(_enemigos.at(i)->getX(),
+                _enemigos.at(i)->getY(),
+                _enemigos.at(i)->getZ(),
+                _enemigos.at(i)->getRX(),
+                _enemigos.at(i)->getRY(),
+                _enemigos.at(i)->getRZ(),
+                i
+            );
+            _motor->dibujarObjetoTemporal(_enemigos.at(i)->getFisX()*2,
+                _enemigos.at(i)->getFisY()*2,
+                _enemigos.at(i)->getFisZ()*2,
+                _enemigos.at(i)->getRX(),
+                _enemigos.at(i)->getRY(),
+                _enemigos.at(i)->getRZ(),3 , 3, 3, 2);
+        }
+
+        //Dibujado de ataques enemigos
+        for(unsigned int i = 0; i < _enemigos.size(); i++)
+        {
+            _motor->dibujarObjetoTemporal(
+                _enemigos.at(i)->getAtX(),
+                _enemigos.at(i)->getAtY(),
+                _enemigos.at(i)->getAtZ(),
+                _enemigos.at(i)->getRX(),
+                _enemigos.at(i)->getRY(),
+                _enemigos.at(i)->getRZ(),
+                4,
+                4,
+                4,
+                2);
+        }
+    }
+    else
+    {
+        _boss->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
+        _boss->UpdateTimeMove(drawTime - lastDrawTime);
+        _boss->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
+        _boss->UpdateTimeRotate(drawTime - lastDrawTime);
+        _motor->mostrarBoss(_boss->getX(),
+            _boss->getY(),
+            _boss->getZ(),
+            _boss->getRX(),
+            _boss->getRY(),
+            _boss->getRZ()
+        );
+        _motor->dibujarObjetoTemporal(_boss->getFisX()*2,
+            _boss->getFisY()*2,
+            _boss->getFisZ()*2,
+            _boss->getRX(),
+            _boss->getRY(),
+            _boss->getRZ(),3 , 3, 3, 2);
+
+        //Dibujado de ataque boss
+        _motor->dibujarObjetoTemporal(
+            _boss->getAtX(),
+            _boss->getAtY(),
+            _boss->getAtZ(),
+            _boss->getRX(),
+            _boss->getRY(),
+            _boss->getRZ(),
+            4,
+            4,
+            4,
+            2);
+    }
 
     //Dibujado del ataque especial del jugador
     if(_jugador->getTimeAtEsp() > 0.0f)
     {
         _jugador->RenderAtaqueEsp(_controladorTiempo->GetUpdateTime(),
             (drawTime - lastDrawTime));
-        ////Ataque especial heavy
-        //if(strcmp(_jugador->getArmaEspecial()->getNombre(), "Heavy") == 0)
-        //Ataque especial bailaora
-        //else if(strcmp(_jugador->getArmaEspecial()->getNombre(), "Bailaora") == 0)
     }
-
-    //Dibujado de ataques
-    /*for(unsigned int i = 0; i < _enemigos.size(); i++)
-    {
-        _motor->dibujarObjetoTemporal(
-            _enemigos.at(i)->getAtX(),
-            _enemigos.at(i)->getAtY(),
-            _enemigos.at(i)->getAtZ(),
-            _enemigos.at(i)->getRX(),
-            _enemigos.at(i)->getRY(),
-            _enemigos.at(i)->getRZ(),
-            4,
-            4,
-            4,
-            2);
-    }*/
 
     //Dibujado zonas
     for(unsigned int i=0; i < _zonas.size(); i++)
@@ -665,6 +769,7 @@ void Jugando::Reanudar()
         DesactivarDebug();
         // valores por defecto del jugador
         ValoresPorDefectoJugador();
+        ValoresPorDefectoBoss();
 
         cout << "Cambia: "<<_jugador->getX() << endl;
 
@@ -737,7 +842,7 @@ void Jugando::CrearJugador()
 
     _motor->CargarJugador(_jugador->getX(),_jugador->getY(), _jugador->getZ(),
         _jugador->GetAncho(), _jugador->GetLargo(), _jugador->GetAlto(),
-        _jugador->GetModelo(), _jugador->GetTextura());
+        _jugador->GetModelo());
 
     _motor->CargarArmaEspecial(_jugador->getX(),_jugador->getY(),
         _jugador->getZ(), _jugador->getRutaArmaEsp(),"");
@@ -889,7 +994,7 @@ void Jugando::cargarCofres(int num)
             //lo cargamos por primera vez en el motor de graficos
             _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->getObjeto(), _recolectables[rec_col]->getTextura());
             //lo cargamos por primera vez en el motor de fisicas
-            _fisicas->crearCuerpo(0,0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,2,_recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(), 6);
+            _fisicas->crearCuerpo(0,0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,2,_recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(), 9);
             //borramos el recolectable de nivel, _motor grafico y motor fisicas
             _recolectables.erase(_recolectables.begin() + rec_col);
             _motor->EraseColectable(rec_col);

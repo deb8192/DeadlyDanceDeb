@@ -38,6 +38,7 @@ class Jugando: public Estado {
         //Funciones propias
         void ValoresPorDefecto();
         void ValoresPorDefectoJugador();
+        void ValoresPorDefectoBoss();
         void PosicionesIniEnemigos();
         void DesactivarDebug();
         void InteractuarNivel();
@@ -77,6 +78,7 @@ class Jugando: public Estado {
         
         Sala* _primeraSala;// la primera sala del arbol
         
+        bool enSalaBoss;
         Enemigo* _boss;
         //TO DO: hacerle un reserve y q el vector sea un puntero
         std::vector<Enemigo*> _enemigos;//Enemigos en scena

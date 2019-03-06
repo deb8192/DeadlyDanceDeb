@@ -13,12 +13,15 @@ Murcielago::Murcielago(float nX, float nY, float nZ, int maxVida)
     maxRotacion = constantes.PI_CUARTOS; 
     rotation = constantes.CERO;
     zonaElegida = nullptr;
+
+    _modelo = "assets/models/Murcielago.obj";
 }
 
 Murcielago::~Murcielago()
 {
     delete[] _ordenes;
     _ordenes = nullptr;
+    _modelo = nullptr;
 }
 
 /***************** RunIA *****************

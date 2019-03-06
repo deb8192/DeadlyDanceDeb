@@ -240,13 +240,12 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre, int* id)
         int largo = enem.attribute("largo").as_int();//nos devuelve un int 
         int alto = enem.attribute("ancho").as_int();//nos devuelve un int
         int enemigo = enem.attribute("enemigo").as_int(); //nos da un char[] = string
-        const char* modelo  =  enem.attribute("Model").value(); //nos da un char[] = string
         
         if (enemigo >= 0)
         {
-            CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,modelo,padren,id); //cargamos el enemigo
+            CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,padren,id); //cargamos el enemigo
         } else {
-            CrearBoss(accion,x,y,z,ancho,largo,alto,padren,id);
+            CrearBoss(accion,enemigo,x,y,z,ancho,largo,alto,padren,id);
         }
     }
     for (pugi::xml_node obj = plat.child("Object"); obj; obj = obj.next_sibling("Object"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -347,8 +346,8 @@ void CargadorNiveles::CrearLuz(int x,int y,int z)
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
-void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto,
-    const char* ruta_objeto, Sala* sala, int* id)
+void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z, 
+    int ancho, int largo, int alto, Sala* sala, int* id)
 {
     //accion indicara futuramente que tipo de enemigo sera (herencia)
     switch (enemigo)
@@ -394,9 +393,11 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z, i
         //fin ia
     _enemigos.back()->SetEnemigo(enemigo);
     _enemigos.back()->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _enemigos.back()->setPosicionesAtaque(x,y,z);
     _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    _enemigos.back()->initPosicionesAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _enemigos.back()->setVelocidadMaxima(1.0f);
     _enemigos.back()->setBarraAtEs(0);
     _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
@@ -411,25 +412,28 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z, i
     _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     
-    _motor->CargarEnemigos(x,y,z,ruta_objeto);//creamos la figura
+    _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo());//creamos la figura
 
     _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2);
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
 }
 
-void CargadorNiveles::CrearBoss(int accion, int x,int y,int z, 
+void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z, 
     int ancho, int largo, int alto, Sala* sala, int* id)
 {
     _boss = new MuerteBoss(x,y,z, 350); // Posiciones, vida
-    _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
+    _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
+    //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
     _boss->setID(++(*id));//le damos el id unico en esta partida al enemigo
 
-    //_boss->SetEnemigo(enemigo); // No se utiliza por ahora
+    _boss->SetEnemigo(enemigo); // Se utiliza en UpdateBehavior()
     _boss->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _boss->setPosicionesAtaque(x, y, z);
     _boss->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _boss->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _boss->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    _boss->initPosicionesAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _boss->setVelocidadMaxima(1.0f);
     _boss->setBarraAtEs(0);
     _boss->definirSala(sala);//le pasamos la sala en donde esta
@@ -443,11 +447,11 @@ void CargadorNiveles::CrearBoss(int accion, int x,int y,int z,
     _boss->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     _boss->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
 
-    _motor->CargarEnemigos(x,y,z,_boss->GetModelo());//creamos la figura
+    _motor->CargarBoss(x,y,z,_boss->GetModelo());//creamos la figura
 
-   // _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2);
-    //_fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
-    //_fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
+    _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,-1);
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,10); //Para ataque
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,11); //Para ataque especial
 }
 
 //lo utilizamos para crear zonas

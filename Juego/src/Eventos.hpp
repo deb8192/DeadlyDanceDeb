@@ -16,6 +16,7 @@ namespace idsEventos
         // TO DO: poner para que se utilizan
         KEY_ESPACIO,    // ATAQUE NORMAL
         KEY_ACEPTAR,    // --------------- POR AHORA NO SE SABE
+        KEY_B,          // TRASLADAR JUGADOR AL BOSS
         KEY_C,          // ACTIVAR/DESACTIVAR PATHFINDING
         KEY_E,          // COGER/SOLTAR OBJETOS
         KEY_I,          // --------------- POR AHORA NADA
@@ -44,6 +45,7 @@ namespace idsEventos
         GUI_ID_REINICIAR_HANOI,
         GUI_ID_MENU_BUTTON,
         GUI_ID_REINICIAR_BUTTON,
+        GUI_ID_CONTINUAR,
         GUI_ID_ARBOLES_BUTTON,
 
         //fin de los nuevos eventos

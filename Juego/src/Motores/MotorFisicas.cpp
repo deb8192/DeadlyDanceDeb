@@ -32,72 +32,75 @@ MotorFisicas::~MotorFisicas()
     //std::vector<unsigned int> relacionInteractuablesObstaculos
 
     jugador = nullptr;
-     jugadorBody  = nullptr;
+    jugadorBody  = nullptr;
     armaAtEsp = nullptr;
     jugadorAtack = nullptr;
     arma = nullptr;
+    _boss = nullptr;
+    _bossAtack = nullptr;
+    _bossAtEsp = nullptr;
 
-    // Liberar memoria
     short tam = enemigos.size();
     for(short i=0; i < tam; i++)
     {
-        delete enemigos.at(i);
+        enemigos.at(i) = nullptr;
     }
     enemigos.clear();
 
     tam = enemigosAtack.size();
     for(short i=0; i < tam; i++)
     {
-        delete enemigosAtack.at(i);
+        enemigosAtack.at(i) = nullptr;
     }
     enemigosAtack.clear();
 
     tam = armaAtEspEne.size();
     for(short i=0; i < tam; i++)
     {
-        delete armaAtEspEne.at(i);
+        armaAtEspEne.at(i) = nullptr;
     }
     armaAtEspEne.clear();
 
     tam = recolectables.size();
     for(short i=0; i < tam; i++)
     {
-        delete recolectables.at(i);
+        recolectables.at(i) = nullptr;
     }
     recolectables.clear();
 
     tam = recolectables_powerup.size();
     for(short i=0; i < tam; i++)
     {
-        delete recolectables_powerup.at(i);
+        recolectables_powerup.at(i) = nullptr;
     }
     recolectables_powerup.clear();
 
     tam = interactuables.size();
     for(short i=0; i < tam; i++)
     {
-        delete interactuables.at(i);
+        interactuables.at(i) = nullptr;
     }
     interactuables.clear();
 
     tam = obstaculos.size();
     for(short i=0; i < tam; i++)
     {
-        delete obstaculos.at(i);
+        obstaculos.at(i) = nullptr;
     }
     obstaculos.clear();
 
     tam = plataformas.size();
     for(short i=0; i < tam; i++)
     {
-        delete plataformas.at(i);
+        plataformas.at(i) = nullptr;
     }
     plataformas.clear();
 
+    // Liberar memoria
+    delete world;
     delete space;
     delete _unica_instancia;
 }
-
 
 void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator)
 {
@@ -109,93 +112,126 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
     rp3d::CollisionBody * cuerpo;
     cuerpo = space->createCollisionBody(transformacion);
 
-   if(type == 1)//esfera
-   {
-        SphereShape * forma = new SphereShape(ancho);
-        cuerpo->addCollisionShape(forma,transformacion);
-    }
-    else if(type == 2)//cubo (boundingbox)
+    switch(type)
     {
-        rp3d::Vector3 medidas(ancho,alto,largo);
-        BoxShape * forma = new BoxShape(medidas);
-        cuerpo->addCollisionShape(forma,transformacion);
+        case 1: //esfera
+        {
+            SphereShape * forma = new SphereShape(ancho);
+            cuerpo->addCollisionShape(forma,transformacion);
+        }
+            break;
+        case 2: //cubo (boundingbox)
+        {
+            rp3d::Vector3 medidas(ancho,alto,largo);
+            BoxShape * forma = new BoxShape(medidas);
+            cuerpo->addCollisionShape(forma,transformacion);
+        }
+            break;
+        default: //type == 3, capsula (ideal para personajes)
+        {
+            CapsuleShape * forma = new CapsuleShape(ancho,alto);
+            cuerpo->addCollisionShape(forma,transformacion);
+        }
+            break;
     }
-    else if(type == 3)//capsula (ideal para personajes)
-    {
-        CapsuleShape * forma = new CapsuleShape(ancho,alto);
-        cuerpo->addCollisionShape(forma,transformacion);
-    }
-    if(typeCreator == 1)//jugador
-    {
-        rp3d::RigidBody* rigido;
-        rigido = world->createRigidBody(transformacion); 
-        rp3d::Vector3 medicion(2,alto,2);
-        BoxShape * ocupamiento = new BoxShape(medicion);
-        rigido->addCollisionShape(ocupamiento,transformacion,rp3d::decimal(10));
-        rigido->enableGravity(false);
 
-        jugadorBody = rigido;
-        jugadorBody->setType(BodyType::KINEMATIC);
-        jugador = cuerpo;
-    }
-    else if(typeCreator == 2)//enemigos
+    switch(typeCreator)
     {
-        enemigos.push_back(cuerpo);
-    }
-    else if(typeCreator == 3)//objetos
-    {
-       
-        //Recolectable power ups
-        if(accion == 4)
+        case 1: //jugador
         {
-           recolectables_powerup.push_back(cuerpo);
+            rp3d::RigidBody* rigido;
+            rigido = world->createRigidBody(transformacion); 
+            rp3d::Vector3 medicion(2,alto,2);
+            BoxShape * ocupamiento = new BoxShape(medicion);
+            rigido->addCollisionShape(ocupamiento,transformacion,rp3d::decimal(10));
+            rigido->enableGravity(false);
+
+            jugadorBody = rigido;
+            jugadorBody->setType(BodyType::KINEMATIC);
+            jugador = cuerpo;
         }
-        //Objetos con los que interactuar como puertas
-        if(accion == 3)
+            break;
+        case 2: //enemigos
         {
-            relacionInteractuablesObstaculos.push_back(obstaculos.size());
-            obstaculos.push_back(cuerpo);
-            //Se le anade una zona de deteccion mediante colision
-            rp3d::CollisionBody * deteccion;
-            SphereShape * detector = new SphereShape(alto);
-            deteccion = space->createCollisionBody(transformacion);
-            deteccion->addCollisionShape(detector,transformacion);
-            interactuables.push_back(deteccion);
+            enemigos.push_back(cuerpo);
         }
-        //Objetos que recoger como armas y llaves
-        if(accion == 2)
+            break;
+        case 3: //objetos
         {
-            recolectables.push_back(cuerpo);
+            //Recolectable power ups
+            if(accion == 4)
+            {
+            recolectables_powerup.push_back(cuerpo);
+            }
+            //Objetos con los que interactuar como puertas
+            if(accion == 3)
+            {
+                relacionInteractuablesObstaculos.push_back(obstaculos.size());
+                obstaculos.push_back(cuerpo);
+                //Se le anade una zona de deteccion mediante colision
+                rp3d::CollisionBody * deteccion;
+                SphereShape * detector = new SphereShape(alto);
+                deteccion = space->createCollisionBody(transformacion);
+                deteccion->addCollisionShape(detector,transformacion);
+                interactuables.push_back(deteccion);
+            }
+            //Objetos que recoger como armas y llaves
+            if(accion == 2)
+            {
+                recolectables.push_back(cuerpo);
+            }
+            //Obstaculos que se interponen ante el jugador
+            if(accion == 1)
+            {
+                obstaculos.push_back(cuerpo);
+            }
         }
-        //Obstaculos que se interponen ante el jugador
-        if(accion == 1)
+            break;
+        case 4: //ataque de jugador
         {
-            obstaculos.push_back(cuerpo);
+            jugadorAtack = cuerpo;
         }
-    }
-    else if(typeCreator == 6)//objetos
-    {
-        plataformas.push_back(cuerpo);
-    }
-    else if(typeCreator == 4)//ataque de jugador
-    {
-        jugadorAtack = cuerpo;
-    }
-    else if(typeCreator == 5)//objetos
-    {
-        armaAtEsp = cuerpo;
-    }
-    else if(typeCreator == 6)//objetos
-    {
-        arma = cuerpo;
-    }
-    else if(typeCreator == 7)//ataque enemigos
-    {
-        enemigosAtack.push_back(cuerpo);
-    }
-    else if(typeCreator == 8)//objetos
-    {
-        armaAtEspEne.push_back(cuerpo);
+            break;
+        case 5:
+        {
+            armaAtEsp = cuerpo;
+        }
+            break;
+        case 6:
+        {
+            plataformas.push_back(cuerpo);
+        }
+            break;
+        case 7: //ataque enemigos
+        {
+            enemigosAtack.push_back(cuerpo);
+        }
+            break;
+        case 8:
+        {
+            armaAtEspEne.push_back(cuerpo);
+        }
+            break;
+        case 9:
+        {
+            arma = cuerpo;
+        }
+            break;
+        case 10:
+        {
+            _bossAtack = cuerpo;
+        }
+            break;
+        case 11:
+        {
+            _bossAtEsp = cuerpo;
+        }
+            break;
+        default: // Boss
+        {
+            _boss = cuerpo;
+        }
+            break;
     }
     // std::cout << "px: " << posiciones.x << std::endl;
     // std::cout << "py: " << posiciones.y << std::endl;
@@ -333,29 +369,45 @@ int MotorFisicas::collideInteractuable()
     return -1;
 }
 
-bool MotorFisicas::collideObstacle()
+bool MotorFisicas::collideObstaculos()
 {
     //abra que indicar tipo de objeto de alguna manera (que sean obstaculos)
     for(long unsigned int i = 0; i < obstaculos.size();i++)
     {
-      if(obstaculos[i])
-      {
+        if(obstaculos[i])
+        {
             if(space->testOverlap(jugador,obstaculos[i]))
             {
                 return true;
             }
-      }
+        }
     }
+}
+
+bool MotorFisicas::collideObstacle()
+{
+    if (collideObstaculos())
+        return true;
 
     //tampoco debe intersectar en el espacio con los enemigos
     for(long unsigned int i = 0; i < enemigos.size();i++)
     {
-      if(space->testOverlap(jugador,enemigos[i]))
-      {
-        return true;
-      }
+        if(space->testOverlap(jugador,enemigos[i]))
+        {
+            return true;
+        }
     }
+    return false;
+}
 
+bool MotorFisicas::collideBossObstacle()
+{
+    if (collideObstaculos())
+        return true;
+
+    //tampoco debe intersectar en el espacio con el boss
+    if(space->testOverlap(jugador,_boss))
+        return true;
     return false;
 }
 
@@ -602,6 +654,15 @@ void MotorFisicas::updateJugador(float x, float y, float z)
     }
 }
 
+void MotorFisicas::updateBoss(float x, float y, float z)
+{
+    rp3d::Vector3 posiciones(x,y,z);
+    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+    Transform transformacion(posiciones,orientacion);
+    _boss->setTransform(transformacion);
+
+}
+
 void MotorFisicas::updateEnemigos(float x, float y, float z, unsigned int i)
 {
     if(enemigos.at(i) != nullptr)
@@ -627,6 +688,17 @@ void MotorFisicas::updatePuerta(float x, float y, float z, float rx, float ry, f
     }
 }
 
+void MotorFisicas::updateAtaqueBoss(float x, float y, float z)
+{
+    if(_boss != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        _bossAtack->setTransform(transformacion);
+    }
+}
+
 void MotorFisicas::updateAtaqueEnemigos(float x, float y, float z, unsigned int i)
 {
     if(i < enemigos.size() && enemigos.at(i) != nullptr)
@@ -648,8 +720,6 @@ void MotorFisicas::updateAtaquEspecEnemigos(float x, float y, float z, unsigned 
         armaAtEspEne.at(i)->setTransform(transformacion);
     }
 }
-
-
 
 vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z)
 {
@@ -692,6 +762,39 @@ vector<unsigned int> MotorFisicas::updateArma(float x, float y, float z)
     return atacados;
 }
 
+bool MotorFisicas::updateArmaBoss(float x, float y, float z)
+{
+    if(jugadorAtack != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        jugadorAtack->setTransform(transformacion);
+        
+        if(space->testOverlap(jugadorAtack, _boss))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool MotorFisicas::updateArmaEspecialBoss(float x, float y, float z)
+{
+    if(armaAtEsp != nullptr)
+    {
+        rp3d::Vector3 posiciones(x,y,z);
+        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+        Transform transformacion(posiciones,orientacion);
+        armaAtEsp->setTransform(transformacion);
+        
+        if(space->testOverlap(armaAtEsp, _boss))
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 void MotorFisicas::updateAtaque(float x, float y, float z, float rx, float ry, float rz)
 {
@@ -740,6 +843,21 @@ CollisionWorld* MotorFisicas::getWorld()
 CollisionBody* MotorFisicas::getJugador()
 {
   return jugador;
+}
+
+CollisionBody* MotorFisicas::getBoss()
+{
+  return _boss;
+}
+
+CollisionBody* MotorFisicas::getBossAtack()
+{
+  return _bossAtack;
+}
+
+CollisionBody* MotorFisicas::getBossAtEsp()
+{
+  return _bossAtEsp;
 }
 
 CollisionBody* MotorFisicas::getEnemies(int n)
