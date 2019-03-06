@@ -38,6 +38,7 @@ class CargadorNiveles
         std::vector<Interactuable*> GetInteractuables();
         std::vector<Recolectable*> GetPowerup();
         Enemigo* GetBoss();
+        std::vector<Waypoint*> GetWaypoints();
 
         Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
