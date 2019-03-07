@@ -55,8 +55,92 @@ Enemigo::~Enemigo()
     _motor = nullptr;
     _eventos = nullptr;
 
-    // INnpc, INdrawable e INsentidos
-    // Nada
+    // Enemigo
+    atx = 0;
+    atespx = 0;
+    aty = 0;
+    atespy = 0;
+    atz = 0;
+    atespz = 0;
+    atgx = 0;
+    atgy = 0;
+    atgz = 0;
+    atespposX = 0;
+    atespposY = 0;
+    atespposZ = 0;
+    incrAtDisCirc = 0;
+    atacktime = 0;
+    velocidadMaxima = 0;
+    tipoEnemigo = 0;
+    pos_ataques = 0;
+    accionRealizada = false;
+
+    // INnpc
+    tipo = 0;
+    vida = 0;
+    barraAtEs = 0;
+    ataque = 0;
+    suerte = 0;
+    danyoCritico = 0;
+    proAtaCritico = 0;
+    //TO DO: int buffos[4];
+    atackTime = 0;
+    atackEspTime = 0;
+    lastAtackTime = 0;
+    lastAtackEspTime = 0;
+    animacionMuerteTiem = 0;
+    tiempoPasadoMuerte = 0;
+    tiempoAtaque = 0;
+    tiempoPasadoAtaque = 0;
+    tiempoAtaEsp = 0;
+    tiempoPasadoAtaEsp = 0;
+    tiempoCogerObjeto = 0;
+    tiempoPasadoCogerObjeto = 0;
+    tiempoEnMorir = 0;
+    tiempoPasadoEnMorir = 0;
+
+    // INdrawable
+    posIni.x = 0;
+    posIni.y = 0;
+    posIni.z = 0;
+
+    posActual.x = 0;
+    posActual.y = 0;
+    posActual.z = 0;
+
+    posPasada.x = 0;
+    posPasada.y = 0;
+    posPasada.z = 0;
+
+    posFutura.x = 0;
+    posFutura.y = 0;
+    posFutura.z = 0;
+
+    posFisicas.x = 0;
+    posFisicas.y = 0;
+    posFisicas.z = 0;
+
+    rotActual.x = 0;
+    rotActual.y = 0;
+    rotActual.z = 0;
+
+    rotPasada.x = 0;
+    rotPasada.y = 0;
+    rotPasada.z = 0;
+
+    rotFutura.x = 0;
+    rotFutura.y = 0;
+    rotFutura.z = 0;
+
+    moveTime = 0;
+    rotateTime = 0;
+    rotation = 0;
+    id = 0;
+    animacion = 0;
+    animacionAnterior = 0;
+
+    // INsentidos
+    //de momento nada
 }
 
 float Enemigo::getX()
@@ -361,19 +445,19 @@ int Enemigo::Atacar(int i)
             distance = 5;
         }
 
-      //Calcular posiciones
-      atx = this->getX();
-      atx += (distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN));
-      aty = this->getY();
-      atz = this->getZ();
-      atz += (distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN));
-      atposZ = iniAtposZ;
-      atposX = iniAtposX;
-      atposZ += atz - posIni.z;
-      atposX += atx - posIni.x;
-      atgx = this->getRX();
-      atgy = this->getRY();
-      atgz = this->getRZ();
+        //Calcular posiciones
+        atx = this->getX();
+        atx += (distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN));
+        aty = this->getY();
+        atz = this->getZ();
+        atz += (distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN));
+        atposZ = iniAtposZ;
+        atposX = iniAtposX;
+        atposZ += atz - posIni.z;
+        atposX += atx - posIni.x;
+        atgx = this->getRX();
+        atgy = this->getRY();
+        atgz = this->getRZ();
 
         if (i >= 0) // Comprueba si ataca al boss o a los enemigos
         {
@@ -401,6 +485,7 @@ int Enemigo::Atacar(int i)
                 cout << "danyo del boss -> " << danyo << endl;
             }
         }
+        _fisicas = nullptr;
     }
     else
     {
@@ -477,18 +562,22 @@ int Enemigo::AtacarEspecial()
             danyo = roundf(danyoF * por10) / por10;
         }
         barraAtEs = 0;
+        _fisicas = nullptr;
         return danyo;
     }
     else
     {
         barraAtEs += 1;
     }
+    _fisicas = nullptr;
     return danyo;
 }
 
-bool Enemigo::estasMuerto(){
+bool Enemigo::estasMuerto()
+{
     //cout << "Muere enemigo??: " << vida << endl;
-    if(vida <= 0){
+    if(vida <= 0)
+    {
         return true;
     }
     return false;
@@ -1077,7 +1166,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             SetPedirAyuda(true); //En caso de no estar buscando a ningun aliado se anade este como peticionario
             return true;
         }
-        //cout << " grita pidiendo ayuda "<< endl;
         return false;
     }
 

@@ -29,6 +29,25 @@ Sala::Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type)
         delete _waypoints.at(i);
     }
     _waypoints.clear();
+
+    if (entradas.size() > 0)
+    {
+        for (unsigned short i=0; i<entradas.size(); ++i)
+        {
+            delete entradas.at(i);
+        }
+        entradas.clear();
+    }
+    
+    if (salidas.size() > 0)
+    {
+        for (unsigned short i=0; i<salidas.size(); ++i)
+        {
+            delete salidas.at(i);
+        }
+        salidas.clear();
+    }
+
     ancho = 0;
     largo = 0;
     alto = 0;

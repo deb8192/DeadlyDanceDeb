@@ -382,6 +382,7 @@ bool MotorFisicas::collideObstaculos()
             }
         }
     }
+    return false;
 }
 
 bool MotorFisicas::collideObstacle()

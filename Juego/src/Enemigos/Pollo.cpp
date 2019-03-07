@@ -129,7 +129,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                 {
                     modo = MODO_ATAQUE;
                     this->setTimeMerodear(constantes.CERO);
-                    cout<<"Pide ayuda a los aliados"<<endl;
+                    //cout<<"Pide ayuda a los aliados"<<endl;
                     this->PedirAyuda(ayuda);
                     funciona = true;
                 }
@@ -168,7 +168,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                         {
                             modo = MODO_ATAQUE;
                             this->setTimeMerodear(constantes.CERO);
-                            cout<<"Pide ayuda a los aliados"<<endl;
+                            //cout<<"Pide ayuda a los aliados"<<endl;
                             this->PedirAyuda(ayuda);
                             funciona = true;
                         }
@@ -191,7 +191,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                         { 
                             modo = MODO_ATAQUE;
                             this->setTimeMerodear(constantes.CERO);
-                            cout<<"Pide ayuda a los aliados"<<endl;
+                            //cout<<"Pide ayuda a los aliados"<<endl;
                             this->PedirAyuda(ayuda);
                             funciona = true;
                         }
