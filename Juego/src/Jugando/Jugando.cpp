@@ -93,7 +93,7 @@ void Jugando::Iniciar()
     _motor->CargarInterfaz();
     
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-    CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
+    CargarNivel(5, 1); //(level, player) 1 = heavy / 2 = bailaora
 
     reiniciando = false;
     
@@ -607,6 +607,10 @@ void Jugando::UpdateIA()
 
                         //Crear objeto
                         this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+                    }
+
+                    if (_enemigos[i]->GetPedirAyuda()) {
+                        enemDejarDePedirAyuda();
                     }
 
                     //Borrar enemigo
@@ -1761,6 +1765,7 @@ void Jugando::EraseEnemigo(std::size_t i)
 
 void Jugando::enemDejarDePedirAyuda()
 {
+    cout << "\e[42m Deja de pedir ayuda \e[0m" << endl;
     _enemPideAyuda->SetPedirAyuda(false);
     _enemPideAyuda = nullptr;
 }
