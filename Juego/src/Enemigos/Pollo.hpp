@@ -10,7 +10,7 @@ class Pollo : public Enemigo
         ~Pollo();
         Pollo(float nX, float nY, float nZ, int maxVida);
         void RunIA();
-        void UpdatePollo(short *i, int* _jug);
+        void UpdatePollo(short *i, int* _jug, bool ayuda);
         void SetNuevasOrdenes(short i);
 
     private:

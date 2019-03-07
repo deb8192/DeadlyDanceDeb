@@ -60,7 +60,7 @@ class Jugando: public Estado {
         void updateRecorridoPathfinding(Enemigo* );
 
         void EraseEnemigo(std::size_t i);
-        void setEnemigoPideAyuda(Enemigo* );
+        void enemDejarDePedirAyuda();
         Enemigo* getEnemigoPideAyuda();
         std::vector<Enemigo*> getEnemigos();
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp

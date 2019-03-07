@@ -6,7 +6,6 @@
 
 Jugando::Jugando()
 {
-    _enemPideAyuda = nullptr;
 }
 
 Jugando::~Jugando()
@@ -199,6 +198,16 @@ void Jugando::ManejarEventos() {
     }
 
     /* *********** Teclas para probar cosas *************** */
+    // Camara libre
+    /*if (_motor->EstaPulsado(KEY_H))
+    {
+        _motor->ResetKey(KEY_H);
+        camLibre = !camLibre;
+
+        if (camLibre)
+            _motor->IniCamLibre(_jugador->getX(), 
+                _jugador->getY(), _jugador->getZ());
+    }*/
 
     if (_motor->EstaPulsado(KEY_K))
     {
@@ -369,10 +378,10 @@ void Jugando::Update()
             );
         }
 
-        if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
+        /*if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
         {
             this->updateRecorridoPathfinding(nullptr);
-        }
+        }*/
     
         //Si se realiza el ataque se comprueban las colisiones
         if(_jugador->getTimeAtEsp() > 0.0)
@@ -392,7 +401,23 @@ void Jugando::Update()
             {
                 if(_enemigos[i] != nullptr)
                 {
-                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    // Comprobamos si alguno pide ayuda para el pathfinding
+                    if (_enemigos[i]->GetPedirAyuda())
+                    {
+                        _enemPideAyuda = _enemigos[i];
+                    }
+                    // Si alguno pide ayuda, se mira a ver si este contesta
+                    else if(_enemPideAyuda != nullptr) 
+                    {
+                        if (_enemigos[i]->GetContestar())
+                            updateRecorridoPathfinding(_enemigos[i]);
+                    }
+                    
+                    // TO DO: optimizar
+                    if (_enemPideAyuda)
+                        _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    else
+                        _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
 
                         //Este bloque se da si el enemigo esta en el proceso de merodear
                         if(_enemigos.at(i)->getTimeMerodear() > 0.0f)
@@ -468,7 +493,7 @@ void Jugando::Update()
         //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
         if(_boss != nullptr)
         {
-            _boss->UpdateBehavior(0, (int*)_jugador, _zonas); //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+            _boss->UpdateBehavior(0, (int*)_jugador, _zonas, false); //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
             
             //Este bloque se da si el boss esta en el proceso de merodear
             if(_boss->getTimeMerodear() > 0.0f)
@@ -1438,14 +1463,15 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
     if(auxiliarPathfinding >= 20 || (contadorEnem > 0 && _enem == _enemPideAyuda))
     {
         _auxiliadores.clear();
-        this->setEnemigoPideAyuda(nullptr);
+        enemDejarDePedirAyuda();
         _destinoPathFinding = nullptr;
         contadorEnem = 0;
 
     }
-    //Si enem no es nulo se anade a la cola de _enemigos _auxiliadores
+    //Si enem no es nulo se anade a la cola de enemigos _auxiliadores
     if(_enem != nullptr && _enem != _enemPideAyuda )
     {
+        _enem->SetContestar(false);
         _auxiliadores.push_back(_enem);
         contadorEnem++;
     }
@@ -1712,7 +1738,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
                 if(recorrido.empty() && _auxiliadores.empty())
                 {
                     _destinoPathFinding = nullptr;
-                    this->setEnemigoPideAyuda(nullptr);
+                    enemDejarDePedirAyuda();
                     contadorEnem = 0;
                 }
             }
@@ -1733,9 +1759,10 @@ void Jugando::EraseEnemigo(std::size_t i)
     //cout <<"que eres?" << i <<endl;
 }
 
-void Jugando::setEnemigoPideAyuda(Enemigo* ene)
+void Jugando::enemDejarDePedirAyuda()
 {
-    _enemPideAyuda = ene;
+    _enemPideAyuda->SetPedirAyuda(false);
+    _enemPideAyuda = nullptr;
 }
 
 Enemigo* Jugando::getEnemigoPideAyuda()
