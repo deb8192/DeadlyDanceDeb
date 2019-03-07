@@ -6,6 +6,37 @@ Recolectable::Recolectable()
 
 }
 
+Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
+    int anc, int lar, int alt, const char* objeto, const char* textura,
+    float x, float y, float z)
+{
+    // INdrawable
+    posIni.x = x;
+    posIni.y = y;
+    posIni.z = z;
+
+    std::string name_objeto(objeto);
+    cadena_objeto = new char[sizeof(name_objeto)];
+    strcpy(cadena_objeto, name_objeto.c_str());
+
+    std::string name_textura(textura);
+    cadena_textura = new char[sizeof(name_textura)];
+    strcpy(cadena_textura, name_textura.c_str());
+
+    std::string name_nombre(nombre);
+    cadena_nombre = new char[sizeof(name_nombre)];
+    strcpy(cadena_nombre, name_nombre.c_str());
+
+    codigoObjeto = codigo;
+    potenciaAtaque = ataque;
+    nombreObjeto = cadena_nombre;
+    ancho = anc;
+    largo = lar;
+    alto = alt;
+    ruta_objeto = cadena_objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
+    ruta_textura = cadena_textura;
+}
+
 Recolectable::~Recolectable()
 {
     // Recolectable
@@ -15,12 +46,15 @@ Recolectable::~Recolectable()
     cantidad = 0;
 
     // INobjetos
-    delete nombreObjeto;
-    delete ruta_objeto;
-    delete ruta_textura;
-    delete cadena_objeto;
-    delete cadena_textura;
+    nombreObjeto = nullptr;
     delete cadena_nombre;
+
+    ruta_objeto = nullptr;
+    delete cadena_objeto;
+
+    ruta_textura = nullptr;
+    delete cadena_textura;
+
     ancho = 0;
     largo = 0;
     alto  = 0;
@@ -64,37 +98,6 @@ Recolectable::~Recolectable()
     id = 0;
     animacion = 0;
     animacionAnterior = 0;
-}
-
-Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
-    int anc, int lar, int alt, const char* objeto, const char* textura,
-    float x, float y, float z)
-{
-    // INdrawable
-    posIni.x = x;
-    posIni.y = y;
-    posIni.z = z;
-
-    std::string name_objeto(objeto);
-    cadena_objeto = new char[sizeof(name_objeto)];
-    strcpy(cadena_objeto, name_objeto.c_str());
-
-    std::string name_textura(textura);
-    cadena_textura = new char[sizeof(name_textura)];
-    strcpy(cadena_textura, name_textura.c_str());
-
-    std::string name_nombre(nombre);
-    cadena_nombre = new char[sizeof(name_nombre)];
-    strcpy(cadena_nombre, name_nombre.c_str());
-
-    codigoObjeto = codigo;
-    potenciaAtaque = ataque;
-    nombreObjeto = cadena_nombre;
-    ancho = anc;
-    largo = lar;
-    alto = alt;
-    ruta_objeto = cadena_objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
-    ruta_textura = cadena_textura;
 }
 
 /*************** moverseEntidad *****************

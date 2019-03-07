@@ -13,10 +13,8 @@ EstadoGanar::~EstadoGanar()
 
 void EstadoGanar::Iniciar()
 {
-    cout << "\e[42m EstadoGanar \e[0m" << endl;
     _motor->FondoEscena(255,0,0,0);
     _motor->ActivarFuenteDefault();
-    _motor->CrearTexto("Partida ganada", 0, 0, 400, 20);
     pintarBotones();
 }
 

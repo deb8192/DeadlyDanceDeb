@@ -2,6 +2,8 @@
 
 Sala::Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type)
 {
+    Constantes constantes;
+    _waypoints.reserve(constantes.CINCO);
     ancho = anch;
     largo = larg;
     alto = alt;
@@ -20,6 +22,32 @@ Sala::Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type)
 
  Sala::~Sala()
  {
+    // Liberar memoria
+    short tam = _waypoints.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _waypoints.at(i);
+    }
+    _waypoints.clear();
+
+    if (entradas.size() > 0)
+    {
+        for (unsigned short i=0; i<entradas.size(); ++i)
+        {
+            delete entradas.at(i);
+        }
+        entradas.clear();
+    }
+    
+    if (salidas.size() > 0)
+    {
+        for (unsigned short i=0; i<salidas.size(); ++i)
+        {
+            delete salidas.at(i);
+        }
+        salidas.clear();
+    }
+
     ancho = 0;
     largo = 0;
     alto = 0;
@@ -28,47 +56,6 @@ Sala::Sala(int anch,int larg, int alt, int nx, int ny, int nz, int type)
     z = 0;
     tipocentro = 0;
     posicion_en_grafica = 0;
-
-    // TO DO:
-    /*Sala* nula;
-    nula=(Sala*)0x100000000;
-    if(entradas.size()>0)
-    {
-        for(std::size_t i = 0;i<entradas.size();i++)
-        {
-            if(entradas[i] != nullptr && entradas[i] != nula && entradas[i] != this)
-            {
-                std::cout <<"CUANTOS TIENES??: " << entradas.size() <<std::endl;
-                std::cout <<"SALA MUESTRATE: " << i <<std::endl;
-                std::cout <<"QUE TIENES?: " << entradas[i] <<std::endl;
-                entradas[i]->~Sala();
-                entradas[i]=nullptr;
-                entradas.erase(entradas.begin() + i);
-            }else{
-                if(entradas[i] == nula || entradas[i] != nullptr){
-                    entradas[i]=nullptr;
-                    entradas.erase(entradas.begin() + i);
-                }
-            }
-        }
-    }
-    if(salidas.size()>0)
-    {    
-        for(std::size_t i=0;i<salidas.size();i++)
-        {
-            if(salidas[i] != nullptr && salidas[i] != nula && salidas[i] != this)
-            {
-                salidas[i]->~Sala();
-                salidas[i]=nullptr;
-                salidas.erase(salidas.begin() + i);
-            }else{
-                if(salidas[i] == nula || salidas[i] != nullptr){
-                    salidas[i]=nullptr;
-                    salidas.erase(salidas.begin() + i);
-                }
-            }
-        }
-    }*/
  }
 
 void Sala::agregarEntrada(Sala* plataforma)
@@ -79,6 +66,18 @@ void Sala::agregarEntrada(Sala* plataforma)
 void Sala::agregarSalida(Sala* plataforma)
 {
     salidas.push_back(plataforma);
+}
+/*********** AgregarWaypoint ***********
+ * Funcion que annade los waypoints que se pasan
+ * por parametro al vector de waypoints de la sal
+ * 
+ *      Entradas:
+ *                  Waypoint* waypoint: waypoint a annadir al vector
+ *      Salida:
+*/
+void Sala::AgregarWaypoint(Waypoint* waypoint)
+{
+    _waypoints.push_back(waypoint);
 }
 
 int* Sala::getSizes()
@@ -106,6 +105,11 @@ std::vector<Sala*> Sala::getEntradas()
 std::vector<Sala*> Sala::getSalidas()
 {
     return salidas;
+}
+
+std::vector<Waypoint*> Sala::GetWaypoints()
+{
+    return _waypoints;
 }
 
 void Sala::definirID(int id)

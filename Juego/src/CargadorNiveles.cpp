@@ -1,3 +1,4 @@
+#include <stdlib.h> 
 #include "CargadorNiveles.hpp"
 
 #include "Personajes/Heavy.hpp"
@@ -57,6 +58,13 @@ CargadorNiveles::~CargadorNiveles()
     }
     _powerup.clear();
 
+    tam = _waypoints.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _waypoints.at(i);
+    }
+    _waypoints.clear();
+    
     delete _primeraSala;
 }
 
@@ -99,9 +107,9 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug, int* id)
         CrearLuz(x,y,z); //cargamos el objeto
     }*/
     
+    //Se crea el arbol de salas del mapa del nivel
     for (pugi::xml_node plat = anterior.back().child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
-        cout << "ciclo" <<endl;
         while(plat != NULL)
         {
             padre.push_back(sala);
@@ -117,7 +125,6 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug, int* id)
             padre.pop_back();
         }
     }
-    cout << "se acaba" <<endl;
 }
 
 void CargadorNiveles::GuardarNivelXml(int level)
@@ -215,7 +222,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre, int* id)
         int ancho = 1;//nos devuelve un int
         int largo = 1;//nos devuelve un int 
         int alto = 5;//nos devuelve un int
-        // Textura y modelo estan dentro de sus clases de jugadores
+        // El modelo esta dentro de sus clases de jugadores
 
         switch (tipoJug)
         {
@@ -283,6 +290,31 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre, int* id)
         CrearZona(accion,x,y,z,ancho,largo,alto,tipo,totalElementos); //cargamos el enemigo
     }
 
+    for (pugi::xml_node enem = plat.child("Waypoint"); enem; enem = enem.next_sibling("Waypoint"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        //aqui va la carga de waypoints para los enemigos
+        int accion = enem.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
+        int ID = enem.attribute("id").as_int(); //lo vamos a usar para indentificar los waypoints de distintas salas
+        int x = enem.attribute("X").as_int();//nos devuelve un int
+        int y = enem.attribute("Y").as_int();//nos devuelve un int
+        int z = enem.attribute("Z").as_int();//nos devuelve un int 
+        int ancho = enem.attribute("ancho").as_int();//nos devuelve un int
+        int largo = enem.attribute("largo").as_int();//nos devuelve un int 
+        int alto = enem.attribute("alto").as_int();//nos devuelve un int 
+        int compartido = enem.attribute("compartido").as_int();//nos devuelve un int
+        char* conexiones = (char *) enem.attribute("conexiones").value(); //nos indica los ID de los waypoints con los que conecta este waypoint
+        char* reading =  strtok(conexiones, ",");
+        int* arrayConexiones = new int [5];
+        unsigned short i = 0;
+        while(reading != nullptr)
+        {
+            arrayConexiones[i] = atoi(reading);
+            reading = strtok(NULL, ",");
+            i++;
+        }
+        CrearWaypoint(padren,accion,compartido,ID,x,y,z,ancho,largo,alto,arrayConexiones,i); //cargamos el waypoint
+    }
+
     return padren;
 }
 
@@ -319,6 +351,22 @@ std::vector<Recolectable*> CargadorNiveles::GetPowerup()
 Enemigo* CargadorNiveles::GetBoss()
 {
     return _boss;
+}
+
+std::vector<Waypoint*> CargadorNiveles::GetWaypoints()
+{
+    return _waypoints;
+}
+
+void CargadorNiveles::ReservarMemoriaVectores()
+{
+    //TO DO: meter a mano o cargar del XML
+    /*_enemigos.reserve(20);
+    _recolectables.reserve(20);
+    _interactuables.reserve(20);
+    _powerup.reserve(20);
+    _zonas.reserve(20);
+    _waypoints.reserve(20);*/
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -397,7 +445,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-    _enemigos.back()->initPosicionesAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    _enemigos.back()->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _enemigos.back()->setVelocidadMaxima(1.0f);
     _enemigos.back()->setBarraAtEs(0);
     _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
@@ -422,7 +470,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z, 
     int ancho, int largo, int alto, Sala* sala, int* id)
 {
-    _boss = new MuerteBoss(x,y,z, 350); // Posiciones, vida
+    _boss = new MuerteBoss(x,y,z, 2000); // Posiciones, vida
     _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
     //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
     _boss->setID(++(*id));//le damos el id unico en esta partida al enemigo
@@ -433,7 +481,7 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
     _boss->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _boss->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _boss->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-    _boss->initPosicionesAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    _boss->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _boss->setVelocidadMaxima(1.0f);
     _boss->setBarraAtEs(0);
     _boss->definirSala(sala);//le pasamos la sala en donde esta
@@ -521,4 +569,27 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
     _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3);
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
+}
+
+void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int ID, int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones)
+{
+    Waypoint* waypoint = new Waypoint(ID, x, y, z, compartido, arrayConexiones, sizeConexiones);
+    bool coincide = false;
+    unsigned short i = 0;
+    while(i < _waypoints.size() && !coincide)
+    {
+        if(_waypoints[i]->GetID() == waypoint->GetID())
+        {
+            coincide = true;
+            sala->AgregarWaypoint(_waypoints[i]);
+            delete waypoint; // TO DO: revisar
+        }
+        else {i++;}
+    }
+    if(!coincide)
+    {
+        _waypoints.push_back(waypoint);
+        sala->AgregarWaypoint(_waypoints.back());
+    }
+    waypoint = nullptr;
 }
