@@ -359,6 +359,17 @@ std::vector<Waypoint*> CargadorNiveles::GetWaypoints()
     return _waypoints;
 }
 
+void CargadorNiveles::ReservarMemoriaVectores()
+{
+    //TO DO: meter a mano o cargar del XML
+    /*_enemigos.reserve(20);
+    _recolectables.reserve(20);
+    _interactuables.reserve(20);
+    _powerup.reserve(20);
+    _zonas.reserve(20);
+    _waypoints.reserve(20);*/
+}
+
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 Sala* CargadorNiveles::CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro,
     const char* ruta_objeto, const char* ruta_textura)
