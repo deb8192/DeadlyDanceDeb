@@ -124,7 +124,7 @@ unsigned short Interfaz::AddLuz(int tipo)
     return 0;//no se hizo la luz
 }
 
-unsigned short Interfaz::AddMalla(const char * archivo)
+unsigned short Interfaz::AddMalla(const char * archivo, int initf)
 {
     if(ventana_inicializada)
     {
@@ -148,7 +148,7 @@ unsigned short Interfaz::AddMalla(const char * archivo)
     escalado->setEntidad(escaladoEnt);
 
     TNodo * malla = new TNodo;
-    TMalla * mallaEn = new TMalla;
+    TMalla * mallaEn = new TMalla(initf);
     mallaEn->SetShader(shaders[0]);
     malla->setEntidad(mallaEn);
 
@@ -189,9 +189,6 @@ void Interfaz::Draw()
     }
 
     window->UpdateLimpiar();
-
-    shaders[0]->Use();
-    shaders[0]->setFloat("material.shininess", 32.0f);
 
     if(_raiz != nullptr)
     {

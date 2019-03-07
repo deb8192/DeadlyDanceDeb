@@ -57,6 +57,11 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     //*********** APLICAR PROFUNDIDAD Z-BUFFER ***********
     glEnable(GL_DEPTH_TEST);   //Necesario para el zoom/fov
 
+    //Activar CULLING
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+    glFrontFace(GL_CW);
+
     return true;
 }
 

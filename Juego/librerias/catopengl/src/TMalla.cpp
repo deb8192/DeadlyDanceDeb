@@ -1,15 +1,15 @@
 #include "TMalla.hpp"
 
 //Uso: Constructor
-TMalla::TMalla()
+TMalla::TMalla(int ft)
 {
     didentidad = 'M'; //para sabe que funcion hace es informativo
     frames_totales = 0;
     mallas_totales = 0;
     frame_inicial = 0;
-    frame_final = 0;
+    frame_final = ft;
     frame_actual = 0;
-    velocidad_animacion = 0;
+    velocidad_animacion = 30;
 }
 
 //Uso: destructor
@@ -20,7 +20,7 @@ TMalla::~TMalla()
 
 //Uso: Pone el shader local nullptr
 //Entradas: ninguna
-//Salidas: ninguna 
+//Salidas: ninguna
 void TMalla::cargarMalla(unsigned short,unsigned short)
 {
     //aqui llamamos a objetos->ObtenerFrame(1); y se carga en memoria para pintarlo
@@ -29,11 +29,17 @@ void TMalla::cargarMalla(unsigned short,unsigned short)
 // sobrecarga metodos TEntidad
 void TMalla::beginDraw()
 {
+    TimeEngine(); //Tiempo del motor
+    //calcular el frame
+    frame_actual = frame_actual + getTime() * velocidad_animacion;
+    //bucle de la animacion
+    if(frame_actual >= frame_final)frame_actual = frame_inicial;
+
     if(matriz_compartida == nullptr)
     {
         glm::mat4 * _matriz_resultado = nullptr;
         std::queue<glm::mat4 *> * cola_compartidaAuxiliar = new std::queue<glm::mat4 *>; //creamos una cola nueva para ir encolando  los elementos que desencolamos de la cola compartida(se aplicaria parecido con una pila)
-    
+
         while(cola_compartida->size() > 0)
         {
             glm::mat4 * nodo = cola_compartida->front();
@@ -59,18 +65,25 @@ void TMalla::beginDraw()
 
         if(_matriz_resultado != nullptr)
         {
-            objetos->Draw(shader);
-            shader->setMat4("model", (*_matriz_resultado));
+            if(frame_actual < frame_final)//pasa por los frames de la animacion
+            {
+                shader->setMat4("model", (*_matriz_resultado));
+                objetos->Draw(shader,frame_actual);
+            }
         }
     }
     else
     {
         if(matriz_compartida != nullptr)
         {
-            objetos->Draw(shader);
-            shader->setMat4("model", (*matriz_compartida));
+            if(frame_actual < frame_final)//pasa por los frames de la animacion
+            {
+                shader->setMat4("model", (*matriz_compartida));
+                objetos->Draw(shader,frame_actual);
+            }
         }
     }
+
 }
 
 void TMalla::endDraw()

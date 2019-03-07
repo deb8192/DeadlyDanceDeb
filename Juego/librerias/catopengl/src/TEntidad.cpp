@@ -13,7 +13,7 @@ void TEntidad::NoEjecutar()
 }
 
 //Uso: desbloquea le entidad para que pueda ser ejecutada
-//Entradas: ninguna 
+//Entradas: ninguna
 //Salidas: ninguna
 void TEntidad::Ejecutar()
 {
@@ -27,13 +27,13 @@ bool TEntidad::GetEjecutar()
 
 //Uso: devuelve el puntero del shader que ejecuta esta entidad
 //Entradas: ninguna
-//Salidas: puntero Shader 
+//Salidas: puntero Shader
 Shader * TEntidad::GetShader()
 {
     return shader;
 }
 
-//Uso: asigna el shader a esta entidad, para que se llame en el draw 
+//Uso: asigna el shader a esta entidad, para que se llame en el draw
 //Entradas: Shader (programa que contiene el vextex y fragment)
 //Salidas: ninguna
 void TEntidad::SetShader(Shader * sha)
@@ -67,4 +67,16 @@ void TEntidad::trasladar(float,float,float)
 void TEntidad::setRecursoObjeto(RMalla * valor)
 {
 
+}
+
+void TEntidad::TimeEngine()
+{
+    float currentFrame = glfwGetTime();
+    deltaTime = currentFrame - lastFrame;
+    lastFrame = currentFrame;
+}
+
+float TEntidad::getTime()
+{
+    return deltaTime;
 }
