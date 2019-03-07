@@ -3,7 +3,14 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #ifndef MotorGrafico_HPP
 #define MotorGrafico_HPP
 
-#include <irrlicht/irrlicht.h> //la utilizaremos para las funcionalidades del motor
+#ifndef WEMOTOR
+    //motor catopengl
+    #include <Interfaz.hpp> 
+#else
+    //motorirrlicht
+    #include <irrlicht/irrlicht.h> //la utilizaremos para las funcionalidades del motor
+#endif
+
 //#include "../Eventos.hpp" //este archivo contiene los ids de los eventos
 #include "../Inputs.hpp" //
 #include <iostream> //la utilizamos para mostrar el log en la consola.
@@ -12,10 +19,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
 //para acortar lineas de programacion se cogen espacios definidos directamente
 using namespace irr;
-using namespace core;
+using namespace core; 
 using namespace scene;
 using namespace video;
-using namespace io;
+using namespace io; 
 using namespace gui;
 using namespace std;
 using namespace idsEventos;
@@ -90,7 +97,7 @@ using namespace idsEventos;
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
-            
+             
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
             void mostrarBoss(float x, float y, float z, float rx, float ry, float rz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
@@ -114,12 +121,12 @@ using namespace idsEventos;
             void colorearJugador(int a, int r, int g, int b);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
             //void colorearObjeto(int a, int r, int g, int b, int obj);
-            
+             
             IAnimatedMeshSceneNode* getArmaEspecial();
-            void EraseColectable(long unsigned int idx);
-            void ErasePowerUP(long unsigned int idx);
+            void EraseColectable(long unsigned int idx); 
+            void ErasePowerUP(long unsigned int idx); 
             void EraseEnemigo(std::size_t i);
-            void EraseJugador();
+            void EraseJugador(); 
             void EraseArma();
             //int getEnemigos_Scena();
             //int getObjetos_Scena();
@@ -168,7 +175,7 @@ using namespace idsEventos;
             int getCs();
 
         private: //clases solo accesibles por MotorGrafico
-
+ 
             //clase singleton
             MotorGrafico();
             static MotorGrafico* _unica_instancia;
@@ -227,14 +234,14 @@ using namespace idsEventos;
             position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
             ISceneNode* _nodoSeleccionado;
 
-            // Ventana
+            // Ventana 
             short WIDTH_AUX, WIDTH, HEIGHT;
             short x_linea1, x_linea2;
 
             IGUIImage* _img;
             ITexture*  _puzParticleTexture;
             //vector<IGUIImage*> imagenes; <- Pendiente de utilizar en puzzles
-
+ 
             enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
             enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
 
@@ -262,9 +269,9 @@ using namespace idsEventos;
             ITexture* manos_textura;
             ITexture* llave_textura;
             ITexture* espada_textura;
-            ITexture* daga_textura;
+            ITexture* daga_textura; 
 
-            //cinematicas
+            //cinematicas 
             int frame_actual;//numero de frame actual
             IGUIImage* _actual;//frame actual
             float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
