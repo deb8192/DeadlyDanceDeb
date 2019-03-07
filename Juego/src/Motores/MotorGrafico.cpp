@@ -20,6 +20,9 @@ MotorGrafico::MotorGrafico()
     _nodoSeleccionado = nullptr;
 
     frame_actual = 0;
+    cx = 0;
+    cz = 30;
+    cs = -1;
 }
 
 MotorGrafico::~MotorGrafico()
@@ -28,7 +31,6 @@ MotorGrafico::~MotorGrafico()
     //position2di initialCursorPosition;        // Posicion del clic raton
     //position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
     
-
     // Punteros sin new
     _device = nullptr;
     _driver = nullptr;
@@ -395,7 +397,12 @@ bool MotorGrafico::EstaPulsado(short boton)
 
         case KEY_G_DEBUG:
             return input.IsKeyDown(irr::KEY_KEY_G);//para modo debug
-
+        
+        case KEY_1:
+            return input.IsKeyDown(irr::KEY_KEY_1);
+        
+        case KEY_2:
+            return input.IsKeyDown(irr::KEY_KEY_2);
         case KEY_P:
             return input.IsKeyDown(irr::KEY_KEY_P);
 
@@ -456,6 +463,12 @@ void MotorGrafico::ResetKey(short event)
         break;
         case KEY_G_DEBUG:
             input.ResetKey(irr::KEY_KEY_G);//para modo debug
+        break;
+        case KEY_1:
+            input.ResetKey(irr::KEY_KEY_1);
+        break;
+        case KEY_2:
+            input.ResetKey(irr::KEY_KEY_2);
         break;
         case KEY_P:
             input.ResetKey(irr::KEY_KEY_P);
@@ -683,6 +696,34 @@ void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, f
     }
 }
 
+void MotorGrafico::cambiarCamara()
+{        
+    if(cx == 0)
+    {
+        cs *= -1;
+        cx = 30;
+        cz = 0;
+    }
+    else
+    {
+        cx = 0;
+        cz = 30;
+    }
+}
+
+int MotorGrafico::getCx()
+{
+    return cx;
+}
+int MotorGrafico::getCz()
+{
+    return cz;
+}
+int MotorGrafico::getCs()
+{
+    return cs;
+}
+
 void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry, float rz)
 {
     // Variables de la camara
@@ -690,9 +731,9 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
     core::vector3df nodeCamTarget = _camera->getTarget();
 
     // Centrar la camara
-    nodeCamPosition.X = x;
+    nodeCamPosition.X = x+(cx*cs);
     nodeCamPosition.Y = y+30;
-    nodeCamPosition.Z = z-30;
+    nodeCamPosition.Z = z+(cz*cs);
     nodeCamTarget.X = x;
     nodeCamTarget.Y = y;
     nodeCamTarget.Z = z;
@@ -764,12 +805,10 @@ void MotorGrafico::activarDebugGrafico()
             }
             Objetos_Debug.resize(0);
         }
-        cout << "\e[38m Modo Debug Desactivado \e[0m" << endl;
     }
     else
     {
         debugGrafico = true;
-        cout << "\e[38m Modo Debug Activado \e[0m" << endl;
     }
 }
 

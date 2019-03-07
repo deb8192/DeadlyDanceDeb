@@ -36,27 +36,18 @@ Arma::~Arma()
 
     // Arma
     potenciaAtaque = 0;
-    if(_nombreArma != nullptr)
-    {
-        delete _nombreArma;
-        _nombreArma = nullptr;
-    }
+    _nombreArma = nullptr;
 
     // INobjetos
-    delete nombreObjeto;
-    if(ruta_objeto != nullptr)
-    {
-        delete ruta_objeto;
-        ruta_objeto = nullptr;
-    }
-    if(ruta_textura != nullptr)
-    {
-        delete ruta_textura;
-        ruta_textura = nullptr;
-    }
-    delete cadena_objeto;
-    delete cadena_textura;
+    nombreObjeto = nullptr;
     delete cadena_nombre;
+
+    ruta_objeto = nullptr;
+    delete cadena_objeto;
+
+    ruta_textura = nullptr;
+    delete cadena_textura;
+    
     ancho = 0;
     largo = 0;
     alto = 0;

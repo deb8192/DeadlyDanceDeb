@@ -481,9 +481,10 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 {
                     arrayTareaObjetivo[0] = 7;
                 }
-                else
+                //La accion es asistir al enemigo que pide ayuda
+                else if(strcmp(accion, constantes.AUXILIAR))
                 {
-                    arrayTareaObjetivo[0] = -1;
+                    arrayTareaObjetivo[0] = 8;
                 }
 
                 //Objetivo

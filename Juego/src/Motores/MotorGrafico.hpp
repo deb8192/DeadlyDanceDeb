@@ -162,6 +162,10 @@ using namespace idsEventos;
 
             void RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame);
             bool finalCinematica();
+            void cambiarCamara();
+            int getCx();
+            int getCz();
+            int getCs();
 
         private: //clases solo accesibles por MotorGrafico
 
@@ -265,6 +269,7 @@ using namespace idsEventos;
             IGUIImage* _actual;//frame actual
             float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
             ITexture* _actualTexture;//textura actual
+            int cx, cz, cs;
     };
 
 #endif /* MotorGrafico_HPP */
