@@ -805,7 +805,7 @@ void Jugando::Reanudar()
         DesactivarDebug();
         // valores por defecto del jugador
         ValoresPorDefectoJugador();
-        ValoresPorDefectoBoss();
+        //ValoresPorDefectoBoss();
 
 
         // Resto de valores del juego
