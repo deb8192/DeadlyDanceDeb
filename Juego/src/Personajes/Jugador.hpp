@@ -171,7 +171,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
         int tipo_arma = 2;
         vector <unsigned int> atacados_normal;
-        int dinero = 0;
+        int dinero;
 
         const char* _modelo;
         int ancho; int largo; int alto;
