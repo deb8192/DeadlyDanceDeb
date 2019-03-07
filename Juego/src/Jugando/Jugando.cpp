@@ -198,6 +198,13 @@ void Jugando::ManejarEventos() {
         Juego::GetInstance()->estado.CambioEstadoPausa();
     }
 
+     //para modo camara
+    if(_motor->EstaPulsado(KEY_1))
+    {
+        _motor->cambiarCamara();
+        _motor->ResetKey(KEY_1);
+    }
+    
     /* *********** Teclas para probar cosas *************** */
 
     if (_motor->EstaPulsado(KEY_K))

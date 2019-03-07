@@ -73,7 +73,7 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     Constantes constantes;
     float px = posFutura.x,
           pz = posFutura.z;
-
+    
     if(w || s || a || d)
     {
         setAnimacion(1);
@@ -129,9 +129,20 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     {
         componente = 0.0;
     }
-    px += componente*sin(deg*constantes.DEG_TO_RAD);
-    pz += componente*cos(deg*constantes.DEG_TO_RAD);
-
+    //getcs, getcx, getcz se utilizan para orientar al jugador cuando se gira la camara
+    if(_motor->getCz() == 0)
+    {
+        px += _motor->getCs() * (-1) * componente*cos(deg*constantes.DEG_TO_RAD);
+        pz += _motor->getCs() * componente*sin(deg*constantes.DEG_TO_RAD);
+        deg = ((_motor->getCs() * 90) - deg) * (-1); 
+    }
+    else
+    {
+        px += _motor->getCs() * (-1) * componente*sin(deg*constantes.DEG_TO_RAD);
+        pz += _motor->getCs() * (-1) * componente*cos(deg*constantes.DEG_TO_RAD);
+        if(_motor->getCs() == 1){deg += 180;}
+    }
+        
     //cout << "deg: " << deg << ", px:" << px << ", pz:" << pz << endl;
     //ahora actualizas movimiento y rotacion
     //has obtenido la arcotangente que te da el angulo de giro en grados
