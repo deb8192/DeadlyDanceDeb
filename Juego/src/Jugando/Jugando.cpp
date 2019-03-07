@@ -976,7 +976,7 @@ void Jugando::cargarCofres(int num)
                 //Colocar cofre
                 int posicionObjeto = _motor->CargarObjetos(3,constantes.CERO,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
                 Interactuable*  inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto, newx, newy, newz);
-                inter->setID(id++);
+                inter->setID(++id);
                 inter->setPosiciones(newx,newy,newz);
                 inter->SetPosicionArrayObjetos(posicionObjeto);
                 inter->setRotacion(0.0,0.0,0.0);
