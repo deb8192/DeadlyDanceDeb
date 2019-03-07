@@ -379,54 +379,60 @@ float Enemigo::randomBinomial()
 
 void Enemigo::UpdateIA()
 {
-    switch (tipoEnemigo)
+    if(vida > 0)
     {
-        case 0:
+        switch (tipoEnemigo)
         {
-            Pollo *pollo = (Pollo*) this;
-            pollo->RunIA();
+            case 0:
+            {
+                Pollo *pollo = (Pollo*) this;
+                pollo->RunIA();
+            }
+                break;
+            
+            case 1:
+            {
+                Murcielago *murcielago = (Murcielago*) this;
+                murcielago->RunIA();
+            }
+                break;
+            default:
+            {
+                MuerteBoss* _boss = (MuerteBoss*) this;
+                _boss->RunIA();
+            }
+                break;
         }
-            break;
-        
-        case 1:
-        {
-            Murcielago *murcielago = (Murcielago*) this;
-            murcielago->RunIA();
-        }
-            break;
-        default:
-        {
-            MuerteBoss* _boss = (MuerteBoss*) this;
-            _boss->RunIA();
-        }
-            break;
     }
 }
 
 void Enemigo::UpdateBehavior(short *i, int* _jugador, 
     std::vector<Zona*> &_getZonas, bool ayuda)
 {
-    switch (tipoEnemigo)
+    if(vida > 0)
     {
-        case 0:
+        switch (tipoEnemigo)
         {
-            Pollo *pollo = (Pollo*) this;
-            pollo->UpdatePollo(i, _jugador, ayuda);
+            case 0:
+            {
+                Pollo *pollo = (Pollo*) this;
+                pollo->UpdatePollo(i, _jugador, ayuda);
+            }
+                break;
+            
+            case 1:
+            {
+                Murcielago *murcielago = (Murcielago*) this;
+                murcielago->UpdateMurcielago(i, _jugador, _getZonas);
+            }
+                break;
+            default:
+            {
+                MuerteBoss* _boss = (MuerteBoss*) this;
+                _boss->UpdateMuerteBoss(_jugador);
+            }
+                break;
         }
-            break;
-        
-        case 1:
-        {
-            Murcielago *murcielago = (Murcielago*) this;
-            murcielago->UpdateMurcielago(i, _jugador, _getZonas);
-        }
-            break;
-        default:
-        {
-            MuerteBoss* _boss = (MuerteBoss*) this;
-            _boss->UpdateMuerteBoss(_jugador);
-        }
-            break;
     }
 }
 
@@ -445,19 +451,19 @@ int Enemigo::Atacar(int i)
             distance = 5;
         }
 
-        //Calcular posiciones
+        //Calcular posiciones del ataque
+        //Calculo de la posicion del ataque en el motor grafico
         atx = this->getX();
         atx += (distance * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN));
         aty = this->getY();
         atz = this->getZ();
         atz += (distance * cos(constantes.PI * this->getRY() / constantes.PI_RADIAN));
+
+        //Calculo de la posicion del ataque en el motor de fisicas
         atposZ = iniAtposZ;
         atposX = iniAtposX;
         atposZ += atz - posIni.z;
         atposX += atx - posIni.x;
-        atgx = this->getRX();
-        atgy = this->getRY();
-        atgz = this->getRZ();
 
         if (i >= 0) // Comprueba si ataca al boss o a los enemigos
         {
