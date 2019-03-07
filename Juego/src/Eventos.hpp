@@ -12,6 +12,8 @@ namespace idsEventos
         KEY_P,          // PAUSA
         KEY_K,          // MATAR PERSONAJE
         KEY_G_DEBUG,    // DEBUG
+        KEY_1,
+        KEY_2,
 
         // TO DO: poner para que se utilizan
         KEY_ESPACIO,    // ATAQUE NORMAL
