@@ -31,7 +31,6 @@ MotorGrafico::~MotorGrafico()
     //position2di initialCursorPosition;        // Posicion del clic raton
     //position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
     
-
     // Punteros sin new
     _device = nullptr;
     _driver = nullptr;
@@ -806,12 +805,10 @@ void MotorGrafico::activarDebugGrafico()
             }
             Objetos_Debug.resize(0);
         }
-        cout << "\e[38m Modo Debug Desactivado \e[0m" << endl;
     }
     else
     {
         debugGrafico = true;
-        cout << "\e[38m Modo Debug Activado \e[0m" << endl;
     }
 }
 

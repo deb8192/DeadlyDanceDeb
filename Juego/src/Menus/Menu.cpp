@@ -17,7 +17,6 @@ Menu::~Menu()
 
 void Menu::Iniciar()
 {
-    cout << "\e[42m Menu \e[0m" << endl;
 
     //Motor de audio inicializar
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
@@ -95,7 +94,6 @@ void Menu::borrarEscenaResetearEvento(short id)
 
 void Menu::jugar()
 {
-    cout << "\e[42m jugar \e[0m" << endl;
 
     _motora->getEvent("Menu")->stop(); //Detener musica Menu
     Juego::GetInstance()->estado.CambioEstadoJugar();
@@ -126,12 +124,10 @@ void Menu::salir()
 
 void Menu::Pausar()
 {
-    cout << "Pausando menu" <<endl;
 }
 
 void Menu::Reanudar()
 {
-    cout << "Reanudando menu" <<endl;
     _motor->CrearTexto("Deadly Dance", 0, 0, 80, 20); // Parametros: texto, x1, y1, x2, y2
     pintarBotones();
 }

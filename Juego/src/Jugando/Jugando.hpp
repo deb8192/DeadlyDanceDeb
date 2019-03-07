@@ -9,14 +9,13 @@
 #include "../Enemigos/Enemigo.hpp"
 #include "../Objetos/Interactuable.hpp"
 #include "../Objetos/Recolectable.hpp"
-#include "Zona.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/InterfazJugador.hpp"
+#include "Zona.hpp"
 #include "Waypoint.hpp"
 
 #include "../Pathfinder.hpp"
 
-//#include <list>
 
 class Jugando: public Estado {
     public:
@@ -60,7 +59,7 @@ class Jugando: public Estado {
         void updateRecorridoPathfinding(Enemigo* );
 
         void EraseEnemigo(std::size_t i);
-        void setEnemigoPideAyuda(Enemigo* );
+        void enemDejarDePedirAyuda();
         Enemigo* getEnemigoPideAyuda();
         std::vector<Enemigo*> getEnemigos();
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
@@ -76,11 +75,8 @@ class Jugando: public Estado {
 
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
 
-        Sala* _primeraSala;// la primera sala del arbol
-        
         bool enSalaBoss;
         Enemigo* _boss;
-        //TO DO: hacerle un reserve y q el vector sea un puntero
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         std::vector<Enemigo*> _auxiliadores;  //Enemigos que responden a la ayuda
         Enemigo* _enemPideAyuda;  //Enemigos que pide ayuda

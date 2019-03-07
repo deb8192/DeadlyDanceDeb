@@ -64,8 +64,71 @@ Jugador::~Jugador()
     _rutaArmaEspecial = nullptr;
     _nombreJugador = nullptr;
 
-    // INnpc e INdrawable
-    // Nada
+    dinero = 0;
+
+    // INnpc
+    tipo = 0;
+    vida = 0;
+    barraAtEs = 0;
+    ataque = 0;
+    suerte = 0;
+    danyoCritico = 0;
+    proAtaCritico = 0;
+    //TO DO: int buffos[4];
+    atackTime = 0;
+    atackEspTime = 0;
+    lastAtackTime = 0;
+    lastAtackEspTime = 0;
+    animacionMuerteTiem = 0;
+    tiempoPasadoMuerte = 0;
+    tiempoAtaque = 0;
+    tiempoPasadoAtaque = 0;
+    tiempoAtaEsp = 0;
+    tiempoPasadoAtaEsp = 0;
+    tiempoCogerObjeto = 0;
+    tiempoPasadoCogerObjeto = 0;
+    tiempoEnMorir = 0;
+    tiempoPasadoEnMorir = 0;
+
+    // INdrawable
+    posIni.x = 0;
+    posIni.y = 0;
+    posIni.z = 0;
+
+    posActual.x = 0;
+    posActual.y = 0;
+    posActual.z = 0;
+
+    posPasada.x = 0;
+    posPasada.y = 0;
+    posPasada.z = 0;
+
+    posFutura.x = 0;
+    posFutura.y = 0;
+    posFutura.z = 0;
+
+    posFisicas.x = 0;
+    posFisicas.y = 0;
+    posFisicas.z = 0;
+
+    rotActual.x = 0;
+    rotActual.y = 0;
+    rotActual.z = 0;
+
+    rotPasada.x = 0;
+    rotPasada.y = 0;
+    rotPasada.z = 0;
+
+    rotFutura.x = 0;
+    rotFutura.y = 0;
+    rotFutura.z = 0;
+
+    moveTime = 0;
+    rotateTime = 0;
+    rotation = 0;
+    id = 0;
+    animacion = 0;
+    animacionAnterior = 0;
 }
 
 void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
@@ -287,6 +350,7 @@ int Jugador::Atacar(int i)
     else {
         cout << "No supera las restricciones"<<endl;
     }
+    _fisicas = nullptr;
     return danyo;
 }
 
@@ -367,8 +431,10 @@ int Jugador::AtacarEspecial()
         danyoF = ataque * critico * aumentosAtaque;
         danyo = roundf(danyoF * por10) / por10;
         setBarraAtEs(0);
+        _fisicas = nullptr;
         return danyo;
     }
+    _fisicas = nullptr;
     return danyo;
 }
 
@@ -447,6 +513,7 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
     {
         cout << "No supera las restricciones"<<endl;
     }
+    _fisicas = nullptr;
 }
 
 void Jugador::AtacarUpdate(int danyo, Enemigo* &_boss)
@@ -491,6 +558,7 @@ void Jugador::AtacarUpdate(int danyo, Enemigo* &_boss)
             cout<<"Vida BOSS "<<_boss->getID()<<" "<<_boss->getVida()<<endl;
         }
     }
+    _fisicas = nullptr;
 }
 
 void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
@@ -517,6 +585,7 @@ void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
             _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }
+    _fisicas = nullptr;
 }
 
 void Jugador::atacarEspUpdBossComun(int* danyo, Enemigo* &_boss)
@@ -534,6 +603,7 @@ void Jugador::atacarEspUpdBossComun(int* danyo, Enemigo* &_boss)
         cout<<"variacion "<<variacion<<endl;
         cout<<"Vida BOSS "<<_boss->getID()<<" "<<_boss->getVida()<<endl;
     }
+    _fisicas = nullptr;
 }
 
 void Jugador::generarSonido(int intensidad,double duracion,int tipo)
@@ -1170,8 +1240,8 @@ bool Jugador::ColisionEntornoEne()
     if(_fisicas->collideObstacle() 
         || !_fisicas->collidePlatform())
     {//colisiona
-        _fisicas = nullptr;
         setNewPosiciones(posActual.x, posActual.y, posActual.z);
+        _fisicas = nullptr;
         return true;
     }
     //no colisiona
@@ -1186,8 +1256,8 @@ bool Jugador::ColisionEntornoBoss()
     if(_fisicas->collideBossObstacle() 
         || !_fisicas->collidePlatform())
     {//colisiona
-        _fisicas = nullptr;
         setNewPosiciones(posActual.x, posActual.y, posActual.z);
+        _fisicas = nullptr;
         return true;
     }
     //no colisiona

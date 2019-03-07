@@ -110,7 +110,6 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug, int* id)
     //Se crea el arbol de salas del mapa del nivel
     for (pugi::xml_node plat = anterior.back().child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
-        cout << "ciclo" <<endl;
         while(plat != NULL)
         {
             padre.push_back(sala);
@@ -223,7 +222,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre, int* id)
         int ancho = 1;//nos devuelve un int
         int largo = 1;//nos devuelve un int 
         int alto = 5;//nos devuelve un int
-        // Textura y modelo estan dentro de sus clases de jugadores
+        // El modelo esta dentro de sus clases de jugadores
 
         switch (tipoJug)
         {
@@ -357,6 +356,17 @@ Enemigo* CargadorNiveles::GetBoss()
 std::vector<Waypoint*> CargadorNiveles::GetWaypoints()
 {
     return _waypoints;
+}
+
+void CargadorNiveles::ReservarMemoriaVectores()
+{
+    //TO DO: meter a mano o cargar del XML
+    /*_enemigos.reserve(20);
+    _recolectables.reserve(20);
+    _interactuables.reserve(20);
+    _powerup.reserve(20);
+    _zonas.reserve(20);
+    _waypoints.reserve(20);*/
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
