@@ -150,6 +150,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         virtual void AtacarEspecialUpdate(int* danyo, Enemigo* &_boss) = 0;
         virtual void RenderAtaqueEsp(float updateTime, float drawTime) = 0;
 
+        void Render(float updTime, float drawTime);
+
     protected:
         void atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos);
         void atacarEspUpdBossComun(int* danyo, Enemigo* &_boss);
