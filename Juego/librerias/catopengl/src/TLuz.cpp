@@ -26,7 +26,7 @@ TLuz::TLuz(int t)
         setDirection(0.0f, -1.0f, 0.0f);
         setLightRange(50.0f);
     }
-
+    brillos_shader = 32.0f;
 }
 
 TLuz::~TLuz()
@@ -85,6 +85,7 @@ void TLuz::beginDraw()
         cola_compartida = cola_compartidaAuxiliar;//ponemos la nueva cola que tiene los elementos situados como la anterior
 
         shader->Use();
+        shader->setFloat("material.shininess", brillos_shader); //Cantidad de Brillos
         //Tipos de luces
         if(tipo_luz == 0)
         {
@@ -127,6 +128,7 @@ void TLuz::beginDraw()
     else
     {
         shader->Use();
+        shader->setFloat("material.shininess", brillos_shader); //Cantidad de Brillos
         //Tipos de luces
         if(tipo_luz == 0)
         {
@@ -198,6 +200,13 @@ void TLuz::setLightRange(float range)
     linear = 4.5f / range;
     quadratic = 75.0f / (range*range);
 }
+
+//Aplica una cantidad de brillos para el shader (32 por defecto)
+void TLuz::setBrillos(float b)
+{
+    brillos_shader = b;
+}
+
 
 void TLuz::endDraw()
 {

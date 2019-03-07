@@ -13,14 +13,14 @@ class TMalla : public TEntidad
         //punteros a recursos
         RMalla * objetos;//diferentes frames para animaciones
         RImagen * texturas[3];//3: textura, brillos, relieves
-        unsigned short frames_totales,mallas_totales,frame_inicial,frame_final,frame_actual,velocidad_animacion;
+        float frames_totales,mallas_totales,frame_inicial,frame_final,frame_actual,velocidad_animacion;
 
     public:
         // Constructor y destructor
-        TMalla();
+        TMalla(int ft);
         ~TMalla();
         void cargarMalla(unsigned short,unsigned short);
-        
+
         // Recibir recurso
         void setRecursoObjeto(RMalla *);//recibe un puntero de la malla
 

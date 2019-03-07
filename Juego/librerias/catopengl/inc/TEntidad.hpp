@@ -37,15 +37,20 @@ class TEntidad
 
         void RemoveShader();
 
+        void TimeEngine();
+
+        float getTime();
+        static glm::mat4 * matriz_compartida;//matriz que tiene la ultima operacion
+
     protected:
 
-        static glm::mat4 * matriz_compartida;//matriz que tiene la ultima operacion
         static std::stack<glm::mat4 *> * pila_compartida;//pila para recorrido normal
         static std::queue<glm::mat4 *> * cola_compartida;//cola para recorrida hacia arriba(padre)
         char didentidad;//nos servira para saber que tipo de funcion hace(solo es informativo)
         bool ejecucion = true;//sirve para saber si se debe ejecutar por defecto es true a no ser que se cambie
         Shader * shader = nullptr;//puntero a shader
-
+        float deltaTime = 0.0f;	// Tiempo entre el actual frame y el ultimo
+        float lastFrame = 0.0f; // Tiempo del ultimo frame
 };
 
 #endif

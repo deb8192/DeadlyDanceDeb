@@ -5,6 +5,7 @@ RMalla::RMalla()
     tipo = 'M';
     objetos = 0;
     mallas = 0;
+    frames.reserve(45);
 }
 
 void RMalla::Remove()
@@ -13,70 +14,90 @@ void RMalla::Remove()
 }
 
 // draws the model, and thus all its meshes
-void RMalla::Draw(Shader *shader)
+void RMalla::Draw(Shader *shader, float frame)
 {
-    for(unsigned int i = 0; i < meshes.size(); i++)
-        meshes[i]->Draw(shader);
+    for(unsigned int j = 0; j < frames[frame].size(); j++)
+    {
+        frames[frame][j]->Draw(shader);
+    }
 }
-
-//**Carga de frames**
-// bool RMalla::CargarAnimacion(const char * _ruta)
-// {
-//     //numero de frames
-//     unsigned int frames_max = 45;
-//
-//     //Pasarlo a string
-//     std::string path = _ruta;
-//
-//     //Directorio
-//     directory = path.substr(0, path.find_last_of('/'));
-//
-//     //Obtenemos el nombre del fichero
-//     std::size_t found = path.find_last_of("/\\");
-//     std::string filename = path.substr(found+1);
-//     std::string name = filename.substr(0, filename.find_last_of('_'));
-//
-//     //Obtener extension del fichero
-//     found = filename.find('.');
-//     std::string ext = filename.substr(found+1);
-//
-//     for(unsigned int i=1; i <= frames_max; i++)
-//     {
-//         //Crear el string del numero de frames
-//         std::stringstream ss;
-//         ss << setw(6) << setfill('0') << i;
-//         std::string nframes = ss.str();
-//
-//         //String con el directorio completo
-//         std::ostringstream newstring;
-//         newstring << directory << "/" << name << "_" << nframes << "." << ext;
-//         std::string pathfile = newstring.str();
-//
-//         cout << "Objeto " << i << ": " << endl;
-//
-//         //Cargar mallas
-//         if(!CargarMalla(pathfile))
-//         {
-//             return false;
-//         }
-//     }
-//
-//     return true;
-//
-// }
-//*******************
 
 bool RMalla::CargarRecurso(const char * _ruta)
 {
+    std::string path = _ruta;
+    bool recurso = CargarAnimacion(_ruta);
+    return recurso;
+}
+
+//Carga de frames
+bool RMalla::CargarAnimacion(const char * _ruta)
+{
+    //AQUI MIRAR EL NUMERO DE FRAMES (FICHEROS EN LA CARPETA)
+    //numero de frames
+    unsigned int frames_max = 1;
+
+    //Pasarlo a string
+    std::string path = _ruta;
+
+    //Directorio
+    directory = path.substr(0, path.find_last_of('/'));
+
+    //Si tiene mas de 1 frame
+    if(frames_max > 1)
+    {
+        //Obtenemos el nombre del fichero
+        std::size_t found = path.find_last_of("/\\");
+        std::string filename = path.substr(found+1);
+        std::string name = filename.substr(0, filename.find_last_of('_'));
+
+        //Obtener extension del fichero
+        found = filename.find('.');
+        std::string ext = filename.substr(found+1);
+
+        for(unsigned int i=1; i <= frames_max; i++)
+        {
+            //Crear el string del numero de frames
+            std::stringstream ss;
+            ss << setw(6) << setfill('0') << i;
+            std::string nframes = ss.str();
+
+            //String con el directorio completo
+            std::ostringstream newstring;
+            newstring << directory << "/" << name << "_" << nframes << "." << ext;
+            std::string pathfile = newstring.str();
+
+            cout << "Objeto " << i << ": " << endl;
+
+            //Cargar mallas
+            if(!CargarMalla(pathfile))
+            {
+                return false;
+            }
+        }
+    }
+    else
+    {
+        //Cargar mallas
+        if(!CargarMalla(path))
+        {
+            return false;
+        }
+    }
+
+    return true;
+
+}
+
+bool RMalla::CargarMalla(std::string _ruta)
+{
     //carga los datos con assimp, mete el numero de datos que tiene en objetos,
     //numeros de mallas que tiene en mallas
-    std::string path = _ruta;
 
     //Leer fichero de assimp
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+    const aiScene* scene = importer.ReadFile(_ruta, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
-    directory = path.substr(0, path.find_last_of('/'));
+    //directory = _ruta.substr(0, _ruta.find_last_of('/'));
 
     //Mirar errores en la lectura
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -99,6 +120,9 @@ bool RMalla::CargarRecurso(const char * _ruta)
     }
 
     mallas = meshes.size();
+
+    frames.push_back(meshes); //Guardar frame de animacion
+    meshes.clear();
 
     return true;
 }

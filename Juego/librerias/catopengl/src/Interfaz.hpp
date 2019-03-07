@@ -23,7 +23,7 @@ class Interfaz
 
         unsigned short AddLuz(int);//creamos una luz
 
-        unsigned short AddMalla(const char *);//creamos una malla
+        unsigned short AddMalla(const char *,int initf);//creamos una malla
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
@@ -74,5 +74,4 @@ class Interfaz
         void ventanaLimpiar();
 
         float x,y,z;
-
 };

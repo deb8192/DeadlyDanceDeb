@@ -77,9 +77,9 @@ void main()
     //Fase 2: Puntos de Luz
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
     {
-        vec3 pointres = CalcPointLight(pointLights[i], norm, FragPos, viewDir);
-        if(pointres.x > 0 && pointres.y > 0 && pointres.z > 0)
+        if(pointLights[i].constant > 0)
         {
+            vec3 pointres = CalcPointLight(pointLights[i], norm, FragPos, viewDir);
             result += pointres;
         }
     }
@@ -106,7 +106,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 reflectDir = reflect(-lightDir, normal);               //Reflejo (la direccion de la luz es negativa porque va desde la luz hasta la vista no hacia el fragment como en la difusa)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);    //Calculo del componente especular (max para asegurar que no sea negativo), material.shininess es el valor del brillo cambialo para mas o menos brillo (32,64,128,etc...)
 
-    vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, TexCoords));  //Luz Ambiental
+    vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, TexCoords));
     vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.diffuse, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
     return (ambient + diffuse + specular);
