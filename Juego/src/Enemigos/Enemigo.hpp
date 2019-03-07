@@ -135,13 +135,17 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
         Arbol* getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
-        void UpdateBehavior(short *i, int* _jugador, std::vector<Zona*> &_getZonas); //actualiza el comportamiento actual del pollo
+        void UpdateBehavior(short *i, int* _jugador, std::vector<Zona*> &_getZonas, bool ayuda); //actualiza el comportamiento actual del pollo
         short * RunIA(bool);//corre la ia del enemigo
         void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
         void AnnadirRecorridoAyuda(vector <Posiciones> recorrido);
         //fin ia
 
         const char* GetModelo(); // Malla 3D con la textura
+        bool GetPedirAyuda();
+        void SetPedirAyuda(bool);
+        bool GetContestar();
+        void SetContestar(bool);
 
     protected:
         Times* _tiempo;
@@ -157,7 +161,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool perseguir(int* _jug);//por defecto devuelve true TO IMPROVE
         bool buscar(VectorEspacial*);//busca un objetivo
         bool Acciones(int);//esto es para recorrer el arbol
-        bool pedirAyuda();//pide ayuda
+        bool PedirAyuda(bool);//pide ayuda
         bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
         void AuxiliarAliado();//se mueve hacia el proximo waypoint del camino a seguir
         bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
@@ -200,6 +204,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
         vector <Posiciones> recorridoAyuda;
         const char* _modelo; // Malla 3D con la textura
+        bool pedirAyuda;
+        bool contestar;
 };
 
 #endif

@@ -13,10 +13,8 @@ Pausa::~Pausa()
 
 void Pausa::Iniciar()
 {
-    cout << "\e[42m Pausa \e[0m" << endl;
     _motor->FondoEscena(255,0,0,0);
     _motor->ActivarFuenteDefault();
-    _motor->CrearTexto("Pausa - ESC o P = Atras", 0, 0, 400, 20);
     pintarBotones();
 }
 

@@ -13,10 +13,8 @@ EstadoMuerte::~EstadoMuerte()
 
 void EstadoMuerte::Iniciar()
 {
-    cout << "\e[42m EstadoMuerte \e[0m" << endl;
     _motor->FondoEscena(255,0,0,0);
     _motor->ActivarFuenteDefault();
-    _motor->CrearTexto("Muerto - ESC = M. principal", 0, 0, 400, 20);
     pintarBotones();
 }
 

@@ -64,7 +64,7 @@ void Pollo::RunIA()
  * Salidas:
 */ 
 
-void Pollo::UpdatePollo(short *i, int* _jug)
+void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
 {
     Jugador* _jugador = (Jugador*)_jug;
     Constantes constantes;
@@ -129,8 +129,8 @@ void Pollo::UpdatePollo(short *i, int* _jug)
                 {
                     modo = MODO_ATAQUE;
                     this->setTimeMerodear(constantes.CERO);
-                    cout<<"Pide ayuda a los aliados"<<endl;
-                    this->pedirAyuda();
+                    //cout<<"Pide ayuda a los aliados"<<endl;
+                    this->PedirAyuda(ayuda);
                     funciona = true;
                 }
                 break;
@@ -168,8 +168,8 @@ void Pollo::UpdatePollo(short *i, int* _jug)
                         {
                             modo = MODO_ATAQUE;
                             this->setTimeMerodear(constantes.CERO);
-                            cout<<"Pide ayuda a los aliados"<<endl;
-                            this->pedirAyuda();
+                            //cout<<"Pide ayuda a los aliados"<<endl;
+                            this->PedirAyuda(ayuda);
                             funciona = true;
                         }
                         else if(this->oir(constantes.DOS))
@@ -191,8 +191,8 @@ void Pollo::UpdatePollo(short *i, int* _jug)
                         { 
                             modo = MODO_ATAQUE;
                             this->setTimeMerodear(constantes.CERO);
-                            cout<<"Pide ayuda a los aliados"<<endl;
-                            this->pedirAyuda();
+                            //cout<<"Pide ayuda a los aliados"<<endl;
+                            this->PedirAyuda(ayuda);
                             funciona = true;
                         }
                         else if(this->oir(constantes.DOS))
