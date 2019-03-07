@@ -22,6 +22,8 @@ Enemigo::Enemigo()
     vectorOrientacion.modulo = 0.0f;
     modo = MODO_DEFAULT;
     atacktime = 0.0f;
+    pedirAyuda = false;
+    contestar = false;
 }
 
 Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida/*,
@@ -318,14 +320,14 @@ void Enemigo::UpdateIA()
 }
 
 void Enemigo::UpdateBehavior(short *i, int* _jugador, 
-    std::vector<Zona*> &_getZonas)
+    std::vector<Zona*> &_getZonas, bool ayuda)
 {
     switch (tipoEnemigo)
     {
         case 0:
         {
             Pollo *pollo = (Pollo*) this;
-            pollo->UpdatePollo(i, _jugador);
+            pollo->UpdatePollo(i, _jugador, ayuda);
         }
             break;
         
@@ -879,14 +881,14 @@ Arbol * Enemigo::getArbol()
     return arbol;
 }
 
-short int* Enemigo::RunIA(bool funciona)
+short int* Enemigo::RunIA(bool funciona/*, bool ayuda*/)//TO DO: ayuda es si _enemPideAyuda tiene algun enemigo
 {
     //aun por determinar primero definir bien la carga de arboles
     return arbol->ContinuarSiguienteNodo(funciona);//el true lo ponemos para detectar la primera ejecucion del bucle
     //bool salir = false;//cuando terminemos el arbol salimos
     /*while(!salir)
     {
-        bool es = Acciones(accion);
+        bool es = Acciones(accion, ayuda);
         accion = arbol->siguiente(es);//cambiamos de rama(false) o de hoja(true)
         salir = arbol->estadoActual();//ultima rama o entras en bucle
     }*/
@@ -900,7 +902,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 //fin ia
 
 //comportamientos bases
-    bool Enemigo::Acciones(int accion)
+    bool Enemigo::Acciones(int accion/*, bool ayuda*/)
     {
         switch(accion)
         {
@@ -918,7 +920,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             case 6://oir al jugador
                 return oir(1);
             case 8://pedir ayuda
-                return pedirAyuda();
+                return PedirAyuda(/*ayuda*/false);
             case 9://oye pedir ayuda enemigo ?
                 return oir(2);
             case 10://contestacion a auxilio
@@ -1064,18 +1066,16 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         return funciona;
     }
 
-    bool Enemigo::pedirAyuda()
+    bool Enemigo::PedirAyuda(bool ayuda)
     {
-       //TO DO: revisar
-        //Jugando* _nivel = Jugando::GetInstance();
         //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
-        /*if(_nivel->getEnemigoPideAyuda() == nullptr)
+        if(!ayuda)
         {
             //vamos a generar un sonido de ayuda
             generarSonido(60,2,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
-            _nivel->setEnemigoPideAyuda(this); //En caso de no estar buscando a ningun aliado se anade este como peticionario
+            SetPedirAyuda(true); //En caso de no estar buscando a ningun aliado se anade este como peticionario
             return true;
-        }*/
+        }
         //cout << " grita pidiendo ayuda "<< endl;
         return false;
     }
@@ -1091,13 +1091,12 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
     bool Enemigo::ContestarAyuda()
     {
-        //Jugando* _nivel = Jugando::GetInstance();
         //vamos a generar un sonido de ayuda
         generarSonido(10,5.750,3); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
         //if(_motor->getPathfindingActivado()){
-            //TO DO: solo esta linea:_nivel->updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
+        SetContestar(true);//Jugando::updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
         //}
-        //cout << " contesta a la llamada de auxilio "<< endl;
+        cout << " contesta a la llamada de auxilio "<< endl;
 
         return true;
     }
@@ -1152,4 +1151,24 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 const char* Enemigo::GetModelo()
 {
     return _modelo;
+}
+
+bool Enemigo::GetPedirAyuda()
+{
+    return pedirAyuda;
+}
+
+void Enemigo::SetPedirAyuda(bool ayu)
+{
+    pedirAyuda = ayu;
+}
+
+bool Enemigo::GetContestar()
+{
+    return contestar;
+}
+
+void Enemigo::SetContestar(bool contesta)
+{
+    contestar = contesta;
 }
