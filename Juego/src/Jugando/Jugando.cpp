@@ -938,7 +938,6 @@ void Jugando::cargarCofres(int num)
 {
   Constantes constantes;
     long unsigned int num_cofres = num;
-    MotorGrafico* _motor = MotorGrafico::GetInstance();
     unsigned short  totalCofresPonible = 0;
     vector<short> zonasDisponibles;
     zonasDisponibles.reserve(num);
@@ -985,7 +984,6 @@ void Jugando::cargarCofres(int num)
                 inter = nullptr;
 
                 //Fisicas del cofre
-                MotorFisicas* _fisicas = MotorFisicas::getInstance();
                 _fisicas->crearCuerpo(3,constantes.CERO,newx/2,newy/2,newz/2,2,2,4,2,3);
 
                 //borrar del Array por que el proposito esta cumplido
