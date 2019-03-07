@@ -1071,6 +1071,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
         if(!ayuda)
         {
+            cout << "\e[42m Pide ayuda \e[0m" << endl;
             //vamos a generar un sonido de ayuda
             generarSonido(60,2,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
             SetPedirAyuda(true); //En caso de no estar buscando a ningun aliado se anade este como peticionario
