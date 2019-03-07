@@ -11,11 +11,12 @@ irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcurs
 libSeguimiento = $(shell ls librerias/catopengl/obj/*.o)
 SHELL = /bin/bash
 CPUCOUNT=$(shell grep -c   "^processor" /proc/cpuinfo)
+DIRECTIVA =#definimos la variable que detecta que motorgrafico compilar el viejo o el nuevo(si no se pone esta directiva), -D debe estar pegado al nombre de la directiva
 # ${CXXFLAGS} - Son las opciones del compilador
 #pwd
 
 # File names
-EXEC = Ejecutable
+EXEC = Ejecutable 
 BEGIN = Comienzo
 
 SOURCES = $(shell ls src/*.cpp)
@@ -65,6 +66,8 @@ RECUR2 = Recursiva2
 PRECA = Precaucion
 LG = LIBRERIAGRAFICA
 PARALLEL = Paralelo
+DIVISION = Division
+
 BUSQ = $(shell find ./obj  -maxdepth 1 -name "*.o" | wc -l)
 BUSQM = $(shell find ./obj/Menus  -maxdepth 1 -name "*.o" | wc -l)
 BUSQP = $(shell find ./obj/Personajes  -maxdepth 1 -name "*.o" | wc -l)
@@ -106,10 +109,10 @@ $(PARALLEL): $(OBJECTS) $(OBJECTSP) $(OBJECTSE) $(OBJECTSM) $(OBJECTSJ) $(OBJECT
 
 $(EXEC): $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2) $(libSeguimiento)
 	#Comprobando ejecutable si esta actualizado
-	$(CXX) $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2) $(irrlichtN) $(LIBRERIAS) $(LIBRERIAS_ESPECIFICAS)  -o $(EXEC)
+	$(CXX) $(DIRECTIVA) $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2) $(irrlichtN) $(LIBRERIAS) $(LIBRERIAS_ESPECIFICAS)  -o $(EXEC)
 	#Ejecutable Actualizado
 
-$(PRECA):
+$(PRECA): 
 	if [ $(BUSQ2) -gt 0 ] ; then mv src/*.o obj/ ; fi
 	if [ $(BUSQ2M) -gt 0 ] ; then mv src/Menus/*.o obj/Menus/ ; fi
 	if [ $(BUSQ2P) -gt 0 ] ; then mv src/Personajes/*.o obj/Personajes/ ; fi
@@ -135,11 +138,11 @@ $(RECUR):
 
 %.o: %.cpp %.hpp #para las clases normales
 	#Compilacion objeto con cabecera
-	$(CXX) -c $(CXXFLAGS) $< -o $@ $(CABECERAS)
+	$(CXX) -c $(CXXFLAGS) $(DIRECTIVA) $< -o $@ $(CABECERAS)
 
 %.o: %.cpp #esto es para el main sobretodo
 	#Compilacion objeto sin cabecera
-	$(CXX) -c $(CXXFLAGS) $< -o $@ $(CABECERAS)
+	$(CXX) -c $(CXXFLAGS) $(DIRECTIVA) $< -o $@ $(CABECERAS)
 
 $(RECUR2):
 	 if [ $(BUSQ2) -gt 0 ] ; then mv src/*.o obj/ ; fi
@@ -178,4 +181,7 @@ val: $(BEGIN)
 	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia
 	export LD_LIBRARY_PATH="$(LIBRERIAS_CARPETAS)";\
 	valgrind --error-limit=no ./$(EXEC)
-		
+
+newmotor: 
+	$(MAKE) DIRECTIVA=-DWEMOTOR Comienzo
+	
