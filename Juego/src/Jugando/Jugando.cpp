@@ -87,7 +87,7 @@ void Jugando::Iniciar()
     _motor->CargarInterfaz();
     
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-    CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
+    CargarNivel(5, 1); //(level, player) 1 = heavy / 2 = bailaora
     
     //TO DO: hacerle un reserve:
     //_auxiliadores.reserve(xx);
@@ -666,125 +666,50 @@ void Jugando::Render()
     lastDrawTime = drawTime;
     drawTime = _controladorTiempo->GetTiempo(2);
 
+    float resta = drawTime - lastDrawTime;
+    float updateTime = _controladorTiempo->GetUpdateTime();
+
     //Dibujado de las puertas, las palancas, los objetos y los cofres
-    for(unsigned int i = 0; i < _interactuables.size(); i++)
+    for(unsigned short i = 0; i < _interactuables.size(); i++)
     {
-        _interactuables.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-        _interactuables.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
-        _motor->mostrarObjetos(_interactuables.at(i)->getX(),
-            _interactuables.at(i)->getY(),
-            _interactuables.at(i)->getZ(),
-            _interactuables.at(i)->getRX(),
-            _interactuables.at(i)->getRY(),
-            _interactuables.at(i)->getRZ(),
-            _interactuables.at(i)->GetPosicionObjetos()
-        );
+        _interactuables.at(i)->Render(updateTime, resta);
     }
     
     //Dibujado del personaje
-    _jugador->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
-    _jugador->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-    _jugador->UpdateTimeMove(drawTime - lastDrawTime);
-    _motor->mostrarJugador(_jugador->getX(),
-        _jugador->getY(),
-        _jugador->getZ(),
-        _jugador->getRX(),
-        _jugador->getRY(),
-        _jugador->getRZ()
-    );
+    _jugador->Render(updateTime, resta);
     
     if (!enSalaBoss)
     {
         //Dibujado de los enemigos
-        for(unsigned int i = 0; i < _enemigos.size(); i++)
+        for(unsigned short i = 0; i < _enemigos.size(); i++)
         {
-            _enemigos.at(i)->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
-            _enemigos.at(i)->UpdateTimeMove(drawTime - lastDrawTime);
-            _enemigos.at(i)->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-            _enemigos.at(i)->UpdateTimeRotate(drawTime - lastDrawTime);
-            _motor->mostrarEnemigos(_enemigos.at(i)->getX(),
-                _enemigos.at(i)->getY(),
-                _enemigos.at(i)->getZ(),
-                _enemigos.at(i)->getRX(),
-                _enemigos.at(i)->getRY(),
-                _enemigos.at(i)->getRZ(),
-                i
-            );
-            _motor->dibujarObjetoTemporal(_enemigos.at(i)->getFisX()*2,
-                _enemigos.at(i)->getFisY()*2,
-                _enemigos.at(i)->getFisZ()*2,
-                _enemigos.at(i)->getRX(),
-                _enemigos.at(i)->getRY(),
-                _enemigos.at(i)->getRZ(),3 , 3, 3, 2);
+            _enemigos.at(i)->Render(i, updateTime, resta);
         }
 
         //Dibujado de ataques enemigos
         for(unsigned int i = 0; i < _enemigos.size(); i++)
         {
-            _motor->dibujarObjetoTemporal(
-                _enemigos.at(i)->getAtX(),
-                _enemigos.at(i)->getAtY(),
-                _enemigos.at(i)->getAtZ(),
-                _enemigos.at(i)->getRX(),
-                _enemigos.at(i)->getRY(),
-                _enemigos.at(i)->getRZ(),
-                4,
-                4,
-                4,
-                2);
+            _enemigos.at(i)->RenderAtaque();
         }
     }
-    else
+    else // Dibujado Boss
     {
-        _boss->moverseEntidad(1 / _controladorTiempo->GetUpdateTime());
-        _boss->UpdateTimeMove(drawTime - lastDrawTime);
-        _boss->RotarEntidad(1 / _controladorTiempo->GetUpdateTime());
-        _boss->UpdateTimeRotate(drawTime - lastDrawTime);
-        _motor->mostrarBoss(_boss->getX(),
-            _boss->getY(),
-            _boss->getZ(),
-            _boss->getRX(),
-            _boss->getRY(),
-            _boss->getRZ()
-        );
-        _motor->dibujarObjetoTemporal(_boss->getFisX()*2,
-            _boss->getFisY()*2,
-            _boss->getFisZ()*2,
-            _boss->getRX(),
-            _boss->getRY(),
-            _boss->getRZ(),3 , 3, 3, 2);
+        _boss->Render(-1, updateTime, resta);
 
         //Dibujado de ataque boss
-        _motor->dibujarObjetoTemporal(
-            _boss->getAtX(),
-            _boss->getAtY(),
-            _boss->getAtZ(),
-            _boss->getRX(),
-            _boss->getRY(),
-            _boss->getRZ(),
-            4,
-            4,
-            4,
-            2);
+        _boss->RenderAtaque();
     }
 
     //Dibujado del ataque especial del jugador
     if(_jugador->getTimeAtEsp() > 0.0f)
     {
-        _jugador->RenderAtaqueEsp(_controladorTiempo->GetUpdateTime(),
-            (drawTime - lastDrawTime));
+        _jugador->RenderAtaqueEsp(updateTime, resta);
     }
 
     //Dibujado zonas
     for(unsigned int i=0; i < _zonas.size(); i++)
     {
-        _motor->dibujarZona(_zonas.at(i)->getX(),
-            _zonas.at(i)->getY(),
-            _zonas.at(i)->getZ(),
-            _zonas.at(i)->getAncho(),
-            _zonas.at(i)->getAlto(),
-            _zonas.at(i)->getLargo()
-        );
+        _zonas.at(i)->Render();
     }
     //_motor->clearDebug2(); //Pruebas debug
 
