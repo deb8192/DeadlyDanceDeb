@@ -1,9 +1,9 @@
 #include "RMalla.hpp"
 
-RMalla::RMalla()
+RMalla::RMalla(int f)
 {
     tipo = 'M';
-    objetos = 0;
+    objetos = f;
     mallas = 0;
     frames.reserve(45);
 }
@@ -32,9 +32,9 @@ bool RMalla::CargarRecurso(const char * _ruta)
 //Carga de frames
 bool RMalla::CargarAnimacion(const char * _ruta)
 {
-    //AQUI MIRAR EL NUMERO DE FRAMES (FICHEROS EN LA CARPETA)
+    //AQUI MIRAR EL NUMERO DE FRAMES (FICHEROS EN LA CARPETA CON EL MISMO NOMBRE Y .OBJ)
     //numero de frames
-    unsigned int frames_max = 1;
+    //unsigned int objetos = 45;
 
     //Pasarlo a string
     std::string path = _ruta;
@@ -43,7 +43,7 @@ bool RMalla::CargarAnimacion(const char * _ruta)
     directory = path.substr(0, path.find_last_of('/'));
 
     //Si tiene mas de 1 frame
-    if(frames_max > 1)
+    if(objetos > 1)
     {
         //Obtenemos el nombre del fichero
         std::size_t found = path.find_last_of("/\\");
@@ -54,7 +54,7 @@ bool RMalla::CargarAnimacion(const char * _ruta)
         found = filename.find('.');
         std::string ext = filename.substr(found+1);
 
-        for(unsigned int i=1; i <= frames_max; i++)
+        for(unsigned int i=1; i <= objetos; i++)
         {
             //Crear el string del numero de frames
             std::stringstream ss;
