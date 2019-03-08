@@ -18,7 +18,7 @@ void Gestor::Remove()
 //Uso: se utiliza para buscar el recurso si lo encuentra y no lo tiene ya instanciado se instancia en memoria, devolviendo un id este id le sirve al que tiene la interfaz para crear objetos
 //Entradas: recurso -> string de donde esta el archivo (ruta)
 //Salidas: 0 significa que no se ha obtenido el recurso, => 1 significa que esta instanciado en esa direccion de memoria.
-unsigned short Gestor::ObtenerRecurso(const char * _recurso,TNodo * _nodo)
+unsigned short Gestor::ObtenerRecurso(const char * _recurso,TNodo * _nodo, int num)
 {
     unsigned short existeArchivador = buscarRecurso(_recurso);
 
@@ -27,7 +27,7 @@ unsigned short Gestor::ObtenerRecurso(const char * _recurso,TNodo * _nodo)
     {
         //existe archivador por lo que devolvemos el id
         Archivador * _archivador = recuperarRecurso(existeArchivador);
-        
+
         if(_archivador != nullptr)
         {
             RMalla * malla = dynamic_cast<RMalla*>(_archivador->_recursos);//obtenemos recurso
@@ -45,15 +45,15 @@ unsigned short Gestor::ObtenerRecurso(const char * _recurso,TNodo * _nodo)
             Archivador * archivador = new Archivador;
             archivador->id = generarId();
             archivador->_nombre = _recurso;
-            archivador->_recursos = new RMalla();
+            archivador->_recursos = new RMalla(num);
             archivador->_recursos->CargarRecurso(_recurso);
-            
+
             if(_nodo != nullptr)
             {
                 RMalla * malla = dynamic_cast<RMalla*>(archivador->_recursos);
                 _nodo->GetEntidad()->setRecursoObjeto(malla);
             }
-            
+
             //detectar tipo de recurso y crear su clase especializada (imagen,malla o texto plano, faltarian fuentes)
 
             archivadores.push_back(archivador);
@@ -158,5 +158,5 @@ Gestor::Archivador * Gestor::recuperarRecurso(unsigned short id)
             }
         }
     }
-    return nullptr;   
+    return nullptr;
 }

@@ -4,7 +4,7 @@
 TMalla::TMalla(int ft)
 {
     didentidad = 'M'; //para sabe que funcion hace es informativo
-    frames_totales = 0;
+    frames_totales = ft;
     mallas_totales = 0;
     frame_inicial = 0;
     frame_final = ft;
@@ -91,9 +91,17 @@ void TMalla::endDraw()
 
 }
 
-void TMalla::BucleAnimacion(unsigned short,unsigned short)
+void TMalla::BucleAnimacion(unsigned short ini,unsigned short fin)
 {
-
+    if(ini > 0 && ini <= frames_totales && fin > 0 && fin <= frames_totales && ini < fin)
+    {
+        frame_inicial = ini;
+        frame_final = fin;
+    }
+    else
+    {
+        cout << "ERROR: Los frames del bucle tienen que estar entre 0 y " << frames_totales << endl;
+    }
 }
 
 void TMalla::SiguienteAnimacion()
@@ -108,22 +116,17 @@ void TMalla::DefinirAnimaciones()
 
 unsigned short TMalla::getFrameInicio()
 {
-    return 0;
+    return frame_inicial;
 }
 
 unsigned short TMalla::getFrameFinal()
 {
-    return 0;
+    return frame_final;
 }
 
 unsigned short TMalla::getFrameActual()
 {
-    return 0;
-}
-
-bool TMalla::setTiempoAnimacion(unsigned short)
-{
-    return false;
+    return frame_actual;
 }
 
 void TMalla::setRecursoObjeto(RMalla * objeto)
