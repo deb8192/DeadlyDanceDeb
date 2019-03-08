@@ -27,6 +27,7 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  //glfwWindowHint(opcion_hint,valor_hint);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4); //MSAA x 4
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); //Solo para OS X
 
     //Creamos una ventana
@@ -54,6 +55,7 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     //Se llama a la funcion "framebuffer_size_callback" cada vez que el usuario cambia el tamanyo de ventana
     glfwSetFramebufferSizeCallback(_window,this->redimensionar);
 
+    glEnable(GL_MULTISAMPLE); // Activar suavizado MSAA
     //*********** APLICAR PROFUNDIDAD Z-BUFFER ***********
     glEnable(GL_DEPTH_TEST);   //Necesario para el zoom/fov
 
