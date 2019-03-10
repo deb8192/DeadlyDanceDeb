@@ -13,8 +13,8 @@ class Gestor
     public:
 
         Gestor();
-        
-        unsigned short ObtenerRecurso(const char *,TNodo *);//obtiene el recurso y lo instancia en memoria
+
+        unsigned short ObtenerRecurso(const char *,TNodo *,int);//obtiene el recurso y lo instancia en memoria
 
         bool DestruirObjeto(unsigned short);//destruye el objeto de memoria (no lo destruye de opengl, para esto hay que llamar a interfaz.RemoveObject(id a destruir))
 
@@ -29,7 +29,7 @@ class Gestor
         //clase que nos sirve para almacenar el recurso de forma mas organizada
         struct Archivador
         {
-            unsigned short id;//id del archivo 
+            unsigned short id;//id del archivo
             const char * _nombre;//nombre del archivo
             Recurso * _recursos;
         };
@@ -44,7 +44,7 @@ class Gestor
 
         unsigned short buscarRecurso(const char *);//nos busca por la ruta del recurso si existe te devuelve su archivador si no te devuelve 0
 
-        Archivador * recuperarRecurso(unsigned short);//sirve para devolver el archivador 
+        Archivador * recuperarRecurso(unsigned short);//sirve para devolver el archivador
 
-        
+
 };

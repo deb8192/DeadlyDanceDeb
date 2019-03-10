@@ -156,7 +156,8 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
     rotacion->addHijo(traslacion);
     traslacion->addHijo(malla);
 
-    unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo,malla);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
+    unsigned short id_recurso = gestorDeRecursos->ObtenerRecurso(archivo,malla,initf);//obtenemos el id del recurso en memoria (para ser procesado por opengl)
+
 
     if(id_recurso != 0)
     {

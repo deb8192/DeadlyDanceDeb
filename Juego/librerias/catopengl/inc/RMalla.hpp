@@ -20,7 +20,7 @@ class RMalla : public Recurso
 {
     public:
 
-        RMalla();
+        RMalla(int f);
         void Remove();
 
         //te carga los datos en la matrix
@@ -29,7 +29,7 @@ class RMalla : public Recurso
         bool CargarRecurso(const char * _ruta);
         void Draw(Shader *shader, float time);
         //datos * CargarFrames(unsigned short,unsigned short); //le pasas datos[x]
-        
+
 
     private:
 
