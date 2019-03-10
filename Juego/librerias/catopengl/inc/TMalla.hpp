@@ -35,7 +35,6 @@ class TMalla : public TEntidad
         unsigned short getFrameInicio();
         unsigned short getFrameFinal();
         unsigned short getFrameActual();
-        bool setTiempoAnimacion(unsigned short);
 
 };
 
