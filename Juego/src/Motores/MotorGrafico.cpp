@@ -13,6 +13,9 @@ MotorGrafico::MotorGrafico()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        
+        _interfaz = nullptr;
+
     #else
         //codigo motor irrlicht
         input.setDevice(_device);//lo  utilizamos para que los eventos puedan llamar a funciones de
@@ -34,6 +37,8 @@ MotorGrafico::~MotorGrafico()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        _interfaz = nullptr;
+
     #else
         //codigo motor irrlicht
         //Inputs input
@@ -269,7 +274,38 @@ void MotorGrafico::LimpiarMotorGrafico()
 bool MotorGrafico::CrearVentana(short tipo)
 {
     #ifdef WEMOTOR
-        //codigo motor catopengl
+            //codigo motor catopengl
+            
+            if(_interfaz == nullptr)
+            {
+                _interfaz = new Interfaz();
+            }
+
+            std::string titulo = "";
+            switch(tipo)
+            {
+                case 1:
+                    width=640; height=480;
+                    titulo = "DeadlyDance LowResolution";
+                    break;
+
+                case 2:
+                    width=800; height=600;
+                    titulo = "DeadlyDance MediumResolution";
+                    break;
+
+                case 3:
+                    width=1280; height=1024;
+                    titulo = "DeadlyDance HightResolution";
+                    break;
+
+                default:
+                    width=1024; height=768;
+                    titulo = "DeadlyDance NormalResolution";
+                    break;
+            }
+        
+            _interfaz->DefinirVentana(width,height,titulo.c_str());
     #else
         //codigo motor irrlicht
         std::string titulo = "";
@@ -310,6 +346,7 @@ bool MotorGrafico::VentanaAbierta()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        return _interfaz->VentanaEstaAbierta();
     #else
         //codigo motor irrlicht
         return _device->run();    
@@ -343,6 +380,11 @@ void MotorGrafico::propiedadesDevice()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        
+        _interfaz = new Interfaz;
+
+        //esto solo con la interfaz, no tenemos accesos por separados a la interfaz del motor esta unificada
+
     #else
         //codigo motor irrlicht
         //cout << "\e[32m Aplicando propiedades a _device \e[0m" << endl;
@@ -378,6 +420,7 @@ void MotorGrafico::FondoEscena(short a, short r, short g, short b)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        _interfaz->CambiarFondo(r,g,b,a);
     #else
         //codigo motor irrlicht
         //Borra la pantalla con un color
@@ -389,6 +432,10 @@ void MotorGrafico::RenderEscena()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        if(_interfaz != nullptr)
+        {
+            _interfaz->Draw();//pintamos la escena
+        }
     #else
         //codigo motor irrlicht
         // Antes de dibujar el contenido, se llama a FondoEscena en los renders de estado
@@ -402,6 +449,10 @@ void MotorGrafico::BorrarScena()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        if(_interfaz != nullptr)
+        {
+            _interfaz->LimpiarEscena();
+        }
     #else
         //codigo motor irrlicht
         _smgr->clear();
@@ -412,6 +463,11 @@ void MotorGrafico::BorrarGui()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        //codigo motor catopengl
+        if(_interfaz != nullptr)
+        {
+            _interfaz->LimpiarGui();
+        }
     #else
         //codigo motor irrlicht
         _guienv->clear();
@@ -647,7 +703,7 @@ void MotorGrafico::ResetEventoMoveRaton()
 
 #ifdef WEMOTOR
     //codigo motor catopengl
-    float * MotorGrafico::GetPosicionRaton()
+    double * MotorGrafico::GetPosicionRaton()
     {
         return nullptr;
     }    

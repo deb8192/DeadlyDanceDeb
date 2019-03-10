@@ -81,7 +81,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void ResetEventoMoveRaton();
 
             #ifdef WEMOTOR
-                float * GetPosicionRaton();
+                double * GetPosicionRaton();
             #else
                 position2di GetPosicionRaton();
             #endif
@@ -200,6 +200,14 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             #ifdef WEMOTOR 
                 //variables y parametros motor catopengl
+                
+                Interfaz * _interfaz;//puntero que contiene la entrada al motorgrafico de catopengl
+
+                // Ventana 
+                short WIDTH_AUX, WIDTH, HEIGHT;
+                short x_linea1, x_linea2;
+                unsigned short width, height;
+                
             #else
                 //variables y parametros motor irrlicht
                 //variables privadas
