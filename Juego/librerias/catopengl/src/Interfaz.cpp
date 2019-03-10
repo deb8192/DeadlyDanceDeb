@@ -274,8 +274,14 @@ void Interfaz::Escalar(unsigned short id,float x,float y,float z)
     }
 }
 
-bool Interfaz::VentanaEstaAbierta()
+bool Interfaz::VentanaEstaAbierta() 
 {
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
     return window->SigueAbierta();
 }
 
@@ -299,5 +305,49 @@ void Interfaz::ventanaLimpiar()
         window->Drop();
         window = nullptr;
         ventana_inicializada = true;
+    }
+}
+
+double * Interfaz::GetPosicionRaton()
+{
+    return window->RecuperarPosicionesMouse();
+}
+
+void Interfaz::EliminarCamara(unsigned short)
+{
+
+}
+
+void Interfaz::LimpiarEscena()
+{
+
+}
+
+void Interfaz::LimpiarGui()
+{
+
+}
+
+void Interfaz::CambiarFondo(float r, float g, float b,float a)
+{
+    
+    if(window != nullptr)
+    {
+        window->CambiarColorFondo(r,g,b,a);
+    }
+}
+
+void Interfaz::DefinirVentana(short unsigned int width, short unsigned int height, const char * title)
+{
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
+    if(window != nullptr)
+    {
+        window->UpdateTitle(title);
+        window->UpdateSize(width,height);
     }
 }
