@@ -3,7 +3,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #ifndef MotorGrafico_HPP
 #define MotorGrafico_HPP
 
-#ifndef WEMOTOR
+#ifdef WEMOTOR
     //motor catopengl
     #include <Interfaz.hpp> 
 #else
@@ -17,16 +17,21 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include <math.h>
 #include <vector>//para los objetos en escena
 
-//para acortar lineas de programacion se cogen espacios definidos directamente
-using namespace irr;
-using namespace core; 
-using namespace scene;
-using namespace video;
-using namespace io; 
-using namespace gui;
-using namespace std;
-using namespace idsEventos;
-//fin de acortes
+#ifdef WEMOTOR
+    //namespaces de catopengl
+#else
+    //namespaces de irrlichts
+    //para acortar lineas de programacion se cogen espacios definidos directamente
+    using namespace irr;
+    using namespace core; 
+    using namespace scene;
+    using namespace video;
+    using namespace io; 
+    using namespace gui;
+    using namespace std;
+    using namespace idsEventos;
+    //fin de acortes
+#endif
 
     class MotorGrafico
     {
@@ -74,7 +79,12 @@ using namespace idsEventos;
             bool SueltoClicDer();
             bool SueltoClicIzq();
             void ResetEventoMoveRaton();
-            position2di GetPosicionRaton();
+
+            #ifdef WEMOTOR
+                float * GetPosicionRaton();
+            #else
+                position2di GetPosicionRaton();
+            #endif
 
             void CrearCamara(); // crea una camara para ver el escenario
 
@@ -121,8 +131,13 @@ using namespace idsEventos;
             void colorearJugador(int a, int r, int g, int b);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
             //void colorearObjeto(int a, int r, int g, int b, int obj);
-             
-            IAnimatedMeshSceneNode* getArmaEspecial();
+            
+            #ifdef WEMOTOR
+                unsigned short getArmaEspecial();
+            #else
+                IAnimatedMeshSceneNode* getArmaEspecial();
+            #endif
+            
             void EraseColectable(long unsigned int idx); 
             void ErasePowerUP(long unsigned int idx); 
             void EraseEnemigo(std::size_t i);
@@ -183,100 +198,105 @@ using namespace idsEventos;
 
             void propiedadesDevice();
 
-            //variables privadas
-            Inputs input;
-            IrrlichtDevice* _device; //puntero a dispositivo por defecto
-            IVideoDriver* _driver;
-            ISceneManager* _smgr;
-            IGUIEnvironment* _guienv;
-            const IGeometryCreator* _geometryCreator;
-            ISceneCollisionManager* _collmgr;
-            ICameraSceneNode* _camera;
+            #ifdef WEMOTOR 
+                //variables y parametros motor catopengl
+            #else
+                //variables y parametros motor irrlicht
+                //variables privadas
+                Inputs input;
+                IrrlichtDevice* _device; //puntero a dispositivo por defecto
+                IVideoDriver* _driver;
+                ISceneManager* _smgr;
+                IGUIEnvironment* _guienv;
+                const IGeometryCreator* _geometryCreator;
+                ISceneCollisionManager* _collmgr;
+                ICameraSceneNode* _camera;
 
-            // Ventana
-            unsigned short width, height;
-            IGUIFont* _font;
-            IGUISkin* _skin;
+                // Ventana
+                unsigned short width, height;
+                IGUIFont* _font;
+                IGUISkin* _skin;
 
-            /** Revisar **/
-            IGUIFont* font2;
-            std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
-            std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
-            std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
-            
-            IAnimatedMeshSceneNode* _armaEnEscena;//Malla del arma del jugador en escena
-            IAnimatedMesh* _armaEsp;//Malla del arma especial del jugador
-            IAnimatedMeshSceneNode* _armaEspJugador;//Malla del arma especial del jugador en escena
-            std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
-            std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
-            std::vector<IAnimatedMeshSceneNode*> PowerUP_Scena;//Objetos en scena
-            std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
-            std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
-            IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena
-            IAnimatedMeshSceneNode* _bossEscena;//Boss en scena
-            //debug
-            IAnimatedMesh* _linea;
-            IAnimatedMesh* _conoVision;
-            bool debugGrafico, pathfinding;//nos sirven para saber si tenemos activado el debug grafico y el pathfinding
-            ISceneNode* _caja;//box
+                /** Revisar **/
+                IGUIFont* font2;
+                std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
+                std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
+                std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
+                
+                IAnimatedMeshSceneNode* _armaEnEscena;//Malla del arma del jugador en escena
+                IAnimatedMesh* _armaEsp;//Malla del arma especial del jugador
+                IAnimatedMeshSceneNode* _armaEspJugador;//Malla del arma especial del jugador en escena
+                std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
+                std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
+                std::vector<IAnimatedMeshSceneNode*> PowerUP_Scena;//Objetos en scena
+                std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
+                std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
+                IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena
+                IAnimatedMeshSceneNode* _bossEscena;//Boss en scena
+                //debug
+                IAnimatedMesh* _linea;
+                IAnimatedMesh* _conoVision;
+                bool debugGrafico, pathfinding;//nos sirven para saber si tenemos activado el debug grafico y el pathfinding
+                ISceneNode* _caja;//box
 
-            IAnimatedMeshSceneNode* _tmpObjEscena;
+                IAnimatedMeshSceneNode* _tmpObjEscena;
 
-            // Objetos y funciones para puzzles
-            IGUIStaticText* _myTextBox;
+                // Objetos y funciones para puzzles
+                IGUIStaticText* _myTextBox;
 
-            IMesh* _fichaMesh;                         // Malla
-            IMeshSceneNode* _ficha;                    // Nodo
-            std::vector<IMeshSceneNode*> fichasMesh;  // Lista de nodos (fichas)
+                IMesh* _fichaMesh;                         // Malla
+                IMeshSceneNode* _ficha;                    // Nodo
+                std::vector<IMeshSceneNode*> fichasMesh;  // Lista de nodos (fichas)
 
-            // Para seleccionar nodos
-            position2di initialCursorPosition;        // Posicion del clic raton
-            position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
-            ISceneNode* _nodoSeleccionado;
+                // Para seleccionar nodos
+                position2di initialCursorPosition;        // Posicion del clic raton
+                position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
+                ISceneNode* _nodoSeleccionado;
 
-            // Ventana 
-            short WIDTH_AUX, WIDTH, HEIGHT;
-            short x_linea1, x_linea2;
+                // Ventana 
+                short WIDTH_AUX, WIDTH, HEIGHT;
+                short x_linea1, x_linea2;
 
-            IGUIImage* _img;
-            ITexture*  _puzParticleTexture;
-            //vector<IGUIImage*> imagenes; <- Pendiente de utilizar en puzzles
- 
-            enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
-            enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
+                IGUIImage* _img;
+                ITexture*  _puzParticleTexture;
+                //vector<IGUIImage*> imagenes; <- Pendiente de utilizar en puzzles
+    
+                enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
+                enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
+                
+                //interfaz
+                IGUIImage* vidaI;
+                IGUIImage* energiaI;
+                IGUIImage* dineroI;
+                IGUIImage* armaI;
+                IGUIImage* BarraVidaI;
+                IGUIImage* BarraEnergiaI;
+                IGUIImage* manosI;
+                IGUIImage* llaveI;
+                IGUIImage* espadaI;
+                IGUIImage* dagaI;
+                IGUIStaticText* moneyI;
+                ITexture* vida_textura;
+                ITexture* energia_textura;
+                ITexture* dinero_textura;
+                ITexture* arma_textura;
+                ITexture* barraVida_textura;
+                ITexture* barraEnergia_textura;
+                ITexture* manos_textura;
+                ITexture* llave_textura;
+                ITexture* espada_textura;
+                ITexture* daga_textura; 
+
+                //cinematicas 
+                int frame_actual;//numero de frame actual
+                IGUIImage* _actual;//frame actual
+                float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
+                ITexture* _actualTexture;//textura actual
+                int cx, cz, cs;
+            #endif
 
             void CargarIMG(short x, short y);
             void CrearMeshFicha(float tamanyo, int r, int g, int b);
-            
-            //interfaz
-            IGUIImage* vidaI;
-            IGUIImage* energiaI;
-            IGUIImage* dineroI;
-            IGUIImage* armaI;
-            IGUIImage* BarraVidaI;
-            IGUIImage* BarraEnergiaI;
-            IGUIImage* manosI;
-            IGUIImage* llaveI;
-            IGUIImage* espadaI;
-            IGUIImage* dagaI;
-            IGUIStaticText* moneyI;
-            ITexture* vida_textura;
-            ITexture* energia_textura;
-            ITexture* dinero_textura;
-            ITexture* arma_textura;
-            ITexture* barraVida_textura;
-            ITexture* barraEnergia_textura;
-            ITexture* manos_textura;
-            ITexture* llave_textura;
-            ITexture* espada_textura;
-            ITexture* daga_textura; 
-
-            //cinematicas 
-            int frame_actual;//numero de frame actual
-            IGUIImage* _actual;//frame actual
-            float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
-            ITexture* _actualTexture;//textura actual
-            int cx, cz, cs;
     };
 
 #endif /* MotorGrafico_HPP */
