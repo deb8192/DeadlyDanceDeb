@@ -645,15 +645,19 @@ void MotorGrafico::ResetEventoMoveRaton()
     #endif  
 }
 
-position2di MotorGrafico::GetPosicionRaton()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
+#ifdef WEMOTOR
+    //codigo motor catopengl
+    float * MotorGrafico::GetPosicionRaton()
+    {
+        return nullptr;
+    }    
+#else
+    //codigo motor irrlicht
+    position2di MotorGrafico::GetPosicionRaton()
+    {
         return input.GetMouseState().Position;
-    #endif  
-}
+    }
+#endif  
 
 void MotorGrafico::CrearCamara()
 {
@@ -968,11 +972,12 @@ void MotorGrafico::mostrarBoss(float x, float y, float z, float rx, float ry, fl
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(_bossEscena != nullptr)
+        {
+            _bossEscena->setPosition(core::vector3df(x,y,z));
+            _bossEscena->setRotation(core::vector3df(rx,ry,rz));
+        }
     #endif 
-    if(_bossEscena != nullptr){
-        _bossEscena->setPosition(core::vector3df(x,y,z));
-        _bossEscena->setRotation(core::vector3df(rx,ry,rz));
-    }
 }
 
 void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
@@ -981,11 +986,12 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(Enemigos_Scena.size()>0 && Enemigos_Scena.size()>i && Enemigos_Scena[i] != nullptr)
+        {
+            Enemigos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
+            Enemigos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
+        }
     #endif 
-    if(Enemigos_Scena.size()>0 && Enemigos_Scena.size()>i && Enemigos_Scena[i] != nullptr){
-        Enemigos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
-        Enemigos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
-    }
 }
 
 void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
@@ -994,9 +1000,9 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        Objetos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
+        Objetos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
     #endif 
-    Objetos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
-    Objetos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
 }
 
 void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
@@ -1005,19 +1011,19 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-    #endif 
-    Constantes constantes;
-    if (_armaEsp)
-	{
-        if(_armaEspJugador)
+        Constantes constantes;
+        if (_armaEsp)
         {
-            this->borrarArmaEspecial();
+            if(_armaEspJugador)
+            {
+                this->borrarArmaEspecial();
+            }
+            _armaEspJugador = _smgr->addAnimatedMeshSceneNode(_armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario
+            _armaEspJugador->setPosition(core::vector3df(x + 5*(sin(constantes.DEG_TO_RAD*ry)),y,z + 5*(cos(constantes.DEG_TO_RAD*ry))));
+            _armaEspJugador->setRotation(core::vector3df(rx,ry,rz));
+            _smgr->getMeshManipulator()->setVertexColors(_armaEspJugador->getMesh(),SColor(255, 125, 150, 160));
         }
-        _armaEspJugador = _smgr->addAnimatedMeshSceneNode(_armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario
-        _armaEspJugador->setPosition(core::vector3df(x + 5*(sin(constantes.DEG_TO_RAD*ry)),y,z + 5*(cos(constantes.DEG_TO_RAD*ry))));
-        _armaEspJugador->setRotation(core::vector3df(rx,ry,rz));
-        _smgr->getMeshManipulator()->setVertexColors(_armaEspJugador->getMesh(),SColor(255, 125, 150, 160));
-    }
+    #endif 
 }
 
 void MotorGrafico::borrarArmaEspecial()
@@ -1026,9 +1032,9 @@ void MotorGrafico::borrarArmaEspecial()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        _armaEspJugador->remove();
+        _armaEspJugador = nullptr;
     #endif 
-    _armaEspJugador->remove();
-    _armaEspJugador = nullptr;
 }
 
 void MotorGrafico::activarDebugGrafico()
@@ -1037,10 +1043,53 @@ void MotorGrafico::activarDebugGrafico()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(debugGrafico)
+        {
+            debugGrafico = false;
+            if(Objetos_Debug.size()>0)
+            {
+                for(std::size_t i=0;i<Objetos_Debug.size();i++)
+                {
+                    Objetos_Debug[i]->remove();
+                    Objetos_Debug[i] = NULL;
+                    delete Objetos_Debug[i];
+                }
+                Objetos_Debug.resize(0);
+            }
+        }
+        else
+        {
+            debugGrafico = true;
+        }
     #endif 
-    if(debugGrafico)
-    {
-        debugGrafico = false;
+
+}
+
+void MotorGrafico::activarPathfinding()
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        if(pathfinding)
+        {
+            pathfinding = false;
+            cout << "\e[38m Pathfinding Desactivado \e[0m" << endl;
+        }
+        else
+        {
+            pathfinding = true;
+            cout << "\e[38m Pathfinding Activado \e[0m" << endl;
+        }
+    #endif 
+}
+
+void MotorGrafico::clearDebug()
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
         if(Objetos_Debug.size()>0)
         {
             for(std::size_t i=0;i<Objetos_Debug.size();i++)
@@ -1051,49 +1100,7 @@ void MotorGrafico::activarDebugGrafico()
             }
             Objetos_Debug.resize(0);
         }
-    }
-    else
-    {
-        debugGrafico = true;
-    }
-}
-
-void MotorGrafico::activarPathfinding()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
     #endif 
-    if(pathfinding)
-    {
-        pathfinding = false;
-        cout << "\e[38m Pathfinding Desactivado \e[0m" << endl;
-    }
-    else
-    {
-        pathfinding = true;
-        cout << "\e[38m Pathfinding Activado \e[0m" << endl;
-    }
-}
-
-void MotorGrafico::clearDebug()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-    #endif 
-    if(Objetos_Debug.size()>0)
-    {
-        for(std::size_t i=0;i<Objetos_Debug.size();i++)
-        {
-            Objetos_Debug[i]->remove();
-            Objetos_Debug[i] = NULL;
-            delete Objetos_Debug[i];
-        }
-        Objetos_Debug.resize(0);
-    }
 }
 
 void MotorGrafico::clearDebug2()
@@ -1102,17 +1109,17 @@ void MotorGrafico::clearDebug2()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-    #endif 
-    if(Objetos_Debug2.size()>0)
-    {
-        for(std::size_t i=0;i<Objetos_Debug2.size();i++)
+        if(Objetos_Debug2.size()>0)
         {
-            Objetos_Debug2[i]->remove();
-            Objetos_Debug2[i] = NULL;
-            delete Objetos_Debug2[i];
+            for(std::size_t i=0;i<Objetos_Debug2.size();i++)
+            {
+                Objetos_Debug2[i]->remove();
+                Objetos_Debug2[i] = NULL;
+                delete Objetos_Debug2[i];
+            }
+            Objetos_Debug2.resize(0);
         }
-        Objetos_Debug2.resize(0);
-    }
+    #endif 
 }
 
 void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensidad)
@@ -1121,26 +1128,26 @@ void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensi
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(debugGrafico)
+        {
+            IAnimatedMesh* circulo = _smgr->getMesh("assets/models/circuloDebugSonido.obj");
+            if(!circulo)
+            {
+                //no se ha podido cargar
+            }
+            else
+            {
+                //vamos a cargar el circulo en su posicion con su intensidad
+                //cout << "\e[36m Generamos Circulo \e[0m" << endl;
+                IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(circulo); //metemos el objeto en el escenario para eso lo pasamos al escenario
+                SColor COLOR  = SColor(127, 255, 0, 0);
+                _smgr->getMeshManipulator()->setVertexColors(_objetoEnEscena->getMesh(),COLOR);
+                _objetoEnEscena->setPosition(core::vector3df(x,y,z));
+                _objetoEnEscena->setScale(core::vector3df(intensidad,1,intensidad));
+                Objetos_Debug.push_back(_objetoEnEscena);
+            }
+        }
     #endif 
-    if(debugGrafico)
-    {
-        IAnimatedMesh* circulo = _smgr->getMesh("assets/models/circuloDebugSonido.obj");
-        if(!circulo)
-        {
-            //no se ha podido cargar
-        }
-        else
-        {
-            //vamos a cargar el circulo en su posicion con su intensidad
-            //cout << "\e[36m Generamos Circulo \e[0m" << endl;
-            IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(circulo); //metemos el objeto en el escenario para eso lo pasamos al escenario
-            SColor COLOR  = SColor(127, 255, 0, 0);
-            _smgr->getMeshManipulator()->setVertexColors(_objetoEnEscena->getMesh(),COLOR);
-            _objetoEnEscena->setPosition(core::vector3df(x,y,z));
-            _objetoEnEscena->setScale(core::vector3df(intensidad,1,intensidad));
-            Objetos_Debug.push_back(_objetoEnEscena);
-        }
-    }
 }
 
 void MotorGrafico::dibujarZona(int x, int y, int z, float ancho, float alto, float profund)
@@ -1149,18 +1156,18 @@ void MotorGrafico::dibujarZona(int x, int y, int z, float ancho, float alto, flo
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(debugGrafico)
+        {
+            IAnimatedMesh* tmpobjt = _smgr->getMesh("assets/models/zona.obj");
+            _tmpObjEscena = _smgr->addAnimatedMeshSceneNode(tmpobjt);
+            _tmpObjEscena->setPosition(core::vector3df(x,y,z));
+            _tmpObjEscena->setScale(core::vector3df(ancho,1.0f,profund));
+            SColor COLOR  = SColor(255,255,255,0);
+            _smgr->getMeshManipulator()->setVertexColors(_tmpObjEscena->getMesh(),COLOR);
+            Objetos_Debug.push_back(_tmpObjEscena);
+            _tmpObjEscena = nullptr;
+        }
     #endif 
-  if(debugGrafico)
-  {
-    IAnimatedMesh* tmpobjt = _smgr->getMesh("assets/models/zona.obj");
-    _tmpObjEscena = _smgr->addAnimatedMeshSceneNode(tmpobjt);
-    _tmpObjEscena->setPosition(core::vector3df(x,y,z));
-    _tmpObjEscena->setScale(core::vector3df(ancho,1.0f,profund));
-    SColor COLOR  = SColor(255,255,255,0);
-    _smgr->getMeshManipulator()->setVertexColors(_tmpObjEscena->getMesh(),COLOR);
-    Objetos_Debug.push_back(_tmpObjEscena);
-    _tmpObjEscena = nullptr;
-  }
 }
 
 void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo)
@@ -1169,30 +1176,30 @@ void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, in
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(debugGrafico)
+        {
+            //Crear objetos debug
+            IAnimatedMesh* tmpobjt;
+            if(tipo == 1)
+            {
+            tmpobjt = _smgr->getMesh("assets/models/sphere.obj");
+            }else if(tipo == 2)
+            {
+            tmpobjt = _smgr->getMesh("assets/models/cube.obj");
+            }else if(tipo == 3)
+            {
+            tmpobjt = _smgr->getMesh("assets/models/capsule.obj");
+            }
+            _tmpObjEscena = _smgr->addAnimatedMeshSceneNode(tmpobjt);
+            _tmpObjEscena->setPosition(core::vector3df(x,y,z));
+            _tmpObjEscena->setRotation(core::vector3df(rx,ry,rz));
+            _tmpObjEscena->setScale(core::vector3df(ancho,alto,profund));
+            SColor COLOR  = SColor(255,255,0,255);
+            _smgr->getMeshManipulator()->setVertexColors(_tmpObjEscena->getMesh(),COLOR);
+            Objetos_Debug2.push_back(_tmpObjEscena);
+            _tmpObjEscena = nullptr;
+        }
     #endif 
-  if(debugGrafico)
-  {
-    //Crear objetos debug
-    IAnimatedMesh* tmpobjt;
-    if(tipo == 1)
-    {
-      tmpobjt = _smgr->getMesh("assets/models/sphere.obj");
-    }else if(tipo == 2)
-    {
-      tmpobjt = _smgr->getMesh("assets/models/cube.obj");
-    }else if(tipo == 3)
-    {
-      tmpobjt = _smgr->getMesh("assets/models/capsule.obj");
-    }
-    _tmpObjEscena = _smgr->addAnimatedMeshSceneNode(tmpobjt);
-    _tmpObjEscena->setPosition(core::vector3df(x,y,z));
-    _tmpObjEscena->setRotation(core::vector3df(rx,ry,rz));
-    _tmpObjEscena->setScale(core::vector3df(ancho,alto,profund));
-    SColor COLOR  = SColor(255,255,0,255);
-    _smgr->getMeshManipulator()->setVertexColors(_tmpObjEscena->getMesh(),COLOR);
-    Objetos_Debug2.push_back(_tmpObjEscena);
-    _tmpObjEscena = nullptr;
-  }
 }
 
 bool MotorGrafico::colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension)
@@ -1201,8 +1208,8 @@ bool MotorGrafico::colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int 
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        return true;
     #endif 
-    return true;
 }
 
 /*void MotorGrafico::dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension)
@@ -1231,9 +1238,9 @@ void MotorGrafico::colorearJugador(int a, int r, int g, int b)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        SColor COLOR  = SColor(a, r, g, b);
+        _smgr->getMeshManipulator()->setVertexColors(_jugEscena->getMesh(),COLOR);
     #endif 
-  SColor COLOR  = SColor(a, r, g, b);
-  _smgr->getMeshManipulator()->setVertexColors(_jugEscena->getMesh(),COLOR);
 }
 
 void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
@@ -1242,11 +1249,13 @@ void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        SColor COLOR  = SColor(a, r, g, b);
+        long unsigned int valor = enem;
+        if(Enemigos_Scena.size() > 0 && valor < Enemigos_Scena.size())//para no salirnos si no existe en motorgrafico
+        {
+            _smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena[enem]->getMesh(),COLOR);
+        }
     #endif 
-  SColor COLOR  = SColor(a, r, g, b);
-  long unsigned int valor = enem;
-  if(Enemigos_Scena.size() > 0 && valor < Enemigos_Scena.size())//para no salirnos si no existe en motorgrafico
-  _smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena[enem]->getMesh(),COLOR);
 }
 
 /*void MotorGrafico::colorearObjeto(int a, int r, int g, int b, int obj)
@@ -1257,15 +1266,19 @@ void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
   _smgr->getMeshManipulator()->setVertexColors(Objetos_Scena[obj]->getMesh(),COLOR);
 }*/
 
-IAnimatedMeshSceneNode* MotorGrafico::getArmaEspecial()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-    #endif 
-    return _armaEspJugador;
-}
+#ifdef WEMOTOR
+    //codigo motor catopengl
+    unsigned short MotorGrafico::getArmaEspecial()
+    {
+        return 0;//AAAAAAAAAA REALIZAR
+    }
+#else
+    //codigo motor irrlicht
+    IAnimatedMeshSceneNode* MotorGrafico::getArmaEspecial()
+    {
+        return _armaEspJugador;
+    }
+#endif 
 
 // TO DO: revisar vector
 void MotorGrafico::EraseColectable(long unsigned int idx)
@@ -1274,13 +1287,13 @@ void MotorGrafico::EraseColectable(long unsigned int idx)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(Recolectables_Scena[idx] && idx < Recolectables_Scena.size())
+        {
+            Recolectables_Scena[idx]->setVisible(false);
+            Recolectables_Scena[idx]->remove();
+            Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
+        }
     #endif 
-    if(Recolectables_Scena[idx] && idx < Recolectables_Scena.size())
-    {
-        Recolectables_Scena[idx]->setVisible(false);
-        Recolectables_Scena[idx]->remove();
-        Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
-    }
 }
 
 void MotorGrafico::ErasePowerUP(long unsigned int idx)
@@ -1289,13 +1302,13 @@ void MotorGrafico::ErasePowerUP(long unsigned int idx)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(PowerUP_Scena[idx] && idx < PowerUP_Scena.size())
+        {
+            PowerUP_Scena[idx]->setVisible(false);
+            PowerUP_Scena[idx]->remove();
+            PowerUP_Scena.erase(PowerUP_Scena.begin() + idx);
+        }
     #endif 
-    if(PowerUP_Scena[idx] && idx < PowerUP_Scena.size())
-    {
-        PowerUP_Scena[idx]->setVisible(false);
-        PowerUP_Scena[idx]->remove();
-        PowerUP_Scena.erase(PowerUP_Scena.begin() + idx);
-    }
 }
 
 //Cuando enemigo muere lo borramos
@@ -1305,15 +1318,14 @@ void MotorGrafico::EraseEnemigo(std::size_t i)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        long unsigned int valor = i;
+        if(valor >= 0 && valor < Enemigos_Scena.size())
+        {
+            Enemigos_Scena[i]->setVisible(false);
+            Enemigos_Scena[i]->remove();
+            Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
+        }
     #endif 
-    long unsigned int valor = i;
-
-    if(valor >= 0 && valor < Enemigos_Scena.size())
-    {
-        Enemigos_Scena[i]->setVisible(false);
-        Enemigos_Scena[i]->remove();
-        Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
-    }
 }
 
 //Cuando jugador muere lo borramos
@@ -1323,9 +1335,9 @@ void MotorGrafico::EraseJugador()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        _jugEscena->setVisible(false);
+        _jugEscena->remove();
     #endif 
-    _jugEscena->setVisible(false);
-    _jugEscena->remove();
 }
 
 void MotorGrafico::EraseArma()
@@ -1334,9 +1346,9 @@ void MotorGrafico::EraseArma()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        _armaEnEscena->setVisible(false);
+        _armaEnEscena->remove();
     #endif 
-    _armaEnEscena->setVisible(false);
-    _armaEnEscena->remove();
 }
 
 //Devolver cantidad de enemigos en escena para recorrerlos en metodo muerteEnemigo
@@ -1357,23 +1369,23 @@ void MotorGrafico::debugBox(int x,int y, int z,int ancho, int alto, int largo)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(debugGrafico)
+        {
+            //cout << x << y << z << ancho << largo << alto << endl;
+            if(_caja)
+            {
+                _caja->setMaterialFlag(video::EMF_LIGHTING, false);
+                //_caja->setPosition(core::vector3df(x,y,z));
+                //_caja->setScale(core::vector3df(ancho/5,alto/5,largo/5));
+                _caja->setPosition(core::vector3df(0,0,20));
+                _caja->setScale(core::vector3df(4,1,0.2));
+            }
+            else
+            {
+                _caja = _smgr->addCubeSceneNode();
+            }
+        }
     #endif 
-    if(debugGrafico)
-    {
-        //cout << x << y << z << ancho << largo << alto << endl;
-        if(_caja)
-        {
-            _caja->setMaterialFlag(video::EMF_LIGHTING, false);
-            //_caja->setPosition(core::vector3df(x,y,z));
-            //_caja->setScale(core::vector3df(ancho/5,alto/5,largo/5));
-            _caja->setPosition(core::vector3df(0,0,20));
-            _caja->setScale(core::vector3df(4,1,0.2));
-        }
-        else
-        {
-            _caja = _smgr->addCubeSceneNode();
-        }
-    }
 }
 
 void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float longitud)
@@ -1382,31 +1394,31 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(debugGrafico)
+        {
+            if(!_conoVision)
+            {
+
+                _conoVision = _smgr->getMesh("assets/models/conoVision.obj");
+            }
+
+            if(_conoVision) // Si se ha cargado
+            {
+                IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(_conoVision); //metemos el objeto en el escenario para eso lo pasamos al escenario
+                _objetoEnEscena->setPosition(core::vector3df(x,y+1,z));
+                SColor COLOR  = SColor(0, 255, 0, 0);
+                _smgr->getMeshManipulator()->setVertexColors(_objetoEnEscena->getMesh(),COLOR);
+
+                core::vector3df rotation = _objetoEnEscena->getRotation();
+                _objetoEnEscena->setRotation(core::vector3df(rotation.X,rotacion,rotation.Z));
+
+                rotation = _objetoEnEscena->getRotation();
+
+                _objetoEnEscena->setScale(core::vector3df(longitud/2,1.0f,0.01f));
+                Objetos_Debug.push_back(_objetoEnEscena);
+            }
+        }
     #endif 
-    if(debugGrafico)
-    {
-        if(!_conoVision)
-        {
-
-            _conoVision = _smgr->getMesh("assets/models/conoVision.obj");
-        }
-
-        if(_conoVision) // Si se ha cargado
-        {
-            IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(_conoVision); //metemos el objeto en el escenario para eso lo pasamos al escenario
-            _objetoEnEscena->setPosition(core::vector3df(x,y+1,z));
-            SColor COLOR  = SColor(0, 255, 0, 0);
-            _smgr->getMeshManipulator()->setVertexColors(_objetoEnEscena->getMesh(),COLOR);
-
-            core::vector3df rotation = _objetoEnEscena->getRotation();
-            _objetoEnEscena->setRotation(core::vector3df(rotation.X,rotacion,rotation.Z));
-
-            rotation = _objetoEnEscena->getRotation();
-
-            _objetoEnEscena->setScale(core::vector3df(longitud/2,1.0f,0.01f));
-            Objetos_Debug.push_back(_objetoEnEscena);
-        }
-    }
 }
 
 void MotorGrafico::CargarInterfaz()
@@ -1415,44 +1427,46 @@ void MotorGrafico::CargarInterfaz()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        //creamos texturas
+        vida_textura = _driver->getTexture("assets/images/51.png");
+        energia_textura = _driver->getTexture("assets/images/21.png");
+        dinero_textura = _driver->getTexture("assets/images/61.png");
+        arma_textura = _driver->getTexture("assets/images/11.png");
+        barraVida_textura = _driver->getTexture("assets/images/4.png");
+        barraEnergia_textura = _driver->getTexture("assets/images/3.png");
+        manos_textura = _driver->getTexture("assets/images/manos.png");
+        llave_textura = _driver->getTexture("assets/images/llave.png");
+        espada_textura = _driver->getTexture("assets/images/espada.png");
+        daga_textura = _driver->getTexture("assets/images/daga.png");
+        //aplicamos texturas
+        vidaI = _guienv->addImage(vida_textura,position2d<int>(10,10));
+        energiaI = _guienv->addImage(energia_textura,position2d<int>(10,58));
+        dineroI = _guienv->addImage(dinero_textura,position2d<int>(680,10));
+        armaI = _guienv->addImage(arma_textura,position2d<int>(730,530));
+        BarraVidaI = _guienv->addImage(barraVida_textura,position2d<int>(50,15));
+        BarraEnergiaI = _guienv->addImage(barraEnergia_textura,position2d<int>(48,65));
+
+        //imagenes tipo objeto que se lleva por defecto manos
+        manosI = _guienv->addImage(manos_textura,position2d<int>(738,534));
+        llaveI = _guienv->addImage(llave_textura,position2d<int>(738,534));
+        espadaI = _guienv->addImage(espada_textura,position2d<int>(738,534));
+        dagaI = _guienv->addImage(daga_textura,position2d<int>(738,534));
+
+        BarraVidaI->setMaxSize(dimension2du(121,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
+        BarraEnergiaI->setMaxSize(dimension2du(63,27));//maximo 63/100 y esto multiplicado por la cantidad de energia
+        font2 = _guienv->getFont("assets/fonts/myfont.xml");
+
+        //moneyI = _guienv->addStaticText(L"1000 M",rect<s32>(710,21,750,40),false); //falta ver los cambios de fuente y ponerlo correctamente
+        moneyI = _guienv->addStaticText(L"0 M",rect<s32>(710,21,750,40),false); //falta ver los cambios de fuente y ponerlo correctamente
+
+        SColor COLOR  = SColor(255, 255, 255, 0);
+        moneyI->enableOverrideColor(true);
+        moneyI->setOverrideColor(COLOR);
+        if(font2)
+        {
+            moneyI->setOverrideFont(font2);
+        }
     #endif 
-    //creamos texturas
-    vida_textura = _driver->getTexture("assets/images/51.png");
-    energia_textura = _driver->getTexture("assets/images/21.png");
-    dinero_textura = _driver->getTexture("assets/images/61.png");
-    arma_textura = _driver->getTexture("assets/images/11.png");
-    barraVida_textura = _driver->getTexture("assets/images/4.png");
-    barraEnergia_textura = _driver->getTexture("assets/images/3.png");
-    manos_textura = _driver->getTexture("assets/images/manos.png");
-    llave_textura = _driver->getTexture("assets/images/llave.png");
-    espada_textura = _driver->getTexture("assets/images/espada.png");
-    daga_textura = _driver->getTexture("assets/images/daga.png");
-    //aplicamos texturas
-    vidaI = _guienv->addImage(vida_textura,position2d<int>(10,10));
-    energiaI = _guienv->addImage(energia_textura,position2d<int>(10,58));
-    dineroI = _guienv->addImage(dinero_textura,position2d<int>(680,10));
-    armaI = _guienv->addImage(arma_textura,position2d<int>(730,530));
-    BarraVidaI = _guienv->addImage(barraVida_textura,position2d<int>(50,15));
-    BarraEnergiaI = _guienv->addImage(barraEnergia_textura,position2d<int>(48,65));
-
-    //imagenes tipo objeto que se lleva por defecto manos
-    manosI = _guienv->addImage(manos_textura,position2d<int>(738,534));
-    llaveI = _guienv->addImage(llave_textura,position2d<int>(738,534));
-    espadaI = _guienv->addImage(espada_textura,position2d<int>(738,534));
-    dagaI = _guienv->addImage(daga_textura,position2d<int>(738,534));
-
-    BarraVidaI->setMaxSize(dimension2du(121,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
-    BarraEnergiaI->setMaxSize(dimension2du(63,27));//maximo 63/100 y esto multiplicado por la cantidad de energia
-    font2 = _guienv->getFont("assets/fonts/myfont.xml");
-
-    //moneyI = _guienv->addStaticText(L"1000 M",rect<s32>(710,21,750,40),false); //falta ver los cambios de fuente y ponerlo correctamente
-    moneyI = _guienv->addStaticText(L"0 M",rect<s32>(710,21,750,40),false); //falta ver los cambios de fuente y ponerlo correctamente
-
-    SColor COLOR  = SColor(255, 255, 255, 0);
-    moneyI->enableOverrideColor(true);
-    moneyI->setOverrideColor(COLOR);
-    if(font2)
-        moneyI->setOverrideFont(font2);
 }
 
 void MotorGrafico::DestruirInterfaz()
@@ -1461,58 +1475,58 @@ void MotorGrafico::DestruirInterfaz()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(vidaI)
+        {
+            vidaI->remove();
+        }
+
+        if(energiaI)
+        {
+            energiaI->remove();
+        }
+
+        if(dineroI)
+        {
+            dineroI->remove();
+        }
+
+        if(armaI)
+        {
+            armaI->remove();
+        }
+
+        if(manosI)
+            manosI->remove();
+
+        if(dagaI)
+            dagaI->remove();
+
+        if(espadaI)
+            espadaI->remove();
+
+        if(llaveI)
+            llaveI->remove();
+
+        if(BarraEnergiaI)
+            BarraEnergiaI->remove();
+
+        if(BarraVidaI)
+            BarraVidaI->remove();
+
+        if(moneyI)
+            moneyI->remove();
+
+        _driver->removeTexture(vida_textura);
+        _driver->removeTexture(energia_textura);
+        _driver->removeTexture(dinero_textura);
+        _driver->removeTexture(arma_textura);
+        _driver->removeTexture(barraVida_textura);
+        _driver->removeTexture(barraEnergia_textura);
+        _driver->removeTexture(manos_textura);
+        _driver->removeTexture(llave_textura);
+        _driver->removeTexture(espada_textura);
+        _driver->removeTexture(daga_textura);
     #endif 
-    if(vidaI)
-    {
-        vidaI->remove();
-    }
-
-    if(energiaI)
-    {
-        energiaI->remove();
-    }
-
-    if(dineroI)
-    {
-        dineroI->remove();
-    }
-
-    if(armaI)
-    {
-         armaI->remove();
-    }
-
-    if(manosI)
-        manosI->remove();
-
-    if(dagaI)
-        dagaI->remove();
-
-    if(espadaI)
-        espadaI->remove();
-
-    if(llaveI)
-        llaveI->remove();
-
-    if(BarraEnergiaI)
-        BarraEnergiaI->remove();
-
-    if(BarraVidaI)
-        BarraVidaI->remove();
-
-    if(moneyI)
-        moneyI->remove();
-
-    _driver->removeTexture(vida_textura);
-    _driver->removeTexture(energia_textura);
-    _driver->removeTexture(dinero_textura);
-    _driver->removeTexture(arma_textura);
-    _driver->removeTexture(barraVida_textura);
-    _driver->removeTexture(barraEnergia_textura);
-    _driver->removeTexture(manos_textura);
-    _driver->removeTexture(llave_textura);
-    _driver->removeTexture(espada_textura);
-    _driver->removeTexture(daga_textura);
 }
 
 void MotorGrafico::SetVida(int vida)
@@ -1521,20 +1535,21 @@ void MotorGrafico::SetVida(int vida)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(BarraVidaI)
+        {
+            float unidad = ((float)121/100);
+            float resultado = unidad*(float)vida;
+            if(resultado <= 0)
+            {
+                BarraVidaI->setMaxSize(dimension2du(1,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
+            }
+            else
+            {
+                BarraVidaI->setMaxSize(dimension2du(resultado,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
+            }
+        }
     #endif 
-    if(BarraVidaI)
-    {
-        float unidad = ((float)121/100);
-        float resultado = unidad*(float)vida;
-        if(resultado <= 0)
-        {
-            BarraVidaI->setMaxSize(dimension2du(1,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
-        }
-        else
-        {
-            BarraVidaI->setMaxSize(dimension2du(resultado,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
-        }
-    }
+
 }
 
 void MotorGrafico::SetBarraEnergia(int barra)
@@ -1543,21 +1558,21 @@ void MotorGrafico::SetBarraEnergia(int barra)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(BarraEnergiaI)
+        {
+            float unidad = ((float)63/100);
+            float resultado = unidad*(float)barra;
+            //cout << barra << " " << unidad << " " << resultado << endl ;
+            if(resultado <= 0)
+            {
+                BarraEnergiaI->setMaxSize(dimension2du(1,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
+            }
+            else
+            {
+                BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
+            }
+        }
     #endif 
-    if(BarraEnergiaI)
-	{
-		float unidad = ((float)63/100);
-		float resultado = unidad*(float)barra;
-		//cout << barra << " " << unidad << " " << resultado << endl ;
-		if(resultado <= 0)
-		{
-			BarraEnergiaI->setMaxSize(dimension2du(1,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
-		}
-		else
-		{
-			BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
-		}
-	}
 }
 
 void MotorGrafico::SetDinero(int dinero)
@@ -1566,13 +1581,14 @@ void MotorGrafico::SetDinero(int dinero)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if(moneyI)
+        {
+            stringw str = L"";
+            str += dinero;
+            moneyI->setText(str.c_str());
+        }
     #endif 
-    if(moneyI)
-    {
-        stringw str = L"";
-        str += dinero;
-        moneyI->setText(str.c_str());
-    }
+
 }
 
 void MotorGrafico::SetArma(int arma)
@@ -1581,37 +1597,37 @@ void MotorGrafico::SetArma(int arma)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-    #endif 
-    switch(arma)
-    {
-        case 1: //es una llave
-            manosI->setVisible(false);
-            dagaI->setVisible(false);
-            espadaI->setVisible(false);
-            llaveI->setVisible(true);
-            break;
+        switch(arma)
+        {
+            case 1: //es una llave
+                manosI->setVisible(false);
+                dagaI->setVisible(false);
+                espadaI->setVisible(false);
+                llaveI->setVisible(true);
+                break;
 
-        case 2: //objeto ataque directo
-            manosI->setVisible(false);
-            dagaI->setVisible(false);
-            espadaI->setVisible(true);
-            llaveI->setVisible(false);
-            break;
-        
-        case 3: //objeto ataque a distancia
-            manosI->setVisible(false);
-            dagaI->setVisible(true);
-            espadaI->setVisible(false);
-            llaveI->setVisible(false);
-            break;
-        
-        default: //son las manos
-            manosI->setVisible(true);
-            dagaI->setVisible(false);
-            espadaI->setVisible(false);
-            llaveI->setVisible(false);
-            break;
-    }
+            case 2: //objeto ataque directo
+                manosI->setVisible(false);
+                dagaI->setVisible(false);
+                espadaI->setVisible(true);
+                llaveI->setVisible(false);
+                break;
+            
+            case 3: //objeto ataque a distancia
+                manosI->setVisible(false);
+                dagaI->setVisible(true);
+                espadaI->setVisible(false);
+                llaveI->setVisible(false);
+                break;
+            
+            default: //son las manos
+                manosI->setVisible(true);
+                dagaI->setVisible(false);
+                espadaI->setVisible(false);
+                llaveI->setVisible(false);
+                break;
+        }
+    #endif 
 }
 
 void MotorGrafico::RenderInterfaz(bool activada)
@@ -1620,49 +1636,49 @@ void MotorGrafico::RenderInterfaz(bool activada)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        if (activada)
+        {
+            if(vidaI)
+                vidaI->setVisible(true);
+            if(energiaI)
+                energiaI->setVisible(true);
+            if(dineroI)
+                dineroI->setVisible(true);
+            if(armaI)
+                armaI->setVisible(true);
+            if(BarraEnergiaI)
+                BarraEnergiaI->setVisible(true);
+            if(BarraVidaI)
+                BarraVidaI->setVisible(true);
+            if(moneyI)
+                moneyI->setVisible(true);
+        }
+        else
+        {
+            if(vidaI)
+                vidaI->setVisible(false);
+            if(energiaI)
+                energiaI->setVisible(false);
+            if(dineroI)
+                dineroI->setVisible(false);
+            if(armaI)
+                armaI->setVisible(false);
+            if(BarraEnergiaI)
+                BarraEnergiaI->setVisible(false);
+            if(BarraVidaI)
+                BarraVidaI->setVisible(false);
+            if(manosI)
+                manosI->setVisible(false);
+            if(dagaI)
+                dagaI->setVisible(false);
+            if(espadaI)
+                espadaI->setVisible(false);
+            if(llaveI)
+                llaveI->setVisible(false);
+            if(moneyI)
+                moneyI->setVisible(false);
+        }
     #endif 
-    if (activada)
-    {
-        if(vidaI)
-            vidaI->setVisible(true);
-        if(energiaI)
-            energiaI->setVisible(true);
-        if(dineroI)
-            dineroI->setVisible(true);
-        if(armaI)
-            armaI->setVisible(true);
-        if(BarraEnergiaI)
-            BarraEnergiaI->setVisible(true);
-        if(BarraVidaI)
-            BarraVidaI->setVisible(true);
-        if(moneyI)
-            moneyI->setVisible(true);
-    }
-    else
-    {
-        if(vidaI)
-            vidaI->setVisible(false);
-        if(energiaI)
-            energiaI->setVisible(false);
-        if(dineroI)
-            dineroI->setVisible(false);
-        if(armaI)
-            armaI->setVisible(false);
-        if(BarraEnergiaI)
-            BarraEnergiaI->setVisible(false);
-        if(BarraVidaI)
-            BarraVidaI->setVisible(false);
-        if(manosI)
-            manosI->setVisible(false);
-        if(dagaI)
-            dagaI->setVisible(false);
-        if(espadaI)
-            espadaI->setVisible(false);
-        if(llaveI)
-            llaveI->setVisible(false);
-        if(moneyI)
-            moneyI->setVisible(false);
-    }
 }
 
 void MotorGrafico::cambiarAnimacionJugador(int estado)
@@ -1671,71 +1687,72 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-    #endif 
-    int frame = _jugEscena->getStartFrame();
-    int frame_actual = _jugEscena->getFrameNr();
-    //animaciones para heavy
-    if(estado == 0 && frame != 30 && frame != 120) //esta quieto
-    {
-        if(_jugEscena)
+        int frame = _jugEscena->getStartFrame();
+        int frame_actual = _jugEscena->getFrameNr();
+        //animaciones para heavy
+        if(estado == 0 && frame != 30 && frame != 120) //esta quieto
         {
-            _jugEscena->setFrameLoop(30, 44);
-		    _jugEscena->setAnimationSpeed(10);
-        }
-    }
-
-    if(estado == 1 && frame != 0 && frame != 120) //se mueve
-    {
-        if(_jugEscena)
-        {
-            _jugEscena->setFrameLoop(0, 30);
-		    _jugEscena->setAnimationSpeed(20);
-        }
-    }
-
-    if(estado == 2 && frame != 48  && frame != 120) //ataca
-    {
-        if(_jugEscena)
-        {
-            _jugEscena->setFrameLoop(48, 70);
-		    _jugEscena->setAnimationSpeed(15);
-        }
-    }
-
-    if(estado == 3 && frame != 72  && frame != 120) //ataque especial
-    {
-        if(_jugEscena)
-        {
-            _jugEscena->setFrameLoop(72, 98);
-		    _jugEscena->setAnimationSpeed(10);
-        }
-    }
-
-    if(estado == 4  && frame != 99  && frame != 120) //coger objeto
-    {
-        if(_jugEscena)
-        {
-            _jugEscena->setFrameLoop(99, 112);
-		    _jugEscena->setAnimationSpeed(10);
-        }
-    }
-
-    if(estado == 5 && frame != 120) //muere
-    {
-        if(frame_actual == 119)
-        {
-            _jugEscena->setFrameLoop(120, 128); //lo dejamos definitivamente muerto
-		    _jugEscena->setAnimationSpeed(10);
-        }
-        else
-        {
-            if(_jugEscena && frame != 112)
+            if(_jugEscena)
             {
-                _jugEscena->setFrameLoop(112, 120);
+                _jugEscena->setFrameLoop(30, 44);
                 _jugEscena->setAnimationSpeed(10);
             }
         }
-    }
+
+        if(estado == 1 && frame != 0 && frame != 120) //se mueve
+        {
+            if(_jugEscena)
+            {
+                _jugEscena->setFrameLoop(0, 30);
+                _jugEscena->setAnimationSpeed(20);
+            }
+        }
+
+        if(estado == 2 && frame != 48  && frame != 120) //ataca
+        {
+            if(_jugEscena)
+            {
+                _jugEscena->setFrameLoop(48, 70);
+                _jugEscena->setAnimationSpeed(15);
+            }
+        }
+
+        if(estado == 3 && frame != 72  && frame != 120) //ataque especial
+        {
+            if(_jugEscena)
+            {
+                _jugEscena->setFrameLoop(72, 98);
+                _jugEscena->setAnimationSpeed(10);
+            }
+        }
+
+        if(estado == 4  && frame != 99  && frame != 120) //coger objeto
+        {
+            if(_jugEscena)
+            {
+                _jugEscena->setFrameLoop(99, 112);
+                _jugEscena->setAnimationSpeed(10);
+            }
+        }
+
+        if(estado == 5 && frame != 120) //muere
+        {
+            if(frame_actual == 119)
+            {
+                _jugEscena->setFrameLoop(120, 128); //lo dejamos definitivamente muerto
+                _jugEscena->setAnimationSpeed(10);
+            }
+            else
+            {
+                if(_jugEscena && frame != 112)
+                {
+                    _jugEscena->setFrameLoop(112, 120);
+                    _jugEscena->setAnimationSpeed(10);
+                }
+            }
+        }
+    #endif 
+
 }
 
 bool MotorGrafico::getPathfindingActivado()
@@ -1744,8 +1761,8 @@ bool MotorGrafico::getPathfindingActivado()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        return pathfinding;
     #endif 
-    return pathfinding;
 }
 
 
@@ -1756,32 +1773,32 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        _driver->beginScene(true, true, SColor(255,255,255,255));//fondo blanco
+        _smgr->drawAll();
+        _guienv->drawAll();
+
+        /* Probando a dibujar objetos 2D
+        //Rectangulo
+        _driver->draw2DRectangle(SColor(255, 255, 128, 64), rect<s32>(40, 40, 200, 200));
+
+        //Poligono
+        _driver->draw2DPolygon(position2d<s32>(100, 300), 50.f, SColor(128, 40, 80, 16), 6);*/
+
+        switch(tipo)
+        {
+            case P_OPCIONES:
+                break;
+            case P_HANOI:
+                // Lineas para dividir la pantalla
+                _driver->draw2DLine(position2d<s32>(x_linea1 , 200),
+                    position2d<s32>(x_linea1, 400 ) , SColor(255, 0, 0, 0));
+                _driver->draw2DLine(position2d<s32>(x_linea2 , 200),
+                    position2d<s32>(x_linea2, 400 ) , SColor(255, 0, 0, 0));
+                break;
+        }
+
+        _driver->endScene();
     #endif 
-    _driver->beginScene(true, true, SColor(255,255,255,255));//fondo blanco
-    _smgr->drawAll();
-    _guienv->drawAll();
-
-    /* Probando a dibujar objetos 2D
-    //Rectangulo
-    _driver->draw2DRectangle(SColor(255, 255, 128, 64), rect<s32>(40, 40, 200, 200));
-
-    //Poligono
-    _driver->draw2DPolygon(position2d<s32>(100, 300), 50.f, SColor(128, 40, 80, 16), 6);*/
-
-    switch(tipo)
-    {
-        case P_OPCIONES:
-            break;
-        case P_HANOI:
-            // Lineas para dividir la pantalla
-            _driver->draw2DLine(position2d<s32>(x_linea1 , 200),
-                position2d<s32>(x_linea1, 400 ) , SColor(255, 0, 0, 0));
-            _driver->draw2DLine(position2d<s32>(x_linea2 , 200),
-                position2d<s32>(x_linea2, 400 ) , SColor(255, 0, 0, 0));
-            break;
-    }
-
-    _driver->endScene();
 }
 
 
@@ -1792,9 +1809,8 @@ void MotorGrafico::BorrarBoton(s32 id)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        _guienv->getRootGUIElement()->getElementFromId(id)->remove();
     #endif 
-    _guienv->getRootGUIElement()->
-        getElementFromId(id)->remove();
 }
 
 
@@ -1805,8 +1821,8 @@ void MotorGrafico::PosicionCamaraEnPuzzles()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        _camera->setPosition(vector3df(14, 2, 0)); // No cambiar la Y, si nos la seleccion tendra errores
     #endif 
-    _camera->setPosition(vector3df(14, 2, 0)); // No cambiar la Y, si nos la seleccion tendra errores
 }
 
 
@@ -1816,110 +1832,110 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        short height_aux = (HEIGHT/2)+100;
+        short yIMG = height_aux-125;
+        short xIMG = 20;
+        short anchoBtn = 40;
+        short altoBtn = 30;
+
+        // Atras
+        _guienv->addButton(rect<s32>(700,HEIGHT-60,750,HEIGHT-30), 0,
+            GUI_ID_ATRAS_BUTTON,L"Atrás", L"Vuelve al menú");
+
+        // Enunciado
+        std::wstring widestr = std::wstring(enun.begin(), enun.end());
+        const wchar_t* widecstr = widestr.c_str();
+        _guienv->addStaticText(widecstr, rect<s32>(60,20,700,50), false);
+
+        switch(tipo)
+        {
+            case P_OPCIONES: // Opciones
+                _guienv->addStaticText(L"Puzzle Opciones", rect<s32>(0,0,200,20), false);
+                _guienv->addStaticText(L"Ejemplo", rect<s32>(WIDTH-200,20,
+                    WIDTH-160,40), false);
+
+                _img = _guienv->addImage(_driver->getTexture("assets/puzzles/particle.bmp"),
+                    core::position2d<s32>(WIDTH-200, 40));
+
+                switch(opciones) {
+                    case 2:
+                        WIDTH_AUX = WIDTH/4;
+                        // x, y, x2, y2
+                        _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
+                            WIDTH_AUX+anchoBtn,height_aux+altoBtn),
+                            0, GUI_ID_OP1,L"A", L"A");
+                        _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
+                            WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
+                            0, GUI_ID_OP2,L"B", L"B");
+
+                        CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                        CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                        break;
+
+                    case 3:
+                        WIDTH_AUX = (WIDTH-2)/6;
+                        // x, y, x2, y2
+                        _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
+                            WIDTH_AUX+anchoBtn,height_aux+altoBtn),
+                            0, GUI_ID_OP1,L"A", L"A");
+                        _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
+                            WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
+                            0, GUI_ID_OP2,L"B", L"B");
+                        _guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
+                            WIDTH_AUX*5+anchoBtn,height_aux+altoBtn),
+                            0, GUI_ID_OP3,L"C", L"C");
+
+                        CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                        CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                        CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
+                        break;
+
+                    case 4:
+                        WIDTH_AUX = WIDTH/8;
+                        // x, y, x2, y2
+                        _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
+                            WIDTH_AUX+anchoBtn,height_aux+altoBtn),
+                            0, GUI_ID_OP1,L"A", L"A");
+                        _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
+                            WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
+                            0, GUI_ID_OP2,L"B", L"B");
+                        _guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
+                            WIDTH_AUX*5+anchoBtn,height_aux+altoBtn),
+                            0, GUI_ID_OP3,L"C", L"C");
+                        _guienv->addButton(rect<s32>(WIDTH_AUX*7,height_aux,
+                            WIDTH_AUX*7+anchoBtn,height_aux+altoBtn),
+                            0, GUI_ID_OP4,L"D", L"D");
+
+                        CargarIMG(WIDTH_AUX-xIMG, yIMG);
+                        CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
+                        CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
+                        CargarIMG(WIDTH_AUX*7-xIMG, yIMG);
+                        break;
+                }
+                break;
+
+            case P_HANOI: // Torres de Hanoi
+                _guienv->addStaticText(L"Torres de Hanoi", rect<s32>(0,0,200,20), false);
+
+                // Reiniciar
+                _guienv->addButton(rect<s32>(700,HEIGHT-90,750,HEIGHT-60), 0,
+                    GUI_ID_REINICIAR_HANOI,L"Reiniciar", L"Reinicia el juego");
+
+                _myTextBox = _guienv->addStaticText(L"Pasos: ", rect<s32>(60,(WIDTH/2)-10,100,(WIDTH/2)+30), false);
+
+                WIDTH_AUX = (WIDTH-2)/6;
+                _guienv->addStaticText(L"IZQ", rect<s32>(WIDTH_AUX,100,WIDTH_AUX+anchoBtn,130), false);
+                _guienv->addStaticText(L"CENTRO", rect<s32>(WIDTH_AUX*3,100,WIDTH_AUX*3+anchoBtn,130), false);
+                _guienv->addStaticText(L"DER", rect<s32>(WIDTH_AUX*5,100,WIDTH_AUX*5+anchoBtn,130), false);
+
+                // Para la ventana de 800, 600
+                // Width = 798, dejamos 1 punto a cada lado
+                WIDTH_AUX = (WIDTH-2)/3;    // Dividimos la pantalla en 3 zonas
+                x_linea1 = WIDTH_AUX;
+                x_linea2 = WIDTH_AUX*2;
+                break;
+        }
     #endif 
-    short height_aux = (HEIGHT/2)+100;
-    short yIMG = height_aux-125;
-    short xIMG = 20;
-    short anchoBtn = 40;
-    short altoBtn = 30;
-
-    // Atras
-    _guienv->addButton(rect<s32>(700,HEIGHT-60,750,HEIGHT-30), 0,
-        GUI_ID_ATRAS_BUTTON,L"Atrás", L"Vuelve al menú");
-
-    // Enunciado
-    std::wstring widestr = std::wstring(enun.begin(), enun.end());
-    const wchar_t* widecstr = widestr.c_str();
-    _guienv->addStaticText(widecstr, rect<s32>(60,20,700,50), false);
-
-    switch(tipo)
-    {
-        case P_OPCIONES: // Opciones
-            _guienv->addStaticText(L"Puzzle Opciones", rect<s32>(0,0,200,20), false);
-            _guienv->addStaticText(L"Ejemplo", rect<s32>(WIDTH-200,20,
-                WIDTH-160,40), false);
-
-            _img = _guienv->addImage(_driver->getTexture("assets/puzzles/particle.bmp"),
-                core::position2d<s32>(WIDTH-200, 40));
-
-            switch(opciones) {
-                case 2:
-                    WIDTH_AUX = WIDTH/4;
-                    // x, y, x2, y2
-                    _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
-                        WIDTH_AUX+anchoBtn,height_aux+altoBtn),
-                        0, GUI_ID_OP1,L"A", L"A");
-                    _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
-                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
-                        0, GUI_ID_OP2,L"B", L"B");
-
-                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
-                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
-                    break;
-
-                case 3:
-                    WIDTH_AUX = (WIDTH-2)/6;
-                    // x, y, x2, y2
-                    _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
-                        WIDTH_AUX+anchoBtn,height_aux+altoBtn),
-                        0, GUI_ID_OP1,L"A", L"A");
-                    _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
-                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
-                        0, GUI_ID_OP2,L"B", L"B");
-                    _guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
-                        WIDTH_AUX*5+anchoBtn,height_aux+altoBtn),
-                        0, GUI_ID_OP3,L"C", L"C");
-
-                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
-                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
-                    CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
-                    break;
-
-                case 4:
-                    WIDTH_AUX = WIDTH/8;
-                    // x, y, x2, y2
-                    _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
-                        WIDTH_AUX+anchoBtn,height_aux+altoBtn),
-                        0, GUI_ID_OP1,L"A", L"A");
-                    _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
-                        WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
-                        0, GUI_ID_OP2,L"B", L"B");
-                    _guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
-                        WIDTH_AUX*5+anchoBtn,height_aux+altoBtn),
-                        0, GUI_ID_OP3,L"C", L"C");
-                    _guienv->addButton(rect<s32>(WIDTH_AUX*7,height_aux,
-                        WIDTH_AUX*7+anchoBtn,height_aux+altoBtn),
-                        0, GUI_ID_OP4,L"D", L"D");
-
-                    CargarIMG(WIDTH_AUX-xIMG, yIMG);
-                    CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
-                    CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
-                    CargarIMG(WIDTH_AUX*7-xIMG, yIMG);
-                    break;
-            }
-            break;
-
-        case P_HANOI: // Torres de Hanoi
-            _guienv->addStaticText(L"Torres de Hanoi", rect<s32>(0,0,200,20), false);
-
-            // Reiniciar
-            _guienv->addButton(rect<s32>(700,HEIGHT-90,750,HEIGHT-60), 0,
-                GUI_ID_REINICIAR_HANOI,L"Reiniciar", L"Reinicia el juego");
-
-            _myTextBox = _guienv->addStaticText(L"Pasos: ", rect<s32>(60,(WIDTH/2)-10,100,(WIDTH/2)+30), false);
-
-            WIDTH_AUX = (WIDTH-2)/6;
-            _guienv->addStaticText(L"IZQ", rect<s32>(WIDTH_AUX,100,WIDTH_AUX+anchoBtn,130), false);
-            _guienv->addStaticText(L"CENTRO", rect<s32>(WIDTH_AUX*3,100,WIDTH_AUX*3+anchoBtn,130), false);
-            _guienv->addStaticText(L"DER", rect<s32>(WIDTH_AUX*5,100,WIDTH_AUX*5+anchoBtn,130), false);
-
-            // Para la ventana de 800, 600
-            // Width = 798, dejamos 1 punto a cada lado
-            WIDTH_AUX = (WIDTH-2)/3;    // Dividimos la pantalla en 3 zonas
-            x_linea1 = WIDTH_AUX;
-            x_linea2 = WIDTH_AUX*2;
-            break;
-    }
 }
 
 void MotorGrafico::TextoPasos(short pasos)
@@ -1928,11 +1944,11 @@ void MotorGrafico::TextoPasos(short pasos)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        stringw str = L"Pasos: ";
+        str += pasos;
+        _myTextBox->setText(str.c_str());
+        _myTextBox = nullptr;
     #endif  
-    stringw str = L"Pasos: ";
-    str += pasos;
-    _myTextBox->setText(str.c_str());
-    _myTextBox = nullptr;
 }
 
 // TO DO: Anyadir string img
@@ -1942,9 +1958,9 @@ void MotorGrafico::CargarIMG(short x, short y)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        _puzParticleTexture = _driver->getTexture("assets/puzzles/particle.bmp");
+        _img = _guienv->addImage(_puzParticleTexture,core::position2d<s32>(x, y));
     #endif  
-    _puzParticleTexture = _driver->getTexture("assets/puzzles/particle.bmp");
-	_img = _guienv->addImage(_puzParticleTexture,core::position2d<s32>(x, y));
 }
 
 void MotorGrafico::CrearMeshFicha(float tamanyo, int r, int g, int b)
@@ -1953,16 +1969,16 @@ void MotorGrafico::CrearMeshFicha(float tamanyo, int r, int g, int b)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-    #endif  
-    //_fichaMesh = _geometryCreator->createCubeMesh(vector3df(tamanyo));
-    _fichaMesh = _geometryCreator->createCylinderMesh(
-        tamanyo,    //radius
-        1,          //length
-        50,         //tesselation
-        SColor(0, r, g, b));
+        //_fichaMesh = _geometryCreator->createCubeMesh(vector3df(tamanyo));
+        _fichaMesh = _geometryCreator->createCylinderMesh(
+            tamanyo,    //radius
+            1,          //length
+            50,         //tesselation
+            SColor(0, r, g, b));
 
-    // insensible a la iluminacion
-    _fichaMesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+        // insensible a la iluminacion
+        _fichaMesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+    #endif
 }
 
 void MotorGrafico::CrearFichas(short posY, float tamanyo,
@@ -1972,15 +1988,15 @@ void MotorGrafico::CrearFichas(short posY, float tamanyo,
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-    #endif  
-    CrearMeshFicha(tamanyo, r, g, b);
-    _ficha = _smgr->addMeshSceneNode(_fichaMesh);
-    _ficha->setPosition(vector3df(0, posY, IZQ));
-    _ficha->setID(tamanyo);
+        CrearMeshFicha(tamanyo, r, g, b);
+        _ficha = _smgr->addMeshSceneNode(_fichaMesh);
+        _ficha->setPosition(vector3df(0, posY, IZQ));
+        _ficha->setID(tamanyo);
 
-    // La anyadimos a la lista
-    fichasMesh.push_back(move(_ficha));
-    _ficha = nullptr;
+        // La anyadimos a la lista
+        fichasMesh.push_back(move(_ficha));
+        _ficha = nullptr;
+    #endif  
 }
 
 short MotorGrafico::GetZonaVentana()
@@ -1989,18 +2005,18 @@ short MotorGrafico::GetZonaVentana()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-    #endif  
-    short posX = GetPosicionRaton().X;
-    if ((posX > 0) && (posX <= WIDTH)) {
-        if ((posX > 0) && (posX <= WIDTH_AUX)) {
-            return IZQ;
-        } else if ((posX > WIDTH_AUX) && (posX <= WIDTH_AUX*2)) {
-            return CENTRO;
-        } else {
-            return DER;
+        short posX = GetPosicionRaton().X;
+        if ((posX > 0) && (posX <= WIDTH)) {
+            if ((posX > 0) && (posX <= WIDTH_AUX)) {
+                return IZQ;
+            } else if ((posX > WIDTH_AUX) && (posX <= WIDTH_AUX*2)) {
+                return CENTRO;
+            } else {
+                return DER;
+            }
         }
-    }
-    return NO_SELECT;// Fuera de ventana
+        return NO_SELECT;// Fuera de ventana
+    #endif  
 }
 
 bool MotorGrafico::SeleccionarNodo()
@@ -2009,28 +2025,30 @@ bool MotorGrafico::SeleccionarNodo()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-    #endif  
-    // check for a node being selected
-    // Posicion, idBitMask (0=deshabilitada), bNoDebugObjects (true=No tiene en cuenta los objetos de depuracion)
-    _nodoSeleccionado = _collmgr->getSceneNodeFromScreenCoordinatesBB(
-        _device->getCursorControl()->getPosition(),0,true);
+        // check for a node being selected
+        // Posicion, idBitMask (0=deshabilitada), bNoDebugObjects (true=No tiene en cuenta los objetos de depuracion)
+        _nodoSeleccionado = _collmgr->getSceneNodeFromScreenCoordinatesBB(
+            _device->getCursorControl()->getPosition(),0,true);
 
-    // Si hay un nodo seleccionado
-    if(_nodoSeleccionado)
-    {
-        // Remember where the node and cursor were when it was clicked on
-        initialCursorPosition = _device->getCursorControl()->getPosition();
-        // Calcula la posición de la pantalla 2d desde una posición 3d.
-        initialObjectPosition = _collmgr->getScreenCoordinatesFrom3DPosition(
-            _nodoSeleccionado->getAbsolutePosition(), _camera);
+        // Si hay un nodo seleccionado
+        if(_nodoSeleccionado)
+        {
+            // Remember where the node and cursor were when it was clicked on
+            initialCursorPosition = _device->getCursorControl()->getPosition();
+            // Calcula la posición de la pantalla 2d desde una posición 3d.
+            initialObjectPosition = _collmgr->getScreenCoordinatesFrom3DPosition(
+                _nodoSeleccionado->getAbsolutePosition(), _camera);
 
-        if (_nodoSeleccionado->getID() != -1) { // Comprobamos que no sea el fondo
-            return true;
+            if (_nodoSeleccionado->getID() != -1) { // Comprobamos que no sea el fondo
+                return true;
+            }
+        } 
+        else 
+        {
+            _nodoSeleccionado = nullptr;
         }
-    } else {
-        _nodoSeleccionado = nullptr;
-    }
-    return false;
+        return false;
+    #endif  
 }
 
 void MotorGrafico::DeseleccionarNodo()
@@ -2039,8 +2057,8 @@ void MotorGrafico::DeseleccionarNodo()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        _nodoSeleccionado = 0;
     #endif  
-    _nodoSeleccionado = 0;
 }
 
 short MotorGrafico::GetFichaY()
@@ -2049,8 +2067,8 @@ short MotorGrafico::GetFichaY()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        return _nodoSeleccionado->getAbsolutePosition().Y;
     #endif  
-    return _nodoSeleccionado->getAbsolutePosition().Y;
 }
 
 void MotorGrafico::MoverFichas(short pila)
@@ -2059,21 +2077,21 @@ void MotorGrafico::MoverFichas(short pila)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-    #endif  
-    if ((_nodoSeleccionado) && (pila != NO_SELECT))
-    {
-        plane3df const planeXZ(_nodoSeleccionado->getAbsolutePosition(), vector3df(1.f, 0.f, 0.f));
-
-        position2di currentCursorPosition(_device->getCursorControl()->getPosition());
-        position2di effectiveObjectPosition = initialObjectPosition + currentCursorPosition - initialCursorPosition;
-        line3df ray(_collmgr->getRayFromScreenCoordinates(effectiveObjectPosition, _camera));
-        vector3df intersectWithPlane;
-
-        if(planeXZ.getIntersectionWithLine(ray.start, ray.getVector(), intersectWithPlane))
+        if ((_nodoSeleccionado) && (pila != NO_SELECT))
         {
-            _nodoSeleccionado->setPosition(intersectWithPlane);
+            plane3df const planeXZ(_nodoSeleccionado->getAbsolutePosition(), vector3df(1.f, 0.f, 0.f));
+
+            position2di currentCursorPosition(_device->getCursorControl()->getPosition());
+            position2di effectiveObjectPosition = initialObjectPosition + currentCursorPosition - initialCursorPosition;
+            line3df ray(_collmgr->getRayFromScreenCoordinates(effectiveObjectPosition, _camera));
+            vector3df intersectWithPlane;
+
+            if(planeXZ.getIntersectionWithLine(ray.start, ray.getVector(), intersectWithPlane))
+            {
+                _nodoSeleccionado->setPosition(intersectWithPlane);
+            }
         }
-    }
+    #endif  
 }
 
 void MotorGrafico::RecolocarFicha(short y, short z)
@@ -2082,9 +2100,9 @@ void MotorGrafico::RecolocarFicha(short y, short z)
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        short x = _nodoSeleccionado->getAbsolutePosition().X;
+        _nodoSeleccionado->setPosition(vector3df(x, y, z));
     #endif  
-    short x = _nodoSeleccionado->getAbsolutePosition().X;
-    _nodoSeleccionado->setPosition(vector3df(x, y, z));
 }
 
 void MotorGrafico::ReiniciarHanoi()
@@ -2093,14 +2111,14 @@ void MotorGrafico::ReiniciarHanoi()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        short tam = fichasMesh.size();
+        short posY=0;
+        for (int pos = 0; pos<tam; pos++)
+        {
+            fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
+            posY++;
+        }
     #endif  
-	short tam = fichasMesh.size();
-    short posY=0;
-    for (int pos = 0; pos<tam; pos++)
-    {
-        fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
-        posY++;
-    }
 }
 
 void MotorGrafico::RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame)
@@ -2109,53 +2127,53 @@ void MotorGrafico::RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFr
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        float mile = 1000.0f;
+        float ratio = 30.0f;
+        float tiempo_frame = mile/ratio;
+        int salto = ceil(tiempoUltimoFrame/tiempo_frame);
+        if(frame_actual == 0)
+        {
+            frame_actual = 1;
+        }
+        else
+        {
+            if(tiempoUltimoFrame > tiempo_frame)
+            {
+                //es mayor (va lento)
+                frame_actual = frame_actual+(1+salto);
+            }
+            else
+            {
+                //es menor (va mas rapido)
+                frame_actual = frame_actual+1;
+            }
+        }
+        if(frame_actual < 498)
+        {
+            //definimos los strings
+            std::string fram = "";
+            std::string extension = ".jpg";
+            std::string ruta = "assets/cinematicas/frames/";
+            fram = std::to_string(frame_actual);
+            //creamos la ruta completa
+            std::string ruta_completa = ruta+fram+extension;
+            char buffer[100];
+            strcpy(buffer,ruta_completa.c_str());
+            if(_actual != nullptr && _actualTexture != nullptr)
+            {
+                _actual->remove();//remuevo imagen actual
+                _driver->removeTexture(_actualTexture);//borras textura
+                _actualTexture = _driver->getTexture(buffer);//creas la textura
+                _actual = _guienv->addImage(_actualTexture,position2d<int>(0,0));//creo imagen actual
+            }
+            else
+            {
+                _actualTexture = _driver->getTexture(buffer);//creo textura
+                _actual = _guienv->addImage(_driver->getTexture(buffer),position2d<int>(0,0));//creo imagen con textura
+            }
+            //cout << tiempoUltimoFrame << " " << salto << endl;
+        }
     #endif  
-    float mile = 1000.0f;
-    float ratio = 30.0f;
-    float tiempo_frame = mile/ratio;
-    int salto = ceil(tiempoUltimoFrame/tiempo_frame);
-    if(frame_actual == 0)
-    {
-        frame_actual = 1;
-    }
-    else
-    {
-        if(tiempoUltimoFrame > tiempo_frame)
-        {
-            //es mayor (va lento)
-            frame_actual = frame_actual+(1+salto);
-        }
-        else
-        {
-            //es menor (va mas rapido)
-            frame_actual = frame_actual+1;
-        }
-    }
-    if(frame_actual < 498)
-    {
-        //definimos los strings
-        std::string fram = "";
-        std::string extension = ".jpg";
-        std::string ruta = "assets/cinematicas/frames/";
-        fram = std::to_string(frame_actual);
-        //creamos la ruta completa
-        std::string ruta_completa = ruta+fram+extension;
-        char buffer[100];
-        strcpy(buffer,ruta_completa.c_str());
-        if(_actual != nullptr && _actualTexture != nullptr)
-        {
-            _actual->remove();//remuevo imagen actual
-            _driver->removeTexture(_actualTexture);//borras textura
-            _actualTexture = _driver->getTexture(buffer);//creas la textura
-            _actual = _guienv->addImage(_actualTexture,position2d<int>(0,0));//creo imagen actual
-        }
-        else
-        {
-            _actualTexture = _driver->getTexture(buffer);//creo textura
-            _actual = _guienv->addImage(_driver->getTexture(buffer),position2d<int>(0,0));//creo imagen con textura
-        }
-        //cout << tiempoUltimoFrame << " " << salto << endl;
-    }
 }
 
 bool MotorGrafico::finalCinematica()
@@ -2164,17 +2182,18 @@ bool MotorGrafico::finalCinematica()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-    #endif  
-    if(frame_actual >= 498)
-    {
-        //borramos los datos
-        _actual->remove();//remuevo imagen actual
-        _driver->removeTexture(_actualTexture);//borras textura
-        //borramos los punteros
-        _actual = nullptr;
-        _actualTexture = nullptr;
-        return true;
-    }
+        if(frame_actual >= 498)
+        {
+            //borramos los datos
+            _actual->remove();//remuevo imagen actual
+            _driver->removeTexture(_actualTexture);//borras textura
+            //borramos los punteros
+            _actual = nullptr;
+            _actualTexture = nullptr;
+            return true;
+        }
 
-    return false;
+        return false;
+    #endif  
+
 }
