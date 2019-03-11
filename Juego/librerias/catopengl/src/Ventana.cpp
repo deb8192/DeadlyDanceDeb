@@ -163,3 +163,43 @@ void Ventana::UpdateSize(short unsigned int w, short unsigned int h)
         glfwSetWindowSize(_window, w, h);
     } 
 }
+
+bool Ventana::EstaPulsada(short tecla)
+{
+    if(glfwGetKey(_window,tecla) == GLFW_PRESS)  //Si pulsas Escape
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool Ventana::MouseEstaPulsado(short boton)
+{
+    if(boton == 666)
+    {
+        double * datos = Ventana::RecuperarPosicionesMouse();
+
+        if(MouseX != datos[0] || MouseY != datos[1])
+        {
+            MouseX = datos[0];
+            MouseY = datos[1];
+            return true;
+        }
+
+        delete datos;
+
+    }
+    else
+    {
+        if(glfwGetMouseButton(_window,boton) == GLFW_PRESS)   
+        {
+            //se ha pulsado entonces devolvemos true
+            return true;
+        }
+    }
+    
+    return false;
+}
