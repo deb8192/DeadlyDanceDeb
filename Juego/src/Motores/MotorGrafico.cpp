@@ -30,6 +30,7 @@ MotorGrafico::MotorGrafico()
         cx = 0;
         cz = 30;
         cs = -1;
+        gdir = 0;   
     #endif   
 }
 
@@ -954,6 +955,7 @@ void MotorGrafico::cambiarCamara()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
+        gdir >= 270 ? gdir = 0 : gdir += 90;
         if(cx == 0)
         {
             cs *= -1;
@@ -966,6 +968,16 @@ void MotorGrafico::cambiarCamara()
             cz = 30;
         }
     #endif        
+}
+
+int MotorGrafico::getGdir()
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        return gdir;
+    #endif 
 }
 
 int MotorGrafico::getCx()

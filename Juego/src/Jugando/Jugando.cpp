@@ -334,7 +334,8 @@ void Jugando::Update()
     this->activarPowerUp();
 
     // Adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
-    _fisicas->colisionChecker(_motor->EstaPulsado(KEY_A),
+    _fisicas->colisionChecker(_motor->getGdir(),
+        _motor->EstaPulsado(KEY_A),
         _motor->EstaPulsado(KEY_S),
         _motor->EstaPulsado(KEY_D),
         _motor->EstaPulsado(KEY_W),
@@ -342,7 +343,7 @@ void Jugando::Update()
         _jugador->getNewY(),
         _jugador->getNewZ()
     );
-
+    
     if (enSalaBoss) {
         //colisiones con todos los objetos y el boss
         jugadorInmovil = _jugador->ColisionEntornoBoss();

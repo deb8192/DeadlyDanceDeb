@@ -583,21 +583,43 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
     return nullptr;
 
 }
-void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z)
+void MotorFisicas::colisionChecker(int gcam, bool a, bool s, bool d, bool w, float x, float y, float z)
 {
-    //cout << "arma: " << arma << endl;
-
+    
+    Constantes constantes;
     float px = x,
           pz = z;
-    if(a)
-     px -= 2;
-    if(s)
-     pz -= 2;
-    if(d)
-     px += 2;
-    if(w)
-     pz += 2;
 
+    if(w)
+     az = 50;
+    if(s)
+     az = -50;
+    if(a)
+     ax = -50;
+    if(d)
+     ax = 50;
+
+    //Para giro: obtienes el maximo comun divisor y lo divides entre x, z
+    //asi tambien evitas que ambas variables aumenten excesivamente de valor
+    float div = (float)__gcd((int)abs(ax),(int)abs(az));
+
+    if(div != 1.0 && div != 0.0)
+    {
+        ax /= div;
+        az /= div;
+    }
+
+    //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
+    az < 0 ?
+     deg = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(ax/az)) :
+     deg =  constantes.RAD_TO_DEG * atan(ax/az) ;
+    //has obtenido la arcotangente que te da el angulo de giro en grados
+
+      deg -= gcam;
+      px += (int)(2.9*sin(deg*constantes.DEG_TO_RAD));
+      pz += (int)(2.9*cos(deg*constantes.DEG_TO_RAD));
+          
+    
     if(jugador != nullptr)
     {
         rp3d::Vector3 posiciones(px,y,pz);
