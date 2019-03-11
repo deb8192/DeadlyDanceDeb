@@ -1252,3 +1252,14 @@ bool Jugador::ColisionEntornoBoss()
     _fisicas = nullptr;
     return false;
 }
+
+void Jugador::Render(float updTime, float drawTime)
+{
+    moverseEntidad(1 / updTime);
+    RotarEntidad(1 / updTime);
+    UpdateTimeMove(drawTime);
+    _motor->mostrarJugador(
+        posActual.x, posActual.y, posActual.z,
+        getRX(), getRY(), getRZ()
+    );
+}
