@@ -147,6 +147,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool GetContestar();
         void SetContestar(bool);
 
+        void Render(unsigned short pos, float updTime, float drawTime);
+        void RenderAtaque();
+
     protected:
         Times* _tiempo;
         MotorAudioSystem* _motora;
