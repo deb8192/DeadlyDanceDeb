@@ -15,6 +15,9 @@ class Ventana
         void CambiarColorFondo(float r,float g,float b,float a);//cambiar el color de fondo de la ventana
         void UpdateTitle(const char *);//cambia titulo de la ventana
         void UpdateSize(short unsigned int w, short unsigned int h);//cambia tamayo de la ventana
+        bool EstaPulsada(short);//comprueba si la tecla esta pulsada
+        bool MouseEstaPulsado(short);//comprueba que este pulsado alguna tecla o que se mueve
+
     private:
 
         ~Ventana();//destructor
@@ -28,5 +31,10 @@ class Ventana
         float green = 0.0f;//verde para el fondo
         float blue = 0.0f;//azul para el fondo
         float alpha = 0.0f;//transparencia para el fondo
+        //posicion raton actual 
+        double MouseX = 0;
+        double MouseY = 0;
+        
+
 };
 #endif

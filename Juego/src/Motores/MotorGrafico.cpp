@@ -218,7 +218,7 @@ void MotorGrafico::LimpiarMotorGrafico()
                 Plataformas_Scena[i] = nullptr;
             }
 
-        Plataformas_Scena.resize(0);
+            Plataformas_Scena.resize(0);
         }
 
         if(Luces_Scena.size() > 0)
@@ -228,37 +228,37 @@ void MotorGrafico::LimpiarMotorGrafico()
                 Luces_Scena[i] = nullptr;
             }
 
-        Luces_Scena.resize(0);
+            Luces_Scena.resize(0);
         }
 
         if(Objetos_Scena.size() > 0)
         {
             for(std::size_t i=0;i < Objetos_Scena.size();i++)
             {
-            Objetos_Scena[i] = nullptr;
+                Objetos_Scena[i] = nullptr;
             }
 
-        Objetos_Scena.resize(0);
+            Objetos_Scena.resize(0);
         }
 
         if(Recolectables_Scena.size() > 0)
         {
             for(std::size_t i=0;i < Recolectables_Scena.size();i++)
             {
-            Recolectables_Scena[i] = nullptr;
+                Recolectables_Scena[i] = nullptr;
             }
 
-        Recolectables_Scena.resize(0);
+            Recolectables_Scena.resize(0);
         }
 
         if(PowerUP_Scena.size() > 0)
         {
             for(std::size_t i=0;i < PowerUP_Scena.size();i++)
             {
-            PowerUP_Scena[i] = nullptr;
+                PowerUP_Scena[i] = nullptr;
             }
  
-        PowerUP_Scena.resize(0);
+            PowerUP_Scena.resize(0);
         }
 
         _armaEnEscena = nullptr;
@@ -403,6 +403,7 @@ void MotorGrafico::ActivarFuenteDefault()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+
     #else
         //codigo motor irrlicht
         _skin = _guienv->getSkin();
@@ -479,6 +480,7 @@ void MotorGrafico::CrearTexto(std::string texto, short x1, short y1, short x2, s
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        _interfaz->CrearTexto(texto.c_str(),x1,y1,x2);
     #else
         //codigo motor irrlicht
         std::wstring widestr = std::wstring(texto.begin(), texto.end());
@@ -522,6 +524,67 @@ bool MotorGrafico::EstaPulsado(short boton)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        switch(boton)
+        {
+            case KEY_A:
+                return _interfaz->IsKeyDown(GLFW_KEY_A);
+
+            case KEY_S:
+                return _interfaz->IsKeyDown(GLFW_KEY_S);
+
+            case KEY_D:
+                return _interfaz->IsKeyDown(GLFW_KEY_D);
+
+            case KEY_W:
+                return _interfaz->IsKeyDown(GLFW_KEY_W);
+
+            case KEY_ESC:
+                return _interfaz->IsKeyDown(GLFW_KEY_ESCAPE);
+
+            case KEY_ESPACIO:
+                return _interfaz->IsKeyDown(GLFW_KEY_SPACE);
+
+            case KEY_ACEPTAR:
+                return _interfaz->IsKeyDown(GLFW_KEY_ENTER);
+
+            case KEY_G_DEBUG:
+                return _interfaz->IsKeyDown(GLFW_KEY_G);//para modo debug
+            
+            case KEY_1:
+                return _interfaz->IsKeyDown(GLFW_KEY_1);
+            
+            case KEY_2:
+                return _interfaz->IsKeyDown(GLFW_KEY_2);
+            case KEY_P:
+                return _interfaz->IsKeyDown(GLFW_KEY_P);
+
+            case KEY_K:
+                return _interfaz->IsKeyDown(GLFW_KEY_K);
+            
+            case KEY_C:
+                return _interfaz->IsKeyDown(GLFW_KEY_C);//activa pathdinding
+            
+            case KEY_B:
+                return _interfaz->IsKeyDown(GLFW_KEY_B);
+
+            case RMOUSE_PRESSED_DOWN:
+                return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_RIGHT);
+
+            case LMOUSE_PRESSED_DOWN:
+                return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_LEFT);
+
+            case MOUSE_MOVED:
+                return _interfaz->IsMouseClick(GLFW_MOUSE_MOVE);
+
+            case KEY_Q:
+                return _interfaz->IsKeyDown(GLFW_KEY_Q);
+
+            case KEY_J:
+                return _interfaz->IsKeyDown(GLFW_KEY_J);//Para matar al jugador (16)
+
+            case KEY_E:
+                return _interfaz->IsKeyDown(GLFW_KEY_E);//actua una sola vez aunque se mantenga pulsado
+        }
     #else
         //codigo motor irrlicht
         switch(boton)

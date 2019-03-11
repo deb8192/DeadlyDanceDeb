@@ -352,3 +352,28 @@ void Interfaz::DefinirVentana(short unsigned int width, short unsigned int heigh
         window->UpdateSize(width,height);
     }
 }
+
+void Interfaz::CrearTexto(const char * texto, short x, short y, unsigned short tamayo)
+{
+
+}
+
+bool Interfaz::IsKeyDown(short tecla)
+{
+    if(window->EstaPulsada(tecla))
+    {
+        return true; 
+    }
+    
+    return false;
+}
+
+bool Interfaz::IsMouseClick(short boton)
+{
+    if(window->MouseEstaPulsado(boton))
+    {
+        return true;
+    }
+
+    return false;
+}
