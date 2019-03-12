@@ -2,6 +2,7 @@
 #define Interactuable_HPP
 #include "../Motores/INobjetos.hpp"
 #include "../Motores/INdrawable.hpp"
+#include "../Motores/MotorGrafico.hpp"
 
 using namespace std;
 
@@ -9,7 +10,6 @@ using namespace std;
 class Interactuable : public INobjetos , public INdrawable //multiple herencia a esto se le llama derivacion multiple
 {
     public:
-        Interactuable();         //esto le deja a la entidad el constructor por defecto
         Interactuable(int codigo, const char* nombre, int anc, int lar, int alt,
             const char* objeto, const char* textura, int posicion,
             float x, float y, float z);
@@ -68,9 +68,10 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         float getAlto();
         int GetPosicionObjetos();
         bool getAccionado();
+        void Render(float updTime, float drawTime);
 
     private:
-
+        MotorGrafico* _motor;
         //Si codigoObjeto es > 0 es un numero comun entre dos objetos: una palanca con el mismo numero que una puerta abre dicha puerta
         int codigoObjeto;   //En caso de igualarse a 0 es una puerta sin llave, y si es -1 es un cofre
         bool accionado;     //Dado que son objetos accionables tendra dos estado segun este accionado o no
