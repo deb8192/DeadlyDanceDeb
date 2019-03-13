@@ -1166,7 +1166,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         //Comprueba si ya se esta respondiendo a la peticion de algun enemigo
         if(!ayuda)
         {
-            cout << "\e[42m Pide ayuda \e[0m" << endl;
+            cout << "\e[42m Pide ayuda ID:\e[0m" <<id<< endl;
             //vamos a generar un sonido de ayuda
             generarSonido(60,2,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
             SetPedirAyuda(true); //En caso de no estar buscando a ningun aliado se anade este como peticionario
@@ -1191,7 +1191,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         //if(_motor->getPathfindingActivado()){
         SetContestar(true);//Jugando::updateRecorridoPathfinding(this);//se llama al pathfinding y se pone en cola al enemigo que responde a la peticion de ayuda
         //}
-        cout << " contesta a la llamada de auxilio "<< endl;
+        cout << " contesta a la llamada de auxilio ID:"<<id<< endl;
 
         return true;
     }
@@ -1266,4 +1266,44 @@ bool Enemigo::GetContestar()
 void Enemigo::SetContestar(bool contesta)
 {
     contestar = contesta;
+}
+
+void Enemigo::Render(unsigned short pos, 
+    float updTime, float drawTime)
+{
+    moverseEntidad(1 / updTime);
+    UpdateTimeMove(drawTime);
+    RotarEntidad(1 / updTime);
+    UpdateTimeRotate(drawTime);
+
+    if (pos >= 0) // Enemigos
+    {
+        _motor->mostrarEnemigos(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y, rotActual.z,
+            pos
+        );
+    }
+    else
+    { // Boss
+        _motor->mostrarBoss(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y, rotActual.z
+        );
+    }
+
+    _motor->dibujarObjetoTemporal(
+        posFisicas.x*2, posFisicas.y*2, posFisicas.z*2,
+        rotActual.x, rotActual.y, rotActual.z,
+        3, 3, 3, 2
+    );
+}
+
+void Enemigo::RenderAtaque()
+{
+    _motor->dibujarObjetoTemporal(
+        atx, aty, atz,
+        rotActual.x, rotActual.y, rotActual.z,
+        4, 4, 4, 2
+    );
 }

@@ -46,7 +46,7 @@ using namespace reactphysics3d;
             int collideColectable();
             int collideColectablePowerup();
             int collideInteractuable();
-            void colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z);
+            void colisionChecker(int gcam, bool a, bool s, bool d, bool w, float x, float y, float z);
             void llevarBox(float x, float y, float z, float anc, float lar, float alt);
 
             void updateJugador(float x, float y, float z, float rx, float ry, float rz);//actualizamos al jugador en el espacio de las fisicas
@@ -113,6 +113,7 @@ using namespace reactphysics3d;
             CollisionBody * arma;//arma normal del jugador
             long double accumulator = 0;
             long double previousFrameTime;
+            float ax = 1.0f, az = 20.0f, deg;
             // Ya no utilizar - MI
             //std::vector<CollisionBody *> objetos;
     };

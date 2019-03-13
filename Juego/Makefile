@@ -3,19 +3,20 @@ CC_FLAGS = -w #comandos extras para el compilador
 RUTACPP = src/ #variable donde iran las clases que utilizamos
 # $(CXX) - Es la variable de entorno del compilador si estas con g++ o gcc te lo detecta solo+
 CXXFLAGS = -g -Wall # lo que hace es que crea archivos debug para que se pueda comprobar la informacion
-CABECERAS =-I"/usr/include/irrlicht" -I"librerias/fmod/lowlevel/inc/" -I"librerias/fmod/studio/inc/" -I"librerias/reactphysics3d/src/" -I"librerias/glew/inc/" -I"librerias/glad/inc/" -I"librerias/glfw/inc/" -I"librerias/stb_image/inc/" -I"librerias/glm/" -I"librerias/assimp/inc/" -I"librerias/catopengl/inc/" #nos dice donde estan los includes
-LIBRERIAS =-L"librerias/reactphysics3d/lib/" -L"librerimmas/fmod/lowlevel/lib/x86_64/" -L"librerias/fmod/studio/lib/x86_64/" -L"librerias/glew/lib/" -L"librerias/glad/lib/" -L"librerias/glfw/lib/" -L"librerias/assimp/lib/" -L"librerias/catopengl/lib/" #nos dice donde estan las librerias
-LIBRERIAS_CARPETAS = "librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/:librerias/reactphysics3d/lib:librerias/glew/lib:librerias/glad/lib:librerias/glfw/lib:librerias/assimp/lib:librerias/catopengl/lib"
+CABECERAS =-I"librerias/irrlicht/inc/" -I"librerias/fmod/lowlevel/inc/" -I"librerias/fmod/studio/inc/" -I"librerias/reactphysics3d/src/" -I"librerias/glew/inc/" -I"librerias/glad/inc/" -I"librerias/glfw/inc/" -I"librerias/stb_image/inc/" -I"librerias/glm/" -I"librerias/assimp/inc/" -I"librerias/catopengl/inc/" #nos dice donde estan los includes
+LIBRERIAS =-L"librerias/irrlicht/lib/" -L"librerias/reactphysics3d/lib/" -L"librerimmas/fmod/lowlevel/lib/x86_64/" -L"librerias/fmod/studio/lib/x86_64/" -L"librerias/glew/lib/" -L"librerias/glad/lib/" -L"librerias/glfw/lib/" -L"librerias/assimp/lib/" -L"librerias/catopengl/lib/" #nos dice donde estan las librerias
+LIBRERIAS_CARPETAS = "librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/lib/:librerias/reactphysics3d/lib:librerias/glew/lib:librerias/glad/lib:librerias/glfw/lib:librerias/assimp/lib:librerias/catopengl/lib"
 LIBRERIAS_ESPECIFICAS = librerias/fmod/studio/lib/x86_64/libfmodstudio.so librerias/fmod/lowlevel/lib/x86_64/libfmod.so librerias/reactphysics3d/lib/libreactphysics3d.a librerias/glew/lib/libGLEW.a librerias/glad/lib/libglad.a librerias/glfw/lib/libglfw3.a librerias/assimp/lib/libIrrXML.a librerias/catopengl/lib/libcatopengl.a #librerias necesarias
 irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor -lGL -lIrrlicht -lassimp   #porque nombre llamarla
 libSeguimiento = $(shell ls librerias/catopengl/obj/*.o)
 SHELL = /bin/bash
 CPUCOUNT=$(shell grep -c   "^processor" /proc/cpuinfo)
+DIRECTIVA =#definimos la variable que detecta que motorgrafico compilar el viejo o el nuevo(si no se pone esta directiva), -D debe estar pegado al nombre de la directiva
 # ${CXXFLAGS} - Son las opciones del compilador
 #pwd
 
 # File names
-EXEC = Ejecutable
+EXEC = Ejecutable 
 BEGIN = Comienzo
 
 SOURCES = $(shell ls src/*.cpp)
@@ -65,6 +66,8 @@ RECUR2 = Recursiva2
 PRECA = Precaucion
 LG = LIBRERIAGRAFICA
 PARALLEL = Paralelo
+DIVISION = Division
+
 BUSQ = $(shell find ./obj  -maxdepth 1 -name "*.o" | wc -l)
 BUSQM = $(shell find ./obj/Menus  -maxdepth 1 -name "*.o" | wc -l)
 BUSQP = $(shell find ./obj/Personajes  -maxdepth 1 -name "*.o" | wc -l)
@@ -106,10 +109,10 @@ $(PARALLEL): $(OBJECTS) $(OBJECTSP) $(OBJECTSE) $(OBJECTSM) $(OBJECTSJ) $(OBJECT
 
 $(EXEC): $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2) $(libSeguimiento)
 	#Comprobando ejecutable si esta actualizado
-	$(CXX) $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2) $(irrlichtN) $(LIBRERIAS) $(LIBRERIAS_ESPECIFICAS)  -o $(EXEC)
+	$(CXX) $(DIRECTIVA) $(OSOURCESV2) $(OSOURCESMV2) $(OSOURCESPV2) $(OSOURCESEV2) $(OSOURCESJV2) $(OSOURCESPU2) $(OSOURCESO2) $(OSOURCESA2) $(OSOURCESMO2) $(irrlichtN) $(LIBRERIAS) $(LIBRERIAS_ESPECIFICAS)  -o $(EXEC)
 	#Ejecutable Actualizado
 
-$(PRECA):
+$(PRECA): 
 	if [ $(BUSQ2) -gt 0 ] ; then mv src/*.o obj/ ; fi
 	if [ $(BUSQ2M) -gt 0 ] ; then mv src/Menus/*.o obj/Menus/ ; fi
 	if [ $(BUSQ2P) -gt 0 ] ; then mv src/Personajes/*.o obj/Personajes/ ; fi
@@ -135,11 +138,11 @@ $(RECUR):
 
 %.o: %.cpp %.hpp #para las clases normales
 	#Compilacion objeto con cabecera
-	$(CXX) -c $(CXXFLAGS) $< -o $@ $(CABECERAS)
+	$(CXX) -c $(CXXFLAGS) $(DIRECTIVA) $< -o $@ $(CABECERAS)
 
 %.o: %.cpp #esto es para el main sobretodo
 	#Compilacion objeto sin cabecera
-	$(CXX) -c $(CXXFLAGS) $< -o $@ $(CABECERAS)
+	$(CXX) -c $(CXXFLAGS) $(DIRECTIVA) $< -o $@ $(CABECERAS)
 
 $(RECUR2):
 	 if [ $(BUSQ2) -gt 0 ] ; then mv src/*.o obj/ ; fi
@@ -178,4 +181,7 @@ val: $(BEGIN)
 	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia
 	export LD_LIBRARY_PATH="$(LIBRERIAS_CARPETAS)";\
 	valgrind --error-limit=no ./$(EXEC)
-		
+
+newmotor: 
+	$(MAKE) DIRECTIVA=-DWEMOTOR Comienzo
+	

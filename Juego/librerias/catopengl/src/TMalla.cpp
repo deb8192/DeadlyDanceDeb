@@ -4,12 +4,12 @@
 TMalla::TMalla(int ft)
 {
     didentidad = 'M'; //para sabe que funcion hace es informativo
-    frames_totales = 0;
+    frames_totales = ft;
     mallas_totales = 0;
     frame_inicial = 0;
     frame_final = ft;
     frame_actual = 0;
-    velocidad_animacion = 30;
+    setVelocidadAnimacion(30);
 }
 
 //Uso: destructor
@@ -29,6 +29,7 @@ void TMalla::cargarMalla(unsigned short,unsigned short)
 // sobrecarga metodos TEntidad
 void TMalla::beginDraw()
 {
+    shader->Use();
     TimeEngine(); //Tiempo del motor
     //calcular el frame
     frame_actual = frame_actual + getTime() * velocidad_animacion;
@@ -91,39 +92,37 @@ void TMalla::endDraw()
 
 }
 
-void TMalla::BucleAnimacion(unsigned short,unsigned short)
+void TMalla::BucleAnimacion(unsigned short ini,unsigned short fin)
 {
-
+    if(ini > 0 && ini <= frames_totales && fin > 0 && fin <= frames_totales && ini < fin)
+    {
+        frame_inicial = ini;
+        frame_final = fin;
+    }
+    else
+    {
+        cout << "ERROR: Los frames del bucle tienen que estar entre 0 y " << frames_totales << endl;
+    }
 }
 
-void TMalla::SiguienteAnimacion()
+void TMalla::setVelocidadAnimacion(float v)
 {
-
-}
-
-void TMalla::DefinirAnimaciones()
-{
-
+    velocidad_animacion = v;
 }
 
 unsigned short TMalla::getFrameInicio()
 {
-    return 0;
+    return frame_inicial;
 }
 
 unsigned short TMalla::getFrameFinal()
 {
-    return 0;
+    return frame_final;
 }
 
 unsigned short TMalla::getFrameActual()
 {
-    return 0;
-}
-
-bool TMalla::setTiempoAnimacion(unsigned short)
-{
-    return false;
+    return frame_actual;
 }
 
 void TMalla::setRecursoObjeto(RMalla * objeto)
