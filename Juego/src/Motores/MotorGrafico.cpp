@@ -15,6 +15,13 @@ MotorGrafico::MotorGrafico()
         //codigo motor catopengl
         
         _interfaz = nullptr;
+        Plataformas_Scena.reserve(100);//salas reservadas
+        Luces_Scena.reserve(40);//luces reservadas
+        Enemigos_Scena.reserve(50);//enemigos reservados
+        camara = 0;
+        _jugEscena = 0;
+        debugGrafico = false;
+        _bossEscena = 0;
 
     #else
         //codigo motor irrlicht
@@ -494,6 +501,7 @@ void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, s32 id,
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+
     #else
         //codigo motor irrlicht
         _guienv->addButton(rect<s32>(x,y,x2,y2), 0, id, texto, texto2);
@@ -719,6 +727,7 @@ bool MotorGrafico::PulsadoClicDer()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_RIGHT); 
     #else
         //codigo motor irrlicht
         return input.PulsadoClicDer();
@@ -729,6 +738,7 @@ bool MotorGrafico::PulsadoClicIzq()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_LEFT); 
     #else
         //codigo motor irrlicht
         return input.PulsadoClicIzq();
@@ -739,6 +749,7 @@ bool MotorGrafico::SueltoClicDer()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_RIGHT); 
     #else
         //codigo motor irrlicht
         return input.SueltoClicDer();
@@ -749,6 +760,7 @@ bool MotorGrafico::SueltoClicIzq()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_LEFT); 
     #else
         //codigo motor irrlicht
         return input.SueltoClicIzq();
@@ -769,7 +781,7 @@ void MotorGrafico::ResetEventoMoveRaton()
     //codigo motor catopengl
     double * MotorGrafico::GetPosicionRaton()
     {
-        return nullptr;
+        return _interfaz->GetPosicionRaton();
     }    
 #else
     //codigo motor irrlicht
@@ -783,6 +795,9 @@ void MotorGrafico::CrearCamara()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        camara = _interfaz->AddCamara();//creamos la camara
+        _interfaz->Trasladar(camara,0,20,-20);//movemos la camara
+        _interfaz->ChangeTargetCamara(camara,0,0,0);//enfocamos la camara al centro
     #else
         //codigo motor irrlicht
         //primer vector traslacion, segundo rotacion
@@ -795,12 +810,7 @@ void MotorGrafico::CrearCamara()
 
 bool MotorGrafico::GetDebugActivado()
 {
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
         return debugGrafico;
-    #endif  
 }
 
 
@@ -810,6 +820,12 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        unsigned short objeto = _interfaz->AddMalla(ruta_objeto,1);//instanciamos el objeto y lo agregamos a la escena
+        _interfaz->Trasladar(objeto,(float)x,(float)y,(float)z);//movemos el objeto
+        _interfaz->Rotar(objeto,(float)rp,(float)0,(float)1,(float)0);//giramos el objeto
+        Plataformas_Scena.push_back(objeto);//lo introducimos en la matriz de objetos
+        return (Plataformas_Scena.size()-1);//devolvemos el valor
+
     #else
         //codigo motor irrlicht
         IAnimatedMesh* objeto = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
@@ -833,7 +849,12 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
 void MotorGrafico::CargarLuces(int x,int y,int z)
 {
     #ifdef WEMOTOR
+        
         //codigo motor catopengl
+        unsigned short luz = _interfaz->AddLuz(1);//instanciamos el objeto y lo agregamos a la escena
+        _interfaz->Trasladar(luz,(float)x,(float)y,(float)z);//movemos el objeto
+        Luces_Scena.push_back(luz);//agregamos la luz
+
     #else
         //codigo motor irrlicht
         // add light 1 (more green)
@@ -863,7 +884,15 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
 void MotorGrafico::CargarBoss(int x,int y,int z, const char* ruta_objeto)
 {
     #ifdef WEMOTOR
+       
         //codigo motor catopengl
+        _bossEscena = _interfaz->AddMalla(ruta_objeto,1); 
+       
+        if(_bossEscena == 0)
+        {
+            _interfaz->Trasladar(_bossEscena,(float)x,(float)y,(float)z);
+        }
+
     #else
         //codigo motor irrlicht
         IAnimatedMesh* boss = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
@@ -879,8 +908,19 @@ void MotorGrafico::CargarBoss(int x,int y,int z, const char* ruta_objeto)
 void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
 {
     #ifdef WEMOTOR
+        
         //codigo motor catopengl
+        
+        unsigned short enemigo = _interfaz->AddMalla(ruta_objeto,1);
+        
+        if(enemigo != 0)
+        {
+            _interfaz->Trasladar(enemigo,(float)x,(float)y,(float)z);
+            Enemigos_Scena.push_back(enemigo);
+        }
+
     #else
+
         //codigo motor irrlicht
         IAnimatedMesh* enemigo = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 
@@ -890,6 +930,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
             enemigo_en_scena->setPosition(core::vector3df(x,y,z));
             Enemigos_Scena.push_back(enemigo_en_scena);
         }
+
     #endif  
 }
 
@@ -906,6 +947,15 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+
+        unsigned short _jugEscena = _interfaz->AddMalla(ruta_objeto,1);
+
+        if(_jugEscena == 0)
+        {
+            _interfaz->Trasladar(_jugEscena,(float)x,(float)y,(float)z);
+            _interfaz->Escalar(_jugEscena,(float)1.75,(float)1.75,(float)1.75);
+        }
+
     #else
         //codigo motor irrlicht
         IAnimatedMesh* jugador = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
@@ -930,6 +980,8 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+
+
     #else
         //codigo motor irrlicht
         IAnimatedMesh* objeto = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
@@ -1399,9 +1451,14 @@ void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
 
 #ifdef WEMOTOR
     //codigo motor catopengl
-    unsigned short MotorGrafico::getArmaEspecial()
+    bool MotorGrafico::getArmaEspecial()
     {
-        return 0;//AAAAAAAAAA REALIZAR
+        if(_armaEspJugador == 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 #else
     //codigo motor irrlicht

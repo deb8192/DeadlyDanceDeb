@@ -377,3 +377,11 @@ bool Interfaz::IsMouseClick(short boton)
 
     return false;
 }
+
+void Interfaz::ChangeTargetCamara(unsigned short id, float x, float y, float z)
+{
+    Nodo * nodo = buscarNodo(id);
+
+    
+
+}
