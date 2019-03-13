@@ -53,7 +53,9 @@ class Interfaz
 
         bool IsKeyDown(short);//se le pasa la tecla que quiere comprobar, esto va a la ventana y le pregunta si esta pulsada
 
-        bool IsMouseClick(short);// comprobaciones de los botones del raton        
+        bool IsMouseClick(short);// comprobaciones de los botones del raton     
+
+        void ChangeTargetCamara(unsigned short id, float x, float y, float z);//cambia donde apunta la camara   
 
     private:
 

@@ -260,7 +260,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             //void colorearObjeto(int a, int r, int g, int b, int obj);
             
             #ifdef WEMOTOR
-                unsigned short getArmaEspecial();
+                bool getArmaEspecial();
             #else
                 IAnimatedMeshSceneNode* getArmaEspecial();
             #endif
@@ -331,6 +331,16 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 
                 Interfaz * _interfaz;//puntero que contiene la entrada al motorgrafico de catopengl
 
+                unsigned short camara;//id de la camara
+
+                std::vector<unsigned short> Plataformas_Scena;//contiene las mmallas del suelo del juego
+                std::vector<unsigned short> Luces_Scena;//contiene las luces de la escena
+                std::vector<unsigned short> Enemigos_Scena;//contiene los enemigos reservados (ids)
+                unsigned short _bossEscena;//id del boss
+                unsigned short _jugEscena;//id jugador
+                bool debugGrafico;//nos sirve para ver las zonas de colision
+                unsigned short _armaEspJugador;//id del arma del jugador
+                
                 // Ventana 
                 short WIDTH_AUX, WIDTH, HEIGHT;
                 short x_linea1, x_linea2;
