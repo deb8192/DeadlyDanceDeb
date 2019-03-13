@@ -5,6 +5,7 @@ Interfaz::Interfaz()
     _raiz = new TNodo();//se crea un nodo raiz(sin entidad) para agregar ramas (camaras,mallas,luces)
     camaras.reserve(3);//dos camaras maximas
     luces.reserve(40);//30 luces como maximo
+    imagenes.reserve(20);//20 imagenes de interfaz
     gestorDeRecursos = new CatOpengl::Gestor;
     ventana_inicializada = true;//se pone para que entra a inicializar por defecto
     window = nullptr;//se pone para saber que no esta inicializada
@@ -180,6 +181,56 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
     return 0;
 }
 
+unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigned int y, float scale)
+{
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
+    TNodo * traslacion = new TNodo;
+    TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
+    traslacion->setEntidad(traslacionEnt);
+
+    TNodo * rotacion = new TNodo;
+    TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0,0);
+    rotacion->setEntidad(rotacionEnt);
+
+    TNodo * escalado = new TNodo;
+    TTransform * escaladoEnt = new TTransform;
+    rotacionEnt->escalar(1,1,1);
+    escalado->setEntidad(escaladoEnt);
+
+    escaladoEnt->Ejecutar();
+
+    TNodo * imagen = new TNodo;
+    TPlano * imagenEn = new TPlano(archivo,x,y,scale,shaders[1]);
+    imagen->setEntidad(imagenEn);
+
+    escalado->addHijo(rotacion);
+    rotacion->addHijo(traslacion);
+    traslacion->addHijo(imagen);
+
+    if(_raiz != nullptr)
+    {
+        luces.push_back(escalado);
+        _raiz->addHijo(escalado);
+
+        unsigned short idnuevo = generarId();
+
+        Nodo * nodo = new Nodo();
+        nodo->id = idnuevo;//se pone el id
+        nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodos.push_back(nodo);//se agrega a la lista de nodos general
+
+        return idnuevo;
+    }
+
+    return 0;
+}
 
 void Interfaz::Draw()
 {
@@ -275,8 +326,14 @@ void Interfaz::Escalar(unsigned short id,float x,float y,float z)
     }
 }
 
-bool Interfaz::VentanaEstaAbierta()
+bool Interfaz::VentanaEstaAbierta() 
 {
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
     return window->SigueAbierta();
 }
 
@@ -290,7 +347,7 @@ void Interfaz::ventanaInicializar()
     window->CrearVentana(600,800,true," Sin titulo ");
 
     shaders[0] = new Shader("assets/shaders/shaderlucesvs.glsl","assets/shaders/shaderlucesfs.glsl");
-    shaders[1] = new Shader("assets/shaders/shaderdefectovs.glsl","assets/shaders/shaderdefectofs.glsl");
+    shaders[1] = new Shader("assets/shaders/shaderguivs.glsl","assets/shaders/shaderguifs.glsl");
 }
 
 void Interfaz::ventanaLimpiar()
@@ -301,4 +358,73 @@ void Interfaz::ventanaLimpiar()
         window = nullptr;
         ventana_inicializada = true;
     }
+}
+
+double * Interfaz::GetPosicionRaton()
+{
+    return window->RecuperarPosicionesMouse();
+}
+
+void Interfaz::EliminarCamara(unsigned short)
+{
+
+}
+
+void Interfaz::LimpiarEscena()
+{
+
+}
+
+void Interfaz::LimpiarGui()
+{
+
+}
+
+void Interfaz::CambiarFondo(float r, float g, float b,float a)
+{
+    
+    if(window != nullptr)
+    {
+        window->CambiarColorFondo(r,g,b,a);
+    }
+}
+
+void Interfaz::DefinirVentana(short unsigned int width, short unsigned int height, const char * title)
+{
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
+    if(window != nullptr)
+    {
+        window->UpdateTitle(title);
+        window->UpdateSize(width,height);
+    }
+}
+
+void Interfaz::CrearTexto(const char * texto, short x, short y, unsigned short tamayo)
+{
+
+}
+
+bool Interfaz::IsKeyDown(short tecla)
+{
+    if(window->EstaPulsada(tecla))
+    {
+        return true; 
+    }
+    
+    return false;
+}
+
+bool Interfaz::IsMouseClick(short boton)
+{
+    if(window->MouseEstaPulsado(boton))
+    {
+        return true;
+    }
+
+    return false;
 }

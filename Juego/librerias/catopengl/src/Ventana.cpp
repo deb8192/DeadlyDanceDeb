@@ -9,13 +9,7 @@ Ventana::Ventana()
 //USO: borra los datos que no se borren correctamente por el sistema
 Ventana::~Ventana()
 {
-
-}
-
-//USO: llama al destructor de la ventana
-void Ventana::Remove()
-{
-    this->~Ventana();
+    Drop();
 }
 
 //USO: se utiliza para crear una ventana
@@ -55,10 +49,11 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     //Se llama a la funcion "framebuffer_size_callback" cada vez que el usuario cambia el tamanyo de ventana
     glfwSetFramebufferSizeCallback(_window,this->redimensionar);
 
-    glEnable(GL_MULTISAMPLE); // Activar suavizado MSAA
+
     //*********** APLICAR PROFUNDIDAD Z-BUFFER ***********
     glEnable(GL_DEPTH_TEST);   //Necesario para el zoom/fov
-
+    glEnable(GL_MULTISAMPLE); // Activar suavizado MSAA
+    
     //Activar CULLING
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
@@ -102,8 +97,11 @@ void Ventana::UpdateDraw()
 //CUIDADO: esta funcion se llama preferentemente despues de cerrar la ventana.
 void Ventana::Drop()
 {
-    glfwTerminate();//limpiar todos los recursos en memoria de GLFW
-    _window = nullptr;
+    if(_window != nullptr)
+    {
+        glfwTerminate();//limpiar todos los recursos en memoria de GLFW
+        _window = nullptr;
+    }
 }
 
 //USO: se llama automaticamente cuando se redimensiona la pantalla, sirve para redimensionar la pantalla
@@ -122,13 +120,87 @@ void Ventana::procesarInputs(GLFWwindow * _ventana)
     }
 }
 
-
 void Ventana::limpiar()
 {
     //actualizar inputs(teclado y raton)
     procesarInputs(_window);
 
     //Comandos de render
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //Designamos a el glClearColor un color
+    glClearColor(red, green, blue, alpha); //Designamos a el glClearColor un color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);         //Borrarmos en el buffer con el glClearColor designado
+}
+
+double * Ventana::RecuperarPosicionesMouse()
+{
+    if(_window != nullptr)
+    {
+        double * posiciones = new double[2];//se destruye en funcion de destino
+        glfwGetCursorPos(_window,&posiciones[0],&posiciones[1]);
+        return posiciones;
+    }
+    return nullptr;
+}
+
+void Ventana::CambiarColorFondo(float r, float g, float b,float a)
+{
+    red = r;
+    green = g;
+    blue = b;
+    alpha = a;
+}
+
+void Ventana::UpdateTitle(const char * _title)
+{
+    if(_window != nullptr)
+    {
+        glfwSetWindowTitle(_window, _title);
+    }
+}
+
+void Ventana::UpdateSize(short unsigned int w, short unsigned int h)
+{
+    if(_window != nullptr)
+    {
+        glfwSetWindowSize(_window, w, h);
+    } 
+}
+
+bool Ventana::EstaPulsada(short tecla)
+{
+    if(glfwGetKey(_window,tecla) == GLFW_PRESS)  //Si pulsas Escape
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool Ventana::MouseEstaPulsado(short boton)
+{
+    if(boton == 666)
+    {
+        double * datos = Ventana::RecuperarPosicionesMouse();
+
+        if(MouseX != datos[0] || MouseY != datos[1])
+        {
+            MouseX = datos[0];
+            MouseY = datos[1];
+            return true;
+        }
+
+        delete datos;
+
+    }
+    else
+    {
+        if(glfwGetMouseButton(_window,boton) == GLFW_PRESS)   
+        {
+            //se ha pulsado entonces devolvemos true
+            return true;
+        }
+    }
+    
+    return false;
 }

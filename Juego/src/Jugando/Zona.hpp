@@ -2,6 +2,7 @@
 #define Zona_HPP
 #include <iostream>
 #include <cstring>
+#include "../Motores/MotorGrafico.hpp"
 
 using namespace std;
 
@@ -41,9 +42,10 @@ class Zona
         unsigned short getTotalElementos();
         unsigned short getElementosActuales();
         short getTipo();
+        void Render();
 
     private:
-
+        MotorGrafico* _motor;
         enum tiposZona 
         {  
             Z_CHEST = 0,
