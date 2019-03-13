@@ -1,18 +1,11 @@
 #include "Interactuable.hpp"
 
-
-Interactuable::Interactuable()
-{
-    // Inicializar variables locales
-    codigoObjeto=0;
-    accionado=0;
-    posicionArrayObjetos=0;
-}
-
 Interactuable::Interactuable(int codigo, const char* nombre,
     int anc, int lar, int alt, const char* objeto,
     const char* textura, int posicion, float x, float y, float z)
 {
+    _motor = MotorGrafico::GetInstance();
+    
     // INdrawable
     posIni.x = x;
     posIni.y = y;
@@ -44,6 +37,7 @@ Interactuable::Interactuable(int codigo, const char* nombre,
 Interactuable::~Interactuable()
 {
     // Interactuable
+    _motor = nullptr;
     codigoObjeto=0;
     accionado=0;
     posicionArrayObjetos=0;
@@ -390,4 +384,15 @@ int Interactuable::GetPosicionObjetos()
 bool Interactuable::getAccionado()
 {
   return accionado;
+}
+
+void Interactuable::Render(float updTime, float drawTime)
+{
+    RotarEntidad(1 / updTime);
+    UpdateTimeRotate(drawTime);
+    _motor->mostrarObjetos(
+        posActual.x, posActual.y, posActual.z,
+        rotActual.x, rotActual.y, rotActual.z,
+        posicionArrayObjetos
+    );
 }
