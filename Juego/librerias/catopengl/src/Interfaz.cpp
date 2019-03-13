@@ -5,6 +5,7 @@ Interfaz::Interfaz()
     _raiz = new TNodo();//se crea un nodo raiz(sin entidad) para agregar ramas (camaras,mallas,luces)
     camaras.reserve(3);//dos camaras maximas
     luces.reserve(40);//30 luces como maximo
+    imagenes.reserve(20);//20 imagenes de interfaz
     gestorDeRecursos = new CatOpengl::Gestor;
     ventana_inicializada = true;//se pone para que entra a inicializar por defecto
     window = nullptr;//se pone para saber que no esta inicializada
@@ -180,6 +181,56 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
     return 0;
 }
 
+unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigned int y, float scale)
+{
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
+    TNodo * traslacion = new TNodo;
+    TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
+    traslacion->setEntidad(traslacionEnt);
+
+    TNodo * rotacion = new TNodo;
+    TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0,0);
+    rotacion->setEntidad(rotacionEnt);
+
+    TNodo * escalado = new TNodo;
+    TTransform * escaladoEnt = new TTransform;
+    rotacionEnt->escalar(1,1,1);
+    escalado->setEntidad(escaladoEnt);
+
+    escaladoEnt->Ejecutar();
+
+    TNodo * imagen = new TNodo;
+    TPlano * imagenEn = new TPlano(archivo,x,y,scale,shaders[1]);
+    imagen->setEntidad(imagenEn);
+
+    escalado->addHijo(rotacion);
+    rotacion->addHijo(traslacion);
+    traslacion->addHijo(imagen);
+
+    if(_raiz != nullptr)
+    {
+        luces.push_back(escalado);
+        _raiz->addHijo(escalado);
+
+        unsigned short idnuevo = generarId();
+
+        Nodo * nodo = new Nodo();
+        nodo->id = idnuevo;//se pone el id
+        nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodos.push_back(nodo);//se agrega a la lista de nodos general
+
+        return idnuevo;
+    }
+
+    return 0;
+}
 
 void Interfaz::Draw()
 {
@@ -296,7 +347,7 @@ void Interfaz::ventanaInicializar()
     window->CrearVentana(600,800,true," Sin titulo ");
 
     shaders[0] = new Shader("assets/shaders/shaderlucesvs.glsl","assets/shaders/shaderlucesfs.glsl");
-    shaders[1] = new Shader("assets/shaders/shaderdefectovs.glsl","assets/shaders/shaderdefectofs.glsl");
+    shaders[1] = new Shader("assets/shaders/shaderguivs.glsl","assets/shaders/shaderguifs.glsl");
 }
 
 void Interfaz::ventanaLimpiar()

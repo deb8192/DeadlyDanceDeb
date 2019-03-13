@@ -49,10 +49,11 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     //Se llama a la funcion "framebuffer_size_callback" cada vez que el usuario cambia el tamanyo de ventana
     glfwSetFramebufferSizeCallback(_window,this->redimensionar);
 
-    glEnable(GL_MULTISAMPLE); // Activar suavizado MSAA
+
     //*********** APLICAR PROFUNDIDAD Z-BUFFER ***********
     glEnable(GL_DEPTH_TEST);   //Necesario para el zoom/fov
-
+    glEnable(GL_MULTISAMPLE); // Activar suavizado MSAA
+    
     //Activar CULLING
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
