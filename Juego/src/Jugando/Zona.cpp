@@ -4,6 +4,7 @@
 //Constructor
 Zona::Zona(int anc, int lar, int alt, const char *tip)
 {
+  _motor = MotorGrafico::GetInstance();
   Constantes constantes;
   ancho = anc;
   largo = lar;
@@ -36,16 +37,17 @@ Zona::Zona(int anc, int lar, int alt, const char *tip)
 //Destructor
 Zona::~Zona()
 {
-    posicionActual.x = 0.0f;
-    posicionActual.y = 0.0f;
-    posicionActual.z = 0.0f;
-    id = 0;
-    tipo = 0;
-    ancho = 0.0f;
-    largo = 0.0f;
-    alto = 0.0f;
-    id = 0.0f;
-    proposito = false;
+  _motor = nullptr;
+  posicionActual.x = 0.0f;
+  posicionActual.y = 0.0f;
+  posicionActual.z = 0.0f;
+  id = 0;
+  tipo = 0;
+  ancho = 0.0f;
+  largo = 0.0f;
+  alto = 0.0f;
+  id = 0.0f;
+  proposito = false;
 }
 
 void Zona::annadirElemento()
@@ -129,5 +131,13 @@ unsigned short Zona::getElementosActuales()
 
 short Zona::getTipo()
 {
-    return tipo;
+  return tipo;
+}
+
+void Zona::Render()
+{
+  _motor->dibujarZona(
+    posicionActual.x, posicionActual.y, posicionActual.z,
+    ancho, alto, largo
+  );
 }

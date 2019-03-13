@@ -3,7 +3,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #ifndef MotorGrafico_HPP
 #define MotorGrafico_HPP
 
-#ifndef WEMOTOR
+#ifdef WEMOTOR
     //motor catopengl
     #include <Interfaz.hpp> 
 #else
@@ -17,16 +17,148 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include <math.h>
 #include <vector>//para los objetos en escena
 
-//para acortar lineas de programacion se cogen espacios definidos directamente
-using namespace irr;
-using namespace core; 
-using namespace scene;
-using namespace video;
-using namespace io; 
-using namespace gui;
-using namespace std;
-using namespace idsEventos;
-//fin de acortes
+#ifdef WEMOTOR
+    //namespaces de catopengl
+    /* The unknown key */
+    #define GLFW_KEY_UNKNOWN            -1
+
+    /* Printable keys */
+    #define GLFW_KEY_SPACE              32
+    #define GLFW_KEY_APOSTROPHE         39  /* ' */
+    #define GLFW_KEY_COMMA              44  /* , */
+    #define GLFW_KEY_MINUS              45  /* - */
+    #define GLFW_KEY_PERIOD             46  /* . */
+    #define GLFW_KEY_SLASH              47  /* / */
+    #define GLFW_KEY_0                  48
+    #define GLFW_KEY_1                  49
+    #define GLFW_KEY_2                  50
+    #define GLFW_KEY_3                  51
+    #define GLFW_KEY_4                  52
+    #define GLFW_KEY_5                  53
+    #define GLFW_KEY_6                  54
+    #define GLFW_KEY_7                  55
+    #define GLFW_KEY_8                  56
+    #define GLFW_KEY_9                  57
+    #define GLFW_KEY_SEMICOLON          59  /* ; */
+    #define GLFW_KEY_EQUAL              61  /* = */
+    #define GLFW_KEY_A                  65
+    #define GLFW_KEY_B                  66
+    #define GLFW_KEY_C                  67
+    #define GLFW_KEY_D                  68
+    #define GLFW_KEY_E                  69
+    #define GLFW_KEY_F                  70
+    #define GLFW_KEY_G                  71
+    #define GLFW_KEY_H                  72
+    #define GLFW_KEY_I                  73
+    #define GLFW_KEY_J                  74
+    #define GLFW_KEY_K                  75
+    #define GLFW_KEY_L                  76
+    #define GLFW_KEY_M                  77
+    #define GLFW_KEY_N                  78
+    #define GLFW_KEY_O                  79
+    #define GLFW_KEY_P                  80
+    #define GLFW_KEY_Q                  81
+    #define GLFW_KEY_R                  82
+    #define GLFW_KEY_S                  83
+    #define GLFW_KEY_T                  84
+    #define GLFW_KEY_U                  85
+    #define GLFW_KEY_V                  86
+    #define GLFW_KEY_W                  87
+    #define GLFW_KEY_X                  88
+    #define GLFW_KEY_Y                  89
+    #define GLFW_KEY_Z                  90
+    #define GLFW_KEY_LEFT_BRACKET       91  /* [ */
+    #define GLFW_KEY_BACKSLASH          92  /* \ */
+    #define GLFW_KEY_RIGHT_BRACKET      93  /* ] */
+    #define GLFW_KEY_GRAVE_ACCENT       96  /* ` */
+    #define GLFW_KEY_WORLD_1            161 /* non-US #1 */
+    #define GLFW_KEY_WORLD_2            162 /* non-US #2 */
+
+    /* Function keys */
+    #define GLFW_KEY_ESCAPE             256
+    #define GLFW_KEY_ENTER              257
+    #define GLFW_KEY_TAB                258
+    #define GLFW_KEY_BACKSPACE          259
+    #define GLFW_KEY_INSERT             260
+    #define GLFW_KEY_DELETE             261
+    #define GLFW_KEY_RIGHT              262
+    #define GLFW_KEY_LEFT               263
+    #define GLFW_KEY_DOWN               264
+    #define GLFW_KEY_UP                 265
+    #define GLFW_KEY_PAGE_UP            266
+    #define GLFW_KEY_PAGE_DOWN          267
+    #define GLFW_KEY_HOME               268
+    #define GLFW_KEY_END                269
+    #define GLFW_KEY_CAPS_LOCK          280
+    #define GLFW_KEY_SCROLL_LOCK        281
+    #define GLFW_KEY_NUM_LOCK           282
+    #define GLFW_KEY_PRINT_SCREEN       283
+    #define GLFW_KEY_PAUSE              284
+    #define GLFW_KEY_F1                 290
+    #define GLFW_KEY_F2                 291
+    #define GLFW_KEY_F3                 292
+    #define GLFW_KEY_F4                 293
+    #define GLFW_KEY_F5                 294
+    #define GLFW_KEY_F6                 295
+    #define GLFW_KEY_F7                 296
+    #define GLFW_KEY_F8                 297
+    #define GLFW_KEY_F9                 298
+    #define GLFW_KEY_F10                299
+    #define GLFW_KEY_F11                300
+    #define GLFW_KEY_F12                301
+    #define GLFW_KEY_F13                302
+    #define GLFW_KEY_F14                303
+    #define GLFW_KEY_F15                304
+    #define GLFW_KEY_F16                305
+    #define GLFW_KEY_F17                306
+    #define GLFW_KEY_F18                307
+    #define GLFW_KEY_F19                308
+    #define GLFW_KEY_F20                309
+    #define GLFW_KEY_F21                310
+    #define GLFW_KEY_F22                311
+    #define GLFW_KEY_F23                312
+    #define GLFW_KEY_F24                313
+    #define GLFW_KEY_F25                314
+    #define GLFW_KEY_KP_0               320
+    #define GLFW_KEY_KP_1               321
+    #define GLFW_KEY_KP_2               322
+    #define GLFW_KEY_KP_3               323
+    #define GLFW_KEY_KP_4               324
+    #define GLFW_KEY_KP_5               325
+    #define GLFW_KEY_KP_6               326
+    #define GLFW_KEY_KP_7               327
+    #define GLFW_KEY_KP_8               328
+    #define GLFW_KEY_KP_9               329
+    #define GLFW_KEY_KP_DECIMAL         330
+    #define GLFW_KEY_KP_DIVIDE          331
+    #define GLFW_KEY_KP_MULTIPLY        332
+    #define GLFW_KEY_KP_SUBTRACT        333
+    #define GLFW_KEY_KP_ADD             334
+    #define GLFW_KEY_KP_ENTER           335
+    #define GLFW_KEY_KP_EQUAL           336
+    #define GLFW_KEY_LEFT_SHIFT         340
+    #define GLFW_KEY_LEFT_CONTROL       341
+    #define GLFW_KEY_LEFT_ALT           342
+    #define GLFW_KEY_LEFT_SUPER         343
+    #define GLFW_KEY_RIGHT_SHIFT        344
+    #define GLFW_KEY_RIGHT_CONTROL      345
+    #define GLFW_KEY_RIGHT_ALT          346
+    #define GLFW_KEY_RIGHT_SUPER        347
+    #define GLFW_KEY_MENU               348 
+    #define GLFW_MOUSE_MOVE             666 //para saber si se ha movido el raton
+#else
+    //namespaces de irrlichts
+    //para acortar lineas de programacion se cogen espacios definidos directamente
+    using namespace irr;
+    using namespace core; 
+    using namespace scene;
+    using namespace video;
+    using namespace io; 
+    using namespace gui;
+    using namespace std;
+    using namespace idsEventos;
+    //fin de acortes
+#endif
 
     class MotorGrafico
     {
@@ -74,7 +206,12 @@ using namespace idsEventos;
             bool SueltoClicDer();
             bool SueltoClicIzq();
             void ResetEventoMoveRaton();
-            position2di GetPosicionRaton();
+
+            #ifdef WEMOTOR
+                double * GetPosicionRaton();
+            #else
+                position2di GetPosicionRaton();
+            #endif
 
             void CrearCamara(); // crea una camara para ver el escenario
 
@@ -121,8 +258,13 @@ using namespace idsEventos;
             void colorearJugador(int a, int r, int g, int b);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
             //void colorearObjeto(int a, int r, int g, int b, int obj);
-             
-            IAnimatedMeshSceneNode* getArmaEspecial();
+            
+            #ifdef WEMOTOR
+                unsigned short getArmaEspecial();
+            #else
+                IAnimatedMeshSceneNode* getArmaEspecial();
+            #endif
+            
             void EraseColectable(long unsigned int idx); 
             void ErasePowerUP(long unsigned int idx); 
             void EraseEnemigo(std::size_t i);
@@ -173,6 +315,7 @@ using namespace idsEventos;
             int getCx();
             int getCz();
             int getCs();
+            int getGdir();
 
         private: //clases solo accesibles por MotorGrafico
  
@@ -183,100 +326,113 @@ using namespace idsEventos;
 
             void propiedadesDevice();
 
-            //variables privadas
-            Inputs input;
-            IrrlichtDevice* _device; //puntero a dispositivo por defecto
-            IVideoDriver* _driver;
-            ISceneManager* _smgr;
-            IGUIEnvironment* _guienv;
-            const IGeometryCreator* _geometryCreator;
-            ISceneCollisionManager* _collmgr;
-            ICameraSceneNode* _camera;
+            #ifdef WEMOTOR 
+                //variables y parametros motor catopengl
+                
+                Interfaz * _interfaz;//puntero que contiene la entrada al motorgrafico de catopengl
 
-            // Ventana
-            unsigned short width, height;
-            IGUIFont* _font;
-            IGUISkin* _skin;
+                // Ventana 
+                short WIDTH_AUX, WIDTH, HEIGHT;
+                short x_linea1, x_linea2;
+                unsigned short width, height;
+                
+            #else
+                //variables y parametros motor irrlicht
+                //variables privadas
+                Inputs input;
+                IrrlichtDevice* _device; //puntero a dispositivo por defecto
+                IVideoDriver* _driver;
+                ISceneManager* _smgr;
+                IGUIEnvironment* _guienv;
+                const IGeometryCreator* _geometryCreator;
+                ISceneCollisionManager* _collmgr;
+                ICameraSceneNode* _camera;
 
-            /** Revisar **/
-            IGUIFont* font2;
-            std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
-            std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
-            std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
-            
-            IAnimatedMeshSceneNode* _armaEnEscena;//Malla del arma del jugador en escena
-            IAnimatedMesh* _armaEsp;//Malla del arma especial del jugador
-            IAnimatedMeshSceneNode* _armaEspJugador;//Malla del arma especial del jugador en escena
-            std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
-            std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
-            std::vector<IAnimatedMeshSceneNode*> PowerUP_Scena;//Objetos en scena
-            std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
-            std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
-            IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena
-            IAnimatedMeshSceneNode* _bossEscena;//Boss en scena
-            //debug
-            IAnimatedMesh* _linea;
-            IAnimatedMesh* _conoVision;
-            bool debugGrafico, pathfinding;//nos sirven para saber si tenemos activado el debug grafico y el pathfinding
-            ISceneNode* _caja;//box
+                // Ventana
+                unsigned short width, height;
+                IGUIFont* _font;
+                IGUISkin* _skin;
 
-            IAnimatedMeshSceneNode* _tmpObjEscena;
+                /** Revisar **/
+                IGUIFont* font2;
+                std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
+                std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
+                std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
+                
+                IAnimatedMeshSceneNode* _armaEnEscena;//Malla del arma del jugador en escena
+                IAnimatedMesh* _armaEsp;//Malla del arma especial del jugador
+                IAnimatedMeshSceneNode* _armaEspJugador;//Malla del arma especial del jugador en escena
+                std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
+                std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
+                std::vector<IAnimatedMeshSceneNode*> PowerUP_Scena;//Objetos en scena
+                std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
+                std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
+                IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena
+                IAnimatedMeshSceneNode* _bossEscena;//Boss en scena
+                //debug
+                IAnimatedMesh* _linea;
+                IAnimatedMesh* _conoVision;
+                bool debugGrafico, pathfinding;//nos sirven para saber si tenemos activado el debug grafico y el pathfinding
+                ISceneNode* _caja;//box
 
-            // Objetos y funciones para puzzles
-            IGUIStaticText* _myTextBox;
+                IAnimatedMeshSceneNode* _tmpObjEscena;
 
-            IMesh* _fichaMesh;                         // Malla
-            IMeshSceneNode* _ficha;                    // Nodo
-            std::vector<IMeshSceneNode*> fichasMesh;  // Lista de nodos (fichas)
+                // Objetos y funciones para puzzles
+                IGUIStaticText* _myTextBox;
 
-            // Para seleccionar nodos
-            position2di initialCursorPosition;        // Posicion del clic raton
-            position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
-            ISceneNode* _nodoSeleccionado;
+                IMesh* _fichaMesh;                         // Malla
+                IMeshSceneNode* _ficha;                    // Nodo
+                std::vector<IMeshSceneNode*> fichasMesh;  // Lista de nodos (fichas)
 
-            // Ventana 
-            short WIDTH_AUX, WIDTH, HEIGHT;
-            short x_linea1, x_linea2;
+                // Para seleccionar nodos
+                position2di initialCursorPosition;        // Posicion del clic raton
+                position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
+                ISceneNode* _nodoSeleccionado;
 
-            IGUIImage* _img;
-            ITexture*  _puzParticleTexture;
-            //vector<IGUIImage*> imagenes; <- Pendiente de utilizar en puzzles
- 
-            enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
-            enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
+                // Ventana 
+                short WIDTH_AUX, WIDTH, HEIGHT;
+                short x_linea1, x_linea2;
+
+                IGUIImage* _img;
+                ITexture*  _puzParticleTexture;
+                //vector<IGUIImage*> imagenes; <- Pendiente de utilizar en puzzles
+    
+                enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
+                enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
+                
+                //interfaz
+                IGUIImage* vidaI;
+                IGUIImage* energiaI;
+                IGUIImage* dineroI;
+                IGUIImage* armaI;
+                IGUIImage* BarraVidaI;
+                IGUIImage* BarraEnergiaI;
+                IGUIImage* manosI;
+                IGUIImage* llaveI;
+                IGUIImage* espadaI;
+                IGUIImage* dagaI;
+                IGUIStaticText* moneyI;
+                ITexture* vida_textura;
+                ITexture* energia_textura;
+                ITexture* dinero_textura;
+                ITexture* arma_textura;
+                ITexture* barraVida_textura;
+                ITexture* barraEnergia_textura;
+                ITexture* manos_textura;
+                ITexture* llave_textura;
+                ITexture* espada_textura;
+                ITexture* daga_textura; 
+
+                //cinematicas 
+                int frame_actual;//numero de frame actual
+                IGUIImage* _actual;//frame actual
+                float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
+                ITexture* _actualTexture;//textura actual
+                int cx, cz, cs, gdir;
+            #endif
 
             void CargarIMG(short x, short y);
             void CrearMeshFicha(float tamanyo, int r, int g, int b);
-            
-            //interfaz
-            IGUIImage* vidaI;
-            IGUIImage* energiaI;
-            IGUIImage* dineroI;
-            IGUIImage* armaI;
-            IGUIImage* BarraVidaI;
-            IGUIImage* BarraEnergiaI;
-            IGUIImage* manosI;
-            IGUIImage* llaveI;
-            IGUIImage* espadaI;
-            IGUIImage* dagaI;
-            IGUIStaticText* moneyI;
-            ITexture* vida_textura;
-            ITexture* energia_textura;
-            ITexture* dinero_textura;
-            ITexture* arma_textura;
-            ITexture* barraVida_textura;
-            ITexture* barraEnergia_textura;
-            ITexture* manos_textura;
-            ITexture* llave_textura;
-            ITexture* espada_textura;
-            ITexture* daga_textura; 
-
-            //cinematicas 
-            int frame_actual;//numero de frame actual
-            IGUIImage* _actual;//frame actual
-            float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
-            ITexture* _actualTexture;//textura actual
-            int cx, cz, cs;
     };
 
 #endif /* MotorGrafico_HPP */
