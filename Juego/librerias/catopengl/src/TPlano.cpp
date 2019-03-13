@@ -3,16 +3,26 @@
 TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale, Shader * sact)
 {
     didentidad = 'I';
+    pixx = x;
+    pixy = y;
+    escalado = scale;
     this->SetShader(sact);
     shader->Use();
     bool recurso = CargarTextura(archivo);
-    if(recurso == true)CargarMalla(x,y,scale);
+    if(recurso)
+    {
+        CargarMalla(pixx,pixy,escalado);
+    }
 }
 
 // sobrecarga metodos TEntidad
 void TPlano::beginDraw()
 {
     shader->Use();
+
+    //Actualizar datos si es necesario
+    UdateMesh();
+
     // Desactivar cullin
     glDisable(GL_CULL_FACE);
 
@@ -129,6 +139,44 @@ void TPlano::CargarMalla(unsigned int xx, unsigned int yy, float s)
 
     //Cerrar el enlace
     glBindVertexArray(0);
+}
+
+void TPlano::UdateMesh()
+{
+    if(cambios)
+    {
+        CargarMalla(pixx,pixy,escalado);
+        cambios = false;
+    }
+}
+
+void TPlano::setSize(float w,float h)
+{
+    if(width != w || height != h)
+    {
+        width = w;
+        height = h;
+        cambios = true;
+    }
+}
+
+void TPlano::setPosition(float x,float y)
+{
+    if(pixx != x || pixy != y)
+    {
+        pixx = x;
+        pixy = y;
+        cambios = true;
+    }
+}
+
+void TPlano::setScale(float s)
+{
+    if(escalado != s)
+    {
+        escalado = s;
+        cambios = true;
+    }
 }
 
 void TPlano::endDraw()
