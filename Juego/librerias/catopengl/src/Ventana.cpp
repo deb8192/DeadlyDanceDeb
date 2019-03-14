@@ -51,9 +51,9 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
 
 
     //*********** APLICAR PROFUNDIDAD Z-BUFFER ***********
-    glEnable(GL_DEPTH_TEST);   //Necesario para el zoom/fov
     glEnable(GL_MULTISAMPLE); // Activar suavizado MSAA
-    
+    glEnable(GL_DEPTH_TEST);   //Necesario para el zoom/fov
+
     //Activar CULLING
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
@@ -162,7 +162,7 @@ void Ventana::UpdateSize(short unsigned int w, short unsigned int h)
     if(_window != nullptr)
     {
         glfwSetWindowSize(_window, w, h);
-    } 
+    }
 }
 
 bool Ventana::EstaPulsada(short tecla)
@@ -195,12 +195,12 @@ bool Ventana::MouseEstaPulsado(short boton)
     }
     else
     {
-        if(glfwGetMouseButton(_window,boton) == GLFW_PRESS)   
+        if(glfwGetMouseButton(_window,boton) == GLFW_PRESS)
         {
             //se ha pulsado entonces devolvemos true
             return true;
         }
     }
-    
+
     return false;
 }
