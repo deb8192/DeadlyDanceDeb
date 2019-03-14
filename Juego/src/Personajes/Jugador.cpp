@@ -194,7 +194,7 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     }
     
     //getGir se utiliza para orientar al jugador cuando se gira la camara
-    deg -= _motor->getGdir();
+    deg -= gcam;
     px += componente*sin(deg*constantes.DEG_TO_RAD);
     pz += componente*cos(deg*constantes.DEG_TO_RAD);
 
@@ -208,6 +208,12 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
  * por el escenario mediante una interpolacion desde
  * el punto de origen al punto de destino
  */
+
+void Jugador::cambiarCamara()
+{    
+        gcam >= 270 ? gcam = 0 : gcam += 90;            
+}
+
 void Jugador::moverseEntidad(float updTime)
 {
     //pt es el porcentaje de tiempo pasado desde la posicion

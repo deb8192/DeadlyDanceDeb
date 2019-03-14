@@ -198,6 +198,8 @@ void Jugando::ManejarEventos() {
     if(_motor->EstaPulsado(KEY_1))
     {
         _motor->cambiarCamara();
+        _fisicas->cambiarCamara();
+        _jugador->cambiarCamara();
         _motor->ResetKey(KEY_1);
     }
     
@@ -334,8 +336,7 @@ void Jugando::Update()
     this->activarPowerUp();
 
     // Adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
-    _fisicas->colisionChecker(_motor->getGdir(),
-        _motor->EstaPulsado(KEY_A),
+    _fisicas->colisionChecker(_motor->EstaPulsado(KEY_A),
         _motor->EstaPulsado(KEY_S),
         _motor->EstaPulsado(KEY_D),
         _motor->EstaPulsado(KEY_W),
