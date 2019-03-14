@@ -192,27 +192,15 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     {
         componente = 0.0;
     }
-    //getcs, getcx, getcz se utilizan para orientar al jugador cuando se gira la camara
-    if(_motor->getCz() == 0)
-    {
-        px += _motor->getCs() * (-1) * componente*cos(deg*constantes.DEG_TO_RAD);
-        pz += _motor->getCs() * componente*sin(deg*constantes.DEG_TO_RAD);
-        deg = ((_motor->getCs() * 90) - deg) * (-1); 
-    }
-    else
-    {
-        px += _motor->getCs() * (-1) * componente*sin(deg*constantes.DEG_TO_RAD);
-        pz += _motor->getCs() * (-1) * componente*cos(deg*constantes.DEG_TO_RAD);
-        if(_motor->getCs() == 1){deg += 180;}
-    }
-        
-    //cout << "deg: " << deg << ", px:" << px << ", pz:" << pz << endl;
+    
+    //getGir se utiliza para orientar al jugador cuando se gira la camara
+    deg -= _motor->getGdir();
+    px += componente*sin(deg*constantes.DEG_TO_RAD);
+    pz += componente*cos(deg*constantes.DEG_TO_RAD);
+
     //ahora actualizas movimiento y rotacion
-    //has obtenido la arcotangente que te da el angulo de giro en grados
-    /*x = px;
-    z = pz;*/
     setNewPosiciones(px, posActual.y, pz);
-    setNewRotacion(rotActual.x, deg, rotActual.z);
+    setNewRotacion(rotActual.x, deg, rotActual.z);    
 }
 
 /*************** moverseEntidad *****************
@@ -1263,4 +1251,15 @@ bool Jugador::ColisionEntornoBoss()
     //no colisiona
     _fisicas = nullptr;
     return false;
+}
+
+void Jugador::Render(float updTime, float drawTime)
+{
+    moverseEntidad(1 / updTime);
+    RotarEntidad(1 / updTime);
+    UpdateTimeMove(drawTime);
+    _motor->mostrarJugador(
+        posActual.x, posActual.y, posActual.z,
+        getRX(), getRY(), getRZ()
+    );
 }

@@ -9,6 +9,7 @@
 #include "TLuz.hpp"
 #include "TCamara.hpp"
 #include "TMalla.hpp"
+#include "TPlano.hpp"
 #include "Shader.hpp"
 
 class Interfaz
@@ -25,6 +26,8 @@ class Interfaz
 
         unsigned short AddMalla(const char *,int initf);//creamos una malla
 
+        unsigned short AddImagen(const char *, unsigned int, unsigned int, float );//creamos una imagen en plano
+
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
         void RemoveObject(unsigned short);//remueve objeto de la escena
@@ -37,6 +40,26 @@ class Interfaz
 
         bool VentanaEstaAbierta();//devuelve true si esta en ejecucion devuelve false si no lo esta
 
+        double * GetPosicionRaton();//devuelve un array de tres posiciones (1,2,3) que es donde esta situado el raton
+
+        void LimpiarGui();// limpiamos todos los elementos pertenecientes a la graphic user interfaces(GUI), rimagen y otros.
+        
+        void LimpiarEscena();// limpiamos todos los elementos pertenecientes a la escena, objetos y luces
+
+        void EliminarCamara(unsigned short);// destruimos la camara a la que pertenezca el id
+
+        void CambiarFondo(float r, float g, float b,float a);//cambia el fondo de la ventana
+
+        void DefinirVentana(short unsigned int,short unsigned int,const char *); // cambia los valores width,height,title,si no existe tambien crea la ventana
+
+        void CrearTexto(const char * texto,short x,short y,unsigned short tamayo); // texto, x e y(max y min de la pantalla), tamayo del texto siempre superior
+
+        bool IsKeyDown(short);//se le pasa la tecla que quiere comprobar, esto va a la ventana y le pregunta si esta pulsada
+
+        bool IsMouseClick(short);// comprobaciones de los botones del raton     
+
+        void ChangeTargetCamara(unsigned short id, float x, float y, float z);//cambia donde apunta la camara   
+
     private:
 
         CatOpengl::Video::Ventana * window;
@@ -46,6 +69,8 @@ class Interfaz
         std::vector<TNodo *> camaras;//registro de camaras
 
         std::vector<TNodo *> luces;//registro de luces
+
+        std::vector<TNodo *> imagenes;//registro de imagenes en interfaz
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 

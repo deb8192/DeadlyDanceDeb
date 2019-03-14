@@ -9,7 +9,8 @@ TMalla::TMalla(int ft)
     frame_inicial = 0;
     frame_final = ft;
     frame_actual = 0;
-    velocidad_animacion = 30;
+    actual_time = 0;
+    setVelocidadAnimacion(60);
 }
 
 //Uso: destructor
@@ -29,9 +30,17 @@ void TMalla::cargarMalla(unsigned short,unsigned short)
 // sobrecarga metodos TEntidad
 void TMalla::beginDraw()
 {
+    shader->Use();
     TimeEngine(); //Tiempo del motor
     //calcular el frame
-    frame_actual = frame_actual + getTime() * velocidad_animacion;
+    actual_time = actual_time + getTime();
+    float end_time = ((1000.0f/velocidad_animacion) / 1000.0f);
+    //cout << actual_time << "  " << end_time << endl;
+    if(actual_time >= end_time)
+    {
+        frame_actual++;
+        actual_time = 0;
+    }
     //bucle de la animacion
     if(frame_actual >= frame_final)frame_actual = frame_inicial;
 
@@ -104,14 +113,9 @@ void TMalla::BucleAnimacion(unsigned short ini,unsigned short fin)
     }
 }
 
-void TMalla::SiguienteAnimacion()
+void TMalla::setVelocidadAnimacion(float v)
 {
-
-}
-
-void TMalla::DefinirAnimaciones()
-{
-
+    velocidad_animacion = v;
 }
 
 unsigned short TMalla::getFrameInicio()

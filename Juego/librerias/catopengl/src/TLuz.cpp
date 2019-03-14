@@ -10,6 +10,7 @@ TLuz::TLuz(int t)
         setDiffuse(0.6f, 0.6f, 0.6f);
         setSpecular(0.7f, 0.7f, 0.7f);
         setDirection(-0.2f, -1.0f, -0.3f);
+        setBrillos(8.0f);
     }
     else if(t == 1)
     {
@@ -17,6 +18,7 @@ TLuz::TLuz(int t)
         setDiffuse(0.8f, 0.8f, 0.8f);
         setSpecular(1.0f, 1.0f, 1.0f);
         setLightRange(50.0f);
+        setBrillos(32.0f);
     }
     else if(t == 2)
     {
@@ -25,8 +27,8 @@ TLuz::TLuz(int t)
         setSpecular(1.0f, 1.0f, 1.0f);
         setDirection(0.0f, -1.0f, 0.0f);
         setLightRange(50.0f);
+        setBrillos(32.0f);
     }
-    brillos_shader = 32.0f;
 }
 
 TLuz::~TLuz()

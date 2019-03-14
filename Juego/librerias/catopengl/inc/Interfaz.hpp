@@ -9,6 +9,7 @@
 #include "TLuz.hpp"
 #include "TCamara.hpp"
 #include "TMalla.hpp"
+#include "TPlano.hpp"
 #include "Shader.hpp"
 
 class Interfaz
@@ -24,6 +25,8 @@ class Interfaz
         unsigned short AddLuz(int);//creamos una luz
 
         unsigned short AddMalla(const char *,int initf);//creamos una malla
+
+        unsigned short AddImagen(const char *, unsigned int, unsigned int, float );//creamos una imagen en plano
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
@@ -46,6 +49,8 @@ class Interfaz
         std::vector<TNodo *> camaras;//registro de camaras
 
         std::vector<TNodo *> luces;//registro de luces
+
+        std::vector<TNodo *> imagenes;//registro de imagenes en interfaz
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 
