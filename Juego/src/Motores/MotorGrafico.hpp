@@ -312,10 +312,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame);
             bool finalCinematica();
             void cambiarCamara();
-            int getCx();
-            int getCz();
-            int getCs();
-            int getGdir();
+            int getCamx();
+            int getCamz();
+            int getCams();
 
         private: //clases solo accesibles por MotorGrafico
  
@@ -438,7 +437,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 IGUIImage* _actual;//frame actual
                 float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
                 ITexture* _actualTexture;//textura actual
-                int cx, cz, cs, gdir;
+                int camx, camz, cams;
             #endif
 
             void CargarIMG(short x, short y);

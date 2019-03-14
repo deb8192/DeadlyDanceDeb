@@ -34,10 +34,9 @@ MotorGrafico::MotorGrafico()
         _nodoSeleccionado = nullptr;
 
         frame_actual = 0;
-        cx = 0;
-        cz = 30;
-        cs = -1;
-        gdir = 0;   
+        camx = 0;
+        camz = 30;
+        cams = -1;
     #endif   
 }
 
@@ -1070,56 +1069,46 @@ void MotorGrafico::cambiarCamara()
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-        gdir >= 270 ? gdir = 0 : gdir += 90;
-        if(cx == 0)
+        if(camx == 0)
         {
-            cs *= -1;
-            cx = 30;
-            cz = 0;
+            cams *= -1;
+            camx = 30;
+            camz = 0;
         }
         else
         {
-            cx = 0;
-            cz = 30;
+            camx = 0;
+            camz = 30;
         }
     #endif        
 }
 
-int MotorGrafico::getGdir()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        return gdir;
-    #endif 
-}
 
-int MotorGrafico::getCx()
+int MotorGrafico::getCamx()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-        return cx;
+        return camx;
     #endif 
 }
-int MotorGrafico::getCz()
+int MotorGrafico::getCamz()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-        return cz;
+        return camz;
     #endif 
 }
-int MotorGrafico::getCs()
+int MotorGrafico::getCams()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-        return cs;
+        return cams;
     #endif 
 }
 
@@ -1134,9 +1123,9 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
         core::vector3df nodeCamTarget = _camera->getTarget();
 
         // Centrar la camara
-        nodeCamPosition.X = x+(cx*cs);
+        nodeCamPosition.X = x+(camx*cams);
         nodeCamPosition.Y = y+30;
-        nodeCamPosition.Z = z+(cz*cs);
+        nodeCamPosition.Z = z+(camz*cams);
         nodeCamTarget.X = x;
         nodeCamTarget.Y = y;
         nodeCamTarget.Z = z;
