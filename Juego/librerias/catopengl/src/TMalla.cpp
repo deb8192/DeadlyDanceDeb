@@ -10,7 +10,7 @@ TMalla::TMalla(int ft)
     frame_final = ft;
     frame_actual = 0;
     actual_time = 0;
-    setVelocidadAnimacion(30);
+    setVelocidadAnimacion(60);
 }
 
 //Uso: destructor
