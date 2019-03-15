@@ -15,6 +15,8 @@ Ventana::~Ventana()
 //USO: se utiliza para crear una ventana
 bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
 {
+    winwidth = w;
+    winheight = h;
     // Inicializar GLFW
     // glfwWindowHint para configurar GLFW, mirar en la documentacion los distintos hint
     glfwInit();
@@ -208,4 +210,14 @@ bool Ventana::MouseEstaPulsado(short boton)
     }
 
     return false;
+}
+
+short unsigned int Ventana::getWidth()
+{
+    return winwidth;
+}
+
+short unsigned int Ventana::getHeight()
+{
+    return winheight;
 }

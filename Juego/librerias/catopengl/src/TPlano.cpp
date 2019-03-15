@@ -1,7 +1,9 @@
 #include "TPlano.hpp"
 
-TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale, Shader * sact)
+TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale, Shader * sact, GLuint ww, GLuint wh)
 {
+    winwidth = ww;
+    winheight = wh;
     didentidad = 'I';
     pixx = x;
     pixy = y;
@@ -24,6 +26,7 @@ void TPlano::beginDraw()
     UdateMesh();
 
     // Desactivar cullin
+    glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
     // Aplicar Textura
@@ -37,6 +40,7 @@ void TPlano::beginDraw()
     glBindVertexArray(0);
 
     // Activar cullin
+    glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 }
 
@@ -80,8 +84,8 @@ void TPlano::CargarMalla(unsigned int xx, unsigned int yy, float s)
     float posx = xx;
     float posy = yy;
     float scale = s;
-    int screen_w = 800;
-    int screen_h = 600;
+    int screen_w = winwidth;
+    int screen_h = winheight;
 
     // Calculos de pixel a mundo 2D
     posx = ((posx + 0.5f) / (float)screen_w) * 2.0f - 1.0f;
