@@ -2,6 +2,7 @@
 #define ESTADO_MUERTE_HPP
 
 #include "../Estado.hpp"
+#include "../Motores/MotorAudio.hpp"
 
 class EstadoMuerte: public Estado {
     public:
@@ -22,5 +23,7 @@ class EstadoMuerte: public Estado {
         void menuPrincipal();
         void reiniciarPartida();
         void salir();
+        
+        MotorAudioSystem* _motora;
 };
 #endif /* ESTADO_MUERTE_HPP */
