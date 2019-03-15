@@ -114,9 +114,13 @@ int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista
 
     int* perDer;
     int* perIzq;
-    int* recto = new int[3];
+    int* recto = new int[6];
+    int* vectorRespuestaAuxiliar = _fisicas->colisionRayoUnCuerpo(x,y,z,rot,vista,modo);//mira directa;
 
-    recto[0] = _fisicas->colisionRayoUnCuerpo(x,y,z,rot,vista,modo)[0];//mira directa
+    recto[0] = vectorRespuestaAuxiliar[0];
+    recto[1] = vectorRespuestaAuxiliar[1];
+    recto[2] = vectorRespuestaAuxiliar[2]; 
+    recto[3] = vectorRespuestaAuxiliar[3]; 
     _motor->debugVision(x,y,z,rot,vista);
     _motor->debugVision(x,y,z,rot+30,vista/2);
     _motor->debugVision(x,y,z,rot-30,vista/2);
@@ -128,13 +132,15 @@ int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista
         
         //Si lo ve por uno de los perifericos lo pone a 1
         if(perDer[0] == 1)
-            {
-                recto[1] = 1;
-            }
-            if(perIzq[0] == 1)
-            {
-                recto[2] = 1;
-            }
+        {
+            recto[4] = 1;
+        }
+        else recto[4] = 0;
+        if(perIzq[0] == 1)
+        {
+            recto[5] = 1;
+        }
+        else recto[5] = 0;
 
         //eliminamos los punteros ya no son necesarios
         delete [] perDer;

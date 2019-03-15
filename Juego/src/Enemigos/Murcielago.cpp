@@ -96,7 +96,6 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                         if(danyo > 0)
                         {
                             _jugador->ModificarVida(-danyo);
-                            cout<<"Ataca por la IA" <<endl;
                             funciona = true;
                             atacado = true;
                         }
@@ -130,7 +129,6 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                 {
                     modo = MODO_ATAQUE;
                     this->setTimeMerodear(constantes.CERO);
-                    cout<<"Pide ayuda a los aliados"<<endl;
                     //this->PedirAyuda();
                     funciona = true;
                 }
