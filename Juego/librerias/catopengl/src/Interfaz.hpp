@@ -10,6 +10,7 @@
 #include "TCamara.hpp"
 #include "TMalla.hpp"
 #include "TPlano.hpp"
+#include "TTexto.hpp"
 #include "Shader.hpp"
 
 class Interfaz
@@ -28,6 +29,8 @@ class Interfaz
 
         unsigned short AddImagen(const char *, unsigned int, unsigned int, float );//creamos una imagen en plano
 
+        unsigned short AddTexto(std::string, GLuint); //Crear un texto
+
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
         void RemoveObject(unsigned short);//remueve objeto de la escena
@@ -43,7 +46,7 @@ class Interfaz
         double * GetPosicionRaton();//devuelve un array de tres posiciones (1,2,3) que es donde esta situado el raton
 
         void LimpiarGui();// limpiamos todos los elementos pertenecientes a la graphic user interfaces(GUI), rimagen y otros.
-        
+
         void LimpiarEscena();// limpiamos todos los elementos pertenecientes a la escena, objetos y luces
 
         void EliminarCamara(unsigned short);// destruimos la camara a la que pertenezca el id
@@ -56,9 +59,9 @@ class Interfaz
 
         bool IsKeyDown(short);//se le pasa la tecla que quiere comprobar, esto va a la ventana y le pregunta si esta pulsada
 
-        bool IsMouseClick(short);// comprobaciones de los botones del raton     
+        bool IsMouseClick(short);// comprobaciones de los botones del raton
 
-        void ChangeTargetCamara(unsigned short id, float x, float y, float z);//cambia donde apunta la camara   
+        void ChangeTargetCamara(unsigned short id, float x, float y, float z);//cambia donde apunta la camara
 
     private:
 
@@ -71,6 +74,8 @@ class Interfaz
         std::vector<TNodo *> luces;//registro de luces
 
         std::vector<TNodo *> imagenes;//registro de imagenes en interfaz
+
+        std::vector<TNodo *> textos;//registro de imagenes en interfaz
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 

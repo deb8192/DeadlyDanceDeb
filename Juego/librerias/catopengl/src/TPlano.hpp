@@ -11,6 +11,7 @@ class TPlano : public TEntidad
         void CargarMalla(unsigned int, unsigned int, float);
         void UdateMesh();
 
+        GLuint winwidth, winheight;
         // const char * _rutafile;
         // unsigned int px, py;
         // float scaleimage;
@@ -23,7 +24,7 @@ class TPlano : public TEntidad
 
     public:
         // Constructor y destructor
-        TPlano(const char *, unsigned int, unsigned int, float, Shader *);
+        TPlano(const char *, unsigned int, unsigned int, float, Shader *, GLuint, GLuint);
         ~TPlano();
 
         void setSize(float,float); //ancho largo
