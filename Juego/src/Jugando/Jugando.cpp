@@ -445,7 +445,7 @@ void Jugando::Update()
                         _enemigos[i]->setTimeMerodear(tiempoMerodear);
                     }
                     //FUNCIONA REGULAR
-                    if((_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i)) && (_enemigos[i]->GetModo() != 1 || _enemigos[i]->GetModo() != 3))
+                    /*if((_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i)) && (_enemigos[i]->GetModo() != 1 || _enemigos[i]->GetModo() != 3))
                     {
                         //colisiona
                         struct DatosDesplazamiento
@@ -469,7 +469,7 @@ void Jugando::Update()
                             _enemigos[i]->setVectorOrientacion(); 
                             _enemigos[i]->setRotation(0.0f);
                         }
-                    }
+                    }*/
                 }
                 //_enemigos[i]->queVes();
             }

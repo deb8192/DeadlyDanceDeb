@@ -156,6 +156,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
 
             case EN_MERODEA: //El Pollo merodea
                 {
+                    this->ver(constantes.DOS);
                     if(!hecho)
                     {
                         //Merodea estableciendo un nuevo angulo de rotacion
@@ -181,7 +182,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                     {
                         //Merodea poniendo en positivo o negativo el angulo actual de rotacion
                         int rota = rand() % 3 - 1;
-                        if (rota != 0)
+                        if (rota != 0 && !objetoAEsquivar)
                         {
                             rotation *= rota;
                         }
@@ -205,7 +206,6 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                 break;
 
             default:
-                cout<<"No hace nada"<<endl;
                 break;
         }
     }

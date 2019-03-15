@@ -82,6 +82,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
         {
             case EN_PERSIGUE: //El Murcielago se mueve
                 {
+                this->ver(constantes.DOS);
                     funciona = this->perseguir(_jug);
                 }
                 break;
@@ -135,6 +136,8 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                 }
                 break;
             case EN_BUSCA:  //El murcielago busca una zona oscura
+                
+                this->ver(constantes.DOS);
                 if(!enZonaOscura)
                 {
                     VectorEspacial coordenadasZonaDestino;
@@ -169,7 +172,6 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                 break;
             
             default:
-                cout<<"No hace nada"<<endl;
                 break;
         }
     }
