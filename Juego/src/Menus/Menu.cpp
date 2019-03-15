@@ -20,7 +20,6 @@ void Menu::Iniciar()
 
     //Motor de audio inicializar
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    _motora->getEvent("Menu")->start(); //Reproducir musica Menu
 
     //Motor grafico, inicializar
     _motor->FondoEscena(255,100,101,140);
@@ -128,6 +127,7 @@ void Menu::Pausar()
 
 void Menu::Reanudar()
 {
+    _motora->getEvent("Menu")->start(); //Reproducir musica Menu
     _motor->CrearTexto("Deadly Dance", 0, 0, 80, 20); // Parametros: texto, x1, y1, x2, y2
     pintarBotones();
 }

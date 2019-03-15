@@ -1268,7 +1268,7 @@ void Enemigo::SetContestar(bool contesta)
     contestar = contesta;
 }
 
-void Enemigo::Render(unsigned short pos, 
+void Enemigo::Render(short pos, 
     float updTime, float drawTime)
 {
     moverseEntidad(1 / updTime);
