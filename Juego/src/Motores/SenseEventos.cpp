@@ -107,13 +107,16 @@ void SenseEventos::agregarEvento(EventoSonido* evento)
 //para la vista devuelve los objetos que ve
 int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista, int modo, bool perifericos)
 {
+    y += 2;
     rot += 90;
     MotorGrafico* _motor = MotorGrafico::GetInstance();
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
 
     int* perDer;
     int* perIzq;
-    int* recto = _fisicas->colisionRayoUnCuerpo(x,y,z,rot,vista,modo);//mira directa
+    int* recto = new int[3];
+
+    recto[0] = _fisicas->colisionRayoUnCuerpo(x,y,z,rot,vista,modo)[0];//mira directa
     _motor->debugVision(x,y,z,rot,vista);
     _motor->debugVision(x,y,z,rot+30,vista/2);
     _motor->debugVision(x,y,z,rot-30,vista/2);
@@ -124,25 +127,14 @@ int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista
         perIzq = _fisicas->colisionRayoUnCuerpo(x,y,z,(-1*(rot-180))-30,vista/2,modo);//mira periferica izquierda
         
         //Si lo ve por uno de los perifericos lo pone a 1
-        if(modo == 1)//jugador
-        {
-            if(recto[0] != 1 && (perDer[0] == 1 || perIzq[0] == 1))
+        if(perDer[0] == 1)
             {
-                recto[0] = 1;
+                recto[1] = 1;
             }
-        }
-
-        if(modo == 2)//objetos
-        {
-            //for recorriendose cada valor comparando 
-            //indice 0 contiene el numero de valores
-        }
-
-        if(modo == 3)//enemigos
-        {
-                //for recorriendose cada valor comparando 
-                //indice 0 contiene el numero de valores
-        }
+            if(perIzq[0] == 1)
+            {
+                recto[2] = 1;
+            }
 
         //eliminamos los punteros ya no son necesarios
         delete [] perDer;

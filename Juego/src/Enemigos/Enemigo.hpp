@@ -130,6 +130,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int GetEnemigo();
         int GetModo();
 
+        bool ver(int tipo);//1 si ve al jugador
+
         //ia
         float randomBinomial();//devuelve un valor random entre -1 y 1
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
@@ -147,7 +149,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool GetContestar();
         void SetContestar(bool);
 
-        void Render(unsigned short pos, float updTime, float drawTime);
+        void Render(short pos, float updTime, float drawTime);
         void RenderAtaque();
 
     protected:
@@ -155,10 +157,10 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         MotorAudioSystem* _motora;
         MotorGrafico* _motor;
         SenseEventos* _eventos;
+        short int maxRotacion;
 
         //comportamientos bases
-        void alinearse(VectorEspacial*);
-        bool ver(int tipo);//1 si ve al jugador
+        void alinearse(VectorEspacial*, bool huir);
         bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
         bool buscar();//por defecto devuelve true
         bool perseguir(int* _jug);//por defecto devuelve true TO IMPROVE
@@ -206,6 +208,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         short modo;
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
         vector <Posiciones> recorridoAyuda;
+        bool objetoAEsquivar; //Coordenadas del objeto detectado para esquivar;
         const char* _modelo; // Malla 3D con la textura
         bool pedirAyuda;
         bool contestar;

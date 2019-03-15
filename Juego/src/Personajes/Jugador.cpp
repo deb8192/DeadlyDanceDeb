@@ -485,11 +485,7 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
                     danyo += (int) variacion;
                     //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
                     _getEnemigos.at(atacados.at(i))->ModificarVida(-danyo);
-                    cout<<"Enemigo: "<< _getEnemigos.at(atacados.at(i))->getID() << endl;
-                    cout<<"Daño "<<danyo<<endl;
                     danyo -= (int) variacion;
-                    cout<<"variacion "<<variacion<<endl;
-                    cout<<"Vida enemigo "<<_getEnemigos.at(atacados.at(i))->getID()<<" "<<_getEnemigos.at(atacados.at(i))->getVida()<<endl;
                     _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
                     //guardar el atacado para no repetir
                     atacados_normal.push_back(atacados.at(i));
@@ -539,11 +535,7 @@ void Jugador::AtacarUpdate(int danyo, Enemigo* &_boss)
             danyo += (int) variacion;
             //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
             _boss->ModificarVida(-danyo);
-            cout<<"BOSS: "<< _boss->getID() << endl;
-            cout<<"Daño "<<danyo<<endl;
             danyo -= (int) variacion;
-            cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida BOSS "<<_boss->getID()<<" "<<_boss->getVida()<<endl;
         }
     }
     _fisicas = nullptr;
@@ -560,16 +552,12 @@ void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
     //y se colorean los enemigos danyados (actualmente todos al ser instancias de una malla) de color verde
     if(!atacados.empty() && *danyo > 0)
     {
-        cout<<"Funciona"<<endl;
         for(unsigned int i = 0; i < atacados.size(); i++)
         {
             float variacion = rand() % 7 - 3;
             *danyo += (int) variacion;
             _getEnemigos.at(atacados.at(i))->ModificarVida(-(*danyo));
-            cout<<"Daño "<<*danyo<<endl;
             *danyo -= (int) variacion;
-            cout<<"variacion "<<variacion<<endl;
-            cout<<"Vida enemigo "<<_getEnemigos.at(atacados.at(i))->getID()<<" "<<_getEnemigos.at(atacados.at(i))->getVida()<<endl;
             _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }
@@ -586,10 +574,7 @@ void Jugador::atacarEspUpdBossComun(int* danyo, Enemigo* &_boss)
         float variacion = rand() % 7 - 3;
         *danyo += (int) variacion;
         _boss->ModificarVida(-(*danyo));
-        cout<<"Daño "<<*danyo<<endl;
         *danyo -= (int) variacion;
-        cout<<"variacion "<<variacion<<endl;
-        cout<<"Vida BOSS "<<_boss->getID()<<" "<<_boss->getVida()<<endl;
     }
     _fisicas = nullptr;
 }

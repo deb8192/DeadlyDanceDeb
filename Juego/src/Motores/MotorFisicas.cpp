@@ -478,46 +478,41 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
 
     RaycastInfo intersection;
 
-    int * jug;
+    int * jug = new int[1];
+    jug[0] = 0;//false - no lo ve;
     int * ene;
-    //int * obj;
+    int * obj;
 
     //creamos un puntero para saber si colisiona con el jugador (si es el jugador devolvera que no colisiona con el)
-    if(modo == 1)
+    /*if(modo == 1)
     {
         jug = new int[1];
         jug[0] = 0;//false - no lo ve
-    }
+    }*/
 
     //creamos un puntero que devuelve solamente los objetos con los que colisiona
     // Ya no utilizar - MI
-    /*if(modo == 2)
+    if(modo == 2)
     {
-        obj = new int[objetos.size()+1];
-        obj[0] = (objetos.size()+1);//dimension
-        for(std::size_t a = 0; a < (objetos.size()+1);a++)
-        {
-            if(a != 0)
-            {
-                obj[a] = 0;
-            }
-        }
-    }*/
+        obj = new int[1];
+        obj[0] = 0;//false - no lo ve
+    }
 
     //creamos un puntero que devuelve solo los enemigos con los que colisiona por defecto si este rayo sale de un enemigo no lo detecta como colision
     if(modo == 3)
     {
         ene = new int[enemigos.size()+1];
-        ene[0] = (enemigos.size()+1);//dimension
+        ene[0] = 0;//false - no lo ve
+    }
 
-        for(std::size_t a = 0; a < (enemigos.size()+1);a++)
+        /*for(std::size_t a = 0; a < (enemigos.size()+1);a++)
         {
             if(a != 0)
             {
                 ene[a] = 0;
             }
         }
-    }
+    }*/
 
     if(modo == 0 || modo == 1)
     {
@@ -536,7 +531,8 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
     //   std::cout << "CuerpoColisionado: " << " Jugador" << std::endl;
     if(modo == 0 || modo == 3)
     {
-        if(enemigos.size() > 0)//posiciones interpolacion
+        bool colision = false;
+        /*if(enemigos.size() > 0)//posiciones interpolacion
         {
             for(std::size_t i=0;i<enemigos.size();i++)
             {
@@ -546,13 +542,29 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
                     if(colision)
                         ene[i+1] = 1;
             }
+        }*/
+        if(enemigos.size() > 0)//posiciones interpolacion
+        {
+            for(std::size_t i=0;i<enemigos.size();i++)
+            {
+                colision = enemigos[i]->raycast(*rayo,intersection);
+                if(intersection.body != enemigos[i])
+                {
+                    if(colision)
+                    {
+                        //cout << "colisiona" << endl;
+                        ene[0] = 1;
+                    }
+                }
+            }
         }
     }
 
     // Ya no utilizar - MI
-    /*if(modo == 0 || modo == 2)
+    if(modo == 0 || modo == 2)
     {
-        if(objetos.size() > 0)//posiciones interpolacion
+        bool colision = false;
+        /*if(objetos.size() > 0)//posiciones interpolacion
         {
             for(std::size_t i=0;i<objetos.size();i++)
             {
@@ -562,8 +574,23 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
                     if(colision)
                         obj[i+1] = 1;
             }
+        }*/
+        if(obstaculos.size() > 0)//posiciones interpolacion
+        {
+            unsigned int i = 0;
+            while(i<obstaculos.size() && !colision)
+            {
+                colision = obstaculos[i]->raycast(*rayo,intersection);
+                
+                if(colision)
+                {
+                    //cout << "colisiona" << endl;
+                    obj[0] = 1;
+                }
+                else i++;
+            }
         }
-    }*/
+    }
 
     //por ultimo destruimos el objeto
     delete rayo;
@@ -575,12 +602,12 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
             return jug;
         case 2:
             //return obj;
-            return nullptr;
+            return obj;
         case 3:
             return ene;
     }
 
-    return nullptr;
+    return jug;
 
 }
 void MotorFisicas::colisionChecker(int gcam, bool a, bool s, bool d, bool w, float x, float y, float z)
@@ -662,9 +689,9 @@ void MotorFisicas::updateJugador(float x, float y, float z)
         jugador->setTransform(transformacion);
         //jugadorBody->getTransform(transformacion);
 
-        cout << jugadorBody->getTransform().getPosition().x << endl;
-        cout << jugadorBody->getTransform().getPosition().y << endl;
-        cout << jugadorBody->getTransform().getPosition().z << endl;
+        //cout << jugadorBody->getTransform().getPosition().x << endl;
+        //cout << jugadorBody->getTransform().getPosition().y << endl;
+        //cout << jugadorBody->getTransform().getPosition().z << endl;
 
         /*
         rp3d::Vector3 posiciones(ix,y,iz);

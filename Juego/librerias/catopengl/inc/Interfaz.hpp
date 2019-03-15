@@ -40,6 +40,24 @@ class Interfaz
 
         bool VentanaEstaAbierta();//devuelve true si esta en ejecucion devuelve false si no lo esta
 
+        double * GetPosicionRaton();//devuelve un array de tres posiciones (1,2,3) que es donde esta situado el raton
+
+        void LimpiarGui();// limpiamos todos los elementos pertenecientes a la graphic user interfaces(GUI), rimagen y otros.
+        
+        void LimpiarEscena();// limpiamos todos los elementos pertenecientes a la escena, objetos y luces
+
+        void EliminarCamara(unsigned short);// destruimos la camara a la que pertenezca el id
+
+        void CambiarFondo(float r, float g, float b,float a);//cambia el fondo de la ventana
+
+        void DefinirVentana(short unsigned int,short unsigned int,const char *); // cambia los valores width,height,title,si no existe tambien crea la ventana
+
+        void CrearTexto(const char * texto,short x,short y,unsigned short tamayo); // texto, x e y(max y min de la pantalla), tamayo del texto siempre superior
+
+        bool IsKeyDown(short);//se le pasa la tecla que quiere comprobar, esto va a la ventana y le pregunta si esta pulsada
+
+        bool IsMouseClick(short);// comprobaciones de los botones del raton        
+
     private:
 
         CatOpengl::Video::Ventana * window;

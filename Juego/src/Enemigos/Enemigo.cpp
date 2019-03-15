@@ -24,6 +24,7 @@ Enemigo::Enemigo()
     atacktime = 0.0f;
     pedirAyuda = false;
     contestar = false;
+    objetoAEsquivar = false;
 }
 
 Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida/*,
@@ -74,6 +75,8 @@ Enemigo::~Enemigo()
     tipoEnemigo = 0;
     pos_ataques = 0;
     accionRealizada = false;
+    contestar = false;
+    objetoAEsquivar = false;
 
     // INnpc
     tipo = 0;
@@ -1026,7 +1029,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     }
 
 
-    void Enemigo::alinearse(VectorEspacial* target)
+    void Enemigo::alinearse(VectorEspacial* target, bool huir)
     {
         Constantes constantes;
         VectorEspacial distancia;
@@ -1040,17 +1043,22 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ)) :
         rotation = constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ);
 
+        if(huir)
+        {
+            rotation *= -1;
+        }
+
         this->setNewRotacion(rotActual.x, rotation, rotActual.z);
         this->setVectorOrientacion();
     }
 
     bool Enemigo::ver(int tipo)
     {
+        int* loqueve = _eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotActual.y,30, tipo, true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+
         //vamos a  ver si vemos al jugador
         if(tipo == 1)//ves al jugador ?
         {
-            int* loqueve = _eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotActual.y,20,1,true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
-
             if(loqueve != nullptr)
             {
                 if(loqueve[0] == 1)
@@ -1059,9 +1067,60 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     return true;
                 }
             }
-
             delete loqueve;
-
+        }
+        if(tipo == 2 && modo != MODO_ATAQUE)//ves algun objeto ?
+        {
+            if(loqueve != nullptr)
+            {
+                if(loqueve[0] == 1)
+                {
+                    if(objetoAEsquivar)
+                    {
+                        this->setNewRotacion(0.0f, rotActual.y + rotation, 0.0f);
+                        this->setVectorOrientacion();
+                    }
+                    else
+                    {
+                        objetoAEsquivar = true;
+                        if(loqueve[1] == 1)
+                        {
+                            this->setRotation(maxRotacion);
+                            if(loqueve[2] == 1)
+                            {
+                                this->setNewRotacion(0.0f, rotActual.y - 90, 0.0f);
+                                this->setVectorOrientacion();
+                                cout<<"COLISIONA POR DELANTE"<<endl;
+                                objetoAEsquivar = false;
+                            }
+                            else
+                            { 
+                                this->setNewRotacion(0.0f, rotActual.y + rotation, 0.0f);
+                                this->setVectorOrientacion();
+                                cout<<"COLISIONA POR LA DERECHA"<<endl;
+                            }
+                        }
+                        else if(loqueve[2] == 1)
+                        {
+                            this->setRotation(-maxRotacion);
+                            this->setNewRotacion(0.0f, rotActual.y + rotation, 0.0f);
+                            this->setVectorOrientacion();
+                            cout<<"COLISIONA POR LA IZQUIERDA"<<endl;
+                        }
+                        else
+                        {
+                            this->setNewRotacion(0.0f, rotActual.y + 15, 0.0f);
+                            this->setVectorOrientacion();
+                        }
+                        
+                        delete loqueve;
+                        return true;
+                    }
+                    
+                }
+                else if(objetoAEsquivar) objetoAEsquivar = false;
+            }
+            delete loqueve;
         }
 
         return false;
@@ -1097,7 +1156,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         objetivo.vY = _jugador->getY();
         objetivo.vZ = _jugador->getZ();
 
-        this->alinearse(&objetivo);
+        this->alinearse(&objetivo, false);
 
         datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima;
         datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima;
@@ -1134,7 +1193,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         VectorEspacial datosDesplazamiento;
         float distancia = 4.0f;
 
-        this->alinearse(objetivo);
+        this->alinearse(objetivo, false);
 
         datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima;
         datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima;
@@ -1268,7 +1327,7 @@ void Enemigo::SetContestar(bool contesta)
     contestar = contesta;
 }
 
-void Enemigo::Render(unsigned short pos, 
+void Enemigo::Render(short pos, 
     float updTime, float drawTime)
 {
     moverseEntidad(1 / updTime);
