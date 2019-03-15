@@ -25,6 +25,7 @@ Enemigo::Enemigo()
     pedirAyuda = false;
     contestar = false;
     objetoAEsquivar = false;
+    distanciaMinimaEsquivar = 3;
 }
 
 Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida/*,
@@ -77,6 +78,7 @@ Enemigo::~Enemigo()
     accionRealizada = false;
     contestar = false;
     objetoAEsquivar = false;
+    distanciaMinimaEsquivar = 0;
 
     // INnpc
     tipo = 0;
@@ -1054,6 +1056,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
     bool Enemigo::ver(int tipo)
     {
+        Constantes constantes;
         int* loqueve = _eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotActual.y,30, tipo, true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
 
         //vamos a  ver si vemos al jugador
@@ -1071,46 +1074,51 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
         if(tipo == 2 && modo != MODO_ATAQUE)//ves algun objeto ?
         {
+            Constantes constantes;
             if(loqueve != nullptr)
             {
                 if(loqueve[0] == 1)
                 {
-                    if(objetoAEsquivar)
+                    VectorEspacial vectorDistanciaPolloObstaculo;
+                    vectorDistanciaPolloObstaculo.vX = loqueve[1] - posActual.x;
+                    vectorDistanciaPolloObstaculo.vY = loqueve[2] - posActual.y;
+                    vectorDistanciaPolloObstaculo.vZ = loqueve[3] - posActual.z;
+                    int distancia = sqrt(pow(vectorDistanciaPolloObstaculo.vX, constantes.DOS) + pow(vectorDistanciaPolloObstaculo.vY, constantes.DOS) + pow(vectorDistanciaPolloObstaculo.vZ, constantes.DOS));
+                    if(/*objetoAEsquivar && */abs(distancia) <= distanciaMinimaEsquivar)
                     {
-                        this->setNewRotacion(0.0f, rotActual.y + rotation, 0.0f);
+                        cout<<"SE PUEDE SALIR"<<endl;
+                        this->setNewRotacion(0.0f, rotActual.y - constantes.PI_MEDIOS, 0.0f);
                         this->setVectorOrientacion();
+                        this->setRotation(0.0f);
                     }
                     else
                     {
-                        objetoAEsquivar = true;
-                        if(loqueve[1] == 1)
+                        if(loqueve[4] == 1)
                         {
+                            objetoAEsquivar = true;
                             this->setRotation(maxRotacion);
-                            if(loqueve[2] == 1)
+                            if(loqueve[5] == 1)
                             {
-                                this->setNewRotacion(0.0f, rotActual.y - 90, 0.0f);
+
+                                this->setRotation(-maxRotacion);
+                                this->setNewRotacion(0.0f, rotActual.y - constantes.PI_MEDIOS, 0.0f);
                                 this->setVectorOrientacion();
                                 cout<<"COLISIONA POR DELANTE"<<endl;
-                                objetoAEsquivar = false;
                             }
                             else
                             { 
                                 this->setNewRotacion(0.0f, rotActual.y + rotation, 0.0f);
                                 this->setVectorOrientacion();
-                                cout<<"COLISIONA POR LA DERECHA"<<endl;
+                                cout<<"COLISIONA POR LA IZQUIERDA"<<endl;
                             }
                         }
-                        else if(loqueve[2] == 1)
+                        else if(loqueve[5] == 1)
                         {
+                            objetoAEsquivar = true;
                             this->setRotation(-maxRotacion);
                             this->setNewRotacion(0.0f, rotActual.y + rotation, 0.0f);
                             this->setVectorOrientacion();
-                            cout<<"COLISIONA POR LA IZQUIERDA"<<endl;
-                        }
-                        else
-                        {
-                            this->setNewRotacion(0.0f, rotActual.y + 15, 0.0f);
-                            this->setVectorOrientacion();
+                            cout<<"COLISIONA POR LA DERECHA"<<endl;
                         }
                         
                         delete loqueve;
@@ -1118,7 +1126,10 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     }
                     
                 }
-                else if(objetoAEsquivar) objetoAEsquivar = false;
+                else if(objetoAEsquivar)
+                {                            
+                    objetoAEsquivar = false;
+                }
             }
             delete loqueve;
         }

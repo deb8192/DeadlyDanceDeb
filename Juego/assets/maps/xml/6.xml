@@ -336,6 +336,7 @@
 	<!--Pared-Invisible--><Object Type="1" accion="1" ancho="26" largo="2" alto="24" RP="90" X="98" Y="0" Z="-26" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object Type="1" accion="1" ancho="2" largo="12" alto="24" RP="90" X="122" Y="0" Z="-12" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object Type="1" accion="1" ancho="26" largo="2" alto="24" RP="90" X="146" Y="0" Z="-2" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object Type="1" accion="1" ancho="26" largo="2" alto="24" RP="90" X="146" Y="0" Z="25" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object Type="1" accion="1" ancho="2" largo="8" alto="24" RP="90" X="170" Y="0" Z="-12" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object Type="1" accion="1" ancho="122" largo="2" alto="24" RP="90" X="233" Y="0" Z="-16" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object Type="1" accion="1" ancho="2" largo="46" alto="24" RP="90" X="292" Y="0" Z="32" despX="0" despZ="0" Texture="" Model=""></Object>

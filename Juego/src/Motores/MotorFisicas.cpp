@@ -494,7 +494,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
     // Ya no utilizar - MI
     if(modo == 2)
     {
-        obj = new int[1];
+        obj = new int[4];
         obj[0] = 0;//false - no lo ve
     }
 
@@ -586,6 +586,9 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
                 {
                     //cout << "colisiona" << endl;
                     obj[0] = 1;
+                    obj[1] = intersection.worldPoint.x;
+                    obj[2] = intersection.worldPoint.y;
+                    obj[3] = intersection.worldPoint.z;
                 }
                 else i++;
             }

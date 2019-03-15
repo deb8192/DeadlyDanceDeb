@@ -81,14 +81,12 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                 {
                     if(!atacado)
                     {
-                        cout<<"intenta atacar"<<endl;
                         int danyo;
                         danyo = this->Atacar(*i);
                         
                         if(danyo > 0)
                         {
                             _jugador->ModificarVida(-danyo);
-                            cout<<"Ataca por la IA" <<endl;
                             funciona = true;
                             atacado = true;
                         }
