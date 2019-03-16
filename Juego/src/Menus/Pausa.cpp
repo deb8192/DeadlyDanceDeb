@@ -4,11 +4,13 @@
 Pausa::Pausa()
 {
     _motor = MotorGrafico::GetInstance();
+    _motora = MotorAudioSystem::getInstance();
 }
 
 Pausa::~Pausa()
 {
     _motor = nullptr;
+    _motora = nullptr;
 }
 
 void Pausa::Iniciar()
@@ -92,6 +94,8 @@ void Pausa::borrarGUIResetearEvento(short id)
 // Vuelve al menu principal
 void Pausa::menuPrincipal()
 {
+    _motora->getEvent("AmbienteGritos")->stop(); //Detener musica ambiente
+    _motora->getEvent("Nivel1")->stop(); //Detener musica Juego
     _motor->LimpiarElementosJuego();
     // Elimina todos los estados y anyade el de menu
     Juego::GetInstance()->estado.CambioDeJuegoAMenu();

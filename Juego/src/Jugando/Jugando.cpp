@@ -103,7 +103,7 @@ void Jugando::Iniciar()
 
 void Jugando::ValoresPorDefecto()
 {
-    id = 0;
+    //id = 0;
     //drawTime = _controladorTiempo->GetTiempo(2);
     drawTime = 0.0f;
     lastDrawTime = drawTime;
@@ -228,10 +228,13 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_G_DEBUG);
     }
 
-    //para pathfinding activado
+    // Debug para probar cofres
     if(_motor->EstaPulsado(KEY_C))
     {
-        _motor->activarPathfinding();
+        unsigned short desplaza = 10;
+        _jugador->setPosiciones(posCofre[0]+desplaza, posCofre[1], posCofre[2]);
+        _jugador->setNewPosiciones(posCofre[0]+desplaza, posCofre[1], posCofre[2]);
+        _jugador->initPosicionesFisicas((posCofre[0]+desplaza)/2, posCofre[1]/2, posCofre[2]/2);
         _motor->ResetKey(KEY_C);
     }
 
@@ -760,7 +763,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     //limpiammos la sala
 
     //cargamos el nivel
-    cargador.CargarNivelXml(nivel, tipoJug, &id); //se llama al constructor vacio
+    cargador.CargarNivelXml(nivel, tipoJug); //se llama al constructor vacio
     
     CrearJugador();
     _recolectables = cargador.GetRecolectables();
@@ -787,7 +790,6 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
 void Jugando::CrearJugador()
 {
     _jugador = cargador.GetJugador();
-    _jugador->setID(++id);
     ValoresPorDefectoJugador();
 
     _motor->CargarJugador(_jugador->getX(),_jugador->getY(), _jugador->getZ(),
@@ -821,7 +823,9 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     {
         posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         Interactuable* _inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto,x,y,z);
-        _inter->setID(id++);
+        int* id = cargador.GetID();
+        _inter->setID(*(++id));
+        id = nullptr;
         _inter->setPosiciones(x,y,z);
         _inter->SetPosicionArrayObjetos(posicionObjeto);
         _inter->setDesplazamientos(despX,despZ);
@@ -876,6 +880,10 @@ void Jugando::cargarCofres(int num)
         //En caso de haber mas o el mismo numero de huecos para cofres que cofres se accede
         if(totalCofresPonible >= num_cofres)
         {
+            float newx = 0;
+            float newy = 0;
+            float newz = 0;
+
             //Mientra hay cofres sin colocar, colocar en una zona aleatoria
             while(num_cofres > 0)
             {
@@ -884,9 +892,9 @@ void Jugando::cargarCofres(int num)
                 cout << "colocar en: " << zonasDisponibles[numAlt] << endl;
 
                 //Buscar zona donde colocar
-                float newx = _zonas[zonasDisponibles[numAlt]]->getX();
-                float newy = _zonas[zonasDisponibles[numAlt]]->getY();
-                float newz = _zonas[zonasDisponibles[numAlt]]->getZ();
+                newx = _zonas[zonasDisponibles[numAlt]]->getX();
+                newy = _zonas[zonasDisponibles[numAlt]]->getY();
+                newz = _zonas[zonasDisponibles[numAlt]]->getZ();
 
                 //Se annade el nuevo elemento al vector de zonas
                 _zonas[zonasDisponibles[numAlt]]->annadirElemento();
@@ -894,7 +902,9 @@ void Jugando::cargarCofres(int num)
                 //Colocar cofre
                 int posicionObjeto = _motor->CargarObjetos(3,constantes.CERO,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
                 Interactuable*  inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto, newx, newy, newz);
-                inter->setID(++id);
+                int* id = cargador.GetID();
+                inter->setID(*(++id));
+                id = nullptr;
                 inter->setPosiciones(newx,newy,newz);
                 inter->SetPosicionArrayObjetos(posicionObjeto);
                 inter->setRotacion(0.0,0.0,0.0);
@@ -914,6 +924,11 @@ void Jugando::cargarCofres(int num)
                 num_cofres--; //un cofre menos
             }
             zonasDisponibles.resize(0);
+
+            // Debug: para cambiar la posicion del jugador al lado de un cofre
+            posCofre[0] = newx;
+            posCofre[1] = newy;
+            posCofre[2] = newz;
         }
         else
         {
