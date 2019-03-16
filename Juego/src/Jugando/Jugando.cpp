@@ -87,7 +87,7 @@ void Jugando::Iniciar()
     _motor->CargarInterfaz();
     
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-    CargarNivel(3, 1); //(level, player) 1 = heavy / 2 = bailaora
+    CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
     
     //TO DO: hacerle un reserve:
     //_auxiliadores.reserve(xx);
@@ -548,7 +548,7 @@ void Jugando::UpdateIA()
     if(!_jugador->EstaMuerto() && (!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
      || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
     {
-        _jugador->generarSonido(constantes.CINCO * constantes.SEIS, constantes.DOS, constantes.UNO);
+        _jugador->generarSonido(constantes.CINCO * constantes.CINCO * constantes.CUATRO, constantes.CINCO, constantes.UNO);
     }
 
     if (!enSalaBoss)

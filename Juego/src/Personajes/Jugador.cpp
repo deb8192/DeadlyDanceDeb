@@ -288,7 +288,8 @@ int Jugador::Atacar(int i)
 {
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     Constantes constantes;
-    int danyo = 0;
+    float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
+    int danyo = 0, por10 = 10, por100 = 100;
     if(vida > 0)
     {
         //Calcular posiciones que no se modifican
@@ -310,8 +311,7 @@ int Jugador::Atacar(int i)
         if(this->getArma() == nullptr)
         {
             setAnimacion(2);
-            _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,2,2,1,4);
-            danyo = 50.0f;
+            _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,3,3,3,4);
             _motora->getEvent("SinArma")->setVolume(0.8f);
             _motora->getEvent("SinArma")->start();
         }
@@ -320,7 +320,6 @@ int Jugador::Atacar(int i)
         {
             //Crear cuerpo de colision de ataque delante del jugador
             _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,1,5,0,0,4);
-            danyo = 70.0f;
             _motora->getEvent("GolpeGuitarra")->setVolume(0.8f);
             _motora->getEvent("GolpeGuitarra")->start();
         }
@@ -329,14 +328,30 @@ int Jugador::Atacar(int i)
         {
             //Crear cuerpo de colision de ataque delante del jugador
             _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,2,0.5,1,4);
-            danyo = 55.0f;
             _motora->getEvent("Arpa")->setVolume(0.8f);
             _motora->getEvent("Arpa")->start();
         }
+        //Se calcula el danyo del ataque
+        aumentosAtaque += por1;
+        if(_armaEquipada != NULL)
+        {
+            aumentosAtaque += (float) _armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
+        }
+        aumentosAtaque *= 2;
+        aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
+
+        //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
+        int probabilidad = rand() % por100 + 1;
+        if(probabilidad <= proAtaCritico)
+        {
+            critico += (float) danyoCritico / por100;
+            critico = roundf(critico * por10) / por10;
+        }
+
+        //Se aplican todas las modificaciones en la variable danyo
+        danyoF = ataque * critico * aumentosAtaque;
+        danyo = roundf(danyoF * por10) / por10;
         atacados_normal.clear(); //Reiniciar vector con enemigos atacados
-    }
-    else {
-        cout << "No supera las restricciones"<<endl;
     }
     _fisicas = nullptr;
     return danyo;

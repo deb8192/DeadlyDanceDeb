@@ -444,7 +444,9 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
 int Enemigo::Atacar(int i)
 {
     Constantes constantes;
-    int danyo = 0;
+    float danyoF = 0.f, critico = 1.f;
+    int danyo = 0, por10 = 10, por100 = 100;
+    bool atacado = false;
     if(vida > 0 && atacktime == 0)
     {
         MotorFisicas* _fisicas = MotorFisicas::getInstance();
@@ -478,9 +480,8 @@ int Enemigo::Atacar(int i)
             //Colision
             if(_fisicas->IfCollision(_fisicas->getEnemiesAtack(i),_fisicas->getJugador()))
             {
+                atacado = true;
                 cout << "Jugador Atacado" << endl;
-                danyo = 10.0f;
-                cout << "danyo del enemigo -> " << danyo << endl;
             }
         }
         else
@@ -491,10 +492,24 @@ int Enemigo::Atacar(int i)
             //Colision
             if(_fisicas->IfCollision(_fisicas->getBossAtack(),_fisicas->getJugador()))
             {
+                atacado = true;
                 cout << "Jugador Atacado por Boss" << endl;
-                danyo = 10.0f;
-                cout << "danyo del boss -> " << danyo << endl;
             }
+        }
+        if(atacado)
+        {
+            //Se calcula el danyo del ataque
+            //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
+            int probabilidad = rand() % por100 + 1;
+            if(probabilidad <= proAtaCritico)
+            {
+                critico += (float) danyoCritico / por100;
+                critico = roundf(critico * por10) / por10;
+            }
+
+            //Se aplican todas las modificaciones en la variable danyo
+            danyoF = ataque * critico;
+            danyo = roundf(danyoF * por10) / por10;
         }
         _fisicas = nullptr;
     }
@@ -516,7 +531,7 @@ int Enemigo::Atacar(int i)
 int Enemigo::AtacarEspecial()
 {
     Constantes constantes;
-    float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
+    float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
 
@@ -550,9 +565,6 @@ int Enemigo::AtacarEspecial()
         }
 
         //Se calcula el danyo del ataque
-        aumentosAtaque += (por1 * 2);
-        aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
-
         //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
         int probabilidad = rand() % por100 + 1;
         if(probabilidad <= proAtaCritico)
@@ -1072,63 +1084,94 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             }
             delete loqueve;
         }
-        if(tipo == 2 && modo != MODO_ATAQUE)//ves algun objeto ?
+        if(tipo == 2)//ves algun objeto ?
         {
             Constantes constantes;
+            int* destino = new int[6];
             if(loqueve != nullptr)
             {
                 if(loqueve[0] == 1)
-                {
-                    VectorEspacial vectorDistanciaPolloObstaculo;
-                    vectorDistanciaPolloObstaculo.vX = loqueve[1] - posActual.x;
-                    vectorDistanciaPolloObstaculo.vY = loqueve[2] - posActual.y;
-                    vectorDistanciaPolloObstaculo.vZ = loqueve[3] - posActual.z;
-                    int distancia = sqrt(pow(vectorDistanciaPolloObstaculo.vX, constantes.DOS) + pow(vectorDistanciaPolloObstaculo.vY, constantes.DOS) + pow(vectorDistanciaPolloObstaculo.vZ, constantes.DOS));
-                    if(/*objetoAEsquivar && */abs(distancia) <= distanciaMinimaEsquivar)
+                {   
+                    VectorEspacial vectorDistancia;
+                    vectorDistancia.vX = loqueve[1] - posActual.x;
+                    vectorDistancia.vY = loqueve[2] - posActual.y;
+                    vectorDistancia.vZ = loqueve[3] - posActual.z;
+                    vectorDistancia.modulo = sqrt(pow(vectorDistancia.vX, constantes.DOS) + pow(vectorDistancia.vY, constantes.DOS) + pow(vectorDistancia.vZ, constantes.DOS));                
+                    if(loqueve[7] == 1)
                     {
-                        cout<<"SE PUEDE SALIR"<<endl;
-                        this->setNewRotacion(0.0f, rotActual.y - constantes.PI_MEDIOS, 0.0f);
-                        this->setVectorOrientacion();
-                        this->setRotation(0.0f);
-                    }
-                    else
-                    {
-                        if(loqueve[4] == 1)
+                        if(loqueve[14] == 1)
                         {
-                            objetoAEsquivar = true;
-                            this->setRotation(maxRotacion);
-                            if(loqueve[5] == 1)
-                            {
+                            destino[0] = loqueve[1];
+                            destino[1] = loqueve[2];
+                            destino[2] = loqueve[3];
+                            destino[3] = loqueve[4];
+                            destino[4] = loqueve[5];
+                            destino[5] = loqueve[6];
 
-                                this->setRotation(-maxRotacion);
-                                this->setNewRotacion(0.0f, rotActual.y - constantes.PI_MEDIOS, 0.0f);
-                                this->setVectorOrientacion();
-                                cout<<"COLISIONA POR DELANTE"<<endl;
-                            }
-                            else
-                            { 
-                                this->setNewRotacion(0.0f, rotActual.y + rotation, 0.0f);
-                                this->setVectorOrientacion();
-                                cout<<"COLISIONA POR LA IZQUIERDA"<<endl;
-                            }
+                            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
+
+                            VectorEspacial vectorDirector = this->normalizarVector(destino);
+                            vectorDirector.vZ < 0 ?
+                                rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
+                                rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
+                            cout<<"COLISIONA POR DELANTE"<<endl;
                         }
-                        else if(loqueve[5] == 1)
-                        {
-                            objetoAEsquivar = true;
-                            this->setRotation(-maxRotacion);
-                            this->setNewRotacion(0.0f, rotActual.y + rotation, 0.0f);
-                            this->setVectorOrientacion();
-                            cout<<"COLISIONA POR LA DERECHA"<<endl;
+                        else
+                        { 
+                            destino[0] = loqueve[8];
+                            destino[1] = loqueve[9];
+                            destino[2] = loqueve[10];
+                            destino[3] = loqueve[11];
+                            destino[4] = loqueve[12];
+                            destino[5] = loqueve[13];
+
+                            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
+
+                            VectorEspacial vectorDirector = this->normalizarVector(destino);
+                            vectorDirector.vZ < 0 ?
+                                rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
+                                rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
+                            cout<<"COLISIONA POR LA IZQUIERDA"<<endl;
                         }
-                        
-                        delete loqueve;
-                        return true;
                     }
-                    
-                }
-                else if(objetoAEsquivar)
-                {                            
-                    objetoAEsquivar = false;
+                    else if(loqueve[14] == 1)
+                    {
+                        destino[0] = loqueve[15];
+                        destino[1] = loqueve[16];
+                        destino[2] = loqueve[17];
+                        destino[3] = loqueve[18];
+                        destino[4] = loqueve[19];
+                        destino[5] = loqueve[20];
+
+                        //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
+
+                        VectorEspacial vectorDirector = this->normalizarVector(destino);
+                        vectorDirector.vZ < 0 ?
+                            rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
+                            rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
+                        cout<<"COLISIONA POR LA DERECHA"<<endl;
+                    }
+                    else if(vectorDistancia.modulo <= distanciaMinimaEsquivar)
+                    {
+                        destino[0] = loqueve[1];
+                            destino[1] = loqueve[2];
+                            destino[2] = loqueve[3];
+                            destino[3] = loqueve[4];
+                            destino[4] = loqueve[5];
+                            destino[5] = loqueve[6];
+
+                            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
+
+                            VectorEspacial vectorDirector = this->normalizarVector(destino);
+                            vectorDirector.vZ < 0 ?
+                                rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
+                                rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
+                            cout<<"QUE SE SALE"<<endl;
+                    }
+                    this->setNewRotacion(0.0f, rotActual.y, 0.0f);
+                    this->setVectorOrientacion();
+                    delete loqueve;
+                    return true;                    
                 }
             }
             delete loqueve;
@@ -1139,7 +1182,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
     bool Enemigo::oir(int tipo)//tipo 1 oir al jugador si lo oye true, tipo 2 si oye al enemigo pedir ayuda si lo oye true si no false
     {
-        std::vector<EventoSonido* > listaSonidos =  _eventos->listarSonidos(posActual.x, posActual.y);//le pasamos nuestra x e y
+        std::vector<EventoSonido* > listaSonidos =  _eventos->listarSonidos(posActual.x, posActual.z);//le pasamos nuestra x e y
 
         if(listaSonidos.size() > 0)
         {
@@ -1309,6 +1352,29 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         this->setPosicionesFisicas(velocidad.x, 0.0f, velocidad.z);
 
 	    return false;
+    }
+    INnpc::VectorEspacial Enemigo::normalizarVector(int* destino)
+    {
+        Constantes constantes;
+        //Se obtiene el vector director del movimiento del enemigo y su modulo
+        VectorEspacial vectorDirector;
+        vectorDirector.vX = destino[0] - posActual.x;
+        vectorDirector.vY = destino[1] - posActual.y;
+        vectorDirector.vZ = destino[2] - posActual.z;
+        vectorDirector.modulo = sqrt(pow(vectorDirector.vX, constantes.DOS) + pow(vectorDirector.vY, constantes.DOS) + pow(vectorDirector.vZ, constantes.DOS));
+
+        //Se normaliza el vector director del movimiento del enemigo
+        vectorDirector.vX /= vectorDirector.modulo;
+        vectorDirector.vY /= vectorDirector.modulo;
+        vectorDirector.vZ /= vectorDirector.modulo;
+        
+        //Se obtiene la nueva direccion del movimiento sumando las componentes de la normal de la pared con las del vector director
+        vectorDirector.vX += destino[3];
+        vectorDirector.vY += destino[4];
+        vectorDirector.vZ += destino[5];
+        vectorDirector.modulo = 1;
+
+        return vectorDirector;
     }
 
 //fin comportamientos bases
