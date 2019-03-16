@@ -449,7 +449,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     _enemigos.back()->setVelocidadMaxima(1.0f);
     _enemigos.back()->setBarraAtEs(0);
     _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
-    _enemigos.back()->setAtaque(10);
+    _enemigos.back()->setAtaque(5);
     _enemigos.back()->setArmaEspecial(100);
     _enemigos.back()->setTimeAtEsp(0.0f);
     _enemigos.back()->setDanyoCritico(50);
