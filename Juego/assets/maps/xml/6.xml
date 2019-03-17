@@ -3,7 +3,7 @@
 	
 	<Light Type="Ambiental" Intensity="50" Attenuation="0" Color="Red" RP="0" X="0" Y="10" Z="0"> </Light>
 	
-	<!--Sala-01--><Platform Type="1" accion="0" ancho="72" largo="72" alto="4" RP="0" X="48" Y="0" Z="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat1.obj" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
+	<!--Sala-01--><Platform Type="1" accion="0" ancho="72" largo="72" alto="4" RP="0" X="48" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
 	<!--Decoracion-conjunto-Paredes--><Object Type="0" accion="1" ancho="0" largo="0" alto="24" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/DecoracionParedes.obj"></Object>
 	<!--Decoracion-cueva-roca--><Object Type="0" accion="7" ancho="0" largo="0" alto="24" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Roca.jpg" Model="assets/models/Escenario/DecoracionRoca.obj"></Object>
 	<!--Decoracion-antorchas--><Object Type="0" accion="7" ancho="0" largo="0" alto="24" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/DecoracionNivel.png" Model="assets/models/Escenario/DecoracionItems.obj"></Object>
@@ -31,7 +31,7 @@
 	
 
 		<!--Sala-02--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="146" Y="0" Z="12" Texture="assets/texture/Puente.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
-		<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="90" X="122" Y="0" Z="4" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+		<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="122" Y="0" Z="4" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 		<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="122" Y="0" Z="20" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 		<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="170" Y="0" Z="4" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 		<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="170" Y="0" Z="20" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>

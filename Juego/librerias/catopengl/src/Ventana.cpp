@@ -15,6 +15,8 @@ Ventana::~Ventana()
 //USO: se utiliza para crear una ventana
 bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
 {
+    winwidth = w;
+    winheight = h;
     // Inicializar GLFW
     // glfwWindowHint para configurar GLFW, mirar en la documentacion los distintos hint
     glfwInit();
@@ -49,11 +51,16 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     //Se llama a la funcion "framebuffer_size_callback" cada vez que el usuario cambia el tamanyo de ventana
     glfwSetFramebufferSizeCallback(_window,this->redimensionar);
 
+    //Activar suavizado MSAA
+    glEnable(GL_MULTISAMPLE);
 
-    //*********** APLICAR PROFUNDIDAD Z-BUFFER ***********
+    //Profundidad Z-Buffer
     glEnable(GL_DEPTH_TEST);   //Necesario para el zoom/fov
-    glEnable(GL_MULTISAMPLE); // Activar suavizado MSAA
-    
+
+    //Activar Blending
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     //Activar CULLING
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
@@ -162,7 +169,7 @@ void Ventana::UpdateSize(short unsigned int w, short unsigned int h)
     if(_window != nullptr)
     {
         glfwSetWindowSize(_window, w, h);
-    } 
+    }
 }
 
 bool Ventana::EstaPulsada(short tecla)
@@ -195,12 +202,22 @@ bool Ventana::MouseEstaPulsado(short boton)
     }
     else
     {
-        if(glfwGetMouseButton(_window,boton) == GLFW_PRESS)   
+        if(glfwGetMouseButton(_window,boton) == GLFW_PRESS)
         {
             //se ha pulsado entonces devolvemos true
             return true;
         }
     }
-    
+
     return false;
+}
+
+short unsigned int Ventana::getWidth()
+{
+    return winwidth;
+}
+
+short unsigned int Ventana::getHeight()
+{
+    return winheight;
 }
