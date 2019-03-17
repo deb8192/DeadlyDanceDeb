@@ -216,7 +216,6 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         short modo;
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
         vector <Posiciones> recorridoAyuda;
-        bool objetoAEsquivar; //Coordenadas del objeto detectado para esquivar;
         int distanciaMinimaEsquivar; //Variable que contiene la distancia mínima para esquivar objetos;
         const char* _modelo; // Malla 3D con la textura
         bool pedirAyuda;
