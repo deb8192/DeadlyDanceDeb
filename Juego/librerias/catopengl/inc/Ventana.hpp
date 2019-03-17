@@ -12,7 +12,7 @@ class Ventana
         void UpdateDraw();//renderizada la informacion y cambia los buffers
         bool SigueAbierta();//nos sirve para saber si la ventana sigue en ejecucion
         void Drop();//borramos la informacion de glfw
-
+        
     private:
 
         ~Ventana();//destructor
@@ -21,5 +21,5 @@ class Ventana
         void procesarInputs(GLFWwindow *);//procesa los inputs si estan pulsados o no (teclado,raton)
         void limpiar();//como dice limpia el buffer y la informacion por pantalla
         GLFWwindow * _window;
-};
+    };
 #endif

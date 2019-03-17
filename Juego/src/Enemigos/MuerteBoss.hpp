@@ -16,7 +16,6 @@ class MuerteBoss : public Enemigo
     private:
         bool funciona, atacado, hecho;
         short int* _ordenes;
-        short int maxRotacion;
         short int direccion;
 };
 

@@ -81,14 +81,12 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                 {
                     if(!atacado)
                     {
-                        cout<<"intenta atacar"<<endl;
                         int danyo;
                         danyo = this->Atacar(*i);
                         
                         if(danyo > 0)
                         {
                             _jugador->ModificarVida(-danyo);
-                            cout<<"Ataca por la IA" <<endl;
                             funciona = true;
                             atacado = true;
                         }
@@ -156,6 +154,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
 
             case EN_MERODEA: //El Pollo merodea
                 {
+                    this->ver(constantes.DOS);
                     if(!hecho)
                     {
                         //Merodea estableciendo un nuevo angulo de rotacion
@@ -205,7 +204,6 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                 break;
 
             default:
-                cout<<"No hace nada"<<endl;
                 break;
         }
     }

@@ -449,7 +449,7 @@ void Jugando::Update()
                         _enemigos[i]->setTimeMerodear(tiempoMerodear);
                     }
                     //FUNCIONA REGULAR
-                    if((_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i)) && (_enemigos[i]->GetModo() != 1 || _enemigos[i]->GetModo() != 3))
+                    /*if((_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i)) && (_enemigos[i]->GetModo() != 1 || _enemigos[i]->GetModo() != 3))
                     {
                         //colisiona
                         struct DatosDesplazamiento
@@ -473,7 +473,7 @@ void Jugando::Update()
                             _enemigos[i]->setVectorOrientacion(); 
                             _enemigos[i]->setRotation(0.0f);
                         }
-                    }
+                    }*/
                 }
                 //_enemigos[i]->queVes();
             }
@@ -552,7 +552,7 @@ void Jugando::UpdateIA()
     if(!_jugador->EstaMuerto() && (!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
      || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
     {
-        _jugador->generarSonido(constantes.CINCO * constantes.SEIS, constantes.DOS, constantes.UNO);
+        _jugador->generarSonido(constantes.CINCO * constantes.SEIS, constantes.CINCO, constantes.UNO);
     }
 
     if (!enSalaBoss)
@@ -716,7 +716,14 @@ void Jugando::Render()
     {
         _zonas.at(i)->Render();
     }
+
+    //Dibujado waypoints
+    for(unsigned int i=0; i < _waypoints.size(); i++)
+    {
+        _waypoints.at(i)->Render();
+    }
     //_motor->clearDebug2(); //Pruebas debug
+
 
     _motor->RenderInterfaz(_interfaz->getEstado());
 
@@ -1395,12 +1402,13 @@ void Jugando::updateAtEsp()
 
 void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
 {
-    if(auxiliarPathfinding >= 20 || (contadorEnem > 0 && _enem == _enemPideAyuda))
+    if(auxiliarPathfinding >= 20 || (contadorEnem == 0 && _enem == _enemPideAyuda))
     {
         _auxiliadores.clear();
         enemDejarDePedirAyuda();
         _destinoPathFinding = nullptr;
         contadorEnem = 0;
+        auxiliarPathfinding = 0;
 
     }
     //Si enem no es nulo se anade a la cola de enemigos _auxiliadores
@@ -1411,7 +1419,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
         contadorEnem++;
     }
     //Si no hay sala de destino guardada, se guarda en este momento
-    else if(_destinoPathFinding == nullptr)
+    if(_destinoPathFinding == nullptr)
     {
         _destinoPathFinding = _enemPideAyuda->getSala();
     }
@@ -1420,7 +1428,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
     {
         while(!_auxiliadores.empty())
         {
-            if(_destinoPathFinding != _auxiliadores.front()->getSala() && _auxiliadores.front()->GetModo() != 8)
+            if(_destinoPathFinding != _auxiliadores.front()->getSala() && _auxiliadores.front()->GetModo() != 3)
             {
                 Pathfinder* path = Pathfinder::getInstance();
                 recorrido = path->encontrarCamino(_auxiliadores.front()->getSala(), _destinoPathFinding);
@@ -1441,244 +1449,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
             _auxiliadores.erase(_auxiliadores.begin());
         }
     }
-    /*{
-        Pathfinder* path = Pathfinder::getInstance();
-        int tipoCentro;
-
-        //Se inicia el recorrido hacia la primera sala del enemigo que pide ayuda.
-        if(recorrido.empty() && !_auxiliadores.empty() && !path->encontrarCamino(_auxiliadores.front()->getSala(), _destinoPathFinding).empty())
-        {
-            recorrido = path->encontrarCamino(_auxiliadores.front()->getSala(), _destinoPathFinding);
-            _auxiliadores.erase(_auxiliadores.begin());
-        }
-        //Desplazamiento del enemigo hacia su destino
-        if(!recorrido.empty())
-        {
-            //Se comprueban las coordenadas del enemigo y si ha llegado a la siguiente
-            //sala del camino a la que debe ir o no. Se tienen en cuenta los tipos de centros
-            //para realizar las comprobaciones de coordenadas adecuadas con el ancho y alto de las salas
-            if(_auxiliadores.front()!= nullptr && _auxiliadores.front()->getSala() != recorrido.front().nodo)
-            {
-                bool cambia = false, moveDer = false, moveIzq = false, moveArb = false, moveAbj = false;
-                tipoCentro = recorrido.front().nodo->getType();
-                //Centro arriba a la izquierda
-                if(tipoCentro == 4)
-                {
-                    if(_auxiliadores.front()->getNewX() >= recorrido.front().nodo->getSizes()[2] && _auxiliadores.front()->getNewX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
-                    {
-                        cambia = true;
-                    }
-                    else if(_auxiliadores.front()->getNewX() < recorrido.front().nodo->getSizes()[2])
-                    {
-                        moveDer = true;
-                    }
-                    else if(_auxiliadores.front()->getNewX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
-                    {
-                        moveIzq = true;
-                    }
-                    if(cambia && (_auxiliadores.front()->getNewZ() >= recorrido.front().nodo->getSizes()[4] && _auxiliadores.front()->getNewZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
-                    {
-                        _auxiliadores.front()->setSala(recorrido.front().nodo);
-                        cout<<"nodo actual: "<<_auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
-                        recorrido.erase(recorrido.begin());
-                    }
-                    else if(_auxiliadores.front()->getNewZ() < recorrido.front().nodo->getSizes()[4])
-                    {
-                        moveAbj = true;
-                    }
-                    else if(_auxiliadores.front()->getNewZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1]))
-                    {
-                        moveArb = true;
-                    }
-                }
-                //Centro abajo a la izquierda
-                else if(tipoCentro == 3)
-                {
-                    if(_auxiliadores.front()->getNewX() >= recorrido.front().nodo->getSizes()[2] && _auxiliadores.front()->getNewX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
-                    {
-                        cambia = true;
-                    }
-                    else if(_auxiliadores.front()->getNewX() < recorrido.front().nodo->getSizes()[2])
-                    {
-                        moveDer = true;
-                    }
-                    else if(_auxiliadores.front()->getNewX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0]))
-                    {
-                        moveIzq = true;
-                    }
-
-                    if(cambia && (_auxiliadores.front()->getNewZ() <= recorrido.front().nodo->getSizes()[4] && _auxiliadores.front()->getNewZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] )))
-                    {
-                        _auxiliadores.front()->setSala(recorrido.front().nodo);
-                        cout<<"nodo actual: "<<_auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
-                        recorrido.erase(recorrido.begin());
-                    }
-                    else if(_auxiliadores.front()->getNewZ() > recorrido.front().nodo->getSizes()[4])
-                    {
-                        moveArb = true;
-                    }
-                    else if(_auxiliadores.front()->getNewZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1]))
-                    {
-                        moveAbj = true;
-                    }
-                }
-                //Centro arriba a la derecha
-                else if(tipoCentro == 2)
-                {
-                    if(_auxiliadores.front()->getNewX() <= recorrido.front().nodo->getSizes()[2] && _auxiliadores.front()->getNewX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
-                    {
-                        cambia = true;
-                    }
-                    else if(_auxiliadores.front()->getNewX() > recorrido.front().nodo->getSizes()[2])
-                    {
-                        moveIzq = true;
-                    }
-                    else if(_auxiliadores.front()->getNewX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
-                    {
-                        moveDer = true;
-                    }
-
-                    if(cambia && (_auxiliadores.front()->getNewZ() >= recorrido.front().nodo->getSizes()[4] && _auxiliadores.front()->getNewZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] )))
-                    {
-                        _auxiliadores.front()->setSala(recorrido.front().nodo);
-                        cout<<"nodo actual: "<<_auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
-                        recorrido.erase(recorrido.begin());
-                    }
-                    else if(_auxiliadores.front()->getNewZ() < recorrido.front().nodo->getSizes()[4])
-                    {
-                        moveAbj = true;
-                    }
-                    else if(_auxiliadores.front()->getNewZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1]))
-                    {
-                        moveArb = true;
-                    }
-                }
-                //Centro abajo a la derecha
-                else if(tipoCentro == 1)
-                {
-                    if(_auxiliadores.front()->getNewX() <= recorrido.front().nodo->getSizes()[2] && _auxiliadores.front()->getNewX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
-                    {
-                        cambia = true;
-                    }
-                    else if(_auxiliadores.front()->getNewX() > recorrido.front().nodo->getSizes()[2])
-                    {
-                        moveIzq = true;
-                    }
-                    else if(_auxiliadores.front()->getNewX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0]))
-                    {
-                        moveDer = true;
-                    }
-
-                    if(cambia && (_auxiliadores.front()->getNewZ() <= recorrido.front().nodo->getSizes()[4] && _auxiliadores.front()->getNewZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] )))
-                    {
-                        _auxiliadores.front()->setSala(recorrido.front().nodo);
-                        cout<<"nodo actual: "<<_auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
-                        recorrido.erase(recorrido.begin());
-                    }
-                    else if(_auxiliadores.front()->getNewZ() > recorrido.front().nodo->getSizes()[4])
-                    {
-                        moveArb = true;
-                    }
-                    else if(_auxiliadores.front()->getNewZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1]))
-                    {
-                        moveAbj = true;
-                    }
-                }
-                //Centro en el centro
-                else if(tipoCentro == 0)
-                {
-                    if(_auxiliadores.front()->getNewX() <= recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0] / 2) && _auxiliadores.front()->getNewX() >= recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0] / 2))
-                    {
-                        cambia = true;
-                    }
-                    else if(_auxiliadores.front()->getNewX() > recorrido.front().nodo->getSizes()[2] + (recorrido.front().nodo->getSizes()[0] / 2))
-                    {
-                        moveIzq = true;
-                    }
-                    else if(_auxiliadores.front()->getNewX() < recorrido.front().nodo->getSizes()[2] - (recorrido.front().nodo->getSizes()[0] / 2))
-                    {
-                        moveDer = true;
-                    }
-
-                    if(cambia && (_auxiliadores.front()->getNewZ() <= recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] / 2) && _auxiliadores.front()->getNewZ() >= recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] / 2)))
-                    {
-                        _auxiliadores.front()->setSala(recorrido.front().nodo);
-                        cout<<"nodo actual: "<<_auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
-                        recorrido.erase(recorrido.begin());
-                    }
-                    else if(_auxiliadores.front()->getNewZ() > recorrido.front().nodo->getSizes()[4] + (recorrido.front().nodo->getSizes()[1] / 2))
-                    {
-                        moveArb = true;
-                    }
-                    else if(_auxiliadores.front()->getNewZ() < recorrido.front().nodo->getSizes()[4] - (recorrido.front().nodo->getSizes()[1] / 2))
-                    {
-                        moveAbj = true;
-                    }
-                }
-                if(moveAbj)
-                {
-                    if(moveDer)
-                    {
-                        _auxiliadores.front()->setNewPosiciones(_auxiliadores.front()->getNewX() + _auxiliadores.front()->getVelocidadMaxima(), _auxiliadores.front()->getNewY(), _auxiliadores.front()->getNewZ() + _auxiliadores.front()->getVelocidadMaxima());
-                        _auxiliadores.front()->setPosicionesFisicas(_auxiliadores.front()->getVelocidadMaxima(), 0.0, _auxiliadores.front()->getVelocidadMaxima());
-                        cout<<"Posicion del enemigo: x="<<_auxiliadores.front()->getNewX()<<" z=" << _auxiliadores.front()->getNewY();
-                    }
-                    else if(moveIzq)
-                    {
-                        _auxiliadores.front()->setNewPosiciones(_auxiliadores.front()->getNewX() - _auxiliadores.front()->getVelocidadMaxima(), _auxiliadores.front()->getNewY(), _auxiliadores.front()->getNewZ() + _auxiliadores.front()->getVelocidadMaxima());
-                        _auxiliadores.front()->setPosicionesFisicas(- (_auxiliadores.front()->getVelocidadMaxima()), 0.0, _auxiliadores.front()->getVelocidadMaxima());
-                    }
-                    else
-                    {
-                        _auxiliadores.front()->setNewPosiciones(_auxiliadores.front()->getNewX(), _auxiliadores.front()->getNewY(), _auxiliadores.front()->getNewZ() + _auxiliadores.front()->getVelocidadMaxima());
-                        _auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, _auxiliadores.front()->getVelocidadMaxima());
-                    }
-                }
-                else if(moveArb)
-                {
-                    if(moveDer)
-                    {
-                        _auxiliadores.front()->setNewPosiciones(_auxiliadores.front()->getNewX() + _auxiliadores.front()->getVelocidadMaxima(), _auxiliadores.front()->getNewY(), _auxiliadores.front()->getNewZ() - _auxiliadores.front()->getVelocidadMaxima());
-                        _auxiliadores.front()->setPosicionesFisicas(_auxiliadores.front()->getVelocidadMaxima(), 0.0, -(_auxiliadores.front()->getVelocidadMaxima()));
-                    }
-                    else if(moveIzq)
-                    {
-                        _auxiliadores.front()->setNewPosiciones(_auxiliadores.front()->getNewX() - _auxiliadores.front()->getVelocidadMaxima(), _auxiliadores.front()->getNewY(), _auxiliadores.front()->getNewZ() - _auxiliadores.front()->getVelocidadMaxima());
-                        _auxiliadores.front()->setPosicionesFisicas(- (_auxiliadores.front()->getVelocidadMaxima()), 0.0, -(_auxiliadores.front()->getVelocidadMaxima()));
-                    }
-                    else
-                    {
-                        _auxiliadores.front()->setNewPosiciones(_auxiliadores.front()->getNewX(), _auxiliadores.front()->getNewY(), _auxiliadores.front()->getNewZ() - _auxiliadores.front()->getVelocidadMaxima());
-                        _auxiliadores.front()->setPosicionesFisicas(0.0, 0.0, -(_auxiliadores.front()->getVelocidadMaxima()));
-                    }
-                }
-                else
-                {
-                    if(moveDer)
-                    {
-                        _auxiliadores.front()->setNewPosiciones(_auxiliadores.front()->getNewX() + _auxiliadores.front()->getVelocidadMaxima(), _auxiliadores.front()->getNewY(), _auxiliadores.front()->getNewZ());
-                        _auxiliadores.front()->setPosicionesFisicas(_auxiliadores.front()->getVelocidadMaxima(), 0.0, 0.0);
-                    }
-                    else if(moveIzq)
-                    {
-                        _auxiliadores.front()->setNewPosiciones(_auxiliadores.front()->getNewX() - _auxiliadores.front()->getVelocidadMaxima(), _auxiliadores.front()->getNewY(), _auxiliadores.front()->getNewZ());
-                        _auxiliadores.front()->setPosicionesFisicas(- (_auxiliadores.front()->getVelocidadMaxima()), 0.0, 0.0);
-                    }
-                }
-            }
-            else
-            {
-                cout<<"nodo actual donde puede que se atasque: "<<_auxiliadores.front()->getSala()->getPosicionEnGrafica()<<endl;
-                recorrido.erase(recorrido.begin());
-                if(recorrido.empty() && _auxiliadores.empty())
-                {
-                    _destinoPathFinding = nullptr;
-                    enemDejarDePedirAyuda();
-                    contadorEnem = 0;
-                }
-            }
-        }
-    }*/
+    auxiliarPathfinding++;
 }
 
 void Jugando::EraseEnemigo(std::size_t i)

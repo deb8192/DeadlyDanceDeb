@@ -56,6 +56,7 @@ using Constantes = struct
     //Comparadores de la lectura de los objetivos de las tareas
     const char* JUGADOR = "jugador";
     const char* ZONA_COFRES = "zona-cofres";
+    const char* AYUDA = "ayuda";
 
     /**************************** String cargado mapas ************************/
     const char* ZCHEST = "zChest";
