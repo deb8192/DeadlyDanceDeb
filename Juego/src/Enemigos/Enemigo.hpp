@@ -130,6 +130,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int GetEnemigo();
         int GetModo();
 
+        bool ver(int tipo);//1 si ve al jugador
+
         //ia
         float randomBinomial();//devuelve un valor random entre -1 y 1
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
@@ -155,10 +157,10 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         MotorAudioSystem* _motora;
         MotorGrafico* _motor;
         SenseEventos* _eventos;
+        short int maxRotacion;
 
         //comportamientos bases
-        void alinearse(VectorEspacial*);
-        bool ver(int tipo);//1 si ve al jugador
+        void alinearse(VectorEspacial*, bool huir);
         bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
         bool buscar();//por defecto devuelve true
         bool perseguir(int* _jug);//por defecto devuelve true TO IMPROVE
@@ -168,6 +170,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
         void AuxiliarAliado();//se mueve hacia el proximo waypoint del camino a seguir
         bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
+        INnpc::VectorEspacial normalizarVector(int*);//Convierte el vector que se pasa en un vector con la misma direccion y sentido pero con modulo 1
         //fin comportamientos bases
 
         Zona* getZonaMasCercana(vector <Zona*> zonas, short enemigo);
@@ -183,6 +186,13 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_BUSCA,
             EN_RECUPERA,
             EN_ACUDE_AYUDA
+        };
+
+        enum objetivosEnemigo
+        {
+            EN_JUGADOR = 0,
+            EN_ZONA_COFRES,
+            EN_AYUDA
         };
 
         enum modosEnemigo 
@@ -206,6 +216,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         short modo;
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
         vector <Posiciones> recorridoAyuda;
+        int distanciaMinimaEsquivar; //Variable que contiene la distancia mínima para esquivar objetos;
         const char* _modelo; // Malla 3D con la textura
         bool pedirAyuda;
         bool contestar;

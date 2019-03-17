@@ -78,7 +78,7 @@ void SenseEventos::agregarEvento(EventoSonido* evento)
     sonidos.push_back(evento);//se agrega elemento
 }
 
- std::vector<EventoSonido* > SenseEventos::listarSonidos(int x, int y)
+ std::vector<EventoSonido* > SenseEventos::listarSonidos(int x, int z)
  {
     std::vector<EventoSonido* > listaSonidos;
     if(sonidos.size()>0)
@@ -89,8 +89,8 @@ void SenseEventos::agregarEvento(EventoSonido* evento)
             {
                 int* propie = sonidos[i]->getPropiedades();
                 int cx = propie[2];
-                int cy = propie[3];
-                float inter = sqrt( (pow((cx-x),2)) + (pow((cy-y),2)) );
+                int cz = propie[4];
+                float inter = sqrt( (pow((cx-x),2)) + (pow((cz-z),2)) );
                 float intensi = sonidos[i]->getIntensidad();
                 if(inter <= intensi)//&& inter != NAN
                 {
@@ -107,13 +107,28 @@ void SenseEventos::agregarEvento(EventoSonido* evento)
 //para la vista devuelve los objetos que ve
 int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista, int modo, bool perifericos)
 {
+    y += 2;
     rot += 90;
     MotorGrafico* _motor = MotorGrafico::GetInstance();
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
 
-    int* perDer;
-    int* perIzq;
-    int* recto = _fisicas->colisionRayoUnCuerpo(x,y,z,rot,vista,modo);//mira directa
+    int* perDer = new int[7];
+    int* perIzq = new int[7];
+    int* recto = new int[21];
+    int* vectorRespuestaAuxiliar = _fisicas->colisionRayoUnCuerpo(x,y,z,rot,vista,modo);//mira directa;
+
+    recto[0] = vectorRespuestaAuxiliar[0];
+
+    //Estos valores se corresponden con las componentes del punto de colision con el obstaculo donde colisiona la vision
+    recto[1] = vectorRespuestaAuxiliar[1];
+    recto[2] = vectorRespuestaAuxiliar[2]; 
+    recto[3] = vectorRespuestaAuxiliar[3]; 
+
+    //Estos valores se corresponden con las componentes de la normal de la seccion del obstaculo donde colisiona la vision
+    recto[4] = vectorRespuestaAuxiliar[4];
+    recto[5] = vectorRespuestaAuxiliar[5]; 
+    recto[6] = vectorRespuestaAuxiliar[6]; 
+    
     _motor->debugVision(x,y,z,rot,vista);
     _motor->debugVision(x,y,z,rot+30,vista/2);
     _motor->debugVision(x,y,z,rot-30,vista/2);
@@ -124,25 +139,34 @@ int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista
         perIzq = _fisicas->colisionRayoUnCuerpo(x,y,z,(-1*(rot-180))-30,vista/2,modo);//mira periferica izquierda
         
         //Si lo ve por uno de los perifericos lo pone a 1
-        if(modo == 1)//jugador
+        if(perDer[0] == 1)
         {
-            if(recto[0] != 1 && (perDer[0] == 1 || perIzq[0] == 1))
-            {
-                recto[0] = 1;
-            }
-        }
+            recto[7] = 1;
+            //Estos valores se corresponden con las componentes del punto de colision con el obstaculo donde colisiona la vision
+            recto[8] = perDer[1];
+            recto[9] = perDer[2]; 
+            recto[10] = perDer[3];
 
-        if(modo == 2)//objetos
-        {
-            //for recorriendose cada valor comparando 
-            //indice 0 contiene el numero de valores
+            //Estos valores se corresponden con las componentes de la normal de la seccion del obstaculo donde colisiona la vision
+            recto[11] = perDer[4];
+            recto[12] = perDer[5]; 
+            recto[13] = perDer[6];
         }
+        else recto[7] = 0;
+        if(perIzq[0] == 1)
+        {
+            recto[14] = 1;
+            //Estos valores se corresponden con las componentes del punto de colision con el obstaculo donde colisiona la vision
+            recto[15] = perIzq[1];
+            recto[16] = perIzq[2]; 
+            recto[17] = perIzq[3];
 
-        if(modo == 3)//enemigos
-        {
-                //for recorriendose cada valor comparando 
-                //indice 0 contiene el numero de valores
+            //Estos valores se corresponden con las componentes de la normal de la seccion del obstaculo donde colisiona la vision
+            recto[18] = perIzq[4];
+            recto[19] = perIzq[5]; 
+            recto[20] = perIzq[6];
         }
+        else recto[14] = 0;
 
         //eliminamos los punteros ya no son necesarios
         delete [] perDer;

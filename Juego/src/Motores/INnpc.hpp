@@ -8,7 +8,7 @@ using namespace std;
 class INnpc {
 
 public:
-    using VectorEspacial = struct
+    using VectorEspacial = struct Vector
     {
         float vX = 0.0f;
         float vY = 0.0f;
