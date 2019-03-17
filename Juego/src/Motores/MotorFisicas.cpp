@@ -513,7 +513,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
             }
         }
     }*/
-
+    //Colisiona la vision con el jugador
     if(modo == 0 || modo == 1)
     {
         bool colision = jugador->raycast(*rayo,intersection);
@@ -527,22 +527,10 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
             }
         }
     }
-    //if(intersection.body != jugador)
-    //   std::cout << "CuerpoColisionado: " << " Jugador" << std::endl;
+    //Colisiona la vision con los enemigos
     if(modo == 0 || modo == 3)
     {
         bool colision = false;
-        /*if(enemigos.size() > 0)//posiciones interpolacion
-        {
-            for(std::size_t i=0;i<enemigos.size();i++)
-            {
-                bool colision = enemigos[i]->raycast(*rayo,intersection);
-
-                if(intersection.body != enemigos[i])
-                    if(colision)
-                        ene[i+1] = 1;
-            }
-        }*/
         if(enemigos.size() > 0)//posiciones interpolacion
         {
             for(std::size_t i=0;i<enemigos.size();i++)
@@ -560,21 +548,10 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
         }
     }
 
-    // Ya no utilizar - MI
+    // Colisiona la vision con los obstaculos
     if(modo == 0 || modo == 2)
     {
         bool colision = false;
-        /*if(objetos.size() > 0)//posiciones interpolacion
-        {
-            for(std::size_t i=0;i<objetos.size();i++)
-            {
-                bool colision = objetos[i]->raycast(*rayo,intersection);
-
-                if(intersection.body != objetos[i])
-                    if(colision)
-                        obj[i+1] = 1;
-            }
-        }*/
         if(obstaculos.size() > 0)//posiciones interpolacion
         {
             unsigned int i = 0;

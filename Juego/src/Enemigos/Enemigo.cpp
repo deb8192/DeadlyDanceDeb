@@ -1281,7 +1281,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         {
             cout << "\e[42m Pide ayuda ID:\e[0m" <<id<< endl;
             //vamos a generar un sonido de ayuda
-            generarSonido(60,2,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
+            generarSonido(90,2,2); //un sonido que se propaga en 0.500 ms, 2 significa que es un grito de ayuda
             SetPedirAyuda(true); //En caso de no estar buscando a ningun aliado se anade este como peticionario
             return true;
         }
@@ -1429,7 +1429,7 @@ void Enemigo::Render(short pos,
     }
 
     _motor->dibujarObjetoTemporal(
-        posFisicas.x*2, posFisicas.y*2, posFisicas.z*2,
+        posActual.x, posActual.y, posActual.z,
         rotActual.x, rotActual.y, rotActual.z,
         3, 3, 3, 2
     );

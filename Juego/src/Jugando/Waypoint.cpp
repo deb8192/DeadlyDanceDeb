@@ -21,6 +21,7 @@ Waypoint::Waypoint(int ID_lectura, int x, int y, int z, int compartido, int* arr
         esCompartido = true;
     }
     else esCompartido = false;
+    _motor = MotorGrafico::GetInstance();
 }
 
 Waypoint::~Waypoint()
@@ -80,4 +81,12 @@ INdrawable::Posiciones Waypoint::GetPosicionWaypoint()
 vector <Waypoint*> Waypoint::GetConexiones()
 {
     return conexiones;
+}
+
+void Waypoint::Render()
+{
+    Constantes constantes;
+    _motor->dibujarObjetoTemporal(posicionWaypoint.x, posicionWaypoint.y, posicionWaypoint.z,
+    0.0f, 0.0f, 0.0f,
+    constantes.UNO, constantes.UNO, constantes.UNO, constantes.UNO);
 }

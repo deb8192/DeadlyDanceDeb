@@ -17,7 +17,7 @@
 	<!--Puerta--><Object Type="1" codigo="8" accion="3" ancho="4" largo="1" alto="10" RP="90" X="122" Y="0" Z="12" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
 	<!--Objeto--><Object Type="1" nombre="guitarra" ataque="15"  accion="2" ancho="4" largo="4" alto="10" X="43" Y="0" Z="50" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
 	<!--Objeto--><Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="43" Y="0" Z="-8" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>						
-	<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="1" ancho="4" largo="4" alto="1" X="0" Y="0" Z="0" conexiones="2"></Waypoint>
+	<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="1" ancho="4" largo="4" alto="1" X="48" Y="0" Z="0" conexiones="2"></Waypoint>
 	<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="2" ancho="4" largo="4" alto="1" X="-26" Y="0" Z="0" conexiones="1,3"></Waypoint>
 	<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="4" ancho="4" largo="4" alto="1" X="122" Y="0" Z="12" conexiones="1,5"></Waypoint>
 

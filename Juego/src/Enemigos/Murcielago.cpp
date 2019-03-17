@@ -154,7 +154,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
             break;
             case EN_BUSCA:  //El murcielago busca una zona oscura
                 
-                this->ver(constantes.DOS);
+                
                 if(!enZonaOscura)
                 {
                     VectorEspacial coordenadasZonaDestino;
@@ -176,6 +176,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                         enZonaOscura = true;
                     }
                 }
+                this->ver(constantes.DOS);
                 break;
             case EN_RECUPERA:  //El murcielago recupera vida en una zona oscura
                 if(enZonaOscura)
