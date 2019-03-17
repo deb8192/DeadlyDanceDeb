@@ -180,7 +180,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                     {
                         //Merodea poniendo en positivo o negativo el angulo actual de rotacion
                         int rota = rand() % 3 - 1;
-                        if (rota != 0 && !objetoAEsquivar)
+                        if (rota != 0)
                         {
                             rotation *= rota;
                         }
