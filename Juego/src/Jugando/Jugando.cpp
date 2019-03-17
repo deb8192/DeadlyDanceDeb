@@ -1449,10 +1449,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
             _auxiliadores.erase(_auxiliadores.begin());
         }
     }
-<<<<<<< HEAD
-=======
     auxiliarPathfinding++;
->>>>>>> 403bac44fef6564fc190906427deb96e519445be
 }
 
 void Jugando::EraseEnemigo(std::size_t i)
