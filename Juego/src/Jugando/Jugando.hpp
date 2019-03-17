@@ -95,8 +95,6 @@ class Jugando: public Estado {
         float drawTime, lastDrawTime;
         float atacktime; //tiempo de ejecucion del ataque
 
-        int id;//id para las figuras
-
         int cambia;
         int danyo, danyo2;
         int contadorEnem;
@@ -104,6 +102,11 @@ class Jugando: public Estado {
         //Comprobacion de powerup
         //int powerupYES = -1; //no se utiliza
         int int_cpw_aux; //no repetir el mismo objeto si esta uno encima de otro
+
+
+        // Variables temporales de Debug
+        float* posCofre = new float[3];
+
 
         /* No se utilizan:
         float dt, lastUpdateTime, updateTime;

@@ -130,7 +130,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float getTimeAt();
         float getLastTimeAt();
         const char* getRutaArmaEsp();
-
+        void cambiarCamara();
         int getDinero();
         void ModificarDinero(int monedas);
         void setDinero(int monedas);
@@ -157,9 +157,12 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         void atacarEspUpdBossComun(int* danyo, Enemigo* &_boss);
         virtual void armaAtacarEspecialUpd() = 0;
 
+        //estas variables son para el movimiento, giro de personaje y giro de la camara
         float ax = 1.0f,
               az = 20.0f,
               deg;
+        int gcam = 0;
+
         Arma* _armaEquipada;
         Arma* _armaEspecial;
         vector <Llave*> llaves;

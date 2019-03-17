@@ -12,7 +12,7 @@ class TMalla : public TEntidad
         //punteros a recursos
         RMalla * objetos;//diferentes frames para animaciones
         float frames_totales,mallas_totales,frame_inicial,frame_final,frame_actual,velocidad_animacion;
-
+        float actual_time;
     public:
         // Constructor y destructor
         TMalla(int ft);

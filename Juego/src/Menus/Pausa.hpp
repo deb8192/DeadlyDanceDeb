@@ -2,6 +2,7 @@
 #define PAUSA_HPP
 
 #include "../Estado.hpp"
+#include "../Motores/MotorAudio.hpp"
 
 class Pausa: public Estado {
     public:
@@ -23,5 +24,7 @@ class Pausa: public Estado {
         void reiniciarPartida();
         void atras();
         void salir();
+
+        MotorAudioSystem* _motora;
 };
 #endif /* PAUSA_HPP */

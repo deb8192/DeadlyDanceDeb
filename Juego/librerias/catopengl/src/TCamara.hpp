@@ -15,9 +15,9 @@ class TCamara : public TEntidad
 
     public:
         //constructor y destructor
-        TCamara();
+        TCamara(GLuint, GLuint);
         ~TCamara();
-        
+
         //gestion de propiedades
         void setPerspectiva();
         void setParalela();
@@ -30,7 +30,7 @@ class TCamara : public TEntidad
         void setCercano(float);//define el plano de recorte cercano
         void setLejano(float);//define el plano de recorte lejano
         void setTarget(float,float,float);//indica donde esta mirando la camara
-        void setUp(float,float,float);//0(hacia dentro)-1(hacia fuera) donde miran las normales por defecto 0,1,0 = x,y,z 
+        void setUp(float,float,float);//0(hacia dentro)-1(hacia fuera) donde miran las normales por defecto 0,1,0 = x,y,z
         void ActivarPerspectiva();//por defecto activo (activa la perspectica)
         void DesactivarPerspectiva();//desactiva la perpestiva, habilita ortho
         void setPantalla(float,float);//cambio resolucion pantalla

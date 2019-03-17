@@ -18,6 +18,10 @@ class Ventana
         bool EstaPulsada(short);//comprueba si la tecla esta pulsada
         bool MouseEstaPulsado(short);//comprueba que este pulsado alguna tecla o que se mueve
 
+        //devolver tamanyos de la ventana
+        short unsigned int getWidth();
+        short unsigned int getHeight();
+
     private:
 
         ~Ventana();//destructor
@@ -31,10 +35,11 @@ class Ventana
         float green = 0.0f;//verde para el fondo
         float blue = 0.0f;//azul para el fondo
         float alpha = 0.0f;//transparencia para el fondo
-        //posicion raton actual 
+        //posicion raton actual
         double MouseX = 0;
         double MouseY = 0;
-        
+
+        short unsigned int winwidth = 0,winheight = 0;
 
 };
 #endif
