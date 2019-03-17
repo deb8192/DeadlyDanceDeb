@@ -24,7 +24,6 @@ Enemigo::Enemigo()
     atacktime = 0.0f;
     pedirAyuda = false;
     contestar = false;
-    objetoAEsquivar = false;
     distanciaMinimaEsquivar = 3;
 }
 
@@ -77,7 +76,6 @@ Enemigo::~Enemigo()
     pos_ataques = 0;
     accionRealizada = false;
     contestar = false;
-    objetoAEsquivar = false;
     distanciaMinimaEsquivar = 0;
 
     // INnpc
