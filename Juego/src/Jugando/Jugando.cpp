@@ -548,7 +548,7 @@ void Jugando::UpdateIA()
     if(!_jugador->EstaMuerto() && (!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
      || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
     {
-        _jugador->generarSonido(constantes.CINCO * constantes.CINCO * constantes.CUATRO, constantes.CINCO, constantes.UNO);
+        _jugador->generarSonido(constantes.CINCO * constantes.SEIS, constantes.CINCO, constantes.UNO);
     }
 
     if (!enSalaBoss)
@@ -712,7 +712,14 @@ void Jugando::Render()
     {
         _zonas.at(i)->Render();
     }
+
+    //Dibujado waypoints
+    for(unsigned int i=0; i < _waypoints.size(); i++)
+    {
+        _waypoints.at(i)->Render();
+    }
     //_motor->clearDebug2(); //Pruebas debug
+
 
     _motor->RenderInterfaz(_interfaz->getEstado());
 
@@ -1379,12 +1386,13 @@ void Jugando::updateAtEsp()
 
 void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
 {
-    if(auxiliarPathfinding >= 20 || (contadorEnem > 0 && _enem == _enemPideAyuda))
+    if(auxiliarPathfinding >= 20 || (contadorEnem == 0 && _enem == _enemPideAyuda))
     {
         _auxiliadores.clear();
         enemDejarDePedirAyuda();
         _destinoPathFinding = nullptr;
         contadorEnem = 0;
+        auxiliarPathfinding = 0;
 
     }
     //Si enem no es nulo se anade a la cola de enemigos _auxiliadores
@@ -1395,7 +1403,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
         contadorEnem++;
     }
     //Si no hay sala de destino guardada, se guarda en este momento
-    else if(_destinoPathFinding == nullptr)
+    if(_destinoPathFinding == nullptr)
     {
         _destinoPathFinding = _enemPideAyuda->getSala();
     }
@@ -1404,7 +1412,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
     {
         while(!_auxiliadores.empty())
         {
-            if(_destinoPathFinding != _auxiliadores.front()->getSala() && _auxiliadores.front()->GetModo() != 8)
+            if(_destinoPathFinding != _auxiliadores.front()->getSala() && _auxiliadores.front()->GetModo() != 3)
             {
                 Pathfinder* path = Pathfinder::getInstance();
                 recorrido = path->encontrarCamino(_auxiliadores.front()->getSala(), _destinoPathFinding);
@@ -1425,6 +1433,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
             _auxiliadores.erase(_auxiliadores.begin());
         }
     }
+    auxiliarPathfinding++;
 }
 
 void Jugando::EraseEnemigo(std::size_t i)
