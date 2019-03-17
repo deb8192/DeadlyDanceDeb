@@ -68,7 +68,7 @@ CargadorNiveles::~CargadorNiveles()
     delete _primeraSala;
 }
 
-void CargadorNiveles::CargarNivelXml(int level, int tipoJug, int* id)
+void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
 {
     this->tipoJug = tipoJug;
 
@@ -96,7 +96,7 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug, int* id)
     vector <pugi::xml_node> anterior;
     anterior.push_back(primera.child("Platform"));
     vector <Sala* > padre;
-    Sala* sala = crearSala(anterior.back(),nullptr,id);//pasamos la primera parte para que busque plataformas
+    Sala* sala = crearSala(anterior.back(),nullptr);//pasamos la primera parte para que busque plataformas
 
 
     /*for (pugi::xml_node hijo = doc.child("Level").child("Light"); hijo; hijo = hijo.next_sibling("Light"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -113,7 +113,7 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug, int* id)
         while(plat != NULL)
         {
             padre.push_back(sala);
-            sala = crearSala(plat, padre.back(), id);
+            sala = crearSala(plat, padre.back());
             anterior.push_back(plat);
             plat = plat.child("Platform");
         }
@@ -188,7 +188,7 @@ void CargadorNiveles::GuardarNivelBin(int level)
     //llamamos a las datos desde nivel para almacenarlos en formato binario 
 }
 
-Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre, int* id)
+Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
 {
     Sala* padren = nullptr;//sala hijo
     
@@ -234,6 +234,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre, int* id)
                 _jugador = new Heavy(Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
                 break;
         }
+        _jugador->setID(++id);
     }
 
     for (pugi::xml_node enem = plat.child("Enemy"); enem; enem = enem.next_sibling("Enemy"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -250,9 +251,9 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre, int* id)
         
         if (enemigo >= 0)
         {
-            CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,padren,id); //cargamos el enemigo
+            CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,padren); //cargamos el enemigo
         } else {
-            CrearBoss(accion,enemigo,x,y,z,ancho,largo,alto,padren,id);
+            CrearBoss(accion,enemigo,x,y,z,ancho,largo,alto,padren);
         }
     }
     for (pugi::xml_node obj = plat.child("Object"); obj; obj = obj.next_sibling("Object"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -273,7 +274,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre, int* id)
         const char* nombre = obj.attribute("nombre").value(); //nos da un char[] = string
         const char* textura = obj.attribute("Texture").value(); //nos da un char[] = string
         const char* modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
-        CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL,id); //cargamos el enemigo
+        CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL); //cargamos el enemigo
     }
     for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
@@ -395,7 +396,7 @@ void CargadorNiveles::CrearLuz(int x,int y,int z)
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z, 
-    int ancho, int largo, int alto, Sala* sala, int* id)
+    int ancho, int largo, int alto, Sala* sala)
 {
     //accion indicara futuramente que tipo de enemigo sera (herencia)
     switch (enemigo)
@@ -406,12 +407,12 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
-            _ene->setID(++(*id));//le damos el id unico en esta partida al enemigo
+            _ene->setID(++id);//le damos el id unico en esta partida al enemigo
             _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
             _ene = nullptr;
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
-            std::string nameid = std::to_string(*id); //pasar id a string
+            std::string nameid = std::to_string(id); //pasar id a string
             _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
             _motora->getEvent(nameid)->setPosition(x,y,z);
             _motora->getEvent(nameid)->setVolume(0.4f);
@@ -424,10 +425,10 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             //ia
             ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
             _enemigos.push_back(ene);//guardamos el enemigo en el vector
-            _enemigos.back()->setID(++(*id));//le damos el id unico en esta partida al enemigo
+            _enemigos.back()->setID(++id);//le damos el id unico en esta partida al enemigo
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
-            std::string nameid = std::to_string(*id); //pasar id a string
+            std::string nameid = std::to_string(id); //pasar id a string
             _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
             _motora->getEvent(nameid)->setPosition(x,y,z);
             _motora->getEvent(nameid)->setVolume(0.4f);
@@ -449,7 +450,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     _enemigos.back()->setVelocidadMaxima(1.0f);
     _enemigos.back()->setBarraAtEs(0);
     _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
-    _enemigos.back()->setAtaque(10);
+    _enemigos.back()->setAtaque(5);
     _enemigos.back()->setArmaEspecial(100);
     _enemigos.back()->setTimeAtEsp(0.0f);
     _enemigos.back()->setDanyoCritico(50);
@@ -468,12 +469,12 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 }
 
 void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z, 
-    int ancho, int largo, int alto, Sala* sala, int* id)
+    int ancho, int largo, int alto, Sala* sala)
 {
     _boss = new MuerteBoss(x,y,z, 2000); // Posiciones, vida
     _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
     //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
-    _boss->setID(++(*id));//le damos el id unico en esta partida al enemigo
+    _boss->setID(++id);//le damos el id unico en esta partida al enemigo
 
     _boss->SetEnemigo(enemigo); // Se utiliza en UpdateBehavior()
     _boss->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
@@ -521,7 +522,7 @@ void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
-    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades,int* id)
+    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades)
 {
     int posicionObjeto;
 
@@ -541,7 +542,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
     {
         posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         Interactuable* _inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto,x,y,z);
-        _inter->setID(++(*id));
+        _inter->setID(++id);
         _inter->setPosiciones(x,y,z);
         _inter->SetPosicionArrayObjetos(posicionObjeto);
         _inter->setDesplazamientos(despX,despZ);
@@ -592,4 +593,9 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
         sala->AgregarWaypoint(_waypoints.back());
     }
     waypoint = nullptr;
+}
+
+int* CargadorNiveles::GetID()
+{
+    return &id;
 }

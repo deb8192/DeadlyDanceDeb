@@ -4,7 +4,7 @@
     <Root id="1" type="selector">
         <Composition id="2" type="secuencia">
             <Leaf id="3" type="tarea" action="oye" target="jugador">
-                <Blackboard task="escribe" info="pos-jugador"></Blackboard>
+                <Blackboard task="escribe" info="jugador"></Blackboard>
             </Leaf>
             <Leaf id="4" type="tarea" action="pide-ayuda" target="">
                 <Blackboard task="escribe" info="pos-ayuda"></Blackboard>
@@ -21,9 +21,9 @@
         </Composition>
         <Composition id="11" type="secuencia">   
             <Leaf id="12" type="tarea" action="oye" target="ayuda">
-                <Blackboard task="lee" info="pos-ayuda"></Blackboard>
+                <Blackboard task="lee" info="ayuda"></Blackboard>
             </Leaf>
-            <Leaf id="13" type="tarea" action="acude" target="pos-ayuda"></Leaf>
+            <Leaf id="13" type="tarea" action="acude" target="ayuda"></Leaf>
         </Composition>
     	<Composition id="14" type="selector">
 	    <Leaf id="15" type="tarea" action="curarse" target=""></Leaf>

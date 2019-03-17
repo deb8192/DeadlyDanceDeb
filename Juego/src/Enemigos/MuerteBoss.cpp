@@ -82,14 +82,12 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
                 {
                     if(!atacado)
                     {
-                        cout<<"intenta atacar"<<endl;
                         int danyo;
                         danyo = this->Atacar(-1);
                         
                         if(danyo > 0)
                         {
                             _jugador->ModificarVida(-danyo);
-                            cout<<"Ataca por la IA" <<endl;
                             funciona = true;
                             atacado = true;
                         }
@@ -150,7 +148,6 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
                 break;
 
             default:
-                cout<<"No hace nada"<<endl;
                 break;
         }
     }

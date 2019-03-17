@@ -72,8 +72,9 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
     Constantes constantes;
 
     funciona = true;
-    if(modo == constantes.UNO && _ordenes != nullptr)
+    if(modo == MODO_ATAQUE && _ordenes != nullptr)
     {
+        //Sale de la zona oscura
         if(enZonaOscura)
         {
             enZonaOscura = false;
@@ -83,6 +84,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
             case EN_PERSIGUE: //El Murcielago se mueve
                 {
                     funciona = this->perseguir(_jug);
+                    this->ver(constantes.DOS);
                 }
                 break;
         
@@ -95,7 +97,6 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                         if(danyo > 0)
                         {
                             _jugador->ModificarVida(-danyo);
-                            cout<<"Ataca por la IA" <<endl;
                             funciona = true;
                             atacado = true;
                         }
@@ -114,27 +115,46 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
         switch (_ordenes[0])
         {          
             case EN_OIR: //El Murcielago oye al jugador
-                {
-                    if(this->oir(constantes.UNO))
-                    {
-                        funciona = true;
-                    }
-                    else 
-                    {
-                        funciona = false;
-                    }
-                }
+                    switch(_ordenes[1])
+                        case EN_JUGADOR:
+                            if(this->oir(constantes.UNO))
+                            {
+                                funciona = true;
+                            }
+                            else 
+                            {
+                                funciona = false;
+                            }
+                            break;
+                        case EN_AYUDA:
+                            if(this->oir(constantes.DOS))
+                            {
+                                funciona = true;
+                            }
+                            else 
+                            {
+                                funciona = false;
+                            }
+                            break;
                 break;
             case EN_PIDE_AYUDA: //El Murcielago pide ayuda
                 {
-                    modo = MODO_ATAQUE;
-                    this->setTimeMerodear(constantes.CERO);
-                    cout<<"Pide ayuda a los aliados"<<endl;
-                    //this->PedirAyuda();
-                    funciona = true;
+                    if(modo != MODO_ATAQUE)
+                    {
+                        modo = MODO_ATAQUE;
+                        this->PedirAyuda(false);
+                        funciona = true;
+                    }
                 }
                 break;
+            case EN_ACUDE_AYUDA: //El Pollo oye un enemigo pedir ayuda
+            {
+                this->ContestarAyuda();
+            }
+            break;
             case EN_BUSCA:  //El murcielago busca una zona oscura
+                
+                
                 if(!enZonaOscura)
                 {
                     VectorEspacial coordenadasZonaDestino;
@@ -156,11 +176,11 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                         enZonaOscura = true;
                     }
                 }
+                this->ver(constantes.DOS);
                 break;
             case EN_RECUPERA:  //El murcielago recupera vida en una zona oscura
                 if(enZonaOscura)
                 {
-                    //uint8 vida = rand() % 5 + 1;
                     unsigned short vida = rand() % 5 + 1;
                     this->ModificarVida(vida);
                     funciona = true;
@@ -169,7 +189,6 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                 break;
             
             default:
-                cout<<"No hace nada"<<endl;
                 break;
         }
     }

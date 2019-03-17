@@ -4,11 +4,13 @@
 EstadoMuerte::EstadoMuerte()
 {
     _motor = MotorGrafico::GetInstance();
+    _motora = MotorAudioSystem::getInstance();
 }
 
 EstadoMuerte::~EstadoMuerte()
 {
     _motor = nullptr;
+    _motora = nullptr;
 }
 
 void EstadoMuerte::Iniciar()
@@ -81,6 +83,8 @@ void EstadoMuerte::borrarGUIResetearEvento(short id)
 
 void EstadoMuerte::menuPrincipal()
 {
+    _motora->getEvent("AmbienteGritos")->stop(); //Detener musica ambiente
+    _motora->getEvent("Nivel1")->stop(); //Detener musica Juego
     _motor->LimpiarElementosJuego();
     // Elimina todos los estados y anyade el de menu
     Juego::GetInstance()->estado.CambioDeJuegoAMenu();

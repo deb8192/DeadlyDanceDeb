@@ -16,7 +16,6 @@ class Murcielago : public Enemigo
     private:
         bool funciona, atacado, hecho, enZonaOscura;
         short int* _ordenes;
-        short int maxRotacion;
         short int direccion;
         Zona* zonaElegida;
 };
