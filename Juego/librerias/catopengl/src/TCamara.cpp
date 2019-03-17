@@ -1,15 +1,15 @@
 #include "TCamara.hpp"
 
 //constructor y destructor
-TCamara::TCamara()
+TCamara::TCamara(GLuint ww, GLuint wh)
 {
     didentidad = 'C'; //para sabe que funcion hace
     //valores por defecto
     esPerspectiva = true;
     cercano=0.1f;
     lejano=100.0f;
-    height=600.0f;
-    width=800.0f;
+    height=wh;
+    width=ww;
     setTarget(0.0f,0.0f,0.0f);
     setUp(0.0f,1.0f,0.0f);
     setPerspectiva();

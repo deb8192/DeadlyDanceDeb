@@ -497,6 +497,10 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 {
                     arrayTareaObjetivo[1] = 1;
                 }
+                else if(strcmp(objetivo, constantes.AYUDA))
+                {
+                    arrayTareaObjetivo[1] = 2;
+                }
                 else
                 {
                     arrayTareaObjetivo[1] = -1;
