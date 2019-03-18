@@ -11,6 +11,7 @@ TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale
     this->SetShader(sact);
     shader->Use();
     bool recurso = CargarTextura(archivo);
+    id = -1;
     if(recurso)
     {
         CargarMalla(pixx,pixy,escalado);
@@ -186,4 +187,19 @@ void TPlano::setScale(float s)
 void TPlano::endDraw()
 {
 
+}
+
+bool TPlano::Comprobar()
+{
+    if(id != -1)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+void TPlano::CambiarId(int newid)
+{
+    id = newid;
 }
