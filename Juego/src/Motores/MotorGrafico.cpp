@@ -18,6 +18,8 @@ MotorGrafico::MotorGrafico()
         Plataformas_Scena.reserve(100);//salas reservadas
         Luces_Scena.reserve(40);//luces reservadas
         Enemigos_Scena.reserve(50);//enemigos reservados
+        Textos_Scena.reserve(18);//textos estaticos en la escena o gui 
+
         camara = 0;
         _jugEscena = 0;
         debugGrafico = false;
@@ -409,7 +411,7 @@ void MotorGrafico::ActivarFuenteDefault()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-
+        //no se carga
     #else
         //codigo motor irrlicht
         _skin = _guienv->getSkin();
@@ -486,7 +488,9 @@ void MotorGrafico::CrearTexto(std::string texto, short x1, short y1, short x2, s
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        _interfaz->CrearTexto(texto.c_str(),x1,y1,x2);
+        unsigned short num = _interfaz->CrearTexto(texto,x1,y1);//crea el texto en pantalla con los valores por defecto 
+        Textos_Scena.push_back(num);//lo introducimos en la matriz de objetos
+
     #else
         //codigo motor irrlicht
         std::wstring widestr = std::wstring(texto.begin(), texto.end());
@@ -500,7 +504,7 @@ void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, s32 id,
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-
+        
     #else
         //codigo motor irrlicht
         _guienv->addButton(rect<s32>(x,y,x2,y2), 0, id, texto, texto2);

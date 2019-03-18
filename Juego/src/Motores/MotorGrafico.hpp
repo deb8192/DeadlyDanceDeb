@@ -335,6 +335,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Plataformas_Scena;//contiene las mmallas del suelo del juego
                 std::vector<unsigned short> Luces_Scena;//contiene las luces de la escena
                 std::vector<unsigned short> Enemigos_Scena;//contiene los enemigos reservados (ids)
+                std::vector<unsigned short> Textos_Scena;//contiene los enemigos reservados (ids)
+                
                 unsigned short _bossEscena;//id del boss
                 unsigned short _jugEscena;//id jugador
                 bool debugGrafico;//nos sirve para ver las zonas de colision
