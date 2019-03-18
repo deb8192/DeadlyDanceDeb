@@ -4,7 +4,7 @@
 int main()
 {
 	Juego::GetInstance();
-    Juego::GetInstance()->Iniciar();
+	Juego::GetInstance()->Iniciar();
 	cout << "\e[42m Cierre Juego \e[0m" << endl;
 	return 0; //retornamos cero de ejecucion correcta
 }

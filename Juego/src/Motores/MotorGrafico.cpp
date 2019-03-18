@@ -288,6 +288,7 @@ bool MotorGrafico::CrearVentana(short tipo)
             if(_interfaz == nullptr)
             {
                 _interfaz = new Interfaz();
+                CrearCamara();
             }
 
             std::string titulo = "";
@@ -391,7 +392,6 @@ void MotorGrafico::propiedadesDevice()
         //codigo motor catopengl
         
         _interfaz = new Interfaz;
-
         //esto solo con la interfaz, no tenemos accesos por separados a la interfaz del motor esta unificada
 
     #else
@@ -488,8 +488,8 @@ void MotorGrafico::CrearTexto(std::string texto, short x1, short y1, short x2, s
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        unsigned short num = _interfaz->CrearTexto(texto,x1,y1);//crea el texto en pantalla con los valores por defecto 
-        Textos_Scena.push_back(num);//lo introducimos en la matriz de objetos
+        //unsigned short num = _interfaz->CrearTexto(texto,x1,y1);//crea el texto en pantalla con los valores por defecto 
+        //Textos_Scena.push_back(num);//lo introducimos en la matriz de objetos
 
     #else
         //codigo motor irrlicht
@@ -504,7 +504,7 @@ void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, s32 id,
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        
+        _interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f);
     #else
         //codigo motor irrlicht
         _guienv->addButton(rect<s32>(x,y,x2,y2), 0, id, texto, texto2);
@@ -515,6 +515,7 @@ bool MotorGrafico::OcurreEvento(short event)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        return false;
     #else
         //codigo motor irrlicht
         return input.IsEventOn(event);
@@ -1940,6 +1941,7 @@ bool MotorGrafico::getPathfindingActivado()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        return false;
     #else
         //codigo motor irrlicht
         return pathfinding;
@@ -2204,6 +2206,7 @@ bool MotorGrafico::SeleccionarNodo()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        return false;
     #else
         //codigo motor irrlicht
         // check for a node being selected
@@ -2361,6 +2364,7 @@ bool MotorGrafico::finalCinematica()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        return false;
     #else
         //codigo motor irrlicht
         if(frame_actual >= 498)

@@ -499,9 +499,11 @@ bool Interfaz::IsMouseClick(short boton)
 void Interfaz::ChangeTargetCamara(unsigned short id, float x, float y, float z)
 {
     Nodo * nodo = buscarNodo(id);
-
-
-
+    if(nodo != nullptr)
+    {
+        TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);//nodo que contiene ttexto en el arbol
+        dynamic_cast<TCamara*>(tnodo->GetEntidad())->setTarget(x,y,z);//direc5 de memoria de TTexto
+    }
 }
 
 bool Interfaz::DetectarPulsacion(int did)
