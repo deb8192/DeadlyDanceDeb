@@ -32,10 +32,6 @@ bool RMalla::CargarRecurso(const char * _ruta)
 //Carga de frames
 bool RMalla::CargarAnimacion(const char * _ruta)
 {
-    //AQUI MIRAR EL NUMERO DE FRAMES (FICHEROS EN LA CARPETA CON EL MISMO NOMBRE Y .OBJ)
-    //numero de frames
-    //unsigned int objetos = 45;
-
     //Pasarlo a string
     std::string path = _ruta;
 
@@ -56,6 +52,8 @@ bool RMalla::CargarAnimacion(const char * _ruta)
 
         for(unsigned int i=1; i <= objetos; i++)
         {
+            cout << "Objeto " << i << ": " << endl;
+
             //Crear el string del numero de frames
             std::stringstream ss;
             ss << setw(6) << setfill('0') << i;
@@ -65,8 +63,6 @@ bool RMalla::CargarAnimacion(const char * _ruta)
             std::ostringstream newstring;
             newstring << directory << "/" << name << "_" << nframes << "." << ext;
             std::string pathfile = newstring.str();
-
-            cout << "Objeto " << i << ": " << endl;
 
             //Cargar mallas
             if(!CargarMalla(pathfile))
@@ -146,7 +142,6 @@ void RMalla::processNode(aiNode *node, const aiScene *scene)
     {
         processNode(node->mChildren[i], scene);
     }
-
 }
 
 //Procesar una malla
@@ -207,12 +202,12 @@ Mesh * RMalla::processMesh(aiMesh *mesh, const aiScene *scene)
     // Difusa: texture_diffuseN
     vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
     // Especular: texture_specularN
     vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
-    //No hay texturas, crear textura falsa de un color RGBA
-    if(textures.size() == 0)
+    if(diffuseMaps.size() == 0 && specularMaps.size() == 0)
     {
         //Mirar si ya existe la textura para no cargarla
         bool skip = false;
@@ -268,6 +263,7 @@ vector<Texture> RMalla::loadMaterialTextures(aiMaterial *mat, aiTextureType type
         mat->GetTexture(type, i, &str);
         // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
         bool skip = false;
+
         for(unsigned int j = 0; j < textures_loaded.size(); j++)
         {
             if(std::strcmp(textures_loaded.at(j)->path.data(), str.C_Str()) == 0)

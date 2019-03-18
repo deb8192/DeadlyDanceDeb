@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.073505
 illum 0
-map_Kd C:\Users\usuario\Pictures\Saved Pictures\untitled1.png
+map_Kd Paredes.png
 
 newmtl ParedOut
 Ns 96.078431
@@ -21,3 +21,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.073505
 illum 2
+map_Kd Paredes.png
