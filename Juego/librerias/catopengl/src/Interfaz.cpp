@@ -466,7 +466,7 @@ unsigned short Interfaz::CrearTexto(std::string texto, short x, short y)
     if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);//nodo que contiene ttexto en el arbol
-        dynamic_cast<TTexto*>(tnodo->GetEntidad())->CrearTexto(texto,x,y,50.0f,1.0f,1.0f,255.0f,255.0f,255.0f);//direc5 de memoria de TTexto
+        dynamic_cast<TTexto*>(tnodo->GetEntidad())->CrearTexto(texto,x,y,200.0f,1.0f,1.0f,0.0f,0.0f,0.0f);//direc5 de memoria de TTexto
     }
     else
     {

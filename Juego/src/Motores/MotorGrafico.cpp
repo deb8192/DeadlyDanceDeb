@@ -488,8 +488,8 @@ void MotorGrafico::CrearTexto(std::string texto, short x1, short y1, short x2, s
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        //unsigned short num = _interfaz->CrearTexto(texto,x1,y1);//crea el texto en pantalla con los valores por defecto 
-        //Textos_Scena.push_back(num);//lo introducimos en la matriz de objetos
+        unsigned short num = _interfaz->CrearTexto(texto,x1,y1);//crea el texto en pantalla con los valores por defecto 
+        Textos_Scena.push_back(num);//lo introducimos en la matriz de objetos
 
     #else
         //codigo motor irrlicht
