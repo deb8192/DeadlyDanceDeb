@@ -857,7 +857,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
          posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     }
 
-    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3);
+    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
 }
@@ -919,7 +919,7 @@ void Jugando::cargarCofres(int num)
                 inter = nullptr;
 
                 //Fisicas del cofre
-                _fisicas->crearCuerpo(3,constantes.CERO,newx/2,newy/2,newz/2,2,2,4,2,3);
+                _fisicas->crearCuerpo(3,constantes.CERO,newx/2,newy/2,newz/2,2,2,4,2,3,0,0);
 
                 //borrar del Array por que el proposito esta cumplido
                 if(_zonas[zonasDisponibles[numAlt]]->getTotalElementos() == _zonas[zonasDisponibles[numAlt]]->getElementosActuales())
@@ -984,7 +984,7 @@ void Jugando::ConectarWaypoints()
             //lo cargamos por primera vez en el motor de graficos
             _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->getObjeto(), _recolectables[rec_col]->getTextura());
             //lo cargamos por primera vez en el motor de fisicas
-            _fisicas->crearCuerpo(0,0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,2,_recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(), 9);
+            _fisicas->crearCuerpo(0,0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,2,_recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(), 9,0,0);
             //borramos el recolectable de nivel, _motor grafico y motor fisicas
             _recolectables.erase(_recolectables.begin() + rec_col);
             _motor->EraseColectable(rec_col);
@@ -1089,7 +1089,7 @@ void Jugando::AccionarMecanismo(int int_col)
             _motora->getEvent("CerrarPuerta")->setPosition(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ());
             _motora->getEvent("CerrarPuerta")->start();
             _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
-            _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), - _interactuables.at(int_col)->getRY(), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
+            _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(),_interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
             cout<<"Cierra la puerta"<<endl;
         }
     }
@@ -1144,7 +1144,7 @@ void Jugando::AccionarMecanismo(int int_col)
                 _motora->getEvent("AbrirPuerta")->setPosition(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ());
                 _motora->getEvent("AbrirPuerta")->start();
                 _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ());
-                _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX() + 100.0, _interactuables.at(i)->getRY(), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
+                _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
                 cout<<"Abre la puerta"<<endl;
             }
             else
@@ -1153,7 +1153,7 @@ void Jugando::AccionarMecanismo(int int_col)
                 _motora->getEvent("CerrarPuerta")->setPosition(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ());
                 _motora->getEvent("CerrarPuerta")->start();
                 _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ());
-                _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX(), - _interactuables.at(i)->getRY(), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
+                _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
                 cout<<"Cierra la puerta"<<endl;
             }
 
@@ -1206,7 +1206,7 @@ void Jugando::AccionarMecanismo(int int_col)
                 _motora->getEvent("CerrarPuerta")->setPosition(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ());
                 _motora->getEvent("CerrarPuerta")->start();
                 _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
-                _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), - _interactuables.at(int_col)->getRY(), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
+                _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
                 cout<<"Cierra la puerta"<<endl;
             }
         }

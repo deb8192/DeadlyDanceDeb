@@ -2,6 +2,7 @@
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 #include "../ConstantesComunes.hpp"
 #include <iostream>
+//#include <Matrix3x3.h>
 
 using namespace std;
 
@@ -102,9 +103,9 @@ MotorFisicas::~MotorFisicas()
     delete _unica_instancia;
 }
 
-void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator)
+void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator, float despX, float despZ)
 {
-    rp3d::Vector3 posiciones(px,py,pz);
+    rp3d::Vector3 posiciones(px+despX,py,pz+despZ); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
     rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
 
     Transform transformacion(posiciones,orientacion);
@@ -174,6 +175,8 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
                 deteccion = space->createCollisionBody(transformacion);
                 deteccion->addCollisionShape(detector,transformacion);
                 interactuables.push_back(deteccion);
+                //interAncho.push_back(ancho);
+                //interLargo.push_back(largo);
             }
             //Objetos que recoger como armas y llaves
             if(accion == 2)
@@ -718,12 +721,12 @@ void MotorFisicas::updatePuerta(float x, float y, float z, float rx, float ry, f
     Constantes constantes;
     if(obstaculos.at(i) != nullptr)
     {
-        rp3d::Vector3 posiciones(x,y,z);
-        //rp3d::Vector3 posiciones(x+(ry/abs(ry)*desplazamientos[0]),y,z-(ry/abs(ry))*desplazamientos[1]);
-        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
-        //rp3d::Quaternion orientacion = rp3d::Quaternion(x * sin((rx * constantes.DEG_TO_RAD) / 2.0), y * sin((ry * constantes.DEG_TO_RAD) / 2.0), z * sin((rz * constantes.DEG_TO_RAD) / 2.0), (cos(ry * constantes.DEG_TO_RAD) / 2.0)*(ry/abs(ry)));
+        rp3d::Vector3 posiciones((x+desplazamientos[0])/2,y,(z+desplazamientos[1])/2);
+        rp3d::Quaternion orientacion = rp3d::Quaternion(cos((ry * constantes.DEG_TO_RAD) / 2),posiciones*(sin((ry * constantes.DEG_TO_RAD) / 2)));
+       	
         Transform transformacion(posiciones,orientacion);
         obstaculos.at(i)->setTransform(transformacion);
+        
     }
 }
 

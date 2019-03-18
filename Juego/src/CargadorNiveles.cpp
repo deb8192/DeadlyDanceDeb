@@ -379,7 +379,7 @@ Sala* CargadorNiveles::CrearPlataforma(int accion, int rp, int x,int y,int z, in
     //cout << "\e[36m datos de la sala: \e[0m" << datos[0] << " " << datos[1]  << " " << datos[2] << " " << datos[3] << " " << datos[4] << endl;
     int nId = _motor->CargarPlataformas(rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     _sala->definirID(nId);
-    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,6);
+    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,6,0,0);
 
     if(!_primeraSala)
     {
@@ -463,9 +463,9 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     
     _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo());//creamos la figura
 
-    _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2);
-    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
-    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
+    _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0);
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
 }
 
 void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z, 
@@ -498,9 +498,9 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
 
     _motor->CargarBoss(x,y,z,_boss->GetModelo());//creamos la figura
 
-    _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,-1);
-    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,10); //Para ataque
-    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,11); //Para ataque especial
+    _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,-1,0,0);
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,10,0,0); //Para ataque
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,11,0,0); //Para ataque especial
 }
 
 //lo utilizamos para crear zonas
@@ -567,7 +567,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
          posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     }
 
-    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3);
+    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
 }

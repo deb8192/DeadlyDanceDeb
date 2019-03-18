@@ -14,7 +14,7 @@
 	<!--Modelo-Suelo--><Object Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="96" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat1.obj"></Object>
 	<!--Objeto--><Object Type="1" codigo="8" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="101" Y="0" Z="-11" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/Palanca.obj"></Object>	
 	<!--Base--><Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="101" Y="0" Z="-11" Texture="assets/texture/platform1.jpg" Model="assets/models/Base.obj"></Object>
-	<!--Puerta--><Object Type="1" codigo="8" accion="3" ancho="4" largo="1" alto="10" RP="90" X="122" Y="0" Z="12" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+	<!--Puerta--><Object Type="1" codigo="8" accion="3" ancho="1" largo="4" alto="10" RP="90" X="122" Y="0" Z="8" despX="0" despZ="2" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
 	<!--Objeto--><Object Type="1" nombre="guitarra" ataque="15"  accion="2" ancho="4" largo="4" alto="10" X="43" Y="0" Z="50" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
 	<!--Objeto--><Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="43" Y="0" Z="-8" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>						
 	<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="1" ancho="4" largo="4" alto="1" X="48" Y="0" Z="0" conexiones="2"></Waypoint>
@@ -49,7 +49,7 @@
 			<!--Pared-Rompible--><Object Type="1" accion="1" ancho="2" largo="12" alto="24" RP="0" X="264" Y="0" Z="62" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/animations/BreakWallSmall_000001.obj"></Object>
 			<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="277" Y="0" Z="65"></Zone>
 			<!--Objeto--><Object Type="1" codigo="1" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="269" Y="0" Z="5" Texture="assets/texture/platform1.jpg" Model="assets/models/llave.obj"></Object>
-			<!--Puerta--><Object Type="1" codigo="1" accion="3" ancho="4" largo="1" alto="10" RP="90" X="232" Y="0" Z="76" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+			<!--Puerta2--><Object Type="1" codigo="1" accion="3" ancho="4" largo="1" alto="10" RP="90" X="228" Y="0" Z="76" despX="2" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
 			<!--Objeto--><Object Type="1" codigo="8" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="196" Y="0" Z="-8" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/Palanca.obj"></Object>	
 			<!--Base--><Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="196" Y="0" Z="-8" Texture="assets/texture/platform1.jpg" Model="assets/models/Base.obj"></Object>
 			<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="6" ancho="4" largo="4" alto="1" X="170" Y="0" Z="12" conexiones="5,7"></Waypoint>
@@ -75,7 +75,7 @@
 					<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="292" Y="0" Z="82" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 					<!--Modelo-Suelo--><Object Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="316" Y="0" Z="90" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 	 				<!--Modelo-Suelo--><Object Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="330" Y="0" Z="128" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat2.obj"></Object>
-	 				<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="292" Y="0" Z="90" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+	 				<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="292" Y="0" Z="86" despX="0" despZ="2" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
 					<!--Objeto--><Object Type="1" codigo="2" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="330" Y="0" Z="120" Texture="assets/texture/platform1.jpg" Model="assets/models/llave.obj"></Object>
 					<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="10" ancho="4" largo="4" alto="1" X="292" Y="0" Z="90" conexiones="9,11"></Waypoint>
 					<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="11" ancho="4" largo="4" alto="1" X="318" Y="0" Z="116" conexiones="10,12"></Waypoint>
@@ -86,7 +86,7 @@
 						<!--Sala-06--><Platform Type="1" accion="0" ancho="24" largo="24" alto="4" RP="0" X="366" Y="0" Z="130" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat1.obj" UserStar="False" StarX="0" StarY="0">
 						<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="344" Y="0" Z="150" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 						<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="16" alto="24" RP="0" X="344" Y="0" Z="122" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
-						<!--Puerta--><Object Type="1" codigo="2" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="344" Y="0" Z="142" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+						<!--Puerta--><Object Type="1" codigo="2" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="344" Y="0" Z="138" despX="0" despZ="2" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
 						<!--Objeto--><Object Type="1" codigo="3" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="369" Y="0" Z="122" Texture="assets/texture/platform1.jpg" Model="assets/models/llave.obj"></Object>
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="12" ancho="4" largo="4" alto="1" X="344" Y="0" Z="142" conexiones="11,13"></Waypoint>
 						<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="13" ancho="4" largo="4" alto="1" X="366" Y="0" Z="130" conexiones="12,14"></Waypoint>
@@ -121,7 +121,7 @@
 	 				<!--Modelo-Suelo--><Object Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="229" Y="0" Z="376" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat4.obj"></Object>
 	 				<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="238" Y="0" Z="172" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 					<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="222" Y="0" Z="172" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
-					<!--Puerta2--><Object Type="1" codigo="3" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="230" Y="0" Z="172" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+					<!--Puerta2--><Object Type="1" codigo="3" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="226" Y="0" Z="172" despX="2" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
 					<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="18" ancho="4" largo="4" alto="1" X="230" Y="0" Z="172" conexiones="9,19"></Waypoint>
 					<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="19" ancho="4" largo="4" alto="1" X="229" Y="0" Z="292" conexiones="18,20"></Waypoint>
 					<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="20" ancho="4" largo="4" alto="1" X="192" Y="0" Z="300" conexiones="19,21"></Waypoint>
@@ -150,7 +150,7 @@
 						<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="7" alto="24" RP="0" X="266" Y="0" Z="281" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo2.obj"></Object>
 						<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="22" alto="24" RP="0" X="266" Y="0" Z="319" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo3.obj"></Object>
 						<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="284" Y="0" Z="322"></Zone>
-						<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="266" Y="0" Z="292" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+						<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="266" Y="0" Z="288" despX="0" despZ="2" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="22" ancho="4" largo="4" alto="1" X="266" Y="0" Z="292" conexiones="19,23"></Waypoint>
 						<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="23" ancho="4" largo="4" alto="1" X="299" Y="0" Z="308" conexiones="22,24"></Waypoint>
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="24" ancho="4" largo="4" alto="1" X="294" Y="0" Z="272" conexiones="23,25"></Waypoint>
@@ -168,7 +168,7 @@
 							<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="336" Y="0" Z="322" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 							<!--Modelo-Suelo--><Object Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="360" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 	 						<!--Modelo-Suelo--><Object Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="412" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat2.obj"></Object>
-	 						<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="336" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+	 						<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="336" Y="0" Z="326" despX="0" despZ="2" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="26" ancho="4" largo="4" alto="1" X="336" Y="0" Z="330" conexiones="23,27"></Waypoint>
 							<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="27" ancho="4" largo="4" alto="1" X="386" Y="0" Z="330" conexiones="26,28"></Waypoint>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="28" ancho="4" largo="4" alto="1" X="426" Y="0" Z="344" conexiones="27,29"></Waypoint>
@@ -179,7 +179,7 @@
 								<!--Objeto--><Object Type="1" codigo="4" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="425" Y="0" Z="422" Texture="assets/texture/platform1.jpg" Model="assets/models/llave.obj"></Object>
 								<!--Modelo-Suelo--><Object Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="414" Y="0" Z="366" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat1.obj"></Object>
 	 							<!--Modelo-Suelo--><Object Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="414" Y="0" Z="414" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat1.obj"></Object>
-	 							<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="426" Y="0" Z="344" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+	 							<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="422" Y="0" Z="344" despX="2" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
 								<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="28" ancho="4" largo="4" alto="1" X="426" Y="0" Z="344" conexiones="27,29"></Waypoint>
 								<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="29" ancho="4" largo="4" alto="1" X="414" Y="0" Z="390" conexiones="28,30"></Waypoint>
 								<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="30" ancho="4" largo="4" alto="1" X="388" Y="0" Z="414" conexiones="29,31"></Waypoint>
@@ -201,7 +201,7 @@
 										<!--Sala-16--><Platform Type="1" accion="0" ancho="24" largo="24" alto="4" RP="0" X="390" Y="0" Z="462" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat1.obj" UserStar="False" StarX="0" StarY="0">
 										<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="370" Y="0" Z="440" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 										<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="16" largo="2" alto="24" RP="90" X="398" Y="0" Z="440" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
-										<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="378" Y="0" Z="440" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+										<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="374" Y="0" Z="440" despX="2" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
 										<!--Objeto--><Object Type="1" codigo="5" nombre="palanca" accion="3" ancho="3" largo="1" alto="10" X="392" Y="0" Z="466" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/Palanca.obj"></Object>
 										<!--Base--><Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="392" Y="0" Z="466" Texture="assets/texture/platform1.jpg" Model="assets/models/Base.obj"></Object>	
 										<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="32" ancho="4" largo="4" alto="1" X="378" Y="0" Z="440"  conexiones="31,33"></Waypoint>
@@ -212,7 +212,7 @@
 										<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="346" Y="0" Z="388" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 										<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="362" Y="0" Z="388" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 										<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="16" largo="2" alto="24" RP="90" X="326" Y="0" Z="388" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
-										<!--Puerta2--><Object Type="1" codigo="5" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="354" Y="0" Z="388" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+										<!--Puerta2--><Object Type="1" codigo="5" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="350" Y="0" Z="388" despX="2" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
 										<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="337" Y="0" Z="375"></Zone>
 										<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="323" Y="0" Z="375"></Zone>
 										<!--Objeto--><Object Type="1" codigo="5" nombre="palanca" accion="3" ancho="3" largo="1" alto="10" X="360" Y="0" Z="370" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/Palanca.obj"></Object>
@@ -234,7 +234,7 @@
 						<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="192" Y="0" Z="390" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 						<!--Modelo-Suelo--><Object Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="168" Y="0" Z="398" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 	 					<!--Modelo-Suelo--><Object Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="116" Y="0" Z="398" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat2.obj"></Object>
-	 					<!--Puerta--><Object Type="1" codigo="4" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="192" Y="0" Z="398" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+	 					<!--Puerta--><Object Type="1" codigo="4" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="192" Y="0" Z="394" despX="0" despZ="2" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="36" ancho="4" largo="4" alto="1" X="192" Y="0" Z="398" conexiones="19,37"></Waypoint>
 						<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="37" ancho="4" largo="4" alto="1" X="142" Y="0" Z="398" conexiones="36,38"></Waypoint>
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="38" ancho="4" largo="4" alto="1" X="102" Y="0" Z="384" conexiones="37,39"></Waypoint>
@@ -244,7 +244,7 @@
 							<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="110" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 							<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="94" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 							<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="22" largo="2" alto="24" RP="90" X="137" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo3.obj"></Object>
-							<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="102" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+							<!--Puerta2--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="98" Y="0" Z="384" despX="2" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
 							<!--Objeto--><Object Type="1" codigo="6" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="146" Y="0" Z="339" Texture="assets/texture/platform1.jpg" Model="assets/models/llave.obj"></Object>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="38" ancho="4" largo="4" alto="1" X="102" Y="0" Z="384" conexiones="37,39"></Waypoint>
 							<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="39" ancho="4" largo="4" alto="1" X="125" Y="0" Z="352" conexiones="38,40"></Waypoint>
@@ -259,7 +259,7 @@
 								<!--Pared-Rompible--><Object Type="1" accion="1" ancho="2" largo="12" alto="24" RP="0" X="40" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/animations/BreakWallSmall_000001.obj"></Object>
 								<!--Objeto--><Object Type="1" codigo="7" nombre="palanca" accion="3" ancho="3" largo="1" alto="10" X="54" Y="0" Z="331" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/Palanca.obj"></Object>	
 								<!--Base--><Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="54" Y="0" Z="331" Texture="assets/texture/platform1.jpg" Model="assets/models/Base.obj"></Object>
-								<!--Puerta--><Object Type="1" codigo="6" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="88" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+								<!--Puerta--><Object Type="1" codigo="6" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="88" Y="0" Z="326" despX="0" despZ="2" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
 								<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="40" ancho="4" largo="4" alto="1" X="88" Y="0" Z="330" conexiones="39,41"></Waypoint>
 								<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="41" ancho="4" largo="4" alto="1" X="64" Y="0" Z="330" conexiones="40,42"></Waypoint>
 								<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="42" ancho="4" largo="4" alto="1" X="40" Y="0" Z="330" conexiones="41,43"></Waypoint>
@@ -280,7 +280,7 @@
 							<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="22" largo="2" alto="24" RP="90" X="137" Y="0" Z="412" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo3.obj"></Object>
 							<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="16" largo="2" alto="24" RP="90" X="82" Y="0" Z="412" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
 							<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="16" largo="2" alto="24" RP="90" X="50" Y="0" Z="412" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
-							<!--Puerta2--><Object Type="1" codigo="7" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="102" Y="0" Z="412" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
+							<!--Puerta2--><Object Type="1" codigo="7" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="98" Y="0" Z="412" despX="2" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta2.obj"></Object>
 							<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="85" Y="0" Z="470"></Zone>
 							<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="85" Y="0" Z="455"></Zone>
 							<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="106" Y="0" Z="470"></Zone>
@@ -289,7 +289,7 @@
 							<!--Base--><Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="146" Y="0" Z="423" Texture="assets/texture/platform1.jpg" Model="assets/models/Base.obj"></Object>
 							<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="158" Y="0" Z="482" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 							<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="158" Y="0" Z="498" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
-							<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="158" Y="0" Z="490" despX="0" despZ="0" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
+							<!--Puerta--><Object Type="1" codigo="0" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="158" Y="0" Z="486" despX="0" despZ="2" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="44" ancho="4" largo="4" alto="1" X="102" Y="0" Z="412" conexiones="37,45"></Waypoint>
 							<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="45" ancho="4" largo="4" alto="1" X="97" Y="0" Z="456" conexiones="44,46"></Waypoint>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="46" ancho="4" largo="4" alto="1" X="158" Y="0" Z="490" conexiones="45,47"></Waypoint>
