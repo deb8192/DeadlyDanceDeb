@@ -73,14 +73,14 @@ void TTexto::CargarFuente(std::string font, GLuint fontSize)
     FT_Done_FreeType(ft);
 }
 
-void TTexto::CrearTexto(std::string newtext, GLfloat xx, GLfloat yy, GLfloat xxe, GLfloat salto, GLfloat sc, float r, float g, float b)
+void TTexto::CrearTexto(std::string newtext, GLfloat xx, GLfloat yy, GLfloat MaxLongEnX, GLfloat salto, GLfloat escalado, float r, float g, float b)
 {
     texto = newtext;
     x = xx;
     y = yy;
-    endx = xxe;
+    endx = MaxLongEnX;
     salto_linea = salto;
-    scale = sc;
+    scale = escalado;
     color = glm::vec3(r, g, b);
 }
 

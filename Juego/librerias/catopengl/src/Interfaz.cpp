@@ -458,9 +458,22 @@ void Interfaz::DefinirVentana(short unsigned int width, short unsigned int heigh
     }
 }
 
-void Interfaz::CrearTexto(const char * texto, short x, short y, unsigned short tamayo)
+unsigned short Interfaz::CrearTexto(std::string texto, short x, short y)
 {
+    unsigned short idn = AddTexto("assets/fonts/arial.ttf",18);//se crea el texto con su tipo de fuente y tamaño inicial
+    Nodo * nodo = buscarNodo(idn);
 
+    if(nodo != nullptr)
+    {
+        TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);//nodo que contiene ttexto en el arbol
+        dynamic_cast<TTexto*>(tnodo->GetEntidad())->CrearTexto(texto,x,y,50.0f,1.0f,1.0f,255.0f,255.0f,255.0f);//direc5 de memoria de TTexto
+    }
+    else
+    {
+        return 0;
+    }
+
+    return idn;
 }
 
 bool Interfaz::IsKeyDown(short tecla)
@@ -489,4 +502,12 @@ void Interfaz::ChangeTargetCamara(unsigned short id, float x, float y, float z)
 
 
 
+}
+
+bool Interfaz::DetectarPulsacion(int did)
+{
+    //foreach de nodos a comprobar
+    //TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);//nodo que contiene ttexto en el arbol
+    //dynamic_cast<TPlano*>(tnodo->GetEntidad())->
+    return false;
 }
