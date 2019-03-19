@@ -316,6 +316,8 @@ bool MotorGrafico::CrearVentana(short tipo)
             }
         
             _interfaz->DefinirVentana(width,height,titulo.c_str());
+
+            return true;
     #else
         //codigo motor irrlicht
         std::string titulo = "";
@@ -499,12 +501,15 @@ void MotorGrafico::CrearTexto(std::string texto, short x1, short y1, short x2, s
     #endif  
 }
 
-void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, s32 id, 
+void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, signed int id, 
     const wchar_t* texto, const wchar_t* texto2)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        _interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f);
+        _interfaz->DeclararBoton(_interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f),id);
+        wstring ws(texto);
+        string str(ws.begin(),ws.end());
+        CrearTexto(str,(x+10),(y+5),0,0);
     #else
         //codigo motor irrlicht
         _guienv->addButton(rect<s32>(x,y,x2,y2), 0, id, texto, texto2);
@@ -515,7 +520,15 @@ bool MotorGrafico::OcurreEvento(short event)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        return false;
+        if(EstaPulsado(idsEventos::Enum::LMOUSE_PRESSED_DOWN))
+        {
+            return _interfaz->DetectarPulsacion(event);
+        }
+        else
+        {
+            return false;
+        }
+        
     #else
         //codigo motor irrlicht
         return input.IsEventOn(event);
@@ -538,63 +551,63 @@ bool MotorGrafico::EstaPulsado(short boton)
         //codigo motor catopengl
         switch(boton)
         {
-            case KEY_A:
+            case idsEventos::Enum::KEY_A:
                 return _interfaz->IsKeyDown(GLFW_KEY_A);
 
-            case KEY_S:
+            case idsEventos::Enum::KEY_S:
                 return _interfaz->IsKeyDown(GLFW_KEY_S);
 
-            case KEY_D:
+            case idsEventos::Enum::KEY_D:
                 return _interfaz->IsKeyDown(GLFW_KEY_D);
 
-            case KEY_W:
+            case idsEventos::Enum::KEY_W:
                 return _interfaz->IsKeyDown(GLFW_KEY_W);
 
-            case KEY_ESC:
+            case idsEventos::Enum::KEY_ESC:
                 return _interfaz->IsKeyDown(GLFW_KEY_ESCAPE);
 
-            case KEY_ESPACIO:
+            case idsEventos::Enum::KEY_ESPACIO:
                 return _interfaz->IsKeyDown(GLFW_KEY_SPACE);
 
-            case KEY_ACEPTAR:
+            case idsEventos::Enum::KEY_ACEPTAR:
                 return _interfaz->IsKeyDown(GLFW_KEY_ENTER);
 
-            case KEY_G_DEBUG:
+            case idsEventos::Enum::KEY_G_DEBUG:
                 return _interfaz->IsKeyDown(GLFW_KEY_G);//para modo debug
             
-            case KEY_1:
+            case idsEventos::Enum::KEY_1:
                 return _interfaz->IsKeyDown(GLFW_KEY_1);
             
-            case KEY_2:
+            case idsEventos::Enum::KEY_2:
                 return _interfaz->IsKeyDown(GLFW_KEY_2);
-            case KEY_P:
+            case idsEventos::Enum::KEY_P:
                 return _interfaz->IsKeyDown(GLFW_KEY_P);
 
-            case KEY_K:
+            case idsEventos::Enum::KEY_K:
                 return _interfaz->IsKeyDown(GLFW_KEY_K);
             
-            case KEY_C:
+            case idsEventos::Enum::KEY_C:
                 return _interfaz->IsKeyDown(GLFW_KEY_C);//activa pathdinding
             
-            case KEY_B:
+            case idsEventos::Enum::KEY_B:
                 return _interfaz->IsKeyDown(GLFW_KEY_B);
 
-            case RMOUSE_PRESSED_DOWN:
+            case idsEventos::Enum::RMOUSE_PRESSED_DOWN:
                 return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_RIGHT);
 
-            case LMOUSE_PRESSED_DOWN:
+            case idsEventos::Enum::LMOUSE_PRESSED_DOWN:
                 return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_LEFT);
 
-            case MOUSE_MOVED:
+            case idsEventos::Enum::MOUSE_MOVED:
                 return _interfaz->IsMouseClick(GLFW_MOUSE_MOVE);
 
-            case KEY_Q:
+            case idsEventos::Enum::KEY_Q:
                 return _interfaz->IsKeyDown(GLFW_KEY_Q);
 
-            case KEY_J:
+            case idsEventos::Enum::KEY_J:
                 return _interfaz->IsKeyDown(GLFW_KEY_J);//Para matar al jugador (16)
 
-            case KEY_E:
+            case idsEventos::Enum::KEY_E:
                 return _interfaz->IsKeyDown(GLFW_KEY_E);//actua una sola vez aunque se mantenga pulsado
         }
     #else
@@ -1986,7 +1999,7 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
 
 
 
-void MotorGrafico::BorrarBoton(s32 id)
+void MotorGrafico::BorrarBoton(signed int id)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
