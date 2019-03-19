@@ -203,3 +203,21 @@ void TPlano::CambiarId(int newid)
 {
     id = newid;
 }
+
+bool TPlano::botonPulsado(double * mouse)
+{
+    // cout << pixx << endl;
+    // cout << pixx+(width * escalado) << endl;
+    // cout << pixy << endl;
+    // cout << pixy+(height * escalado) << endl;
+    //Si el raton esta en rango
+    if(mouse[0] > pixx && mouse[0] < pixx+(width * escalado) && mouse[1] > pixy && mouse[1] < pixy+(height * escalado))
+        return true;
+
+    return false;
+}
+
+int TPlano::getID()
+{
+    return id;
+}
