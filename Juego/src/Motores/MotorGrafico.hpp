@@ -338,16 +338,22 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Luces_Scena;//contiene las luces de la escena
                 std::vector<unsigned short> Enemigos_Scena;//contiene los enemigos reservados (ids)
                 std::vector<unsigned short> Textos_Scena;//contiene los enemigos reservados (ids)
+                std::vector<unsigned short> Recolectables_Scena;//contiene los recolectables reservados (ids)
+                std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
+                std::vector<unsigned short> PowerUP_Scena;//contiene los power ups reservados (ids)
                 
                 unsigned short _bossEscena;//id del boss
                 unsigned short _jugEscena;//id jugador
                 bool debugGrafico;//nos sirve para ver las zonas de colision
                 unsigned short _armaEspJugador;//id del arma del jugador
-                
+                unsigned short _armaEnEscena;
+                unsigned short _armaEsp;//id del arma especial cargado en memoria
+               
                 // Ventana 
                 short WIDTH_AUX, WIDTH, HEIGHT;
                 short x_linea1, x_linea2;
                 unsigned short width, height;
+                int camx, camz, cams;
                 
             #else
                 //variables y parametros motor irrlicht

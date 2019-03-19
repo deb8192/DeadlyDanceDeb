@@ -78,7 +78,7 @@ void TTexto::CrearTexto(std::string newtext, GLfloat xx, GLfloat yy, GLfloat Max
     texto = newtext;
     x = xx;
     y = yy;
-    endx = MaxLongEnX;
+    endx = MaxLongEnX+xx;
     salto_linea = salto;
     scale = escalado;
     color = glm::vec3(r, g, b);
