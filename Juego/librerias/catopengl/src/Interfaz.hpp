@@ -67,6 +67,14 @@ class Interfaz
 
         bool DetectarPulsacion(int);//se le pasa el id del objeto o boton que se quiere comprobar si esta siendo pulsado por el raton
 
+        void DeshabilitarObjeto(unsigned short);//cuando se vaya a pintar los objetos deshabilitados no seran procesados
+
+        void HabilitarObjeto(unsigned short);//cuando se habilite sera procesado por el pintado
+
+        float * GetPosicion(unsigned short);
+
+        float * GetTarget(unsigned short);
+
     private:
 
         CatOpengl::Video::Ventana * window;

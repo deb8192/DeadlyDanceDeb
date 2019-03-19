@@ -19,11 +19,18 @@ MotorGrafico::MotorGrafico()
         Luces_Scena.reserve(40);//luces reservadas
         Enemigos_Scena.reserve(50);//enemigos reservados
         Textos_Scena.reserve(18);//textos estaticos en la escena o gui 
+        Recolectables_Scena.reserve(50);
+        Objetos_Scena.reserve(100);
+        PowerUP_Scena.reserve(50);
 
         camara = 0;
         _jugEscena = 0;
         debugGrafico = false;
         _bossEscena = 0;
+        _armaEnEscena = 0;
+        camx = 0;
+        camz = 30;
+        cams = -1;
 
     #else
         //codigo motor irrlicht
@@ -509,7 +516,7 @@ void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, signed int i
         _interfaz->DeclararBoton(_interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f),id);
         wstring ws(texto);
         string str(ws.begin(),ws.end());
-        CrearTexto(str,(x+10),(y+5),0,0);
+        CrearTexto(str,(x+25),(y+20),0,0);
     #else
         //codigo motor irrlicht
         _guienv->addButton(rect<s32>(x,y,x2,y2), 0, id, texto, texto2);
@@ -539,6 +546,7 @@ void MotorGrafico::ResetEvento(short event)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        //de momento nada
     #else
         //codigo motor irrlicht
         input.ResetEvento(event);
@@ -997,7 +1005,26 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        unsigned short _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,1);
 
+        if(_objetoEnEscena == 0)
+        {
+            _interfaz->Trasladar(_objetoEnEscena,(float)x,(float)y,(float)z);
+            _interfaz->Rotar(_objetoEnEscena,rp,0.0f,1.0f,0.0f);
+
+            if(accion == 4)
+            {
+                PowerUP_Scena.push_back(_objetoEnEscena);
+                return PowerUP_Scena.size() - 1;
+            }
+
+            //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
+            accion == 2 ?
+                Recolectables_Scena.push_back(_objetoEnEscena) :
+                Objetos_Scena.push_back(_objetoEnEscena);
+            
+            return Objetos_Scena.size() - 1;
+        }
 
     #else
         //codigo motor irrlicht
@@ -1011,8 +1038,8 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
 
             if(accion == 4)
             {
-            PowerUP_Scena.push_back(_objetoEnEscena);
-            return PowerUP_Scena.size() - 1;
+                PowerUP_Scena.push_back(_objetoEnEscena);
+                return PowerUP_Scena.size() - 1;
             }
 
             //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
@@ -1027,7 +1054,16 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
 void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
 {
     #ifdef WEMOTOR
+        
         //codigo motor catopengl
+        unsigned short _arma = _interfaz->AddMalla(ruta_objeto,1);
+
+        if(_arma != 0)
+        {
+            _armaEnEscena = _arma;
+            _interfaz->Trasladar(_armaEnEscena,(float)x,(float)y,(float)z);
+        }
+
     #else
         //codigo motor irrlicht
         IAnimatedMesh* _arma = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
@@ -1045,9 +1081,15 @@ void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+
+        _armaEsp = _interfaz->AddMalla(ruta_objeto,1);
+        _interfaz->DeshabilitarObjeto(_armaEsp);
+
     #else
+
         //codigo motor irrlicht
         _armaEsp = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+
     #endif 
 }
 
@@ -1055,6 +1097,14 @@ void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *rut
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        unsigned short recol = _interfaz->AddMalla(ruta_objeto,1);
+        
+        if(recol != 0)
+        {
+            _interfaz->Trasladar(recol,(float)x,(float)y,(float)z);
+            Recolectables_Scena.push_back(recol);
+        }
+
     #else
         //codigo motor irrlicht
         IAnimatedMesh* recol = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
@@ -1070,7 +1120,16 @@ void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *rut
 void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, float rz)
 {
     #ifdef WEMOTOR
+        
         //codigo motor catopengl
+        if(_armaEnEscena != 0)
+        {
+            _interfaz->Trasladar(_armaEnEscena,x,y,z);
+            _interfaz->Rotar(_armaEnEscena,rx,1,0,0);
+            _interfaz->Rotar(_armaEnEscena,ry,0,1,0);
+            _interfaz->Rotar(_armaEnEscena,rz,0,0,1);
+        }
+
     #else
         //codigo motor irrlicht
         if(_armaEnEscena)
@@ -1083,10 +1142,6 @@ void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, f
 
 void MotorGrafico::cambiarCamara()
 { 
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
         if(camx == 0)
         {
             cams *= -1;
@@ -1097,43 +1152,46 @@ void MotorGrafico::cambiarCamara()
         {
             camx = 0;
             camz = 30;
-        }
-    #endif        
+        }      
 }
 
 
 int MotorGrafico::getCamx()
 {
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
         return camx;
-    #endif 
 }
 int MotorGrafico::getCamz()
 {
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
         return camz;
-    #endif 
 }
 int MotorGrafico::getCams()
 {
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
         return cams;
-    #endif 
 }
 
 void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry, float rz)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        float * nodeCamPosition = _interfaz->GetPosicion(camara);
+        float * nodeCamTarget = _interfaz->GetTarget(camara);
+
+        // Centrar la camara
+        nodeCamPosition[0] = x+(camx*cams);
+        nodeCamPosition[1] = y+30;
+        nodeCamPosition[2] = z+(camz*cams);
+        nodeCamTarget[0] = x;
+        nodeCamTarget[1] = y;
+        nodeCamTarget[2] = z;
+
+        _interfaz->Trasladar(camara,nodeCamPosition[0],nodeCamPosition[1],nodeCamPosition[2]);
+        _interfaz->ChangeTargetCamara(camara,nodeCamTarget[0],nodeCamTarget[1],nodeCamTarget[2]);
+
+        _interfaz->Trasladar(_jugEscena,x,y,z);
+        _interfaz->Rotar(_jugEscena,rx,1,0,0);
+        _interfaz->Rotar(_jugEscena,ry,0,1,0);
+        _interfaz->Rotar(_jugEscena,rz,0,0,1);
+
     #else
         //codigo motor irrlicht
         // Variables de la camara
@@ -1160,6 +1218,13 @@ void MotorGrafico::mostrarBoss(float x, float y, float z, float rx, float ry, fl
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        if(_bossEscena != 0)
+        {
+            _interfaz->Trasladar(_bossEscena,x,y,z);
+            _interfaz->Rotar(_bossEscena,rx,1,0,0);
+            _interfaz->Rotar(_bossEscena,ry,0,1,0);
+            _interfaz->Rotar(_bossEscena,rz,0,0,1);
+        }
     #else
         //codigo motor irrlicht
         if(_bossEscena != nullptr)
@@ -1173,7 +1238,16 @@ void MotorGrafico::mostrarBoss(float x, float y, float z, float rx, float ry, fl
 void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
 {
     #ifdef WEMOTOR
+        
         //codigo motor catopengl
+        if(Enemigos_Scena.size() > 0 && Enemigos_Scena.size() > i && Enemigos_Scena[i] != 0)
+        {
+            _interfaz->Trasladar(Enemigos_Scena[i],x,y,z);
+            _interfaz->Rotar(Enemigos_Scena[i],rx,1,0,0);
+            _interfaz->Rotar(Enemigos_Scena[i],ry,0,1,0);
+            _interfaz->Rotar(Enemigos_Scena[i],rz,0,0,1);
+        }
+
     #else
         //codigo motor irrlicht
         if(Enemigos_Scena.size()>0 && Enemigos_Scena.size()>i && Enemigos_Scena[i] != nullptr)
