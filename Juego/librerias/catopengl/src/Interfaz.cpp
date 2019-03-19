@@ -462,11 +462,10 @@ unsigned short Interfaz::CrearTexto(std::string texto, short x, short y)
 {
     unsigned short idn = AddTexto("assets/fonts/arial.ttf",18);//se crea el texto con su tipo de fuente y tamaño inicial
     Nodo * nodo = buscarNodo(idn);
-
     if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);//nodo que contiene ttexto en el arbol
-        dynamic_cast<TTexto*>(tnodo->GetEntidad())->CrearTexto(texto,x,y,200.0f,1.0f,1.0f,0.0f,0.0f,0.0f);//direc5 de memoria de TTexto
+        dynamic_cast<TTexto*>(tnodo->GetEntidad())->CrearTexto(texto,x,y,300.0f,1.0f,1.0f,0.0f,0.0f,0.0f);//direc5 de memoria de TTexto
     }
     else
     {

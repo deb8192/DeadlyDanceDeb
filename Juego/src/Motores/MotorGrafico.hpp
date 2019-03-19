@@ -5,14 +5,16 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
 #ifdef WEMOTOR
     //motor catopengl
-    #include <Interfaz.hpp> 
+    #include <Interfaz.hpp>
+    #include "../Eventos.hpp"
 #else
     //motorirrlicht
     #include <irrlicht/irrlicht.h> //la utilizaremos para las funcionalidades del motor
+    #include "../Inputs.hpp"
 #endif
 
 //#include "../Eventos.hpp" //este archivo contiene los ids de los eventos
-#include "../Inputs.hpp" //
+
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
 #include <vector>//para los objetos en escena
@@ -189,7 +191,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void BorrarGui(); // borra todo lo que haya en la ventana relacionado con el gui
 
             void CrearTexto(std::string texto, short x1, short y1, short x2, short y2);
-            void CrearBoton(short x, short y, short x2, short y2, s32 id, 
+            void CrearBoton(short x, short y, short x2, short y2, signed int id, 
                 const wchar_t* texto, const wchar_t* texto2);
 
             // detecta si un evento de boton con un id pasado ha sido llamado
@@ -307,7 +309,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void RecolocarFicha(short y, short z);
             void ReiniciarHanoi();
 
-            void BorrarBoton(s32 id);
+            void BorrarBoton(signed int id);
 
             void RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame);
             bool finalCinematica();
