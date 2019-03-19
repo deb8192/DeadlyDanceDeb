@@ -506,10 +506,32 @@ void Interfaz::ChangeTargetCamara(unsigned short id, float x, float y, float z)
     }
 }
 
+//Le asigna una id a un plano para hacerlo un boton
+void Interfaz::DeclararBoton(unsigned short id, unsigned short newid)
+{
+    Nodo * nodo = buscarNodo(id);
+    if(nodo != nullptr)
+    {
+        TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);//nodo que contiene ttexto en el arbol
+        dynamic_cast<TPlano*>(tnodo->GetEntidad())->CambiarId(newid);//direc5 de memoria de TTexto
+    }
+}
+
+//Detectar pulsaciones de botones
 bool Interfaz::DetectarPulsacion(int did)
 {
-    //foreach de nodos a comprobar
-    //TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);//nodo que contiene ttexto en el arbol
-    //dynamic_cast<TPlano*>(tnodo->GetEntidad())->
+    for(unsigned int i = 0; i < imagenes.size(); i++)
+    {
+        TNodo * tnodo = imagenes[i]->GetNieto(1)->GetHijo(1);
+        if(dynamic_cast<TPlano*>(tnodo->GetEntidad())->Comprobar()) //Si la imagen es un boton
+        {
+            if(did == dynamic_cast<TPlano*>(tnodo->GetEntidad())->getID()) //Si es la misma id
+            {
+                double * datos = window->RecuperarPosicionesMouse();
+                if(dynamic_cast<TPlano*>(tnodo->GetEntidad())->botonPulsado(datos))//Si pulsas el boton
+                    return true;
+            }
+        }
+    }
     return false;
 }

@@ -63,6 +63,8 @@ class Interfaz
 
         void ChangeTargetCamara(unsigned short id, float x, float y, float z);//cambia donde apunta la camara
 
+        void DeclararBoton(unsigned short id, unsigned short newid);
+
         bool DetectarPulsacion(int);//se le pasa el id del objeto o boton que se quiere comprobar si esta siendo pulsado por el raton
 
     private:
