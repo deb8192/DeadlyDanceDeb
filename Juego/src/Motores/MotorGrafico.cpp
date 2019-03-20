@@ -821,8 +821,11 @@ void MotorGrafico::CrearCamara()
     #ifdef WEMOTOR
         //codigo motor catopengl
         camara = _interfaz->AddCamara();//creamos la camara
-        _interfaz->Trasladar(camara,0,20,-20);//movemos la camara
-        _interfaz->ChangeTargetCamara(camara,0,0,0);//enfocamos la camara al centro
+        if(camara != 0)
+        {
+            _interfaz->Trasladar(camara,0,20,-20);//movemos la camara
+            _interfaz->ChangeTargetCamara(camara,0,0,0);//enfocamos la camara al centro
+        }
     #else
         //codigo motor irrlicht
         //primer vector traslacion, segundo rotacion
@@ -846,10 +849,18 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short objeto = _interfaz->AddMalla(ruta_objeto,1);//instanciamos el objeto y lo agregamos a la escena
-        _interfaz->Trasladar(objeto,(float)x,(float)y,(float)z);//movemos el objeto
-        _interfaz->Rotar(objeto,(float)rp,(float)0,(float)1,(float)0);//giramos el objeto
-        Plataformas_Scena.push_back(objeto);//lo introducimos en la matriz de objetos
-        return (Plataformas_Scena.size()-1);//devolvemos el valor
+        if(objeto != 0)
+        {
+            _interfaz->Trasladar(objeto,(float)x,(float)y,(float)z);//movemos el objeto
+            _interfaz->Rotar(objeto,(float)rp,(float)0,(float)1,(float)0);//giramos el objeto
+            Plataformas_Scena.push_back(objeto);//lo introducimos en la matriz de objetos
+            return (Plataformas_Scena.size()-1);//devolvemos el valor
+        }
+        else
+        {
+            return -1;
+        }
+        
 
     #else
         //codigo motor irrlicht
@@ -877,8 +888,11 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
         
         //codigo motor catopengl
         unsigned short luz = _interfaz->AddLuz(1);//instanciamos el objeto y lo agregamos a la escena
-        _interfaz->Trasladar(luz,(float)x,(float)y,(float)z);//movemos el objeto
-        Luces_Scena.push_back(luz);//agregamos la luz
+        if(luz != 0)
+        {
+            _interfaz->Trasladar(luz,(float)x,(float)y,(float)z);//movemos el objeto
+            Luces_Scena.push_back(luz);//agregamos la luz
+        }
 
     #else
         //codigo motor irrlicht
@@ -1083,7 +1097,10 @@ void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto
         //codigo motor catopengl
 
         _armaEsp = _interfaz->AddMalla(ruta_objeto,1);
-        _interfaz->DeshabilitarObjeto(_armaEsp);
+        if(_armaEsp != 0)
+        {
+            _interfaz->DeshabilitarObjeto(_armaEsp);
+        }
 
     #else
 
@@ -1262,6 +1279,16 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+
+                
+        if(Objetos_Scena.size() > 0 && Objetos_Scena.size() > i && Objetos_Scena[i] != 0)
+        {
+            _interfaz->Trasladar(Objetos_Scena[i],x,y,z);
+            _interfaz->Rotar(Objetos_Scena[i],rx,1,0,0);
+            _interfaz->Rotar(Objetos_Scena[i],ry,0,1,0);
+            _interfaz->Rotar(Objetos_Scena[i],rz,0,0,1);
+        }
+
     #else
         //codigo motor irrlicht
         Objetos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
@@ -1273,6 +1300,8 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        
+
     #else
         //codigo motor irrlicht
         Constantes constantes;
