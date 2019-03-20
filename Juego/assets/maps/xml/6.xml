@@ -15,8 +15,6 @@
 	<!--Objeto--><Object Type="1" codigo="8" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="101" Y="0" Z="-11" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model="assets/models/Palanca.obj"></Object>	
 	<!--Base--><Object Type="1" accion="1" ancho="3" largo="2" alto="5" X="101" Y="0" Z="-11" Texture="assets/texture/platform1.jpg" Model="assets/models/Base.obj"></Object>
 	<!--Puerta--><Object Type="1" codigo="8" accion="3" ancho="1" largo="4" alto="10" RP="90" X="122" Y="0" Z="8" despX="0" despZ="2" Texture="assets/texture/Puerta.jpg" Model="assets/models/Puerta.obj"></Object>
-	<!--Objeto--><Object Type="1" nombre="guitarra" ataque="15"  accion="2" ancho="4" largo="4" alto="10" X="43" Y="0" Z="50" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
-	<!--Objeto--><Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="43" Y="0" Z="-8" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>						
 	<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="1" ancho="4" largo="4" alto="1" X="48" Y="0" Z="0" conexiones="2"></Waypoint>
 	<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="2" ancho="4" largo="4" alto="1" X="-26" Y="0" Z="0" conexiones="1,3"></Waypoint>
 	<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="4" ancho="4" largo="4" alto="1" X="122" Y="0" Z="12" conexiones="1,5"></Waypoint>
@@ -66,8 +64,6 @@
 				<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="10" ancho="4" largo="4" alto="1" X="292" Y="0" Z="90" conexiones="9,11"></Waypoint>
 				<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="18" ancho="4" largo="4" alto="1" X="230" Y="0" Z="172" conexiones="9,19"></Waypoint>
 				<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="10" X="254" Y="0" Z="142" Texture="" Model=""></Enemy>
-				<!--Objeto--><Object Type="1" nombre="arpa" ataque="12" accion="2" ancho="4" largo="4" alto="10" X="182" Y="0" Z="97" Texture="assets/texture/platform1.jpg" Model="assets/models/objeto2.obj"></Object>
-				<!--Objeto--><Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="182" Y="0" Z="115" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
 				<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="4" ancho="20" largo="20" alto="5" X="236" Y="0" Z="128"></Zone>			
 	
 					<!--Sala-05--><Platform Type="1" accion="0" ancho="26" largo="38" alto="4" RP="0" X="318" Y="0" Z="116" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
@@ -92,15 +88,13 @@
 						<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="13" ancho="4" largo="4" alto="1" X="366" Y="0" Z="130" conexiones="12,14"></Waypoint>
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="14" ancho="4" largo="4" alto="1" X="366" Y="0" Z="156" conexiones="13,15"></Waypoint>
 						<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="356" Y="0" Z="122" Texture="" Model=""></Enemy>									
-						<!--Objeto--><Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="372" Y="0" Z="132" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
-	
+						
 							<!--Sala-07--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="366" Y="0" Z="180" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 							<!--Pared-Rompible--><Object Type="1" accion="1" ancho="12" largo="2" alto="24" RP="90" X="366" Y="0" Z="156" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/animations/BreakWallSmall_000001.obj"></Object>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="14" ancho="4" largo="4" alto="1" X="366" Y="0" Z="156" conexiones="13,15"></Waypoint>
 							<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="15" ancho="4" largo="4" alto="1" X="366" Y="0" Z="180" conexiones="14,16"></Waypoint>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="16" ancho="4" largo="4" alto="1" X="380" Y="0" Z="194" conexiones="15,17"></Waypoint>
-							<!--Objeto--><Object Type="1" nombre="guitarra" ataque="25"  accion="2" ancho="4" largo="4" alto="10" X="366" Y="0" Z="184" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
-	
+							
 								<!--Sala-08--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="404" Y="0" Z="194" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 								<!--Pared-Rompible--><Object Type="1" accion="1" ancho="2" largo="12" alto="24" RP="0" X="380" Y="0" Z="194" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/animations/BreakWallSmall_000001.obj"></Object>
 								<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="420" Y="0" Z="194"></Zone>
@@ -133,7 +127,6 @@
 					<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="211" Y="0" Z="358" Texture="" Model=""></Enemy>									
 					<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="250" Y="0" Z="311" Texture="" Model=""></Enemy>
 					<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="232" Y="0" Z="330" Texture="" Model=""></Enemy>									
-					<!--Objeto--><Object Type="1" nombre="guitarra" ataque="25"  accion="2" ancho="4" largo="4" alto="10" X="256" Y="0" Z="402" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
 					<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="232" Y="0" Z="308"></Zone>	
 					<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="232" Y="0" Z="370"></Zone>	
 	
@@ -196,8 +189,7 @@
 									<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="31" ancho="4" largo="4" alto="1" X="366" Y="0" Z="414" conexiones="30,32"></Waypoint>
 									<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="32" ancho="4" largo="4" alto="1" X="378" Y="0" Z="440"  conexiones="31,33"></Waypoint>
 									<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="34" ancho="4" largo="4" alto="1" X="354" Y="0" Z="388"  conexiones="31,35"></Waypoint>
-									<!--Objeto--><Object Type="1" nombre="arpa" ataque="18" accion="2" ancho="4" largo="4" alto="10" X="366" Y="0" Z="402" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
-			
+									
 										<!--Sala-16--><Platform Type="1" accion="0" ancho="24" largo="24" alto="4" RP="0" X="390" Y="0" Z="462" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat1.obj" UserStar="False" StarX="0" StarY="0">
 										<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="370" Y="0" Z="440" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 										<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="16" largo="2" alto="24" RP="90" X="398" Y="0" Z="440" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
@@ -293,8 +285,7 @@
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="44" ancho="4" largo="4" alto="1" X="102" Y="0" Z="412" conexiones="37,45"></Waypoint>
 							<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="45" ancho="4" largo="4" alto="1" X="97" Y="0" Z="456" conexiones="44,46"></Waypoint>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="46" ancho="4" largo="4" alto="1" X="158" Y="0" Z="490" conexiones="45,47"></Waypoint>
-							<!--Objeto--><Object Type="1" nombre="guitarra" ataque="25"  accion="2" ancho="4" largo="4" alto="10" X="44" Y="0" Z="490" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
-				
+							
 									<!--Sala-23--><Platform Type="1" accion="0" ancho="61" largo="34" alto="4" RP="0" X="217" Y="0" Z="490" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 									<!--Sala final boss -->
 									<!--Decoracion-suelo--><Object Type="0" accion="7" ancho="0" largo="0" alto="24" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/DecoracionSalaBoss.obj"></Object>
