@@ -71,9 +71,9 @@ class Interfaz
 
         void HabilitarObjeto(unsigned short);//cuando se habilite sera procesado por el pintado
 
-        float * GetPosicion(unsigned short);
+        float * GetPosicion(unsigned short);//obtiene la posicion que tenga la transformacion
 
-        float * GetTarget(unsigned short);
+        float * GetTarget(unsigned short);//obtiene donde apunta la camara en el momento
 
     private:
 

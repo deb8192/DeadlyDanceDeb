@@ -80,3 +80,28 @@ float TEntidad::getTime()
 {
     return deltaTime;
 }
+
+void TEntidad::EsGui()
+{
+    gui = true;
+}
+
+void TEntidad::NoEsGui()
+{
+    gui = false;
+}
+
+bool TEntidad::GetGui()
+{
+    return gui;
+}
+
+void TEntidad::EsCamara()
+{
+    camara = true;
+}
+
+bool TEntidad::GetCamara()
+{
+    return camara;
+}

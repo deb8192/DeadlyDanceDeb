@@ -41,10 +41,11 @@ unsigned short Interfaz::AddCamara()
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(1,1,1);
+    escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
     //escalado al ser el nodo padre del objeto en cuestion (sea luz, camara, o malla), debe ser el que se le diga que no se ejecuta
+    escaladoEnt->EsCamara();
     escaladoEnt->NoEjecutar();
 
     TNodo * camara = new TNodo;
@@ -202,9 +203,10 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(1,1,1);
+    escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
+    escaladoEnt->EsGui();
     escaladoEnt->Ejecutar();
 
     TNodo * imagen = new TNodo;
@@ -253,9 +255,10 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(1,1,1);
+    escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
+    escaladoEnt->EsGui();
     escaladoEnt->Ejecutar();
 
     TNodo * texto = new TNodo;
@@ -426,12 +429,24 @@ void Interfaz::EliminarCamara(unsigned short)
 
 void Interfaz::LimpiarEscena()
 {
-
+    //limpia todos los elementos que no son gui
+    if(_raiz != nullptr)
+    {
+        _raiz->BorrarEscena();
+    }
 }
 
 void Interfaz::LimpiarGui()
 {
-
+    //limpia todos los elementos gui
+    if(_raiz != nullptr)
+    {
+        _raiz->BorrarGui();
+        imagenes.resize(0);
+        imagenes.reserve(20);
+        textos.resize(0);
+        textos.reserve(20);
+    }
 }
 
 void Interfaz::CambiarFondo(float r, float g, float b,float a)
