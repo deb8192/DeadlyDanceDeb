@@ -376,6 +376,8 @@ void Jugando::Update()
     this->updateAtEsp();
     this->updateAt(&danyo2);
     
+
+    
     if (!enSalaBoss)
     {
         for(unsigned int i = 0; i < _enemigos.size(); i++)
@@ -1052,14 +1054,11 @@ void Jugando::DejarObjeto()
 }
 
 /*********** AccionarMecanismo ***********
-*  Funcion que, en funcion del valor codigo
-*  del interactuable al que apunte int_col,
-*  si es -1 abre un cofre, si es 0 abre una puerta
+*  Funcion que, en funcion del valor codigo obtenida
+*  del vector interactuable en la posicion int_col,
+*  si codigo es -1 abre un cofre, 0 abre una puerta
 *  sin llave y si es mayor que 0 abrira la puerta
 *  indicada si el jugador tiene su llave.
-*       Entradas:
-*                int_col: indicador del elemento en el vector de interactuables
-*       Salidas:
 */
 void Jugando::AccionarMecanismo(int int_col)
 {
@@ -1081,7 +1080,6 @@ void Jugando::AccionarMecanismo(int int_col)
             _motora->getEvent("AbrirPuerta")->start();
             _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
             _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos() , posicion);
-            cout<<"Abre la puerta"<<endl;
         }
         else
         {
@@ -1090,7 +1088,6 @@ void Jugando::AccionarMecanismo(int int_col)
             _motora->getEvent("CerrarPuerta")->start();
             _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
             _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(),_interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
-            cout<<"Cierra la puerta"<<endl;
         }
     }
     else if(_interactuables.at(int_col)->getCodigo() == -1)
@@ -1100,7 +1097,6 @@ void Jugando::AccionarMecanismo(int int_col)
         {
           //Se abre el cofre (Animacion)
           _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY(), _interactuables.at(int_col)->getRZ() + 80.0);
-          cout << "Abres el cofre" << endl;
           _interactuables.at(int_col)->accionar();
 
           //Crear objeto aleatorio
@@ -1145,7 +1141,6 @@ void Jugando::AccionarMecanismo(int int_col)
                 _motora->getEvent("AbrirPuerta")->start();
                 _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ());
                 _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
-                cout<<"Abre la puerta"<<endl;
             }
             else
             {
@@ -1154,20 +1149,17 @@ void Jugando::AccionarMecanismo(int int_col)
                 _motora->getEvent("CerrarPuerta")->start();
                 _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ());
                 _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
-                cout<<"Cierra la puerta"<<endl;
             }
 
             if(activar)
             {
                 //Se abre/acciona la puerta / el mecanismo
                 _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY(), _interactuables.at(int_col)->getRZ()+50);
-               cout<<"Acciona la palanca"<<endl;
             }
             else
             {
                 //Se cierra/desacciona la puerta / el mecanismo
                 _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY(), _interactuables.at(int_col)->getRZ()-50);
-                cout<<"Desacciona la palanca"<<endl;
             }
         }
     }
@@ -1187,7 +1179,6 @@ void Jugando::AccionarMecanismo(int int_col)
         }
         if(coincide)
         {
-            cout<<"Tiene la llave para abrir la puerta"<<endl;
             //Se acciona o desacciona el mecanismo segun su estado actual
             bool abrir = _interactuables.at(int_col)->accionar();
             unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(int_col);
@@ -1198,7 +1189,6 @@ void Jugando::AccionarMecanismo(int int_col)
                 _motora->getEvent("AbrirCerradura")->start();
                 _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
                 _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
-                cout<<"Abre la puerta"<<endl;
             }
             else
             {
@@ -1207,8 +1197,7 @@ void Jugando::AccionarMecanismo(int int_col)
                 _motora->getEvent("CerrarPuerta")->start();
                 _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
                 _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
-                cout<<"Cierra la puerta"<<endl;
-            }
+                }
         }
     }
 }

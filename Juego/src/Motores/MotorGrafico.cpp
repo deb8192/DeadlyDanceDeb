@@ -1033,11 +1033,18 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             }
 
             //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
-            accion == 2 ?
-                Recolectables_Scena.push_back(_objetoEnEscena) :
+            if(accion == 2)
+            {
+                Recolectables_Scena.push_back(_objetoEnEscena);              
+                return Recolectables_Scena.size() - 1;    
+            }
+            else
+            {
                 Objetos_Scena.push_back(_objetoEnEscena);
+                return Objetos_Scena.size() - 1;
+            }
+                
             
-            return Objetos_Scena.size() - 1;
         }
 
     #else
@@ -1057,11 +1064,18 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             }
 
             //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
-            accion == 2 ?
-                Recolectables_Scena.push_back(_objetoEnEscena) :
+            if(accion == 2)
+            {
+                Recolectables_Scena.push_back(_objetoEnEscena);              
+                return Recolectables_Scena.size() - 1;    
+            }
+            else
+            {
                 Objetos_Scena.push_back(_objetoEnEscena);
+                return Objetos_Scena.size() - 1;
+            }
         }
-        return Objetos_Scena.size() - 1;
+        
     #endif 
 }
 
