@@ -1088,6 +1088,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             int* destino = new int[6];
             if(loqueve != nullptr)
             {
+                //Ve algo en la lejania de su visor central
                 if(loqueve[0] == 1)
                 {   
                     VectorEspacial vectorDistancia;
@@ -1095,60 +1096,72 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     vectorDistancia.vY = loqueve[2] - posActual.y;
                     vectorDistancia.vZ = loqueve[3] - posActual.z;
                     vectorDistancia.modulo = sqrt(pow(vectorDistancia.vX, constantes.DOS) + pow(vectorDistancia.vY, constantes.DOS) + pow(vectorDistancia.vZ, constantes.DOS));                
+                    //Si entra aqui dentro es que detecta un obstaculo con su visor izquierdo
                     if(loqueve[7] == 1)
                     {
+                        //Si entra aqui dentro es que detecta un obstaculo por delante con los visores laterales
                         if(loqueve[14] == 1)
                         {
+                            //Coordenadas del punto de obstaculo
                             destino[0] = loqueve[1];
                             destino[1] = loqueve[2];
                             destino[2] = loqueve[3];
+                            //Valores del vector Normal
                             destino[3] = loqueve[4];
                             destino[4] = loqueve[5];
                             destino[5] = loqueve[6];
 
-                            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
-
+                            //Creamos un vector con una nueva direccion normalizando el vector director anterior y sumandole la normal del obstaculo
                             VectorEspacial vectorDirector = this->normalizarVector(destino);
+                            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
                             vectorDirector.vZ < 0 ?
                                 rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
                                 rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
                             cout<<"COLISIONA POR DELANTE"<<endl;
                         }
+                        //Si entra aqui dentro es que detecta un obstaculo con su visor derecho
                         else
                         { 
+                            //Coordenadas del punto de obstaculo
                             destino[0] = loqueve[8];
                             destino[1] = loqueve[9];
                             destino[2] = loqueve[10];
+                            //Valores del vector Normal
                             destino[3] = loqueve[11];
                             destino[4] = loqueve[12];
                             destino[5] = loqueve[13];
 
-                            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
-
+                            //Creamos un vector con una nueva direccion normalizando el vector director anterior y sumandole la normal del obstaculo
                             VectorEspacial vectorDirector = this->normalizarVector(destino);
+                            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
                             vectorDirector.vZ < 0 ?
                                 rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
                                 rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
                             cout<<"COLISIONA POR LA IZQUIERDA"<<endl;
                         }
                     }
+                    //Si entra aqui dentro es que detecta un obstaculo con su visor derecho                    
                     else if(loqueve[14] == 1)
                     {
+                        //Coordenadas del punto de obstaculo
                         destino[0] = loqueve[15];
                         destino[1] = loqueve[16];
                         destino[2] = loqueve[17];
+                        //Valores del vector Normal
                         destino[3] = loqueve[18];
                         destino[4] = loqueve[19];
                         destino[5] = loqueve[20];
 
-                        //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
-
+                        //Creamos un vector con una nueva direccion normalizando el vector director anterior y sumandole la normal del obstaculo
                         VectorEspacial vectorDirector = this->normalizarVector(destino);
+                        //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
                         vectorDirector.vZ < 0 ?
                             rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
                             rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
                         cout<<"COLISIONA POR LA DERECHA"<<endl;
                     }
+                    //Si entra aquí es que los visores laterales no detectan nada pero si el visor central
+                    //y el enemigo en cuestion esta muy cerca del obstaculo que debe esquivar
                     else if(vectorDistancia.modulo <= distanciaMinimaEsquivar)
                     {
                         destino[0] = loqueve[1];
@@ -1158,9 +1171,9 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                             destino[4] = loqueve[5];
                             destino[5] = loqueve[6];
 
-                            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
-
+                            //Creamos un vector con una nueva direccion normalizando el vector director anterior y sumandole la normal del obstaculo
                             VectorEspacial vectorDirector = this->normalizarVector(destino);
+                            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
                             vectorDirector.vZ < 0 ?
                                 rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
                                 rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
@@ -1174,7 +1187,10 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             }
             delete loqueve;
         }
-
+        if(tipo == 3) //Ves algun enemigo?
+        {
+            
+        }
         return false;
     }
 
@@ -1366,7 +1382,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         vectorDirector.vY /= vectorDirector.modulo;
         vectorDirector.vZ /= vectorDirector.modulo;
         
-        //Se obtiene la nueva direccion del movimiento sumando las componentes de la normal de la pared con las del vector director
+        //Se obtiene la nueva direccion del movimiento sumando las componentes de la normal del obstaculo con las del vector director
         vectorDirector.vX += destino[3];
         vectorDirector.vY += destino[4];
         vectorDirector.vZ += destino[5];
