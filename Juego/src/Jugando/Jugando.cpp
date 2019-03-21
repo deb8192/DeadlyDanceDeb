@@ -85,16 +85,16 @@ void Jugando::Iniciar()
     _interfaz = InterfazJugador::getInstance();
 
     _motor->CargarInterfaz();
-    
+
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
     CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
-    
+
     //TO DO: hacerle un reserve:
     //_auxiliadores.reserve(xx);
     //recorrido.reserve(xx);
 
     reiniciando = false;
-    
+
     ValoresPorDefecto();
 
     _motor->CrearCamara();
@@ -126,7 +126,7 @@ void Jugando::ValoresPorDefectoJugador()
     float xIni = _jugador->getIniX();
     float yIni = _jugador->getIniY();
     float zIni = _jugador->getIniZ();
-    
+
     jugadorInmovil = false;
     _jugador->setDinero(0);
     _jugador->setVida(_jugador->getVidaIni());
@@ -166,9 +166,9 @@ void Jugando::PosicionesIniEnemigos()
     for(short i=0; i < tam; i++)
     {
         Enemigo* _ene = _enemigos.at(i);
-        _ene->setPosiciones(_ene->getIniX(), 
+        _ene->setPosiciones(_ene->getIniX(),
             _ene->getIniY(), _ene->getIniZ());
-        
+
         _ene->setVida(_ene->getVidaIni());
 
         _ene = nullptr;
@@ -186,9 +186,9 @@ void Jugando::PosicionesIniEnemigos()
 
 void Jugando::ManejarEventos() {
     // ESC o P para abrir menu de pausa
-    if (_motor->EstaPulsado(KEY_ESC) || 
+    if (_motor->EstaPulsado(KEY_ESC) ||
         _motor->EstaPulsado(KEY_P)) {
-        
+
         _motor->ResetKey(KEY_ESC);
         _motor->ResetKey(KEY_P);
         Juego::GetInstance()->estado.CambioEstadoPausa();
@@ -202,7 +202,7 @@ void Jugando::ManejarEventos() {
         _jugador->cambiarCamara();
         _motor->ResetKey(KEY_1);
     }
-    
+
     /* *********** Teclas para probar cosas *************** */
     // Camara libre
     /*if (_motor->EstaPulsado(KEY_H))
@@ -211,7 +211,7 @@ void Jugando::ManejarEventos() {
         camLibre = !camLibre;
 
         if (camLibre)
-            _motor->IniCamLibre(_jugador->getX(), 
+            _motor->IniCamLibre(_jugador->getX(),
                 _jugador->getY(), _jugador->getZ());
     }*/
 
@@ -248,7 +248,7 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_B);
     }
     /* **************************************************** */
-    
+
     //cambia se utiliza porque coge y suelta el objeto sucesivamente varias veces, la causa de este error
     //era porque ocurren varias iteraciones del bucle tal vez porque la interpolacion crea mas iteraciones en el bucle
     if(_motor->EstaPulsado(KEY_E))
@@ -318,21 +318,56 @@ void Jugando::Update()
         DesactivarDebug();
         Juego::GetInstance()->estado.CambioEstadoMuerte();
     }
-    
-        
+
+
     // ********** se actualiza posiciones e interpolado **********
     //animacion
     _motor->cambiarAnimacionJugador(_jugador->getAnimacion());
 
     if(_jugador->getArma() != nullptr)
     {
+        //Ataque Animacion
+        if(strcmp(_jugador->getArma()->getNombre(),"guitarra") == 0)
+        {
+            if(_jugador->getTimeAt() == 1.5f)
+            {
+                mov_weapon_rotX = -90;
+                mov_weapon_posX = 3.5;
+                mov_weapon_posZ = 3.5;
+                mov_weapon_posY = 4.5;
+            }
+            else if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() < 1.5f)
+            {
+                if(mov_weapon_rotX < 0)mov_weapon_rotX += 15;
+                if(mov_weapon_posY > 0)mov_weapon_posY -= 0.7;
+                if(mov_weapon_posX < 5.5)mov_weapon_posX += 0.3;
+                if(mov_weapon_posZ < 5.5)mov_weapon_posZ += 0.3;
+            }
+            else
+            {
+                mov_weapon_posX=-1.5;
+                mov_weapon_posZ=-1.5;
+                mov_weapon_posY=3.3;
+                mov_weapon_rotX=90;
+            }
+        }
+        else if(strcmp(_jugador->getArma()->getNombre(),"arpa") == 0)
+        {
+            mov_weapon_posX=-1;
+            mov_weapon_posZ=-1;
+            mov_weapon_posY=2.3;
+            mov_weapon_rotX=90;
+        }
+
         //METERLE LA FUNCION AL JUGADOR
-        float posArmaX = 5*  sin(constantes.PI*  _jugador->getRY() / constantes.PI_RADIAN) + _jugador->getX();
-        float posArmaZ = 5*  cos(constantes.PI*  _jugador->getRY() / constantes.PI_RADIAN) + _jugador->getZ();//iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
+        float posArmaX = mov_weapon_posX*  sin(constantes.PI*  _jugador->getRY() / constantes.PI_RADIAN) + _jugador->getX();
+        float posArmaZ = mov_weapon_posZ*  cos(constantes.PI*  _jugador->getRY() / constantes.PI_RADIAN) + _jugador->getZ();//iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
         _jugador->getArma()->setPosiciones(posArmaX, _jugador->getY()+3, posArmaZ);
         //!METERLE LA FUNCION AL JUGADOR
-        _motor->llevarObjeto(posArmaX, _jugador->getY()+3,posArmaZ, _jugador->getRX(), _jugador->getRY(), _jugador->getRZ() );
-        _fisicas->llevarBox(posArmaX, _jugador->getY()+3,posArmaZ, _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto());
+
+       _motor->llevarObjeto(posArmaX, _jugador->getY()+mov_weapon_posY,posArmaZ, _jugador->getRX()+mov_weapon_rotX, _jugador->getRY(), _jugador->getRZ() );
+       _fisicas->llevarBox(posArmaX, _jugador->getY()+mov_weapon_posY,posArmaZ, _jugador->getArma()->getAncho()+mov_weapon_rotX, _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto());
+
     }
 
     //Comprueba la activacion de un powerup
@@ -347,7 +382,7 @@ void Jugando::Update()
         _jugador->getNewY(),
         _jugador->getNewZ()
     );
-    
+
     if (enSalaBoss) {
         //colisiones con todos los objetos y el boss
         jugadorInmovil = _jugador->ColisionEntornoBoss();
@@ -355,7 +390,7 @@ void Jugando::Update()
         //colisiones con todos los objetos y enemigos que no se traspasan
         jugadorInmovil = _jugador->ColisionEntornoEne();
     }
-    
+
     // Actualizar movimiento del jugador
     _jugador->movimiento(jugadorInmovil,
         _motor->EstaPulsado(KEY_A),
@@ -371,13 +406,13 @@ void Jugando::Update()
 
     //Posicion de escucha
     _motora->setListenerPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
-    
+
     //Actualizar ataque especial
     this->updateAtEsp();
     this->updateAt(&danyo2);
-    
 
-    
+
+
     if (!enSalaBoss)
     {
         for(unsigned int i = 0; i < _enemigos.size(); i++)
@@ -393,7 +428,7 @@ void Jugando::Update()
         {
             this->updateRecorridoPathfinding(nullptr);
         }*/
-    
+
         //Si se realiza el ataque se comprueban las colisiones
         if(_jugador->getTimeAtEsp() > 0.0)
         {
@@ -418,12 +453,12 @@ void Jugando::Update()
                         _enemPideAyuda = _enemigos[i];
                     }
                     // Si alguno pide ayuda, se mira a ver si este contesta
-                    else if(_enemPideAyuda != nullptr) 
+                    else if(_enemPideAyuda != nullptr)
                     {
                         if (_enemigos[i]->GetContestar())
                             updateRecorridoPathfinding(_enemigos[i]);
                     }
-                    
+
                     // TO DO: optimizar
                     if (_enemPideAyuda) {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
@@ -455,7 +490,7 @@ void Jugando::Update()
                     {
                         //colisiona
                         struct DatosDesplazamiento
-                        {   
+                        {
                             float x = 0.0f;
                             float y = 0.0f;
                             float z = 0.0f;
@@ -467,12 +502,12 @@ void Jugando::Update()
                         velocidad.z = (_enemigos[i]->getNewZ() - _enemigos[i]->getZ());
 
                         _enemigos[i]->setPosicionesFisicas(-velocidad.x, 0.0f, -velocidad.z);//colisiona
-                        //enemigos.at(i)->setPosiciones(_enemigos[i]->getX() - velocidad.x, _enemigos[i]->getLasY() - velocidad.y, _enemigos[i]->getLastZ() - velocidad.z);//colisiona         
-                        _enemigos[i]->setNewPosiciones(_enemigos[i]->getX(), _enemigos[i]->getY(), _enemigos[i]->getZ());//colisiona                                
+                        //enemigos.at(i)->setPosiciones(_enemigos[i]->getX() - velocidad.x, _enemigos[i]->getLasY() - velocidad.y, _enemigos[i]->getLastZ() - velocidad.z);//colisiona
+                        _enemigos[i]->setNewPosiciones(_enemigos[i]->getX(), _enemigos[i]->getY(), _enemigos[i]->getZ());//colisiona
                         if(_enemigos[i]->GetRotation() != 0.0f)
                         {
                             _enemigos[i]->setNewRotacion(_enemigos[i]->getRX(), _enemigos[i]->getRY() - constantes.PI_RADIAN, _enemigos[i]->getRZ());
-                            _enemigos[i]->setVectorOrientacion(); 
+                            _enemigos[i]->setVectorOrientacion();
                             _enemigos[i]->setRotation(0.0f);
                         }
                     }*/
@@ -489,7 +524,7 @@ void Jugando::Update()
         _fisicas->updateBoss(_boss->getFisX(), _boss->getFisY(),
             _boss->getFisZ()
         );
-        
+
         //Si se realiza el ataque se comprueban las colisiones
         if(_jugador->getTimeAtEsp() > 0.0)
         {
@@ -505,7 +540,7 @@ void Jugando::Update()
         if(_boss != nullptr)
         {
             _boss->UpdateBehavior(0, (int*)_jugador, _zonas, false); //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
-            
+
             //Este bloque se da si el boss esta en el proceso de merodear
             if(_boss->getTimeMerodear() > 0.0f)
             {
@@ -534,9 +569,9 @@ void Jugando::Update()
  * Funcion en la que se actualiza la IA y todos
  * aquellos eventos que deben ocurrir 4 veces por
  * segundo
- *      
+ *
  *      Entradas:
- *      
+ *
  *      Salidas:
 */
 void Jugando::UpdateIA()
@@ -549,7 +584,7 @@ void Jugando::UpdateIA()
         _jugador->ModificarVida(-20);
     }
     /* **************************************************** */
-    
+
     //Aquí el jugador genera sonidos al caminar
     if(!_jugador->EstaMuerto() && (!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
      || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
@@ -681,10 +716,10 @@ void Jugando::Render()
     {
         _interactuables.at(i)->Render(updateTime, resta);
     }
-    
+
     //Dibujado del personaje
     _jugador->Render(updateTime, resta);
-    
+
     if (!enSalaBoss)
     {
         //Dibujado de los enemigos
@@ -733,12 +768,12 @@ void Jugando::Render()
 }
 
 void Jugando::Pausar()
-{ 
+{
     DesactivarDebug();
 }
 
 void Jugando::Reanudar()
-{ 
+{
     if (reiniciando) {
 
         DesactivarDebug();
@@ -773,7 +808,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
 
     //cargamos el nivel
     cargador.CargarNivelXml(nivel, tipoJug); //se llama al constructor vacio
-    
+
     CrearJugador();
     _recolectables = cargador.GetRecolectables();
     _interactuables = cargador.GetInteractuables();
@@ -950,7 +985,7 @@ void Jugando::cargarCofres(int num)
  * Funcion establece por cada waypoint sus
  * conexiones con el resto de waypoints del nivel
  *      Entradas:
- * 
+ *
  *      Salidas:
 */
 void Jugando::ConectarWaypoints()
@@ -1001,21 +1036,21 @@ void Jugando::ConectarWaypoints()
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),_recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),_recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),_recolectables[rec_col]->getObjeto(),_recolectables[rec_col]->getTextura());
             _motor->EraseArma();
             _jugador->setArma(nuArma);
-            
+
             //PROVISIONAL
             _jugador->getArma()->setRotacion(0.0, constantes.PI_RADIAN, 0.0);
             //!PROVISIONAL
             //lo cargamos por primera vez en el motor de graficos
             _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->getObjeto(), _recolectables[rec_col]->getTextura());
-            
+
             //lo cargamos en el motor de fisicas
             _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2, _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),_jugador->getArma()->getAlto());
-            
+
             //borramos el recolectable anterior de nivel, _motor grafico y motor fisicas
             _recolectables.erase(_recolectables.begin() + rec_col);
             _motor->EraseColectable(rec_col);
             _fisicas->EraseColectable(rec_col);
-            
+
             //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
             _recolectables.push_back(nuRec);
             _fisicas->setFormaRecolectable(_recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
@@ -1027,7 +1062,7 @@ void Jugando::ConectarWaypoints()
     {
         Llave* llave = new Llave(_recolectables.at(rec_col)->getCodigo());
         _jugador->AnnadirLlave(llave);
-        
+
         //borramos el recolectable de nivel, _motor grafico y motor fisicas
         _recolectables.erase(_recolectables.begin() + rec_col);
         _motor->EraseColectable(rec_col);
@@ -1124,7 +1159,7 @@ void Jugando::AccionarMecanismo(int int_col)
             {
                 coincide = true;
             }
-            
+
         }
         if(coincide)
         {
@@ -1132,7 +1167,7 @@ void Jugando::AccionarMecanismo(int int_col)
             //Se acciona o desacciona el mecanismo segun su estado actual
             bool activar = _interactuables.at(int_col)->accionar();
             bool abrir = _interactuables.at(i)->accionar();
-            
+
             unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(i);
             if(abrir)
             {

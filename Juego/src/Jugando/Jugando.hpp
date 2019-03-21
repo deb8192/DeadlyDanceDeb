@@ -28,7 +28,7 @@ class Jugando: public Estado {
         void Update(); // Se actualiza todo lo de nivel (interpolacion(cy-y)^2), posiciones, iluminacion)
         void UpdateIA(); // Se llama 4 veces por segundo
         void Render();//dibuja y actualiza las posiciones del interpolado
-        
+
         void Pausar();
         void Reanudar();
         void Reiniciar();
@@ -63,7 +63,7 @@ class Jugando: public Estado {
         Enemigo* getEnemigoPideAyuda();
         std::vector<Enemigo*> getEnemigos();
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
-        
+
     private:
 
         short auxiliarPathfinding = 0;
@@ -82,7 +82,7 @@ class Jugando: public Estado {
         Enemigo* _enemPideAyuda;  //Enemigos que pide ayuda
         std::vector<Waypoint*> recorrido;//Nodos a recorrer en el pathfinding
         Sala* _destinoPathFinding; //sala que se rellena al llamar a pathfinding y se vacía al terminar el recorrido del enemigo
-        
+
         std::vector<Recolectable*> _recolectables;
         std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
         std::vector<Recolectable*> _powerup;
@@ -94,6 +94,8 @@ class Jugando: public Estado {
         bool jugadorInmovil; // Para las colisiones
         float drawTime, lastDrawTime;
         float atacktime; //tiempo de ejecucion del ataque
+        float mov_weapon_posX,mov_weapon_posY,mov_weapon_posZ;
+        float mov_weapon_rotX,mov_weapon_rotY,mov_weapon_rotZ;
 
         int cambia;
         int danyo, danyo2;
