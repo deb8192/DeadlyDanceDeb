@@ -944,8 +944,8 @@ void Jugando::cargarCofres(int num)
                 _zonas[zonasDisponibles[numAlt]]->annadirElemento();
 
                 //Colocar cofre
-                int posicionObjeto = _motor->CargarObjetos(3,constantes.CERO,newx,newy,newz,2,2,2,"assets/models/Cofre/ChestCartoon.obj", "assets/models/Cofre/ChestCartoon.mtl");
-                Interactuable*  inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/ChestCartoon.obj","assets/models/Cofre/ChestCartoon.mtl", posicionObjeto, newx, newy, newz);
+                int posicionObjeto = _motor->CargarObjetos(3,constantes.CERO,newx,newy,newz,2,2,2,"assets/models/Cofre/cofre.obj", "assets/models/Cofre/cofre.mtl");
+                Interactuable*  inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/cofre.obj","assets/models/Cofre/cofre.mtl", posicionObjeto, newx, newy, newz);
                 int* id = cargador.GetID();
                 inter->setID(*(++id));
                 id = nullptr;
