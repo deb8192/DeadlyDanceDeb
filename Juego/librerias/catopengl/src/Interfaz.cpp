@@ -36,7 +36,7 @@ unsigned short Interfaz::AddCamara()
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,0,0,0);
+    rotacionEnt->rotar(0,1,1,1);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
@@ -89,12 +89,12 @@ unsigned short Interfaz::AddLuz(int tipo)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,0,0,0);
+    rotacionEnt->rotar(0,1,1,1);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(1,1,1);
+    escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
     escaladoEnt->Ejecutar();
@@ -142,12 +142,12 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,0,0,0);
+    rotacionEnt->rotar(0,1,1,1);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(1,1,1);
+    escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
     TNodo * malla = new TNodo;
@@ -198,7 +198,7 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,0,0,0);
+    rotacionEnt->rotar(0,1,1,1);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
@@ -250,7 +250,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,0,0,0);
+    rotacionEnt->rotar(0,1,1,1);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
@@ -555,7 +555,7 @@ void Interfaz::DeshabilitarObjeto(unsigned short did)
 {
     Nodo * nodo = buscarNodo(did);
 
-    if(nodo != nullptr)   
+    if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso;
         dynamic_cast<TCamara*>(tnodo->GetEntidad())->NoEjecutar();
@@ -566,7 +566,7 @@ void Interfaz::HabilitarObjeto(unsigned short did)
 {
     Nodo * nodo = buscarNodo(did);
 
-    if(nodo != nullptr)   
+    if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso;
         dynamic_cast<TCamara*>(tnodo->GetEntidad())->Ejecutar();
