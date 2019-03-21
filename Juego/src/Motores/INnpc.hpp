@@ -56,6 +56,7 @@ public:
 protected:
     VectorEspacial vectorOrientacion; //vector para indicar la velocidad vectorial del npc
     float velocidadMaxima; //Valor de la velocidad maxima del npc
+    float porcentajeVelocidad;  //Porcentaje de la velocidad que usara para desplazarse (valores de 0 - 1)
     int tipo;//tipo de enemigo(mayor de cero) o jugador(0)
     int vidaIni;//maximo de vida que tiene la entidad
     int vida;//vida de la entida
