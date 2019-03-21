@@ -28,14 +28,14 @@ Jugador::Jugador()
     _armaEquipada = NULL;
 }
 
-Jugador::Jugador(int nX,int nY,int nZ, int ancho, 
+Jugador::Jugador(int nX,int nY,int nZ, int ancho,
     int largo, int alto, int accion, int maxVida)
 : Jugador()
 {
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     _fisicas->crearCuerpo(accion,0,nX/2,nY/2,nZ/2,3,2,2,2,1,0,0);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
     _fisicas = nullptr;
-    
+
     this->ancho = ancho;
     this->largo = largo;
     this->alto = alto;
@@ -57,7 +57,7 @@ Jugador::~Jugador()
     _motor = nullptr;
     _motora = nullptr;
     _interfaz = nullptr;
-    
+
     _armaEquipada = nullptr;
     _armaEspecial = nullptr;
 
@@ -136,7 +136,7 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     Constantes constantes;
     float px = posFutura.x,
           pz = posFutura.z;
-    
+
     if(w || s || a || d)
     {
         setAnimacion(1);
@@ -192,7 +192,7 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     {
         componente = 0.0;
     }
-    
+
     //getGir se utiliza para orientar al jugador cuando se gira la camara
     deg -= gcam;
     px += componente*sin(deg*constantes.DEG_TO_RAD);
@@ -200,7 +200,7 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 
     //ahora actualizas movimiento y rotacion
     setNewPosiciones(px, posActual.y, pz);
-    setNewRotacion(rotActual.x, deg, rotActual.z);    
+    setNewRotacion(rotActual.x, deg, rotActual.z);
 }
 
 /*************** moverseEntidad *****************
@@ -210,8 +210,8 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
  */
 
 void Jugador::cambiarCamara()
-{    
-        gcam >= 270 ? gcam = 0 : gcam += 90;            
+{
+        gcam >= 270 ? gcam = 0 : gcam += 90;
 }
 
 void Jugador::moverseEntidad(float updTime)
@@ -332,6 +332,7 @@ int Jugador::Atacar(int i)
         //ATAQUE A DISTANCIA
         else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
         {
+            _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj","assets/texture/platform1.png");
             //Crear cuerpo de colision de ataque delante del jugador
             _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0);
             _motora->getEvent("Arpa")->setVolume(0.8f);
@@ -465,14 +466,20 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
         }
         else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
         {
+            float velocidadflecha = 3.0f;
             int distance = 1.5;
-            atz += (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
-            atx += (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
-            atposZ += (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
-            atposX += (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
+            //Si ha chocaco con un obstaculo no avanza
+            if(_fisicas->collideAtackObstacle() == false)
+            {
+                atz += velocidadflecha*(distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
+                atx += velocidadflecha*(distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
+                atposZ += velocidadflecha* (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
+                atposX += velocidadflecha* (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
+            }
 
             _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
             _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
+            _motor->dispararProyectil(atx,aty,atz,atgx,atgy,atgz);
         }
         /***********************************************************************************/
 
@@ -565,7 +572,7 @@ void Jugador::AtacarUpdate(int danyo, Enemigo* &_boss)
 void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
 {
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    
+
     //lista de enteros que senyalan a los enemigos atacados
     vector <unsigned int> atacados = _fisicas->updateArmaEspecial(_armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ());
 
@@ -588,7 +595,7 @@ void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
 void Jugador::atacarEspUpdBossComun(int* danyo, Enemigo* &_boss)
 {
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    
+
     if (_fisicas->updateArmaEspecialBoss(_armaEspecial->getFisX(),
         _armaEspecial->getFisY(),_armaEspecial->getFisZ()))
     {
@@ -921,17 +928,17 @@ int Jugador::getDinero()
  * Metodo que sirve para modificar la cantidad de monedas
  * que tiene el jugador a lo largo del juego
  * Entradas:
- *      monedas: valor negativo o positivo en el que se 
+ *      monedas: valor negativo o positivo en el que se
  *          incrementa o decrementa el dinero
  * Salida:
- * 
+ *
  */
 void Jugador::ModificarDinero(int monedas)
 {
     dinero += monedas;
     if(dinero > 9999)
         dinero = 9999;
-    else if (dinero < 0) 
+    else if (dinero < 0)
         dinero = 0;
     _interfaz->setDinero(dinero);
 }
@@ -1029,10 +1036,10 @@ void Jugador::setPosicionesFisicas(float nx,float ny,float nz)
  * Metodo que sirve para modificar la vida del jugador
  * a lo largo del juego.
  * Entradas:
- *      vid: valor negativo o positivo en el que se 
+ *      vid: valor negativo o positivo en el que se
  *          incrementa o decrementa la vida
  * Salida:
- * 
+ *
  */
 void Jugador::ModificarVida(int vid)
 {
@@ -1063,10 +1070,10 @@ void Jugador::setTipo(int tip)
 
 /*************** Modificar BarraAtEs *****************
  *  Funcion que actualiza la barra del ataque especial
- *  Entradas: 
+ *  Entradas:
  *      bar: valor en positivo o negativo
  *  Salidas:
- * 
+ *
  */
 void Jugador::ModificarBarraAtEs(int bar)
 {
@@ -1231,7 +1238,7 @@ bool Jugador::ColisionEntornoEne()
 {
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     //colisiones con todos los objetos y enemigos que no se traspasan
-    if(_fisicas->collideObstacle() 
+    if(_fisicas->collideObstacle()
         || !_fisicas->collidePlatform())
     {//colisiona
         setNewPosiciones(posActual.x, posActual.y, posActual.z);
@@ -1247,7 +1254,7 @@ bool Jugador::ColisionEntornoBoss()
 {
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     //colisiones con todos los objetos y el boss
-    if(_fisicas->collideBossObstacle() 
+    if(_fisicas->collideBossObstacle()
         || !_fisicas->collidePlatform())
     {//colisiona
         setNewPosiciones(posActual.x, posActual.y, posActual.z);

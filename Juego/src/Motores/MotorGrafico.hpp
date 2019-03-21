@@ -146,16 +146,16 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
     #define GLFW_KEY_RIGHT_CONTROL      345
     #define GLFW_KEY_RIGHT_ALT          346
     #define GLFW_KEY_RIGHT_SUPER        347
-    #define GLFW_KEY_MENU               348 
+    #define GLFW_KEY_MENU               348
     #define GLFW_MOUSE_MOVE             666 //para saber si se ha movido el raton
 #else
     //namespaces de irrlichts
     //para acortar lineas de programacion se cogen espacios definidos directamente
     using namespace irr;
-    using namespace core; 
+    using namespace core;
     using namespace scene;
     using namespace video;
-    using namespace io; 
+    using namespace io;
     using namespace gui;
     using namespace std;
     using namespace idsEventos;
@@ -184,22 +184,22 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CerrarJuego();
             void LimpiarDevice();//elimina el dispositivo
             void ActivarFuenteDefault(); //define fuente por defecto
-            
+
             void FondoEscena(short a, short r, short g, short b);
             void RenderEscena();
             void BorrarScena(); // borra todo lo que haya en la ventana
             void BorrarGui(); // borra todo lo que haya en la ventana relacionado con el gui
 
             void CrearTexto(std::string texto, short x1, short y1, short x2, short y2);
-            void CrearBoton(short x, short y, short x2, short y2, signed int id, 
+            void CrearBoton(short x, short y, short x2, short y2, signed int id,
                 const wchar_t* texto, const wchar_t* texto2);
 
             // detecta si un evento de boton con un id pasado ha sido llamado
             bool OcurreEvento(short);
             void ResetEvento(short); // resetea el evento
-            
+
             // Eventos de teclas
-            bool EstaPulsado(short); 
+            bool EstaPulsado(short);
             void ResetKey(short); // resetea la tecla
 
             // Eventos del raton
@@ -220,7 +220,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             bool GetDebugActivado(); // para saber si esta activado
 
             //----------------- Revisar
-            
+
             /*IMPORTANTE para bullet motor de fisicas y Joints*/
             //btHingeConstraint(btRigidBody& rbA,const btTransform& rbAFrame, const btTransform& rbBFrame);
 
@@ -233,10 +233,12 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
             void CargarArmaJugador(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
+            void CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
-             
+            void dispararProyectil(float x, float y, float z, float rx, float ry, float rz);
+
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
             void mostrarBoss(float x, float y, float z, float rx, float ry, float rz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
@@ -252,33 +254,34 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void dibujarCirculoEventoSonido(int x, int y, int z, float intensidad);//se dibuja el circulo con la intensidad que se solicita en las coordenadas proporcionadas
             void dibujarZona(int x, int y, int z, float ancho, float alto, float profund);
             void dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo);
-            
+
             //colision rayo
             bool colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);
             //void dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension);//dibuja los rayos o lineas con las indicaciones que pongas, (x,y,z) son donde empieza la linea el primer punto, (rx,ry,rz) rotacion de la linea desde su punto, dimension longitud de la linea
-            
+
             void colorearJugador(int a, int r, int g, int b);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
             //void colorearObjeto(int a, int r, int g, int b, int obj);
-            
+
             #ifdef WEMOTOR
                 bool getArmaEspecial();
             #else
                 IAnimatedMeshSceneNode* getArmaEspecial();
             #endif
-            
-            void EraseColectable(long unsigned int idx); 
-            void ErasePowerUP(long unsigned int idx); 
+
+            void EraseColectable(long unsigned int idx);
+            void ErasePowerUP(long unsigned int idx);
             void EraseEnemigo(std::size_t i);
-            void EraseJugador(); 
+            void EraseJugador();
             void EraseArma();
+            void EraseProyectil();
             //int getEnemigos_Scena();
             //int getObjetos_Scena();
 
             void debugBox(int x,int y, int z,int ancho, int alto, int largo);
             void debugVision(float x, float y, float z, float rotacion, float longitud);
-            
-            
+
+
             //interfaz TO DO: revisar
             void CargarInterfaz();
             void DestruirInterfaz();
@@ -319,7 +322,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             int getCams();
 
         private: //clases solo accesibles por MotorGrafico
- 
+
             //clase singleton
             MotorGrafico();
             static MotorGrafico* _unica_instancia;
@@ -327,9 +330,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             void propiedadesDevice();
 
-            #ifdef WEMOTOR 
+            #ifdef WEMOTOR
                 //variables y parametros motor catopengl
-                
+
                 Interfaz * _interfaz;//puntero que contiene la entrada al motorgrafico de catopengl
 
                 unsigned short camara;//id de la camara
@@ -341,20 +344,21 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Recolectables_Scena;//contiene los recolectables reservados (ids)
                 std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
                 std::vector<unsigned short> PowerUP_Scena;//contiene los power ups reservados (ids)
-                
+
                 unsigned short _bossEscena;//id del boss
                 unsigned short _jugEscena;//id jugador
                 bool debugGrafico;//nos sirve para ver las zonas de colision
                 unsigned short _armaEspJugador;//id del arma del jugador
                 unsigned short _armaEnEscena;
+                unsigned short _armaProyectil; //id del proyectil
                 unsigned short _armaEsp;//id del arma especial cargado en memoria
-               
-                // Ventana 
+
+                // Ventana
                 short WIDTH_AUX, WIDTH, HEIGHT;
                 short x_linea1, x_linea2;
                 unsigned short width, height;
                 int camx, camz, cams;
-                
+
             #else
                 //variables y parametros motor irrlicht
                 //variables privadas
@@ -377,8 +381,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<IAnimatedMeshSceneNode*> Plataformas_Scena;//plataformas en scena
                 std::vector<ILightSceneNode*> Luces_Scena;//luces en scena
                 std::vector<IAnimatedMeshSceneNode*> Enemigos_Scena;//Enemigos en scena
-                
+
                 IAnimatedMeshSceneNode* _armaEnEscena;//Malla del arma del jugador en escena
+                IAnimatedMeshSceneNode* _armaProyectil;//Malla del arma del jugador en escena
                 IAnimatedMesh* _armaEsp;//Malla del arma especial del jugador
                 IAnimatedMeshSceneNode* _armaEspJugador;//Malla del arma especial del jugador en escena
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
@@ -408,17 +413,17 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
                 ISceneNode* _nodoSeleccionado;
 
-                // Ventana 
+                // Ventana
                 short WIDTH_AUX, WIDTH, HEIGHT;
                 short x_linea1, x_linea2;
 
                 IGUIImage* _img;
                 ITexture*  _puzParticleTexture;
                 //vector<IGUIImage*> imagenes; <- Pendiente de utilizar en puzzles
-    
+
                 enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
                 enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
-                
+
                 //interfaz
                 IGUIImage* vidaI;
                 IGUIImage* energiaI;
@@ -440,9 +445,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 ITexture* manos_textura;
                 ITexture* llave_textura;
                 ITexture* espada_textura;
-                ITexture* daga_textura; 
+                ITexture* daga_textura;
 
-                //cinematicas 
+                //cinematicas
                 int frame_actual;//numero de frame actual
                 IGUIImage* _actual;//frame actual
                 float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
