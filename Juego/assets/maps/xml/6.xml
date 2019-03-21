@@ -20,7 +20,14 @@
 	<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="1" ancho="4" largo="4" alto="1" X="48" Y="0" Z="0" conexiones="2"></Waypoint>
 	<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="2" ancho="4" largo="4" alto="1" X="-26" Y="0" Z="0" conexiones="1,3"></Waypoint>
 	<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="4" ancho="4" largo="4" alto="1" X="122" Y="0" Z="12" conexiones="1,5"></Waypoint>
-
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="48" Y="0" Z="15" Texture="" Model=""></Enemy>	
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="26" Y="0" Z="0" Texture="" Model=""></Enemy>	
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="80" Y="0" Z="-5" Texture="" Model=""></Enemy>	
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="65" Y="0" Z="45" Texture="" Model=""></Enemy>	
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="0" Y="0" Z="-35" Texture="" Model=""></Enemy>	
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="45" Y="0" Z="-15" Texture="" Model=""></Enemy>	
+	<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="3" Y="0" Z="-25" Texture="" Model=""></Enemy>	
+	
 	
 		<!--Sala-00--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="-50" Y="0" Z="0" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 		<!--Pared-Rompible--><Object Type="1" accion="1" ancho="2" largo="12" alto="24" RP="0" X="-26" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/animations/BreakWallSmall_000001.obj"></Object>
@@ -38,7 +45,7 @@
 		<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="4" ancho="4" largo="4" alto="1" X="122" Y="0" Z="12" conexiones="1,5"></Waypoint>
 		<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="5" ancho="4" largo="4" alto="1" X="146" Y="0" Z="12" conexiones="4,6"></Waypoint>
 		<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="6" ancho="4" largo="4" alto="1" X="170" Y="0" Z="12" conexiones="5,7"></Waypoint>
-		<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="143" Y="0" Z="15" Texture="" Model=""></Enemy>	
+		<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="143" Y="0" Z="15" Texture="" Model=""></Enemy>	
 	
 			<!--Sala-03--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="231" Y="0" Z="32" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 			<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="286" Y="0" Z="76" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
@@ -55,8 +62,8 @@
 			<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="6" ancho="4" largo="4" alto="1" X="170" Y="0" Z="12" conexiones="5,7"></Waypoint>
 			<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="7" ancho="4" largo="4" alto="1" X="231" Y="0" Z="32" conexiones="6,8"></Waypoint>
 			<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="8" ancho="4" largo="4" alto="1" X="232" Y="0" Z="76" conexiones="7,9"></Waypoint>
-			<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="10" X="202" Y="0" Z="48" Texture="" Model=""></Enemy>
-			<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="252" Y="0" Z="20" Texture="" Model=""></Enemy>
+			<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="202" Y="0" Z="48" Texture="" Model=""></Enemy>
+			<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="252" Y="0" Z="20" Texture="" Model=""></Enemy>
 	
 				<!--Sala-04--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="231" Y="0" Z="124" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 				<!--Pared-Rompible--><Object Type="1" accion="1" ancho="2" largo="26" alto="24" RP="0" X="198" Y="0" Z="104" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/animations/BreakWallLarge_000001.obj"></Object>
@@ -91,7 +98,7 @@
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="12" ancho="4" largo="4" alto="1" X="344" Y="0" Z="142" conexiones="11,13"></Waypoint>
 						<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="13" ancho="4" largo="4" alto="1" X="366" Y="0" Z="130" conexiones="12,14"></Waypoint>
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="14" ancho="4" largo="4" alto="1" X="366" Y="0" Z="156" conexiones="13,15"></Waypoint>
-						<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="356" Y="0" Z="122" Texture="" Model=""></Enemy>									
+						<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="356" Y="0" Z="122" Texture="" Model=""></Enemy>									
 						<!--Objeto--><Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="372" Y="0" Z="132" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
 	
 							<!--Sala-07--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="366" Y="0" Z="180" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
@@ -131,8 +138,8 @@
 					<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="250" Y="0" Z="362" Texture="" Model=""></Enemy>					
 					<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="232" Y="0" Z="380" Texture="" Model=""></Enemy>	
 					<!--Murcielago--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="211" Y="0" Z="358" Texture="" Model=""></Enemy>									
-					<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="250" Y="0" Z="311" Texture="" Model=""></Enemy>
-					<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="1" largo="1" alto="10" X="232" Y="0" Z="330" Texture="" Model=""></Enemy>									
+					<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="250" Y="0" Z="311" Texture="" Model=""></Enemy>
+					<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="232" Y="0" Z="330" Texture="" Model=""></Enemy>									
 					<!--Objeto--><Object Type="1" nombre="guitarra" ataque="25"  accion="2" ancho="4" largo="4" alto="10" X="256" Y="0" Z="402" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>
 					<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="232" Y="0" Z="308"></Zone>	
 					<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="232" Y="0" Z="370"></Zone>	
@@ -183,8 +190,8 @@
 								<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="28" ancho="4" largo="4" alto="1" X="426" Y="0" Z="344" conexiones="27,29"></Waypoint>
 								<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="29" ancho="4" largo="4" alto="1" X="414" Y="0" Z="390" conexiones="28,30"></Waypoint>
 								<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="30" ancho="4" largo="4" alto="1" X="388" Y="0" Z="414" conexiones="29,31"></Waypoint>
-								<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="422" Y="0" Z="366" Texture="" Model=""></Enemy>	
-								<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="404" Y="0" Z="402" Texture="" Model=""></Enemy>										
+								<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="3" X="422" Y="0" Z="366" Texture="" Model=""></Enemy>	
+								<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="3" X="404" Y="0" Z="402" Texture="" Model=""></Enemy>										
 								<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="428" Y="0" Z="389"></Zone>	
 	
 									<!--Sala-15--><Platform Type="1" accion="0" ancho="24" largo="24" alto="4" RP="0" X="366" Y="0" Z="414" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat1.obj" UserStar="False" StarX="0" StarY="0">
@@ -249,9 +256,9 @@
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="38" ancho="4" largo="4" alto="1" X="102" Y="0" Z="384" conexiones="37,39"></Waypoint>
 							<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="39" ancho="4" largo="4" alto="1" X="125" Y="0" Z="352" conexiones="38,40"></Waypoint>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="40" ancho="4" largo="4" alto="1" X="88" Y="0" Z="330" conexiones="39,41"></Waypoint>
-							<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="142" Y="0" Z="348" Texture="" Model=""></Enemy>						
-							<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="136" Y="0" Z="366" Texture="" Model=""></Enemy>						
-							<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="115" Y="0" Z="344" Texture="" Model=""></Enemy>	 				
+							<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="3" X="142" Y="0" Z="348" Texture="" Model=""></Enemy>						
+							<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="3" X="136" Y="0" Z="366" Texture="" Model=""></Enemy>						
+							<!--Pollo--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="3" X="115" Y="0" Z="344" Texture="" Model=""></Enemy>	 				
 	
 								<!--Sala-20--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="64" Y="0" Z="330" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 								<!--Pared-Obstaculo--><Object Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="88" Y="0" Z="338" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>

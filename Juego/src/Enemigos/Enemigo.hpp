@@ -84,6 +84,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setVelocidadMaxima(float velocidad); //modifica la VelocidadMaxima de desplazamiento
         void SetEnemigo(int);
         void SetModo(int);
+        void SetPosicionComunBandada(INnpc::VectorEspacial direccion);
 
         int getID();
         int getVidaIni();
@@ -148,6 +149,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void SetPedirAyuda(bool);
         bool GetContestar();
         void SetContestar(bool);
+        int  GetTipoEnemigo();
 
         void Render(short pos, float updTime, float drawTime);
         void RenderAtaque();
@@ -216,10 +218,13 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         short modo;
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
         vector <Posiciones> recorridoAyuda;
+        VectorEspacial distanciaEnemigoObstaculo;
+        VectorEspacial distanciaEnemigoJugador;
         int distanciaMinimaEsquivar; //Variable que contiene la distancia mínima para esquivar objetos;
         const char* _modelo; // Malla 3D con la textura
         bool pedirAyuda;
         bool contestar;
+        INnpc::VectorEspacial posicionComunBandada;
 };
 
 #endif
