@@ -28,6 +28,7 @@ MotorGrafico::MotorGrafico()
         debugGrafico = false;
         _bossEscena = 0;
         _armaEnEscena = 0;
+        _armaProyectil = 0;
         camx = 0;
         camz = 30;
         cams = -1;
@@ -83,6 +84,7 @@ void MotorGrafico::LimpiarElementosJuego()
     #else
         //codigo motor irrlicht
         _armaEnEscena = nullptr;
+        _armaProyectil = nullptr;
         _armaEsp = nullptr;
         _armaEspJugador = nullptr;
         _jugEscena = nullptr;
@@ -277,6 +279,7 @@ void MotorGrafico::LimpiarMotorGrafico()
         }
 
         _armaEnEscena = nullptr;
+        _armaProyectil = nullptr;
         _armaEsp = nullptr;
 
         /*for (std::vector<Enemigos_Scena*>::iterator it = Enemigos_Scena.begin(); it!=Enemigos_Scena.end(); ++it){
@@ -1105,6 +1108,32 @@ void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto,
 
 }
 
+void MotorGrafico::CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+{
+    #ifdef WEMOTOR
+
+        //codigo motor catopengl
+        unsigned short _arma = _interfaz->AddMalla(ruta_objeto,1);
+
+        if(_arma != 0)
+        {
+            _armaProyectil = _arma;
+            _interfaz->Trasladar(_armaProyectil,(float)x,(float)y,(float)z);
+        }
+
+    #else
+        //codigo motor irrlicht
+        IAnimatedMesh* _arma = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+        if (_arma)
+        {
+            _armaProyectil = _smgr->addAnimatedMeshSceneNode(_arma); //metemos el objeto en el escenario para eso lo pasamos al escenario
+            _armaProyectil->setPosition(core::vector3df(x,y,z));
+        }
+        _arma = nullptr;
+    #endif
+
+}
+
 void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
 {
     #ifdef WEMOTOR
@@ -1167,6 +1196,29 @@ void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, f
         {
             _armaEnEscena->setPosition(core::vector3df(x,y,z));
             _armaEnEscena->setRotation(core::vector3df(rx,ry,rz));
+        }
+    #endif
+}
+
+void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float ry, float rz)
+{
+    #ifdef WEMOTOR
+
+        //codigo motor catopengl
+        if(_armaProyectil != 0)
+        {
+            _interfaz->Trasladar(_armaProyectil,x,y,z);
+            _interfaz->Rotar(_armaProyectil,rx,1,0,0);
+            _interfaz->Rotar(_armaProyectil,ry,0,1,0);
+            _interfaz->Rotar(_armaProyectil,rz,0,0,1);
+        }
+
+    #else
+        //codigo motor irrlicht
+        if(_armaProyectil != 0)
+        {
+            _armaProyectil->setPosition(core::vector3df(x,y,z));
+            _armaProyectil->setRotation(core::vector3df(rx,ry,rz));
         }
     #endif
 }
@@ -1660,6 +1712,17 @@ void MotorGrafico::EraseArma()
         //codigo motor irrlicht
         _armaEnEscena->setVisible(false);
         _armaEnEscena->remove();
+    #endif
+}
+
+void MotorGrafico::EraseProyectil()
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        _armaProyectil->setVisible(false);
+        _armaProyectil->remove();
     #endif
 }
 

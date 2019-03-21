@@ -116,7 +116,7 @@ void Jugando::ValoresPorDefecto()
     contadorEnem = 0;
     int_cpw_aux = 0;
     enSalaBoss = false;
-
+    proyectilFuera = true;
     // Activamos la interfaz
     _interfaz->activar();
 }
@@ -349,14 +349,34 @@ void Jugando::Update()
                 mov_weapon_posZ=-1.5;
                 mov_weapon_posY=3.3;
                 mov_weapon_rotX=90;
+                mov_weapon_rotY=0;
+                mov_weapon_rotZ=0;
             }
         }
         else if(strcmp(_jugador->getArma()->getNombre(),"arpa") == 0)
         {
-            mov_weapon_posX=-1;
-            mov_weapon_posZ=-1;
-            mov_weapon_posY=2.3;
-            mov_weapon_rotX=90;
+            if(_jugador->getTimeAt() == 1.5f)
+            {
+                proyectilFuera = false;
+                mov_weapon_rotX = 180;
+                mov_weapon_posX = 2;
+                mov_weapon_posZ = 2;
+                mov_weapon_posY = 2.5;
+            }
+            else
+            {
+                if(proyectilFuera == false)
+                {
+                    _motor->EraseProyectil();
+                    proyectilFuera = true;
+                }
+                mov_weapon_posX=-0.5;
+                mov_weapon_posZ=-0.5;
+                mov_weapon_posY=2.3;
+                mov_weapon_rotX=90;
+                mov_weapon_rotY=0;
+                mov_weapon_rotZ=0;
+            }
         }
 
         //METERLE LA FUNCION AL JUGADOR
@@ -365,9 +385,8 @@ void Jugando::Update()
         _jugador->getArma()->setPosiciones(posArmaX, _jugador->getY()+3, posArmaZ);
         //!METERLE LA FUNCION AL JUGADOR
 
-       _motor->llevarObjeto(posArmaX, _jugador->getY()+mov_weapon_posY,posArmaZ, _jugador->getRX()+mov_weapon_rotX, _jugador->getRY(), _jugador->getRZ() );
-       _fisicas->llevarBox(posArmaX, _jugador->getY()+mov_weapon_posY,posArmaZ, _jugador->getArma()->getAncho()+mov_weapon_rotX, _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto());
-
+       _motor->llevarObjeto(posArmaX, _jugador->getY()+mov_weapon_posY,posArmaZ, _jugador->getRX()+mov_weapon_rotX, _jugador->getRY()+mov_weapon_rotY, _jugador->getRZ()+mov_weapon_rotZ );
+       _fisicas->llevarBox(posArmaX, _jugador->getY()+mov_weapon_posY,posArmaZ, _jugador->getArma()->getAncho()+mov_weapon_rotX, _jugador->getArma()->getLargo()+mov_weapon_rotY, _jugador->getArma()->getAlto()+mov_weapon_rotZ);
     }
 
     //Comprueba la activacion de un powerup
@@ -1258,7 +1277,8 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     //crear guitarra
     accion = 2;
     codigo = 0; //0:arma
-    ataque = 25;
+    srand(time(NULL));
+    ataque = 22 + rand() % (33 - 22);
     nombre = "guitarra";
     modelo = "assets/models/Arma.obj";
     textura = "assets/texture/platform1.jpg";
@@ -1269,9 +1289,10 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     //crear arpa
     accion = 2;
     codigo = 0; //0:arma
-    ataque = 10;
+    srand(time(NULL));
+    ataque = 15 + rand() % (26 - 15);
     nombre = "arpa";
-    modelo = "assets/models/objeto2.obj";
+    modelo = "assets/models/Arpa.obj";
     textura = "assets/texture/platform1.png";
     cout << "Hay una arpa!" << endl;
   }

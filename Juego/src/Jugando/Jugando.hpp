@@ -96,6 +96,7 @@ class Jugando: public Estado {
         float atacktime; //tiempo de ejecucion del ataque
         float mov_weapon_posX,mov_weapon_posY,mov_weapon_posZ;
         float mov_weapon_rotX,mov_weapon_rotY,mov_weapon_rotZ;
+        float proyectilFuera;
 
         int cambia;
         int danyo, danyo2;
