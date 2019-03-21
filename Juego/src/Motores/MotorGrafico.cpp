@@ -13,12 +13,12 @@ MotorGrafico::MotorGrafico()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        
+
         _interfaz = nullptr;
         Plataformas_Scena.reserve(100);//salas reservadas
         Luces_Scena.reserve(40);//luces reservadas
         Enemigos_Scena.reserve(50);//enemigos reservados
-        Textos_Scena.reserve(18);//textos estaticos en la escena o gui 
+        Textos_Scena.reserve(18);//textos estaticos en la escena o gui
         Recolectables_Scena.reserve(50);
         Objetos_Scena.reserve(100);
         PowerUP_Scena.reserve(50);
@@ -46,7 +46,7 @@ MotorGrafico::MotorGrafico()
         camx = 0;
         camz = 30;
         cams = -1;
-    #endif   
+    #endif
 }
 
 MotorGrafico::~MotorGrafico()
@@ -60,7 +60,7 @@ MotorGrafico::~MotorGrafico()
         //Inputs input
         //position2di initialCursorPosition;        // Posicion del clic raton
         //position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
-        
+
         // Punteros sin new
         _device = nullptr;
         _driver = nullptr;
@@ -73,7 +73,7 @@ MotorGrafico::~MotorGrafico()
         _skin    = nullptr;
 
         LimpiarElementosJuego();
-    #endif  
+    #endif
 }
 
 void MotorGrafico::LimpiarElementosJuego()
@@ -192,7 +192,7 @@ void MotorGrafico::LimpiarElementosJuego()
             delete fichasMesh.at(i);
         }
         fichasMesh.clear();*/
-        
+
         //TO DO: Pendiente de utilizar en puzzles
         /*tam = imagenes.size();
         for(short i=0; i < tam; i++)
@@ -200,7 +200,7 @@ void MotorGrafico::LimpiarElementosJuego()
             delete imagenes.at(i);
         }
         imagenes.clear();*/
-    #endif  
+    #endif
 }
 
 void MotorGrafico::LimpiarMotorGrafico()
@@ -272,26 +272,26 @@ void MotorGrafico::LimpiarMotorGrafico()
             {
                 PowerUP_Scena[i] = nullptr;
             }
- 
+
             PowerUP_Scena.resize(0);
         }
 
         _armaEnEscena = nullptr;
         _armaEsp = nullptr;
- 
+
         /*for (std::vector<Enemigos_Scena*>::iterator it = Enemigos_Scena.begin(); it!=Enemigos_Scena.end(); ++it){
             delete *it;
         }
         Enemigos_Scena.clear();*/
 
-    #endif  
+    #endif
 }
- 
+
 bool MotorGrafico::CrearVentana(short tipo)
 {
     #ifdef WEMOTOR
             //codigo motor catopengl
-            
+
             if(_interfaz == nullptr)
             {
                 _interfaz = new Interfaz();
@@ -321,7 +321,7 @@ bool MotorGrafico::CrearVentana(short tipo)
                     titulo = "DeadlyDance NormalResolution";
                     break;
             }
-        
+
             _interfaz->DefinirVentana(width,height,titulo.c_str());
 
             return true;
@@ -358,7 +358,7 @@ bool MotorGrafico::CrearVentana(short tipo)
         _device->setResizable(false);
         propiedadesDevice();
         return true;
-    #endif  
+    #endif
 }
 
 bool MotorGrafico::VentanaAbierta()
@@ -368,8 +368,8 @@ bool MotorGrafico::VentanaAbierta()
         return _interfaz->VentanaEstaAbierta();
     #else
         //codigo motor irrlicht
-        return _device->run();    
-    #endif   
+        return _device->run();
+    #endif
 }
 
 void MotorGrafico::CerrarJuego()
@@ -379,10 +379,10 @@ void MotorGrafico::CerrarJuego()
     #else
         //codigo motor irrlicht
         _device->closeDevice();
-    #endif  
+    #endif
 }
 
-/* Una vez que hayamos terminado con el bucle de procesamiento, debemos eliminar 
+/* Una vez que hayamos terminado con el bucle de procesamiento, debemos eliminar
  * el dispositivo creado antes con createDevice()
  */
 void MotorGrafico::LimpiarDevice()
@@ -392,14 +392,14 @@ void MotorGrafico::LimpiarDevice()
     #else
         //codigo motor irrlicht
         _device->drop();
-    #endif  
+    #endif
 }
 
 void MotorGrafico::propiedadesDevice()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        
+
         _interfaz = new Interfaz;
         //esto solo con la interfaz, no tenemos accesos por separados a la interfaz del motor esta unificada
 
@@ -413,7 +413,7 @@ void MotorGrafico::propiedadesDevice()
         _collmgr = _smgr->getSceneCollisionManager();
 
         //cout << "\e[32m Propiedades aplicadas \e[0m" << endl;
-    #endif  
+    #endif
 }
 
 void MotorGrafico::ActivarFuenteDefault()
@@ -431,7 +431,7 @@ void MotorGrafico::ActivarFuenteDefault()
             //cout << "\e[36m Se encuentra fuente \e[0m" << endl;
         }
         _skin->setFont(_guienv->getBuiltInFont(), EGDF_TOOLTIP);
-    #endif  
+    #endif
 }
 
 // Se puede dibujar cualquier cosa entre una llamada beginScene() y una llamada endScene()
@@ -444,7 +444,7 @@ void MotorGrafico::FondoEscena(short a, short r, short g, short b)
         //codigo motor irrlicht
         //Borra la pantalla con un color
         _driver->beginScene(true, true, SColor(a,r,g,b));
-    #endif 
+    #endif
 }
 
 void MotorGrafico::RenderEscena()
@@ -461,7 +461,7 @@ void MotorGrafico::RenderEscena()
         _smgr->drawAll();
         _guienv->drawAll();
         _driver->endScene(); // Termina y saca por pantalla
-    #endif  
+    #endif
 }
 
 void MotorGrafico::BorrarScena()
@@ -475,7 +475,7 @@ void MotorGrafico::BorrarScena()
     #else
         //codigo motor irrlicht
         _smgr->clear();
-    #endif  
+    #endif
 }
 
 void MotorGrafico::BorrarGui()
@@ -490,14 +490,14 @@ void MotorGrafico::BorrarGui()
     #else
         //codigo motor irrlicht
         _guienv->clear();
-    #endif  
+    #endif
 }
 
 void MotorGrafico::CrearTexto(std::string texto, short x1, short y1, short x2, short y2)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        unsigned short num = _interfaz->CrearTexto(texto,x1,y1);//crea el texto en pantalla con los valores por defecto 
+        unsigned short num = _interfaz->CrearTexto(texto,x1,y1);//crea el texto en pantalla con los valores por defecto
         Textos_Scena.push_back(num);//lo introducimos en la matriz de objetos
 
     #else
@@ -505,10 +505,10 @@ void MotorGrafico::CrearTexto(std::string texto, short x1, short y1, short x2, s
         std::wstring widestr = std::wstring(texto.begin(), texto.end());
         // Parametro false, indica que no pinte el recuadro alrededor del texto
         _guienv->addStaticText(widestr.c_str(), rect<s32>(x1, y1, x2, y2), false);
-    #endif  
+    #endif
 }
 
-void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, signed int id, 
+void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, signed int id,
     const wchar_t* texto, const wchar_t* texto2)
 {
     #ifdef WEMOTOR
@@ -520,7 +520,7 @@ void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, signed int i
     #else
         //codigo motor irrlicht
         _guienv->addButton(rect<s32>(x,y,x2,y2), 0, id, texto, texto2);
-    #endif  
+    #endif
 }
 
 bool MotorGrafico::OcurreEvento(short event)
@@ -535,11 +535,11 @@ bool MotorGrafico::OcurreEvento(short event)
         {
             return false;
         }
-        
+
     #else
         //codigo motor irrlicht
         return input.IsEventOn(event);
-    #endif  
+    #endif
 }
 
 void MotorGrafico::ResetEvento(short event)
@@ -550,7 +550,7 @@ void MotorGrafico::ResetEvento(short event)
     #else
         //codigo motor irrlicht
         input.ResetEvento(event);
-    #endif  
+    #endif
 }
 
 bool MotorGrafico::EstaPulsado(short boton)
@@ -582,10 +582,10 @@ bool MotorGrafico::EstaPulsado(short boton)
 
             case idsEventos::Enum::KEY_G_DEBUG:
                 return _interfaz->IsKeyDown(GLFW_KEY_G);//para modo debug
-            
+
             case idsEventos::Enum::KEY_1:
                 return _interfaz->IsKeyDown(GLFW_KEY_1);
-            
+
             case idsEventos::Enum::KEY_2:
                 return _interfaz->IsKeyDown(GLFW_KEY_2);
             case idsEventos::Enum::KEY_P:
@@ -593,10 +593,10 @@ bool MotorGrafico::EstaPulsado(short boton)
 
             case idsEventos::Enum::KEY_K:
                 return _interfaz->IsKeyDown(GLFW_KEY_K);
-            
+
             case idsEventos::Enum::KEY_C:
                 return _interfaz->IsKeyDown(GLFW_KEY_C);//activa pathdinding
-            
+
             case idsEventos::Enum::KEY_B:
                 return _interfaz->IsKeyDown(GLFW_KEY_B);
 
@@ -645,10 +645,10 @@ bool MotorGrafico::EstaPulsado(short boton)
 
             case KEY_G_DEBUG:
                 return input.IsKeyDown(irr::KEY_KEY_G);//para modo debug
-            
+
             case KEY_1:
                 return input.IsKeyDown(irr::KEY_KEY_1);
-            
+
             case KEY_2:
                 return input.IsKeyDown(irr::KEY_KEY_2);
             case KEY_P:
@@ -656,10 +656,10 @@ bool MotorGrafico::EstaPulsado(short boton)
 
             case KEY_K:
                 return input.IsKeyDown(irr::KEY_KEY_K);
-            
+
             case KEY_C:
                 return input.IsKeyDown(irr::KEY_KEY_C);//activa pathdinding
-            
+
             case KEY_B:
                 return input.IsKeyDown(irr::KEY_KEY_B);
 
@@ -682,7 +682,7 @@ bool MotorGrafico::EstaPulsado(short boton)
                 return input.IsKeyPressed(irr::KEY_KEY_E);//actua una sola vez aunque se mantenga pulsado
         }
         return false;
-    #endif  
+    #endif
 }
 
 void MotorGrafico::ResetKey(short event)
@@ -740,56 +740,56 @@ void MotorGrafico::ResetKey(short event)
             break;
             case KEY_J:
                 input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
-            break; 
+            break;
             case KEY_E:
                 input.ResetKey(irr::KEY_KEY_E);
             break;
         }
-    #endif  
+    #endif
 }
 
 bool MotorGrafico::PulsadoClicDer()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_RIGHT); 
+        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_RIGHT);
     #else
         //codigo motor irrlicht
         return input.PulsadoClicDer();
-    #endif  
+    #endif
 }
 
 bool MotorGrafico::PulsadoClicIzq()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_LEFT); 
+        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_LEFT);
     #else
         //codigo motor irrlicht
         return input.PulsadoClicIzq();
-    #endif  
+    #endif
 }
 
 bool MotorGrafico::SueltoClicDer()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_RIGHT); 
+        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_RIGHT);
     #else
         //codigo motor irrlicht
         return input.SueltoClicDer();
-    #endif  
+    #endif
 }
 
 bool MotorGrafico::SueltoClicIzq()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_LEFT); 
+        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_LEFT);
     #else
         //codigo motor irrlicht
         return input.SueltoClicIzq();
-    #endif  
+    #endif
 }
 
 void MotorGrafico::ResetEventoMoveRaton()
@@ -799,7 +799,7 @@ void MotorGrafico::ResetEventoMoveRaton()
     #else
         //codigo motor irrlicht
         input.ResetEventoRaton(irr::EMIE_MOUSE_MOVED);
-    #endif  
+    #endif
 }
 
 #ifdef WEMOTOR
@@ -807,14 +807,14 @@ void MotorGrafico::ResetEventoMoveRaton()
     double * MotorGrafico::GetPosicionRaton()
     {
         return _interfaz->GetPosicionRaton();
-    }    
+    }
 #else
     //codigo motor irrlicht
     position2di MotorGrafico::GetPosicionRaton()
     {
         return input.GetMouseState().Position;
     }
-#endif  
+#endif
 
 void MotorGrafico::CrearCamara()
 {
@@ -833,7 +833,7 @@ void MotorGrafico::CrearCamara()
         _camera = _smgr->addCameraSceneNode(0, vector3df(0,20,-20), vector3df(0,0,0));
         //camera->setNearValue(0.5f);
         //camera->setFarValue(100.0f);
-    #endif  
+    #endif
 }
 
 bool MotorGrafico::GetDebugActivado()
@@ -860,7 +860,7 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
         {
             return -1;
         }
-        
+
 
     #else
         //codigo motor irrlicht
@@ -879,13 +879,13 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
             Plataformas_Scena.push_back(_objetoEnEscena);
             return (Plataformas_Scena.size()-1);
         }
-    #endif  
+    #endif
 }
 
 void MotorGrafico::CargarLuces(int x,int y,int z)
 {
     #ifdef WEMOTOR
-        
+
         //codigo motor catopengl
         unsigned short luz = _interfaz->AddLuz(1);//instanciamos el objeto y lo agregamos a la escena
         if(luz != 0)
@@ -917,16 +917,16 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
         bill->setMaterialFlag(video::EMF_ZWRITE_ENABLE, false);
         bill->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
         bill->setMaterialTexture(0, _driver->getTexture("assets/models/particlegreen.jpg"));
-    #endif  
+    #endif
 }
 
 void MotorGrafico::CargarBoss(int x,int y,int z, const char* ruta_objeto)
 {
     #ifdef WEMOTOR
-       
+
         //codigo motor catopengl
-        _bossEscena = _interfaz->AddMalla(ruta_objeto,1); 
-       
+        _bossEscena = _interfaz->AddMalla(ruta_objeto,1);
+
         if(_bossEscena == 0)
         {
             _interfaz->Trasladar(_bossEscena,(float)x,(float)y,(float)z);
@@ -941,17 +941,17 @@ void MotorGrafico::CargarBoss(int x,int y,int z, const char* ruta_objeto)
             _bossEscena = _smgr->addAnimatedMeshSceneNode(boss); //metemos el objeto en el escenario para eso lo pasamos al escenario
             _bossEscena->setPosition(core::vector3df(x,y,z));
         }
-    #endif  
+    #endif
 }
 
 void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
 {
     #ifdef WEMOTOR
-        
+
         //codigo motor catopengl
-        
+
         unsigned short enemigo = _interfaz->AddMalla(ruta_objeto,1);
-        
+
         if(enemigo != 0)
         {
             _interfaz->Trasladar(enemigo,(float)x,(float)y,(float)z);
@@ -970,7 +970,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
             Enemigos_Scena.push_back(enemigo_en_scena);
         }
 
-    #endif  
+    #endif
 }
 
 /******----------------Cargar Jugador------------------******
@@ -980,7 +980,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
  *      ruta_objeto: string con la direccion del modelo 3D
  *      ruta_textura: string con la ruta de la textura
  * Salida:
- * 
+ *
  */
 void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto)
 {
@@ -1012,7 +1012,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
             //smgr->getMeshManipulator()->setVertexColors(_jugEscena->getMesh(),COLOR);
         }
         //jugador = nullptr;
-    #endif 
+    #endif
 }
 
 int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
@@ -1035,16 +1035,16 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
             if(accion == 2)
             {
-                Recolectables_Scena.push_back(_objetoEnEscena);              
-                return Recolectables_Scena.size() - 1;    
+                Recolectables_Scena.push_back(_objetoEnEscena);
+                return Recolectables_Scena.size() - 1;
             }
             else
             {
                 Objetos_Scena.push_back(_objetoEnEscena);
                 return Objetos_Scena.size() - 1;
             }
-                
-            
+
+
         }
 
     #else
@@ -1055,7 +1055,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
             _objetoEnEscena->setPosition(core::vector3df(x,y,z));
             _objetoEnEscena->setRotation(core::vector3df(0,rp,0));
-            _objetoEnEscena->setMaterialTexture(0, _driver->getTexture(ruta_textura));
+            if(accion != 3)_objetoEnEscena->setMaterialTexture(0, _driver->getTexture(ruta_textura));
 
             if(accion == 4)
             {
@@ -1066,8 +1066,8 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
             if(accion == 2)
             {
-                Recolectables_Scena.push_back(_objetoEnEscena);              
-                return Recolectables_Scena.size() - 1;    
+                Recolectables_Scena.push_back(_objetoEnEscena);
+                return Recolectables_Scena.size() - 1;
             }
             else
             {
@@ -1075,14 +1075,14 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
                 return Objetos_Scena.size() - 1;
             }
         }
-        
-    #endif 
+
+    #endif
 }
 
 void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
 {
     #ifdef WEMOTOR
-        
+
         //codigo motor catopengl
         unsigned short _arma = _interfaz->AddMalla(ruta_objeto,1);
 
@@ -1101,7 +1101,7 @@ void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto,
             _armaEnEscena->setPosition(core::vector3df(x,y,z));
         }
         _arma = nullptr;
-    #endif 
+    #endif
 
 }
 
@@ -1121,7 +1121,7 @@ void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto
         //codigo motor irrlicht
         _armaEsp = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
 
-    #endif 
+    #endif
 }
 
 void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
@@ -1129,7 +1129,7 @@ void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *rut
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short recol = _interfaz->AddMalla(ruta_objeto,1);
-        
+
         if(recol != 0)
         {
             _interfaz->Trasladar(recol,(float)x,(float)y,(float)z);
@@ -1145,13 +1145,13 @@ void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *rut
             recol_en_scena->setPosition(core::vector3df(x,y,z));
             Recolectables_Scena.push_back(recol_en_scena);
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, float rz)
 {
     #ifdef WEMOTOR
-        
+
         //codigo motor catopengl
         if(_armaEnEscena != 0)
         {
@@ -1168,11 +1168,11 @@ void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, f
             _armaEnEscena->setPosition(core::vector3df(x,y,z));
             _armaEnEscena->setRotation(core::vector3df(rx,ry,rz));
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::cambiarCamara()
-{ 
+{
         if(camx == 0)
         {
             cams *= -1;
@@ -1183,7 +1183,7 @@ void MotorGrafico::cambiarCamara()
         {
             camx = 0;
             camz = 30;
-        }      
+        }
 }
 
 
@@ -1242,7 +1242,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
         _jugEscena->setPosition(core::vector3df(x,y,z));
         _jugEscena->setRotation(core::vector3df(rx,ry-180,rz));
-    #endif 
+    #endif
 }
 
 void MotorGrafico::mostrarBoss(float x, float y, float z, float rx, float ry, float rz)
@@ -1263,13 +1263,13 @@ void MotorGrafico::mostrarBoss(float x, float y, float z, float rx, float ry, fl
             _bossEscena->setPosition(core::vector3df(x,y,z));
             _bossEscena->setRotation(core::vector3df(rx,ry,rz));
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
 {
     #ifdef WEMOTOR
-        
+
         //codigo motor catopengl
         if(Enemigos_Scena.size() > 0 && Enemigos_Scena.size() > i && Enemigos_Scena[i] != 0)
         {
@@ -1286,7 +1286,7 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
             Enemigos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
             Enemigos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
@@ -1294,7 +1294,7 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
     #ifdef WEMOTOR
         //codigo motor catopengl
 
-                
+
         if(Objetos_Scena.size() > 0 && Objetos_Scena.size() > i && Objetos_Scena[i] != 0)
         {
             _interfaz->Trasladar(Objetos_Scena[i],x,y,z);
@@ -1307,14 +1307,14 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
         //codigo motor irrlicht
         Objetos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
         Objetos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
-    #endif 
+    #endif
 }
 
 void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        
+
 
     #else
         //codigo motor irrlicht
@@ -1330,7 +1330,7 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
             _armaEspJugador->setRotation(core::vector3df(rx,ry,rz));
             _smgr->getMeshManipulator()->setVertexColors(_armaEspJugador->getMesh(),SColor(255, 125, 150, 160));
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::borrarArmaEspecial()
@@ -1341,7 +1341,7 @@ void MotorGrafico::borrarArmaEspecial()
         //codigo motor irrlicht
         _armaEspJugador->remove();
         _armaEspJugador = nullptr;
-    #endif 
+    #endif
 }
 
 void MotorGrafico::activarDebugGrafico()
@@ -1368,7 +1368,7 @@ void MotorGrafico::activarDebugGrafico()
         {
             debugGrafico = true;
         }
-    #endif 
+    #endif
 
 }
 
@@ -1388,7 +1388,7 @@ void MotorGrafico::activarPathfinding()
             pathfinding = true;
             cout << "\e[38m Pathfinding Activado \e[0m" << endl;
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::clearDebug()
@@ -1407,7 +1407,7 @@ void MotorGrafico::clearDebug()
             }
             Objetos_Debug.resize(0);
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::clearDebug2()
@@ -1426,7 +1426,7 @@ void MotorGrafico::clearDebug2()
             }
             Objetos_Debug2.resize(0);
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensidad)
@@ -1454,7 +1454,7 @@ void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensi
                 Objetos_Debug.push_back(_objetoEnEscena);
             }
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::dibujarZona(int x, int y, int z, float ancho, float alto, float profund)
@@ -1474,7 +1474,7 @@ void MotorGrafico::dibujarZona(int x, int y, int z, float ancho, float alto, flo
             Objetos_Debug.push_back(_tmpObjEscena);
             _tmpObjEscena = nullptr;
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, int rz ,int ancho, int alto, int profund, int tipo)
@@ -1506,7 +1506,7 @@ void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, in
             Objetos_Debug2.push_back(_tmpObjEscena);
             _tmpObjEscena = nullptr;
         }
-    #endif 
+    #endif
 }
 
 bool MotorGrafico::colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension)
@@ -1516,7 +1516,7 @@ bool MotorGrafico::colisionRayo(int x,int y, int z, int rx, int ry, int rz ,int 
     #else
         //codigo motor irrlicht
         return true;
-    #endif 
+    #endif
 }
 
 /*void MotorGrafico::dibujarRayo(int x,int y, int z, int rx, int ry, int rz ,int dimension)
@@ -1547,7 +1547,7 @@ void MotorGrafico::colorearJugador(int a, int r, int g, int b)
         //codigo motor irrlicht
         SColor COLOR  = SColor(a, r, g, b);
         _smgr->getMeshManipulator()->setVertexColors(_jugEscena->getMesh(),COLOR);
-    #endif 
+    #endif
 }
 
 void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
@@ -1562,7 +1562,7 @@ void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
         {
             _smgr->getMeshManipulator()->setVertexColors(Enemigos_Scena[enem]->getMesh(),COLOR);
         }
-    #endif 
+    #endif
 }
 
 /*void MotorGrafico::colorearObjeto(int a, int r, int g, int b, int obj)
@@ -1590,7 +1590,7 @@ void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
     {
         return _armaEspJugador;
     }
-#endif 
+#endif
 
 // TO DO: revisar vector
 void MotorGrafico::EraseColectable(long unsigned int idx)
@@ -1605,7 +1605,7 @@ void MotorGrafico::EraseColectable(long unsigned int idx)
             Recolectables_Scena[idx]->remove();
             Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::ErasePowerUP(long unsigned int idx)
@@ -1620,7 +1620,7 @@ void MotorGrafico::ErasePowerUP(long unsigned int idx)
             PowerUP_Scena[idx]->remove();
             PowerUP_Scena.erase(PowerUP_Scena.begin() + idx);
         }
-    #endif 
+    #endif
 }
 
 //Cuando enemigo muere lo borramos
@@ -1637,7 +1637,7 @@ void MotorGrafico::EraseEnemigo(std::size_t i)
             Enemigos_Scena[i]->remove();
             Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
         }
-    #endif 
+    #endif
 }
 
 //Cuando jugador muere lo borramos
@@ -1649,7 +1649,7 @@ void MotorGrafico::EraseJugador()
         //codigo motor irrlicht
         _jugEscena->setVisible(false);
         _jugEscena->remove();
-    #endif 
+    #endif
 }
 
 void MotorGrafico::EraseArma()
@@ -1660,7 +1660,7 @@ void MotorGrafico::EraseArma()
         //codigo motor irrlicht
         _armaEnEscena->setVisible(false);
         _armaEnEscena->remove();
-    #endif 
+    #endif
 }
 
 //Devolver cantidad de enemigos en escena para recorrerlos en metodo muerteEnemigo
@@ -1697,7 +1697,7 @@ void MotorGrafico::debugBox(int x,int y, int z,int ancho, int alto, int largo)
                 _caja = _smgr->addCubeSceneNode();
             }
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float longitud)
@@ -1730,7 +1730,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
                 Objetos_Debug.push_back(_objetoEnEscena);
             }
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::CargarInterfaz()
@@ -1778,7 +1778,7 @@ void MotorGrafico::CargarInterfaz()
         {
             moneyI->setOverrideFont(font2);
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::DestruirInterfaz()
@@ -1838,7 +1838,7 @@ void MotorGrafico::DestruirInterfaz()
         _driver->removeTexture(llave_textura);
         _driver->removeTexture(espada_textura);
         _driver->removeTexture(daga_textura);
-    #endif 
+    #endif
 }
 
 void MotorGrafico::SetVida(int vida)
@@ -1860,7 +1860,7 @@ void MotorGrafico::SetVida(int vida)
                 BarraVidaI->setMaxSize(dimension2du(resultado,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
             }
         }
-    #endif 
+    #endif
 
 }
 
@@ -1884,7 +1884,7 @@ void MotorGrafico::SetBarraEnergia(int barra)
                 BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
             }
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::SetDinero(int dinero)
@@ -1899,7 +1899,7 @@ void MotorGrafico::SetDinero(int dinero)
             str += dinero;
             moneyI->setText(str.c_str());
         }
-    #endif 
+    #endif
 
 }
 
@@ -1924,14 +1924,14 @@ void MotorGrafico::SetArma(int arma)
                 espadaI->setVisible(true);
                 llaveI->setVisible(false);
                 break;
-            
+
             case 3: //objeto ataque a distancia
                 manosI->setVisible(false);
                 dagaI->setVisible(true);
                 espadaI->setVisible(false);
                 llaveI->setVisible(false);
                 break;
-            
+
             default: //son las manos
                 manosI->setVisible(true);
                 dagaI->setVisible(false);
@@ -1939,7 +1939,7 @@ void MotorGrafico::SetArma(int arma)
                 llaveI->setVisible(false);
                 break;
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::RenderInterfaz(bool activada)
@@ -1990,7 +1990,7 @@ void MotorGrafico::RenderInterfaz(bool activada)
             if(moneyI)
                 moneyI->setVisible(false);
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::cambiarAnimacionJugador(int estado)
@@ -2063,7 +2063,7 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
                 }
             }
         }
-    #endif 
+    #endif
 
 }
 
@@ -2075,7 +2075,7 @@ bool MotorGrafico::getPathfindingActivado()
     #else
         //codigo motor irrlicht
         return pathfinding;
-    #endif 
+    #endif
 }
 
 
@@ -2111,7 +2111,7 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
         }
 
         _driver->endScene();
-    #endif 
+    #endif
 }
 
 
@@ -2123,7 +2123,7 @@ void MotorGrafico::BorrarBoton(signed int id)
     #else
         //codigo motor irrlicht
         _guienv->getRootGUIElement()->getElementFromId(id)->remove();
-    #endif 
+    #endif
 }
 
 
@@ -2135,7 +2135,7 @@ void MotorGrafico::PosicionCamaraEnPuzzles()
     #else
         //codigo motor irrlicht
         _camera->setPosition(vector3df(14, 2, 0)); // No cambiar la Y, si nos la seleccion tendra errores
-    #endif 
+    #endif
 }
 
 
@@ -2248,7 +2248,7 @@ void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
                 x_linea2 = WIDTH_AUX*2;
                 break;
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::TextoPasos(short pasos)
@@ -2261,7 +2261,7 @@ void MotorGrafico::TextoPasos(short pasos)
         str += pasos;
         _myTextBox->setText(str.c_str());
         _myTextBox = nullptr;
-    #endif  
+    #endif
 }
 
 // TO DO: Anyadir string img
@@ -2273,7 +2273,7 @@ void MotorGrafico::CargarIMG(short x, short y)
         //codigo motor irrlicht
         _puzParticleTexture = _driver->getTexture("assets/puzzles/particle.bmp");
         _img = _guienv->addImage(_puzParticleTexture,core::position2d<s32>(x, y));
-    #endif  
+    #endif
 }
 
 void MotorGrafico::CrearMeshFicha(float tamanyo, int r, int g, int b)
@@ -2309,7 +2309,7 @@ void MotorGrafico::CrearFichas(short posY, float tamanyo,
         // La anyadimos a la lista
         fichasMesh.push_back(move(_ficha));
         _ficha = nullptr;
-    #endif  
+    #endif
 }
 
 short MotorGrafico::GetZonaVentana()
@@ -2329,7 +2329,7 @@ short MotorGrafico::GetZonaVentana()
             }
         }
         return NO_SELECT;// Fuera de ventana
-    #endif  
+    #endif
 }
 
 bool MotorGrafico::SeleccionarNodo()
@@ -2356,13 +2356,13 @@ bool MotorGrafico::SeleccionarNodo()
             if (_nodoSeleccionado->getID() != -1) { // Comprobamos que no sea el fondo
                 return true;
             }
-        } 
-        else 
+        }
+        else
         {
             _nodoSeleccionado = nullptr;
         }
         return false;
-    #endif  
+    #endif
 }
 
 void MotorGrafico::DeseleccionarNodo()
@@ -2372,7 +2372,7 @@ void MotorGrafico::DeseleccionarNodo()
     #else
         //codigo motor irrlicht
         _nodoSeleccionado = 0;
-    #endif  
+    #endif
 }
 
 short MotorGrafico::GetFichaY()
@@ -2382,7 +2382,7 @@ short MotorGrafico::GetFichaY()
     #else
         //codigo motor irrlicht
         return _nodoSeleccionado->getAbsolutePosition().Y;
-    #endif  
+    #endif
 }
 
 void MotorGrafico::MoverFichas(short pila)
@@ -2405,7 +2405,7 @@ void MotorGrafico::MoverFichas(short pila)
                 _nodoSeleccionado->setPosition(intersectWithPlane);
             }
         }
-    #endif  
+    #endif
 }
 
 void MotorGrafico::RecolocarFicha(short y, short z)
@@ -2416,7 +2416,7 @@ void MotorGrafico::RecolocarFicha(short y, short z)
         //codigo motor irrlicht
         short x = _nodoSeleccionado->getAbsolutePosition().X;
         _nodoSeleccionado->setPosition(vector3df(x, y, z));
-    #endif  
+    #endif
 }
 
 void MotorGrafico::ReiniciarHanoi()
@@ -2432,7 +2432,7 @@ void MotorGrafico::ReiniciarHanoi()
             fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
             posY++;
         }
-    #endif  
+    #endif
 }
 
 void MotorGrafico::RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame)
@@ -2487,7 +2487,7 @@ void MotorGrafico::RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFr
             }
             //cout << tiempoUltimoFrame << " " << salto << endl;
         }
-    #endif  
+    #endif
 }
 
 bool MotorGrafico::finalCinematica()
@@ -2509,6 +2509,6 @@ bool MotorGrafico::finalCinematica()
         }
 
         return false;
-    #endif  
+    #endif
 
 }
