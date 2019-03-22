@@ -473,7 +473,7 @@ void Interfaz::DefinirVentana(short unsigned int width, short unsigned int heigh
     }
 }
 
-unsigned short Interfaz::CrearTexto(std::string texto, short x, short y)
+unsigned short Interfaz::CrearTexto(std::string texto, short x, short y,float r, float g, float b)
 {
     unsigned short idn = AddTexto("assets/fonts/arial.ttf",18);//se crea el texto con su tipo de fuente y tamaño inicial
     Nodo * nodo = buscarNodo(idn);
@@ -481,7 +481,7 @@ unsigned short Interfaz::CrearTexto(std::string texto, short x, short y)
     if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);//nodo que contiene ttexto en el arbol
-        dynamic_cast<TTexto*>(tnodo->GetEntidad())->CrearTexto(texto,x,y,200.0f,1.0f,1.0f,0.0f,0.0f,0.0f);//direc5 de memoria de TTexto
+        dynamic_cast<TTexto*>(tnodo->GetEntidad())->CrearTexto(texto,x,y,200.0f,1.0f,1.0f,r,g,b);//direc5 de memoria de TTexto
     }
     else
     {
@@ -581,4 +581,19 @@ float * Interfaz::GetPosicion(unsigned short did)
 float * Interfaz::GetTarget(unsigned short did)
 {
     return nullptr;
+}
+
+void Interfaz::RemoveObject(unsigned short object)
+{
+    //borrar objeto que se le pasa
+}
+
+void Interfaz::EscalarImagen(unsigned short nid,float x,float y,bool enx, bool eny)
+{
+    //escalar la imagen
+}
+
+void Interfaz::CambiarTexto(unsigned short nid,std::string texto)
+{
+    //cambiar string del texto
 }
