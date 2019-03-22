@@ -344,6 +344,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Recolectables_Scena;//contiene los recolectables reservados (ids)
                 std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
                 std::vector<unsigned short> PowerUP_Scena;//contiene los power ups reservados (ids)
+                std::vector<unsigned short> Objetos_Debug;//contiene los elementos que se ven en modo debug
+                std::vector<unsigned short> Objetos_Debug2;//para objetos con tiempo para desaparecer
 
                 unsigned short _bossEscena;//id del boss
                 unsigned short _jugEscena;//id jugador
@@ -352,12 +354,27 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short _armaEnEscena;
                 unsigned short _armaProyectil; //id del proyectil
                 unsigned short _armaEsp;//id del arma especial cargado en memoria
+                bool pathfinding;//sirve para sacar mensaje por pantalla de si esta activado o no
 
                 // Ventana
                 short WIDTH_AUX, WIDTH, HEIGHT;
                 short x_linea1, x_linea2;
                 unsigned short width, height;
                 int camx, camz, cams;
+
+                //hud
+                unsigned short moneyI;
+                unsigned short vida_textura;
+                unsigned short energia_textura;
+                unsigned short dinero_textura;
+                unsigned short arma_textura;
+                unsigned short barraVida_textura;
+                unsigned short barraEnergia_textura;
+                unsigned short manos_textura;
+                unsigned short llave_textura;
+                unsigned short espada_textura;
+                unsigned short daga_textura;
+
 
             #else
                 //variables y parametros motor irrlicht
