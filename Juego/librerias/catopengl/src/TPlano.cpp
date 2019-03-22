@@ -19,6 +19,11 @@ TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale
     }
 }
 
+TPlano::~TPlano()
+{
+
+}
+
 // sobrecarga metodos TEntidad
 void TPlano::beginDraw()
 {

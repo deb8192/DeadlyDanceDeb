@@ -4,6 +4,11 @@ glm::mat4* TEntidad::matriz_compartida = new glm::mat4;
 std::stack<glm::mat4 *> * TEntidad::pila_compartida = new std::stack<glm::mat4 *>;
 std::queue<glm::mat4 *> * TEntidad::cola_compartida = new std::queue<glm::mat4 *>;
 
+TEntidad::~TEntidad()
+{
+    shader = nullptr;
+}
+
 //Uso: bloquea la entidad para que no pueda ser ejecutado por el draw
 //Entradas: ninguna
 //Salidas: ninguna

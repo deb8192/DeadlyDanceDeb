@@ -11,6 +11,8 @@
 class TEntidad
 {
     public:
+    
+        virtual ~TEntidad();
 
         virtual void beginDraw()=0;
 
