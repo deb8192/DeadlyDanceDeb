@@ -22,7 +22,6 @@ Interfaz::~Interfaz()
 
 unsigned short Interfaz::AddCamara()
 {
-
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -174,11 +173,9 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
             nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
             nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
             nodos.push_back(nodo);//se agrega a la lista de nodos general
-
             return idnuevo;
         }
     }
-
     //ahora le pasamos este al cargador para asociar la malla a este id
     return 0;
 }
@@ -319,25 +316,28 @@ unsigned short Interfaz::generarId()
 
 Interfaz::Nodo * Interfaz::buscarNodo(unsigned short id)
 {
-    unsigned short Iarriba = ((unsigned short)(nodos.size()-1));
-    unsigned short Iabajo = 0;
-    unsigned short Icentro;
-    while (Iabajo <= Iarriba)
+    if(id != 0)
     {
-        Icentro = (Iarriba + Iabajo)/2;
-        if (nodos[Icentro]->id == id)
+        unsigned short Iarriba = ((unsigned short)(nodos.size()-1));
+        unsigned short Iabajo = 0;
+        unsigned short Icentro;
+        while (Iabajo <= Iarriba)
         {
-            return nodos[Icentro];
-        }
-        else
-        {
-            if (id < nodos[Icentro]->id)
+            Icentro = (Iarriba + Iabajo)/2;
+            if (nodos[Icentro]->id == id)
             {
-                Iarriba=Icentro-1;
+                return nodos[Icentro];
             }
             else
             {
-                Iabajo=Icentro+1;
+                if (id < nodos[Icentro]->id)
+                {
+                    Iarriba=Icentro-1;
+                }
+                else
+                {
+                    Iabajo=Icentro+1;
+                }
             }
         }
     }
@@ -558,7 +558,10 @@ void Interfaz::DeshabilitarObjeto(unsigned short did)
     if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso;
-        dynamic_cast<TCamara*>(tnodo->GetEntidad())->NoEjecutar();
+        if(dynamic_cast<TCamara*>(tnodo->GetEntidad()) != nullptr)
+        {
+            dynamic_cast<TCamara*>(tnodo->GetEntidad())->NoEjecutar();
+        }
     }
 }
 
@@ -569,7 +572,10 @@ void Interfaz::HabilitarObjeto(unsigned short did)
     if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso;
-        dynamic_cast<TCamara*>(tnodo->GetEntidad())->Ejecutar();
+        if(dynamic_cast<TCamara*>(tnodo->GetEntidad()) != nullptr)
+        {
+            dynamic_cast<TCamara*>(tnodo->GetEntidad())->Ejecutar();
+        }
     }
 }
 
