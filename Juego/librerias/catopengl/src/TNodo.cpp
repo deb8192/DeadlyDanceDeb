@@ -131,7 +131,7 @@ void TNodo::draw()
 
     for(std::size_t i=0 ; i < hijos.size() ; i++)
     {
-        if(hijos[i] != nullptr)
+        if(hijos[i] != nullptr && hijos[i]->GetEntidad() != nullptr)
         {
             hijos[i]->draw();
         }

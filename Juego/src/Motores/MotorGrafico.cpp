@@ -445,7 +445,6 @@ void MotorGrafico::FondoEscena(short a, short r, short g, short b)
     #ifdef WEMOTOR
         //codigo motor catopengl
         _interfaz->CambiarFondo(r,g,b,a);
-        unsigned short idluz = _interfaz->AddLuz(0);
     #else
         //codigo motor irrlicht
         //Borra la pantalla con un color
@@ -892,7 +891,7 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
     #ifdef WEMOTOR
 
         //codigo motor catopengl
-        unsigned short luz = _interfaz->AddLuz(1);//instanciamos el objeto y lo agregamos a la escena
+        unsigned short luz = _interfaz->AddLuz(0);//instanciamos el objeto y lo agregamos a la escena
         if(luz != 0)
         {
             _interfaz->Trasladar(luz,(float)x,(float)y,(float)z);//movemos el objeto
@@ -993,7 +992,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         //codigo motor catopengl
 
         unsigned short _jugEscena = _interfaz->AddMalla(ruta_objeto,1);
-
+        CargarLuces(0,0,0);
         if(_jugEscena == 0)
         {
             _interfaz->Trasladar(_jugEscena,(float)x,(float)y,(float)z);

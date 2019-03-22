@@ -105,6 +105,8 @@ class Interfaz
             TNodo * recurso;//nodo que almacena escalado del objeto
             unsigned short id;//almacena el id a nivel local
             unsigned short idRecurso;//almacena el id del recurso (del gestor de recursos)
+            unsigned short tipo=0;//1 camara, 2 luces, 3 mallas, 4 imagenes, 5 textos
+            bool activo;//solo para camaras
         };
 
         std::vector<Nodo *> nodos;//almacena los nodos
@@ -120,4 +122,6 @@ class Interfaz
         void ventanaLimpiar();
 
         float x,y,z;
+
+        unsigned int cualborrar;
 };
