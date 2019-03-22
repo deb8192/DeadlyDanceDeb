@@ -834,7 +834,6 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
 
     CrearJugador();
     _recolectables = cargador.GetRecolectables();
-    _interactuables = cargador.GetInteractuables();
     _powerup = cargador.GetPowerup();
     _zonas = cargador.GetZonas();
     _enemigos = cargador.GetEnemigos();
@@ -846,6 +845,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     //Cargar objetos con el nivel completo
     cargador.CargarCofres(); //Cargamos los cofres del nivel
     probArana = _eneCofres.size();
+    _interactuables = cargador.GetInteractuables();
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
@@ -1043,12 +1043,12 @@ void Jugando::AccionarMecanismo(int int_col)
     Constantes constantes;
     unsigned int i = 0;
     bool coincide = false;
-    cout << int_col << "<- int_col Tam:interactuables->" << _interactuables.size() <<endl;
+    
     //Si es una puerta sin llave o palanca asociada
     if(_interactuables.at(int_col)->getCodigo() == 0)
     {
         //Se acciona o desacciona el mecanismo segun su estado actual
-        /*bool abrir = _interactuables.at(int_col)->accionar();
+        bool abrir = _interactuables.at(int_col)->accionar();
         unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(int_col);
         if(abrir)
         {
@@ -1067,12 +1067,12 @@ void Jugando::AccionarMecanismo(int int_col)
             _motora->getEvent("CerrarPuerta")->start();
             _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
             _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(),_interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
-        }*/
+        }
     }
-    /*else if(_interactuables.at(int_col)->getCodigo() == -1)
+    else if(_interactuables.at(int_col)->getCodigo() == -1)
     {
        //Cofre no abierto
-        /*if(!_interactuables.at(int_col)->getAccionado())
+        if(!_interactuables.at(int_col)->getAccionado())
         {
           //Se abre el cofre (Animacion)
           _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY(), _interactuables.at(int_col)->getRZ() + 80.0);
@@ -1084,8 +1084,8 @@ void Jugando::AccionarMecanismo(int int_col)
         else
         {
             cout << "Cofre ya abierto" << endl;
-        }*/
-    /*}
+        }
+    }
     else if(std::strcmp(_interactuables.at(int_col)->getNombre(), PALANCA) == 0)
     {
         i = 0;
@@ -1178,7 +1178,7 @@ void Jugando::AccionarMecanismo(int int_col)
                 _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
                 }
         }
-    }*/
+    }
 }
 
 void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
