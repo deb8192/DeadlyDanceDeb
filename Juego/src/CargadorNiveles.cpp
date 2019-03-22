@@ -379,6 +379,13 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int chestsMax)
     //TO DO: meter a mano o cargar del XML
     _enemigos.reserve(eneMax);
     _eneCofres.reserve(chestsMax);
+
+    unsigned short eneAranas = chestsMax/4; // 1/4 de los cofres son enemigos
+    for (unsigned short i= 0; i<eneAranas; ++i)
+    {
+        CrearCofreArana();
+    }
+    
     /*_recolectables.reserve(20);
     _interactuables.reserve(20);
     _powerup.reserve(20);
@@ -609,6 +616,53 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
         sala->AgregarWaypoint(_waypoints.back());
     }
     waypoint = nullptr;
+}
+
+void CargadorNiveles::CrearCofreArana()
+{
+    /*int accion, int enemigo, int x,int y,int z, 
+    int ancho, int largo, int alto, Sala* sala*/
+
+    CofreArana* _eneA = new CofreArana(0,0,0, 150); // Posiciones, vida
+    
+    _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
+    _eneA->setID(++id);//le damos el id unico en esta partida al enemigo
+    _eneA->SetEnemigo(2);
+
+    _eneA->setVelocidadMaxima(1.5f);
+    _eneA->setBarraAtEs(0);
+    _eneA->setAtaque(10);
+    _eneA->setArmaEspecial(100);
+    _eneA->setTimeAtEsp(0.0f);
+    _eneA->setDanyoCritico(50);
+    _eneA->setProAtaCritico(10);
+    _eneA->setRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+    _eneA->setVectorOrientacion();
+    _eneA->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+    _eneA->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+
+    //_motor->CargarEnemigos(0,0,0,_eneA->GetModelo());//creamos la figura
+    _eneCofres.push_back(move(_eneA));//guardamos el enemigo en el vector
+    _eneA = nullptr;
+
+    /*_eneA->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _eneA->setPosicionesAtaque(x,y,z);
+    _eneA->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _eneA->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _eneA->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    _eneA->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+    _eneA->definirSala(sala);//le pasamos la sala en donde esta
+    _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2);
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
+    */
+    
+    //Cargar sonido evento en una instancia con la id del enemigo como nombre
+    /* std::string nameid = std::to_string(id); //pasar id a string
+    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+    _motora->getEvent(nameid)->setPosition(x,y,z);
+    _motora->getEvent(nameid)->setVolume(0.4f);
+    _motora->getEvent(nameid)->start();*/
 }
 
 int* CargadorNiveles::GetID()
