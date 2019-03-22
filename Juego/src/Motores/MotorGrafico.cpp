@@ -445,6 +445,7 @@ void MotorGrafico::FondoEscena(short a, short r, short g, short b)
     #ifdef WEMOTOR
         //codigo motor catopengl
         _interfaz->CambiarFondo(r,g,b,a);
+        unsigned short idluz = _interfaz->AddLuz(0);
     #else
         //codigo motor irrlicht
         //Borra la pantalla con un color
@@ -486,7 +487,6 @@ void MotorGrafico::BorrarScena()
 void MotorGrafico::BorrarGui()
 {
     #ifdef WEMOTOR
-        //codigo motor catopengl
         //codigo motor catopengl
         if(_interfaz != nullptr)
         {
@@ -1261,21 +1261,24 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
         float * nodeCamPosition = _interfaz->GetPosicion(camara);
         float * nodeCamTarget = _interfaz->GetTarget(camara);
 
-        // Centrar la camara
-        nodeCamPosition[0] = x+(camx*cams);
-        nodeCamPosition[1] = y+30;
-        nodeCamPosition[2] = z+(camz*cams);
-        nodeCamTarget[0] = x;
-        nodeCamTarget[1] = y;
-        nodeCamTarget[2] = z;
+        if(nodeCamPosition != nullptr && nodeCamTarget != nullptr)
+        {
+            // Centrar la camara
+            nodeCamPosition[0] = x+(camx*cams);
+            nodeCamPosition[1] = y+30;
+            nodeCamPosition[2] = z+(camz*cams);
+            nodeCamTarget[0] = x;
+            nodeCamTarget[1] = y;
+            nodeCamTarget[2] = z;
 
-        _interfaz->Trasladar(camara,nodeCamPosition[0],nodeCamPosition[1],nodeCamPosition[2]);
-        _interfaz->ChangeTargetCamara(camara,nodeCamTarget[0],nodeCamTarget[1],nodeCamTarget[2]);
+            _interfaz->Trasladar(camara,nodeCamPosition[0],nodeCamPosition[1],nodeCamPosition[2]);
+            _interfaz->ChangeTargetCamara(camara,nodeCamTarget[0],nodeCamTarget[1],nodeCamTarget[2]);
 
-        _interfaz->Trasladar(_jugEscena,x,y,z);
-        _interfaz->Rotar(_jugEscena,rx,1,0,0);
-        _interfaz->Rotar(_jugEscena,ry,0,1,0);
-        _interfaz->Rotar(_jugEscena,rz,0,0,1);
+            _interfaz->Trasladar(_jugEscena,x,y,z);
+            _interfaz->Rotar(_jugEscena,rx,1,0,0);
+            _interfaz->Rotar(_jugEscena,ry,0,1,0);
+            _interfaz->Rotar(_jugEscena,rz,0,0,1);
+        }
 
     #else
         //codigo motor irrlicht
@@ -1921,7 +1924,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
                 _smgr->getMeshManipulator()->setVertexColors(_objetoEnEscena->getMesh(),COLOR);
 
                 core::vector3df rotation = _objetoEnEscena->getRotation();
-                _objetoEnEscena->setRotation(core:_objetoEnEscena:vector3df(rotation.X,rotacion,rotation.Z));
+                _objetoEnEscena->setRotation(core::vector3df(rotation.X,rotacion,rotation.Z));
 
                 rotation = _objetoEnEscena->getRotation();
 
