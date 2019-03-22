@@ -363,7 +363,7 @@ void Jugando::Update()
                 mov_weapon_posZ = 2;
                 mov_weapon_posY = 2.5;
             }
-            else
+            else if(_jugador->getTimeAt() <= 0.0f)
             {
                 if(proyectilFuera == false)
                 {
@@ -1323,13 +1323,13 @@ void Jugando::activarPowerUp()
         bool locoges = false; //Comprobar si lo puedes coger
 
         //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
-        if(_powerup.at(int_cpw)->getAtaque() == 0 && _jugador->getVida() < 100)
+        if(_powerup.at(int_cpw)->getAtaque() == 0 /*&& _jugador->getVida() < 100*/)
         {
-            cout << "PowerUP! Curado 20 de vida. TOTAL:" << _jugador->getVida() << endl;
-            _jugador->ModificarVida(20);
+            cout << "PowerUP! Curado 25 de vida. TOTAL:" << _jugador->getVida() << endl;
+            _jugador->ModificarVida(25);
             locoges = true;
         }
-        else if(_powerup.at(int_cpw)->getAtaque() == 1 && _jugador->getBarraAtEs() < 100)
+        else if(_powerup.at(int_cpw)->getAtaque() == 1 /*&& _jugador->getBarraAtEs() < 100*/)
         {
             cout << "PowerUP! 50 de energia. TOTAL:" << _jugador->getBarraAtEs() << endl;
            _jugador->ModificarBarraAtEs(50);
@@ -1393,6 +1393,7 @@ void Jugando::updateAt(int* danyo)
         //clear
         if(_jugador->getTimeAt() <= 0.0f){
            // _motor->clearDebug2();
+
         }
     }
 }
