@@ -445,6 +445,7 @@ void Interfaz::LimpiarEscena()
     //limpia todos los elementos que no son gui
     if(_raiz != nullptr)
     {
+
         _raiz->BorrarEscena();
     }
 }
@@ -464,7 +465,7 @@ void Interfaz::LimpiarGui()
             if(nodos[i] != nullptr && (nodos[i]->tipo == 4 || nodos[i]->tipo == 5))
             {
                 nodos[i]->recurso = nullptr;
-                //delete nodos[i];
+                delete nodos[i];
                 nodos.erase(nodos.begin()+i); 
                 i--;
             }
@@ -623,10 +624,10 @@ void Interfaz::RemoveObject(unsigned short object)
         {
             if(nodo->recurso != nullptr)
             {
-                //delete nodo->recurso;
+                _raiz->remHijo(nodo->recurso);
+                delete nodo->recurso;
                 nodo->recurso = nullptr;
-                //delete nodo;
-                nodos.erase(nodos.begin()+cualborrar); 
+                delete nodo;
             }
             nodos.erase(nodos.begin()+cualborrar); 
         }
