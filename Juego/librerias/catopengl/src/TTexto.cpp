@@ -86,6 +86,7 @@ void TTexto::CrearTexto(std::string newtext, GLfloat xx, GLfloat yy, GLfloat Max
 
 void TTexto::beginDraw()
 {
+    
     // Activar render
     shader->Use();
     shader->setVec3("textColor", color);

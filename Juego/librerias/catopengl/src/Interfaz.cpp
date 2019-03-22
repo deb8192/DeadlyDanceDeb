@@ -10,6 +10,7 @@ Interfaz::Interfaz()
     gestorDeRecursos = new CatOpengl::Gestor;
     ventana_inicializada = true;//se pone para que entra a inicializar por defecto
     window = nullptr;//se pone para saber que no esta inicializada
+    nodos.reserve(600);//para almacenar el objeto
     x = 0.0f;
     y = 0.0f;
     z = 0.0f;
@@ -22,6 +23,7 @@ Interfaz::~Interfaz()
 
 unsigned short Interfaz::AddCamara()
 {
+    //std::cout << "SE CREA CAMARA" << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -65,8 +67,8 @@ unsigned short Interfaz::AddCamara()
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodo->tipo = 0;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
-
         return idnuevo;
     }
 
@@ -75,6 +77,7 @@ unsigned short Interfaz::AddCamara()
 
 unsigned short Interfaz::AddLuz(int tipo)
 {
+    //std::cout << "SE CREA LUZ" << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -118,6 +121,7 @@ unsigned short Interfaz::AddLuz(int tipo)
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodo->tipo = 1;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
 
         return idnuevo;
@@ -128,6 +132,7 @@ unsigned short Interfaz::AddLuz(int tipo)
 
 unsigned short Interfaz::AddMalla(const char * archivo, int initf)
 {
+    //std::cout << "SE CREA MALLA" << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -172,6 +177,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
             nodo->id = idnuevo;//se pone el id
             nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
             nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
+            nodo->tipo = 2;
             nodos.push_back(nodo);//se agrega a la lista de nodos general
             return idnuevo;
         }
@@ -182,6 +188,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
 
 unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigned int y, float scale)
 {
+    //std::cout << "SE CREA IMAGEN" << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -224,6 +231,7 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodo->tipo = 4;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
 
         return idnuevo;
@@ -234,6 +242,8 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
 
 unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 {
+    //std::cout << "SE CREA TEXTO" << std::endl;
+
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -277,6 +287,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodo->tipo = 5;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
 
         return idnuevo;
@@ -287,6 +298,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
 void Interfaz::Draw()
 {
+    //std::cout << "TAMANO NODOS " << nodos.size() << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -326,6 +338,7 @@ Interfaz::Nodo * Interfaz::buscarNodo(unsigned short id)
             Icentro = (Iarriba + Iabajo)/2;
             if (nodos[Icentro]->id == id)
             {
+                cualborrar = Icentro;
                 return nodos[Icentro];
             }
             else
@@ -446,6 +459,16 @@ void Interfaz::LimpiarGui()
         imagenes.reserve(20);
         textos.resize(0);
         textos.reserve(20);
+        for(std::size_t i=0 ; i < nodos.size() ; i++)
+        {
+            if(nodos[i] != nullptr && (nodos[i]->tipo == 4 || nodos[i]->tipo == 5))
+            {
+                nodos[i]->recurso = nullptr;
+                //delete nodos[i];
+                nodos.erase(nodos.begin()+i); 
+                i--;
+            }
+        }
     }
 }
 
@@ -558,9 +581,9 @@ void Interfaz::DeshabilitarObjeto(unsigned short did)
     if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso;
-        if(dynamic_cast<TCamara*>(tnodo->GetEntidad()) != nullptr)
+        if(tnodo->GetEntidad() != nullptr)
         {
-            dynamic_cast<TCamara*>(tnodo->GetEntidad())->NoEjecutar();
+           tnodo->GetEntidad()->NoEjecutar();
         }
     }
 }
@@ -572,9 +595,9 @@ void Interfaz::HabilitarObjeto(unsigned short did)
     if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso;
-        if(dynamic_cast<TCamara*>(tnodo->GetEntidad()) != nullptr)
+        if(tnodo->GetEntidad() != nullptr)
         {
-            dynamic_cast<TCamara*>(tnodo->GetEntidad())->Ejecutar();
+            tnodo->GetEntidad()->Ejecutar();
         }
     }
 }
@@ -591,7 +614,23 @@ float * Interfaz::GetTarget(unsigned short did)
 
 void Interfaz::RemoveObject(unsigned short object)
 {
-    //borrar objeto que se le pasa
+    if(object != 0)
+    {
+        //borrar objeto que se le pasa
+        Nodo * nodo = buscarNodo(object);
+
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                //delete nodo->recurso;
+                nodo->recurso = nullptr;
+                //delete nodo;
+                nodos.erase(nodos.begin()+cualborrar); 
+            }
+            nodos.erase(nodos.begin()+cualborrar); 
+        }
+    }
 }
 
 void Interfaz::EscalarImagen(unsigned short nid,float x,float y,bool enx, bool eny)
