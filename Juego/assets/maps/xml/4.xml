@@ -1,5 +1,8 @@
 <Level><!--- Esto nos indica que estamos definiendo un nivel -->
-
+	<!-- Para reservar memoria en los vectores -->
+	<!-- TO DO: Poner todos los numeros correctos menos de Chests -->
+	<MaxNumberOf Enemies="50" Walls="100" Doors="20" Keys="10" Chests="12"></MaxNumberOf>
+	
 	<Light Type="Ambiental" Intensity="50" Attenuation="0" Color="Red" X="0" Y="10" Z="0"> </Light>
 
 	<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="0" Y="0" Z="0" Texture="assets/texture/platform1.png" TypeCenter="1" Model="assets/models/paredes_suelo.obj" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
