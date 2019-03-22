@@ -31,6 +31,13 @@ CargadorNiveles::~CargadorNiveles()
     }
     _enemigos.clear();
 
+    tam = _eneCofres.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _eneCofres.at(i);
+    }
+    _eneCofres.clear();
+
     tam = _zonas.size();
     for(short i=0; i < tam; i++)
     {
@@ -99,8 +106,8 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     int eneMax = hijo.attribute("Enemies").as_int();//nos devuelve un int
     int wallsMax = hijo.attribute("Walls").as_int();//nos devuelve un int
     int doorsMax = hijo.attribute("Doors").as_int();//nos devuelve un int
-    int chestsMax = hijo.attribute("Chests").as_int();//nos devuelve un int
-    ReservarMemoriaVectores(eneMax, /*wallsMax, doorsMax, */chestsMax);
+    chestsMax = hijo.attribute("Chests").as_int();//nos devuelve un int
+    ReservarMemoriaVectores(eneMax/*, wallsMax, doorsMax*/);
     
     pugi::xml_node primera = doc.child("Level"); //partimos de nivel
     vector <pugi::xml_node> anterior;
@@ -374,9 +381,8 @@ std::vector<Waypoint*> CargadorNiveles::GetWaypoints()
     return _waypoints;
 }
 
-void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int chestsMax)
+void CargadorNiveles::ReservarMemoriaVectores(int eneMax/*, int wallsMax, int doorsMax*/)
 {
-    //TO DO: meter a mano o cargar del XML
     _enemigos.reserve(eneMax);
     _eneCofres.reserve(chestsMax);
 
@@ -385,7 +391,8 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int chestsMax)
     {
         CrearCofreArana();
     }
-    
+
+    // TO DO:
     /*_recolectables.reserve(20);
     _interactuables.reserve(20);
     _powerup.reserve(20);
@@ -665,7 +672,93 @@ void CargadorNiveles::CrearCofreArana()
     _motora->getEvent(nameid)->start();*/
 }
 
+//Cargar los cofres del nivel
+void CargadorNiveles::CargarCofres()
+{
+    unsigned short totalCofresPonible = 0;
+    vector<short> zonasDisponibles;
+    zonasDisponibles.reserve(chestsMax);
+
+    //Se comprueba si hay zonas de cofres disponibles
+    if(!_zonas.empty())
+    {
+        //se contabilizan las zonas donde se pueden colocar cofres
+        for(unsigned short i = 0; i < _zonas.size(); i++)
+        {
+            //Se comprueba que es una zona de cofres y que le caben mas cofres
+            if((_zonas.at(i)->getTipo() == 0) && (!_zonas.at(i)->getProposito()))
+            {
+                totalCofresPonible += (_zonas[i]->getTotalElementos() - _zonas[i]->getElementosActuales());
+                zonasDisponibles.push_back(i);
+            }
+        }
+        //En caso de haber mas o el mismo numero de huecos para cofres que cofres se accede
+        if(totalCofresPonible >= chestsMax)
+        {
+            float newx = 0;
+            float newy = 0;
+            float newz = 0;
+
+            //Mientra hay cofres sin colocar, colocar en una zona aleatoria
+            while(chestsMax > 0)
+            {
+                srand(time(NULL));
+                int numAlt = rand() % zonasDisponibles.size();
+                cout << "colocar en: " << zonasDisponibles[numAlt] << endl;
+
+                //Buscar zona donde colocar
+                newx = _zonas[zonasDisponibles[numAlt]]->getX();
+                newy = _zonas[zonasDisponibles[numAlt]]->getY();
+                newz = _zonas[zonasDisponibles[numAlt]]->getZ();
+
+                //Se annade el nuevo elemento al vector de zonas
+                _zonas[zonasDisponibles[numAlt]]->annadirElemento();
+
+                //Colocar cofre
+                int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,"assets/models/Cofre/cofre.obj", "assets/models/Cofre/cofre.mtl");
+                Interactuable*  inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/cofre.obj","assets/models/Cofre/cofre.mtl", posicionObjeto, newx, newy, newz);
+                inter->setID(++id);
+                inter->setPosiciones(newx,newy,newz);
+                inter->SetPosicionArrayObjetos(posicionObjeto);
+                inter->setRotacion(0.0,0.0,0.0);
+                _interactuables.push_back(inter);
+                inter = nullptr;
+
+                //Fisicas del cofre
+                _fisicas->crearCuerpo(3,0,newx/2,newy/2,newz/2,2,2,4,2,3,0,0);
+
+                //borrar del Array por que el proposito esta cumplido
+                if(_zonas[zonasDisponibles[numAlt]]->getTotalElementos() == _zonas[zonasDisponibles[numAlt]]->getElementosActuales())
+                {
+                    _zonas[zonasDisponibles[numAlt]]->setProposito(true);
+                    zonasDisponibles.erase(zonasDisponibles.begin() + numAlt);
+                }
+
+                chestsMax--; //un cofre menos
+            }
+            zonasDisponibles.resize(0);
+
+            // Debug: para cambiar la posicion del jugador al lado de un cofre
+            posCofre[0] = newx;
+            posCofre[1] = newy;
+            posCofre[2] = newz;
+        }
+        else
+        {
+            cout << "No hay zonas de cofres suficientes en el nivel" << endl;
+        }
+    }
+}
+
 int* CargadorNiveles::GetID()
 {
     return &id;
+}
+
+void CargadorNiveles::TrasladarJugadorACofres()
+{
+    unsigned short desplaza = 10;
+    _jugador->setPosiciones(posCofre[0]+desplaza, posCofre[1], posCofre[2]);
+    _jugador->setNewPosiciones(posCofre[0]+desplaza, posCofre[1], posCofre[2]);
+    _jugador->initPosicionesFisicas((posCofre[0]+desplaza)/2, posCofre[1]/2, posCofre[2]/2);
 }

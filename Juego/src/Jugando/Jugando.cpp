@@ -31,6 +31,13 @@ Jugando::~Jugando()
     }
     _enemigos.clear();
 
+    tam = _eneCofres.size();
+    for(short i=0; i < tam; i++)
+    {
+        _eneCofres.at(i) = nullptr;
+    }
+    _eneCofres.clear();
+
     tam = _zonas.size();
     for(short i=0; i < tam; i++)
     {
@@ -231,10 +238,7 @@ void Jugando::ManejarEventos() {
     // Debug para probar cofres
     if(_motor->EstaPulsado(KEY_C))
     {
-        unsigned short desplaza = 10;
-        _jugador->setPosiciones(posCofre[0]+desplaza, posCofre[1], posCofre[2]);
-        _jugador->setNewPosiciones(posCofre[0]+desplaza, posCofre[1], posCofre[2]);
-        _jugador->initPosicionesFisicas((posCofre[0]+desplaza)/2, posCofre[1]/2, posCofre[2]/2);
+        cargador.TrasladarJugadorACofres();
         _motor->ResetKey(KEY_C);
     }
 
@@ -834,12 +838,14 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _powerup = cargador.GetPowerup();
     _zonas = cargador.GetZonas();
     _enemigos = cargador.GetEnemigos();
+    _eneCofres = cargador.GetEneCofres();
     _boss = cargador.GetBoss();
     _waypoints = cargador.GetWaypoints();
     ConectarWaypoints();
 
     //Cargar objetos con el nivel completo
-    this->cargarCofres(16); //Cargamos los cofres del nivel
+    cargador.CargarCofres(); //Cargamos los cofres del nivel
+    probArana = _eneCofres.size();
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
@@ -916,88 +922,6 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
-}
-
-//Cargar los cofres del nivel
-void Jugando::cargarCofres(int num)
-{
-  Constantes constantes;
-    long unsigned int num_cofres = num;
-    unsigned short  totalCofresPonible = 0;
-    vector<short> zonasDisponibles;
-    zonasDisponibles.reserve(num);
-
-    //Se comprueba si hay zonas de cofres disponibles
-    if(!_zonas.empty())
-    {
-        //se contabilizan las zonas donde se pueden colocar cofres
-        for(unsigned short i = 0; i < _zonas.size(); i++)
-        {
-            //Se comprueba que es una zona de cofres y que le caben mas cofres
-            if((_zonas.at(i)->getTipo() == constantes.CERO) && (!_zonas.at(i)->getProposito()))
-            {
-                totalCofresPonible += (_zonas[i]->getTotalElementos() - _zonas[i]->getElementosActuales());
-                zonasDisponibles.push_back(i);
-            }
-        }
-        //En caso de haber mas o el mismo numero de huecos para cofres que cofres se accede
-        if(totalCofresPonible >= num_cofres)
-        {
-            float newx = 0;
-            float newy = 0;
-            float newz = 0;
-
-            //Mientra hay cofres sin colocar, colocar en una zona aleatoria
-            while(num_cofres > 0)
-            {
-                srand(time(NULL));
-                int numAlt = rand() % zonasDisponibles.size();
-                cout << "colocar en: " << zonasDisponibles[numAlt] << endl;
-
-                //Buscar zona donde colocar
-                newx = _zonas[zonasDisponibles[numAlt]]->getX();
-                newy = _zonas[zonasDisponibles[numAlt]]->getY();
-                newz = _zonas[zonasDisponibles[numAlt]]->getZ();
-
-                //Se annade el nuevo elemento al vector de zonas
-                _zonas[zonasDisponibles[numAlt]]->annadirElemento();
-
-                //Colocar cofre
-                int posicionObjeto = _motor->CargarObjetos(3,constantes.CERO,newx,newy,newz,2,2,2,"assets/models/Cofre/cofre.obj", "assets/models/Cofre/cofre.mtl");
-                Interactuable*  inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/cofre.obj","assets/models/Cofre/cofre.mtl", posicionObjeto, newx, newy, newz);
-                int* id = cargador.GetID();
-                inter->setID(*(++id));
-                id = nullptr;
-                inter->setPosiciones(newx,newy,newz);
-                inter->SetPosicionArrayObjetos(posicionObjeto);
-                inter->setRotacion(0.0,0.0,0.0);
-                _interactuables.push_back(inter);
-                inter = nullptr;
-
-                //Fisicas del cofre
-                _fisicas->crearCuerpo(3,constantes.CERO,newx/2,newy/2,newz/2,2,2,4,2,3,0,0);
-
-                //borrar del Array por que el proposito esta cumplido
-                if(_zonas[zonasDisponibles[numAlt]]->getTotalElementos() == _zonas[zonasDisponibles[numAlt]]->getElementosActuales())
-                {
-                    _zonas[zonasDisponibles[numAlt]]->setProposito(true);
-                    zonasDisponibles.erase(zonasDisponibles.begin() + numAlt);
-                }
-
-                num_cofres--; //un cofre menos
-            }
-            zonasDisponibles.resize(0);
-
-            // Debug: para cambiar la posicion del jugador al lado de un cofre
-            posCofre[0] = newx;
-            posCofre[1] = newy;
-            posCofre[2] = newz;
-        }
-        else
-        {
-            cout << "No hay zonas de cofres suficientes en el nivel" << endl;
-        }
-    }
 }
 
 /************ ConectarWaypoints ************
@@ -1119,11 +1043,12 @@ void Jugando::AccionarMecanismo(int int_col)
     Constantes constantes;
     unsigned int i = 0;
     bool coincide = false;
+    cout << int_col << "<- int_col Tam:interactuables->" << _interactuables.size() <<endl;
     //Si es una puerta sin llave o palanca asociada
     if(_interactuables.at(int_col)->getCodigo() == 0)
     {
         //Se acciona o desacciona el mecanismo segun su estado actual
-        bool abrir = _interactuables.at(int_col)->accionar();
+        /*bool abrir = _interactuables.at(int_col)->accionar();
         unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(int_col);
         if(abrir)
         {
@@ -1142,12 +1067,12 @@ void Jugando::AccionarMecanismo(int int_col)
             _motora->getEvent("CerrarPuerta")->start();
             _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ());
             _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(),_interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
-        }
+        }*/
     }
-    else if(_interactuables.at(int_col)->getCodigo() == -1)
+    /*else if(_interactuables.at(int_col)->getCodigo() == -1)
     {
        //Cofre no abierto
-        if(!_interactuables.at(int_col)->getAccionado())
+        /*if(!_interactuables.at(int_col)->getAccionado())
         {
           //Se abre el cofre (Animacion)
           _interactuables.at(int_col)->setNewRotacion(_interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY(), _interactuables.at(int_col)->getRZ() + 80.0);
@@ -1159,8 +1084,8 @@ void Jugando::AccionarMecanismo(int int_col)
         else
         {
             cout << "Cofre ya abierto" << endl;
-        }
-    }
+        }*/
+    /*}
     else if(std::strcmp(_interactuables.at(int_col)->getNombre(), PALANCA) == 0)
     {
         i = 0;
@@ -1253,7 +1178,7 @@ void Jugando::AccionarMecanismo(int int_col)
                 _fisicas->updatePuerta(_interactuables.at(int_col)->getX(), _interactuables.at(int_col)->getY(), _interactuables.at(int_col)->getZ(), _interactuables.at(int_col)->getRX(), _interactuables.at(int_col)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(int_col)->getRZ(), _interactuables.at(int_col)->GetDesplazamientos(), posicion);
                 }
         }
-    }
+    }*/
 }
 
 void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
