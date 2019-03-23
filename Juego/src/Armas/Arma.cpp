@@ -7,7 +7,8 @@ Arma::Arma()
 
 }
 
-Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt, const char* objeto, const char* textura)
+Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt, 
+    const char* objeto, const char* textura, unsigned short tipoObj)
 {
     std::string name_objeto(objeto);
     cadena_objeto = new char[sizeof(name_objeto)];
@@ -29,6 +30,9 @@ Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt, const cha
     ruta_objeto = cadena_objeto; 
     ruta_textura = cadena_textura;
     //motor->CargarArmaEspecial(0,0,0,ruta,"");
+
+    // INobjetos
+    tipoObjeto = tipoObj;
 }
 
 Arma::~Arma()
@@ -360,4 +364,9 @@ float Arma::getLargo()
 float Arma::getAlto()
 {
     return alto;
+}
+
+unsigned short Arma::GetTipoObjeto()
+{
+    return tipoObjeto;
 }

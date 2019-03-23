@@ -2,8 +2,6 @@
 #include "../Juego.hpp"
 #include "../ConstantesComunes.hpp"
 
-#define PALANCA "palanca"
-
 Jugando::Jugando()
 {
 }
@@ -30,6 +28,13 @@ Jugando::~Jugando()
         _enemigos.at(i) = nullptr;
     }
     _enemigos.clear();
+
+    tam = _eneCofres.size();
+    for(short i=0; i < tam; i++)
+    {
+        _eneCofres.at(i) = nullptr;
+    }
+    _eneCofres.clear();
 
     tam = _zonas.size();
     for(short i=0; i < tam; i++)
@@ -235,10 +240,7 @@ void Jugando::ManejarEventos() {
     // Debug para probar cofres
     if(_motor->EstaPulsado(KEY_C))
     {
-        unsigned short desplaza = 10;
-        _jugador->setPosiciones(posCofre[0]+desplaza, posCofre[1], posCofre[2]);
-        _jugador->setNewPosiciones(posCofre[0]+desplaza, posCofre[1], posCofre[2]);
-        _jugador->initPosicionesFisicas((posCofre[0]+desplaza)/2, posCofre[1]/2, posCofre[2]/2);
+        cargador.TrasladarJugadorACofres();
         _motor->ResetKey(KEY_C);
     }
 
@@ -681,7 +683,7 @@ void Jugando::UpdateIA()
                         }
 
                         //Crear objeto
-                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+                        this->CrearPowerUp(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
                     }
 
                     if (_enemigos[i]->GetPedirAyuda()) {
@@ -726,6 +728,8 @@ void Jugando::UpdateIA()
 
 void Jugando::Render()
 {
+    cout<<"LLEGOOOOOOOOOOO"<<endl;
+
     _motor->FondoEscena(255,0,0,0); // Borra toda la pantalla
 
     _motor->clearDebug2();
@@ -840,16 +844,18 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
 
     CrearJugador();
     _recolectables = cargador.GetRecolectables();
-    _interactuables = cargador.GetInteractuables();
     _powerup = cargador.GetPowerup();
     _zonas = cargador.GetZonas();
     _enemigos = cargador.GetEnemigos();
+    _eneCofres = cargador.GetEneCofres();
     _boss = cargador.GetBoss();
     _waypoints = cargador.GetWaypoints();
     ConectarWaypoints();
 
     //Cargar objetos con el nivel completo
-    this->cargarCofres(16); //Cargamos los cofres del nivel
+    cargador.CargarCofres(); //Cargamos los cofres del nivel
+    probArana = _eneCofres.size();
+    _interactuables = cargador.GetInteractuables();
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
@@ -874,139 +880,23 @@ void Jugando::CrearJugador()
 
 }
 
-//lo utilizamos para crear su modelo en motorgrafico y su objeto
-void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
-    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades)
+void Jugando::CrearPowerUp(int codigo, int accion, const char* nombre, int ataque, int rp, 
+    int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, 
+    const char* ruta_objeto, const char* ruta_textura, int* propiedades)
 {
-    int posicionObjeto;
-
-    //Arma
-    if(accion == 2)
+    if (accion == 4) // Nos aseguramos que es un powerup //Esto es temporal
     {
-        posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z);
-        _rec->setID(_recolectables.size());
-        _rec->setPosiciones(x,y,z);
-        _rec->SetPosicionArrayObjetos(posicionObjeto);
-        _recolectables.push_back(move(_rec));
-        _rec = nullptr;
-    }else
-    //Puertas o interruptores
-    if(accion == 3)
-    {
-        posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Interactuable* _inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto,x,y,z);
-        int* id = cargador.GetID();
-        _inter->setID(*(++id));
-        id = nullptr;
-        _inter->setPosiciones(x,y,z);
-        _inter->SetPosicionArrayObjetos(posicionObjeto);
-        _inter->setDesplazamientos(despX,despZ);
-        _inter->setRotacion(0.0,0.0,0.0);
-        _interactuables.push_back(move(_inter));
-        _inter = nullptr;
-    }else
-    //Powerups
-    if(accion == 4)
-    {
-        posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z);
+        Constantes constantes;
+        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z,constantes.POWERUP);
         _rec->setID(_powerup.size());
         _rec->setPosiciones(x,y,z);
         _rec->SetPosicionArrayObjetos(posicionObjeto);
         _rec->setCantidad(propiedades[0]); //cantidad
         _powerup.push_back(move(_rec));
         _rec = nullptr;
-    }
-    else
-    {
-         posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-    }
 
-    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
-    //motor->debugBox(x,y,z,ancho,alto,largo);
-    //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
-}
-
-//Cargar los cofres del nivel
-void Jugando::cargarCofres(int num)
-{
-  Constantes constantes;
-    long unsigned int num_cofres = num;
-    unsigned short  totalCofresPonible = 0;
-    vector<short> zonasDisponibles;
-    zonasDisponibles.reserve(num);
-
-    //Se comprueba si hay zonas de cofres disponibles
-    if(!_zonas.empty())
-    {
-        //se contabilizan las zonas donde se pueden colocar cofres
-        for(unsigned short i = 0; i < _zonas.size(); i++)
-        {
-            //Se comprueba que es una zona de cofres y que le caben mas cofres
-            if((_zonas.at(i)->getTipo() == constantes.CERO) && (!_zonas.at(i)->getProposito()))
-            {
-                totalCofresPonible += (_zonas[i]->getTotalElementos() - _zonas[i]->getElementosActuales());
-                zonasDisponibles.push_back(i);
-            }
-        }
-        //En caso de haber mas o el mismo numero de huecos para cofres que cofres se accede
-        if(totalCofresPonible >= num_cofres)
-        {
-            float newx = 0;
-            float newy = 0;
-            float newz = 0;
-
-            //Mientra hay cofres sin colocar, colocar en una zona aleatoria
-            while(num_cofres > 0)
-            {
-                srand(time(NULL));
-                int numAlt = rand() % zonasDisponibles.size();
-                cout << "colocar en: " << zonasDisponibles[numAlt] << endl;
-
-                //Buscar zona donde colocar
-                newx = _zonas[zonasDisponibles[numAlt]]->getX();
-                newy = _zonas[zonasDisponibles[numAlt]]->getY();
-                newz = _zonas[zonasDisponibles[numAlt]]->getZ();
-
-                //Se annade el nuevo elemento al vector de zonas
-                _zonas[zonasDisponibles[numAlt]]->annadirElemento();
-
-                //Colocar cofre
-                int posicionObjeto = _motor->CargarObjetos(3,constantes.CERO,newx,newy,newz,2,2,2,"assets/models/Cofre/cofre.obj", "assets/models/Cofre/cofre.mtl");
-                Interactuable*  inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/cofre.obj","assets/models/Cofre/cofre.mtl", posicionObjeto, newx, newy, newz);
-                int* id = cargador.GetID();
-                inter->setID(*(++id));
-                id = nullptr;
-                inter->setPosiciones(newx,newy,newz);
-                inter->SetPosicionArrayObjetos(posicionObjeto);
-                inter->setRotacion(0.0,0.0,0.0);
-                _interactuables.push_back(inter);
-                inter = nullptr;
-
-                //Fisicas del cofre
-                _fisicas->crearCuerpo(3,constantes.CERO,newx/2,newy/2,newz/2,2,2,4,2,3,0,0);
-
-                //borrar del Array por que el proposito esta cumplido
-                if(_zonas[zonasDisponibles[numAlt]]->getTotalElementos() == _zonas[zonasDisponibles[numAlt]]->getElementosActuales())
-                {
-                    _zonas[zonasDisponibles[numAlt]]->setProposito(true);
-                    zonasDisponibles.erase(zonasDisponibles.begin() + numAlt);
-                }
-
-                num_cofres--; //un cofre menos
-            }
-            zonasDisponibles.resize(0);
-
-            // Debug: para cambiar la posicion del jugador al lado de un cofre
-            posCofre[0] = newx;
-            posCofre[1] = newy;
-            posCofre[2] = newz;
-        }
-        else
-        {
-            cout << "No hay zonas de cofres suficientes en el nivel" << endl;
-        }
+        _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
     }
 }
 
@@ -1043,7 +933,11 @@ void Jugando::ConectarWaypoints()
         if(_jugador->getArma() == nullptr)//si no tiene arma equipada
         {
             //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)_recolectables[rec_col];
-            Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),_recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),_recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),_recolectables[rec_col]->getObjeto(),_recolectables[rec_col]->getTextura());
+            Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
+                _recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),
+                _recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),
+                _recolectables[rec_col]->getObjeto(),_recolectables[rec_col]->getTextura(),
+                constantes.ARMA);
             _jugador->setArma(nuArma);
             //PROVISIONAL
             _jugador->getArma()->setRotacion(0.0, constantes.PI_RADIAN, 0.0);//!PROVISIONAL
@@ -1060,9 +954,18 @@ void Jugando::ConectarWaypoints()
         else if(_jugador->getArma() != nullptr)//si tiene arma equipada
         {
             //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-            Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),_jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),_jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),_jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura(),_jugador->getX(),_jugador->getY(), _jugador->getZ());
+            Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),
+                _jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),
+                _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),
+                _jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura(),
+                _jugador->getX(),_jugador->getY(), _jugador->getZ(),5);
+
             nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
-            Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),_recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),_recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),_recolectables[rec_col]->getObjeto(),_recolectables[rec_col]->getTextura());
+            Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
+                _recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),
+                _recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),
+                _recolectables[rec_col]->getObjeto(),_recolectables[rec_col]->getTextura(),
+                constantes.ARMA);
             _motor->EraseArma();
             _jugador->setArma(nuArma);
 
@@ -1101,10 +1004,15 @@ void Jugando::ConectarWaypoints()
 
 void Jugando::DejarObjeto()
 {
+    Constantes constantes;
     if(_jugador->getArma() != nullptr)//si tiene arma equipada
     {
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-        Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),_jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),_jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),_jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura(),_jugador->getX(),_jugador->getY(), _jugador->getZ());
+        Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),
+            _jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),
+            _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),
+            _jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura(),
+            _jugador->getX(),_jugador->getY(), _jugador->getZ(),constantes.ARMA);
         nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
         _motor->EraseArma();
         _fisicas->EraseArma();
@@ -1129,6 +1037,7 @@ void Jugando::AccionarMecanismo(int int_col)
     Constantes constantes;
     unsigned int i = 0;
     bool coincide = false;
+    
     //Si es una puerta sin llave o palanca asociada
     if(_interactuables.at(int_col)->getCodigo() == 0)
     {
@@ -1171,7 +1080,7 @@ void Jugando::AccionarMecanismo(int int_col)
             cout << "Cofre ya abierto" << endl;
         }
     }
-    else if(std::strcmp(_interactuables.at(int_col)->getNombre(), PALANCA) == 0)
+    else if(_interactuables.at(int_col)->GetTipoObjeto() == constantes.PALANCA)
     {
         i = 0;
         coincide = false;
@@ -1179,8 +1088,8 @@ void Jugando::AccionarMecanismo(int int_col)
         while(i < _interactuables.size() && !coincide)
         {
             if((_interactuables.at(i)->getCodigo() != _interactuables.at(int_col)->getCodigo()) ||
-                strcmp(_interactuables.at(i)->getNombre(), PALANCA) == 0 ||
-                strcmp(_interactuables.at(i)->getNombre(), "llave") == 0)
+                _interactuables.at(i)->GetTipoObjeto() == constantes.PALANCA ||
+                _interactuables.at(i)->GetTipoObjeto() == constantes.LLAVE)
             {
                 i++;
             }
@@ -1321,7 +1230,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     cout << "Hay " << orocant << " de Oro!" << endl;
     propiedades[0] = orocant; //para pasarlo a crear objeto
   }
-   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+   this->CrearPowerUp(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
 }
 
 void Jugando::activarPowerUp()

@@ -1,8 +1,8 @@
 #include "Interactuable.hpp"
 
 Interactuable::Interactuable(int codigo, const char* nombre,
-    int anc, int lar, int alt, const char* objeto,
-    const char* textura, int posicion, float x, float y, float z)
+    int anc, int lar, int alt, int posicion, float x, float y, float z,
+    unsigned short tipoObj)
 {
     _motor = MotorGrafico::GetInstance();
     
@@ -11,14 +11,6 @@ Interactuable::Interactuable(int codigo, const char* nombre,
     posIni.y = y;
     posIni.z = z;
     
-    std::string name_objeto(objeto);
-    cadena_objeto = new char[sizeof(name_objeto)];
-    strcpy(cadena_objeto, name_objeto.c_str());
-
-    std::string name_textura(textura);
-    cadena_textura = new char[sizeof(name_textura)];
-    strcpy(cadena_textura, name_textura.c_str());
-
     std::string name_nombre(nombre);
     cadena_nombre = new char[sizeof(name_nombre)];
     strcpy(cadena_nombre, name_nombre.c_str());
@@ -28,10 +20,13 @@ Interactuable::Interactuable(int codigo, const char* nombre,
     ancho = anc;
     largo = lar;
     alto = alt;
-    ruta_objeto = cadena_objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
-    ruta_textura = cadena_textura;
+    //ruta_objeto = cadena_objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
+    //ruta_textura = cadena_textura;
     posicionArrayObjetos = posicion;
     accionado = false;
+
+    //INobjetos
+    tipoObjeto = tipoObj;
 }
 
 Interactuable::~Interactuable()
@@ -53,11 +48,11 @@ Interactuable::~Interactuable()
     nombreObjeto = nullptr;
     delete cadena_nombre;
 
-    ruta_objeto = nullptr;
+    /*ruta_objeto = nullptr;
     delete cadena_objeto;
 
     ruta_textura = nullptr;
-    delete cadena_textura;
+    delete cadena_textura;*/
     
     ancho = 0;
     largo = 0;
@@ -243,10 +238,10 @@ int Interactuable::getCodigo()
     return codigoObjeto;
 }
 
-const char* Interactuable::getNombre()
+/*const char* Interactuable::getNombre()
 {
     return nombreObjeto;
-}
+}*/
 
 const char* Interactuable::getObjeto()
 {
@@ -388,6 +383,7 @@ bool Interactuable::getAccionado()
 
 void Interactuable::Render(float updTime, float drawTime)
 {
+    cout << "POS: "<<posicionArrayObjetos<<endl;
     RotarEntidad(1 / updTime);
     UpdateTimeRotate(drawTime);
     _motor->mostrarObjetos(
@@ -395,4 +391,15 @@ void Interactuable::Render(float updTime, float drawTime)
         rotActual.x, rotActual.y, rotActual.z,
         posicionArrayObjetos
     );
+}
+
+const char* Interactuable::GetModelo()
+{
+    return _modelo;
+}
+
+// Devuelve si es una puerta, palanca, cofre, llave
+unsigned short Interactuable::GetTipoObjeto()
+{
+    return tipoObjeto;
 }

@@ -10,6 +10,7 @@ class INobjetos
 {
     public:
         virtual ~INobjetos() = default;
+        virtual unsigned short GetTipoObjeto()=0;
 
     /*el protected es para que tenga acceso sus descendientes o parientes*/
     protected:    	
@@ -19,7 +20,8 @@ class INobjetos
         char* cadena_objeto; 
         char* cadena_textura;
         char* cadena_nombre;
-        float ancho, largo, alto; 
+        float ancho, largo, alto;
+        unsigned short tipoObjeto;
 };
 
 #endif /* INobjetos_HPP */
