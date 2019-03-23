@@ -118,12 +118,9 @@ void Jugando::ValoresPorDefecto()
     enSalaBoss = false;    
     
     //Valores para el centro de las bandadas en el flocking
-    posicionMediaPollos.vX = INT_MAX;
-    posicionMediaPollos.vY = INT_MAX;
-    posicionMediaPollos.vZ = INT_MAX;
-    posicionMediaMurcielagos.vX = INT_MAX;
-    posicionMediaMurcielagos.vY = INT_MAX;
-    posicionMediaMurcielagos.vZ = INT_MAX;
+    posicionMediaEnemigos.vX = INT_MAX;
+    posicionMediaEnemigos.vY = INT_MAX;
+    posicionMediaEnemigos.vZ = INT_MAX;
 
     // Activamos la interfaz
     _interfaz->activar();
@@ -414,10 +411,8 @@ void Jugando::Update()
         if(_enemigos.size() > 0)//posiciones interpolacion
         {
             //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
-            short contadorPollos = 0;
-            short contadorMurcielagos = 0;
-            INnpc::VectorEspacial posicionPollosTemporal;  
-            INnpc::VectorEspacial posicionMurcielagosTemporal;
+            short contadorEnemigos = 0;
+            INnpc::VectorEspacial posicionTemporal;  
 
             for(short i=0;(unsigned)i<_enemigos.size();i++)
             {
@@ -426,13 +421,9 @@ void Jugando::Update()
                     // Se coloca la posicionMedia de las bandadas
                     if(_enemigos[i]->GetModo() == constantes.UNO)
                     {
-                        if(_enemigos[i]->GetTipoEnemigo() == constantes.CERO && posicionMediaPollos.vX != INT_MAX)
+                        if(posicionMediaEnemigos.vX != INT_MAX)
                         {
-                            _enemigos[i]->SetPosicionComunBandada(posicionMediaPollos);
-                        }
-                        else if(_enemigos[i]->GetTipoEnemigo() == constantes.UNO && posicionMediaMurcielagos.vX != INT_MAX)
-                        {
-                            _enemigos[i]->SetPosicionComunBandada(posicionMediaMurcielagos);
+                            _enemigos[i]->SetPosicionComunBandada(posicionMediaEnemigos);
                         }
                     }
 
@@ -447,23 +438,14 @@ void Jugando::Update()
                         if (_enemigos[i]->GetContestar())
                             updateRecorridoPathfinding(_enemigos[i]);
                     }
-                    if(_enemigos[i]->GetModo() == constantes.UNO)
+                    if(_enemigos[i]->GetModo() == constantes.UNO && _enemigos[i]->getVida() > 0)
                     {
-                        if(_enemigos[i]->GetTipoEnemigo() == constantes.CERO)
-                        {
-                            contadorPollos++;
-                            posicionPollosTemporal.vX += _enemigos[i]->getX();
-                            posicionPollosTemporal.vY += _enemigos[i]->getY();
-                            posicionPollosTemporal.vY += _enemigos[i]->getZ();
-                        }
-                        else if(_enemigos[i]->GetTipoEnemigo() == constantes.UNO)
-                        {
-                            contadorMurcielagos++;
-                            posicionMurcielagosTemporal.vX += _enemigos[i]->getX();
-                            posicionMurcielagosTemporal.vY += _enemigos[i]->getY();
-                            posicionMurcielagosTemporal.vY += _enemigos[i]->getZ();
-                        }
+                        contadorEnemigos++;
+                        posicionTemporal.vX += _enemigos[i]->getX();
+                        posicionTemporal.vY += _enemigos[i]->getY();
+                        posicionTemporal.vZ += _enemigos[i]->getZ();
                     }
+                    
                     
                     // TO DO: optimizar
                     if (_enemPideAyuda) {
@@ -494,18 +476,20 @@ void Jugando::Update()
                 }
                 //_enemigos[i]->queVes();
             }
-            if(contadorPollos > 0)
+            if(contadorEnemigos > 1)
             {
-                posicionMediaPollos.vX = posicionPollosTemporal.vX / contadorPollos;
-                posicionMediaPollos.vY = posicionPollosTemporal.vY / contadorPollos;
-                posicionMediaPollos.vZ = posicionPollosTemporal.vZ / contadorPollos;
+                posicionMediaEnemigos.vX = posicionTemporal.vX / contadorEnemigos;
+                posicionMediaEnemigos.vY = posicionTemporal.vY / contadorEnemigos;
+                posicionMediaEnemigos.vZ = posicionTemporal.vZ / contadorEnemigos;
             }
-            if(contadorMurcielagos > 0)
+            else
             {
-                posicionMediaMurcielagos.vX = posicionMurcielagosTemporal.vX / contadorMurcielagos;
-                posicionMediaMurcielagos.vY = posicionMurcielagosTemporal.vY / contadorMurcielagos;
-                posicionMediaMurcielagos.vZ = posicionMurcielagosTemporal.vZ / contadorMurcielagos;
+                posicionMediaEnemigos.vX = INT_MAX;
+                posicionMediaEnemigos.vY = INT_MAX;
+                posicionMediaEnemigos.vZ = INT_MAX;
             }
+            
+            
         }
             //_enemigos->MuereEnemigo(acumulator);
             //acumulator -= dt;

@@ -84,7 +84,6 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
             case EN_PERSIGUE: //El Murcielago se mueve
                 {
                     funciona = this->perseguir(_jug);
-                    this->ver(constantes.DOS);
                 }
                 break;
         

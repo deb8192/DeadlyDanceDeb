@@ -30,6 +30,8 @@ Enemigo::Enemigo()
     posicionComunBandada.vY = INT_MAX;
     posicionComunBandada.vZ = INT_MAX;
 
+    distanciaMaximaCohesionBandada = 10;
+
     distanciaEnemigoJugador.vX = INT_MAX;
     distanciaEnemigoJugador.vY = INT_MAX;
     distanciaEnemigoJugador.vZ = INT_MAX;
@@ -41,6 +43,7 @@ Enemigo::Enemigo()
     distanciaEnemigoObstaculo.modulo = INT_MAX;
 
     porcentajeVelocidad = 1.0;
+    pesoRotacion = 0.0f;
     }
 
 Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida/*,
@@ -89,11 +92,14 @@ Enemigo::~Enemigo()
     atacktime = 0;
     velocidadMaxima = 0;
     porcentajeVelocidad = 0;
+    pesoRotacion = 0;
     tipoEnemigo = 0;
     pos_ataques = 0;
     accionRealizada = false;
     contestar = false;
     distanciaMinimaEsquivar = 0;
+
+    distanciaMaximaCohesionBandada = 0;
 
     posicionComunBandada.vX = 0;
     posicionComunBandada.vY = 0;
@@ -724,6 +730,10 @@ void Enemigo::UpdateTimeRotate(float updTime)
  */
 void Enemigo::ModificarVida(int vid)
 {
+    if(vid < 0)
+    {
+        modo = MODO_ATAQUE;
+    }
     vida += vid;
     if (vida > vidaIni)
         vida = vidaIni;
@@ -1079,7 +1089,23 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
     void Enemigo::alinearse(VectorEspacial* target, bool huir)
     {
+        float contraRotacion = 0.0f;
         Constantes constantes;
+        bool controlRotacion = false;
+        if(modo == MODO_ATAQUE || modo == MODO_AUXILIAR_ALIADO)
+        {
+            pesoRotacion = 0.35f;
+            contraRotacion = 1.0 - pesoRotacion;
+            if(this->ver(constantes.TRES))
+            {
+                controlRotacion = true;
+            }
+        }
+        else
+        {
+            pesoRotacion = 1.0f;
+        }
+
         VectorEspacial distancia;
         distancia.vX = target->vX - this->getX();
         distancia.vY = target->vY - this->getY();
@@ -1087,14 +1113,19 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         distancia.modulo = pow(distancia.vX, constantes.DOS) + pow(distancia.vY, constantes.DOS) + pow(distancia.vZ, constantes.DOS);
         distancia.modulo = sqrt(distancia.modulo);
 
-        distancia.vZ < 0 ?
-        rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ)) :
-        rotation = constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ);
-
-        if(modo == MODO_ATAQUE)
+        if(controlRotacion)
         {
-            this->ver(constantes.TRES);
+            distancia.vZ < 0 ?
+                rotation += (constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ))) * contraRotacion :
+                rotation += (constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ)) * contraRotacion;
         }
+        else
+        {
+            distancia.vZ < 0 ?
+            rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ)) :
+            rotation = constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ);
+        }
+        
 
         if(huir)
         {
@@ -1175,8 +1206,8 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                             VectorEspacial vectorDirector = this->normalizarVector(destino);
                             //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
                             vectorDirector.vZ < 0 ?
-                                rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
-                                rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
+                                rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
+                                rotation = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
                             cout<<"COLISIONA POR DELANTE"<<endl;
                         }
                         //Si entra aqui dentro es que detecta un obstaculo con su visor derecho
@@ -1195,8 +1226,8 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                             VectorEspacial vectorDirector = this->normalizarVector(destino);
                             //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
                             vectorDirector.vZ < 0 ?
-                                rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
-                                rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
+                                rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
+                                rotation = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
                             cout<<"COLISIONA POR LA IZQUIERDA"<<endl;
                         }
                     }
@@ -1216,8 +1247,8 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                         VectorEspacial vectorDirector = this->normalizarVector(destino);
                         //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
                         vectorDirector.vZ < 0 ?
-                            rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
-                            rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
+                            rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
+                            rotation = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
                         cout<<"COLISIONA POR LA DERECHA"<<endl;
                     }
                     //Si entra aquí es que los visores laterales no detectan nada pero si el visor central
@@ -1225,21 +1256,21 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     else if(distanciaEnemigoObstaculo.modulo <= distanciaMinimaEsquivar)
                     {
                         destino[0] = loqueve[1];
-                            destino[1] = loqueve[2];
-                            destino[2] = loqueve[3];
-                            destino[3] = loqueve[4];
-                            destino[4] = loqueve[5];
-                            destino[5] = loqueve[6];
+                        destino[1] = loqueve[2];
+                        destino[2] = loqueve[3];
+                        destino[3] = loqueve[4];
+                        destino[4] = loqueve[5];
+                        destino[5] = loqueve[6];
 
-                            //Creamos un vector con una nueva direccion normalizando el vector director anterior y sumandole la normal del obstaculo
-                            VectorEspacial vectorDirector = this->normalizarVector(destino);
-                            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
-                            vectorDirector.vZ < 0 ?
-                                rotActual.y = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
-                                rotActual.y = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
-                            cout<<"QUE SE SALE"<<endl;
+                        //Creamos un vector con una nueva direccion normalizando el vector director anterior y sumandole la normal del obstaculo
+                        VectorEspacial vectorDirector = this->normalizarVector(destino);
+                        //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
+                        vectorDirector.vZ < 0 ?
+                            rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
+                            rotation = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
+                        cout<<"QUE SE SALE"<<endl;
                     }
-                    this->setNewRotacion(0.0f, rotActual.y, 0.0f);
+                    this->setNewRotacion(0.0f, rotation, 0.0f);
                     this->setVectorOrientacion();
                     delete loqueve;
                     return true;                    
@@ -1257,7 +1288,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 //Ve algo en la lejania de su visor central
                 if(loqueve[0] == 1)
                 {   
-                    colisiona = true;
                     posicionEnemigo.vX = loqueve[1] - posActual.x;
                     posicionEnemigo.vY = loqueve[2] - posActual.y;
                     posicionEnemigo.vZ = loqueve[3] - posActual.z;
@@ -1265,15 +1295,25 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     
                     if(posicionEnemigo.modulo <= distanciaMinimaEsquivar)
                     {
-                        porcentajeVelocidad *= 0.75f;
-                        obsPorDelante = true;
+                        colisiona = true;
+                        destino[0] = loqueve[1];
+                        destino[1] = loqueve[2];
+                        destino[2] = loqueve[3];
+                        destino[3] = loqueve[4];
+                        destino[4] = loqueve[5];
+                        destino[5] = loqueve[6];
                     }
                     else
                     {
-                        porcentajeVelocidad = 1.0f;
+                        if(porcentajeVelocidad >= 0.6)
+                        {
+                            porcentajeVelocidad *= 0.9;
+                        }
+                        obsPorDelante = true;
                     }
                     
-                    cout<<"COLISIONA CON ENEMIGO POR DELANTE"<<endl;
+                    
+                    cout<<"VE AL ENEMIGO POR DELANTE"<<endl;
                     /*this->setNewRotacion(0.0f, rotActual.y, 0.0f);
                     this->setVectorOrientacion();
                     delete loqueve;
@@ -1282,6 +1322,10 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 //Si entra aqui dentro es que detecta un obstaculo por delante con el visores izquierdo
                 if(loqueve[7] == 1)
                 {
+                    if(!obsPorDelante && porcentajeVelocidad >= 0.6)
+                    {
+                        porcentajeVelocidad *= 0.9;
+                    }
                     colisiona = true;
                     posicionEnemigo.vX = loqueve[8] - posActual.x;
                     posicionEnemigo.vY = loqueve[9] - posActual.y;
@@ -1290,21 +1334,47 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     
                     if(loqueve[14] == 1 && posicionEnemigo.modulo <= distanciaMinimaEsquivar)
                     {
-                        porcentajeVelocidad *= 0.75f;
+                        /*if(porcentajeVelocidad <= 0.5f)
+                        {*/
+
+                            colisiona = true;
+                            destino[0] = loqueve[1];
+                            destino[1] = loqueve[2];
+                            destino[2] = loqueve[3];
+                            destino[3] = loqueve[4];
+                            destino[4] = loqueve[5];
+                            destino[5] = loqueve[6];
+
+                            /*//Creamos un vector con una nueva direccion normalizando el vector director anterior y sumandole la normal del obstaculo
+                            VectorEspacial vectorDirector = this->normalizarVector(destino);
+                            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
+                            vectorDirector.vZ < 0 ?
+                                rotation = (constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ))) * pesoRotacion :
+                                rotation = (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) * pesoRotacion ;
+                        //}*/
+                        
+                        cout<<"COLISIONA CON ENEMIGO POR DELANTE"<<endl;
                     }
-                    else
+                    else if(posicionEnemigo.modulo <= distanciaMinimaEsquivar)
                     {
-                        rotActual.y -= 15;
-                        if(!obsPorDelante)
-                        {
-                            porcentajeVelocidad = 1.0f;
-                        }
+                        colisiona = true;
+                        destino[0] = loqueve[8];
+                        destino[1] = loqueve[9];
+                        destino[2] = loqueve[10];
+                        destino[3] = loqueve[11];
+                        destino[4] = loqueve[12];
+                        destino[5] = loqueve[13];
+                        //rotation += 15;
+                        cout<<"COLISIONA CON ENEMIGO POR LA IZQUIERDA"<<endl;
                     }
-                    cout<<"COLISIONA CON ENEMIGO POR LA IZQUIERDA"<<endl;
                 }
                 //Si entra aqui dentro es que detecta un obstaculo con su visor derecho                    
                 else if(loqueve[14] == 1)
                 {
+                    if(!obsPorDelante && porcentajeVelocidad >= 0.6)
+                    {
+                        porcentajeVelocidad *= 0.9;
+                    }
                     colisiona = true;
                     posicionEnemigo.vX = loqueve[15] - posActual.x;
                     posicionEnemigo.vY = loqueve[16] - posActual.y;
@@ -1314,14 +1384,32 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
                     if(posicionEnemigo.modulo <= distanciaMinimaEsquivar)
                     {
-                        rotActual.y += 15;
-                        if(!obsPorDelante)
-                        {
-                            porcentajeVelocidad = 1.0f;
-                        }
+                        colisiona = true;
+                        destino[0] = loqueve[15];
+                        destino[1] = loqueve[16];
+                        destino[2] = loqueve[17];
+                        destino[3] = loqueve[18];
+                        destino[4] = loqueve[19];
+                        destino[5] = loqueve[20];
+                        //rotation -= 15;
+                        
+                        cout<<"COLISIONA CON ENEMIGO POR LA DERECHA"<<endl;
                     }
-                    cout<<"COLISIONA CON ENEMIGO POR LA DERECHA"<<endl;
                 }
+                else
+                {
+                    if(!obsPorDelante)
+                        porcentajeVelocidad = 1.0;
+                }
+            }
+            if(colisiona)
+            {
+                //Creamos un vector con una nueva direccion normalizando el vector director anterior y sumandole la normal del obstaculo
+                VectorEspacial vectorDirector = this->normalizarVector(destino);
+                //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
+                vectorDirector.vZ < 0 ?
+                    rotation = (constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ))) * pesoRotacion :
+                    rotation = (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) * pesoRotacion ;
             }
             delete loqueve;
             return colisiona;
@@ -1355,9 +1443,18 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         VectorEspacial datosDesplazamiento, objetivo;
         float distancia = 4.0f;
 
-        objetivo.vX = _jugador->getX();
-        objetivo.vY = _jugador->getY();
-        objetivo.vZ = _jugador->getZ();
+        if(comprobarDistanciaFlocking())
+        {
+            objetivo.vX = posicionComunBandada.vX;
+            objetivo.vY = posicionComunBandada.vY;
+            objetivo.vZ = posicionComunBandada.vZ;
+        }
+        else
+        {
+            objetivo.vX = _jugador->getX();
+            objetivo.vY = _jugador->getY();
+            objetivo.vZ = _jugador->getZ();
+        }
 
         this->alinearse(&objetivo, false);
 
@@ -1524,6 +1621,25 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         vectorDirector.modulo = 1;
 
         return vectorDirector;
+    }
+
+    bool Enemigo::comprobarDistanciaFlocking()
+    {
+        Constantes constantes;
+        if(posicionComunBandada.vX != INT_MAX)
+        {
+            VectorEspacial vectorDistancia;
+            vectorDistancia.vX = posicionComunBandada.vX - posActual.x;
+            vectorDistancia.vY = posicionComunBandada.vY - posActual.y;
+            vectorDistancia.vZ = posicionComunBandada.vZ - posActual.z;
+            vectorDistancia.modulo = sqrt(pow(vectorDistancia.vX, constantes.DOS) + pow(vectorDistancia.vY, constantes.DOS) + pow(vectorDistancia.vZ, constantes.DOS));
+            if(vectorDistancia.modulo > distanciaMaximaCohesionBandada)
+            {
+                return true;
+            }
+            else return false;
+        }
+        return false;
     }
 
 //fin comportamientos bases

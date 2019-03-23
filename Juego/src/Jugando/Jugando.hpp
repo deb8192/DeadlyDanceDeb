@@ -89,9 +89,8 @@ class Jugando: public Estado {
         std::vector<Zona*> _zonas; //Array de zonas
         std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
 
-        INnpc::VectorEspacial posicionMediaPollos;  //Posicion media que comparten los pollos que atacan en bandada
-        INnpc::VectorEspacial posicionMediaMurcielagos;     //Posicion media que comparten los murcielagos que atacan en bandada
-
+        INnpc::VectorEspacial posicionMediaEnemigos;  //Posicion media que comparten los pollos que atacan en bandada
+        
         bool reiniciando; // Se utiliza solo en Reanudar por el cambio entre Estados
         Jugador* _jugador;
         bool jugadorInmovil; // Para las colisiones
