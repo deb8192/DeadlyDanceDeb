@@ -661,14 +661,14 @@ void Jugando::UpdateIA()
                         ataque = 0;
                         nombre = "vida_up";
                         modelo = "assets/models/powerup0.obj";
-                        textura = "assets/models/powerup0.mtl";
+                        textura = "assets/models/powerup0.png";
                         }
                         else if(cualpower == 1)
                         {
                         ataque = 1;
                         nombre = "energy_up";
                         modelo = "assets/models/powerup1.obj";
-                        textura = "assets/models/powerup1.mtl";
+                        textura = "assets/models/powerup1.png";
                         }
                         else if(cualpower == 2)
                         {
