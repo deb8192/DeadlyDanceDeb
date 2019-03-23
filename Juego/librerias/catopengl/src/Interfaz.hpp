@@ -81,12 +81,12 @@ class Interfaz
 
     private:
 
+        bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
+
         CatOpengl::Video::Ventana * window;
 
         Shader * shaders[4];//cuatro programas de shader(vertex y fragment cada uno)
-
-        std::vector<TNodo *> camaras;//registro de camaras
-
+        
         std::vector<TNodo *> luces;//registro de luces
 
         std::vector<TNodo *> imagenes;//registro de imagenes en interfaz
@@ -110,6 +110,8 @@ class Interfaz
         };
 
         std::vector<Nodo *> nodos;//almacena los nodos
+
+        std::vector<Nodo *> camaras;//registro de camaras
 
         CatOpengl::Gestor * gestorDeRecursos;
 

@@ -14,6 +14,7 @@ Interfaz::Interfaz()
     x = 0.0f;
     y = 0.0f;
     z = 0.0f;
+    ModoOneCamara = true;
 }
 
 Interfaz::~Interfaz()
@@ -23,53 +24,60 @@ Interfaz::~Interfaz()
 
 unsigned short Interfaz::AddCamara()
 {
-    //std::cout << "SE CREA CAMARA" << std::endl;
-    if(ventana_inicializada)
+    if(ModoOneCamara && camaras.size() > 0)
     {
-        ventanaInicializar();
-        ventana_inicializada = false;
+        //se devuelve el id de la primera camara 
+        return camaras[0]->id;
     }
-
-    TNodo * traslacion = new TNodo;
-    TTransform * traslacionEnt = new TTransform;
-    traslacionEnt->trasladar(0,0,0);
-    traslacion->setEntidad(traslacionEnt);
-
-    TNodo * rotacion = new TNodo;
-    TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,1,1,1);
-    rotacion->setEntidad(rotacionEnt);
-
-    TNodo * escalado = new TNodo;
-    TTransform * escaladoEnt = new TTransform;
-    escaladoEnt->escalar(1,1,1);
-    escalado->setEntidad(escaladoEnt);
-
-    //escalado al ser el nodo padre del objeto en cuestion (sea luz, camara, o malla), debe ser el que se le diga que no se ejecuta
-    escaladoEnt->EsCamara();
-    escaladoEnt->NoEjecutar();
-
-    TNodo * camara = new TNodo;
-    TCamara * camaraEn = new TCamara(window->getWidth(),window->getHeight());
-    camaraEn->SetShader(shaders[0]);
-    camara->setEntidad(camaraEn);
-
-    escalado->addHijo(rotacion);
-    rotacion->addHijo(traslacion);
-    traslacion->addHijo(camara);
-
-    if(_raiz != nullptr)
+    else
     {
-        camaras.push_back(escalado);
-        _raiz->addHijo(escalado);
+        //std::cout << "SE CREA CAMARA" << std::endl;
+        if(ventana_inicializada)
+        {
+            ventanaInicializar();
+            ventana_inicializada = false;
+        }
 
-        unsigned short idnuevo = generarId();
-        Nodo * nodo = new Nodo();
-        nodo->id = idnuevo;//se pone el id
-        nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
-        nodo->tipo = 0;
-        nodos.push_back(nodo);//se agrega a la lista de nodos general
-        return idnuevo;
+        TNodo * traslacion = new TNodo;
+        TTransform * traslacionEnt = new TTransform;
+        traslacionEnt->trasladar(0,0,0);
+        traslacion->setEntidad(traslacionEnt);
+
+        TNodo * rotacion = new TNodo;
+        TTransform * rotacionEnt = new TTransform;
+        rotacionEnt->rotar(0,1,1,1);
+        rotacion->setEntidad(rotacionEnt);
+
+        TNodo * escalado = new TNodo;
+        TTransform * escaladoEnt = new TTransform;
+        escaladoEnt->escalar(1,1,1);
+        escalado->setEntidad(escaladoEnt);
+
+        //escalado al ser el nodo padre del objeto en cuestion (sea luz, camara, o malla), debe ser el que se le diga que no se ejecuta
+        escaladoEnt->EsCamara();
+        escaladoEnt->NoEjecutar();
+
+        TNodo * camara = new TNodo;
+        TCamara * camaraEn = new TCamara(window->getWidth(),window->getHeight());
+        camaraEn->SetShader(shaders[0]);
+        camara->setEntidad(camaraEn);
+
+        escalado->addHijo(rotacion);
+        rotacion->addHijo(traslacion);
+        traslacion->addHijo(camara);
+
+        if(_raiz != nullptr)
+        {
+            _raiz->addHijo(escalado);
+            unsigned short idnuevo = generarId();
+            Nodo * nodo = new Nodo();
+            nodo->id = idnuevo;//se pone el id
+            nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+            nodo->tipo = 0;
+            camaras.push_back(nodo);
+            nodos.push_back(nodo);//se agrega a la lista de nodos general
+            return idnuevo;
+        }
     }
 
     return 0;
@@ -298,7 +306,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
 void Interfaz::Draw()
 {
-    //std::cout << "TAMANO NODOS " << nodos.size() << std::endl;
+    //std::cout << "TAMANO NODOS " << camaras.size() << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -605,11 +613,32 @@ void Interfaz::HabilitarObjeto(unsigned short did)
 
 float * Interfaz::GetPosicion(unsigned short did)
 {
+    Nodo * nodo = buscarNodo(did);
+
+    if(nodo != nullptr)
+    {
+        TNodo * tnodo = nodo->recurso->GetNieto(1);
+        if(tnodo->GetEntidad() != nullptr)
+        {
+            return dynamic_cast<TTransform*>(tnodo->GetEntidad())->GetPosicion();
+        }
+    }
+
     return nullptr;
 }
 
 float * Interfaz::GetTarget(unsigned short did)
 {
+    Nodo * nodo = buscarNodo(did);
+    
+    if(nodo != nullptr)
+    {
+        TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+        if(tnodo != nullptr)
+        {
+            return dynamic_cast<TCamara*>(tnodo->GetEntidad())->GetTarget();
+        }
+    }
     return nullptr;
 }
 
