@@ -738,7 +738,8 @@ void Enemigo::setAtaque(int ataq)
 
 void Enemigo::setArmaEspecial(int ataque)
 {
-    _armaEspecial = new Arma(ataque, "",2,2,2,_rutaArmaEspecial,"");
+    Constantes constantes;
+    _armaEspecial = new Arma(ataque, "",2,2,2,_rutaArmaEspecial,"",constantes.ARMA);
 }
 
 void Enemigo::setSuerte(int suer)
