@@ -361,6 +361,7 @@ int MotorFisicas::collideColectablePowerup()
 
 int MotorFisicas::collideInteractuable()
 {
+    cout << "Colisiones: "<<interactuables.size() <<endl;
     for(long unsigned int i = 0; i < interactuables.size();i++)
     {
       if(space->testOverlap(jugador,interactuables[i]))

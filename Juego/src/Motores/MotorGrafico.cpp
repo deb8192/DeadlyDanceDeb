@@ -1063,19 +1063,20 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
 
             if(accion == 4)
             {
-                PowerUP_Scena.push_back(_objetoEnEscena);
+                PowerUP_Scena.push_back(move(_objetoEnEscena));
                 return PowerUP_Scena.size() - 1;
             }
 
             //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
             if(accion == 2)
             {
-                Recolectables_Scena.push_back(_objetoEnEscena);
+                Recolectables_Scena.push_back(move(_objetoEnEscena));
                 return Recolectables_Scena.size() - 1;
             }
             else
             {
-                Objetos_Scena.push_back(_objetoEnEscena);
+                cout << Objetos_Scena.size()<< " objetos."<<endl;
+                Objetos_Scena.push_back(move(_objetoEnEscena));
                 return Objetos_Scena.size() - 1;
             }
         }

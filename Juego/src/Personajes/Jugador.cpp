@@ -1132,7 +1132,8 @@ void Jugador::setArma(Arma* arma)
 
 void Jugador::setArmaEspecial(int ataque)
 {
-    _armaEspecial = new Arma(ataque, _nombreJugador,3,3,3,_rutaArmaEspecial,"");
+    Constantes constantes;
+    _armaEspecial = new Arma(ataque, _nombreJugador,3,3,3,_rutaArmaEspecial,"",constantes.ARMA);
 }
 
 void Jugador::setNombre(const char* nombre)

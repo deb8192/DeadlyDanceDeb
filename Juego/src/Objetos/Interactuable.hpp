@@ -11,8 +11,8 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
 {
     public:
         Interactuable(int codigo, const char* nombre, int anc, int lar, int alt,
-            const char* objeto, const char* textura, int posicion,
-            float x, float y, float z);
+            int posicion, float x, float y, float z, unsigned short tipoObj);
+        
         ~Interactuable();
         
         //metodos de interaccion
@@ -60,7 +60,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         //getters del propio objeto
         int GetPosicionArrayObjetos();
         int getCodigo();
-        const char* getNombre();
+        //const char* getNombre();
         const char* getObjeto();
         const char* getTextura();
         float getAncho();
@@ -69,8 +69,10 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         int GetPosicionObjetos();
         bool getAccionado();
         void Render(float updTime, float drawTime);
+        const char* GetModelo(); // Malla 3D con la textura
+        unsigned short GetTipoObjeto();
 
-    private:
+    protected:
         MotorGrafico* _motor;
         //Si codigoObjeto es > 0 es un numero comun entre dos objetos: una palanca con el mismo numero que una puerta abre dicha puerta
         int codigoObjeto;   //En caso de igualarse a 0 es una puerta sin llave, y si es -1 es un cofre
@@ -79,6 +81,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         
         unsigned short tam = 2;
         float* _desplazamientos = new float [tam];   //Desplazamientos en X y en Z para le giro de la puerta
+        const char* _modelo; // Malla 3D con la textura
 };
 
 #endif /* Interactuable_HPP */

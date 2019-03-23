@@ -42,16 +42,21 @@ class CargadorNiveles
         Enemigo* GetBoss();
         std::vector<Waypoint*> GetWaypoints();
 
-        void ReservarMemoriaVectores(int, int);
+        void ReservarMemoriaVectores(int eneMax, int interMax, int waypointsMax, int zonesMax);
         Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearBoss(int accion,int enemigo,int x,int y,int z,int ancho, int largo, int alto, Sala* sala);
         void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem); //lo usamos para crear zonas
-        void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearWaypoint(Sala* sala, int accion, int compartido, int ID,  int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones); //Lo usamos para crear waypoints
-        
+        void CrearCofreArana();
+        void CargarCofres();  //Lo usamos para cargar los cofres en las distintas zonas de cofres
+
         int* GetID();
+
+        // Funciones de Debug
+        void TrasladarJugadorACofres();
 
     private:
         Sala* crearSala(pugi::xml_node hijo, Sala* padre);//se llama recursivamente si hay salas
@@ -65,6 +70,7 @@ class CargadorNiveles
         CargadorBehaviorTrees cargadorIA; //Variable para crear la IA de los enemigos
         Enemigo* _boss;
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
+        int chestsMax;
         std::vector<Enemigo*> _eneCofres;
         std::vector<Recolectable*> _recolectables;
         std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
@@ -75,6 +81,9 @@ class CargadorNiveles
         MotorGrafico* _motor;
         MotorFisicas* _fisicas;
         MotorAudioSystem* _motora;
+
+        // Variables temporales de Debug
+        float* posCofre = new float[3];
 };
 
 #endif /* CargadorNiveles_HPP */

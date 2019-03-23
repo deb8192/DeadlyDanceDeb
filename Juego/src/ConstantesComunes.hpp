@@ -61,5 +61,16 @@ using Constantes = struct
     /**************************** String cargado mapas ************************/
     const char* ZCHEST = "zChest";
     const char* ZDARK = "zDark";
+
+    // Tipos de objetos interactuables
+    const unsigned short PALANCA = 0;
+    const unsigned short LLAVE = 1;
+    //Puerta2 = 2
+    //Puerta = 3
+    //Cofre = 4
+
+    // Tipos de recolectables
+    const unsigned short ARMA = 5;
+    const unsigned short POWERUP = 6;
 };
 #endif
