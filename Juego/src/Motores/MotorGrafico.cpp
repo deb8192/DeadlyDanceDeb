@@ -1075,7 +1075,6 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             }
             else
             {
-                cout << Objetos_Scena.size()<< " objetos."<<endl;
                 Objetos_Scena.push_back(move(_objetoEnEscena));
                 return Objetos_Scena.size() - 1;
             }
