@@ -475,9 +475,10 @@ bool MotorFisicas::enemyCollidePlatform(unsigned int enemigo)
 // TO DO revisar
 int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,float longitud,int modo)
 {
-
+    Constantes constantes;
     //se recomiendan usar modos especificos para ahorrar costes.
-    Ray * rayo = crearRayo(x,y,z,(-1*(rotation-180)),longitud);
+    
+    Ray * rayo = crearRayo(x/*-(2*(sin(constantes.PI * rotation / constantes.PI_RADIAN)))*/,y,z/*-(2*(cos(constantes.PI * rotation / constantes.PI_RADIAN)))*/,(-1*(rotation-180)),longitud);
 
     RaycastInfo intersection;
 
@@ -539,7 +540,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
                 
                 if(colision)
                 {
-                    //cout << "colisiona" << endl;
+                  
                     ene[0] = 1;
                     ene[1] = intersection.worldPoint.x;
                     ene[2] = intersection.worldPoint.y;
