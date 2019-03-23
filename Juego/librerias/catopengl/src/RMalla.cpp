@@ -5,7 +5,8 @@ RMalla::RMalla(int f)
     tipo = 'M';
     objetos = f;
     mallas = 0;
-    frames.reserve(45);
+    text_cargada = false;
+    frames.reserve(150);
 }
 
 void RMalla::Remove()
@@ -52,6 +53,7 @@ bool RMalla::CargarAnimacion(const char * _ruta)
 
         for(unsigned int i=1; i <= objetos; i++)
         {
+            if(i > 1)text_cargada = true;
             cout << "Objeto " << i << ": " << endl;
 
             //Crear el string del numero de frames
@@ -79,6 +81,8 @@ bool RMalla::CargarAnimacion(const char * _ruta)
             return false;
         }
     }
+
+    textures_loaded.clear();
 
     return true;
 
@@ -112,7 +116,7 @@ bool RMalla::CargarMalla(std::string _ruta)
 
     for(unsigned int i=0; i < textures_loaded.size(); i++)
     {
-        cout << " |- Textura " << i << ": " << textures_loaded.at(i) << endl;
+        //cout << " |- Textura " << i << ": " << (std::string)textures_loaded.at(i) << endl;
     }
     cout << "--------------------" << endl;
 
@@ -120,7 +124,6 @@ bool RMalla::CargarMalla(std::string _ruta)
 
     frames.push_back(meshes); //Guardar frame de animacion
     meshes.clear();
-    textures_loaded.clear();
 
     return true;
 }
@@ -194,59 +197,68 @@ Mesh * RMalla::processMesh(aiMesh *mesh, const aiScene *scene)
             indices.push_back(face.mIndices[j]);
     }
 
-    // Procesar materiales
-    aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-    // Asumimos unas lineas para los nombres de los samplers en los shaders. cada textura difusa tiene que ser nombrada
-    // como "texture_diffuseN", donde N es un número secuencial que va de 1 a MAX_SAMPLER_NUMBER.
-    // Lo mismo se aplica a otras texturas que se resumen en la siguiente lista:
-    // Difusa: texture_diffuseN
-    vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-    textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-
-    // Especular: texture_specularN
-    vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-    textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-
-    if(diffuseMaps.size() == 0 && specularMaps.size() == 0)
+    if(text_cargada == false)
     {
-        //Mirar si ya existe la textura para no cargarla
-        bool skip = false;
-        for(unsigned int j = 0; j < textures_loaded.size(); j++)
+        // Procesar materiales
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+        // Asumimos unas lineas para los nombres de los samplers en los shaders. cada textura difusa tiene que ser nombrada
+        // como "texture_diffuseN", donde N es un número secuencial que va de 1 a MAX_SAMPLER_NUMBER.
+        // Lo mismo se aplica a otras texturas que se resumen en la siguiente lista:
+        // Difusa: texture_diffuseN
+        vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
+        // Especular: texture_specularN
+        vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+        if(diffuseMaps.size() == 0 && specularMaps.size() == 0)
         {
-            if(std::strcmp(textures_loaded.at(j)->path.data(), "default_texture") == 0)
+            //Mirar si ya existe la textura para no cargarla
+            bool skip = false;
+            for(unsigned int j = 0; j < textures_loaded.size(); j++)
             {
-                textures.push_back(*textures_loaded.at(j));
-                skip = true; //Si la texgtura ya ha se ha creado no volverla a crearla
-                break;
+                if(textures_loaded.at(j).path == "default_texture")
+                {
+                    textures.push_back(textures_loaded.at(j));
+                    skip = true; //Si la texgtura ya ha se ha creado no volverla a crearla
+                    break;
+                }
+            }
+            if(!skip)
+            {   //textura no cargada aún
+                unsigned int textureID;
+                glGenTextures(1, &textureID);
+
+                int width=1, height=1;
+                GLubyte datamat[] = { 35, 35, 35, 255 }; //RGBA
+                GLenum format = GL_RGBA;
+
+                glBindTexture(GL_TEXTURE_2D, textureID);
+                glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, datamat);
+                glGenerateMipmap(GL_TEXTURE_2D);
+
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+                Texture texture;
+                texture.id = textureID;
+                texture.type = "texture_diffuse";
+                texture.path = "default_texture";
+                textures.push_back(texture);
+                textures_loaded.push_back(texture);
             }
         }
-        if(!skip)
-        {   //textura no cargada aún
-            unsigned int textureID;
-            glGenTextures(1, &textureID);
-
-            int width=1, height=1;
-            GLubyte datamat[] = { 35, 35, 35, 255 }; //RGBA
-            GLenum format = GL_RGBA;
-
-            glBindTexture(GL_TEXTURE_2D, textureID);
-            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, datamat);
-            glGenerateMipmap(GL_TEXTURE_2D);
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-            Texture texture;
-            texture.id = textureID;
-            texture.type = "texture_diffuse";
-            texture.path = "default_texture";
-            textures.push_back(texture);
-            textures_loaded.push_back(&texture);
+    }
+    else
+    {
+        for(unsigned int j = 0; j < textures_loaded.size(); j++)
+        {
+            textures.push_back(textures_loaded.at(j));
         }
     }
-
     //Devolver un objeto mesh creado a partir de los datos mesh extraídos
     Mesh * newmesh = new Mesh(vertices, indices, textures);
     return newmesh;
@@ -266,9 +278,9 @@ vector<Texture> RMalla::loadMaterialTextures(aiMaterial *mat, aiTextureType type
 
         for(unsigned int j = 0; j < textures_loaded.size(); j++)
         {
-            if(std::strcmp(textures_loaded.at(j)->path.data(), str.C_Str()) == 0)
+            if(textures_loaded.at(j).path == str.C_Str())
             {
-                textures.push_back(*textures_loaded.at(j));
+                textures.push_back(textures_loaded.at(j));
                 skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
                 break;
             }
@@ -280,7 +292,7 @@ vector<Texture> RMalla::loadMaterialTextures(aiMaterial *mat, aiTextureType type
             texture.type = typeName;
             texture.path = str.C_Str();
             textures.push_back(texture);
-            textures_loaded.push_back(&texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
+            textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
         }
     }
     return textures;

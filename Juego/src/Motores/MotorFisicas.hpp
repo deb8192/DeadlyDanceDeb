@@ -38,6 +38,7 @@ using namespace reactphysics3d;
             CollisionBody* getColectables(int n);
             CollisionBody* getObstacles(int n);
             bool collideObstaculos();
+            bool collideAtackObstacle();
             bool collideObstacle();
             bool collideBossObstacle();
             bool enemyCollideObstacle(unsigned int enemigo);
@@ -63,8 +64,8 @@ using namespace reactphysics3d;
             void setFormaArma(float px, float py, float pz, int anc, int lar, int alt);
             void setFormaRecolectable(int id, float px, float py, float pz, int anc, int lar, int alt);
             void updateAtaqueEspecial(float x, float y, float z, float rx, float ry, float rz);
-            void vaciarupdateArma();            
-            
+            void vaciarupdateArma();
+
             bool IfCollision(CollisionBody * body1, CollisionBody * body2);
             CollisionWorld* getWorld();
             CollisionBody* getJugador();
@@ -77,7 +78,7 @@ using namespace reactphysics3d;
             CollisionBody* getAtack();
             CollisionBody* getColectablesPowerup(int n);
             unsigned int GetRelacionInteractuablesObstaculos(int n);
-            
+
             //para limpiar todas las fisicas
             void limpiarFisicas();
 
@@ -103,14 +104,14 @@ using namespace reactphysics3d;
             std::vector<CollisionBody *> recolectables;//Vector de elementos que se pueden coger
             std::vector<CollisionBody *> recolectables_powerup;//Vector recolectables_powerup
             std::vector<CollisionBody *> interactuables;//Vector de elementos con los que interactuar
-            //std::vector<float> interAncho;//Vector de elementos con los que interactuar            
+            //std::vector<float> interAncho;//Vector de elementos con los que interactuar
            // std::vector<float> interLargo;//Vector de elementos con los que interactuar
 
             std::vector<unsigned int> relacionInteractuablesObstaculos;//vector que contiene en la posicion correspondiente a un interactuable en su vector el valor de su posicion en el vector de obstaculos
             std::vector<CollisionBody *> obstaculos;//Vector de obstaculos que bloquean el movimiento
             std::vector<CollisionBody *> plataformas;//Vector de plataformas para caminar
             std::vector<rp3d::Transform> prevTransform;
-            
+
             CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             CollisionBody * jugadorAtack; //contiene el ataque normal del jugador
             CollisionBody * arma;//arma normal del jugador

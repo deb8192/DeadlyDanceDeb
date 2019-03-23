@@ -22,6 +22,11 @@ TTexto::TTexto(GLuint width, GLuint height, Shader * sact)
     CrearTexto("Deafult Text",0,0,200,10, 1.0f, 1.0f, 1.0f, 1.0f);
 }
 
+TTexto::~TTexto()
+{
+    
+}
+
 void TTexto::CargarFuente(std::string font, GLuint fontSize)
 {
     // Primero limpiar los caracteres cargados previamente
@@ -86,6 +91,7 @@ void TTexto::CrearTexto(std::string newtext, GLfloat xx, GLfloat yy, GLfloat Max
 
 void TTexto::beginDraw()
 {
+    
     // Activar render
     shader->Use();
     shader->setVec3("textColor", color);

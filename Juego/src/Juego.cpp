@@ -25,8 +25,8 @@ void Juego::inicializarVentana()
     cout << "\e[42m Iniciando Juego \e[0m" << endl;
     _motor->CrearVentana(2);//crea ventana de 800x600
 
-    //estado.CambioEstadoMenu();// temporal para pruebas, 
-    estado.CambioEstadoCinematica();
+    estado.CambioEstadoMenu();// temporal para pruebas, 
+    //estado.CambioEstadoCinematica();
 }
 
 void Juego::Iniciar()

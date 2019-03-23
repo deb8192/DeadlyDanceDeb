@@ -5,6 +5,7 @@
 #include "Personajes/Bailaora.hpp"
 #include "Enemigos/Pollo.hpp"
 #include "Enemigos/Murcielago.hpp"
+#include "Enemigos/CofreArana.hpp"
 #include "Enemigos/MuerteBoss.hpp"
 
 CargadorNiveles::CargadorNiveles()
@@ -92,6 +93,15 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     pugi::xml_document doc;//instanciamos el objeto de la libreria xml
     doc.load_file(cadena);//cargamos el archivo
 
+    // Reservar memoria
+    // Solo hay una etiqueta para reservar memoria
+    pugi::xml_node hijo = doc.child("Level").child("MaxNumberOf");
+    int eneMax = hijo.attribute("Enemies").as_int();//nos devuelve un int
+    int wallsMax = hijo.attribute("Walls").as_int();//nos devuelve un int
+    int doorsMax = hijo.attribute("Doors").as_int();//nos devuelve un int
+    int chestsMax = hijo.attribute("Chests").as_int();//nos devuelve un int
+    ReservarMemoriaVectores(eneMax, /*wallsMax, doorsMax, */chestsMax);
+    
     pugi::xml_node primera = doc.child("Level"); //partimos de nivel
     vector <pugi::xml_node> anterior;
     anterior.push_back(primera.child("Platform"));
@@ -329,6 +339,11 @@ std::vector<Enemigo*> CargadorNiveles::GetEnemigos()
     return _enemigos;
 }
 
+std::vector<Enemigo*> CargadorNiveles::GetEneCofres()
+{
+    return _eneCofres;
+}
+
 std::vector<Zona*> CargadorNiveles::GetZonas()
 {
     return _zonas;
@@ -359,11 +374,12 @@ std::vector<Waypoint*> CargadorNiveles::GetWaypoints()
     return _waypoints;
 }
 
-void CargadorNiveles::ReservarMemoriaVectores()
+void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int chestsMax)
 {
     //TO DO: meter a mano o cargar del XML
-    /*_enemigos.reserve(20);
-    _recolectables.reserve(20);
+    _enemigos.reserve(eneMax);
+    _eneCofres.reserve(chestsMax);
+    /*_recolectables.reserve(20);
     _interactuables.reserve(20);
     _powerup.reserve(20);
     _zonas.reserve(20);

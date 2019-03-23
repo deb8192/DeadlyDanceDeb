@@ -7,15 +7,21 @@ TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale
     didentidad = 'I';
     pixx = x;
     pixy = y;
-    escalado = scale;
+    escaladox = scale;
+    escaladoy = scale;
     this->SetShader(sact);
     shader->Use();
     bool recurso = CargarTextura(archivo);
     id = -1;
     if(recurso)
     {
-        CargarMalla(pixx,pixy,escalado);
+        CargarMalla(pixx,pixy,escaladox,escaladoy);
     }
+}
+
+TPlano::~TPlano()
+{
+
 }
 
 // sobrecarga metodos TEntidad
@@ -80,19 +86,20 @@ bool TPlano::CargarTextura(const char * _ruta)
     return true;
 }
 
-void TPlano::CargarMalla(unsigned int xx, unsigned int yy, float s)
+void TPlano::CargarMalla(unsigned int xx, unsigned int yy, float sx, float sy)
 {
     float posx = xx;
     float posy = yy;
-    float scale = s;
+    float scalex = sx;
+    float scaley = sy;
     int screen_w = winwidth;
     int screen_h = winheight;
 
     // Calculos de pixel a mundo 2D
     posx = ((posx + 0.5f) / (float)screen_w) * 2.0f - 1.0f;
     posy = 1.0f - ((posy + 0.5f) / (float)screen_h) * 2.0f;
-    float x = ((width * scale + 0.5f) / (float)screen_w) * 2.0f - 1.0f;
-    float y = 1.0f - ((height * scale + 0.5f) / (float)screen_h) * 2.0f;
+    float x = ((width * scalex + 0.5f) / (float)screen_w) * 2.0f - 1.0f;
+    float y = 1.0f - ((height * scaley + 0.5f) / (float)screen_h) * 2.0f;
     x = 1.0 + (x + posx);
     y = (y + posy) - 1.0;
 
@@ -150,7 +157,7 @@ void TPlano::UdateMesh()
 {
     if(cambios)
     {
-        CargarMalla(pixx,pixy,escalado);
+        CargarMalla(pixx,pixy,escaladox,escaladoy);
         cambios = false;
     }
 }
@@ -175,11 +182,12 @@ void TPlano::setPosition(float x,float y)
     }
 }
 
-void TPlano::setScale(float s)
+void TPlano::setScale(float sx, float sy)
 {
-    if(escalado != s)
+    if(escaladox != sx || escaladoy != sy)
     {
-        escalado = s;
+        escaladox = sx;
+        escaladoy = sy;
         cambios = true;
     }
 }
@@ -211,7 +219,7 @@ bool TPlano::botonPulsado(double * mouse)
     // cout << pixy << endl;
     // cout << pixy+(height * escalado) << endl;
     //Si el raton esta en rango
-    if(mouse[0] > pixx && mouse[0] < pixx+(width * escalado) && mouse[1] > pixy && mouse[1] < pixy+(height * escalado))
+    if(mouse[0] > pixx && mouse[0] < pixx+(width * escaladox) && mouse[1] > pixy && mouse[1] < pixy+(height * escaladoy))
         return true;
 
     return false;

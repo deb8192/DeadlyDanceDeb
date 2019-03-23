@@ -10,9 +10,11 @@ Interfaz::Interfaz()
     gestorDeRecursos = new CatOpengl::Gestor;
     ventana_inicializada = true;//se pone para que entra a inicializar por defecto
     window = nullptr;//se pone para saber que no esta inicializada
+    nodos.reserve(600);//para almacenar el objeto
     x = 0.0f;
     y = 0.0f;
     z = 0.0f;
+    ModoOneCamara = true;
 }
 
 Interfaz::~Interfaz()
@@ -22,52 +24,60 @@ Interfaz::~Interfaz()
 
 unsigned short Interfaz::AddCamara()
 {
-
-    if(ventana_inicializada)
+    if(ModoOneCamara && camaras.size() > 0)
     {
-        ventanaInicializar();
-        ventana_inicializada = false;
+        //se devuelve el id de la primera camara 
+        return camaras[0]->id;
     }
-
-    TNodo * traslacion = new TNodo;
-    TTransform * traslacionEnt = new TTransform;
-    traslacionEnt->trasladar(0,0,0);
-    traslacion->setEntidad(traslacionEnt);
-
-    TNodo * rotacion = new TNodo;
-    TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,0,0,0);
-    rotacion->setEntidad(rotacionEnt);
-
-    TNodo * escalado = new TNodo;
-    TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(1,1,1);
-    escalado->setEntidad(escaladoEnt);
-
-    //escalado al ser el nodo padre del objeto en cuestion (sea luz, camara, o malla), debe ser el que se le diga que no se ejecuta
-    escaladoEnt->NoEjecutar();
-
-    TNodo * camara = new TNodo;
-    TCamara * camaraEn = new TCamara(window->getWidth(),window->getHeight());
-    camaraEn->SetShader(shaders[0]);
-    camara->setEntidad(camaraEn);
-
-    escalado->addHijo(rotacion);
-    rotacion->addHijo(traslacion);
-    traslacion->addHijo(camara);
-
-    if(_raiz != nullptr)
+    else
     {
-        camaras.push_back(escalado);
-        _raiz->addHijo(escalado);
+        //std::cout << "SE CREA CAMARA" << std::endl;
+        if(ventana_inicializada)
+        {
+            ventanaInicializar();
+            ventana_inicializada = false;
+        }
 
-        unsigned short idnuevo = generarId();
-        Nodo * nodo = new Nodo();
-        nodo->id = idnuevo;//se pone el id
-        nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
-        nodos.push_back(nodo);//se agrega a la lista de nodos general
+        TNodo * traslacion = new TNodo;
+        TTransform * traslacionEnt = new TTransform;
+        traslacionEnt->trasladar(0,0,0);
+        traslacion->setEntidad(traslacionEnt);
 
-        return idnuevo;
+        TNodo * rotacion = new TNodo;
+        TTransform * rotacionEnt = new TTransform;
+        rotacionEnt->rotar(0,1,1,1);
+        rotacion->setEntidad(rotacionEnt);
+
+        TNodo * escalado = new TNodo;
+        TTransform * escaladoEnt = new TTransform;
+        escaladoEnt->escalar(1,1,1);
+        escalado->setEntidad(escaladoEnt);
+
+        //escalado al ser el nodo padre del objeto en cuestion (sea luz, camara, o malla), debe ser el que se le diga que no se ejecuta
+        escaladoEnt->EsCamara();
+        escaladoEnt->NoEjecutar();
+
+        TNodo * camara = new TNodo;
+        TCamara * camaraEn = new TCamara(window->getWidth(),window->getHeight());
+        camaraEn->SetShader(shaders[0]);
+        camara->setEntidad(camaraEn);
+
+        escalado->addHijo(rotacion);
+        rotacion->addHijo(traslacion);
+        traslacion->addHijo(camara);
+
+        if(_raiz != nullptr)
+        {
+            _raiz->addHijo(escalado);
+            unsigned short idnuevo = generarId();
+            Nodo * nodo = new Nodo();
+            nodo->id = idnuevo;//se pone el id
+            nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+            nodo->tipo = 0;
+            camaras.push_back(nodo);
+            nodos.push_back(nodo);//se agrega a la lista de nodos general
+            return idnuevo;
+        }
     }
 
     return 0;
@@ -75,6 +85,7 @@ unsigned short Interfaz::AddCamara()
 
 unsigned short Interfaz::AddLuz(int tipo)
 {
+    //std::cout << "SE CREA LUZ" << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -88,12 +99,12 @@ unsigned short Interfaz::AddLuz(int tipo)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,0,0,0);
+    rotacionEnt->rotar(0,1,1,1);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(1,1,1);
+    escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
     escaladoEnt->Ejecutar();
@@ -118,6 +129,7 @@ unsigned short Interfaz::AddLuz(int tipo)
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodo->tipo = 1;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
 
         return idnuevo;
@@ -128,6 +140,7 @@ unsigned short Interfaz::AddLuz(int tipo)
 
 unsigned short Interfaz::AddMalla(const char * archivo, int initf)
 {
+    //std::cout << "SE CREA MALLA" << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -141,12 +154,12 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,0,0,0);
+    rotacionEnt->rotar(0,1,1,1);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(1,1,1);
+    escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
     TNodo * malla = new TNodo;
@@ -172,18 +185,18 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
             nodo->id = idnuevo;//se pone el id
             nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
             nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
+            nodo->tipo = 2;
             nodos.push_back(nodo);//se agrega a la lista de nodos general
-
             return idnuevo;
         }
     }
-
     //ahora le pasamos este al cargador para asociar la malla a este id
     return 0;
 }
 
 unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigned int y, float scale)
 {
+    //std::cout << "SE CREA IMAGEN" << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -197,14 +210,15 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,0,0,0);
+    rotacionEnt->rotar(0,1,1,1);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(1,1,1);
+    escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
+    escaladoEnt->EsGui();
     escaladoEnt->Ejecutar();
 
     TNodo * imagen = new TNodo;
@@ -225,6 +239,7 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodo->tipo = 4;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
 
         return idnuevo;
@@ -235,6 +250,8 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
 
 unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 {
+    //std::cout << "SE CREA TEXTO" << std::endl;
+
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -248,14 +265,15 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,0,0,0);
+    rotacionEnt->rotar(0,1,1,1);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
     TTransform * escaladoEnt = new TTransform;
-    rotacionEnt->escalar(1,1,1);
+    escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
+    escaladoEnt->EsGui();
     escaladoEnt->Ejecutar();
 
     TNodo * texto = new TNodo;
@@ -277,6 +295,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodo->tipo = 5;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
 
         return idnuevo;
@@ -287,6 +306,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
 void Interfaz::Draw()
 {
+    //std::cout << "TAMANO NODOS " << camaras.size() << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -316,25 +336,29 @@ unsigned short Interfaz::generarId()
 
 Interfaz::Nodo * Interfaz::buscarNodo(unsigned short id)
 {
-    unsigned short Iarriba = ((unsigned short)(nodos.size()-1));
-    unsigned short Iabajo = 0;
-    unsigned short Icentro;
-    while (Iabajo <= Iarriba)
+    if(id != 0)
     {
-        Icentro = (Iarriba + Iabajo)/2;
-        if (nodos[Icentro]->id == id)
+        unsigned short Iarriba = ((unsigned short)(nodos.size()-1));
+        unsigned short Iabajo = 0;
+        unsigned short Icentro;
+        while (Iabajo <= Iarriba)
         {
-            return nodos[Icentro];
-        }
-        else
-        {
-            if (id < nodos[Icentro]->id)
+            Icentro = (Iarriba + Iabajo)/2;
+            if (nodos[Icentro]->id == id)
             {
-                Iarriba=Icentro-1;
+                cualborrar = Icentro;
+                return nodos[Icentro];
             }
             else
             {
-                Iabajo=Icentro+1;
+                if (id < nodos[Icentro]->id)
+                {
+                    Iarriba=Icentro-1;
+                }
+                else
+                {
+                    Iabajo=Icentro+1;
+                }
             }
         }
     }
@@ -426,12 +450,35 @@ void Interfaz::EliminarCamara(unsigned short)
 
 void Interfaz::LimpiarEscena()
 {
+    //limpia todos los elementos que no son gui
+    if(_raiz != nullptr)
+    {
 
+        _raiz->BorrarEscena();
+    }
 }
 
 void Interfaz::LimpiarGui()
 {
-
+    //limpia todos los elementos gui
+    if(_raiz != nullptr)
+    {
+        _raiz->BorrarGui();
+        imagenes.resize(0);
+        imagenes.reserve(20);
+        textos.resize(0);
+        textos.reserve(20);
+        for(std::size_t i=0 ; i < nodos.size() ; i++)
+        {
+            if(nodos[i] != nullptr && (nodos[i]->tipo == 4 || nodos[i]->tipo == 5))
+            {
+                nodos[i]->recurso = nullptr;
+                delete nodos[i];
+                nodos.erase(nodos.begin()+i); 
+                i--;
+            }
+        }
+    }
 }
 
 void Interfaz::CambiarFondo(float r, float g, float b,float a)
@@ -458,7 +505,7 @@ void Interfaz::DefinirVentana(short unsigned int width, short unsigned int heigh
     }
 }
 
-unsigned short Interfaz::CrearTexto(std::string texto, short x, short y)
+unsigned short Interfaz::CrearTexto(std::string texto, short x, short y,float r, float g, float b)
 {
     unsigned short idn = AddTexto("assets/fonts/arial.ttf",18);//se crea el texto con su tipo de fuente y tamaño inicial
     Nodo * nodo = buscarNodo(idn);
@@ -466,7 +513,7 @@ unsigned short Interfaz::CrearTexto(std::string texto, short x, short y)
     if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);//nodo que contiene ttexto en el arbol
-        dynamic_cast<TTexto*>(tnodo->GetEntidad())->CrearTexto(texto,x,y,200.0f,1.0f,1.0f,0.0f,0.0f,0.0f);//direc5 de memoria de TTexto
+        dynamic_cast<TTexto*>(tnodo->GetEntidad())->CrearTexto(texto,x,y,200.0f,1.0f,1.0f,r,g,b);//direc5 de memoria de TTexto
     }
     else
     {
@@ -540,10 +587,13 @@ void Interfaz::DeshabilitarObjeto(unsigned short did)
 {
     Nodo * nodo = buscarNodo(did);
 
-    if(nodo != nullptr)   
+    if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso;
-        dynamic_cast<TCamara*>(tnodo->GetEntidad())->NoEjecutar();
+        if(tnodo->GetEntidad() != nullptr)
+        {
+           tnodo->GetEntidad()->NoEjecutar();
+        }
     }
 }
 
@@ -551,19 +601,74 @@ void Interfaz::HabilitarObjeto(unsigned short did)
 {
     Nodo * nodo = buscarNodo(did);
 
-    if(nodo != nullptr)   
+    if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso;
-        dynamic_cast<TCamara*>(tnodo->GetEntidad())->Ejecutar();
+        if(tnodo->GetEntidad() != nullptr)
+        {
+            tnodo->GetEntidad()->Ejecutar();
+        }
     }
 }
 
 float * Interfaz::GetPosicion(unsigned short did)
 {
+    Nodo * nodo = buscarNodo(did);
+
+    if(nodo != nullptr)
+    {
+        TNodo * tnodo = nodo->recurso->GetNieto(1);
+        if(tnodo->GetEntidad() != nullptr)
+        {
+            return dynamic_cast<TTransform*>(tnodo->GetEntidad())->GetPosicion();
+        }
+    }
+
     return nullptr;
 }
 
 float * Interfaz::GetTarget(unsigned short did)
 {
+    Nodo * nodo = buscarNodo(did);
+    
+    if(nodo != nullptr)
+    {
+        TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+        if(tnodo != nullptr)
+        {
+            return dynamic_cast<TCamara*>(tnodo->GetEntidad())->GetTarget();
+        }
+    }
     return nullptr;
+}
+
+void Interfaz::RemoveObject(unsigned short object)
+{
+    if(object != 0)
+    {
+        //borrar objeto que se le pasa
+        Nodo * nodo = buscarNodo(object);
+
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                _raiz->remHijo(nodo->recurso);
+                delete nodo->recurso;
+                nodo->recurso = nullptr;
+                delete nodo;
+            }
+            nodos.erase(nodos.begin()+cualborrar); 
+        }
+    }
+}
+
+void Interfaz::EscalarImagen(unsigned short nid,float x,float y,bool enx, bool eny)
+{
+    //escalar la imagen
+}
+
+void Interfaz::CambiarTexto(unsigned short nid,std::string texto)
+{
+    //cambiar string del texto
 }
