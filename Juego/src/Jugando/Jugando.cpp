@@ -675,7 +675,7 @@ void Jugando::UpdateIA()
                         ataque = 2;
                         nombre = "gold_up";
                         modelo = "assets/models/gold.obj";
-                        textura = "assets/models/gold.mtl";
+                        textura = "assets/models/gold.png";
                         //oro entre 1 y 5 monedas
                         srand(time(NULL));
                         int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
@@ -683,7 +683,7 @@ void Jugando::UpdateIA()
                         }
 
                         //Crear objeto
-                        this->CrearPowerUp(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
                     }
 
                     if (_enemigos[i]->GetPedirAyuda()) {
@@ -878,11 +878,24 @@ void Jugando::CrearJugador()
 
 }
 
-void Jugando::CrearPowerUp(int codigo, int accion, const char* nombre, int ataque, int rp, 
+void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, 
     int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, 
     const char* ruta_objeto, const char* ruta_textura, int* propiedades)
 {
-    if (accion == 4) // Nos aseguramos que es un powerup //Esto es temporal
+    //Arma
+    if(accion == 2)
+    {
+        Constantes constantes;
+        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z,constantes.ARMA);
+        _rec->setID(_recolectables.size());
+        _rec->setPosiciones(x,y,z);
+        _rec->SetPosicionArrayObjetos(posicionObjeto);
+        _recolectables.push_back(move(_rec));
+        _rec = nullptr;
+        _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
+    }
+    else if (accion == 4) // Nos aseguramos que es un powerup //Esto es temporal
     {
         Constantes constantes;
         int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
@@ -893,7 +906,6 @@ void Jugando::CrearPowerUp(int codigo, int accion, const char* nombre, int ataqu
         _rec->setCantidad(propiedades[0]); //cantidad
         _powerup.push_back(move(_rec));
         _rec = nullptr;
-
         _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
     }
 }
@@ -1198,7 +1210,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     ataque = 22 + rand() % (33 - 22);
     nombre = "guitarra";
     modelo = "assets/models/Arma.obj";
-    textura = "assets/texture/platform1.jpg";
+    textura = "assets/models/Arma.png";
     cout << "Hay una guitarra!" << endl;
   }
   else if(tipobj == 2)
@@ -1210,7 +1222,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     ataque = 15 + rand() % (26 - 15);
     nombre = "arpa";
     modelo = "assets/models/Arpa.obj";
-    textura = "assets/texture/platform1.png";
+    textura = "assets/models/Arpa.png";
     cout << "Hay una arpa!" << endl;
   }
   else if(tipobj == 3)
@@ -1221,14 +1233,14 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     ataque = 2;
     nombre = "gold_up";
     modelo = "assets/models/gold.obj";
-    textura = "assets/models/gold.mtl";
+    textura = "assets/models/gold.png";
     //Cantidad de oro entre 20 y 30
     srand(time(NULL));
     int orocant = 20 + rand() % (31 - 20); //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
     cout << "Hay " << orocant << " de Oro!" << endl;
     propiedades[0] = orocant; //para pasarlo a crear objeto
   }
-   this->CrearPowerUp(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
 }
 
 void Jugando::activarPowerUp()
