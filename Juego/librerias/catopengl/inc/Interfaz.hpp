@@ -56,24 +56,12 @@ class Interfaz
         void DefinirVentana(short unsigned int,short unsigned int,const char *); // cambia los valores width,height,title,si no existe tambien crea la ventana
 
         void CrearTexto(const char * texto,short x,short y,unsigned short tamayo); // texto, x e y(max y min de la pantalla), tamayo del texto siempre superior
-        
+
         bool IsKeyDown(short);//se le pasa la tecla que quiere comprobar, esto va a la ventana y le pregunta si esta pulsada
 
         bool IsMouseClick(short);// comprobaciones de los botones del raton
 
         void ChangeTargetCamara(unsigned short id, float x, float y, float z);//cambia donde apunta la camara
-
-        void DeclararBoton(unsigned short id, unsigned short newid);
-
-        bool DetectarPulsacion(int);//se le pasa el id del objeto o boton que se quiere comprobar si esta siendo pulsado por el raton
-
-        void DeshabilitarObjeto(unsigned short);//cuando se vaya a pintar los objetos deshabilitados no seran procesados
-
-        void HabilitarObjeto(unsigned short);//cuando se habilite sera procesado por el pintado
-
-        float * GetPosicion(unsigned short);
-
-        float * GetTarget(unsigned short);
 
     private:
 
