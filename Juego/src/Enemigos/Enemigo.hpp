@@ -84,6 +84,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setVelocidadMaxima(float velocidad); //modifica la VelocidadMaxima de desplazamiento
         void SetEnemigo(int);
         void SetModo(int);
+        void SetPosicionComunBandada(INnpc::VectorEspacial direccion);
 
         int getID();
         int getVidaIni();
@@ -148,6 +149,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void SetPedirAyuda(bool);
         bool GetContestar();
         void SetContestar(bool);
+        int  GetTipoEnemigo();
 
         void Render(short pos, float updTime, float drawTime);
         void RenderAtaque();
@@ -171,6 +173,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void AuxiliarAliado();//se mueve hacia el proximo waypoint del camino a seguir
         bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         INnpc::VectorEspacial normalizarVector(int*);//Convierte el vector que se pasa en un vector con la misma direccion y sentido pero con modulo 1
+        bool comprobarDistanciaFlocking();
         //fin comportamientos bases
 
         Zona* getZonaMasCercana(vector <Zona*> zonas, short enemigo);
@@ -213,13 +216,18 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Arbol* arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
         bool accionRealizada; //
-        short modo;
+        short modo;  //Modo de actuacion en que se encuentra el enemigo: normal, ataque, huida, esconderse
+        float pesoRotacion;  //valor que sirve para dar mas importancia a un tipo de rotacion que a otra
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
         vector <Posiciones> recorridoAyuda;
+        VectorEspacial distanciaEnemigoObstaculo;
+        VectorEspacial distanciaEnemigoJugador;
         int distanciaMinimaEsquivar; //Variable que contiene la distancia mínima para esquivar objetos;
+        int distanciaMaximaCohesionBandada; //Distancia maxima de las bandadas con su centro con flocking
         const char* _modelo; // Malla 3D con la textura
         bool pedirAyuda;
         bool contestar;
+        INnpc::VectorEspacial posicionComunBandada; //PUnto de cohesion de las bandadas
 };
 
 #endif
