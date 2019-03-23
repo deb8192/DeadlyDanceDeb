@@ -154,3 +154,12 @@ void TCamara::ActivarPerspectiva()
 {
     esPerspectiva = true;
 }
+
+float * TCamara::GetTarget()
+{
+    float * array = new float[3];
+    array[0] = cameraTarget[0];
+    array[1] = cameraTarget[1];
+    array[2] = cameraTarget[2];
+    return array;
+}

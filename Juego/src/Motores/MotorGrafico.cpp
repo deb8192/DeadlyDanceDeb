@@ -1277,6 +1277,10 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
             _interfaz->Rotar(_jugEscena,rx,1,0,0);
             _interfaz->Rotar(_jugEscena,ry,0,1,0);
             _interfaz->Rotar(_jugEscena,rz,0,0,1);
+
+            delete nodeCamPosition;
+            
+            delete nodeCamTarget;
         }
 
     #else
