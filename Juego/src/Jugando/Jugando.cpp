@@ -661,21 +661,21 @@ void Jugando::UpdateIA()
                         ataque = 0;
                         nombre = "vida_up";
                         modelo = "assets/models/powerup0.obj";
-                        textura = "assets/models/powerup0.png";
+                        textura = "assets/texture/powerup0.png";
                         }
                         else if(cualpower == 1)
                         {
                         ataque = 1;
                         nombre = "energy_up";
                         modelo = "assets/models/powerup1.obj";
-                        textura = "assets/models/powerup1.png";
+                        textura = "assets/texture/powerup1.png";
                         }
                         else if(cualpower == 2)
                         {
                         ataque = 2;
                         nombre = "gold_up";
                         modelo = "assets/models/gold.obj";
-                        textura = "assets/models/gold.png";
+                        textura = "assets/texture/gold.png";
                         //oro entre 1 y 5 monedas
                         srand(time(NULL));
                         int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
@@ -1210,7 +1210,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     ataque = 22 + rand() % (33 - 22);
     nombre = "guitarra";
     modelo = "assets/models/Arma.obj";
-    textura = "assets/models/Arma.png";
+    textura = "assets/texture/Arma.png";
     cout << "Hay una guitarra!" << endl;
   }
   else if(tipobj == 2)
@@ -1222,7 +1222,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     ataque = 15 + rand() % (26 - 15);
     nombre = "arpa";
     modelo = "assets/models/Arpa.obj";
-    textura = "assets/models/Arpa.png";
+    textura = "assets/texture/Arpa.png";
     cout << "Hay una arpa!" << endl;
   }
   else if(tipobj == 3)
@@ -1233,7 +1233,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     ataque = 2;
     nombre = "gold_up";
     modelo = "assets/models/gold.obj";
-    textura = "assets/models/gold.png";
+    textura = "assets/texture/gold.png";
     //Cantidad de oro entre 20 y 30
     srand(time(NULL));
     int orocant = 20 + rand() % (31 - 20); //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
