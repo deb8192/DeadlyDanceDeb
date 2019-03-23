@@ -8,7 +8,7 @@ Recolectable::Recolectable()
 
 Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
     int anc, int lar, int alt, const char* objeto, const char* textura,
-    float x, float y, float z)
+    float x, float y, float z, unsigned short tipoObj)
 {
     // INdrawable
     posIni.x = x;
@@ -35,6 +35,9 @@ Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
     alto = alt;
     ruta_objeto = cadena_objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
     ruta_textura = cadena_textura;
+
+    //INobjetos
+    tipoObjeto = tipoObj;
 }
 
 Recolectable::~Recolectable()
@@ -362,4 +365,10 @@ float Recolectable::getAlto()
 int Recolectable::getCantidad()
 {
     return cantidad;
+}
+
+// Devuelve si es una llave u otra cosa
+unsigned short Recolectable::GetTipoObjeto()
+{
+    return tipoObjeto;
 }

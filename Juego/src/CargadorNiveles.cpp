@@ -8,6 +8,10 @@
 #include "Enemigos/CofreArana.hpp"
 #include "Enemigos/MuerteBoss.hpp"
 
+#include "Objetos/Puerta.hpp"
+#include "Objetos/Palanca.hpp"
+#include "Objetos/Cofre.hpp"
+
 CargadorNiveles::CargadorNiveles()
 {
     _motor = MotorGrafico::GetInstance();
@@ -291,7 +295,8 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         const char* nombre = obj.attribute("nombre").value(); //nos da un char[] = string
         const char* textura = obj.attribute("Texture").value(); //nos da un char[] = string
         const char* modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
-        CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL); //cargamos el enemigo
+        short tipoObj = (short) obj.attribute("tipoObj").as_int();//nos devuelve un short
+        CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj); //cargamos el enemigo
     }
     for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
@@ -552,49 +557,61 @@ void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
-    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades)
+    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj)
 {
     int posicionObjeto;
 
-    //Arma
-    if(accion == 2)
+    switch (accion)
     {
-        posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z);
-        _rec->setID(_recolectables.size());
-        _rec->setPosiciones(x,y,z);
-        _rec->SetPosicionArrayObjetos(posicionObjeto);
-        _recolectables.push_back(move(_rec));
-        _rec = nullptr;
-    }else
-    //Puertas o interruptores
-    if(accion == 3)
-    {
-        posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Interactuable* _inter = new Interactuable(codigo, nombre, ancho, largo, alto, ruta_objeto, ruta_textura, posicionObjeto,x,y,z);
-        _inter->setID(++id);
-        _inter->setPosiciones(x,y,z);
-        _inter->SetPosicionArrayObjetos(posicionObjeto);
-        _inter->setDesplazamientos(despX,despZ);
-        _inter->setRotacion(0.0,0.0,0.0);
-        _interactuables.push_back(move(_inter));
-        _inter = nullptr;
-    }else
-    //Powerups
-    if(accion == 4)
-    {
-        posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z);
-        _rec->setID(_powerup.size());
-        _rec->setPosiciones(x,y,z);
-        _rec->SetPosicionArrayObjetos(posicionObjeto);
-        _rec->setCantidad(propiedades[0]); //cantidad
-        _powerup.push_back(move(_rec));
-        _rec = nullptr;
-    }
-    else
-    {
-         posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        case 2: //Arma
+        {
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+            Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z,tipoObj);
+            _rec->setID(_recolectables.size());
+            _rec->setPosiciones(x,y,z);
+            _rec->SetPosicionArrayObjetos(posicionObjeto);
+            _recolectables.push_back(move(_rec));
+            _rec = nullptr;
+        }
+        break;
+
+        case 3: //Puertas o palancas
+        {
+            Interactuable* _inter;
+            if (tipoObj == 0) // Palancas
+                _inter = new Palanca(codigo, nombre, ancho, largo, alto, 0,x,y,z,tipoObj);
+            else // 2 o 3, Puertas
+                _inter = new Puerta(codigo, nombre, ancho, largo, alto, 0,x,y,z,tipoObj);
+            
+            _inter->setID(++id);
+            _inter->setPosiciones(x,y,z);
+            _inter->setDesplazamientos(despX,despZ);
+            _inter->setRotacion(0.0,0.0,0.0);
+
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_inter->GetModelo(),NULL);
+            _inter->SetPosicionArrayObjetos(posicionObjeto);
+            
+            _interactuables.push_back(move(_inter));
+            _inter = nullptr;
+        }
+        break;
+
+        case 4: //Powerups
+        {
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+            Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z,tipoObj);
+            _rec->setID(_powerup.size());
+            _rec->setPosiciones(x,y,z);
+            _rec->SetPosicionArrayObjetos(posicionObjeto);
+            _rec->setCantidad(propiedades[0]); //cantidad
+            _powerup.push_back(move(_rec));
+            _rec = nullptr;
+        }
+        break;
+
+        default:
+            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+        break;
     }
 
     _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
@@ -715,8 +732,11 @@ void CargadorNiveles::CargarCofres()
                 _zonas[zonasDisponibles[numAlt]]->annadirElemento();
 
                 //Colocar cofre
-                int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,"assets/models/Cofre/cofre.obj", "assets/models/Cofre/cofre.mtl");
-                Interactuable*  inter = new Interactuable(-1,"Cofre",2,2,2,"assets/models/Cofre/cofre.obj","assets/models/Cofre/cofre.mtl", posicionObjeto, newx, newy, newz);
+                int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
+                    "assets/models/Cofre/cofre.obj", "assets/models/Cofre/cofre.mtl");
+                Interactuable*  inter = new Cofre(false, -1,"Cofre",2,2,2,
+                    posicionObjeto, newx, newy, newz, 4); //4=tipoObj
+
                 inter->setID(++id);
                 inter->setPosiciones(newx,newy,newz);
                 inter->SetPosicionArrayObjetos(posicionObjeto);

@@ -48,7 +48,7 @@ class CargadorNiveles
         void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearBoss(int accion,int enemigo,int x,int y,int z,int ancho, int largo, int alto, Sala* sala);
         void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem); //lo usamos para crear zonas
-        void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearWaypoint(Sala* sala, int accion, int compartido, int ID,  int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones); //Lo usamos para crear waypoints
         void CrearCofreArana();
         void CargarCofres();  //Lo usamos para cargar los cofres en las distintas zonas de cofres
@@ -84,8 +84,6 @@ class CargadorNiveles
 
         // Variables temporales de Debug
         float* posCofre = new float[3];
-        std::vector<Interactuable*> _cofres; //Objetos interactuables del mapa
-
 };
 
 #endif /* CargadorNiveles_HPP */
