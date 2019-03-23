@@ -21,7 +21,6 @@ class TPlano : public TEntidad
         int width, height, nrComponents;
         unsigned int textureID;
         unsigned int VAO, VBO, EBO; //Datos de render
-        int id;//id del boton
 
     public:
         // Constructor y destructor
@@ -31,16 +30,10 @@ class TPlano : public TEntidad
         void setSize(float,float); //ancho largo
         void setPosition(float,float); //x,y
         void setScale(float); //escalado
-        bool botonPulsado(double *); //pulsar boton
 
         // sobrecarga metodos TEntidad
         void beginDraw();
         void endDraw();
-
-        //seccion para botones
-        bool Comprobar();
-        void CambiarId(int);
-        int getID();
 };
 
 #endif

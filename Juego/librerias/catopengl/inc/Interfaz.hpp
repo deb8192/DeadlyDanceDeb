@@ -55,8 +55,8 @@ class Interfaz
 
         void DefinirVentana(short unsigned int,short unsigned int,const char *); // cambia los valores width,height,title,si no existe tambien crea la ventana
 
-        unsigned short CrearTexto(std::string texto,short x,short y); // texto, x e y(max y min de la pantalla), tamayo del texto siempre superior
-
+        void CrearTexto(const char * texto,short x,short y,unsigned short tamayo); // texto, x e y(max y min de la pantalla), tamayo del texto siempre superior
+        
         bool IsKeyDown(short);//se le pasa la tecla que quiere comprobar, esto va a la ventana y le pregunta si esta pulsada
 
         bool IsMouseClick(short);// comprobaciones de los botones del raton
