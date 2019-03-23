@@ -109,9 +109,15 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     pugi::xml_node hijo = doc.child("Level").child("MaxNumberOf");
     int eneMax = hijo.attribute("Enemies").as_int();//nos devuelve un int
     int wallsMax = hijo.attribute("Walls").as_int();//nos devuelve un int
-    int doorsMax = hijo.attribute("Doors").as_int();//nos devuelve un int
+    int keysMax = hijo.attribute("Keys").as_int();//nos devuelve un int
+    int leversMax = hijo.attribute("Levers").as_int();//nos devuelve un int
     chestsMax = hijo.attribute("Chests").as_int();//nos devuelve un int
-    ReservarMemoriaVectores(eneMax/*, wallsMax, doorsMax*/);
+    int doorsMax = hijo.attribute("Doors").as_int();//nos devuelve un int
+    int zonesMax = hijo.attribute("Zones").as_int();//nos devuelve un int
+    int waypointsMax = hijo.attribute("Waypoints").as_int();//nos devuelve un int
+    
+    ReservarMemoriaVectores(eneMax, (doorsMax+leversMax+chestsMax),
+        waypointsMax, zonesMax/*, wallsMax*/);
     
     pugi::xml_node primera = doc.child("Level"); //partimos de nivel
     vector <pugi::xml_node> anterior;
@@ -386,11 +392,15 @@ std::vector<Waypoint*> CargadorNiveles::GetWaypoints()
     return _waypoints;
 }
 
-void CargadorNiveles::ReservarMemoriaVectores(int eneMax/*, int wallsMax, int doorsMax*/)
+void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int interMax,
+    int waypointsMax, int zonesMax)
 {
     _enemigos.reserve(eneMax);
-    _eneCofres.reserve(chestsMax);
+    _interactuables.reserve(interMax);
+    _zonas.reserve(zonesMax);
+    _waypoints.reserve(waypointsMax);
 
+    _eneCofres.reserve(chestsMax);
     unsigned short eneAranas = chestsMax/4; // 1/4 de los cofres son enemigos
     for (unsigned short i= 0; i<eneAranas; ++i)
     {
@@ -399,10 +409,8 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax/*, int wallsMax, int do
 
     // TO DO:
     /*_recolectables.reserve(20);
-    _interactuables.reserve(20);
     _powerup.reserve(20);
-    _zonas.reserve(20);
-    _waypoints.reserve(20);*/
+    */
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -732,17 +740,18 @@ void CargadorNiveles::CargarCofres()
                 _zonas[zonasDisponibles[numAlt]]->annadirElemento();
 
                 //Colocar cofre
+                
+                Interactuable* _cofre = new Cofre(false, -1,"Cofre",2,2,2,
+                    0, newx, newy, newz, 4); //4=tipoObj
                 int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
-                    "assets/models/Cofre/cofre.obj", "assets/models/Cofre/cofre.mtl");
-                Interactuable*  inter = new Cofre(false, -1,"Cofre",2,2,2,
-                    posicionObjeto, newx, newy, newz, 4); //4=tipoObj
-
-                inter->setID(++id);
-                inter->setPosiciones(newx,newy,newz);
-                inter->SetPosicionArrayObjetos(posicionObjeto);
-                inter->setRotacion(0.0,0.0,0.0);
-                _interactuables.push_back(inter);
-                inter = nullptr;
+                    _cofre->GetModelo(), NULL);
+                    
+                _cofre->setID(++id);
+                _cofre->setPosiciones(newx,newy,newz);
+                _cofre->SetPosicionArrayObjetos(posicionObjeto);
+                _cofre->setRotacion(0.0,0.0,0.0);
+                _interactuables.push_back(move(_cofre));
+                _cofre = nullptr;
 
                 //Fisicas del cofre
                 _fisicas->crearCuerpo(3,0,newx/2,newy/2,newz/2,2,2,4,2,3,0,0);
