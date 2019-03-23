@@ -383,7 +383,6 @@ bool Interactuable::getAccionado()
 
 void Interactuable::Render(float updTime, float drawTime)
 {
-    cout << "POS: "<<posicionArrayObjetos<<endl;
     RotarEntidad(1 / updTime);
     UpdateTimeRotate(drawTime);
     _motor->mostrarObjetos(

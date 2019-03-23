@@ -728,8 +728,6 @@ void Jugando::UpdateIA()
 
 void Jugando::Render()
 {
-    cout<<"LLEGOOOOOOOOOOO"<<endl;
-
     _motor->FondoEscena(255,0,0,0); // Borra toda la pantalla
 
     _motor->clearDebug2();
