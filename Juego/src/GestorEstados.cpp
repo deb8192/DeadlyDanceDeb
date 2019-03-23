@@ -32,7 +32,7 @@ void GestorEstados::CambioEstadoCinematica()
 // Carga el Menu principal, se llama desde Cinematica
 void GestorEstados::CambioEstadoMenu()
 {
-    eliminar(); // Elimina el estado superior antes de anyadir el menu
+    //eliminar(); // Elimina el estado superior (Cinematica) antes de anyadir el menu
     anyadir(new Menu(), false);
 }
 

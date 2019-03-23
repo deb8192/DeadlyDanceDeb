@@ -14,13 +14,13 @@ MotorFisicas::MotorFisicas()
     armaAtEsp = nullptr;
     jugadorAtack = nullptr;
     arma = nullptr;
-    
+
     config.defaultVelocitySolverNbIterations = 20;
     config.isSleepingEnabled = false;
     space = new CollisionWorld(config);
-    // Gravity vector 
-    rp3d::Vector3 gravity(0.0, -9.81, 0.0);  
-    // Create the dynamics world 
+    // Gravity vector
+    rp3d::Vector3 gravity(0.0, -9.81, 0.0);
+    // Create the dynamics world
     world = new DynamicsWorld(gravity);
     jugador = nullptr;
         jugadorBody  = nullptr;
@@ -141,7 +141,7 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
         case 1: //jugador
         {
             rp3d::RigidBody* rigido;
-            rigido = world->createRigidBody(transformacion); 
+            rigido = world->createRigidBody(transformacion);
             rp3d::Vector3 medicion(2,alto,2);
             BoxShape * ocupamiento = new BoxShape(medicion);
             rigido->addCollisionShape(ocupamiento,transformacion,rp3d::decimal(10));
@@ -404,6 +404,23 @@ bool MotorFisicas::collideObstacle()
     return false;
 }
 
+bool MotorFisicas::collideAtackObstacle()
+{
+
+    for(long unsigned int i = 0; i < obstaculos.size();i++)
+    {
+        if(obstaculos[i])
+        {
+            if(space->testOverlap(jugadorAtack,obstaculos[i]))
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 bool MotorFisicas::collideBossObstacle()
 {
     if (collideObstaculos())
@@ -564,7 +581,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
             while(i<obstaculos.size() && !colision)
             {
                 colision = obstaculos[i]->raycast(*rayo,intersection);
-                
+
                 if(colision)
                 {
                     //cout << "colisiona" << endl;
@@ -601,13 +618,13 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
 }
 
 void MotorFisicas::cambiarCamara()
-{    
-        gcam >= 270 ? gcam = 0 : gcam += 90;            
+{
+        gcam >= 270 ? gcam = 0 : gcam += 90;
 }
 
 void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z)
 {
-    
+
     Constantes constantes;
     float px = x,
           pz = z;
@@ -640,8 +657,8 @@ void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, floa
       deg -= gcam;
       px += (int)(2.9*sin(deg*constantes.DEG_TO_RAD));
       pz += (int)(2.9*cos(deg*constantes.DEG_TO_RAD));
-          
-    
+
+
     if(jugador != nullptr)
     {
         rp3d::Vector3 posiciones(px,y,pz);
@@ -726,10 +743,10 @@ void MotorFisicas::updatePuerta(float x, float y, float z, float rx, float ry, f
     {
         rp3d::Vector3 posiciones((x+desplazamientos[0])/2,y,(z+desplazamientos[1])/2);
         rp3d::Quaternion orientacion = rp3d::Quaternion(cos((ry * constantes.DEG_TO_RAD) / 2),posiciones*(sin((ry * constantes.DEG_TO_RAD) / 2)));
-       	
+
         Transform transformacion(posiciones,orientacion);
         obstaculos.at(i)->setTransform(transformacion);
-        
+
     }
 }
 
@@ -815,7 +832,7 @@ bool MotorFisicas::updateArmaBoss(float x, float y, float z)
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         jugadorAtack->setTransform(transformacion);
-        
+
         if(space->testOverlap(jugadorAtack, _boss))
         {
             return true;
@@ -832,7 +849,7 @@ bool MotorFisicas::updateArmaEspecialBoss(float x, float y, float z)
         rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
         Transform transformacion(posiciones,orientacion);
         armaAtEsp->setTransform(transformacion);
-        
+
         if(space->testOverlap(armaAtEsp, _boss))
         {
             return true;

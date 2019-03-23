@@ -78,3 +78,12 @@ void TTransform::endDraw()
         TEntidad::cola_compartida->pop();
     }
 }
+
+float * TTransform::GetPosicion()
+{
+    float * array = new float[3];
+    array[0] = (*matriz)[3][0];
+    array[1] = (*matriz)[3][1];
+    array[2] = (*matriz)[3][2];
+    return array;
+}

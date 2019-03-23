@@ -28,6 +28,8 @@ class TNodo
         TEntidad * GetEntidad();//se devuelve entidad
         TNodo * GetHijo(unsigned short);//devuelve el numero de hijo que le pases, si no nullptr
         TNodo * GetNieto(unsigned short);//devuelve el primer hijo del hijo de este nodo que le pases
+        void BorrarEscena();//borra todos los elementos de la escena siempre que no sean gui
+        void BorrarGui();//borramos todos los elementos que sean gui
         //pintado
         void draw();//se llama a las funciones de pintado
 

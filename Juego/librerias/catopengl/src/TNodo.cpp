@@ -26,8 +26,6 @@ TNodo::~TNodo()
             {
                 delete hijos[i];
             }
-            hijos[i] = nullptr;
-            hijos.erase(hijos.begin() + i); 
         }
 
         hijos.resize(0);
@@ -66,7 +64,7 @@ int TNodo::addHijo(TNodo* hijo)
     }
 
     //agregamos el hijo al final del vector
-    hijos.push_back(hijo);
+    hijos.push_back(move(hijo));
 
     std::size_t longitud = hijos.size();//recuperamos la longitud
     int posicion = (int)longitud;//la pasamos a int
@@ -133,10 +131,24 @@ void TNodo::draw()
 
     for(std::size_t i=0 ; i < hijos.size() ; i++)
     {
-        if(hijos[i] != nullptr)
+       /* if(entidad == nullptr && hijos[i] != nullptr && hijos[i]->GetEntidad() != nullptr)
         {
-            hijos[i]->draw();
+            if(hijos[i]->GetEntidad()->GetEjecutar())
+            {
+                std::cout << "entro aqui" << std::endl;
+                hijos[i]->draw();
+            }
         }
+        else
+        {*/
+            if(hijos[i] != nullptr && hijos[i]->GetEntidad() != nullptr)
+            {
+                //std::cout << "entro alli" << std::endl;
+                hijos[i]->draw();
+            }
+       // }
+        
+
     }
 
     if(entidad != nullptr)
@@ -182,3 +194,42 @@ TNodo * TNodo::GetNieto(unsigned short numeroDeHijo)
     return nullptr;
 }
 
+void TNodo::BorrarEscena()
+{
+    if(entidad == nullptr)//solo se ejecuta en raiz
+    {
+        for(std::size_t i=0 ; i < hijos.size() ; i++)
+        {
+            if(hijos[i] != nullptr)//comprobamos que no sea nulo para borrarlo si lo es se borra su posicion
+            {
+                if(!hijos[i]->GetEntidad()->GetGui()  && (!hijos[i]->GetEntidad()->GetCamara()))
+                {
+                    //no es gui por lo que borramos
+                    delete hijos[i];
+                    hijos.erase(hijos.begin()+i); 
+                    i--;
+                }
+            }
+        }      
+    }
+}
+
+void TNodo::BorrarGui()
+{
+    if(entidad == nullptr)//solo se ejecuta en raiz
+    {
+        for(std::size_t i=0 ; i < hijos.size() ; i++)
+        {
+            if(hijos[i] != nullptr)//comprobamos que no sea nulo para borrarlo si lo es se borra su posicion
+            {
+                if(hijos[i]->GetEntidad()->GetGui() && (!hijos[i]->GetEntidad()->GetCamara()))
+                {
+                    //no es gui por lo que borramos
+                    delete hijos[i];
+                    hijos.erase(hijos.begin()+i); 
+                    i--;
+                }
+            }
+        }      
+    }
+}

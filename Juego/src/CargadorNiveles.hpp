@@ -34,6 +34,7 @@ class CargadorNiveles
         
         Jugador* GetJugador();
         std::vector<Enemigo*> GetEnemigos();
+        std::vector<Enemigo*> GetEneCofres();
         std::vector<Zona*> GetZonas();
         std::vector<Recolectable*> GetRecolectables();
         std::vector<Interactuable*> GetInteractuables();
@@ -41,7 +42,7 @@ class CargadorNiveles
         Enemigo* GetBoss();
         std::vector<Waypoint*> GetWaypoints();
 
-        void ReservarMemoriaVectores();
+        void ReservarMemoriaVectores(int, int);
         Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -64,6 +65,7 @@ class CargadorNiveles
         CargadorBehaviorTrees cargadorIA; //Variable para crear la IA de los enemigos
         Enemigo* _boss;
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
+        std::vector<Enemigo*> _eneCofres;
         std::vector<Recolectable*> _recolectables;
         std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
         std::vector<Recolectable*> _powerup;
