@@ -846,7 +846,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     cargador.CargarCofres(); //Cargamos los cofres del nivel
     probArana = _eneCofres.size();
     _interactuables = cargador.GetInteractuables();
-    
+
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
     _motora->getEvent("AmbienteGritos")->start(); //Reproducir ambiente

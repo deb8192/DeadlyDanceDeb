@@ -1,7 +1,7 @@
 <Level><!--- Esto nos indica que estamos definiendo un nivel -->
 	<!-- Para reservar memoria en los vectores -->
 	<!-- TO DO: Poner todos los numeros correctos menos de Chests -->
-	<MaxNumberOf Enemies="50" Walls="100" Doors="20" Keys="10" Chests="12"></MaxNumberOf>
+	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="5" Levers="6" Chests="16" Waypoints="70" Zones="21"></MaxNumberOf>
 	
 	<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="0" Y="0" Z="0" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
 		<Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="10" X="-4" Y="0" Z="7" Texture="assets/texture/enemigos.mtl" Model="assets/models/ninja.b3d"></Enemy>	
