@@ -107,7 +107,7 @@ void SenseEventos::agregarEvento(EventoSonido* evento)
 //para la vista devuelve los objetos que ve
 int * SenseEventos::listaObjetos(float x, float y, float z,float rot,float vista, int modo, bool perifericos)
 {
-    y += 2;
+    y += 1;
     rot += 90;
     MotorGrafico* _motor = MotorGrafico::GetInstance();
     MotorFisicas* _fisicas = MotorFisicas::getInstance();

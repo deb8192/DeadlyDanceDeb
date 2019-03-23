@@ -115,7 +115,11 @@ void Jugando::ValoresPorDefecto()
     danyo2 = 0;
     contadorEnem = 0;
     int_cpw_aux = 0;
-    enSalaBoss = false;
+    enSalaBoss = false;    
+    //Valores para el centro de las bandadas en el flocking
+    posicionMediaEnemigos.vX = INT_MAX;
+    posicionMediaEnemigos.vY = INT_MAX;
+    posicionMediaEnemigos.vZ = INT_MAX;
     proyectilFuera = true;
     // Activamos la interfaz
     _interfaz->activar();
@@ -462,10 +466,22 @@ void Jugando::Update()
         if(_enemigos.size() > 0)//posiciones interpolacion
         {
             //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
+            short contadorEnemigos = 0;
+            INnpc::VectorEspacial posicionTemporal;  
+
             for(short i=0;(unsigned)i<_enemigos.size();i++)
             {
                 if(_enemigos[i] != nullptr)
                 {
+                    // Se coloca la posicionMedia de las bandadas
+                    if(_enemigos[i]->GetModo() == constantes.UNO)
+                    {
+                        if(posicionMediaEnemigos.vX != INT_MAX)
+                        {
+                            _enemigos[i]->SetPosicionComunBandada(posicionMediaEnemigos);
+                        }
+                    }
+
                     // Comprobamos si alguno pide ayuda para el pathfinding
                     if (_enemigos[i]->GetPedirAyuda())
                     {
@@ -477,7 +493,13 @@ void Jugando::Update()
                         if (_enemigos[i]->GetContestar())
                             updateRecorridoPathfinding(_enemigos[i]);
                     }
-
+                    if(_enemigos[i]->GetModo() == constantes.UNO && _enemigos[i]->getVida() > 0)
+                    {
+                        contadorEnemigos++;
+                        posicionTemporal.vX += _enemigos[i]->getX();
+                        posicionTemporal.vY += _enemigos[i]->getY();
+                        posicionTemporal.vZ += _enemigos[i]->getZ();
+                    }                    
                     // TO DO: optimizar
                     if (_enemPideAyuda) {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
@@ -504,35 +526,23 @@ void Jugando::Update()
                         }
                         _enemigos[i]->setTimeMerodear(tiempoMerodear);
                     }
-                    //FUNCIONA REGULAR
-                    /*if((_fisicas->enemyCollideObstacle(i) || !_fisicas->enemyCollidePlatform(i)) && (_enemigos[i]->GetModo() != 1 || _enemigos[i]->GetModo() != 3))
-                    {
-                        //colisiona
-                        struct DatosDesplazamiento
-                        {
-                            float x = 0.0f;
-                            float y = 0.0f;
-                            float z = 0.0f;
-                        }
-                        velocidad, posicionesPasadas;
-
-                        velocidad.x = (_enemigos[i]->getNewX() - _enemigos[i]->getX());
-                        velocidad.y = (_enemigos[i]->getNewY() - _enemigos[i]->getY());
-                        velocidad.z = (_enemigos[i]->getNewZ() - _enemigos[i]->getZ());
-
-                        _enemigos[i]->setPosicionesFisicas(-velocidad.x, 0.0f, -velocidad.z);//colisiona
-                        //enemigos.at(i)->setPosiciones(_enemigos[i]->getX() - velocidad.x, _enemigos[i]->getLasY() - velocidad.y, _enemigos[i]->getLastZ() - velocidad.z);//colisiona
-                        _enemigos[i]->setNewPosiciones(_enemigos[i]->getX(), _enemigos[i]->getY(), _enemigos[i]->getZ());//colisiona
-                        if(_enemigos[i]->GetRotation() != 0.0f)
-                        {
-                            _enemigos[i]->setNewRotacion(_enemigos[i]->getRX(), _enemigos[i]->getRY() - constantes.PI_RADIAN, _enemigos[i]->getRZ());
-                            _enemigos[i]->setVectorOrientacion();
-                            _enemigos[i]->setRotation(0.0f);
-                        }
-                    }*/
                 }
                 //_enemigos[i]->queVes();
             }
+            if(contadorEnemigos > 1)
+            {
+                posicionMediaEnemigos.vX = posicionTemporal.vX / contadorEnemigos;
+                posicionMediaEnemigos.vY = posicionTemporal.vY / contadorEnemigos;
+                posicionMediaEnemigos.vZ = posicionTemporal.vZ / contadorEnemigos;
+            }
+            else
+            {
+                posicionMediaEnemigos.vX = INT_MAX;
+                posicionMediaEnemigos.vY = INT_MAX;
+                posicionMediaEnemigos.vZ = INT_MAX;
+            }
+            
+            
         }
             //_enemigos->MuereEnemigo(acumulator);
             //acumulator -= dt;

@@ -492,23 +492,23 @@ bool MotorFisicas::enemyCollidePlatform(unsigned int enemigo)
 // TO DO revisar
 int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,float longitud,int modo)
 {
-
+    Constantes constantes;
     //se recomiendan usar modos especificos para ahorrar costes.
-    Ray * rayo = crearRayo(x,y,z,(-1*(rotation-180)),longitud);
+    
+    Ray * rayo = crearRayo(x/*-(2*(sin(constantes.PI * rotation / constantes.PI_RADIAN)))*/,y,z/*-(2*(cos(constantes.PI * rotation / constantes.PI_RADIAN)))*/,(-1*(rotation-180)),longitud);
 
     RaycastInfo intersection;
 
-    int * jug = new int[1];
-    jug[0] = 0;//false - no lo ve;
+    int * jug;
     int * ene;
     int * obj;
 
     //creamos un puntero para saber si colisiona con el jugador (si es el jugador devolvera que no colisiona con el)
-    /*if(modo == 1)
+    if(modo == 1)
     {
-        jug = new int[1];
+        jug = new int[7];
         jug[0] = 0;//false - no lo ve
-    }*/
+    }
 
     //creamos un puntero que devuelve solamente los objetos con los que colisiona
     // Ya no utilizar - MI
@@ -521,18 +521,9 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
     //creamos un puntero que devuelve solo los enemigos con los que colisiona por defecto si este rayo sale de un enemigo no lo detecta como colision
     if(modo == 3)
     {
-        ene = new int[enemigos.size()+1];
+        ene = new int[7];
         ene[0] = 0;//false - no lo ve
     }
-
-        /*for(std::size_t a = 0; a < (enemigos.size()+1);a++)
-        {
-            if(a != 0)
-            {
-                ene[a] = 0;
-            }
-        }
-    }*/
     //Colisiona la vision con el jugador
     if(modo == 0 || modo == 1)
     {
@@ -544,6 +535,12 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
             {
                 //cout << "colisiona" << endl;
                 jug[0] = 1;
+                jug[1] = intersection.worldPoint.x;
+                jug[2] = intersection.worldPoint.y;
+                jug[3] = intersection.worldPoint.z;
+                jug[4] = intersection.worldNormal.x;
+                jug[5] = intersection.worldNormal.y;
+                jug[6] = intersection.worldNormal.z;
             }
         }
     }
@@ -553,17 +550,23 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
         bool colision = false;
         if(enemigos.size() > 0)//posiciones interpolacion
         {
-            for(std::size_t i=0;i<enemigos.size();i++)
+            unsigned int i = 0;
+            while(i<enemigos.size() && !colision)
             {
                 colision = enemigos[i]->raycast(*rayo,intersection);
-                if(intersection.body != enemigos[i])
+                
+                if(colision)
                 {
-                    if(colision)
-                    {
-                        //cout << "colisiona" << endl;
-                        ene[0] = 1;
-                    }
+                  
+                    ene[0] = 1;
+                    ene[1] = intersection.worldPoint.x;
+                    ene[2] = intersection.worldPoint.y;
+                    ene[3] = intersection.worldPoint.z;
+                    ene[4] = intersection.worldNormal.x;
+                    ene[5] = intersection.worldNormal.y;
+                    ene[6] = intersection.worldNormal.z;
                 }
+                else i++;
             }
         }
     }

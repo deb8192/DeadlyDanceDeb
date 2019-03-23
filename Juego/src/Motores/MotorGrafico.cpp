@@ -1912,6 +1912,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
         //codigo motor irrlicht
         if(debugGrafico)
         {
+            Constantes constantes;
             if(!_conoVision)
             {
 
@@ -1922,7 +1923,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
             if(_conoVision) // Si se ha cargado
             {
                 IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(_conoVision); //metemos el objeto en el escenario para eso lo pasamos al escenario
-                _objetoEnEscena->setPosition(core::vector3df(x,y+1,z));
+                _objetoEnEscena->setPosition(core::vector3df(x/*-(2*(sin(constantes.PI * rotacion / constantes.PI_RADIAN)))*/,y+2,z/*-(2*(cos(constantes.PI * rotacion / constantes.PI_RADIAN)))*/));
                 SColor COLOR  = SColor(0, 255, 0, 0);
                 _smgr->getMeshManipulator()->setVertexColors(_objetoEnEscena->getMesh(),COLOR);
 

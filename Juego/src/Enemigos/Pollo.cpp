@@ -114,7 +114,15 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                 {
                     if(this->ver(constantes.UNO))
                     {
-                        funciona = true;
+                        this->ver(constantes.DOS);
+                        if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
+                        {
+                            funciona = true;
+                        }
+                        else
+                        {
+                            funciona = false;
+                        }
                     }
                     else 
                     {
@@ -165,11 +173,14 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                         //Comprueba si ve al jugador para atacarle en caso necesario
                         if(this->ver(constantes.UNO))
                         {
-                            modo = MODO_ATAQUE;
-                            this->setTimeMerodear(constantes.CERO);
-                            //cout<<"Pide ayuda a los aliados"<<endl;
-                            this->PedirAyuda(ayuda);
-                            funciona = true;
+                            if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
+                            {
+                                modo = MODO_ATAQUE;
+                                this->setTimeMerodear(constantes.CERO);
+                                //cout<<"Pide ayuda a los aliados"<<endl;
+                                this->PedirAyuda(ayuda);
+                                funciona = true;
+                            }
                         }
                         else if(this->oir(constantes.DOS))
                         {
@@ -188,11 +199,14 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                         //Comprueba si ve al jugador para atacarle en caso necesario
                         if(this->ver(constantes.UNO))
                         { 
-                            modo = MODO_ATAQUE;
-                            this->setTimeMerodear(constantes.CERO);
-                            //cout<<"Pide ayuda a los aliados"<<endl;
-                            this->PedirAyuda(ayuda);
-                            funciona = true;
+                            if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
+                            {
+                                modo = MODO_ATAQUE;
+                                this->setTimeMerodear(constantes.CERO);
+                                //cout<<"Pide ayuda a los aliados"<<endl;
+                                this->PedirAyuda(ayuda);
+                                funciona = true;
+                            }
                         }
                         else if(this->oir(constantes.DOS))
                         {
