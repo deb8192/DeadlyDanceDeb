@@ -55,7 +55,7 @@ class Interfaz
 
         void DefinirVentana(short unsigned int,short unsigned int,const char *); // cambia los valores width,height,title,si no existe tambien crea la ventana
 
-        void CrearTexto(const char * texto,short x,short y,unsigned short tamayo); // texto, x e y(max y min de la pantalla), tamayo del texto siempre superior
+        unsigned short CrearTexto(std::string texto,short x,short y,float r = 0.0f,float g = 0.0f,float b = 0.0f); // texto, x e y(max y min de la pantalla), tamayo del texto siempre superior
 
         bool IsKeyDown(short);//se le pasa la tecla que quiere comprobar, esto va a la ventana y le pregunta si esta pulsada
 
@@ -63,14 +63,30 @@ class Interfaz
 
         void ChangeTargetCamara(unsigned short id, float x, float y, float z);//cambia donde apunta la camara
 
+        void DeclararBoton(unsigned short id, unsigned short newid);
+
+        bool DetectarPulsacion(int);//se le pasa el id del objeto o boton que se quiere comprobar si esta siendo pulsado por el raton
+
+        void DeshabilitarObjeto(unsigned short);//cuando se vaya a pintar los objetos deshabilitados no seran procesados
+
+        void HabilitarObjeto(unsigned short);//cuando se habilite sera procesado por el pintado
+
+        float * GetPosicion(unsigned short);//obtiene la posicion que tenga la transformacion
+
+        float * GetTarget(unsigned short);//obtiene donde apunta la camara en el momento
+
+        void EscalarImagen(unsigned short nid,float x,float y,bool enx = true, bool eny = true);//escala la imagen en x e y,si solo se quiere escalar de un lado se le tiene que pasar false en enx o eny
+
+        void CambiarTexto(unsigned short nid,std::string texto);//cambia el texto del elemento que le pases como nid
+
     private:
+
+        bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
         CatOpengl::Video::Ventana * window;
 
         Shader * shaders[4];//cuatro programas de shader(vertex y fragment cada uno)
-
-        std::vector<TNodo *> camaras;//registro de camaras
-
+        
         std::vector<TNodo *> luces;//registro de luces
 
         std::vector<TNodo *> imagenes;//registro de imagenes en interfaz
@@ -89,9 +105,13 @@ class Interfaz
             TNodo * recurso;//nodo que almacena escalado del objeto
             unsigned short id;//almacena el id a nivel local
             unsigned short idRecurso;//almacena el id del recurso (del gestor de recursos)
+            unsigned short tipo=0;//1 camara, 2 luces, 3 mallas, 4 imagenes, 5 textos
+            bool activo;//solo para camaras
         };
 
         std::vector<Nodo *> nodos;//almacena los nodos
+
+        std::vector<Nodo *> camaras;//registro de camaras
 
         CatOpengl::Gestor * gestorDeRecursos;
 
@@ -104,4 +124,6 @@ class Interfaz
         void ventanaLimpiar();
 
         float x,y,z;
+
+        unsigned int cualborrar;
 };
