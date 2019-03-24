@@ -13,6 +13,7 @@ Jugando::~Jugando()
     _destinoPathFinding = nullptr;
     _jugador = nullptr;
     _boss = nullptr;
+    _puzzle = nullptr;
 
     // Punteros a clases singleton
     _controladorTiempo = nullptr;
@@ -90,6 +91,9 @@ void Jugando::Iniciar()
     _interfaz = InterfazJugador::getInstance();
 
     _motor->CargarInterfaz();
+
+    // Cargamos todos los puzzles en memoria
+    cargPuzzles.CargarPuzzlesXml();
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
     CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
@@ -223,6 +227,13 @@ void Jugando::ManejarEventos() {
             _motor->IniCamLibre(_jugador->getX(),
                 _jugador->getY(), _jugador->getZ());
     }*/
+
+    // Z para abrir pantalla de puzzle
+    if (_motor->EstaPulsado(KEY_Z))
+    {
+        _motor->ResetKey(KEY_Z);
+        Juego::GetInstance()->estado.CambioEstadoPuzle((int*)cargPuzzles.GetPuzzle(1));
+    }
 
     if (_motor->EstaPulsado(KEY_K))
     {

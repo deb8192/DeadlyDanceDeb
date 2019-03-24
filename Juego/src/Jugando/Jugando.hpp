@@ -4,6 +4,7 @@
 #include "../Estado.hpp"
 #include "../Motores/SenseEventos.hpp"
 #include "../CargadorNiveles.hpp"
+#include "../CargadorPuzzles.hpp"
 #include "../Times.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "../Enemigos/Enemigo.hpp"
@@ -75,6 +76,8 @@ class Jugando: public Estado {
         InterfazJugador* _interfaz;
 
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
+        CargadorPuzzles cargPuzzles; // contiene todos los puzzles
+        Puzzle* _puzzle;
 
         bool enSalaBoss;
         Enemigo* _boss;

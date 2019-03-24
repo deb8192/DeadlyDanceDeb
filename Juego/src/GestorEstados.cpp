@@ -42,7 +42,7 @@ void GestorEstados::CambioEstadoJugar()
     anyadir(new Jugando(), false);
 }
 
-// Elimina la Pausa y deja paso al estado jugando
+// Elimina la Pausa/Puzzle y deja paso al estado jugando
 void GestorEstados::QuitarPausa()
 {
     eliminar();
@@ -64,9 +64,9 @@ void GestorEstados::CambioDeJuegoAMenu()
     _estados.top()->Reanudar(); //Menu
 }
 
-void GestorEstados::CambioEstadoPuzle()
+void GestorEstados::CambioEstadoPuzle(int* puzzle)
 {
-    anyadir(new EstadoPuzle(), false);
+    anyadir(new EstadoPuzle(puzzle), false);
 }
 
 void GestorEstados::CambioEstadoConfig()
