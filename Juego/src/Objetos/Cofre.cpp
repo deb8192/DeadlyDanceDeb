@@ -12,3 +12,8 @@ Cofre::~Cofre()
 {
     _modelo = nullptr;
 }
+
+bool Cofre::GetEsArana()
+{
+    return esArana;
+}
