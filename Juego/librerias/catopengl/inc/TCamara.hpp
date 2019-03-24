@@ -34,6 +34,7 @@ class TCamara : public TEntidad
         void ActivarPerspectiva();//por defecto activo (activa la perspectica)
         void DesactivarPerspectiva();//desactiva la perpestiva, habilita ortho
         void setPantalla(float,float);//cambio resolucion pantalla
+        float * GetTarget();//devuelve el target actual
 };
 
 #endif
