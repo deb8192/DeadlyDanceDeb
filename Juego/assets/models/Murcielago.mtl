@@ -1,4 +1,4 @@
-# Blender MTL File: 'None'
+# Blender MTL File: 'murci.blend'
 # Material Count: 2
 
 newmtl blenderMurci:initialShadingGroup.000
@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd /home/debora/Escritorio/Git/Deadly-Dance/Juego/assets/texture/texturas_murci.png
+map_Kd /run/media/debora/KINGSTON/EnemigosDeadlyDance/texturas_murci.png
 
 newmtl blenderMurci:initialShadingGroup.001
 Ns 92.156863
@@ -21,4 +21,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 0.000000
 illum 2
-map_Kd /home/debora/Escritorio/Git/Deadly-Dance/Juego/assets/texture/texturas_murci.png
+map_Kd /run/media/debora/KINGSTON/RV/texturas_murci.png
