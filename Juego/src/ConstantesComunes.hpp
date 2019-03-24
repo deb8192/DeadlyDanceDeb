@@ -62,15 +62,28 @@ using Constantes = struct
     const char* ZCHEST = "zChest";
     const char* ZDARK = "zDark";
 
-    // Tipos de objetos interactuables
+    // Tipos de objetos interactuables y recolectables
     const unsigned short PALANCA = 0;
     const unsigned short LLAVE = 1;
-    //Puerta2 = 2
-    //Puerta = 3
-    //Cofre = 4
-
-    // Tipos de recolectables
+    
     const unsigned short ARMA = 5;
     const unsigned short POWERUP = 6;
+
+    const unsigned short ARPA = 7;
+    const unsigned short GUITARRA = 8;
+    const unsigned short ORO = 9;
+    const unsigned short VIDA = 10;
+    const unsigned short ENERGIA = 11;
+
+    // Sin utilizar por ahora
+    const unsigned short PUERTA2 = 2;
+    const unsigned short PUERTA = 3;
+    const unsigned short COFRE = 4;
+    const unsigned short PARED_INVISIBLE = 12;
+    const unsigned short PARED_OBSTACULO = 13;
+    const unsigned short PARED_ROMPIBLE = 14;
+    const unsigned short SUELO = 15;
+    const unsigned short BASE = 16;
+    const unsigned short DECO = 17;
 };
 #endif
