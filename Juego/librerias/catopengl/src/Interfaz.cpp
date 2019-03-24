@@ -24,6 +24,7 @@ Interfaz::~Interfaz()
 
 unsigned short Interfaz::AddCamara()
 {
+    //std::cout << "SE CREA LUZ" << std::endl;
     if(ModoOneCamara && camaras.size() > 0)
     {
         //se devuelve el id de la primera camara 
@@ -74,6 +75,7 @@ unsigned short Interfaz::AddCamara()
             nodo->id = idnuevo;//se pone el id
             nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
             nodo->tipo = 0;
+            nodo->activo = true;//activo la camara por defecto cuando se activa
             camaras.push_back(nodo);
             nodos.push_back(nodo);//se agrega a la lista de nodos general
             return idnuevo;
@@ -107,7 +109,7 @@ unsigned short Interfaz::AddLuz(int tipo)
     escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
-    escaladoEnt->Ejecutar();
+    escaladoEnt->NoEjecutar();
 
     TNodo * luz = new TNodo;
     TLuz * luzEn = new TLuz(tipo);
@@ -121,7 +123,7 @@ unsigned short Interfaz::AddLuz(int tipo)
 
     if(_raiz != nullptr)
     {
-        luces.push_back(escalado);
+       
         _raiz->addHijo(escalado);
 
         unsigned short idnuevo = generarId();
@@ -130,7 +132,9 @@ unsigned short Interfaz::AddLuz(int tipo)
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodo->tipo = 1;
+        nodo->activo = true;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
+        luces.push_back(nodo);//se agrega la luz a la lista de luces
 
         return idnuevo;
     }
@@ -186,6 +190,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
             nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
             nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
             nodo->tipo = 2;
+            nodo->activo = true;
             nodos.push_back(nodo);//se agrega a la lista de nodos general
             return idnuevo;
         }
@@ -219,7 +224,7 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
     escalado->setEntidad(escaladoEnt);
 
     escaladoEnt->EsGui();
-    escaladoEnt->Ejecutar();
+    escaladoEnt->NoEjecutar();
 
     TNodo * imagen = new TNodo;
     TPlano * imagenEn = new TPlano(archivo,x,y,scale,shaders[1],window->getWidth(), window->getHeight());
@@ -231,7 +236,6 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
 
     if(_raiz != nullptr)
     {
-        imagenes.push_back(escalado);
         _raiz->addHijo(escalado);
 
         unsigned short idnuevo = generarId();
@@ -240,8 +244,9 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodo->tipo = 4;
+        nodo->activo = true;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
-
+        imagenes.push_back(nodo);//se agrega a la lista de imagenes
         return idnuevo;
     }
 
@@ -274,7 +279,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
     escalado->setEntidad(escaladoEnt);
 
     escaladoEnt->EsGui();
-    escaladoEnt->Ejecutar();
+    escaladoEnt->NoEjecutar();
 
     TNodo * texto = new TNodo;
     TTexto * textoEn = new TTexto(window->getWidth(),window->getHeight(),shaders[2]);
@@ -287,7 +292,6 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
     if(_raiz != nullptr)
     {
-        textos.push_back(escalado);
         _raiz->addHijo(escalado);
 
         unsigned short idnuevo = generarId();
@@ -296,7 +300,9 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodo->tipo = 5;
+        nodo->activo = true;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
+        textos.push_back(nodo);//se agrega a la lista de textos
 
         return idnuevo;
     }
@@ -306,7 +312,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
 void Interfaz::Draw()
 {
-    //std::cout << "TAMANO NODOS " << camaras.size() << std::endl;
+    //std::cout << "TAMANO NODOS " << nodos.size() << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -319,10 +325,44 @@ void Interfaz::Draw()
     {
         if(camaras.size() > 0)
         {
+            for(unsigned int i = 0; i < camaras.size(); i++)
+            {
+                if(camaras[i]->activo)
+                {
+                    camaras[i]->recurso->draw(1);
+                    i = camaras.size()+1;
+                }
+            }
+
+            for(unsigned int i = 0; i < luces.size(); i++)
+            {
+                if(luces[i] != nullptr && luces[i]->recurso != nullptr && luces[i]->activo)
+                {
+                    luces[i]->recurso->draw(1);
+                }
+            }
+
             //primero calculamos las matrices de view y projection
             //¿¿¿¿¿¿????????
             //esto seria lo ultimo vamos a las model
-            _raiz->draw();
+
+            _raiz->draw(0);
+
+            for(unsigned int i = 0; i < imagenes.size(); i++)
+            {
+                if(imagenes[i] != nullptr && imagenes[i]->recurso != nullptr && imagenes[i]->activo)
+                {
+                    imagenes[i]->recurso->draw(1);
+                }
+            }
+
+            for(unsigned int i = 0; i < textos.size(); i++)
+            {
+                if(textos[i] != nullptr && textos[i]->recurso != nullptr && textos[i]->activo)
+                {
+                    textos[i]->recurso->draw(1);
+                }
+            }
         }
     }
 
@@ -569,7 +609,7 @@ bool Interfaz::DetectarPulsacion(int did)
 {
     for(unsigned int i = 0; i < imagenes.size(); i++)
     {
-        TNodo * tnodo = imagenes[i]->GetNieto(1)->GetHijo(1);
+        TNodo * tnodo = imagenes[i]->recurso->GetNieto(1)->GetHijo(1);
         if(dynamic_cast<TPlano*>(tnodo->GetEntidad())->Comprobar()) //Si la imagen es un boton
         {
             if(did == dynamic_cast<TPlano*>(tnodo->GetEntidad())->getID()) //Si es la misma id
@@ -589,11 +629,7 @@ void Interfaz::DeshabilitarObjeto(unsigned short did)
 
     if(nodo != nullptr)
     {
-        TNodo * tnodo = nodo->recurso;
-        if(tnodo->GetEntidad() != nullptr)
-        {
-           tnodo->GetEntidad()->NoEjecutar();
-        }
+        nodo->activo = false;
     }
 }
 
@@ -603,11 +639,7 @@ void Interfaz::HabilitarObjeto(unsigned short did)
 
     if(nodo != nullptr)
     {
-        TNodo * tnodo = nodo->recurso;
-        if(tnodo->GetEntidad() != nullptr)
-        {
-            tnodo->GetEntidad()->Ejecutar();
-        }
+        nodo->activo = true;
     }
 }
 
