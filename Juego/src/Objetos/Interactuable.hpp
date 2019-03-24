@@ -60,9 +60,6 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         //getters del propio objeto
         int GetPosicionArrayObjetos();
         int getCodigo();
-        //const char* getNombre();
-        const char* getObjeto();
-        const char* getTextura();
         float getAncho();
         float getLargo();
         float getAlto();

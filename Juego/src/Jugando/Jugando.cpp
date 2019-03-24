@@ -645,7 +645,7 @@ void Jugando::UpdateIA()
                         int cualpower = rand() % numpow;
                         cout << "POWER: " << cualpower << endl;
                         int ataque;
-                        const char* nombre,*modelo,*textura;
+                        const char* nombre;
 
                         //DAtos comunes a todos
                         int x = _enemigos[i]->getX();
@@ -655,27 +655,26 @@ void Jugando::UpdateIA()
                         int ancho = 0.5 ,largo = 0.5,alto = 0.5;
                         int codigo = -2;
                         int*  propiedades = new int [6];
+                        unsigned short tipoObjeto;
+                        Constantes constantes;
 
                         if(cualpower == 0)
                         {
                         ataque = 0;
                         nombre = "vida_up";
-                        modelo = "assets/models/powerup0.obj";
-                        textura = "assets/texture/powerup0.png";
+                        tipoObjeto = constantes.VIDA;
                         }
                         else if(cualpower == 1)
                         {
                         ataque = 1;
                         nombre = "energy_up";
-                        modelo = "assets/models/powerup1.obj";
-                        textura = "assets/texture/powerup1.png";
+                        tipoObjeto = constantes.ENERGIA;
                         }
                         else if(cualpower == 2)
                         {
                         ataque = 2;
                         nombre = "gold_up";
-                        modelo = "assets/models/gold.obj";
-                        textura = "assets/texture/gold.png";
+                        tipoObjeto = constantes.ORO;
                         //oro entre 1 y 5 monedas
                         srand(time(NULL));
                         int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
@@ -683,7 +682,7 @@ void Jugando::UpdateIA()
                         }
 
                         //Crear objeto
-                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObjeto);
                     }
 
                     if (_enemigos[i]->GetPedirAyuda()) {
@@ -879,17 +878,18 @@ void Jugando::CrearJugador()
 }
 
 void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, 
-    int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, 
-    const char* ruta_objeto, const char* ruta_textura, int* propiedades)
+    int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, int* propiedades,
+    unsigned short tipoObjeto)
 {
     //Arma
     if(accion == 2)
     {
         Constantes constantes;
-        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z,constantes.ARMA);
+        
+        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObjeto);
         _rec->setID(_recolectables.size());
         _rec->setPosiciones(x,y,z);
+        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),NULL);
         _rec->SetPosicionArrayObjetos(posicionObjeto);
         _recolectables.push_back(move(_rec));
         _rec = nullptr;
@@ -898,10 +898,10 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     else if (accion == 4) // Nos aseguramos que es un powerup //Esto es temporal
     {
         Constantes constantes;
-        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z,constantes.POWERUP);
+        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObjeto);
         _rec->setID(_powerup.size());
         _rec->setPosiciones(x,y,z);
+        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),NULL);
         _rec->SetPosicionArrayObjetos(posicionObjeto);
         _rec->setCantidad(propiedades[0]); //cantidad
         _powerup.push_back(move(_rec));
@@ -946,13 +946,12 @@ void Jugando::ConectarWaypoints()
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
                 _recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),
                 _recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),
-                _recolectables[rec_col]->getObjeto(),_recolectables[rec_col]->getTextura(),
-                constantes.ARMA);
+                _recolectables[rec_col]->GetTipoObjeto());
             _jugador->setArma(nuArma);
             //PROVISIONAL
             _jugador->getArma()->setRotacion(0.0, constantes.PI_RADIAN, 0.0);//!PROVISIONAL
             //lo cargamos por primera vez en el motor de graficos
-            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->getObjeto(), _recolectables[rec_col]->getTextura());
+            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->GetModelo(),NULL);
             //lo cargamos por primera vez en el motor de fisicas
             _fisicas->crearCuerpo(0,0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,2,_recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(), 9,0,0);
             //borramos el recolectable de nivel, _motor grafico y motor fisicas
@@ -967,15 +966,14 @@ void Jugando::ConectarWaypoints()
             Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),
                 _jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),
                 _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),
-                _jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura(),
-                _jugador->getX(),_jugador->getY(), _jugador->getZ(),5);
+                _jugador->getX(),_jugador->getY(), _jugador->getZ(), 
+                _jugador->getArma()->GetTipoObjeto());
 
             nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
                 _recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),
                 _recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),
-                _recolectables[rec_col]->getObjeto(),_recolectables[rec_col]->getTextura(),
-                constantes.ARMA);
+                _recolectables[rec_col]->GetTipoObjeto());
             _motor->EraseArma();
             _jugador->setArma(nuArma);
 
@@ -983,7 +981,7 @@ void Jugando::ConectarWaypoints()
             _jugador->getArma()->setRotacion(0.0, constantes.PI_RADIAN, 0.0);
             //!PROVISIONAL
             //lo cargamos por primera vez en el motor de graficos
-            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->getObjeto(), _recolectables[rec_col]->getTextura());
+            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->GetModelo(), NULL);
 
             //lo cargamos en el motor de fisicas
             _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2, _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),_jugador->getArma()->getAlto());
@@ -996,7 +994,7 @@ void Jugando::ConectarWaypoints()
             //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
             _recolectables.push_back(nuRec);
             _fisicas->setFormaRecolectable(_recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
-            _motor->CargarRecolectable(_recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
+            _motor->CargarRecolectable(_recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->GetModelo(), NULL);
             atacktime = 0.0f; //Reiniciar tiempo de ataques
         }
     }
@@ -1021,8 +1019,8 @@ void Jugando::DejarObjeto()
         Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),
             _jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),
             _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),
-            _jugador->getArma()->getObjeto(),_jugador->getArma()->getTextura(),
-            _jugador->getX(),_jugador->getY(), _jugador->getZ(),constantes.ARMA);
+            _jugador->getX(),_jugador->getY(), _jugador->getZ(),
+            _jugador->getArma()->GetTipoObjeto());
         nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
         _motor->EraseArma();
         _fisicas->EraseArma();
@@ -1031,7 +1029,7 @@ void Jugando::DejarObjeto()
         //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
         _recolectables.push_back(nuRec);
         _fisicas->setFormaRecolectable(_recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
-        _motor->CargarRecolectable(_recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->getObjeto(), nuRec->getTextura() );
+        _motor->CargarRecolectable(_recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->GetModelo(), NULL);
     }
 }
 
@@ -1198,8 +1196,10 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
   int z = _newObjeto->getZ();
   int ancho = 2 ,largo = 2,alto = 2;
   int codigo,ataque;
-  const char* nombre,* modelo,* textura;
+  const char* nombre;
   int*  propiedades = new int [6];
+    unsigned short tipoObjeto;
+    Constantes constantes;
 
   if(tipobj == 1)
   {
@@ -1209,8 +1209,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     srand(time(NULL));
     ataque = 22 + rand() % (33 - 22);
     nombre = "guitarra";
-    modelo = "assets/models/Arma.obj";
-    textura = "assets/texture/Arma.png";
+    tipoObjeto = constantes.GUITARRA;
     cout << "Hay una guitarra!" << endl;
   }
   else if(tipobj == 2)
@@ -1221,8 +1220,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     srand(time(NULL));
     ataque = 15 + rand() % (26 - 15);
     nombre = "arpa";
-    modelo = "assets/models/Arpa.obj";
-    textura = "assets/texture/Arpa.png";
+    tipoObjeto = constantes.ARPA;
     cout << "Hay una arpa!" << endl;
   }
   else if(tipobj == 3)
@@ -1232,15 +1230,14 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     codigo = -2;
     ataque = 2;
     nombre = "gold_up";
-    modelo = "assets/models/gold.obj";
-    textura = "assets/texture/gold.png";
+    tipoObjeto = constantes.ORO;
     //Cantidad de oro entre 20 y 30
     srand(time(NULL));
     int orocant = 20 + rand() % (31 - 20); //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
     cout << "Hay " << orocant << " de Oro!" << endl;
     propiedades[0] = orocant; //para pasarlo a crear objeto
   }
-   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObjeto);
 }
 
 void Jugando::activarPowerUp()

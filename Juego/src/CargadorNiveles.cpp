@@ -573,10 +573,10 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
     {
         case 2: //Arma
         {
-            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-            Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z,tipoObj);
+            Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
             _rec->setID(_recolectables.size());
             _rec->setPosiciones(x,y,z);
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),NULL);
             _rec->SetPosicionArrayObjetos(posicionObjeto);
             _recolectables.push_back(move(_rec));
             _rec = nullptr;
@@ -606,10 +606,10 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
 
         case 4: //Powerups
         {
-            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
-            Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,ruta_objeto,ruta_textura,x,y,z,tipoObj);
+            Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
             _rec->setID(_powerup.size());
             _rec->setPosiciones(x,y,z);
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),NULL);
             _rec->SetPosicionArrayObjetos(posicionObjeto);
             _rec->setCantidad(propiedades[0]); //cantidad
             _powerup.push_back(move(_rec));
