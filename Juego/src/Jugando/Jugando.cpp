@@ -1394,7 +1394,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
         contadorEnem++;
     }
     //Si no hay sala de destino guardada, se guarda en este momento
-    if(_destinoPathFinding == nullptr)
+    if(_destinoPathFinding == nullptr && _enemPideAyuda != nullptr)
     {
         _destinoPathFinding = _enemPideAyuda->getSala();
     }

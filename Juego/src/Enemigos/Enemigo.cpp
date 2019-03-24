@@ -1003,28 +1003,31 @@ int Enemigo::GetModo()
 Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, short enemigo)
 {
     Constantes constantes;
-    Zona* zonaElegida = nullptr;
+    Zona* _zonaElegida = nullptr;
     VectorEspacial distanciaZonaActual, distanciaZonaElegida;
     vector<Zona*> zonasCompletas;
     zonasCompletas.reserve(zonas.size());
 
     unsigned short i = 0;
-    while(i < zonas.size() && (zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
+    while(i < zonas.size() && (_zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
     {
-        distanciaZonaActual.vX = abs(zonas.at(i)->getX() - posActual.x);
-        distanciaZonaActual.vY = abs(zonas.at(i)->getY() - posActual.y);
-        distanciaZonaActual.vZ = abs(zonas.at(i)->getZ() - posActual.z);
-        distanciaZonaActual.modulo = pow(distanciaZonaActual.vX, constantes.DOS) + pow(distanciaZonaActual.vY, constantes.DOS) + pow(distanciaZonaActual.vZ, constantes.DOS);
-        distanciaZonaActual.modulo = sqrt(distanciaZonaActual.modulo);
-
-        if(zonaElegida == nullptr || distanciaZonaElegida.modulo > distanciaZonaActual.modulo)
+        if(zonas.at(i) != nullptr && zonas.at(i)->getTipo() == Zona::tiposZona::Z_DARK)
         {
-            distanciaZonaElegida = distanciaZonaActual;
-            zonaElegida = zonas.at(i);
+            distanciaZonaActual.vX = abs(zonas.at(i)->getX() - posActual.x);
+            distanciaZonaActual.vY = abs(zonas.at(i)->getY() - posActual.y);
+            distanciaZonaActual.vZ = abs(zonas.at(i)->getZ() - posActual.z);
+            distanciaZonaActual.modulo = pow(distanciaZonaActual.vX, constantes.DOS) + pow(distanciaZonaActual.vY, constantes.DOS) + pow(distanciaZonaActual.vZ, constantes.DOS);
+            distanciaZonaActual.modulo = sqrt(distanciaZonaActual.modulo);
+
+            if(_zonaElegida == nullptr || distanciaZonaElegida.modulo > distanciaZonaActual.modulo)
+            {
+                distanciaZonaElegida = distanciaZonaActual;
+                _zonaElegida = zonas.at(i);
+            }
         }
         i++;
     }
-    return zonaElegida;
+    return _zonaElegida;
 }
 //ia
 
