@@ -135,12 +135,22 @@ void MotorAudioEvent::setVolume(float vol)
   ERRCHECK(soundInstance->setVolume(vol));
 }
 
+//Modifica el reverb
+void MotorAudioEvent::setReverbLevel(int index, float level)
+{
+  ERRCHECK(soundInstance->setReverbLevel(index,level));
+}
+
 //Posicion 3D instancia del evento
 void MotorAudioEvent::setPosition(float posx, float posy, float posz)
 {
   FMOD_3D_ATTRIBUTES attributes = {{0}};
+  attributes.forward.x = 1.0f;
+  attributes.forward.y = 1.0f;
   attributes.forward.z = 1.0f;
+  attributes.up.x = 1.0f;
   attributes.up.y = 1.0f;
+  attributes.up.z = 1.0f;
   attributes.position.x = posx;
   attributes.position.y = posy;
   attributes.position.z = posz;
