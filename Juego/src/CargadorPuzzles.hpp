@@ -20,10 +20,8 @@ class CargadorPuzzles
 
         void CargarPuzzlesXml();
         Puzzle* GetPuzzle(unsigned short pos);
-        const char* GetFondo();
 
     private:
         vector<Puzzle*> _listaPuzzles;
-        const char* _fondo;
 };
 #endif

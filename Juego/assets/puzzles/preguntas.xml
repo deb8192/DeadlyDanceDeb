@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--Puzzles puzles-->
-<Puzzles Fondo="FondoPuzle.png">
+<Puzzles>
 	<!--Puzzles de opciones -->
 	<Puzzle tipo="1" solucion="2" opciones="2">
         <Descripcion>Resuelve el acertijo: En un pueblo hay 2 peluqueros, ¿A cuál acudirías?</Descripcion>
-		<Respuestas>
-			<Respuesta opcion="1" img="particle.bmp"></Respuesta>
-			<Respuesta opcion="2" img="particle.bmp"></Respuesta>
+		<Respuestas ejemplo="particle.bmp">
+			<Respuesta opcion="1" img="a.bmp"></Respuesta>
+			<Respuesta opcion="2" img="b.bmp"></Respuesta>
 		</Respuestas>
     </Puzzle>
     
     <Puzzle tipo="1" solucion="1" opciones="2">
         <Descripcion>Elige la figura que coincida con el hueco:</Descripcion>
-		<Respuestas>
-			<Respuesta opcion="1" img="particle.bmp"></Respuesta>
-			<Respuesta opcion="2" img="particle.bmp"></Respuesta>
+		<Respuestas ejemplo="particle.bmp">
+			<Respuesta opcion="1" img="a.bmp"></Respuesta>
+			<Respuesta opcion="2" img="b.bmp"></Respuesta>
 		</Respuestas>
     </Puzzle>
 	
 	<Puzzle tipo="1" solucion="4" opciones="4">
         <Descripcion>Elige la figura que coincida su alto y ancho con la del ejemplo:</Descripcion>
-		<Respuestas>
-			<Respuesta opcion="1" img="particle.bmp"></Respuesta>
-			<Respuesta opcion="2" img="particle.bmp"></Respuesta>
-			<Respuesta opcion="3" img="particle.bmp"></Respuesta>
-			<Respuesta opcion="4" img="particle.bmp"></Respuesta>
+		<Respuestas ejemplo="particle.bmp">
+			<Respuesta opcion="1" img="a.bmp"></Respuesta>
+			<Respuesta opcion="2" img="b.bmp"></Respuesta>
+			<Respuesta opcion="3" img="c.bmp"></Respuesta>
+			<Respuesta opcion="4" img="d.bmp"></Respuesta>
 		</Respuestas>
     </Puzzle>
 	
 	<!--Puzzles de piezas Maya -->
 	<!--solucion = pasos y opciones = piezas -->
-	<Puzzle tipo="2" solucion="7" opciones="3">
+	<!--<Puzzle tipo="2" solucion="7" opciones="3">
 		<Descripcion>Debes pasar las piezas de la torre IZQ a la torre DER en menos de 15 pasos. Sólo puedes moverlas de una en una y no puedes dejar una pieza grande sobre otra más pequeña.</Descripcion>
-	</Puzzle>
+	</Puzzle>-->
 </Puzzles>

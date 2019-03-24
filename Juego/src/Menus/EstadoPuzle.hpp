@@ -18,5 +18,8 @@ class EstadoPuzle: public Estado {
         void atras();
 
         Puzzle* _puzzle;
+        unsigned short width, height;
+        unsigned short tipo, opciones;
+        enum opcPuzzles { P_ACERTIJO = 1, P_HANOI = 2 };
 };
 #endif /* ESTADO_PUZLE_HPP */

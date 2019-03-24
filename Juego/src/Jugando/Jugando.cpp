@@ -232,7 +232,7 @@ void Jugando::ManejarEventos() {
     if (_motor->EstaPulsado(KEY_Z))
     {
         _motor->ResetKey(KEY_Z);
-        Juego::GetInstance()->estado.CambioEstadoPuzle((int*)cargPuzzles.GetPuzzle(1));
+        Juego::GetInstance()->estado.CambioEstadoPuzle((int*)cargPuzzles.GetPuzzle(2));
     }
 
     if (_motor->EstaPulsado(KEY_K))

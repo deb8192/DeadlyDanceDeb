@@ -5,8 +5,6 @@ EstadoPuzle::EstadoPuzle(int* puzzle)
 {
     _motor = MotorGrafico::GetInstance();
     _puzzle = (Puzzle*) puzzle;
-
-    cout << _puzzle->GetEnunciado()<<endl;
 }
 
 EstadoPuzle::~EstadoPuzle()
@@ -17,8 +15,79 @@ EstadoPuzle::~EstadoPuzle()
 
 void EstadoPuzle::Iniciar()
 {
+    _motor->IniIDPuzzles();
     _motor->FondoEscena(255,0,0,0);
+    _motor->CargarFondoPuzzle();
     _motor->ActivarFuenteDefault();
+
+    width = _motor->GetWidth();
+    height = _motor->GetHeight();
+
+    _motor->CrearBoton(700,height-80,750,height-50, GUI_ID_ATRAS_PUZ, L"Atrás", L"Salir del puzzle");
+    _motor->CrearTextoPuzzles(_puzzle->GetEnunciado(), 60,80,700,110); // Parametros: texto, x1, y1, x2, y2
+
+    tipo = _puzzle->GetTipo();
+    opciones = 0;
+
+    if (tipo == P_ACERTIJO)
+    {
+        _motor->CrearTextoPuzzles("Acertijo", 40,60,200,80);
+        _motor->CrearTextoPuzzles("Ejemplo", (width-200),60,(width-160),80);
+        
+        // Imagen con la figura de ejemplo
+        _motor->CargarIMGPuzzle(width-200, 80, _puzzle->GetImagen(0));
+
+        opciones = _puzzle->GetOpciones();
+        short width_aux = 0;
+
+        short height_aux = (height/2)+100;
+        short yIMG = height_aux-125;
+        short xIMG = 20;
+        short anchoBtn = 40;
+        short altoBtn = 30;
+
+        if (opciones == 2)
+        {
+            width_aux = width/4;
+            _motor->CrearBoton(width_aux,height_aux,width_aux+anchoBtn,height_aux+altoBtn,
+                GUI_ID_OP1, L"A", L"A");
+
+            _motor->CrearBoton(width_aux*3,height_aux,width_aux*3+anchoBtn,height_aux+altoBtn,
+                GUI_ID_OP2, L"B", L"B");
+            
+            _motor->CargarIMGPuzzle(width_aux-xIMG, yIMG, _puzzle->GetImagen(1));
+            _motor->CargarIMGPuzzle(width_aux*3-xIMG, yIMG, _puzzle->GetImagen(2));
+        }
+        else
+        {
+            width_aux = width/8;
+            _motor->CrearBoton(width_aux,height_aux,
+                    width_aux+anchoBtn,height_aux+altoBtn,
+                GUI_ID_OP1, L"A", L"A");
+
+            _motor->CrearBoton(width_aux*3,height_aux,
+                    width_aux*3+anchoBtn,height_aux+altoBtn,
+                GUI_ID_OP2, L"B", L"B");
+
+            _motor->CrearBoton(width_aux*5,height_aux,
+                    width_aux*5+anchoBtn,height_aux+altoBtn,
+                GUI_ID_OP3, L"C", L"C");
+
+            _motor->CrearBoton(width_aux*7,height_aux,
+                    width_aux*7+anchoBtn,height_aux+altoBtn,
+                GUI_ID_OP4, L"D", L"D");
+
+            _motor->CargarIMGPuzzle(width_aux-xIMG, yIMG, _puzzle->GetImagen(1));
+            _motor->CargarIMGPuzzle(width_aux*3-xIMG, yIMG, _puzzle->GetImagen(2));
+            _motor->CargarIMGPuzzle(width_aux*5-xIMG, yIMG, _puzzle->GetImagen(3));
+            _motor->CargarIMGPuzzle(width_aux*7-xIMG, yIMG, _puzzle->GetImagen(4));
+        }
+    }
+    else
+    {
+        // HANNOI
+    }
+    
     
 }
 
@@ -71,13 +140,18 @@ void EstadoPuzle::ManejarEventos()
         _motor->ResetKey(KEY_ESC);
         atras();
     }
+
+    if (_motor->OcurreEvento(GUI_ID_ATRAS_PUZ))
+    {
+        _motor->ResetEvento(GUI_ID_ATRAS_PUZ);
+        atras();
+    }
 }
 
 // Vuelve al juego
 void EstadoPuzle::atras()
 {
-    //_motor->BorrarScena();
-    //_motor->BorrarGui();
+    _motor->BorrarGuiPuzzle(tipo, opciones);
     Juego::GetInstance()->estado.QuitarPausa();
 }
 
