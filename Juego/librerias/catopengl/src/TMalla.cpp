@@ -61,7 +61,7 @@ void TMalla::beginDraw()
             }
             else
             {
-                /*if(cola_compartida->size() == 1)
+                /*¡if(cola_compartida->size() == 1)
                 {
                     std::cout << (*nodo)[3][0] << " " << (*nodo)[3][1] << " " << (*nodo)[3][2] << std::endl;
                 }*/
@@ -79,7 +79,11 @@ void TMalla::beginDraw()
                 shader->setMat4("model", (*_matriz_resultado));
                 objetos->Draw(shader,frame_actual);
             }
-        }
+        } 
+
+        delete cola_compartida;//borramos la cola anterior porque esta vacia
+        cola_compartida = cola_compartidaAuxiliar;//ponemos la nueva cola que tiene los elementos situados como la anterior
+        
     }
     else
     {
