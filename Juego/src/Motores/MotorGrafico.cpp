@@ -1059,7 +1059,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
             _objetoEnEscena->setPosition(core::vector3df(x,y,z));
             _objetoEnEscena->setRotation(core::vector3df(0,rp,0));
-            if(accion != 3)_objetoEnEscena->setMaterialTexture(0, _driver->getTexture(ruta_textura));
+            //if(accion != 3)_objetoEnEscena->setMaterialTexture(0, _driver->getTexture(ruta_textura));
 
             if(accion == 4)
             {
