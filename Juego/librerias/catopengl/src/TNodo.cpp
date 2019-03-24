@@ -121,7 +121,7 @@ void TNodo::setPadre(TNodo * papa)
 
 //USO: se recorre sus nodos en postorden
 //SALIDAS: Llama a todas las funciones no hay salida aparte de lo que hace la funcion internamente
-void TNodo::draw()
+void TNodo::draw(unsigned int modo)
 {
 
     if(entidad != nullptr)
@@ -131,24 +131,22 @@ void TNodo::draw()
 
     for(std::size_t i=0 ; i < hijos.size() ; i++)
     {
-       /* if(entidad == nullptr && hijos[i] != nullptr && hijos[i]->GetEntidad() != nullptr)
+        if(modo == 0 && entidad == nullptr && hijos[i] != nullptr && hijos[i]->GetEntidad() != nullptr)
         {
             if(hijos[i]->GetEntidad()->GetEjecutar())
             {
-                std::cout << "entro aqui" << std::endl;
-                hijos[i]->draw();
+                //std::cout << "entro aqui" << std::endl;
+                hijos[i]->draw(0);
             }
         }
         else
-        {*/
+        {
             if(hijos[i] != nullptr && hijos[i]->GetEntidad() != nullptr)
             {
                 //std::cout << "entro alli" << std::endl;
-                hijos[i]->draw();
+                hijos[i]->draw(0);
             }
-       // }
-        
-
+        }
     }
 
     if(entidad != nullptr)

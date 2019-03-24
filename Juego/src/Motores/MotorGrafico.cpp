@@ -1278,9 +1278,9 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
             _interfaz->Rotar(_jugEscena,ry,0,1,0);
             _interfaz->Rotar(_jugEscena,rz,0,0,1);
 
-            delete nodeCamPosition;
+            delete [] nodeCamPosition;
             
-            delete nodeCamTarget;
+            delete [] nodeCamTarget;
         }
 
     #else
@@ -1900,13 +1900,16 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        unsigned short _conoVision = _interfaz->AddMalla("assets/models/conoVision.obj",1);
-        if(_conoVision != 0)
+        if(debugGrafico)
         {
-            _interfaz->Trasladar(_conoVision,x,y,z);
-            _interfaz->Rotar(_conoVision,rotacion,0,1,0);
-            _interfaz->Escalar(_conoVision,longitud/2,1.0f,0.01f);
-            Objetos_Debug.push_back(_conoVision);
+            unsigned short _conoVision = _interfaz->AddMalla("assets/models/conoVision.obj",1);
+            if(_conoVision != 0)
+            {
+                _interfaz->Trasladar(_conoVision,x,y,z);
+                _interfaz->Rotar(_conoVision,rotacion,0,1,0);
+                _interfaz->Escalar(_conoVision,longitud/2,1.0f,0.01f);
+                Objetos_Debug.push_back(_conoVision);
+            }
         }
     #else
         //codigo motor irrlicht
