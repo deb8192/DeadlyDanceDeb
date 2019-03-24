@@ -84,10 +84,10 @@ void Pausa::borrarEscenaResetearEvento(short id)
 // Para Atras y Reiniciar partida, borra solo los botones del GUI
 void Pausa::borrarGUIResetearEvento(short id)
 {
-    _motor->BorrarBoton(GUI_ID_ATRAS_BUTTON);
-    _motor->BorrarBoton(GUI_ID_REINICIAR_BUTTON);
-    _motor->BorrarBoton(GUI_ID_MENU_BUTTON);
-    _motor->BorrarBoton(GUI_ID_SALIR_BUTTON);
+    _motor->BorrarElemento(GUI_ID_ATRAS_BUTTON);
+    _motor->BorrarElemento(GUI_ID_REINICIAR_BUTTON);
+    _motor->BorrarElemento(GUI_ID_MENU_BUTTON);
+    _motor->BorrarElemento(GUI_ID_SALIR_BUTTON);
     _motor->ResetEvento(id);
 }
 

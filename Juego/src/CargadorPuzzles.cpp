@@ -7,8 +7,6 @@ CargadorPuzzles::CargadorPuzzles()
 
 CargadorPuzzles::~CargadorPuzzles()
 {
-    _fondo = nullptr;
-
     short tam = _listaPuzzles.size();
     for(short i=0; i < tam; i++)
     {
@@ -45,8 +43,6 @@ void CargadorPuzzles::CargarPuzzlesXml()
     //Se pasa a la lectura del archivo .xml
     pugi::xml_node puzzles = doc.child("Puzzles");
 
-    _fondo = puzzles.attribute("Fondo").value();
-
     // Comprbamos si tiene puzzles
     if(puzzles == NULL) {
         cout << "No hijos" << "\n" <<endl;
@@ -67,18 +63,22 @@ void CargadorPuzzles::CargarPuzzlesXml()
         	buffer.clear();
 
         	// Crear el puzzle y anyadirlo a la lista
-        	Puzzle* _puzzle = new Puzzle(tipoV, tool.child_value("Descripcion"), opc, sol);
+        	Puzzle* _puzzle = new Puzzle(tipoV, tool.child_value(
+                "Descripcion"), opc, sol);
 
-            for (pugi::xml_node hijo = tool.first_child(); hijo; hijo = hijo.next_sibling())
+            if (tipoV == 1)
             {
-                if(std::strcmp(hijo.name(), "Respuestas") == 0)
+                // Imagen con la imagen de ejemplo
+                pugi::xml_node hijo = tool.child("Respuestas");
+                _puzzle->AnyadirImgRespuesta(hijo.attribute("ejemplo").value());
+
+                // Resto de imgs para las respuestas
+                for (pugi::xml_node resp = hijo.first_child(); resp; resp = resp.next_sibling())
                 {
-                    for (pugi::xml_node resp = hijo.first_child(); resp; resp = resp.next_sibling())
-                    {
-                        _puzzle->AnyadirImgRespuesta(resp.attribute("img").value());
-                    }
+                    _puzzle->AnyadirImgRespuesta(resp.attribute("img").value());
                 }
             }
+            
             _listaPuzzles.push_back(move(_puzzle));
             _puzzle = nullptr;
         }
@@ -96,9 +96,4 @@ void CargadorPuzzles::CargarPuzzlesXml()
 Puzzle* CargadorPuzzles::GetPuzzle(unsigned short pos) 
 {
 	return _listaPuzzles.at(pos);
-}
-
-const char* CargadorPuzzles::GetFondo()
-{
-    return _fondo;
 }

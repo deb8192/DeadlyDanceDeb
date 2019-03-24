@@ -23,9 +23,9 @@ class Puzzle
     protected:
 
     private:
-        unsigned short tipo; //opcion, casillas o arrastrar
+        unsigned short tipo; // 1 = ACERTIJO, 2 = HANNOI
         std::string enunciado;
-        unsigned short opciones; //2, 3 o 4
+        unsigned short opciones; //2 o 4
         unsigned short solucion;
         vector<std::string> imgRespuestas;
 };
