@@ -57,6 +57,8 @@ Arma::~Arma()
     alto = 0;
 
     // INdrawable
+    _modelo = nullptr;
+    
     posIni.x = 0;
     posIni.y = 0;
     posIni.z = 0;
@@ -369,4 +371,9 @@ float Arma::getAlto()
 unsigned short Arma::GetTipoObjeto()
 {
     return tipoObjeto;
+}
+
+const char* Arma::GetModelo()
+{
+    return _modelo;
 }

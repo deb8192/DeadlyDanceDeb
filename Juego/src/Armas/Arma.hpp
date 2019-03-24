@@ -64,6 +64,7 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
         float getAncho();
         float getLargo();
         float getAlto();
+        const char* GetModelo(); // Malla 3D con la textura
         unsigned short GetTipoObjeto();
 
     private:

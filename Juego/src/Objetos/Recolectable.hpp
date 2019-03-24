@@ -65,6 +65,7 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         float getLargo();
         float getAlto();
         int getCantidad();
+        const char* GetModelo(); // Malla 3D con la textura
         unsigned short GetTipoObjeto();
 
     private:

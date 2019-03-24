@@ -63,6 +63,8 @@ Recolectable::~Recolectable()
     alto  = 0;
 
     // INdrawable
+    _modelo = nullptr;
+    
     posIni.x = 0;
     posIni.y = 0;
     posIni.z = 0;
@@ -371,4 +373,9 @@ int Recolectable::getCantidad()
 unsigned short Recolectable::GetTipoObjeto()
 {
     return tipoObjeto;
+}
+
+const char* Recolectable::GetModelo()
+{
+    return _modelo;
 }
