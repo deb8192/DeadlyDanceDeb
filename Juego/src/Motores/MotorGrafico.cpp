@@ -1262,13 +1262,15 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
         if(nodeCamPosition != nullptr && nodeCamTarget != nullptr)
         {
+            cout << " x: " << x << " y: " << y << " z: " << z << endl;
+
             // Centrar la camara
             nodeCamPosition[0] = x+(camx*cams);
             nodeCamPosition[1] = y+30;
             nodeCamPosition[2] = z+(camz*cams);
             nodeCamTarget[0] = x;
             nodeCamTarget[1] = y;
-            nodeCamTarget[2] = z;
+            nodeCamTarget[2] = -z;
 
             _interfaz->Trasladar(camara,nodeCamPosition[0],nodeCamPosition[1],nodeCamPosition[2]);
             _interfaz->ChangeTargetCamara(camara,nodeCamTarget[0],nodeCamTarget[1],nodeCamTarget[2]);
@@ -1279,8 +1281,8 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
             _interfaz->Rotar(_jugEscena,rz,0,0,1);
 
             delete [] nodeCamPosition;
-            
             delete [] nodeCamTarget;
+
         }
 
     #else
@@ -1540,7 +1542,7 @@ void MotorGrafico::clearDebug2()
 void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensidad)
 {
     #ifdef WEMOTOR
-        
+
         //codigo motor catopengl
         if(debugGrafico)
         {
@@ -1784,7 +1786,7 @@ void MotorGrafico::ErasePowerUP(long unsigned int idx)
         {
             _interfaz->RemoveObject(PowerUP_Scena[idx]);
             PowerUP_Scena.erase(PowerUP_Scena.begin() + idx);
-        }       
+        }
     #else
         //codigo motor irrlicht
         if(PowerUP_Scena[idx] && idx < PowerUP_Scena.size())
@@ -2018,65 +2020,65 @@ void MotorGrafico::DestruirInterfaz()
             _interfaz->RemoveObject(moneyI);
             moneyI = 0;
         }
-        
+
         if(vida_textura != 0)
         {
-            _interfaz->RemoveObject(vida_textura);  
-            vida_textura = 0;      
+            _interfaz->RemoveObject(vida_textura);
+            vida_textura = 0;
         }
-        
+
         if(energia_textura != 0)
         {
-            _interfaz->RemoveObject(energia_textura);     
-            energia_textura = 0;       
+            _interfaz->RemoveObject(energia_textura);
+            energia_textura = 0;
         }
 
         if(dinero_textura != 0)
         {
-            _interfaz->RemoveObject(dinero_textura);   
-            dinero_textura = 0;         
+            _interfaz->RemoveObject(dinero_textura);
+            dinero_textura = 0;
         }
 
         if(arma_textura != 0)
         {
-            _interfaz->RemoveObject(arma_textura);        
-            arma_textura = 0;   
+            _interfaz->RemoveObject(arma_textura);
+            arma_textura = 0;
         }
 
         if(barraVida_textura != 0)
         {
-            _interfaz->RemoveObject(barraVida_textura);    
-            barraVida_textura = 0;        
+            _interfaz->RemoveObject(barraVida_textura);
+            barraVida_textura = 0;
         }
 
         if(barraEnergia_textura != 0)
         {
             _interfaz->RemoveObject(barraEnergia_textura);
-            barraEnergia_textura = 0;            
+            barraEnergia_textura = 0;
         }
 
         if(manos_textura != 0)
         {
-            _interfaz->RemoveObject(manos_textura);    
+            _interfaz->RemoveObject(manos_textura);
             manos_textura = 0;
         }
 
         if(llave_textura != 0)
         {
-            _interfaz->RemoveObject(llave_textura);      
-            llave_textura = 0;      
+            _interfaz->RemoveObject(llave_textura);
+            llave_textura = 0;
         }
 
         if(espada_textura != 0)
         {
             _interfaz->RemoveObject(espada_textura);
-            espada_textura = 0;            
+            espada_textura = 0;
         }
 
         if(daga_textura != 0)
         {
             _interfaz->RemoveObject(daga_textura);
-            daga_textura= 0;            
+            daga_textura= 0;
         }
 
     #else
@@ -2155,7 +2157,7 @@ void MotorGrafico::SetVida(int vida)
                 _interfaz->EscalarImagen(barraVida_textura,resultado,1,true,false);
             }
         }
-        
+
     #else
         //codigo motor irrlicht
         if(BarraVidaI)
@@ -2186,8 +2188,8 @@ void MotorGrafico::SetBarraEnergia(int barra)
             float unidad_min = 0.01f;
 
             float resultado = (unidad*(float)barra)*unidad_min;
-            
-            
+
+
             if(resultado <= 0)
             {
                 _interfaz->EscalarImagen(barraEnergia_textura,0.01f,1,true,false);
