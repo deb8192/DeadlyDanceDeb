@@ -2,10 +2,11 @@
 #define ESTADO_PUZLE_HPP
 
 #include "../Estado.hpp"
+#include "../Puzzles/Puzzle.hpp"
 
 class EstadoPuzle: public Estado {
     public:
-        EstadoPuzle();
+        EstadoPuzle(int* puzzle);
         ~EstadoPuzle();
         
         void Iniciar();
@@ -15,5 +16,7 @@ class EstadoPuzle: public Estado {
         
     private:
         void atras();
+
+        Puzzle* _puzzle;
 };
 #endif /* ESTADO_PUZLE_HPP */

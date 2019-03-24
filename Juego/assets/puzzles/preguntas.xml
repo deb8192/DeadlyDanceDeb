@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Puzzles puzles-->
-<Puzzles>
+<Puzzles Fondo="FondoPuzle.png">
 	<!--Puzzles de opciones -->
 	<Puzzle tipo="1" solucion="2" opciones="2">
         <Descripcion>Resuelve el acertijo: En un pueblo hay 2 peluqueros, ¿A cuál acudirías?</Descripcion>

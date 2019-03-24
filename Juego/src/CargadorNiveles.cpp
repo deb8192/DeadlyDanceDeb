@@ -108,8 +108,8 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     // Solo hay una etiqueta para reservar memoria
     pugi::xml_node hijo = doc.child("Level").child("MaxNumberOf");
     int eneMax = hijo.attribute("Enemies").as_int();//nos devuelve un int
-    int wallsMax = hijo.attribute("Walls").as_int();//nos devuelve un int
-    int keysMax = hijo.attribute("Keys").as_int();//nos devuelve un int
+    //int wallsMax = hijo.attribute("Walls").as_int();//nos devuelve un int
+    //int keysMax = hijo.attribute("Keys").as_int();//nos devuelve un int
     int leversMax = hijo.attribute("Levers").as_int();//nos devuelve un int
     chestsMax = hijo.attribute("Chests").as_int();//nos devuelve un int
     int doorsMax = hijo.attribute("Doors").as_int();//nos devuelve un int

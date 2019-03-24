@@ -15,7 +15,7 @@ public:
     void CambioDeJuegoAMenu();
     void CambioEstadoMenu();
     void CambioEstadoJugar();
-    void CambioEstadoPuzle();
+    void CambioEstadoPuzle(int* puzzle);
     void CambioEstadoConfig();
     void CambioEstadoCreditos();
     void CambioEstadoPausa();

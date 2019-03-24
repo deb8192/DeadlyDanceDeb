@@ -619,6 +619,9 @@ bool MotorGrafico::EstaPulsado(short boton)
             case idsEventos::Enum::KEY_J:
                 return _interfaz->IsKeyDown(GLFW_KEY_J);//Para matar al jugador (16)
 
+            case idsEventos::Enum::KEY_Z:
+                return _interfaz->IsKeyDown(GLFW_KEY_Z);//Para abrir 1 puzzle
+
             case idsEventos::Enum::KEY_E:
                 return _interfaz->IsKeyDown(GLFW_KEY_E);//actua una sola vez aunque se mantenga pulsado
         }
@@ -682,6 +685,9 @@ bool MotorGrafico::EstaPulsado(short boton)
             case KEY_J:
                 return input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
 
+            case KEY_Z:
+                return input.IsKeyDown(irr::KEY_KEY_Z);// Para abrir 1 puzzle
+
             case KEY_E:
                 return input.IsKeyPressed(irr::KEY_KEY_E);//actua una sola vez aunque se mantenga pulsado
         }
@@ -744,6 +750,9 @@ void MotorGrafico::ResetKey(short event)
             break;
             case KEY_J:
                 input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
+            break;
+            case KEY_Z:
+                input.IsKeyDown(irr::KEY_KEY_Z);
             break;
             case KEY_E:
                 input.ResetKey(irr::KEY_KEY_E);

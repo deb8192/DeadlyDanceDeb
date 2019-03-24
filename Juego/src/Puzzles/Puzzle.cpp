@@ -8,10 +8,11 @@ Puzzle::Puzzle()
     solucion = 0;
 }
 
-Puzzle::Puzzle(short tipo, std::string e, short opciones, short solucion)
+Puzzle::Puzzle(unsigned short tipo, std::string enun, 
+    unsigned short opciones, unsigned short solucion)
 {
     this->tipo = tipo;
-    this->enunciado = e;
+    this->enunciado = enun;
     this->opciones = opciones;
     this->solucion = solucion;
 }
@@ -24,7 +25,7 @@ Puzzle::~Puzzle()
     this->solucion = 0;
 }
 
-short Puzzle::GetTipo()
+unsigned short Puzzle::GetTipo()
 {
     return tipo;
 }
@@ -34,17 +35,17 @@ std::string Puzzle::GetEnunciado()
     return enunciado;
 }
 
-short Puzzle::GetOpciones()
+unsigned short Puzzle::GetOpciones()
 {
     return opciones;
 }
 
-short Puzzle::GetSolucion()
+unsigned short Puzzle::GetSolucion()
 {
     return solucion;
 }
 
-bool Puzzle::CorregirSolucion(short solucion)
+bool Puzzle::CorregirSolucion(unsigned short solucion)
 {
     if (this->solucion != solucion)
     {
@@ -55,10 +56,10 @@ bool Puzzle::CorregirSolucion(short solucion)
 
 void Puzzle::AnyadirImgRespuesta(std::string img)
 {
-    imgRespuestas.push_back(img);
+    imgRespuestas.push_back(move(img));
 }
 
-std::string Puzzle::GetImagen(short pos)
+std::string Puzzle::GetImagen(unsigned short pos)
 {
     return imgRespuestas.at(pos);
 }

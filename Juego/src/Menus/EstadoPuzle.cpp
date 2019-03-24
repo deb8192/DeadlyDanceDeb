@@ -1,27 +1,31 @@
 #include "EstadoPuzle.hpp"
 #include "../Juego.hpp"
 
-EstadoPuzle::EstadoPuzle()
+EstadoPuzle::EstadoPuzle(int* puzzle)
 {
     _motor = MotorGrafico::GetInstance();
+    _puzzle = (Puzzle*) puzzle;
+
+    cout << _puzzle->GetEnunciado()<<endl;
 }
 
 EstadoPuzle::~EstadoPuzle()
 {
     _motor = nullptr;
+    _puzzle = nullptr;
 }
 
 void EstadoPuzle::Iniciar()
 {
-    _motor->FondoEscena(255,5,100,50);
+    _motor->FondoEscena(255,0,0,0);
     _motor->ActivarFuenteDefault();
-    _motor->CrearTexto("EstadoPuzle - ESC para salir", 0, 0, 300, 20); // Parametros: texto, x1, y1, x2, y2
+    
 }
 
 // Actualiza lo que se ve por pantalla
 void EstadoPuzle::Render()
 {
-    _motor->FondoEscena(255,5,100,50); // Borra
+    _motor->FondoEscena(255,0,0,0); // Borra
     _motor->RenderEscena();               // Vuelve a pintar
 }
 
@@ -62,18 +66,19 @@ void EstadoPuzle::Update()
 
 void EstadoPuzle::ManejarEventos()
 {
+    // Temporal para pruebas
     if (_motor->EstaPulsado(KEY_ESC)) {
         _motor->ResetKey(KEY_ESC);
         atras();
     }
 }
 
-// Vuelve al menu principal
+// Vuelve al juego
 void EstadoPuzle::atras()
 {
-    _motor->BorrarScena();
-    _motor->BorrarGui();
-    Juego::GetInstance()->estado.SaltarAlMenu();
+    //_motor->BorrarScena();
+    //_motor->BorrarGui();
+    Juego::GetInstance()->estado.QuitarPausa();
 }
 
 /*short Puzzles::GetTipo()
