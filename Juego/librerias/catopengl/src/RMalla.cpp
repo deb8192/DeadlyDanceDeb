@@ -53,7 +53,7 @@ bool RMalla::CargarAnimacion(const char * _ruta)
 
         for(unsigned int i=1; i <= objetos; i++)
         {
-            if(i > 1)text_cargada = true;
+            if(i > 1 && text_cargada == false)text_cargada = true;
             cout << "Objeto " << i << ": " << endl;
 
             //Crear el string del numero de frames
@@ -114,11 +114,11 @@ bool RMalla::CargarMalla(std::string _ruta)
         cout << " |- Malla " << i << ": " << meshes.at(i) << endl;
     }
 
-    for(unsigned int i=0; i < textures_loaded.size(); i++)
-    {
-        //cout << " |- Textura " << i << ": " << (std::string)textures_loaded.at(i) << endl;
-    }
-    cout << "--------------------" << endl;
+    // for(unsigned int i=0; i < textures_loaded.size(); i++)
+    // {
+    //     //cout << " |- Textura " << i << ": " << (std::string)textures_loaded.at(i) << endl;
+    // }
+    // cout << "--------------------" << endl;
 
     mallas = meshes.size();
 
