@@ -273,6 +273,13 @@ void MotorFisicas::EraseEnemigo(std::size_t i)
     armaAtEspEne.erase(armaAtEspEne.begin() + i);
 }
 
+void MotorFisicas::EraseCofre(std::size_t i)
+{
+    /*space->destroyCollisionBody(interactuables[i]);//nos cargamos el contenido
+    interactuables[i]=nullptr;
+    interactuables.erase(interactuables.begin() + i);*/
+}
+
 void MotorFisicas::EraseJugador(){
     jugador = NULL;
      jugadorBody  = NULL;
