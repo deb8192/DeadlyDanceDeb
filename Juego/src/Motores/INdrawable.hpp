@@ -53,6 +53,7 @@ public:
     virtual float getRY()=0;
     virtual float getRZ()=0;
     //virtual int getAnimacion(); //no lo pongo porque lo tendria que definir en todo
+    virtual const char* GetModelo()=0; // Malla 3D con la textura
 
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:
@@ -73,6 +74,8 @@ protected:
     int animacion = 0;  //nos sirve para cambiar de animacion //por defecto en reposo
     int animacionAnterior = 0; //nos sirve para saber si debemos cambiar de animacion por la nueva
     //fin posiciones
+
+    const char* _modelo; // Malla 3D con la textura
 };
 
 #endif /* INdrawable_HPP */

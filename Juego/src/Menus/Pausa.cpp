@@ -66,7 +66,7 @@ void Pausa::ManejarEventos()
 
 void Pausa::pintarBotones()
 {
-    _motor->CrearBoton(300,200,500,230, GUI_ID_ATRAS_BUTTON, L"Atras", L"Volver al juego");
+    _motor->CrearBoton(300,200,500,230, GUI_ID_ATRAS_BUTTON, L"Continuar", L"Volver al juego");
     _motor->CrearBoton(300,240,500,270, GUI_ID_REINICIAR_BUTTON, L"Reiniciar partida", L"Reiniciar");
     _motor->CrearBoton(300,280,500,310, GUI_ID_MENU_BUTTON, L"Menu principal", L"M. principal");
     _motor->CrearBoton(300,320,500,350, GUI_ID_SALIR_BUTTON, L"Salir del juego", L"Cierra el juego");
@@ -84,10 +84,10 @@ void Pausa::borrarEscenaResetearEvento(short id)
 // Para Atras y Reiniciar partida, borra solo los botones del GUI
 void Pausa::borrarGUIResetearEvento(short id)
 {
-    _motor->BorrarBoton(GUI_ID_ATRAS_BUTTON);
-    _motor->BorrarBoton(GUI_ID_REINICIAR_BUTTON);
-    _motor->BorrarBoton(GUI_ID_MENU_BUTTON);
-    _motor->BorrarBoton(GUI_ID_SALIR_BUTTON);
+    _motor->BorrarElemento(GUI_ID_ATRAS_BUTTON);
+    _motor->BorrarElemento(GUI_ID_REINICIAR_BUTTON);
+    _motor->BorrarElemento(GUI_ID_MENU_BUTTON);
+    _motor->BorrarElemento(GUI_ID_SALIR_BUTTON);
     _motor->ResetEvento(id);
 }
 

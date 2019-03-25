@@ -60,9 +60,6 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         //getters del propio objeto
         int GetPosicionArrayObjetos();
         int getCodigo();
-        //const char* getNombre();
-        const char* getObjeto();
-        const char* getTextura();
         float getAncho();
         float getLargo();
         float getAlto();
@@ -81,7 +78,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         
         unsigned short tam = 2;
         float* _desplazamientos = new float [tam];   //Desplazamientos en X y en Z para le giro de la puerta
-        const char* _modelo; // Malla 3D con la textura
+        
 };
 
 #endif /* Interactuable_HPP */
