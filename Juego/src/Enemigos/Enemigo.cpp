@@ -753,7 +753,7 @@ void Enemigo::ModificarVida(int vid)
         {
             if(vida <= vidaIni * constantes.UN_CUARTO)
             {
-                modo = MODO_PELIGRO
+                modo = MODO_PELIGRO;
             }
             else
             {
@@ -1031,7 +1031,7 @@ int Enemigo::GetModo()
     return modo;
 }
 
-Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, short enemigo)
+Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas)
 {
     Constantes constantes;
     Zona* _zonaElegida = nullptr;
@@ -1042,7 +1042,8 @@ Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, short enemigo)
     unsigned short i = 0;
     while(i < zonas.size() && (_zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
     {
-        if(zonas.at(i) != nullptr && zonas.at(i)->getTipo() == Zona::tiposZona::Z_DARK)
+        if(zonas.at(i) != nullptr && (zonas.at(i)->getTipo() == Zona::tiposZona::Z_DARK && tipoEnemigo == 1)
+        || (zonas.at(i)->getTipo() == Zona::tiposZona::Z_HIDE && (tipoEnemigo == 3) || (tipoEnemigo == 4)))
         {
             distanciaZonaActual.vX = abs(zonas.at(i)->getX() - posActual.x);
             distanciaZonaActual.vY = abs(zonas.at(i)->getY() - posActual.y);
