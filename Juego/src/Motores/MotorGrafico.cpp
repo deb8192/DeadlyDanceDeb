@@ -1735,6 +1735,22 @@ void MotorGrafico::ErasePowerUP(long unsigned int idx)
     #endif
 }
 
+// Para cuando el cofre se convierte en arana
+// TO DO: separar cofres de Objetos_Scena
+void MotorGrafico::DibujarCofre(long unsigned int idx, bool dibujar)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        
+    #else
+        //codigo motor irrlicht
+        if(Objetos_Scena[idx] && idx < Objetos_Scena.size())
+        {
+            Objetos_Scena[idx]->setVisible(dibujar);
+        }
+    #endif
+}
+
 //Cuando enemigo muere lo borramos
 void MotorGrafico::EraseEnemigo(std::size_t i)
 {
