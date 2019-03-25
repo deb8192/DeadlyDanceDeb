@@ -728,7 +728,6 @@ void CargadorNiveles::CargarCofres()
                     pos = CrearCofreArana(newx,newy,newz, 2,4,2, _zonas[zonasDisponibles[numAlt]]->GetSala());
                     ++aranasCreadas;
                     esArana = true;
-                    cout << "Arana: "<<aranasCreadas<<" de "<<eneAranas<<endl;
                 }
                 
                 Interactuable* _cofre = new Cofre(esArana, -1,"Cofre",2,2,2,
