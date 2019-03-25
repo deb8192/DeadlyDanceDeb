@@ -97,8 +97,11 @@ void Jugando::Iniciar()
     cargPuzzles.CargarPuzzlesXml();
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-    CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
-
+    #ifdef WEMOTOR
+        CargarNivel(7, 1); //(level, player) 1 = heavy / 2 = bailaora
+    #else
+        CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
+    #endif
     //TO DO: hacerle un reserve:
     //_auxiliadores.reserve(xx);
     //recorrido.reserve(xx);
