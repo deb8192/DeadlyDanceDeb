@@ -17,6 +17,7 @@ class Arbol
         Nodo* GetNodoEnEjecucionDirecta();
         Composicion* devolverPadre();
         void CambiarNodo(const short *nodo);
+        void ResetTree();
     private:
         
         void finBucleDecorador();

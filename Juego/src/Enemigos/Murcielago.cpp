@@ -163,7 +163,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                         //TO DO: revisar por constr. copia
                         vector<Zona*> zonas = _getZonas;
                         zonas.reserve(zonas.size());
-                        zonaElegida = this->getZonaMasCercana(zonas, constantes.CERO);
+                        zonaElegida = this->getZonaMasCercana(zonas);
                     }
                     coordenadasZonaDestino.vX = zonaElegida->getX();
                     coordenadasZonaDestino.vY = zonaElegida->getY();
@@ -175,7 +175,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                         enZonaOscura = true;
                     }
                 }
-                this->ver(constantes.DOS);
+                this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
                 break;
             case EN_RECUPERA:  //El murcielago recupera vida en una zona oscura
                 if(enZonaOscura)

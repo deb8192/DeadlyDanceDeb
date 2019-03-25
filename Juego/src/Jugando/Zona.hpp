@@ -54,7 +54,11 @@ class Zona
         {  
             Z_CHEST = 0,
             Z_DARK,
+            Z_HIDE
         };
+
+    private:
+        MotorGrafico* _motor;
 
         short tipo;       //Indica el tipo de zona que es para contabilizar cofres, murcielagos o lo que fuera necesario
         PosicionesZonas posicionActual;        //Strunct que contiene la posicion de la zona
