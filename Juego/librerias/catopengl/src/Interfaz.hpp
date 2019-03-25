@@ -81,6 +81,8 @@ class Interfaz
 
     private:
 
+        bool  banco_ids [65535];
+
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
         CatOpengl::Video::Ventana * window;
@@ -125,6 +127,8 @@ class Interfaz
 
         Nodo * buscarNodo(unsigned short);
 
+        Nodo * buscarNodo2(unsigned short);
+        
         bool ventana_inicializada = true;//nos sirve para saber si tenemos que llamar a inicializar ventana
 
         void ventanaInicializar();
@@ -133,5 +137,8 @@ class Interfaz
 
         float x,y,z;
 
+        void eliminarID(unsigned short x);
+
         unsigned int cualborrar;
+        
 };
