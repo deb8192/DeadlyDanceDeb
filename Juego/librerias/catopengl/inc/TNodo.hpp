@@ -31,7 +31,7 @@ class TNodo
         void BorrarEscena();//borra todos los elementos de la escena siempre que no sean gui
         void BorrarGui();//borramos todos los elementos que sean gui
         //pintado
-        void draw();//se llama a las funciones de pintado
+        void draw(unsigned int);//se llama a las funciones de pintado
 
 };
 

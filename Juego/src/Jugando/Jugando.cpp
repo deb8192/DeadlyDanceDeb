@@ -589,6 +589,8 @@ void Jugando::UpdateIA()
 
             if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte())
             {
+
+                    unsigned short tipoObj = 1;
                 if(_enemigos[i]->GetTipoEnemigo() == 3 || _enemigos[i]->GetTipoEnemigo() == 4)
                 {
                     int x = _enemigos[i]->getX();
@@ -602,7 +604,7 @@ void Jugando::UpdateIA()
                     const char* nombre = "llave_boss";
                     const char* modelo = "assets/models/llave.obj";
                     const char* textura = "";
-                    this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+                    this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades,tipoObj);
                 }
                 else
                 {
@@ -659,7 +661,7 @@ void Jugando::UpdateIA()
                         }
 
                         //Crear objeto
-                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades,tipoObj);
                     }
                 }
 
@@ -861,7 +863,7 @@ void Jugando::CrearJugador()
 }
 
 void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, 
-    int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, int* propiedades,
+    int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* modelo, const char* textura, int* propiedades,
     unsigned short tipoObjeto)
 {
     //Arma
@@ -1234,7 +1236,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     cout << "Hay " << orocant << " de Oro!" << endl;
     propiedades[0] = orocant; //para pasarlo a crear objeto
   }
-   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObjeto);
+   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,"","",propiedades,tipoObjeto);
 }
 
 void Jugando::activarPowerUp()

@@ -47,9 +47,7 @@ class Zona
         Sala* GetSala();
         void SetSala(Sala* sala);
 
-    private:
-        Sala* _estoy;
-        MotorGrafico* _motor;
+
         enum tiposZona 
         {  
             Z_CHEST = 0,
@@ -58,6 +56,7 @@ class Zona
         };
 
     private:
+        Sala* _estoy;
         MotorGrafico* _motor;
 
         short tipo;       //Indica el tipo de zona que es para contabilizar cofres, murcielagos o lo que fuera necesario
