@@ -544,7 +544,7 @@ void Jugando::Update()
                 }
                 //_enemigos[i]->queVes();
             }
-            if(contadorEnemigos > 1)
+            if(contadorEnemigos >= 1)
             {
                 posicionMediaEnemigos.vX = posicionTemporal.vX / contadorEnemigos;
                 posicionMediaEnemigos.vY = posicionTemporal.vY / contadorEnemigos;

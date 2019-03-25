@@ -25,7 +25,8 @@ class TTransform : public TEntidad
         void trasladar(float x,float y,float z);//Trasladar en el espacio 3D (x,y,z)
         void rotar(float g,float x,float y,float z);//Rotar tantos grados, en (X-axis,y-axis,z-axis entre 0 y 1.0)
         void escalar(float x,float y,float z);//Escalar en (x,y,z entre 0 y 1.0)
-
+        float * GetPosicion();//devuelve un array de 3 posiciones 
+        
         //sobrecarga de metodos virtuales TEntidad
         void beginDraw();
         void endDraw();

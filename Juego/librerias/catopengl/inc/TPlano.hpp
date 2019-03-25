@@ -8,7 +8,7 @@ class TPlano : public TEntidad
     private:
 
         bool CargarTextura(const char * _ruta);
-        void CargarMalla(unsigned int, unsigned int, float);
+        void CargarMalla(unsigned int, unsigned int, float, float);
         void UdateMesh();
 
         GLuint winwidth, winheight;
@@ -17,10 +17,11 @@ class TPlano : public TEntidad
         // float scaleimage;
         bool cambios = false;
         float pixx, pixy;
-        float escalado;
+        float escaladox, escaladoy;
         int width, height, nrComponents;
         unsigned int textureID;
         unsigned int VAO, VBO, EBO; //Datos de render
+        int id;//id del boton
 
     public:
         // Constructor y destructor
@@ -29,11 +30,17 @@ class TPlano : public TEntidad
 
         void setSize(float,float); //ancho largo
         void setPosition(float,float); //x,y
-        void setScale(float); //escalado
+        void setScale(float,float); //escalado
+        bool botonPulsado(double *); //pulsar boton
 
         // sobrecarga metodos TEntidad
         void beginDraw();
         void endDraw();
+
+        //seccion para botones
+        bool Comprobar();
+        void CambiarId(int);
+        int getID();
 };
 
 #endif
