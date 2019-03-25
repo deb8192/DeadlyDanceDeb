@@ -175,7 +175,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                         enZonaOscura = true;
                     }
                 }
-                this->ver(constantes.DOS);
+                this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
                 break;
             case EN_RECUPERA:  //El murcielago recupera vida en una zona oscura
                 if(enZonaOscura)

@@ -131,7 +131,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int GetEnemigo();
         int GetModo();
 
-        bool ver(int tipo);//1 si ve al jugador
+        bool ver(int tipo, int longitud);//1 si ve al jugador
 
         //ia
         float randomBinomial();//devuelve un valor random entre -1 y 1
@@ -142,6 +142,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         short * RunIA(bool);//corre la ia del enemigo
         void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
         void AnnadirRecorridoAyuda(vector <Posiciones> recorrido);
+        void ResetTree();
         //fin ia
 
         const char* GetModelo(); // Malla 3D con la textura
@@ -194,8 +195,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_ATRAVESAR,
             EN_NO_VER,
             EN_CAMBIAR,
-            EN_ESTA,
-            EN_DEBE
+            EN_DEBE,
+            EN_ESTA
         };
 
         enum objetivosEnemigo
@@ -224,7 +225,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             MODO_ATAQUE,
             MODO_HUIDA,
             MODO_AUXILIAR_ALIADO,
-            MODO_PELIGRO
+            MODO_BUSCAR_ESCONDITE,
+            MODO_OCULTACION
         };
 
         Sala* _estoy;//sala en la que esta el enemigo
@@ -248,6 +250,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         const char* _modelo; // Malla 3D con la textura
         bool pedirAyuda;
         bool contestar;
+        bool defensa; //TO DO EXPANDIRLO AL JUGADOR cuando recibe danyo recibe la mitad si esta a true
         INnpc::VectorEspacial posicionComunBandada; //PUnto de cohesion de las bandadas
 };
 
