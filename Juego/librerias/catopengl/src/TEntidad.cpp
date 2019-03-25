@@ -59,7 +59,7 @@ void TEntidad::escalar(float,float,float)
 
 }
 
-void TEntidad::rotar(float,float,float,float)
+void TEntidad::rotar(float,float,float)
 {
 
 }
