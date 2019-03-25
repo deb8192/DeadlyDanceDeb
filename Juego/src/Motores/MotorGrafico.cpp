@@ -52,8 +52,11 @@ MotorGrafico::~MotorGrafico()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        _interfaz = nullptr;
-
+        if(_interfaz)
+        {
+            delete _interfaz;
+            _interfaz = nullptr;
+        }
     #else
         //codigo motor irrlicht
         //Inputs input
@@ -1735,6 +1738,22 @@ void MotorGrafico::ErasePowerUP(long unsigned int idx)
     #endif
 }
 
+// Para cuando el cofre se convierte en arana
+// TO DO: separar cofres de Objetos_Scena
+void MotorGrafico::DibujarCofre(long unsigned int idx, bool dibujar)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        
+    #else
+        //codigo motor irrlicht
+        if(Objetos_Scena[idx] && idx < Objetos_Scena.size())
+        {
+            Objetos_Scena[idx]->setVisible(dibujar);
+        }
+    #endif
+}
+
 //Cuando enemigo muere lo borramos
 void MotorGrafico::EraseEnemigo(std::size_t i)
 {
@@ -1891,7 +1910,7 @@ void MotorGrafico::CargarInterfaz()
         energia_textura = _interfaz->AddImagen("assets/images/21.png",10,58,1);
         dinero_textura = _interfaz->AddImagen("assets/images/61.png",680,10,1);
         arma_textura =_interfaz->AddImagen("assets/images/11.png",730,530,1);
-        barraVida_textura = _interfaz->AddImagen("assets/images/4.png",50,15,1);
+        barraVida_textura = _interfaz->AddImagen("assets/images/4.png",50,17,1);
         barraEnergia_textura = _interfaz->AddImagen("assets/images/3.png",48,65,1);
         manos_textura = _interfaz->AddImagen("assets/images/manos.png",738,534,1);
         llave_textura = _interfaz->AddImagen("assets/images/llave.png",738,534,1);
@@ -2081,17 +2100,17 @@ void MotorGrafico::SetVida(int vida)
         if(barraVida_textura != 0)
         {
             float unidad = ((float)121/100);
-            float unidad_min = 0.01f;
+            float unidad_min = 0.0030f;
 
             float resultado = (unidad*(float)vida)*unidad_min;
 
             if(resultado <= 0)
             {
-                _interfaz->EscalarImagen(barraVida_textura,0.01f,1,true,false);
+                _interfaz->EscalarImagen(barraVida_textura,0.01f,0.49f,true,true);
             }
             else
             {
-                _interfaz->EscalarImagen(barraVida_textura,resultado,1,true,false);
+                _interfaz->EscalarImagen(barraVida_textura,resultado,0.49f,true,true);
             }
         }
 
@@ -2122,18 +2141,18 @@ void MotorGrafico::SetBarraEnergia(int barra)
         if(barraEnergia_textura != 0)
         {
             float unidad = ((float)63/100);
-            float unidad_min = 0.01f;
+            float unidad_min = 0.0040f;
 
             float resultado = (unidad*(float)barra)*unidad_min;
 
 
             if(resultado <= 0)
             {
-                _interfaz->EscalarImagen(barraEnergia_textura,0.01f,1,true,false);
+                _interfaz->EscalarImagen(barraEnergia_textura,0.01f,0.5f,true,true);
             }
             else
             {
-                _interfaz->EscalarImagen(barraEnergia_textura,resultado,1,true,false);
+                _interfaz->EscalarImagen(barraEnergia_textura,resultado,0.5f,true,true);
             }
         }
     #else
