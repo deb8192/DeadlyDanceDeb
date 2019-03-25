@@ -48,6 +48,9 @@ void TMalla::beginDraw()
     {
         glm::mat4 * _matriz_resultado = nullptr;
         std::queue<glm::mat4 *> * cola_compartidaAuxiliar = new std::queue<glm::mat4 *>; //creamos una cola nueva para ir encolando  los elementos que desencolamos de la cola compartida(se aplicaria parecido con una pila)
+        glm::mat4 * _matriz_escalado = new glm::mat4(1.0f);
+        glm::mat4 * _matriz_traslade = new glm::mat4(1.0f);
+        glm::mat4 * _matriz_rotacion = new glm::mat4(1.0f);
 
         while(cola_compartida->size() > 0)
         {
@@ -56,21 +59,37 @@ void TMalla::beginDraw()
             //cogemos el primer valor de la pila
             if(_matriz_resultado == nullptr)
             {
-                _matriz_resultado = new glm::mat4;
-                *_matriz_resultado = *nodo;
+                _matriz_resultado = new glm::mat4(1.0f);
+                *_matriz_resultado = (*_matriz_resultado)*(*nodo);
+
+                if(cola_compartida->size() == 3)
+                {
+                    std::cout << "escalado: "<< "\n" << (*nodo)[0][0] << " " << (*nodo)[1][0] << " " << (*nodo)[2][0]  << " " << (*nodo)[3][0] << "\n" << (*nodo)[0][1] << " " << (*nodo)[1][1] << " " << (*nodo)[2][1]  << " " << (*nodo)[3][1] << "\n" << (*nodo)[0][2] << " " << (*nodo)[1][2] << " " << (*nodo)[2][2]  << " " << (*nodo)[3][2] << "\n" << (*nodo)[0][3] << " " << (*nodo)[1][3] << " " << (*nodo)[2][3]  << " " << (*nodo)[3][3] << std::endl;
+                    *_matriz_escalado = *nodo;
+                }
             }
             else
             {
-                /*¡if(cola_compartida->size() == 1)
+                if(cola_compartida->size() == 1)
                 {
-                    std::cout << (*nodo)[3][0] << " " << (*nodo)[3][1] << " " << (*nodo)[3][2] << std::endl;
-                }*/
+                    std::cout << "traslacion: "<< "\n" << (*nodo)[0][0] << " " << (*nodo)[1][0] << " " << (*nodo)[2][0]  << " " << (*nodo)[3][0] << "\n" << (*nodo)[0][1] << " " << (*nodo)[1][1] << " " << (*nodo)[2][1]  << " " << (*nodo)[3][1] << "\n" << (*nodo)[0][2] << " " << (*nodo)[1][2] << " " << (*nodo)[2][2]  << " " << (*nodo)[3][2] << "\n" << (*nodo)[0][3] << " " << (*nodo)[1][3] << " " << (*nodo)[2][3]  << " " << (*nodo)[3][3] << std::endl;
+                    *_matriz_traslade = *nodo;
+                }
 
-                *_matriz_resultado = (*_matriz_resultado) * (*nodo);
+                if(cola_compartida->size() == 2)
+                {
+                    std::cout << "rotacion: "<< "\n" << (*nodo)[0][0] << " " << (*nodo)[1][0] << " " << (*nodo)[2][0]  << " " << (*nodo)[3][0] << "\n" << (*nodo)[0][1] << " " << (*nodo)[1][1] << " " << (*nodo)[2][1]  << " " << (*nodo)[3][1] << "\n" << (*nodo)[0][2] << " " << (*nodo)[1][2] << " " << (*nodo)[2][2]  << " " << (*nodo)[3][2] << "\n" << (*nodo)[0][3] << " " << (*nodo)[1][3] << " " << (*nodo)[2][3]  << " " << (*nodo)[3][3] << std::endl;
+                    *_matriz_rotacion = *nodo;
+                }
+
+
+                //*_matriz_resultado = (*_matriz_resultado) * (*nodo);
             }
 
             cola_compartida->pop();
         }
+
+        *_matriz_resultado = (*_matriz_traslade) * (*_matriz_rotacion) * (*_matriz_escalado);
 
         if(_matriz_resultado != nullptr)
         {
@@ -79,11 +98,11 @@ void TMalla::beginDraw()
                 shader->setMat4("model", (*_matriz_resultado));
                 objetos->Draw(shader,frame_actual);
             }
-        } 
+        }
 
         delete cola_compartida;//borramos la cola anterior porque esta vacia
         cola_compartida = cola_compartidaAuxiliar;//ponemos la nueva cola que tiene los elementos situados como la anterior
-        
+
     }
     else
     {
