@@ -37,7 +37,7 @@ class Interfaz
 
         void Trasladar(unsigned short,float,float,float);//trasladar
 
-        void Rotar(unsigned short,float,float,float,float);//rotar
+        void Rotar(unsigned short,float,float,float);//rotar
 
         void Escalar(unsigned short,float,float,float);//escalar
 
@@ -128,7 +128,7 @@ class Interfaz
         Nodo * buscarNodo(unsigned short);
 
         Nodo * buscarNodo2(unsigned short);
-        
+
         bool ventana_inicializada = true;//nos sirve para saber si tenemos que llamar a inicializar ventana
 
         void ventanaInicializar();
@@ -140,5 +140,5 @@ class Interfaz
         void eliminarID(unsigned short x);
 
         unsigned int cualborrar;
-        
+
 };
