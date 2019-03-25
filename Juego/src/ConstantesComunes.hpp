@@ -62,11 +62,25 @@ using Constantes = struct
     const char* ATRAVESAR = "atraviesa";
     const char* NO_VE = "no-ve";
     const char* CAMBIA = "cambia";
+    const char* ESTA = "esta";
+    const char* DEBE = "debe";
+
 
     //Comparadores de la lectura de los objetivos de las tareas
     const char* JUGADOR = "jugador";
     const char* ZONA_COFRES = "zona-cofres";
     const char* AYUDA = "ayuda";
+    const char* NORMAL = "modo-normal";
+    const char* PELIGRO = "modo-peligro";
+    const char* ATAQUE = "modo-ataque";
+    const char* OCULTACION = "modo-ocultacion";
+    const char* ULTIMA_PUERTA = "ultima-puerta";
+    const char* PUERTA = "puerta";
+    const char* MECANISMO = "mecanismo";
+    const char* COFRE = "cofre";
+    const char* ESCONDITE = "escondite";
+    const char* ACCIONADO = "accionado";
+    const char* NO_ACCIONADO = "no-accionado";
 
     /**************************** String cargado mapas ************************/
     const char* ZCHEST = "zChest";

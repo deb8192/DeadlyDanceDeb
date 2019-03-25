@@ -176,7 +176,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool comprobarDistanciaFlocking();
         //fin comportamientos bases
 
-        Zona* getZonaMasCercana(vector <Zona*> zonas, short enemigo);
+        Zona* getZonaMasCercana(vector <Zona*> zonas);
         //Comparadores de la lectura de las acciones y objetivos de las tareas
         enum accionesEnemigo 
         {  
@@ -188,14 +188,34 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_OIR,
             EN_BUSCA,
             EN_RECUPERA,
-            EN_ACUDE_AYUDA
+            EN_ACUDE_AYUDA,
+            EN_DEFENDERSE,
+            EN_COMPROBAR,
+            EN_ATRAVESAR,
+            EN_NO_VER,
+            EN_CAMBIAR,
+            EN_ESTA,
+            EN_DEBE
         };
 
         enum objetivosEnemigo
         {
             EN_JUGADOR = 0,
             EN_ZONA_COFRES,
-            EN_AYUDA
+            EN_AYUDA,
+            EN_PELIGRO,
+            EN_ATAQUE,
+            EN_OCULTACION,
+            EN_NORMAL,
+            EN_ESCONDITE,
+            EN_ULTIMA_PUERTA,
+            EN_CAMBIAR_ESTADO,
+            EN_MECANISMO,
+            EN_PUERTA,
+            EN_PALANCA,
+            EN_COFRE,
+            EN_ACCIONADO,
+            EN_NO_ACCIONADO,
         };
 
         enum modosEnemigo 

@@ -22,6 +22,10 @@ Zona::Zona(int anc, int lar, int alt, const char *tip)
   {
     tipo = Z_DARK;
   }
+  else if(strcmp(cadena_tipo, constantes.ZDARK) == 0)
+  {
+    tipo = Z_DARK;
+  }
 
   tip = nullptr;
 
