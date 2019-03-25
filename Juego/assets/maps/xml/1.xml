@@ -18,7 +18,7 @@
 			<Enemy Type="1" accion="1" ancho="1" largo="1" alto="10" X="0" Y="10" Z="0" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj"></Enemy>
 			<Object Type="1" nombre="guitarra" ataque="20"  accion="2" ancho="4" largo="4" alto="10" X="10" Y="0" Z="4" Texture="assets/texture/platform1.png" Model="assets/models/objeto.obj"></Object>
 
-			<!--BossMuerte--><Enemy Type="1" enemigo="-1" accion="1" ancho="1" largo="1" alto="10" X="0" Y="10" Z="0" Texture="" Model=""></Enemy>
+			<!--BossMuerte--><Enemy Type="1" enemigo="3" accion="1" ancho="1" largo="1" alto="10" X="0" Y="10" Z="0" Texture="" Model=""></Enemy>
 		
 		</Platform>
 		

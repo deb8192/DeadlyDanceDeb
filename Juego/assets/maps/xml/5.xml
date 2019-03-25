@@ -96,7 +96,7 @@
 
 							<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="45" Y="0" Z="160" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="False" StarX="10" StarY="0">
 								<!--Sala final boss -->
-									 <!--BossMuerte--><Enemy Type="1" enemigo="-1" accion="1" ancho="1" largo="1" alto="10" X="45" Y="0" Z="155" Texture="" Model=""></Enemy>
+									 <!--BossMuerte--><Enemy Type="1" enemigo="3" accion="1" ancho="1" largo="1" alto="10" X="45" Y="0" Z="155" Texture="" Model=""></Enemy>
 							</Platform>
 			
 						</Platform>

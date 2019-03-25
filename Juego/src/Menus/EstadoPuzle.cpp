@@ -83,9 +83,6 @@ void EstadoPuzle::Iniciar()
             _motor->CargarIMGPuzzle(width_aux*5-xIMG, yIMG, _puzzle->GetImagen(3));
             _motor->CargarIMGPuzzle(width_aux*7-xIMG, yIMG, _puzzle->GetImagen(4));
         }
-
-        // TO DO: Tiene que resetearlo, no se porque
-        _motor->ResetEvento(GUI_ID_OP1);
     }
     else // Torres de Hanoi
     {

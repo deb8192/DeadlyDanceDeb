@@ -74,7 +74,10 @@ void GestorEstados::CambioDeJuegoAMenu()
 
 void GestorEstados::CambioEstadoPuzle(int* puzzle)
 {
-    anyadir(new EstadoPuzle(puzzle), false);
+    //anyadir(new EstadoPuzle(puzzle), false);
+    _estados.top()->Pausar();
+    _estados.push(new EstadoPuzle(puzzle));
+    _estados.top()->Iniciar();
 }
 
 void GestorEstados::CambioEstadoConfig()

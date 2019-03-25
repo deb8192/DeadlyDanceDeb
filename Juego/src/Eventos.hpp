@@ -39,23 +39,23 @@ namespace idsEventos
         GUI_ID_SALIR_BUTTON,
         GUI_ID_CREDITOS_BUTTON,
         GUI_ID_SUBIR_SONIDO,
+        GUI_ID_CONFIGURACION_BUTTON,
         
         GUI_ID_ATRAS_BUTTON,
         GUI_ID_REINICIAR_HANOI,
         GUI_ID_MENU_BUTTON,
         GUI_ID_REINICIAR_BUTTON,
         GUI_ID_CONTINUAR,
-        GUI_ID_CONFIGURACION_BUTTON,
 
         // IDs para cosas de Puzzles en MotorGrafico
-        GUI_ID_ATRAS_PUZ = 200,
+        GUI_ID_ATRAS_PUZ,
         GUI_ID_OP1,
         GUI_ID_OP2,
         GUI_ID_OP3,
         GUI_ID_OP4,
         GUI_ID_PUZZLE, 
 
-        UltimoEvento = GUI_ID_CONFIGURACION_BUTTON
+        UltimoEvento = GUI_ID_PUZZLE
     };
 }
 
