@@ -40,9 +40,10 @@ class RMalla : public Recurso
 
         vector< vector<Mesh *> > frames;    //Frames de animacion
         vector<Mesh *> meshes;              //Guardar mallas del modelo
-        vector<Texture *> textures_loaded;	//Guarda todas las texturas cargadas
+        vector<Texture> textures_loaded;	//Guarda todas las texturas cargadas
         std::string directory;              //Directorio con los objetos
         unsigned int objetos,mallas;      //Numero de objetos y mallas
+        bool text_cargada;
         //datos * para pasarlos a la entidad
 
 };

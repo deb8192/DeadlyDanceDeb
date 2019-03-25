@@ -81,17 +81,13 @@ class Interfaz
 
     private:
 
+        bool  banco_ids [65535];
+
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
         CatOpengl::Video::Ventana * window;
 
         Shader * shaders[4];//cuatro programas de shader(vertex y fragment cada uno)
-        
-        std::vector<TNodo *> luces;//registro de luces
-
-        std::vector<TNodo *> imagenes;//registro de imagenes en interfaz
-
-        std::vector<TNodo *> textos;//registro de imagenes en interfaz
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 
@@ -102,6 +98,14 @@ class Interfaz
         //nos sirve para buscar rapidamente un objeto y llamar a su funcion de pintado(esto se hace con una busqueda binaria)
         struct Nodo
         {
+            ~Nodo()
+            {
+                if(recurso != nullptr && recurso)
+                {
+                    delete recurso;
+                    recurso = nullptr;
+                }
+            };
             TNodo * recurso;//nodo que almacena escalado del objeto
             unsigned short id;//almacena el id a nivel local
             unsigned short idRecurso;//almacena el id del recurso (del gestor de recursos)
@@ -113,10 +117,18 @@ class Interfaz
 
         std::vector<Nodo *> camaras;//registro de camaras
 
+        std::vector<Nodo *> luces;//registro de luces
+
+        std::vector<Nodo *> imagenes;//registro de imagenes en interfaz
+
+        std::vector<Nodo *> textos;//registro de imagenes en interfaz
+
         CatOpengl::Gestor * gestorDeRecursos;
 
         Nodo * buscarNodo(unsigned short);
 
+        Nodo * buscarNodo2(unsigned short);
+        
         bool ventana_inicializada = true;//nos sirve para saber si tenemos que llamar a inicializar ventana
 
         void ventanaInicializar();
@@ -125,5 +137,8 @@ class Interfaz
 
         float x,y,z;
 
+        void eliminarID(unsigned short x);
+
         unsigned int cualborrar;
+        
 };
