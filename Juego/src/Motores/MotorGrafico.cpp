@@ -15,7 +15,7 @@ MotorGrafico::MotorGrafico()
         //codigo motor catopengl
 
         _interfaz = nullptr;
-        Plataformas_Scena.reserve(100);//salas reservadas
+        Plataformas_Scena.reserve(200);//salas reservadas
         Luces_Scena.reserve(40);//luces reservadas
         Enemigos_Scena.reserve(50);//enemigos reservados
         Textos_Scena.reserve(18);//textos estaticos en la escena o gui
@@ -855,6 +855,7 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
         unsigned short objeto = _interfaz->AddMalla(ruta_objeto,1);//instanciamos el objeto y lo agregamos a la escena
         if(objeto != 0)
         {
+            cout << "colocar plataforma en: " << x << y << z << endl;
             _interfaz->Trasladar(objeto,(float)x,(float)y,(float)z);//movemos el objeto
             _interfaz->Rotar(objeto,(float)rp,(float)0,(float)1,(float)0);//giramos el objeto
             Plataformas_Scena.push_back(objeto);//lo introducimos en la matriz de objetos
@@ -931,7 +932,7 @@ void MotorGrafico::CargarBoss(int x,int y,int z, const char* ruta_objeto)
         //codigo motor catopengl
         _bossEscena = _interfaz->AddMalla(ruta_objeto,1);
 
-        if(_bossEscena == 0)
+        if(_bossEscena != 0)
         {
             _interfaz->Trasladar(_bossEscena,(float)x,(float)y,(float)z);
         }
@@ -991,12 +992,13 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     #ifdef WEMOTOR
         //codigo motor catopengl
 
-        unsigned short _jugEscena = _interfaz->AddMalla(ruta_objeto,1);
+        _jugEscena = _interfaz->AddMalla(ruta_objeto,28);
         CargarLuces(0,0,0);
-        if(_jugEscena == 0)
+        if(_jugEscena != 0)
         {
             _interfaz->Trasladar(_jugEscena,(float)x,(float)y,(float)z);
             _interfaz->Escalar(_jugEscena,(float)1.75,(float)1.75,(float)1.75);
+            cout << _jugEscena << " INICIALMENTE: " << x << " " << y << " " << z << endl;
         }
 
     #else
@@ -1024,11 +1026,11 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,1);
-
-        if(_objetoEnEscena == 0)
+        cout << "colocar objeto en: " << x << y << z << endl;
+        if(_objetoEnEscena != 0)
         {
             _interfaz->Trasladar(_objetoEnEscena,(float)x,(float)y,(float)z);
-            _interfaz->Rotar(_objetoEnEscena,rp,0.0f,1.0f,0.0f);
+            _interfaz->Rotar(_objetoEnEscena,(float)rp,0.0f,1.0f,0.0f);
 
             if(accion == 4)
             {
@@ -1262,8 +1264,6 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
         if(nodeCamPosition != nullptr && nodeCamTarget != nullptr)
         {
-            cout << " x: " << x << " y: " << y << " z: " << z << endl;
-
             // Centrar la camara
             nodeCamPosition[0] = x+(camx*cams);
             nodeCamPosition[1] = y+30;
@@ -1275,14 +1275,15 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
             _interfaz->Trasladar(camara,nodeCamPosition[0],nodeCamPosition[1],nodeCamPosition[2]);
             _interfaz->ChangeTargetCamara(camara,nodeCamTarget[0],nodeCamTarget[1],nodeCamTarget[2]);
 
+            cout << _jugEscena << endl;
             _interfaz->Trasladar(_jugEscena,x,y,z);
             _interfaz->Rotar(_jugEscena,rx,1,0,0);
             _interfaz->Rotar(_jugEscena,ry,0,1,0);
             _interfaz->Rotar(_jugEscena,rz,0,0,1);
 
-            delete [] nodeCamPosition;
-            delete [] nodeCamTarget;
+            delete nodeCamPosition;
 
+            delete nodeCamTarget;
         }
 
     #else
@@ -1904,16 +1905,13 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        if(debugGrafico)
+        unsigned short _conoVision = _interfaz->AddMalla("assets/models/conoVision.obj",1);
+        if(_conoVision != 0)
         {
-            unsigned short _conoVision = _interfaz->AddMalla("assets/models/conoVision.obj",1);
-            if(_conoVision != 0)
-            {
-                _interfaz->Trasladar(_conoVision,x,y,z);
-                _interfaz->Rotar(_conoVision,rotacion,0,1,0);
-                _interfaz->Escalar(_conoVision,longitud/2,1.0f,0.01f);
-                Objetos_Debug.push_back(_conoVision);
-            }
+            _interfaz->Trasladar(_conoVision,x,y,z);
+            _interfaz->Rotar(_conoVision,rotacion,0,1,0);
+            _interfaz->Escalar(_conoVision,longitud/2,1.0f,0.01f);
+            Objetos_Debug.push_back(_conoVision);
         }
     #else
         //codigo motor irrlicht
