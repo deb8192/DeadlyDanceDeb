@@ -203,7 +203,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             MODO_DEFAULT = 0,
             MODO_ATAQUE,
             MODO_HUIDA,
-            MODO_AUXILIAR_ALIADO
+            MODO_AUXILIAR_ALIADO,
+            MODO_PELIGRO
         };
 
         Sala* _estoy;//sala en la que esta el enemigo

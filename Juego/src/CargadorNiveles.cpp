@@ -7,6 +7,7 @@
 #include "Enemigos/Murcielago.hpp"
 #include "Enemigos/CofreArana.hpp"
 #include "Enemigos/MuerteBoss.hpp"
+#include "Enemigos/Guardian.hpp"
 
 #include "Objetos/Puerta.hpp"
 #include "Objetos/Palanca.hpp"
@@ -450,6 +451,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
+            _ene->setVelocidadMaxima(1.0f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
             _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
             _ene = nullptr;
@@ -464,10 +466,11 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             break;
         case 1:
         {
-            Murcielago* ene = new Murcielago(x,y,z, 125); // Posiciones, vida
+            Murcielago* _ene = new Murcielago(x,y,z, 125); // Posiciones, vida
             //ia
-            ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
-            _enemigos.push_back(ene);//guardamos el enemigo en el vector
+            _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
+            _ene->setVelocidadMaxima(1.5f);
+            _enemigos.push_back(_ene);//guardamos el enemigo en el vector
             _enemigos.back()->setID(++id);//le damos el id unico en esta partida al enemigo
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
@@ -478,6 +481,45 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             _motora->getEvent(nameid)->start();
         }
             break;
+        
+        case 3: 
+        {
+            Guardian* _ene = new Guardian(x,y,z, 625, enemigo);
+            //ia
+            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
+            _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
+            _ene->setVelocidadMaxima(2.5f);
+            _ene->setID(++id);//le damos el id unico en esta partida al enemigo
+            _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
+            _ene = nullptr;
+
+            //Cargar sonido evento en una instancia con la id del enemigo como nombre
+            std::string nameid = std::to_string(id); //pasar id a string
+            _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+            _motora->getEvent(nameid)->setPosition(x,y,z);
+            _motora->getEvent(nameid)->setVolume(0.4f);
+            _motora->getEvent(nameid)->start();
+        }
+        break;
+
+        case 4: 
+        {
+            Guardian* _ene = new Guardian(x,y,z, 750, enemigo);
+            //ia
+            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
+            _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
+            _ene->setVelocidadMaxima(2.5f);
+            _ene->setID(++id);//le damos el id unico en esta partida al enemigo
+            _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
+            _ene = nullptr;
+
+            //Cargar sonido evento en una instancia con la id del enemigo como nombre
+            std::string nameid = std::to_string(id); //pasar id a string
+            _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+            _motora->getEvent(nameid)->setPosition(x,y,z);
+            _motora->getEvent(nameid)->setVolume(0.4f);
+            _motora->getEvent(nameid)->start();
+        }
 
         default:
             break;
@@ -490,7 +532,6 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _enemigos.back()->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-    _enemigos.back()->setVelocidadMaxima(1.0f);
     _enemigos.back()->setBarraAtEs(0);
     _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
     _enemigos.back()->setAtaque(5);
