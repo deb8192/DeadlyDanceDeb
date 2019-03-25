@@ -22,8 +22,8 @@ MotorGrafico::MotorGrafico()
         Recolectables_Scena.reserve(50);
         Objetos_Scena.reserve(100);
         PowerUP_Scena.reserve(50);
-        Objetos_Debug.reserve(200);
-        Objetos_Debug2.reserve(200);
+        Objetos_Debug.reserve(500);
+        Objetos_Debug2.reserve(500);
 
         camara = 0;
         _jugEscena = 0;
@@ -1489,9 +1489,11 @@ void MotorGrafico::clearDebug()
         //codigo motor catopengl
         if(Objetos_Debug.size()>0)
         {
+            std::cout << Objetos_Debug.size() << std::endl;
             for(std::size_t i=0;i<Objetos_Debug.size();i++)
             {
                 _interfaz->RemoveObject(Objetos_Debug[i]);
+                std::cout << "borrado" << Objetos_Debug[i] << std::endl;
                 Objetos_Debug[i] = 0;
             }
             Objetos_Debug.resize(0);
