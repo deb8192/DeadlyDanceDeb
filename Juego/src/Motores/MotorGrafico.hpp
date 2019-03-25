@@ -297,29 +297,25 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             //getters & setters
             bool getPathfindingActivado();
 
-            // Funciones para puzzles
-            void PosicionCamaraEnPuzzles();
-            void updateMotorPuzzles(short tipo);
-            void PuzzlesGui(short tipo, std::string enun, short opciones);
-            void TextoPasos(short pasos);
-            void CrearFichas(short posY, float tamanyo,
-                  int r, int g, int b);
-            short GetZonaVentana();
-            bool SeleccionarNodo();
-            void DeseleccionarNodo();
-            short GetFichaY();
-            void MoverFichas(short pila);
-            void RecolocarFicha(short y, short z);
-            void ReiniciarHanoi();
-
-            void BorrarBoton(signed int id);
-
             void RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame);
             bool finalCinematica();
             void cambiarCamara();
             int getCamx();
             int getCamz();
             int getCams();
+            
+            // Borra un elemento del arbol de nodos a traves de su ID
+            void BorrarElemento(signed int id);
+            unsigned short GetWidth();
+            unsigned short GetHeight();
+
+            // Funciones para Puzzles
+            void IniIDPuzzles();
+            void BorrarGuiPuzzle(unsigned short tipo, unsigned short opciones);
+            void CargarFondoPuzzle();
+            void CargarIMGPuzzle(unsigned short x, unsigned short y, std::string img);
+            void CrearTextoPuzzles(std::string texto, unsigned short x1, unsigned short y1, 
+                unsigned short x2, unsigned short y2);
 
         private: //clases solo accesibles por MotorGrafico
 
@@ -378,7 +374,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             #else
                 //variables y parametros motor irrlicht
-                //variables privadas
+                
                 Inputs input;
                 IrrlichtDevice* _device; //puntero a dispositivo por defecto
                 IVideoDriver* _driver;
@@ -418,29 +414,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
                 IAnimatedMeshSceneNode* _tmpObjEscena;
 
-                // Objetos y funciones para puzzles
-                IGUIStaticText* _myTextBox;
-
-                IMesh* _fichaMesh;                         // Malla
-                IMeshSceneNode* _ficha;                    // Nodo
-                std::vector<IMeshSceneNode*> fichasMesh;  // Lista de nodos (fichas)
-
-                // Para seleccionar nodos
-                position2di initialCursorPosition;        // Posicion del clic raton
-                position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
-                ISceneNode* _nodoSeleccionado;
-
-                // Ventana
-                short WIDTH_AUX, WIDTH, HEIGHT;
-                short x_linea1, x_linea2;
-
-                IGUIImage* _img;
-                ITexture*  _puzParticleTexture;
-                //vector<IGUIImage*> imagenes; <- Pendiente de utilizar en puzzles
-
-                enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
-                enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
-
                 //interfaz
                 IGUIImage* vidaI;
                 IGUIImage* energiaI;
@@ -470,11 +443,15 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
                 ITexture* _actualTexture;//textura actual
                 int camx, camz, cams;
+
+                // Variables para Puzzles
+                unsigned short IDP;
+                IGUIImage* _imgP;
+                IGUIStaticText* _txtP;
+                vector<IGUIImage*> _imagenesP;
+                vector<IGUIStaticText*> _textosP;
                 
             #endif
-
-            void CargarIMG(short x, short y);
-            void CrearMeshFicha(float tamanyo, int r, int g, int b);
     };
 
 #endif /* MotorGrafico_HPP */

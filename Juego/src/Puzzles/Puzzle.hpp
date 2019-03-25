@@ -9,23 +9,23 @@ class Puzzle
 {
     public:
         Puzzle();
-        Puzzle(short tipo, std::string enunciado, short opciones, short solucion);
+        Puzzle(unsigned short tipo, std::string enun, 
+            unsigned short opciones, unsigned short solucion);
         ~Puzzle();
 
-        short GetTipo();
+        unsigned short GetTipo();
         std::string GetEnunciado();
-        short GetOpciones();
-        short GetSolucion();
-        bool CorregirSolucion(short solucion);
+        unsigned short GetOpciones();
+        unsigned short GetSolucion();
         void AnyadirImgRespuesta(std::string img);
-        std::string GetImagen(short pos);
+        std::string GetImagen(unsigned short pos);
     protected:
 
     private:
-        short tipo; //opcion, casillas o arrastrar
+        unsigned short tipo; // 1 = ACERTIJO, 2 = HANNOI
         std::string enunciado;
-        short opciones; //2, 3 o 4
-        short solucion;
+        unsigned short opciones; //2 o 4
+        unsigned short solucion;
         vector<std::string> imgRespuestas;
 };
 #endif
