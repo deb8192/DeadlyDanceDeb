@@ -2229,7 +2229,8 @@ void MotorGrafico::SetDinero(int dinero)
         {
             string str = "";
             str += dinero;
-            _interfaz->CambiarTexto(moneyI,str.c_str());
+            std::cout << "recoges tantas: " << str << std::endl;
+            _interfaz->CambiarTexto(moneyI,str);
         }
     #else
         //codigo motor irrlicht
@@ -2472,7 +2473,7 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
         {
             if(_jugEscena != 0)
             {
-                _interfaz->setFrameLoop(_jugEscena,0, 30);
+                _interfaz->setFrameLoop(_jugEscena,1, 30);
                 _interfaz->setAnimationSpeed(_jugEscena,20);
             }
         }
