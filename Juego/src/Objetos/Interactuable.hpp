@@ -75,7 +75,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         int codigoObjeto;   //En caso de igualarse a 0 es una puerta sin llave, y si es -1 es un cofre
         bool accionado;     //Dado que son objetos accionables tendra dos estado segun este accionado o no
         int posicionArrayObjetos; //Posicion del elemento en el vector de objetos del motor grafico.
-        
+
         unsigned short tam = 2;
         float* _desplazamientos = new float [tam];   //Desplazamientos en X y en Z para le giro de la puerta
         
