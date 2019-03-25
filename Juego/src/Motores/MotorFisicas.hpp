@@ -32,6 +32,7 @@ using namespace reactphysics3d;
             void EraseColectable(int idx);
             void EraseColectablePowerup(int idx);
             void EraseEnemigo(std::size_t i);
+            void EraseCofre(std::size_t i);
             void EraseJugador();
             void EraseArma();
             CollisionBody* getColectables(int n);

@@ -1453,9 +1453,7 @@ void Jugando::AbrirCofre(Interactuable* _inter)
 
 void Jugando::CrearEnemigoArana()
 {
-    // Para la posicion, desde el cargador
-    // al crear el cofre, asociarle una pos
-    // en el cargador, al crear la aranya, meterle esto de las x, y, z....
+    // Crear Arana
     CofreArana* _eneA = (CofreArana*)_eneCofres.at(
         _cofreP->GetPosArray());
 
@@ -1477,7 +1475,13 @@ void Jugando::CrearEnemigoArana()
 
     _enemigos.push_back(move(_eneA));
     _eneA = nullptr;
-    _cofreP = nullptr;
+
+    // Borrar cofre
+    _motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), false);
+    //_fisicas->EraseCofre(_cofreP->GetPosicionArrayObjetos());
+    //_cofreP->~Cofre();//el destructor de enemigo
+    _cofreP=nullptr;
+    //_interactuables.erase(_interactuables.begin() + _cofreP->GetPosicionArrayObjetos());//begin le suma las posiciones
 }
 
 void Jugando::CargarBossEnMemoria()
