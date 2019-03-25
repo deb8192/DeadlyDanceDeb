@@ -192,6 +192,20 @@ void TPlano::setScale(float sx, float sy)
     }
 }
 
+void TPlano::setScaleX(float nx)
+{
+    escaladox = nx;
+    escaladoy = escaladoy;
+    cambios = true;
+}
+
+void TPlano::setScaleY(float ny)
+{
+    escaladoy = ny;
+    escaladox = escaladox;
+    cambios = true;
+}
+
 void TPlano::endDraw()
 {
 

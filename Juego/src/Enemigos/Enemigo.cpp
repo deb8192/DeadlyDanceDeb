@@ -3,6 +3,7 @@
 #include "Murcielago.hpp"
 #include "MuerteBoss.hpp"
 #include "Guardian.hpp"
+#include "CofreArana.hpp"
 #include "../ConstantesComunes.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "cmath"
@@ -437,10 +438,18 @@ void Enemigo::UpdateIA()
                 murcielago->RunIA();
             }
                 break;
+
+            case 2:
+            {
+                CofreArana *cofreArana = (CofreArana*) this;
+                cofreArana->RunIA();
+            }
+                break;
+
             default:
             {
                 MuerteBoss* _boss = (MuerteBoss*) this;
-                _boss->RunIA();
+                //_boss->RunIA();
             }
                 break;
         }
@@ -467,6 +476,14 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
                 murcielago->UpdateMurcielago(i, _jugador, _getZonas);
             }
                 break;
+            
+            case 2:
+            {
+                CofreArana* cofreArana = (CofreArana*) this;
+                cofreArana->UpdateCofreArana(i, _jugador);
+            }
+                break;
+            
             case 3:
             {
                 Guardian *guardian = (Guardian*) this;
@@ -481,6 +498,7 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
                 guardian->UpdateGuardian(i, _jugador, _getZonas);
             }
                 break;
+            
             default:
             {
                 MuerteBoss* _boss = (MuerteBoss*) this;
@@ -522,30 +540,16 @@ int Enemigo::Atacar(int i)
         atposZ += atz - posIni.z;
         atposX += atx - posIni.x;
 
-        if (i >= 0) // Comprueba si ataca al boss o a los enemigos
+        //Acutualizar posicion del ataque
+        _fisicas->updateAtaqueEnemigos(atposX,iniAtposY,atposZ,i);
+        
+        //Colision
+        if(_fisicas->IfCollision(_fisicas->getEnemiesAtack(i),_fisicas->getJugador()))
         {
-            //Acutualizar posicion del ataque
-            _fisicas->updateAtaqueEnemigos(atposX,iniAtposY,atposZ,i);
-            
-            //Colision
-            if(_fisicas->IfCollision(_fisicas->getEnemiesAtack(i),_fisicas->getJugador()))
-            {
-                atacado = true;
-                cout << "Jugador Atacado" << endl;
-            }
+            atacado = true;
+            cout << "Jugador Atacado" << endl;
         }
-        else
-        {
-            //Acutualizar posicion del ataque
-            _fisicas->updateAtaqueBoss(atx/2,aty/2,atz/2);
 
-            //Colision
-            if(_fisicas->IfCollision(_fisicas->getBossAtack(),_fisicas->getJugador()))
-            {
-                atacado = true;
-                cout << "Jugador Atacado por Boss" << endl;
-            }
-        }
         if(atacado)
         {
             //Se calcula el danyo del ataque
@@ -811,7 +815,7 @@ void Enemigo::setAtaque(int ataq)
 void Enemigo::setArmaEspecial(int ataque)
 {
     Constantes constantes;
-    _armaEspecial = new Arma(ataque, "",2,2,2,_rutaArmaEspecial,"",constantes.ARMA);
+    _armaEspecial = new Arma(ataque, "",2,2,2,constantes.ARMA);
 }
 
 void Enemigo::setSuerte(int suer)
@@ -1715,7 +1719,7 @@ int Enemigo::GetTipoEnemigo()
     return tipoEnemigo;
 }
 
-void Enemigo::Render(short pos, 
+void Enemigo::Render(short posArray, 
     float updTime, float drawTime)
 {
     moverseEntidad(1 / updTime);
@@ -1723,21 +1727,11 @@ void Enemigo::Render(short pos,
     RotarEntidad(1 / updTime);
     UpdateTimeRotate(drawTime);
 
-    if (pos >= 0) // Enemigos
-    {
-        _motor->mostrarEnemigos(
-            posActual.x, posActual.y, posActual.z,
-            rotActual.x, rotActual.y, rotActual.z,
-            pos
-        );
-    }
-    else
-    { // Boss
-        _motor->mostrarBoss(
-            posActual.x, posActual.y, posActual.z,
-            rotActual.x, rotActual.y, rotActual.z
-        );
-    }
+    _motor->mostrarEnemigos(
+        posActual.x, posActual.y, posActual.z,
+        rotActual.x, rotActual.y, rotActual.z,
+        posArray
+    );
 
     _motor->dibujarObjetoTemporal(
         posActual.x, posActual.y, posActual.z,

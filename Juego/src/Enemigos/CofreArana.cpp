@@ -3,7 +3,8 @@
 #include "../Personajes/Jugador.hpp"
 #include "cmath"
 
-CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida)
+CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
+    float anchoN, float altoN, float largoN)
 : Enemigo(nX,nY,nZ,maxVida)
 {
     Constantes constantes;
@@ -14,6 +15,10 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida)
     rotation = constantes.CERO;
 
     _modelo = "assets/models/Cofre/cofreArana.obj";
+
+    ancho = anchoN;
+    largo = largoN;
+    alto = altoN;
 }
 
 CofreArana::~CofreArana()
@@ -64,7 +69,7 @@ void CofreArana::RunIA()
  * Salidas:
 */ 
 
-void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
+void CofreArana::UpdateCofreArana(short *i, int* _jug)
 {
     Jugador* _jugador = (Jugador*)_jug;
     Constantes constantes;
@@ -101,13 +106,6 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
                 break;
         }
     }
-
-
-    else if(modo == MODO_AUXILIAR_ALIADO)
-    {
-        this->AuxiliarAliado();
-    }
-
     else if(_ordenes != nullptr)
     {
         switch (_ordenes[0])
@@ -125,85 +123,6 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
                 }
                 break;
 
-                case EN_PIDE_AYUDA: //El CofreArana pide ayuda
-                {
-                    modo = MODO_ATAQUE;
-                    this->setTimeMerodear(constantes.CERO);
-                    //cout<<"Pide ayuda a los aliados"<<endl;
-                    this->PedirAyuda(ayuda);
-                    funciona = true;
-                }
-                break;
-                
-                case EN_OIR: //El CofreArana oye un enemigo pedir ayuda
-                {
-                    if(this->oir(constantes.DOS))
-                    {
-                        funciona = true;
-                    }
-                    else 
-                    {
-                        funciona = false;
-                    }
-                }
-                break;
-
-                case EN_ACUDE_AYUDA: //El CofreArana oye un enemigo pedir ayuda
-                {
-                    this->ContestarAyuda();
-                }
-                break;
-
-            case EN_MERODEA: //El CofreArana merodea
-                {
-                    if(!hecho)
-                    {
-                        //Merodea estableciendo un nuevo angulo de rotacion
-                        this->setRotation(this->randomBinomial() * maxRotacion);
-                        this->Merodear();
-                        this->setTimeMerodear(1.5f);
-                        hecho = true;
-                        //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
-                        {
-                            modo = MODO_ATAQUE;
-                            this->setTimeMerodear(constantes.CERO);
-                            //cout<<"Pide ayuda a los aliados"<<endl;
-                            this->PedirAyuda(ayuda);
-                            funciona = true;
-                        }
-                        else if(this->oir(constantes.DOS))
-                        {
-                            this->ContestarAyuda();
-                        }
-                    }
-                    else 
-                    {
-                        //Merodea poniendo en positivo o negativo el angulo actual de rotacion
-                        int rota = rand() % 3 - 1;
-                        if (rota != 0)
-                        {
-                            rotation *= rota;
-                        }
-                        this->Merodear();
-                        //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
-                        { 
-                            modo = MODO_ATAQUE;
-                            this->setTimeMerodear(constantes.CERO);
-                            //cout<<"Pide ayuda a los aliados"<<endl;
-                            this->PedirAyuda(ayuda);
-                            funciona = true;
-                        }
-                        else if(this->oir(constantes.DOS))
-                        {
-                            this->ContestarAyuda();
-                        }
-                    }
-                    funciona = true;
-                }
-                break;
-
             default:
                 cout<<"No hace nada"<<endl;
                 break;
@@ -214,4 +133,19 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
 void CofreArana::SetNuevasOrdenes(short newOrden)
 {
     _ordenes[0] = newOrden;
+}
+
+float CofreArana::GetAncho()
+{
+    return ancho;
+}
+
+float CofreArana::GetAlto()
+{
+    return alto;
+}
+
+float CofreArana::GetLargo()
+{
+    return largo;
 }

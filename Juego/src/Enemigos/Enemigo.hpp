@@ -152,7 +152,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void SetContestar(bool);
         int  GetTipoEnemigo();
 
-        void Render(short pos, float updTime, float drawTime);
+        void Render(short posArray, float updTime, float drawTime);
         void RenderAtaque();
 
     protected:
@@ -247,7 +247,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         VectorEspacial distanciaEnemigoJugador;
         int distanciaMinimaEsquivar; //Variable que contiene la distancia mínima para esquivar objetos;
         int distanciaMaximaCohesionBandada; //Distancia maxima de las bandadas con su centro con flocking
-        const char* _modelo; // Malla 3D con la textura
+        
         bool pedirAyuda;
         bool contestar;
         bool defensa; //TO DO EXPANDIRLO AL JUGADOR cuando recibe danyo recibe la mitad si esta a true

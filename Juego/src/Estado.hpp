@@ -18,6 +18,7 @@ class Estado {
         virtual void Pausar() { };
         virtual void Reanudar() { };
         virtual void Reiniciar() { };
+        virtual void EstPuzzle(bool ganar) { };
 
     protected:
         MotorGrafico* _motor;

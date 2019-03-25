@@ -4,10 +4,12 @@
 #include "../Estado.hpp"
 #include "../Motores/SenseEventos.hpp"
 #include "../CargadorNiveles.hpp"
+#include "../CargadorPuzzles.hpp"
 #include "../Times.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "../Enemigos/Enemigo.hpp"
 #include "../Objetos/Interactuable.hpp"
+#include "../Objetos/Cofre.hpp"
 #include "../Objetos/Recolectable.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/InterfazJugador.hpp"
@@ -32,6 +34,7 @@ class Jugando: public Estado {
         void Pausar();
         void Reanudar();
         void Reiniciar();
+        void EstPuzzle(bool ganar);
 
         //Funciones propias
         void ValoresPorDefecto();
@@ -43,7 +46,9 @@ class Jugando: public Estado {
 
         bool CargarNivel(int nivel, int tipoJug); //Niveles en assets/maps/xml/
         void CrearJugador();//lo utilizamos para crear su objeto
-        void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, 
+            int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, 
+            int* propiedades, unsigned short tipoObjeto);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void ConectarWaypoints();
 
         //Funciones de interacciones
@@ -62,6 +67,11 @@ class Jugando: public Estado {
         Enemigo* getEnemigoPideAyuda();
         std::vector<Enemigo*> getEnemigos();
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
+        
+        void AbrirPantallaPuzzle();
+        void AbrirCofre(Interactuable* _inter);
+        void CrearEnemigoArana();
+        void CargarBossEnMemoria();
 
     private:
 
@@ -73,6 +83,8 @@ class Jugando: public Estado {
         InterfazJugador* _interfaz;
 
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
+        CargadorPuzzles cargPuzzles; // contiene todos los puzzles
+        Puzzle* _puzzle;
 
         bool enSalaBoss;
         Enemigo* _boss;
@@ -92,7 +104,10 @@ class Jugando: public Estado {
 
         INnpc::VectorEspacial posicionMediaEnemigos;  //Posicion media que comparten los pollos que atacan en bandada
         
-        bool reiniciando; // Se utiliza solo en Reanudar por el cambio entre Estados
+        bool reiniciando, puzzleResuelto; // Se utiliza solo en Reanudar por el cambio entre Estados
+        bool ganarPuzzle;
+        Cofre* _cofreP;
+
         Jugador* _jugador;
         bool jugadorInmovil; // Para las colisiones
         float drawTime, lastDrawTime;

@@ -70,9 +70,9 @@ void EstadoGanar::borrarEscenaResetearEvento(short id)
 // Para Atras y Reiniciar partida, borra solo los botones del GUI
 void EstadoGanar::borrarGUIResetearEvento(short id)
 {
-    _motor->BorrarBoton(GUI_ID_CONTINUAR);
-    _motor->BorrarBoton(GUI_ID_MENU_BUTTON);
-    _motor->BorrarBoton(GUI_ID_SALIR_BUTTON);
+    _motor->BorrarElemento(GUI_ID_CONTINUAR);
+    _motor->BorrarElemento(GUI_ID_MENU_BUTTON);
+    _motor->BorrarElemento(GUI_ID_SALIR_BUTTON);
     _motor->ResetEvento(id);
 }
 

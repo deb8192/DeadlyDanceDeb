@@ -13,8 +13,7 @@ MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
     maxRotacion = constantes.PI_CUARTOS; 
     rotation = constantes.CERO;
 
-    //TO DO: cambiar por el suyo
-    _modelo = "assets/models/guardian_m/GuardianMuerteConTextura.obj";
+    _modelo = "assets/models/Muerte/Muerte.obj";
 }
 
 MuerteBoss::~MuerteBoss()
@@ -116,36 +115,7 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
                     }
                 }
                 break;
-            
-            case EN_MERODEA: //La muerte merodea
-                {
-                    if(!hecho)
-                    {
-                        //Merodea estableciendo un nuevo angulo de rotacion
-                        this->setRotation(this->randomBinomial() * maxRotacion);
-                        //this->Merodear();
-                        this->setTimeMerodear(1.5f);
-                        hecho = true;
-                        
-                    }
-                    else 
-                    {
-                        //Merodea poniendo en positivo o negativo el angulo actual de rotacion
-                        int rota = rand() % 3 - 1;
-                        if (rota != 0)
-                        {
-                            rotation *= rota;
-                        }
-                        //this->Merodear();
-                        //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
-                        { 
-                            modo = MODO_ATAQUE;
-                        }
-                    }
-                    funciona = true;
-                }
-                break;
+
 
             default:
                 break;
