@@ -55,18 +55,6 @@ void Bailaora::AtacarEspecialUpdate(int* danyo, std::vector<Enemigo*> &_getEnemi
     atacarEspUpdComun(danyo, _getEnemigos);
 }
 
-/*************** AtacarEspecialUpdate *****************
- *  Funcion que actualiza la posicion y
- *  la colision del ataque especial
- *      Entradas: int danyo y Enemigo* _boss
- *      Salidas:
- */
-void Bailaora::AtacarEspecialUpdate(int* danyo, Enemigo* &_boss)
-{
-    armaAtacarEspecialUpd();
-    atacarEspUpdBossComun(danyo, _boss);
-}
-
 void Bailaora::RenderAtaqueEsp(float updateTime, float drawTime)
 {
     getArmaEspecial()->moverseEntidad(1 / updateTime);

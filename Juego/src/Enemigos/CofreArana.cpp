@@ -69,7 +69,7 @@ void CofreArana::RunIA()
  * Salidas:
 */ 
 
-void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
+void CofreArana::UpdateCofreArana(short *i, int* _jug)
 {
     Jugador* _jugador = (Jugador*)_jug;
     Constantes constantes;
@@ -106,13 +106,6 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
                 break;
         }
     }
-
-
-    else if(modo == MODO_AUXILIAR_ALIADO)
-    {
-        this->AuxiliarAliado();
-    }
-
     else if(_ordenes != nullptr)
     {
         switch (_ordenes[0])
@@ -127,85 +120,6 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
                     {
                         funciona = false;
                     }
-                }
-                break;
-
-                case EN_PIDE_AYUDA: //El CofreArana pide ayuda
-                {
-                    modo = MODO_ATAQUE;
-                    this->setTimeMerodear(constantes.CERO);
-                    //cout<<"Pide ayuda a los aliados"<<endl;
-                    this->PedirAyuda(ayuda);
-                    funciona = true;
-                }
-                break;
-                
-                case EN_OIR: //El CofreArana oye un enemigo pedir ayuda
-                {
-                    if(this->oir(constantes.DOS))
-                    {
-                        funciona = true;
-                    }
-                    else 
-                    {
-                        funciona = false;
-                    }
-                }
-                break;
-
-                case EN_ACUDE_AYUDA: //El CofreArana oye un enemigo pedir ayuda
-                {
-                    this->ContestarAyuda();
-                }
-                break;
-
-            case EN_MERODEA: //El CofreArana merodea
-                {
-                    if(!hecho)
-                    {
-                        //Merodea estableciendo un nuevo angulo de rotacion
-                        this->setRotation(this->randomBinomial() * maxRotacion);
-                        this->Merodear();
-                        this->setTimeMerodear(1.5f);
-                        hecho = true;
-                        //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO))
-                        {
-                            modo = MODO_ATAQUE;
-                            this->setTimeMerodear(constantes.CERO);
-                            //cout<<"Pide ayuda a los aliados"<<endl;
-                            this->PedirAyuda(ayuda);
-                            funciona = true;
-                        }
-                        else if(this->oir(constantes.DOS))
-                        {
-                            this->ContestarAyuda();
-                        }
-                    }
-                    else 
-                    {
-                        //Merodea poniendo en positivo o negativo el angulo actual de rotacion
-                        int rota = rand() % 3 - 1;
-                        if (rota != 0)
-                        {
-                            rotation *= rota;
-                        }
-                        this->Merodear();
-                        //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO))
-                        { 
-                            modo = MODO_ATAQUE;
-                            this->setTimeMerodear(constantes.CERO);
-                            //cout<<"Pide ayuda a los aliados"<<endl;
-                            this->PedirAyuda(ayuda);
-                            funciona = true;
-                        }
-                        else if(this->oir(constantes.DOS))
-                        {
-                            this->ContestarAyuda();
-                        }
-                    }
-                    funciona = true;
                 }
                 break;
 
