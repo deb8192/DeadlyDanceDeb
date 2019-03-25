@@ -38,10 +38,12 @@ void TTransform::trasladar(float x,float y,float z)
     *matriz = glm::translate(*matriz, glm::vec3(x,y,-z));
 }
 
-void TTransform::rotar(float g,float x,float y,float z)
+void TTransform::rotar(float gx,float gy,float gz)
 {
     identidad();
-    *matriz = glm::rotate(*matriz, glm::radians(g), glm::vec3(x,y,z));
+    *matriz = glm::rotate(*matriz, glm::radians(gx), glm::vec3(1,0,0));
+    *matriz = glm::rotate(*matriz, glm::radians(gy), glm::vec3(0,1,0));
+    *matriz = glm::rotate(*matriz, glm::radians(gz), glm::vec3(0,0,1));
     trasponer();
 }
 
