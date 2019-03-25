@@ -227,8 +227,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             //cargadores de objetos
             int CargarPlataformas(int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
-
-            void CargarBoss(int x,int y,int z, const char* ruta_objeto);
             void CargarEnemigos(int x,int y,int z, const char* ruta_objeto);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
@@ -240,7 +238,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void dispararProyectil(float x, float y, float z, float rx, float ry, float rz);
 
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
-            void mostrarBoss(float x, float y, float z, float rx, float ry, float rz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
@@ -343,7 +340,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Objetos_Debug;//contiene los elementos que se ven en modo debug
                 std::vector<unsigned short> Objetos_Debug2;//para objetos con tiempo para desaparecer
 
-                unsigned short _bossEscena;//id del boss
                 unsigned short _jugEscena;//id jugador
                 bool debugGrafico;//nos sirve para ver las zonas de colision
                 unsigned short _armaEspJugador;//id del arma del jugador
@@ -405,7 +401,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
                 IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena
-                IAnimatedMeshSceneNode* _bossEscena;//Boss en scena
                 //debug
                 IAnimatedMesh* _linea;
                 IAnimatedMesh* _conoVision;

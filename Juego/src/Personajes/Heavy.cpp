@@ -41,18 +41,6 @@ void Heavy::AtacarEspecialUpdate(int* danyo, std::vector<Enemigo*> &_getEnemigos
     atacarEspUpdComun(danyo, _getEnemigos);
 }
 
-/*************** AtacarEspecialUpdate *****************
- *  Funcion que actualiza la posicion y
- *  la colision del ataque especial
- *      Entradas: int danyo y Enemigo* _boss
- *      Salidas:
- */
-void Heavy::AtacarEspecialUpdate(int* danyo, Enemigo* &_boss)
-{
-    armaAtacarEspecialUpd();
-    atacarEspUpdBossComun(danyo, _boss);
-}
-
 void Heavy::RenderAtaqueEsp(float updateTime, float drawTime)
 {
     getArmaEspecial()->moverseEntidad(1 / updateTime);

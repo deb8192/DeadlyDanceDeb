@@ -71,6 +71,7 @@ class Jugando: public Estado {
         void AbrirPantallaPuzzle();
         void AbrirCofre(Interactuable* _inter);
         void CrearEnemigoArana();
+        void CargarBossEnMemoria();
 
     private:
 
