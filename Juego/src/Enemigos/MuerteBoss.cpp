@@ -13,8 +13,7 @@ MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
     maxRotacion = constantes.PI_CUARTOS; 
     rotation = constantes.CERO;
 
-    //TO DO: cambiar por el suyo
-    _modelo = "assets/models/guardian_m/GuardianMuerteConTextura.obj";
+    _modelo = "assets/models/Muerte/Muerte.obj";
 }
 
 MuerteBoss::~MuerteBoss()
