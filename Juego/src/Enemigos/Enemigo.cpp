@@ -2,6 +2,7 @@
 #include "Pollo.hpp"
 #include "Murcielago.hpp"
 #include "MuerteBoss.hpp"
+#include "Guardian.hpp"
 #include "../ConstantesComunes.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "cmath"
@@ -466,6 +467,20 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
                 murcielago->UpdateMurcielago(i, _jugador, _getZonas);
             }
                 break;
+            case 3:
+            {
+                Guardian *guardian = (Guardian*) this;
+                guardian->RunIA();
+                guardian->UpdateGuardian(i, _jugador, _getZonas);
+            }
+                break;
+            case 4:
+            {
+                Guardian *guardian = (Guardian*) this;
+                guardian->RunIA();
+                guardian->UpdateGuardian(i, _jugador, _getZonas);
+            }
+                break;
             default:
             {
                 MuerteBoss* _boss = (MuerteBoss*) this;
@@ -730,11 +745,27 @@ void Enemigo::UpdateTimeRotate(float updTime)
  */
 void Enemigo::ModificarVida(int vid)
 {
+    Constantes constantes;
+    vida += vid;
     if(vid < 0)
     {
-        modo = MODO_ATAQUE;
+        if(tipoEnemigo == 3 || tipoEnemigo == 4)
+        {
+            if(vida <= vidaIni * constantes.UN_CUARTO)
+            {
+                modo = MODO_PELIGRO
+            }
+            else
+            {
+                modo = MODO_ATAQUE;
+            }
+        }
+        else
+        {
+            modo = MODO_ATAQUE;
+        }
+        
     }
-    vida += vid;
     if (vida > vidaIni)
         vida = vidaIni;
     else if (vida < 0)

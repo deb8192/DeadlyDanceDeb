@@ -230,6 +230,8 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
     bool desciende = true;  //Permite o bloquea el descenso segun si hay mas hijos o no
     bool primeraVez = true;
     unsigned int i = 0;
+    arrayTareaObjetivo[0] = -1;
+    arrayTareaObjetivo[1] = -1;
     
     //Si el arbol de esta recorrendo
     if(nodoEnEjecucionDirecta != nullptr)
@@ -482,9 +484,34 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     arrayTareaObjetivo[0] = 7;
                 }
                 //La accion es asistir al enemigo que pide ayuda
-                else if(strcmp(accion, constantes.AUXILIAR))
+                else if(strcmp(accion, constantes.AUXILIAR) == 0)
                 {
                     arrayTareaObjetivo[0] = 8;
+                }
+                //La accion es defenderse
+                else if(strcmp(accion, constantes.DEFENDERSE) == 0)
+                {
+                    arrayTareaObjetivo[0] = 9;
+                }
+                //La accion es comprobar un estado
+                else if(strcmp(accion, constantes.COMPROBAR) == 0)
+                {
+                    arrayTareaObjetivo[0] = 10;
+                }
+                //La accion es atravesar una zona (puerta)
+                else if(strcmp(accion, constantes.ATRAVESAR) == 0)
+                {
+                    arrayTareaObjetivo[0] = 11;
+                }
+                //La accion es no ver algo (jugador)
+                else if(strcmp(accion, constantes.NO_VE) == 0)
+                {
+                    arrayTareaObjetivo[0] = 12;
+                }
+                //La accion es cambiar (modo)
+                else if(strcmp(accion, constantes.CAMBIA) == 0)
+                {
+                    arrayTareaObjetivo[0] = 13;
                 }
 
                 //Objetivo
@@ -497,7 +524,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 {
                     arrayTareaObjetivo[1] = 1;
                 }
-                else if(strcmp(objetivo, constantes.AYUDA))
+                else if(strcmp(objetivo, constantes.AYUDA) == 0)
                 {
                     arrayTareaObjetivo[1] = 2;
                 }
@@ -508,7 +535,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
             }
             else if(strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0)
             {
-                /*if(strcmp(compo->GetAccion(), constantes.FALSO) != 0)
+                if(strcmp(compo->GetAccion(), constantes.FALSO) != 0)
                 {
                     //Se indican la tarea y el objetivo a ejecutar
                     //Tarea
@@ -527,7 +554,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     }
 
                     //Objetivo
-                    const char* objetivo = comp->GetObjetivo();
+                    const char* objetivo = compo->GetObjetivo();
                     if(strcmp(objetivo, constantes.JUGADOR) == 0)
                     {
                         arrayTareaObjetivo[1] = 0;
@@ -540,7 +567,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     {
                         arrayTareaObjetivo[1] = -1;
                     }
-                }*/
+                }
             }
             else
             {
