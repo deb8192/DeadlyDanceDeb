@@ -579,7 +579,7 @@ void Jugando::UpdateIA()
     if(!_jugador->EstaMuerto() && (!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
      || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
     {
-        _jugador->generarSonido(constantes.CINCO * constantes.SEIS, constantes.CINCO, constantes.UNO);
+        _jugador->generarSonido(constantes.NUEVE * constantes.SEIS, constantes.CINCO, constantes.UNO);
     }
 
     //En esta parte muere enemigo
@@ -587,60 +587,83 @@ void Jugando::UpdateIA()
         //comprobando los _enemigos para saber si estan muertos
         for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
 
-            if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte()){
-
-                //Crear un power-up/dinero
-                //Se crea un power-up?
-                srand(time(NULL));
-                int secreapower = rand() % 101; //Entre 0 y 100
-                cout << "secreapower:" << secreapower << endl;
-
-                if(secreapower <= 100){ //20% de posibilidades
-                    //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
-                    srand(time(NULL));
-                    int numpow = 3;
-                    int cualpower = rand() % numpow;
-                    cout << "POWER: " << cualpower << endl;
-                    int ataque;
-                    const char* nombre;
-
-                    //DAtos comunes a todos
+            if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte())
+            {
+                if(_enemigos[i]->GetTipoEnemigo() == 3 || _enemigos[i]->GetTipoEnemigo() == 4)
+                {
                     int x = _enemigos[i]->getX();
                     int y = _enemigos[i]->getY();
                     int z = _enemigos[i]->getZ();
                     int accion = 4;
                     int ancho = 0.5 ,largo = 0.5,alto = 0.5;
-                    int codigo = -2;
+                    int codigo = 20;
                     int*  propiedades = new int [6];
-                    unsigned short tipoObjeto;
-                    Constantes constantes;
-
-                    if(cualpower == 0)
-                    {
-                    ataque = 0;
-                    nombre = "vida_up";
-                    tipoObjeto = constantes.VIDA;
-                    }
-                    else if(cualpower == 1)
-                    {
-                    ataque = 1;
-                    nombre = "energy_up";
-                    tipoObjeto = constantes.ENERGIA;
-                    }
-                    else if(cualpower == 2)
-                    {
-                    ataque = 2;
-                    nombre = "gold_up";
-                    tipoObjeto = constantes.ORO;
-                    //oro entre 1 y 5 monedas
-                    srand(time(NULL));
-                    int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
-                    propiedades[0] = orocant; //para pasarlo a crear objeto
-                    }
-
-                    //Crear objeto
-                    this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObjeto);
+                    int ataque = 0;
+                    const char* nombre = "llave_boss";
+                    const char* modelo = "assets/models/llave.obj";
+                    const char* textura = "";
+                    this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
                 }
+                else
+                {
+                    //Crear un power-up/dinero
+                    //Se crea un power-up?
+                    srand(time(NULL));
+                    int secreapower = rand() % 101; //Entre 0 y 100
+                    cout << "secreapower:" << secreapower << endl;
+
+                    if(secreapower <= 100)
+                    { 
+                        //20% de posibilidades
+                        //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
+                        srand(time(NULL));
+                        int numpow = 3;
+                        int cualpower = rand() % numpow;
+                        cout << "POWER: " << cualpower << endl;
+                        int ataque;
+                        const char* nombre,*modelo,*textura;
+
+                        //DAtos comunes a todos
+                        int x = _enemigos[i]->getX();
+                        int y = _enemigos[i]->getY();
+                        int z = _enemigos[i]->getZ();
+                        int accion = 4;
+                        int ancho = 0.5 ,largo = 0.5,alto = 0.5;
+                        int codigo = -2;
+                        int*  propiedades = new int [6];
+
+                        if(cualpower == 0)
+                        {
+                        ataque = 0;
+                        nombre = "vida_up";
+                        modelo = "assets/models/powerup0.obj";
+                        textura = "assets/texture/powerup0.png";
+                        }
+                        else if(cualpower == 1)
+                        {
+                        ataque = 1;
+                        nombre = "energy_up";
+                        modelo = "assets/models/powerup1.obj";
+                        textura = "assets/texture/powerup1.png";
+                        }
+                        else if(cualpower == 2)
+                        {
+                        ataque = 2;
+                        nombre = "gold_up";
+                        modelo = "assets/models/gold.obj";
+                        textura = "assets/texture/gold.png";
+                        //oro entre 1 y 5 monedas
+                        srand(time(NULL));
+                        int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
+                        propiedades[0] = orocant; //para pasarlo a crear objeto
+                        }
+
+                        //Crear objeto
+                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades);
+                    }
+                }
+
+
 
                 if (_enemigos[i]->GetPedirAyuda()) {
                     enemDejarDePedirAyuda();
@@ -1365,7 +1388,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
         contadorEnem++;
     }
     //Si no hay sala de destino guardada, se guarda en este momento
-    if(_destinoPathFinding == nullptr)
+    if(_destinoPathFinding == nullptr && _enemPideAyuda != nullptr)
     {
         _destinoPathFinding = _enemPideAyuda->getSala();
     }

@@ -105,7 +105,7 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
         {          
             case EN_VER: //La muerte ve al jugador
                 {
-                    if(this->ver(constantes.UNO))
+                    if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
                     {
                         funciona = true;
                     }
@@ -115,6 +115,7 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
                     }
                 }
                 break;
+
 
             default:
                 break;
