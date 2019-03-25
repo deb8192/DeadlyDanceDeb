@@ -21,7 +21,6 @@ class Menu: public Estado {
         void pintarBotones();
         void borrarEscenaResetearEvento(short id);
         void jugar();
-        void cargarPuzzlesXML();
         void configuracion();
         void creditos();
         void salir();
