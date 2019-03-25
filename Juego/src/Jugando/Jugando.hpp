@@ -9,6 +9,7 @@
 #include "../Personajes/Jugador.hpp"
 #include "../Enemigos/Enemigo.hpp"
 #include "../Objetos/Interactuable.hpp"
+#include "../Objetos/Cofre.hpp"
 #include "../Objetos/Recolectable.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/InterfazJugador.hpp"
@@ -66,6 +67,10 @@ class Jugando: public Estado {
         Enemigo* getEnemigoPideAyuda();
         std::vector<Enemigo*> getEnemigos();
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
+        
+        void AbrirPantallaPuzzle();
+        void AbrirCofre(Interactuable* _inter);
+        void CrearEnemigoArana();
 
     private:
 
@@ -100,6 +105,8 @@ class Jugando: public Estado {
         
         bool reiniciando, puzzleResuelto; // Se utiliza solo en Reanudar por el cambio entre Estados
         bool ganarPuzzle;
+        Cofre* _cofreP;
+
         Jugador* _jugador;
         bool jugadorInmovil; // Para las colisiones
         float drawTime, lastDrawTime;

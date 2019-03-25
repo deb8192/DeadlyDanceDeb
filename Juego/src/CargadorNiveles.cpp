@@ -316,7 +316,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int alto = zon.attribute("ancho").as_int();//nos devuelve un int
         short totalElementos = zon.attribute("elementos").as_int();
         const char* tipo = zon.attribute("tipo").value(); //nos da un char[] = string
-        CrearZona(accion,x,y,z,ancho,largo,alto,tipo,totalElementos); //cargamos el enemigo
+        CrearZona(accion,x,y,z,ancho,largo,alto,tipo,totalElementos,padren); //cargamos el enemigo
     }
 
     for (pugi::xml_node enem = plat.child("Waypoint"); enem; enem = enem.next_sibling("Waypoint"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -547,20 +547,21 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
 }
 
 //lo utilizamos para crear zonas
-void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem)
+void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem, Sala* sala)
 {
-   //Crear zona
-   Zona* zon = new Zona(ancho,largo,alto,tipo);
+    //Crear zona
+    Zona* zon = new Zona(ancho,largo,alto,tipo);
 
-   //ID propia y posicion
-   int calcID = _zonas.size();
-   zon->setID(calcID);
-   zon->setPosiciones(x,y,z);
-   zon->setTotalElementos(totalElem);
+    //ID propia y posicion
+    int calcID = _zonas.size();
+    zon->setID(calcID);
+    zon->setPosiciones(x,y,z);
+    zon->setTotalElementos(totalElem);
+    zon->SetSala(sala);
 
-   //guardarla en el nivel
-   _zonas.push_back(move(zon));
-   zon = nullptr;
+    //guardarla en el nivel
+    _zonas.push_back(move(zon));
+    zon = nullptr;
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -677,6 +678,14 @@ void CargadorNiveles::CrearCofreArana()
     _eneCofres.push_back(move(_eneA));//guardamos el enemigo en el vector
     _eneA = nullptr;
 
+    //Cargar sonido evento en una instancia con la id del enemigo como nombre
+    /*std::string nameid = std::to_string(id); //pasar id a string
+    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+    _motora->getEvent(nameid)->setPosition(x,y,z);
+    _motora->getEvent(nameid)->setVolume(0.4f);
+    _motora->getEvent(nameid)->start();*/
+
+
     /*_eneA->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _eneA->setPosicionesAtaque(x,y,z);
     _eneA->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
@@ -688,13 +697,6 @@ void CargadorNiveles::CrearCofreArana()
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
     */
-    
-    //Cargar sonido evento en una instancia con la id del enemigo como nombre
-    /* std::string nameid = std::to_string(id); //pasar id a string
-    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
-    _motora->getEvent(nameid)->setPosition(x,y,z);
-    _motora->getEvent(nameid)->setVolume(0.4f);
-    _motora->getEvent(nameid)->start();*/
 }
 
 //Cargar los cofres del nivel
@@ -741,8 +743,10 @@ void CargadorNiveles::CargarCofres()
 
                 //Colocar cofre
                 
-                Interactuable* _cofre = new Cofre(false, -1,"Cofre",2,2,2,
-                    0, newx, newy, newz, 4); //4=tipoObj
+                Interactuable* _cofre = new Cofre(true, -1,"Cofre",2,2,2,
+                    0, newx, newy, newz, 4, //4=tipoObj
+                    _zonas[zonasDisponibles[numAlt]]->GetSala());
+
                 int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
                     _cofre->GetModelo(), NULL);
                     
