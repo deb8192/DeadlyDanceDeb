@@ -1286,7 +1286,7 @@ void Jugando::updateAt(int* danyo)
 {
     float tiempoActual = 0.0f;
     float tiempoAtaque = 0.0f;
-    if((_motor->EstaPulsado(KEY_ESPACIO) || _motor->EstaPulsado(LMOUSE_DOWN)) && _jugador->getTimeAt() <= 0.0f)
+    if(_motor->EstaPulsado(KEY_ESPACIO) && _jugador->getTimeAt() <= 0.0f)
     {
         *danyo = _jugador->Atacar(0);
         _motor->ResetKey(KEY_ESPACIO);

@@ -729,11 +729,28 @@ void Interfaz::RemoveObject(unsigned short object)
 void Interfaz::EscalarImagen(unsigned short nid,float x,float y,bool enx, bool eny)
 {
     //escalar la imagen
+
 }
 
 void Interfaz::CambiarTexto(unsigned short nid,std::string texto)
 {
-    //cambiar string del texto
+    //cambiar string del texto 
+    if(nid != 0)
+    {
+        Nodo * nodo = buscarNodo2(nid);
+        std::cout << "monedas " << texto << std::endl;
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TTexto*>(tnodo->GetEntidad())->CambiarTexto(texto);
+                }
+            }
+        }
+    }
 }
 
 void Interfaz::eliminarID(unsigned short x)
@@ -811,6 +828,7 @@ void Interfaz::setFrameLoop(unsigned short did,int start,int end)
                 TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
                 if(tnodo != nullptr)
                 {
+                    std::cout << " inicio " << ((unsigned short)start) << "final" << ((unsigned short)end) << std::endl;
                     dynamic_cast<TMalla*>(tnodo->GetEntidad())->BucleAnimacion((unsigned short)start,(unsigned short)end);
                 }
             }
