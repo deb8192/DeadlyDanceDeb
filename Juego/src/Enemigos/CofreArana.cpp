@@ -3,7 +3,8 @@
 #include "../Personajes/Jugador.hpp"
 #include "cmath"
 
-CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida)
+CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
+    float anchoN, float altoN, float largoN)
 : Enemigo(nX,nY,nZ,maxVida)
 {
     Constantes constantes;
@@ -14,6 +15,10 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida)
     rotation = constantes.CERO;
 
     _modelo = "assets/models/Cofre/cofreArana.obj";
+
+    ancho = anchoN;
+    largo = largoN;
+    alto = altoN;
 }
 
 CofreArana::~CofreArana()
@@ -214,4 +219,19 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
 void CofreArana::SetNuevasOrdenes(short newOrden)
 {
     _ordenes[0] = newOrden;
+}
+
+float CofreArana::GetAncho()
+{
+    return ancho;
+}
+
+float CofreArana::GetAlto()
+{
+    return alto;
+}
+
+float CofreArana::GetLargo()
+{
+    return largo;
 }

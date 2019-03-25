@@ -42,9 +42,6 @@ MotorGrafico::MotorGrafico()
         _actual = nullptr;
         _actualTexture = nullptr;
 
-        // Para las torres de HANNOI
-        _nodoSeleccionado = nullptr;
-
         frame_actual = 0;
         camx = 0;
         camz = 30;
@@ -94,16 +91,6 @@ void MotorGrafico::LimpiarElementosJuego()
         _caja = nullptr;
         _tmpObjEscena = nullptr;
 
-        // Puzzles
-        _myTextBox = nullptr;
-        _fichaMesh = nullptr;
-        _ficha = nullptr;
-        _nodoSeleccionado = nullptr;
-        _img = nullptr;
-        _puzParticleTexture = nullptr;
-        WIDTH_AUX = 0; WIDTH = 0; HEIGHT = 0;
-        x_linea1 = 0; x_linea2 = 0;
-
         // Texturas
         vidaI = nullptr;
         energiaI = nullptr;
@@ -133,7 +120,6 @@ void MotorGrafico::LimpiarElementosJuego()
         frame_actual = 0;
         tiempoUltimoFrame = 0;
 
-        width = 0; height = 0;
         debugGrafico = false;
         pathfinding = false;
 
@@ -619,6 +605,9 @@ bool MotorGrafico::EstaPulsado(short boton)
             case idsEventos::Enum::KEY_J:
                 return _interfaz->IsKeyDown(GLFW_KEY_J);//Para matar al jugador (16)
 
+            case idsEventos::Enum::KEY_Z:
+                return _interfaz->IsKeyDown(GLFW_KEY_Z);//Para abrir 1 puzzle
+
             case idsEventos::Enum::KEY_E:
                 return _interfaz->IsKeyDown(GLFW_KEY_E);//actua una sola vez aunque se mantenga pulsado
         }
@@ -682,6 +671,9 @@ bool MotorGrafico::EstaPulsado(short boton)
             case KEY_J:
                 return input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
 
+            case KEY_Z:
+                return input.IsKeyDown(irr::KEY_KEY_Z);// Para abrir 1 puzzle
+
             case KEY_E:
                 return input.IsKeyPressed(irr::KEY_KEY_E);//actua una sola vez aunque se mantenga pulsado
         }
@@ -744,6 +736,9 @@ void MotorGrafico::ResetKey(short event)
             break;
             case KEY_J:
                 input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
+            break;
+            case KEY_Z:
+                input.IsKeyDown(irr::KEY_KEY_Z);
             break;
             case KEY_E:
                 input.ResetKey(irr::KEY_KEY_E);
@@ -1061,7 +1056,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
             _objetoEnEscena->setPosition(core::vector3df(x,y,z));
             _objetoEnEscena->setRotation(core::vector3df(0,rp,0));
-            if(accion != 3)_objetoEnEscena->setMaterialTexture(0, _driver->getTexture(ruta_textura));
+            //if(accion != 3)_objetoEnEscena->setMaterialTexture(0, _driver->getTexture(ruta_textura));
 
             if(accion == 4)
             {
@@ -2445,363 +2440,6 @@ bool MotorGrafico::getPathfindingActivado()
     #endif
 }
 
-
-
-void MotorGrafico::updateMotorPuzzles(short tipo)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        _driver->beginScene(true, true, SColor(255,255,255,255));//fondo blanco
-        _smgr->drawAll();
-        _guienv->drawAll();
-
-        /* Probando a dibujar objetos 2D
-        //Rectangulo
-        _driver->draw2DRectangle(SColor(255, 255, 128, 64), rect<s32>(40, 40, 200, 200));
-
-        //Poligono
-        _driver->draw2DPolygon(position2d<s32>(100, 300), 50.f, SColor(128, 40, 80, 16), 6);*/
-
-        switch(tipo)
-        {
-            case P_OPCIONES:
-                break;
-            case P_HANOI:
-                // Lineas para dividir la pantalla
-                _driver->draw2DLine(position2d<s32>(x_linea1 , 200),
-                    position2d<s32>(x_linea1, 400 ) , SColor(255, 0, 0, 0));
-                _driver->draw2DLine(position2d<s32>(x_linea2 , 200),
-                    position2d<s32>(x_linea2, 400 ) , SColor(255, 0, 0, 0));
-                break;
-        }
-
-        _driver->endScene();
-    #endif
-}
-
-
-
-void MotorGrafico::BorrarBoton(signed int id)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        _guienv->getRootGUIElement()->getElementFromId(id)->remove();
-    #endif
-}
-
-
-// Funciones para puzzles
-void MotorGrafico::PosicionCamaraEnPuzzles()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        _camera->setPosition(vector3df(14, 2, 0)); // No cambiar la Y, si nos la seleccion tendra errores
-    #endif
-}
-
-
-void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        short height_aux = (HEIGHT/2)+100;
-        short yIMG = height_aux-125;
-        short xIMG = 20;
-        short anchoBtn = 40;
-        short altoBtn = 30;
-
-        // Atras
-        _guienv->addButton(rect<s32>(700,HEIGHT-60,750,HEIGHT-30), 0,
-            GUI_ID_ATRAS_BUTTON,L"Atrás", L"Vuelve al menú");
-
-        // Enunciado
-        std::wstring widestr = std::wstring(enun.begin(), enun.end());
-        const wchar_t* widecstr = widestr.c_str();
-        _guienv->addStaticText(widecstr, rect<s32>(60,20,700,50), false);
-
-        switch(tipo)
-        {
-            case P_OPCIONES: // Opciones
-                _guienv->addStaticText(L"Puzzle Opciones", rect<s32>(0,0,200,20), false);
-                _guienv->addStaticText(L"Ejemplo", rect<s32>(WIDTH-200,20,
-                    WIDTH-160,40), false);
-
-                _img = _guienv->addImage(_driver->getTexture("assets/puzzles/particle.bmp"),
-                    core::position2d<s32>(WIDTH-200, 40));
-
-                switch(opciones) {
-                    case 2:
-                        WIDTH_AUX = WIDTH/4;
-                        // x, y, x2, y2
-                        _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
-                            WIDTH_AUX+anchoBtn,height_aux+altoBtn),
-                            0, GUI_ID_OP1,L"A", L"A");
-                        _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
-                            WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
-                            0, GUI_ID_OP2,L"B", L"B");
-
-                        CargarIMG(WIDTH_AUX-xIMG, yIMG);
-                        CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
-                        break;
-
-                    case 3:
-                        WIDTH_AUX = (WIDTH-2)/6;
-                        // x, y, x2, y2
-                        _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
-                            WIDTH_AUX+anchoBtn,height_aux+altoBtn),
-                            0, GUI_ID_OP1,L"A", L"A");
-                        _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
-                            WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
-                            0, GUI_ID_OP2,L"B", L"B");
-                        _guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
-                            WIDTH_AUX*5+anchoBtn,height_aux+altoBtn),
-                            0, GUI_ID_OP3,L"C", L"C");
-
-                        CargarIMG(WIDTH_AUX-xIMG, yIMG);
-                        CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
-                        CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
-                        break;
-
-                    case 4:
-                        WIDTH_AUX = WIDTH/8;
-                        // x, y, x2, y2
-                        _guienv->addButton(rect<s32>(WIDTH_AUX,height_aux,
-                            WIDTH_AUX+anchoBtn,height_aux+altoBtn),
-                            0, GUI_ID_OP1,L"A", L"A");
-                        _guienv->addButton(rect<s32>(WIDTH_AUX*3,height_aux,
-                            WIDTH_AUX*3+anchoBtn,height_aux+altoBtn),
-                            0, GUI_ID_OP2,L"B", L"B");
-                        _guienv->addButton(rect<s32>(WIDTH_AUX*5,height_aux,
-                            WIDTH_AUX*5+anchoBtn,height_aux+altoBtn),
-                            0, GUI_ID_OP3,L"C", L"C");
-                        _guienv->addButton(rect<s32>(WIDTH_AUX*7,height_aux,
-                            WIDTH_AUX*7+anchoBtn,height_aux+altoBtn),
-                            0, GUI_ID_OP4,L"D", L"D");
-
-                        CargarIMG(WIDTH_AUX-xIMG, yIMG);
-                        CargarIMG(WIDTH_AUX*3-xIMG, yIMG);
-                        CargarIMG(WIDTH_AUX*5-xIMG, yIMG);
-                        CargarIMG(WIDTH_AUX*7-xIMG, yIMG);
-                        break;
-                }
-                break;
-
-            case P_HANOI: // Torres de Hanoi
-                _guienv->addStaticText(L"Torres de Hanoi", rect<s32>(0,0,200,20), false);
-
-                // Reiniciar
-                _guienv->addButton(rect<s32>(700,HEIGHT-90,750,HEIGHT-60), 0,
-                    GUI_ID_REINICIAR_HANOI,L"Reiniciar", L"Reinicia el juego");
-
-                _myTextBox = _guienv->addStaticText(L"Pasos: ", rect<s32>(60,(WIDTH/2)-10,100,(WIDTH/2)+30), false);
-
-                WIDTH_AUX = (WIDTH-2)/6;
-                _guienv->addStaticText(L"IZQ", rect<s32>(WIDTH_AUX,100,WIDTH_AUX+anchoBtn,130), false);
-                _guienv->addStaticText(L"CENTRO", rect<s32>(WIDTH_AUX*3,100,WIDTH_AUX*3+anchoBtn,130), false);
-                _guienv->addStaticText(L"DER", rect<s32>(WIDTH_AUX*5,100,WIDTH_AUX*5+anchoBtn,130), false);
-
-                // Para la ventana de 800, 600
-                // Width = 798, dejamos 1 punto a cada lado
-                WIDTH_AUX = (WIDTH-2)/3;    // Dividimos la pantalla en 3 zonas
-                x_linea1 = WIDTH_AUX;
-                x_linea2 = WIDTH_AUX*2;
-                break;
-        }
-    #endif
-}
-
-void MotorGrafico::TextoPasos(short pasos)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        stringw str = L"Pasos: ";
-        str += pasos;
-        _myTextBox->setText(str.c_str());
-        _myTextBox = nullptr;
-    #endif
-}
-
-// TO DO: Anyadir string img
-void MotorGrafico::CargarIMG(short x, short y)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        _puzParticleTexture = _driver->getTexture("assets/puzzles/particle.bmp");
-        _img = _guienv->addImage(_puzParticleTexture,core::position2d<s32>(x, y));
-    #endif
-}
-
-void MotorGrafico::CrearMeshFicha(float tamanyo, int r, int g, int b)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        //_fichaMesh = _geometryCreator->createCubeMesh(vector3df(tamanyo));
-        _fichaMesh = _geometryCreator->createCylinderMesh(
-            tamanyo,    //radius
-            1,          //length
-            50,         //tesselation
-            SColor(0, r, g, b));
-
-        // insensible a la iluminacion
-        _fichaMesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-    #endif
-}
-
-void MotorGrafico::CrearFichas(short posY, float tamanyo,
-    int r, int g, int b)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        CrearMeshFicha(tamanyo, r, g, b);
-        _ficha = _smgr->addMeshSceneNode(_fichaMesh);
-        _ficha->setPosition(vector3df(0, posY, IZQ));
-        _ficha->setID(tamanyo);
-
-        // La anyadimos a la lista
-        fichasMesh.push_back(move(_ficha));
-        _ficha = nullptr;
-    #endif
-}
-
-short MotorGrafico::GetZonaVentana()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        short posX = GetPosicionRaton().X;
-        if ((posX > 0) && (posX <= WIDTH)) {
-            if ((posX > 0) && (posX <= WIDTH_AUX)) {
-                return IZQ;
-            } else if ((posX > WIDTH_AUX) && (posX <= WIDTH_AUX*2)) {
-                return CENTRO;
-            } else {
-                return DER;
-            }
-        }
-        return NO_SELECT;// Fuera de ventana
-    #endif
-}
-
-bool MotorGrafico::SeleccionarNodo()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-        return false;
-    #else
-        //codigo motor irrlicht
-        // check for a node being selected
-        // Posicion, idBitMask (0=deshabilitada), bNoDebugObjects (true=No tiene en cuenta los objetos de depuracion)
-        _nodoSeleccionado = _collmgr->getSceneNodeFromScreenCoordinatesBB(
-            _device->getCursorControl()->getPosition(),0,true);
-
-        // Si hay un nodo seleccionado
-        if(_nodoSeleccionado)
-        {
-            // Remember where the node and cursor were when it was clicked on
-            initialCursorPosition = _device->getCursorControl()->getPosition();
-            // Calcula la posición de la pantalla 2d desde una posición 3d.
-            initialObjectPosition = _collmgr->getScreenCoordinatesFrom3DPosition(
-                _nodoSeleccionado->getAbsolutePosition(), _camera);
-
-            if (_nodoSeleccionado->getID() != -1) { // Comprobamos que no sea el fondo
-                return true;
-            }
-        }
-        else
-        {
-            _nodoSeleccionado = nullptr;
-        }
-        return false;
-    #endif
-}
-
-void MotorGrafico::DeseleccionarNodo()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        _nodoSeleccionado = 0;
-    #endif
-}
-
-short MotorGrafico::GetFichaY()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        return _nodoSeleccionado->getAbsolutePosition().Y;
-    #endif
-}
-
-void MotorGrafico::MoverFichas(short pila)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        if ((_nodoSeleccionado) && (pila != NO_SELECT))
-        {
-            plane3df const planeXZ(_nodoSeleccionado->getAbsolutePosition(), vector3df(1.f, 0.f, 0.f));
-
-            position2di currentCursorPosition(_device->getCursorControl()->getPosition());
-            position2di effectiveObjectPosition = initialObjectPosition + currentCursorPosition - initialCursorPosition;
-            line3df ray(_collmgr->getRayFromScreenCoordinates(effectiveObjectPosition, _camera));
-            vector3df intersectWithPlane;
-
-            if(planeXZ.getIntersectionWithLine(ray.start, ray.getVector(), intersectWithPlane))
-            {
-                _nodoSeleccionado->setPosition(intersectWithPlane);
-            }
-        }
-    #endif
-}
-
-void MotorGrafico::RecolocarFicha(short y, short z)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        short x = _nodoSeleccionado->getAbsolutePosition().X;
-        _nodoSeleccionado->setPosition(vector3df(x, y, z));
-    #endif
-}
-
-void MotorGrafico::ReiniciarHanoi()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        short tam = fichasMesh.size();
-        short posY=0;
-        for (int pos = 0; pos<tam; pos++)
-        {
-            fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
-            posY++;
-        }
-    #endif
-}
-
 void MotorGrafico::RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame)
 {
     #ifdef WEMOTOR
@@ -2878,4 +2516,130 @@ bool MotorGrafico::finalCinematica()
         return false;
     #endif
 
+}
+
+void MotorGrafico::BorrarElemento(signed int id)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        _guienv->getRootGUIElement()->getElementFromId(id)->remove();
+    #endif
+}
+
+unsigned short MotorGrafico::GetWidth()
+{
+    return width;
+}
+
+unsigned short MotorGrafico::GetHeight()
+{
+    return height;
+}
+
+
+// ************************* Funciones para Puzzles *******************
+void MotorGrafico::IniIDPuzzles()
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        IDP = GUI_ID_PUZZLE;
+    #endif
+}
+
+void MotorGrafico::BorrarGuiPuzzle(unsigned short tipo, unsigned short opciones)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+
+        BorrarElemento(GUI_ID_ATRAS_PUZ);
+
+        if (tipo == 1)
+        {
+            unsigned short tam = _imagenesP.size();
+            for(unsigned short i=0; i < tam; i++)
+            {
+                BorrarElemento(_imagenesP.at(i)->getID());
+            }
+            _imagenesP.clear();
+
+            tam = _textosP.size();
+            for(unsigned short i=0; i < tam; i++)
+            {
+                BorrarElemento(_textosP.at(i)->getID());
+            }
+            _textosP.clear();
+
+            BorrarElemento(GUI_ID_OP1);
+            BorrarElemento(GUI_ID_OP2);
+
+            if (opciones > 2)
+            {
+                BorrarElemento(GUI_ID_OP3);
+                BorrarElemento(GUI_ID_OP4);
+            }
+        }
+    #endif
+}
+
+void MotorGrafico::CargarFondoPuzzle()
+{
+    // Depende de la resolucion: 640, 800, 1024, 1280
+    std::string fondo = "assets/puzzles/Fondo"+
+        std::to_string(width) + ".png";
+    const char* cfondo = fondo.c_str();
+
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        ITexture* _textura = _driver->getTexture(cfondo);
+        _imgP = _guienv->addImage(_textura,
+            core::position2d<s32>(0, 0));
+        _imgP->setID(IDP);
+        _imagenesP.push_back(move(_imgP));
+        _imgP = nullptr;
+        _textura = nullptr;
+    #endif
+}
+
+void MotorGrafico::CargarIMGPuzzle(unsigned short x, unsigned short y, std::string img)
+{
+    std::string ruta = "assets/puzzles/"+img;
+    const char* cruta = ruta.c_str();
+
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        ITexture* _textura = _driver->getTexture(cruta);
+        _imgP = _guienv->addImage(_textura,
+            core::position2d<s32>(x, y));
+        _imgP->setID(++IDP);
+        _imagenesP.push_back(move(_imgP));
+        _imgP = nullptr;
+        _textura = nullptr;
+    #endif
+}
+
+void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
+    unsigned short y1, unsigned short x2, unsigned short y2)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        
+    #else
+        //codigo motor irrlicht
+        std::wstring widestr = std::wstring(texto.begin(), texto.end());
+        // Parametro false, indica que no pinte el recuadro alrededor del texto
+        _txtP = _guienv->addStaticText(widestr.c_str(), rect<s32>(x1, y1, x2, y2), false);
+        _txtP->setID(++IDP);
+        _textosP.push_back(move(_txtP));
+        _txtP = nullptr;
+    #endif
 }

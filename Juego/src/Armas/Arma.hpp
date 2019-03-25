@@ -11,8 +11,7 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
 {
     public:
         Arma();         //esto le deja a la entidad el constructor por defecto
-        Arma(int ataque, const char* nombre, int anc, int lar, int alt, 
-            const char* objeto, const char* textura, unsigned short tipoObj);
+        Arma(int ataque, const char* nombre, int anc, int lar, int alt, unsigned short tipoObj);
         ~Arma();
         
         //drawable metodos
@@ -59,11 +58,10 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
         float getRX();
         float getRY();
         float getRZ();
-        const char* getObjeto();
-        const char* getTextura();
         float getAncho();
         float getLargo();
         float getAlto();
+        const char* GetModelo(); // Malla 3D con la textura
         unsigned short GetTipoObjeto();
 
     private:

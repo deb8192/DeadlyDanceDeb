@@ -20,8 +20,7 @@ Interactuable::Interactuable(int codigo, const char* nombre,
     ancho = anc;
     largo = lar;
     alto = alt;
-    //ruta_objeto = cadena_objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
-    //ruta_textura = cadena_textura;
+    
     posicionArrayObjetos = posicion;
     accionado = false;
 
@@ -238,16 +237,6 @@ int Interactuable::getCodigo()
     return codigoObjeto;
 }
 
-/*const char* Interactuable::getNombre()
-{
-    return nombreObjeto;
-}*/
-
-const char* Interactuable::getObjeto()
-{
-    return ruta_objeto;
-}
-
 float Interactuable::getX()
 {
     return posActual.x;
@@ -353,11 +342,6 @@ int Interactuable::getID()
     return id;
 }
 
-
-const char* Interactuable::getTextura()
-{
-    return ruta_textura;
-}
 float Interactuable::getAncho()
 {
     return ancho;
