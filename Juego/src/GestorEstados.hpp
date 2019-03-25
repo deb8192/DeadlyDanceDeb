@@ -12,6 +12,7 @@ public:
     void CambioEstadoCinematica();
     void QuitarPausa();
     void ReiniciarPartida();
+    void ReanudarDesdePuzzle(bool ganar);
     void CambioDeJuegoAMenu();
     void CambioEstadoMenu();
     void CambioEstadoJugar();

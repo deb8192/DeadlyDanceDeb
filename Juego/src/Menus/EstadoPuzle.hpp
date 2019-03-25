@@ -16,10 +16,12 @@ class EstadoPuzle: public Estado {
         
     private:
         void atras();
+        void comprobarEventosOpciones();
+        void corregirSolucion(unsigned short opcion);
 
         Puzzle* _puzzle;
         unsigned short width, height;
-        unsigned short tipo, opciones;
+        unsigned short tipo, opciones, solucion;
         enum opcPuzzles { P_ACERTIJO = 1, P_HANOI = 2 };
 };
 #endif /* ESTADO_PUZLE_HPP */

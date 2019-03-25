@@ -103,6 +103,7 @@ void Jugando::Iniciar()
     //recorrido.reserve(xx);
 
     reiniciando = false;
+    puzzleResuelto = false;
 
     ValoresPorDefecto();
 
@@ -232,6 +233,8 @@ void Jugando::ManejarEventos() {
     if (_motor->EstaPulsado(KEY_Z))
     {
         _motor->ResetKey(KEY_Z);
+
+        ganarPuzzle = false;
         Juego::GetInstance()->estado.CambioEstadoPuzle((int*)cargPuzzles.GetPuzzle(2));
     }
 
@@ -829,11 +832,30 @@ void Jugando::Reanudar()
 
         reiniciando = false;
     }
+    else if (puzzleResuelto)
+    {
+        if (ganarPuzzle)
+        {
+            cout << "No Sale la araña, has ganado......"<<endl;
+        }
+        else
+        {
+            cout << "Sale la araña......"<<endl;
+        }
+        ganarPuzzle = false;
+        puzzleResuelto = false;
+    }
 }
 
 void Jugando::Reiniciar()
 {
     reiniciando = true;
+}
+
+void Jugando::EstPuzzle(bool ganar)
+{
+    ganarPuzzle = ganar;
+    puzzleResuelto = true;
 }
 
 bool Jugando::CargarNivel(int nivel, int tipoJug)

@@ -120,7 +120,6 @@ void MotorGrafico::LimpiarElementosJuego()
         frame_actual = 0;
         tiempoUltimoFrame = 0;
 
-        width = 0; height = 0;
         debugGrafico = false;
         pathfinding = false;
 
