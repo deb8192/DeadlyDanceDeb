@@ -97,8 +97,11 @@ void Jugando::Iniciar()
     cargPuzzles.CargarPuzzlesXml();
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-    CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
-
+    #ifdef WEMOTOR
+        CargarNivel(7, 1); //(level, player) 1 = heavy / 2 = bailaora
+    #else
+        CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
+    #endif
     //TO DO: hacerle un reserve:
     //_auxiliadores.reserve(xx);
     //recorrido.reserve(xx);
@@ -1450,9 +1453,7 @@ void Jugando::AbrirCofre(Interactuable* _inter)
 
 void Jugando::CrearEnemigoArana()
 {
-    // Para la posicion, desde el cargador
-    // al crear el cofre, asociarle una pos
-    // en el cargador, al crear la aranya, meterle esto de las x, y, z....
+    // Crear Arana
     CofreArana* _eneA = (CofreArana*)_eneCofres.at(
         _cofreP->GetPosArray());
 
@@ -1474,7 +1475,13 @@ void Jugando::CrearEnemigoArana()
 
     _enemigos.push_back(move(_eneA));
     _eneA = nullptr;
-    _cofreP = nullptr;
+
+    // Borrar cofre
+    _motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), false);
+    //_fisicas->EraseCofre(_cofreP->GetPosicionArrayObjetos());
+    //_cofreP->~Cofre();//el destructor de enemigo
+    _cofreP=nullptr;
+    //_interactuables.erase(_interactuables.begin() + _cofreP->GetPosicionArrayObjetos());//begin le suma las posiciones
 }
 
 void Jugando::CargarBossEnMemoria()
