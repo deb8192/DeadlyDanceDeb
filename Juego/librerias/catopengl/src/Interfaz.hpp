@@ -37,7 +37,7 @@ class Interfaz
 
         void Trasladar(unsigned short,float,float,float);//trasladar
 
-        void Rotar(unsigned short,float,float,float,float);//rotar
+        void Rotar(unsigned short,float,float,float);//rotar
 
         void Escalar(unsigned short,float,float,float);//escalar
 
@@ -79,6 +79,15 @@ class Interfaz
 
         void CambiarTexto(unsigned short nid,std::string texto);//cambia el texto del elemento que le pases como nid
 
+        int getStartFrame(unsigned short);//consigue el frame inicial
+
+        int getFrameNr(unsigned short);//consigue el frame actual
+
+        void setFrameLoop(unsigned short,int,int);//le asigna desde que frame a que frame debe cambiar la animacion
+
+        void setAnimationSpeed(unsigned short,int);//le asigna velocidad a la animacion
+
+        
     private:
 
         bool  banco_ids [65535];
@@ -128,7 +137,7 @@ class Interfaz
         Nodo * buscarNodo(unsigned short);
 
         Nodo * buscarNodo2(unsigned short);
-        
+
         bool ventana_inicializada = true;//nos sirve para saber si tenemos que llamar a inicializar ventana
 
         void ventanaInicializar();
@@ -140,5 +149,5 @@ class Interfaz
         void eliminarID(unsigned short x);
 
         unsigned int cualborrar;
-        
+
 };

@@ -89,6 +89,11 @@ void TTexto::CrearTexto(std::string newtext, GLfloat xx, GLfloat yy, GLfloat Max
     color = glm::vec3(r, g, b);
 }
 
+void TTexto::CambiarTexto(std::string newtext)
+{
+    texto = newtext;
+}
+
 void TTexto::beginDraw()
 {
     
