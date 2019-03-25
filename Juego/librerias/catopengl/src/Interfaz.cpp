@@ -15,6 +15,11 @@ Interfaz::Interfaz()
     y = 0.0f;
     z = 0.0f;
     ModoOneCamara = true;
+
+    for(unsigned int e = 0;e < 65535;e++)
+    {
+        banco_ids[e] = false;
+    }
 }
 
 Interfaz::~Interfaz()
@@ -24,9 +29,10 @@ Interfaz::~Interfaz()
 
 unsigned short Interfaz::AddCamara()
 {
+    //std::cout << "SE CREA LUZ" << std::endl;
     if(ModoOneCamara && camaras.size() > 0)
     {
-        //se devuelve el id de la primera camara 
+        //se devuelve el id de la primera camara
         return camaras[0]->id;
     }
     else
@@ -45,7 +51,7 @@ unsigned short Interfaz::AddCamara()
 
         TNodo * rotacion = new TNodo;
         TTransform * rotacionEnt = new TTransform;
-        rotacionEnt->rotar(0,1,1,1);
+        rotacionEnt->rotar(0,0,0);
         rotacion->setEntidad(rotacionEnt);
 
         TNodo * escalado = new TNodo;
@@ -74,6 +80,7 @@ unsigned short Interfaz::AddCamara()
             nodo->id = idnuevo;//se pone el id
             nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
             nodo->tipo = 0;
+            nodo->activo = true;//activo la camara por defecto cuando se activa
             camaras.push_back(nodo);
             nodos.push_back(nodo);//se agrega a la lista de nodos general
             return idnuevo;
@@ -99,7 +106,7 @@ unsigned short Interfaz::AddLuz(int tipo)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,1,1,1);
+    rotacionEnt->rotar(0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
@@ -107,7 +114,7 @@ unsigned short Interfaz::AddLuz(int tipo)
     escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
-    escaladoEnt->Ejecutar();
+    escaladoEnt->NoEjecutar();
 
     TNodo * luz = new TNodo;
     TLuz * luzEn = new TLuz(tipo);
@@ -121,7 +128,7 @@ unsigned short Interfaz::AddLuz(int tipo)
 
     if(_raiz != nullptr)
     {
-        luces.push_back(escalado);
+
         _raiz->addHijo(escalado);
 
         unsigned short idnuevo = generarId();
@@ -130,7 +137,9 @@ unsigned short Interfaz::AddLuz(int tipo)
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodo->tipo = 1;
+        nodo->activo = true;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
+        luces.push_back(nodo);//se agrega la luz a la lista de luces
 
         return idnuevo;
     }
@@ -154,7 +163,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,1,1,1);
+    rotacionEnt->rotar(0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
@@ -186,6 +195,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
             nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
             nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
             nodo->tipo = 2;
+            nodo->activo = true;
             nodos.push_back(nodo);//se agrega a la lista de nodos general
             return idnuevo;
         }
@@ -210,7 +220,7 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,1,1,1);
+    rotacionEnt->rotar(0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
@@ -219,7 +229,7 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
     escalado->setEntidad(escaladoEnt);
 
     escaladoEnt->EsGui();
-    escaladoEnt->Ejecutar();
+    escaladoEnt->NoEjecutar();
 
     TNodo * imagen = new TNodo;
     TPlano * imagenEn = new TPlano(archivo,x,y,scale,shaders[1],window->getWidth(), window->getHeight());
@@ -231,7 +241,6 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
 
     if(_raiz != nullptr)
     {
-        imagenes.push_back(escalado);
         _raiz->addHijo(escalado);
 
         unsigned short idnuevo = generarId();
@@ -239,9 +248,10 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
-        nodo->tipo = 4;
+        nodo->tipo = 3;
+        nodo->activo = true;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
-
+        imagenes.push_back(nodo);//se agrega a la lista de imagenes
         return idnuevo;
     }
 
@@ -265,7 +275,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,1,1,1);
+    rotacionEnt->rotar(0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
@@ -274,7 +284,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
     escalado->setEntidad(escaladoEnt);
 
     escaladoEnt->EsGui();
-    escaladoEnt->Ejecutar();
+    escaladoEnt->NoEjecutar();
 
     TNodo * texto = new TNodo;
     TTexto * textoEn = new TTexto(window->getWidth(),window->getHeight(),shaders[2]);
@@ -287,7 +297,6 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
     if(_raiz != nullptr)
     {
-        textos.push_back(escalado);
         _raiz->addHijo(escalado);
 
         unsigned short idnuevo = generarId();
@@ -295,8 +304,10 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
-        nodo->tipo = 5;
+        nodo->tipo = 4;
+        nodo->activo = true;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
+        textos.push_back(nodo);//se agrega a la lista de textos
 
         return idnuevo;
     }
@@ -306,7 +317,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
 void Interfaz::Draw()
 {
-    //std::cout << "TAMANO NODOS " << camaras.size() << std::endl;
+    //std::cout << "TAMANO NODOS " << nodos.size() << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -319,19 +330,48 @@ void Interfaz::Draw()
     {
         if(camaras.size() > 0)
         {
+            for(unsigned int i = 0; i < camaras.size(); i++)
+            {
+                if(camaras[i]->activo)
+                {
+                    camaras[i]->recurso->draw(1);
+                    i = camaras.size()+1;
+                }
+            }
+
+            for(unsigned int i = 0; i < luces.size(); i++)
+            {
+                if(luces[i] != nullptr && luces[i]->recurso != nullptr && luces[i]->activo)
+                {
+                    luces[i]->recurso->draw(1);
+                }
+            }
+
             //primero calculamos las matrices de view y projection
             //¿¿¿¿¿¿????????
             //esto seria lo ultimo vamos a las model
-            _raiz->draw();
+
+            _raiz->draw(0);
+
+            for(unsigned int i = 0; i < imagenes.size(); i++)
+            {
+                if(imagenes[i] != nullptr && imagenes[i]->recurso != nullptr && imagenes[i]->activo)
+                {
+                    imagenes[i]->recurso->draw(1);
+                }
+            }
+
+            for(unsigned int i = 0; i < textos.size(); i++)
+            {
+                if(textos[i] != nullptr && textos[i]->recurso != nullptr && textos[i]->activo)
+                {
+                    textos[i]->recurso->draw(1);
+                }
+            }
         }
     }
 
     window->UpdateDraw();
-}
-
-unsigned short Interfaz::generarId()
-{
-    return ++ids;
 }
 
 Interfaz::Nodo * Interfaz::buscarNodo(unsigned short id)
@@ -365,37 +405,53 @@ Interfaz::Nodo * Interfaz::buscarNodo(unsigned short id)
     return nullptr;
 }
 
+Interfaz::Nodo * Interfaz::buscarNodo2(unsigned short id)
+{
+    for(unsigned int i = 0; i < nodos.size(); i++)
+    {
+        if (nodos[i] != nullptr && nodos[i]->id == id)
+        {
+            cualborrar = i;
+            return nodos[i];
+        }
+    }
+    return nullptr;
+}
+
 void Interfaz::Trasladar(unsigned short id,float x,float y,float z)
 {
-    Nodo * nodo = buscarNodo(id);
+    Nodo * nodo = buscarNodo2(id);
 
     if(nodo != nullptr)
     {
-        TNodo * tnodo = nodo->recurso->GetNieto(1);
-        if(tnodo != nullptr)
+        if(nodo->recurso != nullptr)
         {
-            tnodo->GetEntidad()->trasladar(x,y,z);
+            TNodo * tnodo = nodo->recurso->GetNieto(1);
+            if(tnodo != nullptr)
+            {
+                tnodo->GetEntidad()->trasladar(x,y,z);
+            }
         }
     }
 }
 
-void Interfaz::Rotar(unsigned short id,float grados,float x,float y,float z)
+void Interfaz::Rotar(unsigned short id,float gx,float gy,float gz)
 {
-    Nodo * nodo = buscarNodo(id);
+    Nodo * nodo = buscarNodo2(id);
 
     if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso->GetHijo(1);
         if(tnodo != nullptr)
         {
-            tnodo->GetEntidad()->rotar(grados,x,y,z);
+            tnodo->GetEntidad()->rotar(gx,gy,gz);
         }
     }
 }
 
 void Interfaz::Escalar(unsigned short id,float x,float y,float z)
 {
-    Nodo * nodo = buscarNodo(id);
+    Nodo * nodo = buscarNodo2(id);
 
     if(nodo != nullptr)
     {
@@ -453,8 +509,20 @@ void Interfaz::LimpiarEscena()
     //limpia todos los elementos que no son gui
     if(_raiz != nullptr)
     {
-
         _raiz->BorrarEscena();
+        luces.resize(0);
+        luces.reserve(40);//30 luces como maximo
+        for(std::size_t i=0 ; i < nodos.size() ; i++)
+        {
+            if(nodos[i] != nullptr && (nodos[i]->tipo == 2 || nodos[i]->tipo == 1))
+            {
+                nodos[i]->recurso = nullptr;
+                eliminarID((nodos[i]->id));
+                delete nodos[i];
+                nodos.erase(nodos.begin()+i);
+                i--;
+            }
+        }
     }
 }
 
@@ -470,11 +538,12 @@ void Interfaz::LimpiarGui()
         textos.reserve(20);
         for(std::size_t i=0 ; i < nodos.size() ; i++)
         {
-            if(nodos[i] != nullptr && (nodos[i]->tipo == 4 || nodos[i]->tipo == 5))
+            if(nodos[i] != nullptr && (nodos[i]->tipo == 3 || nodos[i]->tipo == 4))
             {
                 nodos[i]->recurso = nullptr;
+                eliminarID((nodos[i]->id));
                 delete nodos[i];
-                nodos.erase(nodos.begin()+i); 
+                nodos.erase(nodos.begin()+i);
                 i--;
             }
         }
@@ -508,7 +577,7 @@ void Interfaz::DefinirVentana(short unsigned int width, short unsigned int heigh
 unsigned short Interfaz::CrearTexto(std::string texto, short x, short y,float r, float g, float b)
 {
     unsigned short idn = AddTexto("assets/fonts/arial.ttf",18);//se crea el texto con su tipo de fuente y tamaño inicial
-    Nodo * nodo = buscarNodo(idn);
+    Nodo * nodo = buscarNodo2(idn);
 
     if(nodo != nullptr)
     {
@@ -545,7 +614,7 @@ bool Interfaz::IsMouseClick(short boton)
 
 void Interfaz::ChangeTargetCamara(unsigned short id, float x, float y, float z)
 {
-    Nodo * nodo = buscarNodo(id);
+    Nodo * nodo = buscarNodo2(id);
     if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);//nodo que contiene ttexto en el arbol
@@ -556,7 +625,7 @@ void Interfaz::ChangeTargetCamara(unsigned short id, float x, float y, float z)
 //Le asigna una id a un plano para hacerlo un boton
 void Interfaz::DeclararBoton(unsigned short id, unsigned short newid)
 {
-    Nodo * nodo = buscarNodo(id);
+    Nodo * nodo = buscarNodo2(id);
     if(nodo != nullptr)
     {
         TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);//nodo que contiene ttexto en el arbol
@@ -569,7 +638,7 @@ bool Interfaz::DetectarPulsacion(int did)
 {
     for(unsigned int i = 0; i < imagenes.size(); i++)
     {
-        TNodo * tnodo = imagenes[i]->GetNieto(1)->GetHijo(1);
+        TNodo * tnodo = imagenes[i]->recurso->GetNieto(1)->GetHijo(1);
         if(dynamic_cast<TPlano*>(tnodo->GetEntidad())->Comprobar()) //Si la imagen es un boton
         {
             if(did == dynamic_cast<TPlano*>(tnodo->GetEntidad())->getID()) //Si es la misma id
@@ -585,35 +654,27 @@ bool Interfaz::DetectarPulsacion(int did)
 
 void Interfaz::DeshabilitarObjeto(unsigned short did)
 {
-    Nodo * nodo = buscarNodo(did);
+    Nodo * nodo = buscarNodo2(did);
 
     if(nodo != nullptr)
     {
-        TNodo * tnodo = nodo->recurso;
-        if(tnodo->GetEntidad() != nullptr)
-        {
-           tnodo->GetEntidad()->NoEjecutar();
-        }
+        nodo->activo = false;
     }
 }
 
 void Interfaz::HabilitarObjeto(unsigned short did)
 {
-    Nodo * nodo = buscarNodo(did);
+    Nodo * nodo = buscarNodo2(did);
 
     if(nodo != nullptr)
     {
-        TNodo * tnodo = nodo->recurso;
-        if(tnodo->GetEntidad() != nullptr)
-        {
-            tnodo->GetEntidad()->Ejecutar();
-        }
+        nodo->activo = true;
     }
 }
 
 float * Interfaz::GetPosicion(unsigned short did)
 {
-    Nodo * nodo = buscarNodo(did);
+    Nodo * nodo = buscarNodo2(did);
 
     if(nodo != nullptr)
     {
@@ -629,10 +690,11 @@ float * Interfaz::GetPosicion(unsigned short did)
 
 float * Interfaz::GetTarget(unsigned short did)
 {
-    Nodo * nodo = buscarNodo(did);
-    
+    Nodo * nodo = buscarNodo2(did);
+
     if(nodo != nullptr)
     {
+
         TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
         if(tnodo != nullptr)
         {
@@ -647,7 +709,7 @@ void Interfaz::RemoveObject(unsigned short object)
     if(object != 0)
     {
         //borrar objeto que se le pasa
-        Nodo * nodo = buscarNodo(object);
+        Nodo * nodo = buscarNodo2(object);
 
         if(nodo != nullptr)
         {
@@ -656,19 +718,160 @@ void Interfaz::RemoveObject(unsigned short object)
                 _raiz->remHijo(nodo->recurso);
                 delete nodo->recurso;
                 nodo->recurso = nullptr;
+                eliminarID((nodo->id));
                 delete nodo;
             }
-            nodos.erase(nodos.begin()+cualborrar); 
+            nodos.erase(nodos.begin()+cualborrar);
         }
     }
 }
 
 void Interfaz::EscalarImagen(unsigned short nid,float x,float y,bool enx, bool eny)
 {
-    //escalar la imagen
+    if(nid != 0)
+    {
+        Nodo * nodo = buscarNodo2(nid);
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    //escalar la imagen
+                    if(enx)
+                    {
+                        dynamic_cast<TPlano*>(tnodo->GetEntidad())->setScaleX(x);
+                    }
+
+                    if(eny)
+                    {
+                        dynamic_cast<TPlano*>(tnodo->GetEntidad())->setScaleY(y);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void Interfaz::CambiarTexto(unsigned short nid,std::string texto)
 {
-    //cambiar string del texto
+    //cambiar string del texto 
+    if(nid != 0)
+    {
+        Nodo * nodo = buscarNodo2(nid);
+        std::cout << "monedas " << texto << std::endl;
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TTexto*>(tnodo->GetEntidad())->CambiarTexto(texto);
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::eliminarID(unsigned short x)
+{
+    if(x >= 0 && x < 65535)
+    {
+        banco_ids[x-1] = false;
+    }
+}
+
+unsigned short Interfaz::generarId()
+{
+    for(unsigned short e = 0;e < 65535;e++)
+    {
+        if(banco_ids[e] == false)
+        {
+            banco_ids[e]=true;
+            return (e+1);
+        }
+    }
+
+    return 0;
+}
+
+int Interfaz::getStartFrame(unsigned short did)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    return (int)dynamic_cast<TMalla*>(tnodo->GetEntidad())->getFrameInicio();                
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+int Interfaz::getFrameNr(unsigned short did)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    return (int)dynamic_cast<TMalla*>(tnodo->GetEntidad())->getFrameActual();
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+void Interfaz::setFrameLoop(unsigned short did,int start,int end)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->BucleAnimacion((unsigned short)start,(unsigned short)end);
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::setAnimationSpeed(unsigned short did,int velocidad)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->setVelocidadAnimacion((float)velocidad);
+                }
+            }
+        }
+    }
 }

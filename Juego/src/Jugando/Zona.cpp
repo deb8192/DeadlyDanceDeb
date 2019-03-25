@@ -42,6 +42,7 @@ Zona::Zona(int anc, int lar, int alt, const char *tip)
 Zona::~Zona()
 {
   _motor = nullptr;
+  _estoy = nullptr;
   posicionActual.x = 0.0f;
   posicionActual.y = 0.0f;
   posicionActual.z = 0.0f;
@@ -144,4 +145,14 @@ void Zona::Render()
     posicionActual.x, posicionActual.y, posicionActual.z,
     ancho, alto, largo
   );
+}
+
+Sala* Zona::GetSala()
+{
+  return _estoy;
+}
+
+void Zona::SetSala(Sala* sala)
+{
+  _estoy = sala;
 }

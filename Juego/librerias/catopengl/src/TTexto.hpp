@@ -44,6 +44,9 @@ class TTexto : public TEntidad
         //sobrecarga metodos TEntidad
         void beginDraw();
         void endDraw();
+
+        //para cambiar de texto
+        void CambiarTexto(std::string newtext);
 };
 
 #endif

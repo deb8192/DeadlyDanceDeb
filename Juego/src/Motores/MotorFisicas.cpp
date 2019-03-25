@@ -37,9 +37,6 @@ MotorFisicas::~MotorFisicas()
     armaAtEsp = nullptr;
     jugadorAtack = nullptr;
     arma = nullptr;
-    _boss = nullptr;
-    _bossAtack = nullptr;
-    _bossAtEsp = nullptr;
 
     short tam = enemigos.size();
     for(short i=0; i < tam; i++)
@@ -220,19 +217,10 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
             arma = cuerpo;
         }
             break;
-        case 10:
+        
+        default:
         {
-            _bossAtack = cuerpo;
-        }
-            break;
-        case 11:
-        {
-            _bossAtEsp = cuerpo;
-        }
-            break;
-        default: // Boss
-        {
-            _boss = cuerpo;
+            // Nada por ahora
         }
             break;
     }
@@ -283,6 +271,13 @@ void MotorFisicas::EraseEnemigo(std::size_t i)
     space->destroyCollisionBody(armaAtEspEne[i]);//nos cargamos el contenido
     armaAtEspEne[i]=nullptr;
     armaAtEspEne.erase(armaAtEspEne.begin() + i);
+}
+
+void MotorFisicas::EraseCofre(std::size_t i)
+{
+    /*space->destroyCollisionBody(interactuables[i]);//nos cargamos el contenido
+    interactuables[i]=nullptr;
+    interactuables.erase(interactuables.begin() + i);*/
 }
 
 void MotorFisicas::EraseJugador(){
@@ -419,17 +414,6 @@ bool MotorFisicas::collideAtackObstacle()
         }
     }
 
-    return false;
-}
-
-bool MotorFisicas::collideBossObstacle()
-{
-    if (collideObstaculos())
-        return true;
-
-    //tampoco debe intersectar en el espacio con el boss
-    if(space->testOverlap(jugador,_boss))
-        return true;
     return false;
 }
 
@@ -717,15 +701,6 @@ void MotorFisicas::updateJugador(float x, float y, float z)
     }
 }
 
-void MotorFisicas::updateBoss(float x, float y, float z)
-{
-    rp3d::Vector3 posiciones(x,y,z);
-    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
-    Transform transformacion(posiciones,orientacion);
-    _boss->setTransform(transformacion);
-
-}
-
 void MotorFisicas::updateEnemigos(float x, float y, float z, unsigned int i)
 {
     if(enemigos.at(i) != nullptr)
@@ -748,17 +723,6 @@ void MotorFisicas::updatePuerta(float x, float y, float z, float rx, float ry, f
         Transform transformacion(posiciones,orientacion);
         obstaculos.at(i)->setTransform(transformacion);
 
-    }
-}
-
-void MotorFisicas::updateAtaqueBoss(float x, float y, float z)
-{
-    if(_boss != nullptr)
-    {
-        rp3d::Vector3 posiciones(x,y,z);
-        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
-        Transform transformacion(posiciones,orientacion);
-        _bossAtack->setTransform(transformacion);
     }
 }
 
@@ -825,40 +789,6 @@ vector<unsigned int> MotorFisicas::updateArma(float x, float y, float z)
     return atacados;
 }
 
-bool MotorFisicas::updateArmaBoss(float x, float y, float z)
-{
-    if(jugadorAtack != nullptr)
-    {
-        rp3d::Vector3 posiciones(x,y,z);
-        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
-        Transform transformacion(posiciones,orientacion);
-        jugadorAtack->setTransform(transformacion);
-
-        if(space->testOverlap(jugadorAtack, _boss))
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool MotorFisicas::updateArmaEspecialBoss(float x, float y, float z)
-{
-    if(armaAtEsp != nullptr)
-    {
-        rp3d::Vector3 posiciones(x,y,z);
-        rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
-        Transform transformacion(posiciones,orientacion);
-        armaAtEsp->setTransform(transformacion);
-
-        if(space->testOverlap(armaAtEsp, _boss))
-        {
-            return true;
-        }
-    }
-    return false;
-}
-
 void MotorFisicas::updateAtaque(float x, float y, float z, float rx, float ry, float rz)
 {
     if(jugadorAtack != nullptr)
@@ -906,21 +836,6 @@ CollisionWorld* MotorFisicas::getWorld()
 CollisionBody* MotorFisicas::getJugador()
 {
   return jugador;
-}
-
-CollisionBody* MotorFisicas::getBoss()
-{
-  return _boss;
-}
-
-CollisionBody* MotorFisicas::getBossAtack()
-{
-  return _bossAtack;
-}
-
-CollisionBody* MotorFisicas::getBossAtEsp()
-{
-  return _bossAtEsp;
 }
 
 CollisionBody* MotorFisicas::getEnemies(int n)

@@ -121,10 +121,10 @@ void Ventana::redimensionar(GLFWwindow * _ventana, int width, int height)
 //USO: revisa los inputs para ponerlos como pulsados o no pulsados
 void Ventana::procesarInputs(GLFWwindow * _ventana)
 {
-    if(glfwGetKey(_ventana, GLFW_KEY_ESCAPE) == GLFW_PRESS)  //Si pulsas Escape
+    /*if(glfwGetKey(_ventana, GLFW_KEY_ESCAPE) == GLFW_PRESS)  //Si pulsas Escape
     {
         glfwSetWindowShouldClose(_ventana, true);            //Cerrar GLFW
-    }
+    }*/
 }
 
 void Ventana::limpiar()
@@ -176,6 +176,10 @@ bool Ventana::EstaPulsada(short tecla)
 {
     if(glfwGetKey(_window,tecla) == GLFW_PRESS)  //Si pulsas Escape
     {
+        if(glfwGetKey(_window,GLFW_KEY_SPACE) == GLFW_PRESS)
+        {
+            std::cout << " se presiona espacio " << std::endl;
+        }
         return true;
     }
     else

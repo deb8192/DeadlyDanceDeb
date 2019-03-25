@@ -12,10 +12,11 @@ public:
     void CambioEstadoCinematica();
     void QuitarPausa();
     void ReiniciarPartida();
+    void ReanudarDesdePuzzle(bool ganar);
     void CambioDeJuegoAMenu();
     void CambioEstadoMenu();
     void CambioEstadoJugar();
-    void CambioEstadoPuzle();
+    void CambioEstadoPuzle(int* puzzle);
     void CambioEstadoConfig();
     void CambioEstadoCreditos();
     void CambioEstadoPausa();

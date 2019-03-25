@@ -41,7 +41,6 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         int Atacar(int);//efectua un ataque normal, llama al motor para ejecutar la animacion.
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
         void AtacarUpdate(int danyo, vector<Enemigo*> &_getEnemigos);
-        void AtacarUpdate(int danyo, Enemigo* &_boss);
         void Interactuar(int, int);//llama a la mecanica de interactuar
 
         //Metodos de INsentidos
@@ -144,17 +143,14 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         int GetLargo();
         int GetAlto();
         bool ColisionEntornoEne();
-        bool ColisionEntornoBoss();
 
         virtual void AtacarEspecialUpdate(int* danyo, vector<Enemigo*> &_getEnemigos) = 0;
-        virtual void AtacarEspecialUpdate(int* danyo, Enemigo* &_boss) = 0;
         virtual void RenderAtaqueEsp(float updateTime, float drawTime) = 0;
 
         void Render(float updTime, float drawTime);
 
     protected:
         void atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos);
-        void atacarEspUpdBossComun(int* danyo, Enemigo* &_boss);
         virtual void armaAtacarEspecialUpd() = 0;
 
         //estas variables son para el movimiento, giro de personaje y giro de la camara
@@ -178,7 +174,6 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         vector <unsigned int> atacados_normal;
         int dinero;
 
-        const char* _modelo;
         int ancho; int largo; int alto;
 
         MotorGrafico* _motor;

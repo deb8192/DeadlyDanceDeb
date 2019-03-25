@@ -227,8 +227,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             //cargadores de objetos
             int CargarPlataformas(int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);//carga el objeto en scena lo mete en el array
             void CargarLuces(int x,int y,int z);
-
-            void CargarBoss(int x,int y,int z, const char* ruta_objeto);
             void CargarEnemigos(int x,int y,int z, const char* ruta_objeto);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
@@ -240,7 +238,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void dispararProyectil(float x, float y, float z, float rx, float ry, float rz);
 
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
-            void mostrarBoss(float x, float y, float z, float rx, float ry, float rz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
@@ -271,6 +268,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             void EraseColectable(long unsigned int idx);
             void ErasePowerUP(long unsigned int idx);
+            void DibujarCofre(long unsigned int idx, bool dibujar);
             void EraseEnemigo(std::size_t i);
             void EraseJugador();
             void EraseArma();
@@ -297,29 +295,25 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             //getters & setters
             bool getPathfindingActivado();
 
-            // Funciones para puzzles
-            void PosicionCamaraEnPuzzles();
-            void updateMotorPuzzles(short tipo);
-            void PuzzlesGui(short tipo, std::string enun, short opciones);
-            void TextoPasos(short pasos);
-            void CrearFichas(short posY, float tamanyo,
-                  int r, int g, int b);
-            short GetZonaVentana();
-            bool SeleccionarNodo();
-            void DeseleccionarNodo();
-            short GetFichaY();
-            void MoverFichas(short pila);
-            void RecolocarFicha(short y, short z);
-            void ReiniciarHanoi();
-
-            void BorrarBoton(signed int id);
-
             void RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame);
             bool finalCinematica();
             void cambiarCamara();
             int getCamx();
             int getCamz();
             int getCams();
+            
+            // Borra un elemento del arbol de nodos a traves de su ID
+            void BorrarElemento(signed int id);
+            unsigned short GetWidth();
+            unsigned short GetHeight();
+
+            // Funciones para Puzzles
+            void IniIDPuzzles();
+            void BorrarGuiPuzzle(unsigned short tipo, unsigned short opciones);
+            void CargarFondoPuzzle();
+            void CargarIMGPuzzle(unsigned short x, unsigned short y, std::string img);
+            void CrearTextoPuzzles(std::string texto, unsigned short x1, unsigned short y1, 
+                unsigned short x2, unsigned short y2);
 
         private: //clases solo accesibles por MotorGrafico
 
@@ -347,7 +341,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Objetos_Debug;//contiene los elementos que se ven en modo debug
                 std::vector<unsigned short> Objetos_Debug2;//para objetos con tiempo para desaparecer
 
-                unsigned short _bossEscena;//id del boss
                 unsigned short _jugEscena;//id jugador
                 bool debugGrafico;//nos sirve para ver las zonas de colision
                 unsigned short _armaEspJugador;//id del arma del jugador
@@ -378,7 +371,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             #else
                 //variables y parametros motor irrlicht
-                //variables privadas
+                
                 Inputs input;
                 IrrlichtDevice* _device; //puntero a dispositivo por defecto
                 IVideoDriver* _driver;
@@ -409,7 +402,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
                 IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena
-                IAnimatedMeshSceneNode* _bossEscena;//Boss en scena
                 //debug
                 IAnimatedMesh* _linea;
                 IAnimatedMesh* _conoVision;
@@ -417,29 +409,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 ISceneNode* _caja;//box
 
                 IAnimatedMeshSceneNode* _tmpObjEscena;
-
-                // Objetos y funciones para puzzles
-                IGUIStaticText* _myTextBox;
-
-                IMesh* _fichaMesh;                         // Malla
-                IMeshSceneNode* _ficha;                    // Nodo
-                std::vector<IMeshSceneNode*> fichasMesh;  // Lista de nodos (fichas)
-
-                // Para seleccionar nodos
-                position2di initialCursorPosition;        // Posicion del clic raton
-                position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
-                ISceneNode* _nodoSeleccionado;
-
-                // Ventana
-                short WIDTH_AUX, WIDTH, HEIGHT;
-                short x_linea1, x_linea2;
-
-                IGUIImage* _img;
-                ITexture*  _puzParticleTexture;
-                //vector<IGUIImage*> imagenes; <- Pendiente de utilizar en puzzles
-
-                enum opcPuzzles { P_OPCIONES = 1, P_HANOI = 2 };
-                enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
 
                 //interfaz
                 IGUIImage* vidaI;
@@ -470,10 +439,15 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
                 ITexture* _actualTexture;//textura actual
                 int camx, camz, cams;
-            #endif
 
-            void CargarIMG(short x, short y);
-            void CrearMeshFicha(float tamanyo, int r, int g, int b);
+                // Variables para Puzzles
+                unsigned short IDP;
+                IGUIImage* _imgP;
+                IGUIStaticText* _txtP;
+                vector<IGUIImage*> _imagenesP;
+                vector<IGUIStaticText*> _textosP;
+                
+            #endif
     };
 
 #endif /* MotorGrafico_HPP */
