@@ -399,13 +399,7 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int interMax,
     _interactuables.reserve(interMax);
     _zonas.reserve(zonesMax);
     _waypoints.reserve(waypointsMax);
-
-    _eneCofres.reserve(chestsMax);
-    unsigned short eneAranas = chestsMax/4; // 1/4 de los cofres son enemigos
-    for (unsigned short i= 0; i<eneAranas; ++i)
-    {
-        CrearCofreArana();
-    }
+    _eneCofres.reserve(chestsMax/4);
 
     // TO DO:
     /*_recolectables.reserve(20);
@@ -651,16 +645,15 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
     waypoint = nullptr;
 }
 
-void CargadorNiveles::CrearCofreArana()
+unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
+    float ancho, float alto, float largo, Sala* sala)
 {
-    /*int accion, int enemigo, int x,int y,int z, 
-    int ancho, int largo, int alto, Sala* sala*/
-
-    CofreArana* _eneA = new CofreArana(0,0,0, 150); // Posiciones, vida
+    Constantes constantes; 
+    CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo); // Posiciones, vida
     
     _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
     _eneA->setID(++id);//le damos el id unico en esta partida al enemigo
-    _eneA->SetEnemigo(2);
+    _eneA->SetEnemigo(constantes.ARANA);
 
     _eneA->setVelocidadMaxima(1.5f);
     _eneA->setBarraAtEs(0);
@@ -674,34 +667,26 @@ void CargadorNiveles::CrearCofreArana()
     _eneA->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     _eneA->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
 
-    //_motor->CargarEnemigos(0,0,0,_eneA->GetModelo());//creamos la figura
-    _eneCofres.push_back(move(_eneA));//guardamos el enemigo en el vector
-    _eneA = nullptr;
-
-    //Cargar sonido evento en una instancia con la id del enemigo como nombre
-    /*std::string nameid = std::to_string(id); //pasar id a string
-    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
-    _motora->getEvent(nameid)->setPosition(x,y,z);
-    _motora->getEvent(nameid)->setVolume(0.4f);
-    _motora->getEvent(nameid)->start();*/
-
-
-    /*_eneA->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+    _eneA->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _eneA->setPosicionesAtaque(x,y,z);
     _eneA->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _eneA->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
     _eneA->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _eneA->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _eneA->definirSala(sala);//le pasamos la sala en donde esta
-    _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2);
-    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7); //Para ataques
-    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8); //Para ataques especiales
-    */
+
+    //_motor->CargarEnemigos(0,0,0,_eneA->GetModelo());//creamos la figura
+    _eneCofres.push_back(move(_eneA));//guardamos el enemigo en el vector
+    _eneA = nullptr;
+
+    return _eneCofres.size()-1;
 }
 
 //Cargar los cofres del nivel
 void CargadorNiveles::CargarCofres()
 {
+    unsigned short eneAranas = chestsMax/4; // 1/4 de los cofres son enemigos
+    unsigned short aranasCreadas = 0;
     unsigned short totalCofresPonible = 0;
     vector<short> zonasDisponibles;
     zonasDisponibles.reserve(chestsMax);
@@ -742,9 +727,18 @@ void CargadorNiveles::CargarCofres()
                 _zonas[zonasDisponibles[numAlt]]->annadirElemento();
 
                 //Colocar cofre
+                unsigned short pos = 0;
+                bool esArana = false;
+                if (aranasCreadas < eneAranas)
+                {
+                    pos = CrearCofreArana(newx,newy,newz, 2,4,2, _zonas[zonasDisponibles[numAlt]]->GetSala());
+                    ++aranasCreadas;
+                    esArana = true;
+                    cout << "Arana: "<<aranasCreadas<<" de "<<eneAranas<<endl;
+                }
                 
-                Interactuable* _cofre = new Cofre(true, -1,"Cofre",2,2,2,
-                    0, newx, newy, newz, 4, //4=tipoObj
+                Interactuable* _cofre = new Cofre(esArana, -1,"Cofre",2,2,2,
+                    0, newx, newy, newz, 4, pos, //4=tipoObj
                     _zonas[zonasDisponibles[numAlt]]->GetSala());
 
                 int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,

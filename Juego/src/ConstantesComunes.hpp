@@ -76,7 +76,7 @@ using Constantes = struct
     const unsigned short ENERGIA = 11;
 
     // Sin utilizar por ahora
-    const unsigned short PUERTA2 = 2;
+    /*const unsigned short PUERTA2 = 2;
     const unsigned short PUERTA = 3;
     const unsigned short COFRE = 4;
     const unsigned short PARED_INVISIBLE = 12;
@@ -84,6 +84,13 @@ using Constantes = struct
     const unsigned short PARED_ROMPIBLE = 14;
     const unsigned short SUELO = 15;
     const unsigned short BASE = 16;
-    const unsigned short DECO = 17;
+    const unsigned short DECO = 17;*/
+
+    // Tipos de enemigos
+    const unsigned short POLLO = 0;
+    const unsigned short MURCI = 1;
+    const unsigned short ARANA = 2;
+    const unsigned short BOSS = 3;
+
 };
 #endif

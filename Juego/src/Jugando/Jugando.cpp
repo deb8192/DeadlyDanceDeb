@@ -842,7 +842,7 @@ void Jugando::Reanudar()
         }
         else
         {
-            cout << "Sale la araña......"<<endl;
+            cout << "Sale la araña en ......"<<_cofreP->GetPosArray()<<endl;
             _cofreP->accionar();
             CrearEnemigoArana();
         }
@@ -881,7 +881,6 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _powerup = cargador.GetPowerup();
     _zonas = cargador.GetZonas();
     _enemigos = cargador.GetEnemigos();
-    _eneCofres = cargador.GetEneCofres();
     _boss = cargador.GetBoss();
     _waypoints = cargador.GetWaypoints();
     ConectarWaypoints();
@@ -890,6 +889,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     cargador.CargarCofres(); //Cargamos los cofres del nivel
     probArana = _eneCofres.size();
     _interactuables = cargador.GetInteractuables();
+    _eneCofres = cargador.GetEneCofres();
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
@@ -1530,23 +1530,19 @@ void Jugando::AbrirCofre(Interactuable* _inter)
 
 void Jugando::CrearEnemigoArana()
 {
-    CofreArana* _eneA = (CofreArana*)_eneCofres.at(0);
+    // Para la posicion, desde el cargador
+    // al crear el cofre, asociarle una pos
+    // en el cargador, al crear la aranya, meterle esto de las x, y, z....
+    CofreArana* _eneA = (CofreArana*)_eneCofres.at(
+        _cofreP->GetPosArray());
 
-    float x = _cofreP->getX()+10;
-    float y = _cofreP->getY();
-    float z = _cofreP->getZ();
+    float x = _eneA->getX();
+    float y = _eneA->getY();
+    float z = _eneA->getZ();
 
-    _eneA->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-    _eneA->setPosicionesAtaque(x,y,z);
-    _eneA->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-    _eneA->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-    _eneA->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-    _eneA->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-    //_eneA->definirSala(_cofreP->GetSala());//le pasamos la sala en donde esta
-    
     _motor->CargarEnemigos(x,y,z,_eneA->GetModelo());//creamos la figura
-    _fisicas->crearCuerpo(1,0,x/2,y/2,z/2,2,_cofreP->getAncho(),
-        _cofreP->getAlto(),_cofreP->getLargo(),2,0,0);
+    _fisicas->crearCuerpo(1,0,x/2,y/2,z/2,2,_eneA->GetAncho(),
+        _eneA->GetAlto(),_eneA->GetLargo(),2,0,0);
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
     
