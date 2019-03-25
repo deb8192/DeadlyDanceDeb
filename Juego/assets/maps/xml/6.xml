@@ -14,6 +14,7 @@
 	<!--Decoracion-rio-lava--><Object tipoObj="17" Type="0" accion="7" ancho="0" largo="0" alto="24" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/lava.jpg" Model="assets/models/Escenario/RioLava.obj"></Object>
 	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat1.obj"></Object>
 	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="48" Y="0" Z="48" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat1.obj"></Object>
+	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="48" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat1.obj"></Object>
 	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="48" Y="0" Z="-48" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat1.obj"></Object>
 	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="96" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat1.obj"></Object>
 	<!--Palanca--><Object tipoObj="0" Type="1" codigo="8" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="101" Y="0" Z="-11" despX="0" despZ="0" Texture="assets/texture/platform1.jpg" Model=""></Object>	
@@ -59,7 +60,8 @@
 			<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="8" ancho="4" largo="4" alto="1" X="232" Y="0" Z="76" conexiones="7,9"></Waypoint>
 			<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="202" Y="0" Z="48" Texture="" Model=""></Enemy>
 			<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="252" Y="0" Z="20" Texture="" Model=""></Enemy>
-	
+			<!--Zona-Escondite--><Zone Type="1" accion="1" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="-5" Y="0" Z="15"></Zone>
+			
 				<!--Sala-04--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="231" Y="0" Z="124" Texture="assets/texture/Suelo.jpg" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 				<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="1" ancho="2" largo="26" alto="24" RP="0" X="198" Y="0" Z="104" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/animations/BreakWallLarge_000001.obj"></Object>
 				<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="1" ancho="12" largo="2" alto="24" RP="90" X="184" Y="0" Z="128" despX="0" despZ="0" Texture="assets/texture/Paredes.jpg" Model="assets/animations/BreakWallSmall_000001.obj"></Object>
