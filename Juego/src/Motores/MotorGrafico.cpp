@@ -855,9 +855,9 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
         unsigned short objeto = _interfaz->AddMalla(ruta_objeto,1);//instanciamos el objeto y lo agregamos a la escena
         if(objeto != 0)
         {
-            cout << "colocar plataforma en: " << x << y << z << endl;
+            //cout << "colocar plataforma en: " << x << y << z << endl;
             _interfaz->Trasladar(objeto,(float)x,(float)y,(float)z);//movemos el objeto
-            _interfaz->Rotar(objeto,(float)rp,(float)0,(float)1,(float)0);//giramos el objeto
+            _interfaz->Rotar(objeto,(float)0,(float)rp,(float)0);//giramos el objeto
             Plataformas_Scena.push_back(objeto);//lo introducimos en la matriz de objetos
             return (Plataformas_Scena.size()-1);//devolvemos el valor
         }
@@ -998,7 +998,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         {
             _interfaz->Trasladar(_jugEscena,(float)x,(float)y,(float)z);
             _interfaz->Escalar(_jugEscena,(float)1.75,(float)1.75,(float)1.75);
-            cout << _jugEscena << " INICIALMENTE: " << x << " " << y << " " << z << endl;
+            //cout << _jugEscena << " INICIALMENTE: " << x << " " << y << " " << z << endl;
         }
 
     #else
@@ -1026,11 +1026,11 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,1);
-        cout << "colocar objeto en: " << x << y << z << endl;
+        //cout << "colocar objeto en: " << x << y << z << endl;
         if(_objetoEnEscena != 0)
         {
             _interfaz->Trasladar(_objetoEnEscena,(float)x,(float)y,(float)z);
-            _interfaz->Rotar(_objetoEnEscena,(float)rp,0.0f,1.0f,0.0f);
+            _interfaz->Rotar(_objetoEnEscena,0.0f,(float)rp,0.0f);
 
             if(accion == 4)
             {
@@ -1188,9 +1188,7 @@ void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, f
         if(_armaEnEscena != 0)
         {
             _interfaz->Trasladar(_armaEnEscena,x,y,z);
-            _interfaz->Rotar(_armaEnEscena,rx,1,0,0);
-            _interfaz->Rotar(_armaEnEscena,ry,0,1,0);
-            _interfaz->Rotar(_armaEnEscena,rz,0,0,1);
+            _interfaz->Rotar(_armaEnEscena,rx,ry,rz);
         }
 
     #else
@@ -1211,9 +1209,7 @@ void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float 
         if(_armaProyectil != 0)
         {
             _interfaz->Trasladar(_armaProyectil,x,y,z);
-            _interfaz->Rotar(_armaProyectil,rx,1,0,0);
-            _interfaz->Rotar(_armaProyectil,ry,0,1,0);
-            _interfaz->Rotar(_armaProyectil,rz,0,0,1);
+            _interfaz->Rotar(_armaProyectil,rx,ry,rz);
         }
 
     #else
@@ -1275,11 +1271,8 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
             _interfaz->Trasladar(camara,nodeCamPosition[0],nodeCamPosition[1],nodeCamPosition[2]);
             _interfaz->ChangeTargetCamara(camara,nodeCamTarget[0],nodeCamTarget[1],nodeCamTarget[2]);
 
-            cout << _jugEscena << endl;
             _interfaz->Trasladar(_jugEscena,x,y,z);
-            _interfaz->Rotar(_jugEscena,rx,1,0,0);
-            _interfaz->Rotar(_jugEscena,ry,0,1,0);
-            _interfaz->Rotar(_jugEscena,rz,0,0,1);
+            _interfaz->Rotar(_jugEscena,rx,ry+180,rx);
 
             delete nodeCamPosition;
 
@@ -1315,9 +1308,7 @@ void MotorGrafico::mostrarBoss(float x, float y, float z, float rx, float ry, fl
         if(_bossEscena != 0)
         {
             _interfaz->Trasladar(_bossEscena,x,y,z);
-            _interfaz->Rotar(_bossEscena,rx,1,0,0);
-            _interfaz->Rotar(_bossEscena,ry,0,1,0);
-            _interfaz->Rotar(_bossEscena,rz,0,0,1);
+            _interfaz->Rotar(_bossEscena,rx,ry,rz);
         }
     #else
         //codigo motor irrlicht
@@ -1337,9 +1328,7 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
         if(Enemigos_Scena.size() > 0 && Enemigos_Scena.size() > i && Enemigos_Scena[i] != 0)
         {
             _interfaz->Trasladar(Enemigos_Scena[i],x,y,z);
-            _interfaz->Rotar(Enemigos_Scena[i],rx,1,0,0);
-            _interfaz->Rotar(Enemigos_Scena[i],ry,0,1,0);
-            _interfaz->Rotar(Enemigos_Scena[i],rz,0,0,1);
+            _interfaz->Rotar(Enemigos_Scena[i],rx,ry,rz);
         }
 
     #else
@@ -1361,9 +1350,7 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
         if(Objetos_Scena.size() > 0 && Objetos_Scena.size() > i && Objetos_Scena[i] != 0)
         {
             _interfaz->Trasladar(Objetos_Scena[i],x,y,z);
-            _interfaz->Rotar(Objetos_Scena[i],rx,1,0,0);
-            _interfaz->Rotar(Objetos_Scena[i],ry,0,1,0);
-            _interfaz->Rotar(Objetos_Scena[i],rz,0,0,1);
+            _interfaz->Rotar(Objetos_Scena[i],rx,ry,rz);
         }
 
     #else
@@ -1387,9 +1374,7 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
             Constantes constantes;
             _interfaz->HabilitarObjeto(_armaEsp);//para verlo en escena y que se procese
             _interfaz->Trasladar(_armaEspJugador,x + 5*(sin(constantes.DEG_TO_RAD*ry)),y,z + 5*(cos(constantes.DEG_TO_RAD*ry)));//trasladamos
-            _interfaz->Rotar(_armaEspJugador,rx,1,0,0);//rotamos en x
-            _interfaz->Rotar(_armaEspJugador,ry,0,1,0);//rotamos en y
-            _interfaz->Rotar(_armaEspJugador,rz,0,0,1);//rotamos en z
+            _interfaz->Rotar(_armaEspJugador,rx,ry,rz);//rotamo
         }
 
 
@@ -1637,9 +1622,7 @@ void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, in
             if(tmpobjt != 0)
             {
                 _interfaz->Trasladar(tmpobjt,(float)x,(float)y,(float)z);
-                _interfaz->Rotar(tmpobjt,(float)rx,1,0,0);
-                _interfaz->Rotar(tmpobjt,(float)ry,0,1,0);
-                _interfaz->Rotar(tmpobjt,(float)rz,0,0,1);
+                _interfaz->Rotar(tmpobjt,(float)rx,(float)ry,(float)rz);
                 _interfaz->Escalar(tmpobjt,(float)ancho,(float)alto,(float)profund);
                 Objetos_Debug2.push_back(tmpobjt);
             }
@@ -1909,7 +1892,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
         if(_conoVision != 0)
         {
             _interfaz->Trasladar(_conoVision,x,y,z);
-            _interfaz->Rotar(_conoVision,rotacion,0,1,0);
+            _interfaz->Rotar(_conoVision,0,rotacion,0);
             _interfaz->Escalar(_conoVision,longitud/2,1.0f,0.01f);
             Objetos_Debug.push_back(_conoVision);
         }
