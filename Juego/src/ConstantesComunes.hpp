@@ -90,7 +90,9 @@ using Constantes = struct
     const unsigned short POLLO = 0;
     const unsigned short MURCI = 1;
     const unsigned short ARANA = 2;
-    const unsigned short BOSS = 3;
+    const unsigned short GUARDIAN_A = 3;
+    const unsigned short GUARDIAN_B = 4;
+    const unsigned short BOSS = 5;
 
 };
 #endif

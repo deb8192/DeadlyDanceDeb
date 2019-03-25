@@ -528,47 +528,6 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
     _fisicas = nullptr;
 }
 
-void Jugador::AtacarUpdate(int danyo, Enemigo* &_boss)
-{
-    Constantes constantes;
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    if(vida > 0)
-    {
-        /***************************** Codigo repe  TO DO *******************************/
-        if(this->getArma() == nullptr) {
-            _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-            _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,2,1,1,2);
-        }
-        else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
-        {
-            _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-            _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,3,1,3,1);
-        }
-        else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
-        {
-            int distance = 1.5;
-            atz += (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
-            atx += (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
-            atposZ += (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
-            atposX += (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
-
-            _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-            _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
-        }
-        /***********************************************************************************/
-
-        if (_fisicas->updateArmaBoss(atposX,atposY,atposZ))
-        {
-            float variacion = rand() % 7 - 3;
-            danyo += (int) variacion;
-            //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
-            _boss->ModificarVida(-danyo);
-            danyo -= (int) variacion;
-        }
-    }
-    _fisicas = nullptr;
-}
-
 void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
 {
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
@@ -588,21 +547,6 @@ void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
             *danyo -= (int) variacion;
             _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
-    }
-    _fisicas = nullptr;
-}
-
-void Jugador::atacarEspUpdBossComun(int* danyo, Enemigo* &_boss)
-{
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
-
-    if (_fisicas->updateArmaEspecialBoss(_armaEspecial->getFisX(),
-        _armaEspecial->getFisY(),_armaEspecial->getFisZ()))
-    {
-        float variacion = rand() % 7 - 3;
-        *danyo += (int) variacion;
-        _boss->ModificarVida(-(*danyo));
-        *danyo -= (int) variacion;
     }
     _fisicas = nullptr;
 }
@@ -1240,22 +1184,6 @@ bool Jugador::ColisionEntornoEne()
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     //colisiones con todos los objetos y enemigos que no se traspasan
     if(_fisicas->collideObstacle()
-        || !_fisicas->collidePlatform())
-    {//colisiona
-        setNewPosiciones(posActual.x, posActual.y, posActual.z);
-        _fisicas = nullptr;
-        return true;
-    }
-    //no colisiona
-    _fisicas = nullptr;
-    return false;
-}
-
-bool Jugador::ColisionEntornoBoss()
-{
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    //colisiones con todos los objetos y el boss
-    if(_fisicas->collideBossObstacle()
         || !_fisicas->collidePlatform())
     {//colisiona
         setNewPosiciones(posActual.x, posActual.y, posActual.z);

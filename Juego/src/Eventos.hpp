@@ -23,7 +23,7 @@ namespace idsEventos
         KEY_E,          // COGER/SOLTAR OBJETOS
         KEY_I,          // --------------- POR AHORA NADA
         KEY_J,          // BAJAR VIDA
-        KEY_Z,          // CARGAR 1 PUZZLE
+        KEY_Z,          // --------------- POR AHORA NADA
         KEY_Q,          // ATAQUE ESPECIAL
         RMOUSE_DOWN,    // ATAQUE ESPECIAL
         LMOUSE_DOWN,    // ATAQUE NORMAL
