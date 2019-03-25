@@ -15,15 +15,15 @@ MotorGrafico::MotorGrafico()
         //codigo motor catopengl
 
         _interfaz = nullptr;
-        Plataformas_Scena.reserve(100);//salas reservadas
+        Plataformas_Scena.reserve(200);//salas reservadas
         Luces_Scena.reserve(40);//luces reservadas
         Enemigos_Scena.reserve(50);//enemigos reservados
         Textos_Scena.reserve(18);//textos estaticos en la escena o gui
         Recolectables_Scena.reserve(50);
         Objetos_Scena.reserve(100);
         PowerUP_Scena.reserve(50);
-        Objetos_Debug.reserve(200);
-        Objetos_Debug2.reserve(200);
+        Objetos_Debug.reserve(500);
+        Objetos_Debug2.reserve(500);
 
         camara = 0;
         _jugEscena = 0;
@@ -855,6 +855,7 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
         unsigned short objeto = _interfaz->AddMalla(ruta_objeto,1);//instanciamos el objeto y lo agregamos a la escena
         if(objeto != 0)
         {
+            cout << "colocar plataforma en: " << x << y << z << endl;
             _interfaz->Trasladar(objeto,(float)x,(float)y,(float)z);//movemos el objeto
             _interfaz->Rotar(objeto,(float)rp,(float)0,(float)1,(float)0);//giramos el objeto
             Plataformas_Scena.push_back(objeto);//lo introducimos en la matriz de objetos
@@ -931,7 +932,7 @@ void MotorGrafico::CargarBoss(int x,int y,int z, const char* ruta_objeto)
         //codigo motor catopengl
         _bossEscena = _interfaz->AddMalla(ruta_objeto,1);
 
-        if(_bossEscena == 0)
+        if(_bossEscena != 0)
         {
             _interfaz->Trasladar(_bossEscena,(float)x,(float)y,(float)z);
         }
@@ -991,12 +992,13 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     #ifdef WEMOTOR
         //codigo motor catopengl
 
-        unsigned short _jugEscena = _interfaz->AddMalla(ruta_objeto,1);
+        _jugEscena = _interfaz->AddMalla(ruta_objeto,28);
         CargarLuces(0,0,0);
-        if(_jugEscena == 0)
+        if(_jugEscena != 0)
         {
             _interfaz->Trasladar(_jugEscena,(float)x,(float)y,(float)z);
             _interfaz->Escalar(_jugEscena,(float)1.75,(float)1.75,(float)1.75);
+            cout << _jugEscena << " INICIALMENTE: " << x << " " << y << " " << z << endl;
         }
 
     #else
@@ -1024,11 +1026,11 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,1);
-
-        if(_objetoEnEscena == 0)
+        cout << "colocar objeto en: " << x << y << z << endl;
+        if(_objetoEnEscena != 0)
         {
             _interfaz->Trasladar(_objetoEnEscena,(float)x,(float)y,(float)z);
-            _interfaz->Rotar(_objetoEnEscena,rp,0.0f,1.0f,0.0f);
+            _interfaz->Rotar(_objetoEnEscena,(float)rp,0.0f,1.0f,0.0f);
 
             if(accion == 4)
             {
@@ -1268,18 +1270,19 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
             nodeCamPosition[2] = z+(camz*cams);
             nodeCamTarget[0] = x;
             nodeCamTarget[1] = y;
-            nodeCamTarget[2] = z;
+            nodeCamTarget[2] = -z;
 
             _interfaz->Trasladar(camara,nodeCamPosition[0],nodeCamPosition[1],nodeCamPosition[2]);
             _interfaz->ChangeTargetCamara(camara,nodeCamTarget[0],nodeCamTarget[1],nodeCamTarget[2]);
 
+            cout << _jugEscena << endl;
             _interfaz->Trasladar(_jugEscena,x,y,z);
             _interfaz->Rotar(_jugEscena,rx,1,0,0);
             _interfaz->Rotar(_jugEscena,ry,0,1,0);
             _interfaz->Rotar(_jugEscena,rz,0,0,1);
 
             delete nodeCamPosition;
-            
+
             delete nodeCamTarget;
         }
 
@@ -1487,9 +1490,11 @@ void MotorGrafico::clearDebug()
         //codigo motor catopengl
         if(Objetos_Debug.size()>0)
         {
+            std::cout << Objetos_Debug.size() << std::endl;
             for(std::size_t i=0;i<Objetos_Debug.size();i++)
             {
                 _interfaz->RemoveObject(Objetos_Debug[i]);
+                std::cout << "borrado" << Objetos_Debug[i] << std::endl;
                 Objetos_Debug[i] = 0;
             }
             Objetos_Debug.resize(0);
@@ -1540,7 +1545,7 @@ void MotorGrafico::clearDebug2()
 void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensidad)
 {
     #ifdef WEMOTOR
-        
+
         //codigo motor catopengl
         if(debugGrafico)
         {
@@ -1784,7 +1789,7 @@ void MotorGrafico::ErasePowerUP(long unsigned int idx)
         {
             _interfaz->RemoveObject(PowerUP_Scena[idx]);
             PowerUP_Scena.erase(PowerUP_Scena.begin() + idx);
-        }       
+        }
     #else
         //codigo motor irrlicht
         if(PowerUP_Scena[idx] && idx < PowerUP_Scena.size())
@@ -2015,65 +2020,65 @@ void MotorGrafico::DestruirInterfaz()
             _interfaz->RemoveObject(moneyI);
             moneyI = 0;
         }
-        
+
         if(vida_textura != 0)
         {
-            _interfaz->RemoveObject(vida_textura);  
-            vida_textura = 0;      
+            _interfaz->RemoveObject(vida_textura);
+            vida_textura = 0;
         }
-        
+
         if(energia_textura != 0)
         {
-            _interfaz->RemoveObject(energia_textura);     
-            energia_textura = 0;       
+            _interfaz->RemoveObject(energia_textura);
+            energia_textura = 0;
         }
 
         if(dinero_textura != 0)
         {
-            _interfaz->RemoveObject(dinero_textura);   
-            dinero_textura = 0;         
+            _interfaz->RemoveObject(dinero_textura);
+            dinero_textura = 0;
         }
 
         if(arma_textura != 0)
         {
-            _interfaz->RemoveObject(arma_textura);        
-            arma_textura = 0;   
+            _interfaz->RemoveObject(arma_textura);
+            arma_textura = 0;
         }
 
         if(barraVida_textura != 0)
         {
-            _interfaz->RemoveObject(barraVida_textura);    
-            barraVida_textura = 0;        
+            _interfaz->RemoveObject(barraVida_textura);
+            barraVida_textura = 0;
         }
 
         if(barraEnergia_textura != 0)
         {
             _interfaz->RemoveObject(barraEnergia_textura);
-            barraEnergia_textura = 0;            
+            barraEnergia_textura = 0;
         }
 
         if(manos_textura != 0)
         {
-            _interfaz->RemoveObject(manos_textura);    
+            _interfaz->RemoveObject(manos_textura);
             manos_textura = 0;
         }
 
         if(llave_textura != 0)
         {
-            _interfaz->RemoveObject(llave_textura);      
-            llave_textura = 0;      
+            _interfaz->RemoveObject(llave_textura);
+            llave_textura = 0;
         }
 
         if(espada_textura != 0)
         {
             _interfaz->RemoveObject(espada_textura);
-            espada_textura = 0;            
+            espada_textura = 0;
         }
 
         if(daga_textura != 0)
         {
             _interfaz->RemoveObject(daga_textura);
-            daga_textura= 0;            
+            daga_textura= 0;
         }
 
     #else
@@ -2152,7 +2157,7 @@ void MotorGrafico::SetVida(int vida)
                 _interfaz->EscalarImagen(barraVida_textura,resultado,1,true,false);
             }
         }
-        
+
     #else
         //codigo motor irrlicht
         if(BarraVidaI)
@@ -2183,8 +2188,8 @@ void MotorGrafico::SetBarraEnergia(int barra)
             float unidad_min = 0.01f;
 
             float resultado = (unidad*(float)barra)*unidad_min;
-            
-            
+
+
             if(resultado <= 0)
             {
                 _interfaz->EscalarImagen(barraEnergia_textura,0.01f,1,true,false);
