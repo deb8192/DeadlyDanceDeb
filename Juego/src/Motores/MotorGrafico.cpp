@@ -2125,7 +2125,7 @@ void MotorGrafico::SetBarraEnergia(int barra)
         if(barraEnergia_textura != 0)
         {
             float unidad = ((float)63/100);
-            float unidad_min = 0.008f;
+            float unidad_min = 0.0040f;
 
             float resultado = (unidad*(float)barra)*unidad_min;
 
