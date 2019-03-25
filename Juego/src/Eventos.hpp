@@ -23,6 +23,7 @@ namespace idsEventos
         KEY_E,          // COGER/SOLTAR OBJETOS
         KEY_I,          // --------------- POR AHORA NADA
         KEY_J,          // BAJAR VIDA
+        KEY_Z,          // CARGAR 1 PUZZLE
         KEY_Q,          // ATAQUE ESPECIAL
         RMOUSE_DOWN,    // ATAQUE ESPECIAL
         LMOUSE_DOWN,    // ATAQUE NORMAL
@@ -38,21 +39,23 @@ namespace idsEventos
         GUI_ID_SALIR_BUTTON,
         GUI_ID_CREDITOS_BUTTON,
         GUI_ID_SUBIR_SONIDO,
-        GUI_ID_PUZZLES_BUTTON,//105
-        GUI_ID_OP1,
-        GUI_ID_OP2,
-        GUI_ID_OP3,
-        GUI_ID_OP4,
-        GUI_ID_ATRAS_BUTTON,//110
+        GUI_ID_CONFIGURACION_BUTTON,
+        
+        GUI_ID_ATRAS_BUTTON,
         GUI_ID_REINICIAR_HANOI,
         GUI_ID_MENU_BUTTON,
         GUI_ID_REINICIAR_BUTTON,
         GUI_ID_CONTINUAR,
-        GUI_ID_ARBOLES_BUTTON,
 
-        //fin de los nuevos eventos
-        GUI_ID_CONFIGURACION_BUTTON,
-        UltimoEvento = GUI_ID_CONFIGURACION_BUTTON
+        // IDs para cosas de Puzzles en MotorGrafico
+        GUI_ID_ATRAS_PUZ,
+        GUI_ID_OP1,
+        GUI_ID_OP2,
+        GUI_ID_OP3,
+        GUI_ID_OP4,
+        GUI_ID_PUZZLE, 
+
+        UltimoEvento = GUI_ID_PUZZLE
     };
 }
 

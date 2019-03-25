@@ -8,16 +8,8 @@ Arma::Arma()
 }
 
 Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt, 
-    const char* objeto, const char* textura, unsigned short tipoObj)
+    unsigned short tipoObj)
 {
-    std::string name_objeto(objeto);
-    cadena_objeto = new char[sizeof(name_objeto)];
-    strcpy(cadena_objeto, name_objeto.c_str());
-     
-    std::string name_textura(textura);
-    cadena_textura = new char[sizeof(name_textura)];
-    strcpy(cadena_textura, name_textura.c_str());
-
     std::string name_nombre(nombre);
     cadena_nombre = new char[sizeof(name_nombre)];
     strcpy(cadena_nombre, name_nombre.c_str());
@@ -27,17 +19,24 @@ Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt,
     ancho = anc;
     largo = lar;
     alto = alt;
-    ruta_objeto = cadena_objeto; 
-    ruta_textura = cadena_textura;
     //motor->CargarArmaEspecial(0,0,0,ruta,"");
 
     // INobjetos
     tipoObjeto = tipoObj;
+
+    Constantes constantes;
+    if (tipoObj == constantes.GUITARRA) // GUITARRA
+    {
+        _modelo = "assets/models/Arma.obj";
+    }
+    else if (tipoObj == constantes.ARPA)
+    {
+        _modelo = "assets/models/Arpa.obj";
+    }
 }
 
 Arma::~Arma()
 {
-
     // Arma
     potenciaAtaque = 0;
     _nombreArma = nullptr;
@@ -46,17 +45,13 @@ Arma::~Arma()
     nombreObjeto = nullptr;
     delete cadena_nombre;
 
-    ruta_objeto = nullptr;
-    delete cadena_objeto;
-
-    ruta_textura = nullptr;
-    delete cadena_textura;
-    
     ancho = 0;
     largo = 0;
     alto = 0;
 
     // INdrawable
+    _modelo = nullptr;
+
     posIni.x = 0;
     posIni.y = 0;
     posIni.z = 0;
@@ -344,15 +339,6 @@ int Arma::getID()
     return id;
 }
 
-const char* Arma::getObjeto()
-{
-    return ruta_objeto;
-}
- 
-const char* Arma::getTextura()
-{
-    return ruta_textura;
-}
 float Arma::getAncho()
 {
     return ancho;
@@ -369,4 +355,9 @@ float Arma::getAlto()
 unsigned short Arma::GetTipoObjeto()
 {
     return tipoObjeto;
+}
+
+const char* Arma::GetModelo()
+{
+    return _modelo;
 }

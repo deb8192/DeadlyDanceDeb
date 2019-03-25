@@ -1,6 +1,19 @@
 #include "CargadorPuzzles.hpp"
 
-CargadorPuzzles::CargadorPuzzles() { }
+CargadorPuzzles::CargadorPuzzles()
+{
+
+}
+
+CargadorPuzzles::~CargadorPuzzles()
+{
+    short tam = _listaPuzzles.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _listaPuzzles.at(i);
+    }
+    _listaPuzzles.clear();
+}
 
 /*******Cargador de puzzles*******
  * Descripcion: Metodo que sirve par leer un xml con
@@ -16,7 +29,6 @@ void CargadorPuzzles::CargarPuzzlesXml()
 
     //definimos los strings
     string ruta = "assets/puzzles/preguntas.xml";
-    cout<<ruta<<endl;  
 
     //Se transforma el string a un char array
     char cadena[sizeof(ruta)];
@@ -27,7 +39,6 @@ void CargadorPuzzles::CargarPuzzlesXml()
     if (!doc.load_file(cadena)) {
     	cout<<"No existe el documento"<<"\n"<<endl;
 	}
-    cout<<"Hay documento"<<"\n"<<endl;
 
     //Se pasa a la lectura del archivo .xml
     pugi::xml_node puzzles = doc.child("Puzzles");
@@ -52,19 +63,24 @@ void CargadorPuzzles::CargarPuzzlesXml()
         	buffer.clear();
 
         	// Crear el puzzle y anyadirlo a la lista
-        	Puzzle puzzle(tipoV, tool.child_value("Descripcion"), opc, sol);
+        	Puzzle* _puzzle = new Puzzle(tipoV, tool.child_value(
+                "Descripcion"), opc, sol);
 
-            for (pugi::xml_node hijo = tool.first_child(); hijo; hijo = hijo.next_sibling())
+            if (tipoV == 1)
             {
-                if(std::strcmp(hijo.name(), "Respuestas") == 0)
+                // Imagen con la imagen de ejemplo
+                pugi::xml_node hijo = tool.child("Respuestas");
+                _puzzle->AnyadirImgRespuesta(hijo.attribute("ejemplo").value());
+
+                // Resto de imgs para las respuestas
+                for (pugi::xml_node resp = hijo.first_child(); resp; resp = resp.next_sibling())
                 {
-                    for (pugi::xml_node r = hijo.first_child(); r; r = r.next_sibling())
-                    {
-                        puzzle.AnyadirImgRespuesta(r.attribute("img").value());
-                    }
+                    _puzzle->AnyadirImgRespuesta(resp.attribute("img").value());
                 }
             }
-            listaPuzzles.push_back(puzzle);
+            
+            _listaPuzzles.push_back(move(_puzzle));
+            _puzzle = nullptr;
         }
     }
 
@@ -77,7 +93,7 @@ void CargadorPuzzles::CargarPuzzlesXml()
     cout << "FIN" << "\n" <<endl;*/
 }
 
-vector<Puzzle> CargadorPuzzles::GetPuzzles() 
+Puzzle* CargadorPuzzles::GetPuzzle(unsigned short pos) 
 {
-	return listaPuzzles;
+	return _listaPuzzles.at(pos);
 }
