@@ -470,6 +470,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 float tiempoUltimoFrame;//nos sirve para saber cuantos saltos tenemos que hacer
                 ITexture* _actualTexture;//textura actual
                 int camx, camz, cams;
+                
             #endif
 
             void CargarIMG(short x, short y);

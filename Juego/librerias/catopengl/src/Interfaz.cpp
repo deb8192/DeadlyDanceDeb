@@ -317,7 +317,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
 void Interfaz::Draw()
 {
-    std::cout << "TAMANO NODOS " << nodos.size() << std::endl;
+    //std::cout << "TAMANO NODOS " << nodos.size() << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -756,4 +756,83 @@ unsigned short Interfaz::generarId()
     }
 
     return 0;
+}
+
+int Interfaz::getStartFrame(unsigned short did)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    return (int)dynamic_cast<TMalla*>(tnodo->GetEntidad())->getFrameInicio();                
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+int Interfaz::getFrameNr(unsigned short did)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    return (int)dynamic_cast<TMalla*>(tnodo->GetEntidad())->getFrameActual();
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+void Interfaz::setFrameLoop(unsigned short did,int start,int end)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->BucleAnimacion((unsigned short)start,(unsigned short)end);
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::setAnimationSpeed(unsigned short did,int velocidad)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->setVelocidadAnimacion((float)velocidad);
+                }
+            }
+        }
+    }
 }

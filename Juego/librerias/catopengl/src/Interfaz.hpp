@@ -79,6 +79,15 @@ class Interfaz
 
         void CambiarTexto(unsigned short nid,std::string texto);//cambia el texto del elemento que le pases como nid
 
+        int getStartFrame(unsigned short);//consigue el frame inicial
+
+        int getFrameNr(unsigned short);//consigue el frame actual
+
+        void setFrameLoop(unsigned short,int,int);//le asigna desde que frame a que frame debe cambiar la animacion
+
+        void setAnimationSpeed(unsigned short,int);//le asigna velocidad a la animacion
+
+        
     private:
 
         bool  banco_ids [65535];
