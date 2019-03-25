@@ -106,7 +106,7 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
         {          
             case EN_VER: //La muerte ve al jugador
                 {
-                    if(this->ver(constantes.UNO))
+                    if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
                     {
                         funciona = true;
                     }
@@ -138,7 +138,7 @@ void MuerteBoss::UpdateMuerteBoss(int* _jug)
                         }
                         //this->Merodear();
                         //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO))
+                        if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
                         { 
                             modo = MODO_ATAQUE;
                         }

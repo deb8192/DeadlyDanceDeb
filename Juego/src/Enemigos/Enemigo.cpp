@@ -753,16 +753,16 @@ void Enemigo::ModificarVida(int vid)
         {
             if(vida <= vidaIni * constantes.UN_CUARTO)
             {
-                modo = MODO_PELIGRO;
+                modo = EN_PELIGRO;
             }
             else
             {
-                modo = MODO_ATAQUE;
+                modo = EN_ATAQUE;
             }
         }
         else
         {
-            modo = MODO_ATAQUE;
+            modo = EN_ATAQUE;
         }
         
     }
@@ -1102,7 +1102,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 return false;
             break;
             case 1://ve al jugador
-                return ver(1);
+                return ver(1, 30);
             case 2://merodeo
                 return Merodear();//merodeo pollo
             case 3://esta cerca del jugador
@@ -1132,7 +1132,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         {
             pesoRotacion = 0.35f;
             contraRotacion = 1.0 - pesoRotacion;
-            if(this->ver(constantes.TRES))
+            if(this->ver(constantes.TRES, constantes.SEIS * constantes.CINCO))
             {
                 controlRotacion = true;
             }
@@ -1172,12 +1172,12 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         this->setVectorOrientacion();
     }
 
-    bool Enemigo::ver(int tipo)
+    bool Enemigo::ver(int tipo, int longitud)
     {
         Constantes constantes;
         bool ve = false;
         short posicionArray = 0;
-        int* loqueve = _eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotActual.y,30, tipo, true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+        int* loqueve = _eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotActual.y,longitud, tipo, true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
 
         //vamos a  ver si vemos al jugador
         if(tipo == 1)//ves al jugador ?
@@ -1577,6 +1577,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             recorridoAyuda = recorrido;
             modo = MODO_AUXILIAR_ALIADO;
         }
+    }
+
+    void Enemigo::ResetTree()
+    {
+        arbol->ResetTree();
     }
 
     bool Enemigo::ContestarAyuda()

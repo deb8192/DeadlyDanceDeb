@@ -114,7 +114,7 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
         {          
             case EN_VER: //El CofreArana ve al jugador
                 {
-                    if(this->ver(constantes.UNO))
+                    if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
                     {
                         funciona = true;
                     }
@@ -164,7 +164,7 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
                         this->setTimeMerodear(1.5f);
                         hecho = true;
                         //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO))
+                        if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
                         {
                             modo = MODO_ATAQUE;
                             this->setTimeMerodear(constantes.CERO);
@@ -187,7 +187,7 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
                         }
                         this->Merodear();
                         //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO))
+                        if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
                         { 
                             modo = MODO_ATAQUE;
                             this->setTimeMerodear(constantes.CERO);

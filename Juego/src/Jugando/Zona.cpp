@@ -22,9 +22,9 @@ Zona::Zona(int anc, int lar, int alt, const char *tip)
   {
     tipo = Z_DARK;
   }
-  else if(strcmp(cadena_tipo, constantes.ZDARK) == 0)
+  else if(strcmp(cadena_tipo, constantes.ZHIDE) == 0)
   {
-    tipo = Z_DARK;
+    tipo = Z_HIDE;
   }
 
   tip = nullptr;
