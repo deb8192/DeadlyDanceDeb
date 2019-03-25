@@ -17,7 +17,6 @@ class Puzzle
         std::string GetEnunciado();
         unsigned short GetOpciones();
         unsigned short GetSolucion();
-        bool CorregirSolucion(unsigned short solucion);
         void AnyadirImgRespuesta(std::string img);
         std::string GetImagen(unsigned short pos);
     protected:

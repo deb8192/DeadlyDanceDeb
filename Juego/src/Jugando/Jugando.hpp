@@ -33,6 +33,7 @@ class Jugando: public Estado {
         void Pausar();
         void Reanudar();
         void Reiniciar();
+        void EstPuzzle(bool ganar);
 
         //Funciones propias
         void ValoresPorDefecto();
@@ -97,7 +98,8 @@ class Jugando: public Estado {
 
         INnpc::VectorEspacial posicionMediaEnemigos;  //Posicion media que comparten los pollos que atacan en bandada
         
-        bool reiniciando; // Se utiliza solo en Reanudar por el cambio entre Estados
+        bool reiniciando, puzzleResuelto; // Se utiliza solo en Reanudar por el cambio entre Estados
+        bool ganarPuzzle;
         Jugador* _jugador;
         bool jugadorInmovil; // Para las colisiones
         float drawTime, lastDrawTime;

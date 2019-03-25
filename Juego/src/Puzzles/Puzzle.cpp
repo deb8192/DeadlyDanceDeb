@@ -45,15 +45,6 @@ unsigned short Puzzle::GetSolucion()
     return solucion;
 }
 
-bool Puzzle::CorregirSolucion(unsigned short solucion)
-{
-    if (this->solucion != solucion)
-    {
-        return false;
-    }
-    return true;
-}
-
 void Puzzle::AnyadirImgRespuesta(std::string img)
 {
     imgRespuestas.push_back(move(img));

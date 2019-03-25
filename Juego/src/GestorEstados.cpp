@@ -56,6 +56,14 @@ void GestorEstados::ReiniciarPartida()
     _estados.top()->Reanudar();
 }
 
+// Se llama desde EstadoPuzle
+void GestorEstados::ReanudarDesdePuzzle(bool ganar)
+{
+    _estados.pop();
+    _estados.top()->EstPuzzle(ganar);
+    _estados.top()->Reanudar();
+}
+
 // Se llama desde Pausa y EstadoMuerte
 void GestorEstados::CambioDeJuegoAMenu()
 {
