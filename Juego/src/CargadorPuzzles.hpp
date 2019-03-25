@@ -15,16 +15,13 @@ using namespace std;
 class CargadorPuzzles
 {
     public:
-        // Puzzles
-    	//const int P_OPCION = 1;
-    	//const int P_HANOI = 2;
-    	//const int P_ARRASTRAR = 3;
-
         CargadorPuzzles();
+        ~CargadorPuzzles();
+
         void CargarPuzzlesXml();
-        vector<Puzzle> GetPuzzles();
+        Puzzle* GetPuzzle(unsigned short pos);
 
     private:
-        vector<Puzzle> listaPuzzles;
+        vector<Puzzle*> _listaPuzzles;
 };
 #endif

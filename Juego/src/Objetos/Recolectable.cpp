@@ -1,5 +1,5 @@
 #include "Recolectable.hpp"
-
+#include "../ConstantesComunes.hpp"
 
 Recolectable::Recolectable()
 {
@@ -7,21 +7,12 @@ Recolectable::Recolectable()
 }
 
 Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
-    int anc, int lar, int alt, const char* objeto, const char* textura,
-    float x, float y, float z, unsigned short tipoObj)
+    int anc, int lar, int alt, float x, float y, float z, unsigned short tipoObj)
 {
     // INdrawable
     posIni.x = x;
     posIni.y = y;
     posIni.z = z;
-
-    std::string name_objeto(objeto);
-    cadena_objeto = new char[sizeof(name_objeto)];
-    strcpy(cadena_objeto, name_objeto.c_str());
-
-    std::string name_textura(textura);
-    cadena_textura = new char[sizeof(name_textura)];
-    strcpy(cadena_textura, name_textura.c_str());
 
     std::string name_nombre(nombre);
     cadena_nombre = new char[sizeof(name_nombre)];
@@ -33,11 +24,49 @@ Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
     ancho = anc;
     largo = lar;
     alto = alt;
-    ruta_objeto = cadena_objeto; // deberia recoger *objeto pero se corrompe en la segunda iteracion del bucle
-    ruta_textura = cadena_textura;
 
     //INobjetos
     tipoObjeto = tipoObj;
+
+    // TO DO: no me dejaba usar constantes
+    switch (tipoObj)
+    {
+        case 7: // ARPA
+        {
+            _modelo = "assets/models/Arpa.obj";
+        }
+        break;
+        
+        case 8: // GUITARRA
+        {
+            _modelo = "assets/models/Arma.obj";
+        }
+        break;
+
+        case 9: // ORO
+        {
+            _modelo = "assets/models/gold.obj";
+        }
+        break;
+
+        case 10: // VIDA
+        {
+            _modelo = "assets/models/powerup0.obj";
+        }
+        break;
+
+        case 11: // ENERGIA
+        {
+            _modelo = "assets/models/powerup1.obj";
+        }
+        break;
+
+        case 1: // Llave
+        {
+            _modelo = "assets/models/llave.obj";
+        }
+        break;
+    }
 }
 
 Recolectable::~Recolectable()
@@ -52,17 +81,13 @@ Recolectable::~Recolectable()
     nombreObjeto = nullptr;
     delete cadena_nombre;
 
-    ruta_objeto = nullptr;
-    delete cadena_objeto;
-
-    ruta_textura = nullptr;
-    delete cadena_textura;
-
     ancho = 0;
     largo = 0;
     alto  = 0;
 
     // INdrawable
+    _modelo = nullptr;
+    
     posIni.x = 0;
     posIni.y = 0;
     posIni.z = 0;
@@ -239,11 +264,6 @@ const char* Recolectable::getNombre()
     return nombreObjeto;
 }
 
-const char* Recolectable::getObjeto()
-{
-    return ruta_objeto;
-}
-
 float Recolectable::getX()
 {
     return posActual.x;
@@ -344,11 +364,6 @@ int Recolectable::getID()
     return id;
 }
 
-
-const char* Recolectable::getTextura()
-{
-    return ruta_textura;
-}
 float Recolectable::getAncho()
 {
     return ancho;
@@ -371,4 +386,9 @@ int Recolectable::getCantidad()
 unsigned short Recolectable::GetTipoObjeto()
 {
     return tipoObjeto;
+}
+
+const char* Recolectable::GetModelo()
+{
+    return _modelo;
 }

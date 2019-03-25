@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstring>
 #include "../Motores/MotorGrafico.hpp"
+#include "Sala.hpp"
 
 using namespace std;
 
@@ -43,8 +44,11 @@ class Zona
         unsigned short getElementosActuales();
         short getTipo();
         void Render();
+        Sala* GetSala();
+        void SetSala(Sala* sala);
 
     private:
+        Sala* _estoy;
         MotorGrafico* _motor;
         enum tiposZona 
         {  

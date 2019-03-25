@@ -1,6 +1,5 @@
 #include "Menu.hpp"
 #include "../Juego.hpp"
-#include "../CargadorPuzzles.hpp"
 
 Menu::Menu()
 {
@@ -49,12 +48,6 @@ void Menu::ManejarEventos()
         jugar();
     }
 
-    if (_motor->OcurreEvento(GUI_ID_PUZZLES_BUTTON))
-    {
-        borrarEscenaResetearEvento(GUI_ID_PUZZLES_BUTTON);
-        cargarPuzzlesXML();
-    }
-
     if (_motor->OcurreEvento(GUI_ID_CONFIGURACION_BUTTON))
     {
         borrarEscenaResetearEvento(GUI_ID_CONFIGURACION_BUTTON);
@@ -77,10 +70,9 @@ void Menu::ManejarEventos()
 void Menu::pintarBotones()
 {
     _motor->CrearBoton(300,200,500,230, GUI_ID_EMPEZAR_BUTTON, L"Iniciar Juego", L"Empieza a jugar");
-    _motor->CrearBoton(300,240,500,270, GUI_ID_PUZZLES_BUTTON, L"Puzzles", L"Minijuego");
-    _motor->CrearBoton(300,280,500,310, GUI_ID_CONFIGURACION_BUTTON, L"Configuracion", L"Configuracion del juego");
-    _motor->CrearBoton(300,320,500,350, GUI_ID_CREDITOS_BUTTON, L"Creditos", L"Creditos del juego");
-    _motor->CrearBoton(300,360,500,390, GUI_ID_SALIR_BUTTON, L"Salir del juego", L"Sale del juego");
+    _motor->CrearBoton(300,240,500,270, GUI_ID_CONFIGURACION_BUTTON, L"Configuracion", L"Configuracion del juego");
+    _motor->CrearBoton(300,280,500,310, GUI_ID_CREDITOS_BUTTON, L"Creditos", L"Creditos del juego");
+    _motor->CrearBoton(300,320,500,350, GUI_ID_SALIR_BUTTON, L"Salir del juego", L"Sale del juego");
 }
 
 void Menu::borrarEscenaResetearEvento(short id)
@@ -96,14 +88,6 @@ void Menu::jugar()
 
     _motora->getEvent("Menu")->stop(); //Detener musica Menu
     Juego::GetInstance()->estado.CambioEstadoJugar();
-}
-
-void Menu::cargarPuzzlesXML()
-{
-    // Cargamos los puzzles 1 vez
-    CargadorPuzzles cargadorPuzzles;
-    cargadorPuzzles.CargarPuzzlesXml();
-    Juego::GetInstance()->estado.CambioEstadoPuzle();
 }
 
 void Menu::configuracion()

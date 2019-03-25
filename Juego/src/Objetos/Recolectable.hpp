@@ -13,8 +13,7 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         Recolectable();//esto le deja a la entidad el constructor por defecto
         ~Recolectable();//destructor del objeto
         Recolectable(int codigo, int ataque, const char* nombre,
-            int anc, int lar, int alt, const char* objeto,
-            const char* textura, float x, float y, float z, unsigned short tipoObj);
+            int anc, int lar, int alt, float x, float y, float z, unsigned short tipoObj);
 
         //drawable metodos
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
@@ -59,12 +58,11 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         int getCodigo();
         int getAtaque();
         const char* getNombre();
-        const char* getObjeto();
-        const char* getTextura();
         float getAncho();
         float getLargo();
         float getAlto();
         int getCantidad();
+        const char* GetModelo(); // Malla 3D con la textura
         unsigned short GetTipoObjeto();
 
     private:
