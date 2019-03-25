@@ -1242,7 +1242,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
             _interfaz->ChangeTargetCamara(camara,nodeCamTarget[0],nodeCamTarget[1],nodeCamTarget[2]);
 
             _interfaz->Trasladar(_jugEscena,x,y,z);
-            _interfaz->Rotar(_jugEscena,rx,ry+180,rx);
+            _interfaz->Rotar(_jugEscena,rx,ry-180,rx);
 
             delete nodeCamPosition;
 
@@ -1279,7 +1279,7 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
         if(Enemigos_Scena.size() > 0 && Enemigos_Scena.size() > i && Enemigos_Scena[i] != 0)
         {
             _interfaz->Trasladar(Enemigos_Scena[i],x,y,z);
-            _interfaz->Rotar(Enemigos_Scena[i],rx,ry,rz);
+            _interfaz->Rotar(Enemigos_Scena[i],rx,ry-180,rz);
         }
 
     #else
@@ -2261,35 +2261,35 @@ void MotorGrafico::RenderInterfaz(bool activada)
 
             if(energia_textura != 0)
             {
-                _interfaz->HabilitarObjeto(energia_textura);                
+                _interfaz->HabilitarObjeto(energia_textura);
             }
 
             if(dinero_textura != 0)
             {
-                _interfaz->HabilitarObjeto(dinero_textura);                
+                _interfaz->HabilitarObjeto(dinero_textura);
             }
 
             if(arma_textura != 0)
             {
-                _interfaz->HabilitarObjeto(arma_textura);                
+                _interfaz->HabilitarObjeto(arma_textura);
             }
 
             if(barraEnergia_textura != 0)
             {
-                _interfaz->HabilitarObjeto(barraEnergia_textura);                
-            }    
+                _interfaz->HabilitarObjeto(barraEnergia_textura);
+            }
 
             if(barraVida_textura != 0)
             {
-                _interfaz->HabilitarObjeto(barraVida_textura);                
-            }          
+                _interfaz->HabilitarObjeto(barraVida_textura);
+            }
 
             if(dinero_textura != 0)
             {
-                _interfaz->HabilitarObjeto(dinero_textura);                
-            }  
+                _interfaz->HabilitarObjeto(dinero_textura);
+            }
 
-        }   
+        }
         else
         {
             if(vida_textura != 0)
@@ -2299,46 +2299,46 @@ void MotorGrafico::RenderInterfaz(bool activada)
 
             if(energia_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(energia_textura);                
+                _interfaz->DeshabilitarObjeto(energia_textura);
             }
 
             if(dinero_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(dinero_textura);                
+                _interfaz->DeshabilitarObjeto(dinero_textura);
             }
 
             if(arma_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(arma_textura);                
+                _interfaz->DeshabilitarObjeto(arma_textura);
             }
 
             if(barraEnergia_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(barraEnergia_textura);                
-            }    
+                _interfaz->DeshabilitarObjeto(barraEnergia_textura);
+            }
 
             if(barraVida_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(barraVida_textura);                
-            }          
+                _interfaz->DeshabilitarObjeto(barraVida_textura);
+            }
 
             if(dinero_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(dinero_textura);                
-            }  
+                _interfaz->DeshabilitarObjeto(dinero_textura);
+            }
 
             if(espada_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(dinero_textura);                
+                _interfaz->DeshabilitarObjeto(dinero_textura);
             }
 
             if(llave_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(dinero_textura);                
-            }          
-            
+                _interfaz->DeshabilitarObjeto(dinero_textura);
+            }
+
         }
-            
+
     #else
         //codigo motor irrlicht
         if (activada)
@@ -2455,7 +2455,7 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
                 }
             }
         }
-        
+
     #else
         //codigo motor irrlicht
         int frame = _jugEscena->getStartFrame();
@@ -2733,7 +2733,7 @@ void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        
+
     #else
         //codigo motor irrlicht
         std::wstring widestr = std::wstring(texto.begin(), texto.end());
