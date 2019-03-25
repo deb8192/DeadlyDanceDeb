@@ -163,6 +163,8 @@ void Jugando::ValoresPorDefectoJugador()
 
 void Jugando::ValoresPorDefectoBoss()
 {
+    // TO DO: comprobar si esta en array ene
+    // sacarlo de ahí y del motor
     float xIni = _boss->getIniX();
     float yIni = _boss->getIniY();
     float zIni = _boss->getIniZ();
@@ -230,13 +232,6 @@ void Jugando::ManejarEventos() {
                 _jugador->getY(), _jugador->getZ());
     }*/
 
-    // Z para abrir pantalla de puzzle
-    if (_motor->EstaPulsado(KEY_Z))
-    {
-        _motor->ResetKey(KEY_Z);
-        AbrirPantallaPuzzle();
-    }
-
     if (_motor->EstaPulsado(KEY_K))
     {
         _motor->ResetKey(KEY_K);
@@ -260,10 +255,11 @@ void Jugando::ManejarEventos() {
     if(_motor->EstaPulsado(KEY_B))
     {
         unsigned short desplaza = 10;
-        _jugador->setPosiciones(_boss->getIniX()+desplaza, _boss->getIniY(), _boss->getIniZ());
-        _jugador->setNewPosiciones(_boss->getIniX()+desplaza, _boss->getIniY(), _boss->getIniZ());
-        _jugador->initPosicionesFisicas((_boss->getIniX()+desplaza)/2, _boss->getIniY()/2, _boss->getIniZ()/2);
+        _jugador->setPosiciones(242+desplaza, 0, 490);
+        _jugador->setNewPosiciones(242+desplaza, 0, 490);
+        _jugador->initPosicionesFisicas((242+desplaza)/2, 0/2, 490/2);
         enSalaBoss = true;
+        CargarBossEnMemoria();
         _motor->ResetKey(KEY_B);
     }
     /* **************************************************** */
@@ -421,14 +417,9 @@ void Jugando::Update()
         _jugador->getNewZ()
     );
 
-    if (enSalaBoss) {
-        //colisiones con todos los objetos y el boss
-        jugadorInmovil = _jugador->ColisionEntornoBoss();
-    } else {
-        //colisiones con todos los objetos y enemigos que no se traspasan
-        jugadorInmovil = _jugador->ColisionEntornoEne();
-    }
-
+    //colisiones con todos los objetos y enemigos que no se traspasan
+    jugadorInmovil = _jugador->ColisionEntornoEne();
+    
     // Actualizar movimiento del jugador
     _jugador->movimiento(jugadorInmovil,
         _motor->EstaPulsado(KEY_A),
@@ -450,163 +441,115 @@ void Jugando::Update()
     this->updateAt(&danyo2);
 
 
-
-    if (!enSalaBoss)
+    for(unsigned int i = 0; i < _enemigos.size(); i++)
     {
-        for(unsigned int i = 0; i < _enemigos.size(); i++)
-        {
-            _fisicas->updateEnemigos(_enemigos.at(i)->getFisX(),
-                _enemigos.at(i)->getFisY(),
-                _enemigos.at(i)->getFisZ(),
-                i
-            );
-        }
-
-        /*if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
-        {
-            this->updateRecorridoPathfinding(nullptr);
-        }*/
-
-        //Si se realiza el ataque se comprueban las colisiones
-        if(_jugador->getTimeAtEsp() > 0.0)
-        {
-            _jugador->AtacarEspecialUpdate(&danyo, _enemigos);
-        }
-        else if(_jugador->getTimeAt() > 0.0)
-        {
-            _jugador->AtacarUpdate(danyo2, _enemigos);
-        }
-
-        //actualizamos los enemigos
-        if(_enemigos.size() > 0)//posiciones interpolacion
-        {
-            //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
-            short contadorEnemigos = 0;
-            INnpc::VectorEspacial posicionTemporal;  
-
-            for(short i=0;(unsigned)i<_enemigos.size();i++)
-            {
-                if(_enemigos[i] != nullptr)
-                {
-                    // Se coloca la posicionMedia de las bandadas
-                    if(_enemigos[i]->GetModo() == constantes.UNO)
-                    {
-                        if(posicionMediaEnemigos.vX != INT_MAX)
-                        {
-                            _enemigos[i]->SetPosicionComunBandada(posicionMediaEnemigos);
-                        }
-                    }
-
-                    // Comprobamos si alguno pide ayuda para el pathfinding
-                    if (_enemigos[i]->GetPedirAyuda())
-                    {
-                        _enemPideAyuda = _enemigos[i];
-                    }
-                    // Si alguno pide ayuda, se mira a ver si este contesta
-                    else if(_enemPideAyuda != nullptr)
-                    {
-                        if (_enemigos[i]->GetContestar())
-                            updateRecorridoPathfinding(_enemigos[i]);
-                    }
-                    if(_enemigos[i]->GetModo() == constantes.UNO && _enemigos[i]->getVida() > 0)
-                    {
-                        contadorEnemigos++;
-                        posicionTemporal.vX += _enemigos[i]->getX();
-                        posicionTemporal.vY += _enemigos[i]->getY();
-                        posicionTemporal.vZ += _enemigos[i]->getZ();
-                    }                    
-                    // TO DO: optimizar
-                    if (_enemPideAyuda) {
-                        _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
-                    } else {
-                        _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
-                    }
-                    //Este bloque se da si el enemigo esta en el proceso de merodear
-                    if(_enemigos[i]->getTimeMerodear() > 0.0f)
-                    {
-                        if(_enemigos[i]->getTimeMerodear() == 1.5f)
-                        {
-                            //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
-                            _enemigos[i]->setLastTimeMerodear(_controladorTiempo->GetTiempo(2));
-                        }
-                        float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
-                        tiempoActual = _controladorTiempo->GetTiempo(2);
-                        tiempoMerodear = _enemigos[i]->getTimeMerodear();
-                        tiempoMerodear -= (tiempoActual - _enemigos[i]->getLastTimeMerodear());
-                        if(tiempoActual > _enemigos[i]->getLastTimeMerodear())
-                        {
-                            //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeMerodear
-                            //por lo que guardamos en lastTimeMerodear a tiempoActual
-                            _enemigos[i]->setLastTimeMerodear(tiempoActual);
-                        }
-                        _enemigos[i]->setTimeMerodear(tiempoMerodear);
-                    }
-                }
-                //_enemigos[i]->queVes();
-            }
-            if(contadorEnemigos >= 1)
-            {
-                posicionMediaEnemigos.vX = posicionTemporal.vX / contadorEnemigos;
-                posicionMediaEnemigos.vY = posicionTemporal.vY / contadorEnemigos;
-                posicionMediaEnemigos.vZ = posicionTemporal.vZ / contadorEnemigos;
-            }
-            else
-            {
-                posicionMediaEnemigos.vX = INT_MAX;
-                posicionMediaEnemigos.vY = INT_MAX;
-                posicionMediaEnemigos.vZ = INT_MAX;
-            }
-            
-            
-        }
-            //_enemigos->MuereEnemigo(acumulator);
-            //acumulator -= dt;
-        //}
-    }
-    else // Actualiza el BOSS
-    {
-        _fisicas->updateBoss(_boss->getFisX(), _boss->getFisY(),
-            _boss->getFisZ()
+        _fisicas->updateEnemigos(_enemigos.at(i)->getFisX(),
+            _enemigos.at(i)->getFisY(),
+            _enemigos.at(i)->getFisZ(),
+            i
         );
-
-        //Si se realiza el ataque se comprueban las colisiones
-        if(_jugador->getTimeAtEsp() > 0.0)
-        {
-            _jugador->AtacarEspecialUpdate(&danyo, _boss);
-        }
-        else if(_jugador->getTimeAt() > 0.0)
-        {
-            _jugador->AtacarUpdate(danyo2, _boss);
-        }
-
-        //actualizamos el boss, posiciones interpolacion
-        //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
-        if(_boss != nullptr)
-        {
-            _boss->UpdateBehavior(0, (int*)_jugador, _zonas, false); //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
-
-            //Este bloque se da si el boss esta en el proceso de merodear
-            if(_boss->getTimeMerodear() > 0.0f)
-            {
-                if(_boss->getTimeMerodear() == 1.5f)
-                {
-                    //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
-                    _boss->setLastTimeMerodear(_controladorTiempo->GetTiempo(2));
-                }
-                float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
-                tiempoActual = _controladorTiempo->GetTiempo(2);
-                tiempoMerodear = _boss->getTimeMerodear();
-                tiempoMerodear -= (tiempoActual - _boss->getLastTimeMerodear());
-                if(tiempoActual > _boss->getLastTimeMerodear())
-                {
-                    //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeMerodear
-                    //por lo que guardamos en lastTimeMerodear a tiempoActual
-                    _boss->setLastTimeMerodear(tiempoActual);
-                }
-                _boss->setTimeMerodear(tiempoMerodear);
-            }
-        }
     }
+
+    /*if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
+    {
+        this->updateRecorridoPathfinding(nullptr);
+    }*/
+
+    //Si se realiza el ataque se comprueban las colisiones
+    if(_jugador->getTimeAtEsp() > 0.0)
+    {
+        _jugador->AtacarEspecialUpdate(&danyo, _enemigos);
+    }
+    else if(_jugador->getTimeAt() > 0.0)
+    {
+        _jugador->AtacarUpdate(danyo2, _enemigos);
+    }
+
+    //actualizamos los enemigos
+    if(_enemigos.size() > 0)//posiciones interpolacion
+    {
+        //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
+        short contadorEnemigos = 0;
+        INnpc::VectorEspacial posicionTemporal;  
+
+        for(short i=0;(unsigned)i<_enemigos.size();i++)
+        {
+            if(_enemigos[i] != nullptr)
+            {
+                // Se coloca la posicionMedia de las bandadas
+                if(_enemigos[i]->GetModo() == constantes.UNO)
+                {
+                    if(posicionMediaEnemigos.vX != INT_MAX)
+                    {
+                        _enemigos[i]->SetPosicionComunBandada(posicionMediaEnemigos);
+                    }
+                }
+
+                // Comprobamos si alguno pide ayuda para el pathfinding
+                if (_enemigos[i]->GetPedirAyuda())
+                {
+                    _enemPideAyuda = _enemigos[i];
+                }
+                // Si alguno pide ayuda, se mira a ver si este contesta
+                else if(_enemPideAyuda != nullptr)
+                {
+                    if (_enemigos[i]->GetContestar())
+                        updateRecorridoPathfinding(_enemigos[i]);
+                }
+                if(_enemigos[i]->GetModo() == constantes.UNO && _enemigos[i]->getVida() > 0)
+                {
+                    contadorEnemigos++;
+                    posicionTemporal.vX += _enemigos[i]->getX();
+                    posicionTemporal.vY += _enemigos[i]->getY();
+                    posicionTemporal.vZ += _enemigos[i]->getZ();
+                }                    
+                // TO DO: optimizar
+                if (_enemPideAyuda) {
+                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                } else {
+                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                }
+                //Este bloque se da si el enemigo esta en el proceso de merodear
+                if(_enemigos[i]->getTimeMerodear() > 0.0f)
+                {
+                    if(_enemigos[i]->getTimeMerodear() == 1.5f)
+                    {
+                        //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                        _enemigos[i]->setLastTimeMerodear(_controladorTiempo->GetTiempo(2));
+                    }
+                    float tiempoActual = 0.0f, tiempoMerodear = 0.0f;
+                    tiempoActual = _controladorTiempo->GetTiempo(2);
+                    tiempoMerodear = _enemigos[i]->getTimeMerodear();
+                    tiempoMerodear -= (tiempoActual - _enemigos[i]->getLastTimeMerodear());
+                    if(tiempoActual > _enemigos[i]->getLastTimeMerodear())
+                    {
+                        //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeMerodear
+                        //por lo que guardamos en lastTimeMerodear a tiempoActual
+                        _enemigos[i]->setLastTimeMerodear(tiempoActual);
+                    }
+                    _enemigos[i]->setTimeMerodear(tiempoMerodear);
+                }
+            }
+            //_enemigos[i]->queVes();
+        }
+        if(contadorEnemigos >= 1)
+        {
+            posicionMediaEnemigos.vX = posicionTemporal.vX / contadorEnemigos;
+            posicionMediaEnemigos.vY = posicionTemporal.vY / contadorEnemigos;
+            posicionMediaEnemigos.vZ = posicionTemporal.vZ / contadorEnemigos;
+        }
+        else
+        {
+            posicionMediaEnemigos.vX = INT_MAX;
+            posicionMediaEnemigos.vY = INT_MAX;
+            posicionMediaEnemigos.vZ = INT_MAX;
+        }
+        
+        
+    }
+        //_enemigos->MuereEnemigo(acumulator);
+        //acumulator -= dt;
+    //}
 }
 
 /**************** updateIA ***************
@@ -636,106 +579,94 @@ void Jugando::UpdateIA()
         _jugador->generarSonido(constantes.CINCO * constantes.SEIS, constantes.CINCO, constantes.UNO);
     }
 
-    if (!enSalaBoss)
-    {
-        //En esta parte muere enemigo
-        if(_enemigos.size() > 0){
-            //comprobando los _enemigos para saber si estan muertos
-            for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+    //En esta parte muere enemigo
+    if(_enemigos.size() > 0){
+        //comprobando los _enemigos para saber si estan muertos
+        for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
 
-                if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte()){
+            if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte()){
 
-                    //Crear un power-up/dinero
-                    //Se crea un power-up?
+                //Crear un power-up/dinero
+                //Se crea un power-up?
+                srand(time(NULL));
+                int secreapower = rand() % 101; //Entre 0 y 100
+                cout << "secreapower:" << secreapower << endl;
+
+                if(secreapower <= 100){ //20% de posibilidades
+                    //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
                     srand(time(NULL));
-                    int secreapower = rand() % 101; //Entre 0 y 100
-                    cout << "secreapower:" << secreapower << endl;
+                    int numpow = 3;
+                    int cualpower = rand() % numpow;
+                    cout << "POWER: " << cualpower << endl;
+                    int ataque;
+                    const char* nombre;
 
-                    if(secreapower <= 100){ //20% de posibilidades
-                        //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
-                        srand(time(NULL));
-                        int numpow = 3;
-                        int cualpower = rand() % numpow;
-                        cout << "POWER: " << cualpower << endl;
-                        int ataque;
-                        const char* nombre;
+                    //DAtos comunes a todos
+                    int x = _enemigos[i]->getX();
+                    int y = _enemigos[i]->getY();
+                    int z = _enemigos[i]->getZ();
+                    int accion = 4;
+                    int ancho = 0.5 ,largo = 0.5,alto = 0.5;
+                    int codigo = -2;
+                    int*  propiedades = new int [6];
+                    unsigned short tipoObjeto;
+                    Constantes constantes;
 
-                        //DAtos comunes a todos
-                        int x = _enemigos[i]->getX();
-                        int y = _enemigos[i]->getY();
-                        int z = _enemigos[i]->getZ();
-                        int accion = 4;
-                        int ancho = 0.5 ,largo = 0.5,alto = 0.5;
-                        int codigo = -2;
-                        int*  propiedades = new int [6];
-                        unsigned short tipoObjeto;
-                        Constantes constantes;
-
-                        if(cualpower == 0)
-                        {
-                        ataque = 0;
-                        nombre = "vida_up";
-                        tipoObjeto = constantes.VIDA;
-                        }
-                        else if(cualpower == 1)
-                        {
-                        ataque = 1;
-                        nombre = "energy_up";
-                        tipoObjeto = constantes.ENERGIA;
-                        }
-                        else if(cualpower == 2)
-                        {
-                        ataque = 2;
-                        nombre = "gold_up";
-                        tipoObjeto = constantes.ORO;
-                        //oro entre 1 y 5 monedas
-                        srand(time(NULL));
-                        int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
-                        propiedades[0] = orocant; //para pasarlo a crear objeto
-                        }
-
-                        //Crear objeto
-                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObjeto);
-                    }
-
-                    if (_enemigos[i]->GetPedirAyuda()) {
-                        enemDejarDePedirAyuda();
-                    }
-
-                    //Borrar enemigo
-                    _motor->EraseEnemigo(i);
-                    _fisicas->EraseEnemigo(i);
-                    EraseEnemigo(i);
-
-                }else{
-                    if(_enemigos[i]->estasMuerto()){
-                        _enemigos[i]->MuereEnemigo(i);
-                    }
-                    else
+                    if(cualpower == 0)
                     {
-                        //si no esta muerto ni piensa morirse XD ejecutamos ia
-                        if(_enemigos[i] != nullptr)
-                        {
-                            _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
-                        }
+                    ataque = 0;
+                    nombre = "vida_up";
+                    tipoObjeto = constantes.VIDA;
+                    }
+                    else if(cualpower == 1)
+                    {
+                    ataque = 1;
+                    nombre = "energy_up";
+                    tipoObjeto = constantes.ENERGIA;
+                    }
+                    else if(cualpower == 2)
+                    {
+                    ataque = 2;
+                    nombre = "gold_up";
+                    tipoObjeto = constantes.ORO;
+                    //oro entre 1 y 5 monedas
+                    srand(time(NULL));
+                    int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
+                    propiedades[0] = orocant; //para pasarlo a crear objeto
+                    }
+
+                    //Crear objeto
+                    this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObjeto);
+                }
+
+                if (_enemigos[i]->GetPedirAyuda()) {
+                    enemDejarDePedirAyuda();
+                }
+
+                //Borrar enemigo
+                _motor->EraseEnemigo(i);
+                _fisicas->EraseEnemigo(i);
+                EraseEnemigo(i);
+
+            }else{
+                if(_enemigos[i]->estasMuerto()){
+                    _enemigos[i]->MuereEnemigo(i);
+                }
+                else
+                {
+                    //si no esta muerto ni piensa morirse XD ejecutamos ia
+                    if(_enemigos[i] != nullptr)
+                    {
+                        _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
                     }
                 }
             }
         }
     }
-    else
-    {
-        //En esta parte muere el BOSS
-        if (!_boss->estasMuerto())
-        {
-            _boss->UpdateIA();
-        }
-        else
-        {
-            //TO DO: borrar fisicas y cosas
-            Juego::GetInstance()->estado.CambioEstadoGanar();
-        }
-    }
+    
+    //TO DO: borrar fisicas y cosas
+    // Para cuando se mate al boss
+    //Juego::GetInstance()->estado.CambioEstadoGanar();
 }
 
 void Jugando::Render()
@@ -763,26 +694,16 @@ void Jugando::Render()
     //Dibujado del personaje
     _jugador->Render(updateTime, resta);
 
-    if (!enSalaBoss)
+    //Dibujado de los enemigos
+    for(unsigned short i = 0; i < _enemigos.size(); i++)
     {
-        //Dibujado de los enemigos
-        for(unsigned short i = 0; i < _enemigos.size(); i++)
-        {
-            _enemigos.at(i)->Render(i, updateTime, resta);
-        }
-
-        //Dibujado de ataques enemigos
-        for(unsigned int i = 0; i < _enemigos.size(); i++)
-        {
-            _enemigos.at(i)->RenderAtaque();
-        }
+        _enemigos.at(i)->Render(i, updateTime, resta);
     }
-    else // Dibujado Boss
-    {
-        _boss->Render(-1, updateTime, resta);
 
-        //Dibujado de ataque boss
-        _boss->RenderAtaque();
+    //Dibujado de ataques enemigos
+    for(unsigned int i = 0; i < _enemigos.size(); i++)
+    {
+        _enemigos.at(i)->RenderAtaque();
     }
 
     //Dibujado del ataque especial del jugador
@@ -803,7 +724,6 @@ void Jugando::Render()
         _waypoints.at(i)->Render();
     }
     //_motor->clearDebug2(); //Pruebas debug
-
 
     _motor->RenderInterfaz(_interfaz->getEstado());
 
@@ -881,7 +801,6 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _powerup = cargador.GetPowerup();
     _zonas = cargador.GetZonas();
     _enemigos = cargador.GetEnemigos();
-    _boss = cargador.GetBoss();
     _waypoints = cargador.GetWaypoints();
     ConectarWaypoints();
 
@@ -890,6 +809,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     probArana = _eneCofres.size();
     _interactuables = cargador.GetInteractuables();
     _eneCofres = cargador.GetEneCofres();
+    _boss = cargador.GetBoss();
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
@@ -1555,4 +1475,18 @@ void Jugando::CrearEnemigoArana()
     _enemigos.push_back(move(_eneA));
     _eneA = nullptr;
     _cofreP = nullptr;
+}
+
+void Jugando::CargarBossEnMemoria()
+{
+    float x = _boss->getX();
+    float y = _boss->getY();
+    float z = _boss->getZ();
+    
+    _motor->CargarEnemigos(x,y,z,_boss->GetModelo());//creamos la figura
+    _fisicas->crearCuerpo(1,0,x/2,y/2,z/2,2,1,1,1,2,0,0);
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
+    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
+
+    _enemigos.push_back(move(_boss));
 }

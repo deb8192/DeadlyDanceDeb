@@ -28,7 +28,6 @@ MotorGrafico::MotorGrafico()
         camara = 0;
         _jugEscena = 0;
         debugGrafico = false;
-        _bossEscena = 0;
         _armaEnEscena = 0;
         _armaProyectil = 0;
         camx = 0;
@@ -920,30 +919,6 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
     #endif
 }
 
-void MotorGrafico::CargarBoss(int x,int y,int z, const char* ruta_objeto)
-{
-    #ifdef WEMOTOR
-
-        //codigo motor catopengl
-        _bossEscena = _interfaz->AddMalla(ruta_objeto,1);
-
-        if(_bossEscena != 0)
-        {
-            _interfaz->Trasladar(_bossEscena,(float)x,(float)y,(float)z);
-        }
-
-    #else
-        //codigo motor irrlicht
-        IAnimatedMesh* boss = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
-
-        if (boss)
-        {
-            _bossEscena = _smgr->addAnimatedMeshSceneNode(boss); //metemos el objeto en el escenario para eso lo pasamos al escenario
-            _bossEscena->setPosition(core::vector3df(x,y,z));
-        }
-    #endif
-}
-
 void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
 {
     #ifdef WEMOTOR
@@ -967,7 +942,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
         {
             IAnimatedMeshSceneNode* enemigo_en_scena = _smgr->addAnimatedMeshSceneNode(enemigo); //metemos el objeto en el escenario para eso lo pasamos al escenario
             enemigo_en_scena->setPosition(core::vector3df(x,y,z));
-            Enemigos_Scena.push_back(enemigo_en_scena);
+            Enemigos_Scena.push_back(move(enemigo_en_scena));
         }
 
     #endif
@@ -1303,27 +1278,6 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
     #endif
 }
 
-void MotorGrafico::mostrarBoss(float x, float y, float z, float rx, float ry, float rz)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-        if(_bossEscena != 0)
-        {
-            _interfaz->Trasladar(_bossEscena,x,y,z);
-            _interfaz->Rotar(_bossEscena,rx,1,0,0);
-            _interfaz->Rotar(_bossEscena,ry,0,1,0);
-            _interfaz->Rotar(_bossEscena,rz,0,0,1);
-        }
-    #else
-        //codigo motor irrlicht
-        if(_bossEscena != nullptr)
-        {
-            _bossEscena->setPosition(core::vector3df(x,y,z));
-            _bossEscena->setRotation(core::vector3df(rx,ry,rz));
-        }
-    #endif
-}
-
 void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
 {
     #ifdef WEMOTOR
@@ -1572,7 +1526,7 @@ void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensi
                 _smgr->getMeshManipulator()->setVertexColors(_objetoEnEscena->getMesh(),COLOR);
                 _objetoEnEscena->setPosition(core::vector3df(x,y,z));
                 _objetoEnEscena->setScale(core::vector3df(intensidad,1,intensidad));
-                Objetos_Debug.push_back(_objetoEnEscena);
+                Objetos_Debug.push_back(move(_objetoEnEscena));
             }
         }
     #endif
