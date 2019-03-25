@@ -15,7 +15,7 @@ Interfaz::Interfaz()
     y = 0.0f;
     z = 0.0f;
     ModoOneCamara = true;
-    
+
     for(unsigned int e = 0;e < 65535;e++)
     {
         banco_ids[e] = false;
@@ -24,7 +24,7 @@ Interfaz::Interfaz()
 
 Interfaz::~Interfaz()
 {
-    
+
 }
 
 unsigned short Interfaz::AddCamara()
@@ -32,7 +32,7 @@ unsigned short Interfaz::AddCamara()
     //std::cout << "SE CREA LUZ" << std::endl;
     if(ModoOneCamara && camaras.size() > 0)
     {
-        //se devuelve el id de la primera camara 
+        //se devuelve el id de la primera camara
         return camaras[0]->id;
     }
     else
@@ -51,7 +51,7 @@ unsigned short Interfaz::AddCamara()
 
         TNodo * rotacion = new TNodo;
         TTransform * rotacionEnt = new TTransform;
-        rotacionEnt->rotar(0,1,1,1);
+        rotacionEnt->rotar(0,0,0);
         rotacion->setEntidad(rotacionEnt);
 
         TNodo * escalado = new TNodo;
@@ -106,7 +106,7 @@ unsigned short Interfaz::AddLuz(int tipo)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,1,1,1);
+    rotacionEnt->rotar(0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
@@ -128,7 +128,7 @@ unsigned short Interfaz::AddLuz(int tipo)
 
     if(_raiz != nullptr)
     {
-       
+
         _raiz->addHijo(escalado);
 
         unsigned short idnuevo = generarId();
@@ -163,7 +163,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(1,1,1,1);
+    rotacionEnt->rotar(0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
@@ -220,7 +220,7 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,1,1,1);
+    rotacionEnt->rotar(0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
@@ -275,7 +275,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
     TNodo * rotacion = new TNodo;
     TTransform * rotacionEnt = new TTransform;
-    rotacionEnt->rotar(0,1,1,1);
+    rotacionEnt->rotar(0,0,0);
     rotacion->setEntidad(rotacionEnt);
 
     TNodo * escalado = new TNodo;
@@ -317,7 +317,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
 
 void Interfaz::Draw()
 {
-    std::cout << "TAMANO NODOS " << nodos.size() << std::endl;
+    //std::cout << "TAMANO NODOS " << nodos.size() << std::endl;
     if(ventana_inicializada)
     {
         ventanaInicializar();
@@ -435,7 +435,7 @@ void Interfaz::Trasladar(unsigned short id,float x,float y,float z)
     }
 }
 
-void Interfaz::Rotar(unsigned short id,float grados,float x,float y,float z)
+void Interfaz::Rotar(unsigned short id,float gx,float gy,float gz)
 {
     Nodo * nodo = buscarNodo2(id);
 
@@ -444,7 +444,7 @@ void Interfaz::Rotar(unsigned short id,float grados,float x,float y,float z)
         TNodo * tnodo = nodo->recurso->GetHijo(1);
         if(tnodo != nullptr)
         {
-            tnodo->GetEntidad()->rotar(grados,x,y,z);
+            tnodo->GetEntidad()->rotar(gx,gy,gz);
         }
     }
 }
@@ -519,7 +519,7 @@ void Interfaz::LimpiarEscena()
                 nodos[i]->recurso = nullptr;
                 eliminarID((nodos[i]->id));
                 delete nodos[i];
-                nodos.erase(nodos.begin()+i); 
+                nodos.erase(nodos.begin()+i);
                 i--;
             }
         }
@@ -543,7 +543,7 @@ void Interfaz::LimpiarGui()
                 nodos[i]->recurso = nullptr;
                 eliminarID((nodos[i]->id));
                 delete nodos[i];
-                nodos.erase(nodos.begin()+i); 
+                nodos.erase(nodos.begin()+i);
                 i--;
             }
         }
@@ -691,9 +691,9 @@ float * Interfaz::GetPosicion(unsigned short did)
 float * Interfaz::GetTarget(unsigned short did)
 {
     Nodo * nodo = buscarNodo2(did);
-    
+
     if(nodo != nullptr)
-    {        
+    {
 
         TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
         if(tnodo != nullptr)
@@ -712,7 +712,7 @@ void Interfaz::RemoveObject(unsigned short object)
         Nodo * nodo = buscarNodo2(object);
 
         if(nodo != nullptr)
-        {            
+        {
             if(nodo->recurso != nullptr)
             {
                 _raiz->remHijo(nodo->recurso);
@@ -721,7 +721,7 @@ void Interfaz::RemoveObject(unsigned short object)
                 eliminarID((nodo->id));
                 delete nodo;
             }
-            nodos.erase(nodos.begin()+cualborrar); 
+            nodos.erase(nodos.begin()+cualborrar);
         }
     }
 }
@@ -729,11 +729,28 @@ void Interfaz::RemoveObject(unsigned short object)
 void Interfaz::EscalarImagen(unsigned short nid,float x,float y,bool enx, bool eny)
 {
     //escalar la imagen
+
 }
 
 void Interfaz::CambiarTexto(unsigned short nid,std::string texto)
 {
-    //cambiar string del texto
+    //cambiar string del texto 
+    if(nid != 0)
+    {
+        Nodo * nodo = buscarNodo2(nid);
+        std::cout << "monedas " << texto << std::endl;
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TTexto*>(tnodo->GetEntidad())->CambiarTexto(texto);
+                }
+            }
+        }
+    }
 }
 
 void Interfaz::eliminarID(unsigned short x)
@@ -756,4 +773,83 @@ unsigned short Interfaz::generarId()
     }
 
     return 0;
+}
+
+int Interfaz::getStartFrame(unsigned short did)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    return (int)dynamic_cast<TMalla*>(tnodo->GetEntidad())->getFrameInicio();                
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+int Interfaz::getFrameNr(unsigned short did)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    return (int)dynamic_cast<TMalla*>(tnodo->GetEntidad())->getFrameActual();
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+void Interfaz::setFrameLoop(unsigned short did,int start,int end)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->BucleAnimacion((unsigned short)start,(unsigned short)end);
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::setAnimationSpeed(unsigned short did,int velocidad)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->setVelocidadAnimacion((float)velocidad);
+                }
+            }
+        }
+    }
 }

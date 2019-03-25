@@ -445,6 +445,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 IGUIStaticText* _txtP;
                 vector<IGUIImage*> _imagenesP;
                 vector<IGUIStaticText*> _textosP;
+                
             #endif
     };
 

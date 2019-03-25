@@ -849,9 +849,9 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
         unsigned short objeto = _interfaz->AddMalla(ruta_objeto,1);//instanciamos el objeto y lo agregamos a la escena
         if(objeto != 0)
         {
-            cout << "colocar plataforma en: " << x << y << z << endl;
+            //cout << "colocar plataforma en: " << x << y << z << endl;
             _interfaz->Trasladar(objeto,(float)x,(float)y,(float)z);//movemos el objeto
-            _interfaz->Rotar(objeto,(float)rp,(float)0,(float)1,(float)0);//giramos el objeto
+            _interfaz->Rotar(objeto,(float)0,(float)rp,(float)0);//giramos el objeto
             Plataformas_Scena.push_back(objeto);//lo introducimos en la matriz de objetos
             return (Plataformas_Scena.size()-1);//devolvemos el valor
         }
@@ -962,13 +962,13 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     #ifdef WEMOTOR
         //codigo motor catopengl
 
-        _jugEscena = _interfaz->AddMalla(ruta_objeto,28);
+        _jugEscena = _interfaz->AddMalla(ruta_objeto,128);
         CargarLuces(0,0,0);
         if(_jugEscena != 0)
         {
             _interfaz->Trasladar(_jugEscena,(float)x,(float)y,(float)z);
             _interfaz->Escalar(_jugEscena,(float)1.75,(float)1.75,(float)1.75);
-            cout << _jugEscena << " INICIALMENTE: " << x << " " << y << " " << z << endl;
+            //cout << _jugEscena << " INICIALMENTE: " << x << " " << y << " " << z << endl;
         }
 
     #else
@@ -996,11 +996,11 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,1);
-        cout << "colocar objeto en: " << x << y << z << endl;
+        //cout << "colocar objeto en: " << x << y << z << endl;
         if(_objetoEnEscena != 0)
         {
             _interfaz->Trasladar(_objetoEnEscena,(float)x,(float)y,(float)z);
-            _interfaz->Rotar(_objetoEnEscena,(float)rp,0.0f,1.0f,0.0f);
+            _interfaz->Rotar(_objetoEnEscena,0.0f,(float)rp,0.0f);
 
             if(accion == 4)
             {
@@ -1158,9 +1158,7 @@ void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, f
         if(_armaEnEscena != 0)
         {
             _interfaz->Trasladar(_armaEnEscena,x,y,z);
-            _interfaz->Rotar(_armaEnEscena,rx,1,0,0);
-            _interfaz->Rotar(_armaEnEscena,ry,0,1,0);
-            _interfaz->Rotar(_armaEnEscena,rz,0,0,1);
+            _interfaz->Rotar(_armaEnEscena,rx,ry,rz);
         }
 
     #else
@@ -1181,9 +1179,7 @@ void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float 
         if(_armaProyectil != 0)
         {
             _interfaz->Trasladar(_armaProyectil,x,y,z);
-            _interfaz->Rotar(_armaProyectil,rx,1,0,0);
-            _interfaz->Rotar(_armaProyectil,ry,0,1,0);
-            _interfaz->Rotar(_armaProyectil,rz,0,0,1);
+            _interfaz->Rotar(_armaProyectil,rx,ry,rz);
         }
 
     #else
@@ -1245,11 +1241,8 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
             _interfaz->Trasladar(camara,nodeCamPosition[0],nodeCamPosition[1],nodeCamPosition[2]);
             _interfaz->ChangeTargetCamara(camara,nodeCamTarget[0],nodeCamTarget[1],nodeCamTarget[2]);
 
-            cout << _jugEscena << endl;
             _interfaz->Trasladar(_jugEscena,x,y,z);
-            _interfaz->Rotar(_jugEscena,rx,1,0,0);
-            _interfaz->Rotar(_jugEscena,ry,0,1,0);
-            _interfaz->Rotar(_jugEscena,rz,0,0,1);
+            _interfaz->Rotar(_jugEscena,rx,ry+180,rx);
 
             delete nodeCamPosition;
 
@@ -1286,9 +1279,7 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
         if(Enemigos_Scena.size() > 0 && Enemigos_Scena.size() > i && Enemigos_Scena[i] != 0)
         {
             _interfaz->Trasladar(Enemigos_Scena[i],x,y,z);
-            _interfaz->Rotar(Enemigos_Scena[i],rx,1,0,0);
-            _interfaz->Rotar(Enemigos_Scena[i],ry,0,1,0);
-            _interfaz->Rotar(Enemigos_Scena[i],rz,0,0,1);
+            _interfaz->Rotar(Enemigos_Scena[i],rx,ry,rz);
         }
 
     #else
@@ -1310,9 +1301,7 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
         if(Objetos_Scena.size() > 0 && Objetos_Scena.size() > i && Objetos_Scena[i] != 0)
         {
             _interfaz->Trasladar(Objetos_Scena[i],x,y,z);
-            _interfaz->Rotar(Objetos_Scena[i],rx,1,0,0);
-            _interfaz->Rotar(Objetos_Scena[i],ry,0,1,0);
-            _interfaz->Rotar(Objetos_Scena[i],rz,0,0,1);
+            _interfaz->Rotar(Objetos_Scena[i],rx,ry,rz);
         }
 
     #else
@@ -1336,9 +1325,7 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
             Constantes constantes;
             _interfaz->HabilitarObjeto(_armaEsp);//para verlo en escena y que se procese
             _interfaz->Trasladar(_armaEspJugador,x + 5*(sin(constantes.DEG_TO_RAD*ry)),y,z + 5*(cos(constantes.DEG_TO_RAD*ry)));//trasladamos
-            _interfaz->Rotar(_armaEspJugador,rx,1,0,0);//rotamos en x
-            _interfaz->Rotar(_armaEspJugador,ry,0,1,0);//rotamos en y
-            _interfaz->Rotar(_armaEspJugador,rz,0,0,1);//rotamos en z
+            _interfaz->Rotar(_armaEspJugador,rx,ry,rz);//rotamo
         }
 
 
@@ -1424,12 +1411,12 @@ void MotorGrafico::activarPathfinding()
         if(pathfinding)
         {
             pathfinding = false;
-            cout << "\e[38m Pathfinding Desactivado \e[0m" << endl;
+            //cout << "\e[38m Pathfinding Desactivado \e[0m" << endl;
         }
         else
         {
             pathfinding = true;
-            cout << "\e[38m Pathfinding Activado \e[0m" << endl;
+            //cout << "\e[38m Pathfinding Activado \e[0m" << endl;
         }
 }
 
@@ -1439,11 +1426,11 @@ void MotorGrafico::clearDebug()
         //codigo motor catopengl
         if(Objetos_Debug.size()>0)
         {
-            std::cout << Objetos_Debug.size() << std::endl;
+            //std::cout << Objetos_Debug.size() << std::endl;
             for(std::size_t i=0;i<Objetos_Debug.size();i++)
             {
                 _interfaz->RemoveObject(Objetos_Debug[i]);
-                std::cout << "borrado" << Objetos_Debug[i] << std::endl;
+                //std::cout << "borrado" << Objetos_Debug[i] << std::endl;
                 Objetos_Debug[i] = 0;
             }
             Objetos_Debug.resize(0);
@@ -1586,9 +1573,7 @@ void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, in
             if(tmpobjt != 0)
             {
                 _interfaz->Trasladar(tmpobjt,(float)x,(float)y,(float)z);
-                _interfaz->Rotar(tmpobjt,(float)rx,1,0,0);
-                _interfaz->Rotar(tmpobjt,(float)ry,0,1,0);
-                _interfaz->Rotar(tmpobjt,(float)rz,0,0,1);
+                _interfaz->Rotar(tmpobjt,(float)rx,(float)ry,(float)rz);
                 _interfaz->Escalar(tmpobjt,(float)ancho,(float)alto,(float)profund);
                 Objetos_Debug2.push_back(tmpobjt);
             }
@@ -1854,13 +1839,16 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        unsigned short _conoVision = _interfaz->AddMalla("assets/models/conoVision.obj",1);
-        if(_conoVision != 0)
+        if(debugGrafico)
         {
-            _interfaz->Trasladar(_conoVision,x,y,z);
-            _interfaz->Rotar(_conoVision,rotacion,0,1,0);
-            _interfaz->Escalar(_conoVision,longitud/2,1.0f,0.01f);
-            Objetos_Debug.push_back(_conoVision);
+            unsigned short _conoVision = _interfaz->AddMalla("assets/models/conoVision.obj",1);
+            if(_conoVision != 0)
+            {
+                _interfaz->Trasladar(_conoVision,x,y,z);
+                _interfaz->Rotar(_conoVision,0,rotacion,0);
+                _interfaz->Escalar(_conoVision,longitud/2,1.0f,0.01f);
+                Objetos_Debug.push_back(_conoVision);
+            }
         }
     #else
         //codigo motor irrlicht
@@ -2175,7 +2163,8 @@ void MotorGrafico::SetDinero(int dinero)
         {
             string str = "";
             str += dinero;
-            _interfaz->CambiarTexto(moneyI,str.c_str());
+            std::cout << "recoges tantas: " << str << std::endl;
+            _interfaz->CambiarTexto(moneyI,str);
         }
     #else
         //codigo motor irrlicht
@@ -2262,6 +2251,94 @@ void MotorGrafico::RenderInterfaz(bool activada)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        if (activada)
+        {
+
+            if(vida_textura != 0)
+            {
+                _interfaz->HabilitarObjeto(vida_textura);
+            }
+
+            if(energia_textura != 0)
+            {
+                _interfaz->HabilitarObjeto(energia_textura);                
+            }
+
+            if(dinero_textura != 0)
+            {
+                _interfaz->HabilitarObjeto(dinero_textura);                
+            }
+
+            if(arma_textura != 0)
+            {
+                _interfaz->HabilitarObjeto(arma_textura);                
+            }
+
+            if(barraEnergia_textura != 0)
+            {
+                _interfaz->HabilitarObjeto(barraEnergia_textura);                
+            }    
+
+            if(barraVida_textura != 0)
+            {
+                _interfaz->HabilitarObjeto(barraVida_textura);                
+            }          
+
+            if(dinero_textura != 0)
+            {
+                _interfaz->HabilitarObjeto(dinero_textura);                
+            }  
+
+        }   
+        else
+        {
+            if(vida_textura != 0)
+            {
+                _interfaz->DeshabilitarObjeto(vida_textura);
+            }
+
+            if(energia_textura != 0)
+            {
+                _interfaz->DeshabilitarObjeto(energia_textura);                
+            }
+
+            if(dinero_textura != 0)
+            {
+                _interfaz->DeshabilitarObjeto(dinero_textura);                
+            }
+
+            if(arma_textura != 0)
+            {
+                _interfaz->DeshabilitarObjeto(arma_textura);                
+            }
+
+            if(barraEnergia_textura != 0)
+            {
+                _interfaz->DeshabilitarObjeto(barraEnergia_textura);                
+            }    
+
+            if(barraVida_textura != 0)
+            {
+                _interfaz->DeshabilitarObjeto(barraVida_textura);                
+            }          
+
+            if(dinero_textura != 0)
+            {
+                _interfaz->DeshabilitarObjeto(dinero_textura);                
+            }  
+
+            if(espada_textura != 0)
+            {
+                _interfaz->DeshabilitarObjeto(dinero_textura);                
+            }
+
+            if(llave_textura != 0)
+            {
+                _interfaz->DeshabilitarObjeto(dinero_textura);                
+            }          
+            
+        }
+            
     #else
         //codigo motor irrlicht
         if (activada)
@@ -2313,6 +2390,72 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+
+        int frame = _interfaz->getStartFrame(_jugEscena);
+        int frame_actual = _interfaz->getFrameNr(_jugEscena);
+
+        if(estado == 0 && frame != 30 && frame != 120) //esta quieto
+        {
+            if(_jugEscena != 0)
+            {
+                _interfaz->setFrameLoop(_jugEscena,30, 44);
+                _interfaz->setAnimationSpeed(_jugEscena,10);
+            }
+        }
+
+        if(estado == 1 && frame != 0 && frame != 120) //se mueve
+        {
+            if(_jugEscena != 0)
+            {
+                _interfaz->setFrameLoop(_jugEscena,1, 30);
+                _interfaz->setAnimationSpeed(_jugEscena,20);
+            }
+        }
+
+        if(estado == 2 && frame != 48  && frame != 120) //ataca
+        {
+            if(_jugEscena != 0)
+            {
+                _interfaz->setFrameLoop(_jugEscena,48, 70);
+                _interfaz->setAnimationSpeed(_jugEscena,15);
+            }
+        }
+
+        if(estado == 3 && frame != 72  && frame != 120) //ataque especial
+        {
+            if(_jugEscena != 0)
+            {
+                _interfaz->setFrameLoop(_jugEscena,72, 98);
+                _interfaz->setAnimationSpeed(_jugEscena,10);
+            }
+        }
+
+        if(estado == 4  && frame != 99  && frame != 120) //coger objeto
+        {
+            if(_jugEscena != 0)
+            {
+                _interfaz->setFrameLoop(_jugEscena,99, 112);
+                _interfaz->setAnimationSpeed(_jugEscena,10);
+            }
+        }
+
+        if(estado == 5 && frame != 120) //muere
+        {
+            if(frame_actual == 119)
+            {
+                _interfaz->setFrameLoop(_jugEscena,120, 128); //lo dejamos definitivamente muerto
+                _interfaz->setAnimationSpeed(_jugEscena,10);
+            }
+            else
+            {
+                if(_interfaz && frame != 112)
+                {
+                    _interfaz->setFrameLoop(_jugEscena,112, 120);
+                    _interfaz->setAnimationSpeed(_jugEscena,10);
+                }
+            }
+        }
+        
     #else
         //codigo motor irrlicht
         int frame = _jugEscena->getStartFrame();
@@ -2476,6 +2619,10 @@ void MotorGrafico::BorrarElemento(signed int id)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        if(_interfaz)
+        {
+            _interfaz->RemoveObject((unsigned short)id);
+        }
     #else
         //codigo motor irrlicht
         _guienv->getRootGUIElement()->getElementFromId(id)->remove();

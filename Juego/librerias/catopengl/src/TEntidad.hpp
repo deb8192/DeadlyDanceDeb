@@ -4,6 +4,7 @@
 #include "iostream"
 #include <stack>
 #include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
 #include <queue>
 #include "Shader.hpp"
 #include "RMalla.hpp"
@@ -11,7 +12,7 @@
 class TEntidad
 {
     public:
-    
+
         virtual ~TEntidad();
 
         virtual void beginDraw()=0;
@@ -20,7 +21,7 @@ class TEntidad
 
         //para TTransform
         virtual void escalar(float,float,float);
-        virtual void rotar(float,float,float,float);
+        virtual void rotar(float,float,float);
         virtual void trasladar(float,float,float);
         //fin TTransform
 
@@ -46,7 +47,7 @@ class TEntidad
         static glm::mat4 * matriz_compartida;//matriz que tiene la ultima operacion
 
         void EsGui();//lo convierte en un elemento identificado como gui
-        
+
         void NoEsGui();//si es gui deja de serlo
 
         bool GetGui();//devuelve true si es gui o false si no lo es
