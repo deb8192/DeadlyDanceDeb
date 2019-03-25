@@ -151,7 +151,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void SetContestar(bool);
         int  GetTipoEnemigo();
 
-        void Render(short pos, float updTime, float drawTime);
+        void Render(short posArray, float updTime, float drawTime);
         void RenderAtaque();
 
     protected:
