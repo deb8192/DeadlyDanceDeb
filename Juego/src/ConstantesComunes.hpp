@@ -63,6 +63,7 @@ using Constantes = struct
     const char* COMPROBAR = "comprueba";
     const char* ATRAVESAR = "atraviesa";
     const char* NO_VE = "no-ve";
+    const char* NO_OYE = "no-oye";
     const char* CAMBIA = "cambia";
     const char* ESTA = "esta";
     const char* DEBE = "debe";

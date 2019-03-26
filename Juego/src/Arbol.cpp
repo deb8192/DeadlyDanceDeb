@@ -277,7 +277,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
 
                 //Si la composicion es una secuencia y la accion anterior ha tenido exito
                 //o si es un selector y la accion anterior no ha tenido exito, se busca el siguiente hijo
-                if((comp->getTipo() == 2 && exito) || (comp->getTipo() == 3 && (!exito || ID < comp->getHijos().front()->getID())))
+                if(((comp->getTipo() == 2 || comp->getTipo() == 0) && exito) || (comp->getTipo() == 3 && (!exito || ID < comp->getHijos().front()->getID())))
                 {
                     //Se accede al hijo que toca en funcion del ultimo ID registrado en el recorrido
                     while(i < comp->getHijos().size() && ID >= comp->getHijos().at(i)->getID())
@@ -313,7 +313,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 }
                 //Si la composicion es una secuencia y la accion anterior no ha tenido exito
                 //o si es un selector y la accion anterior ha tenido exito, se asciende para seleccionar otro nodo no hijo
-                else if((comp->getTipo() == 2 && !exito) || (comp->getTipo() == 3 && exito && ID >= comp->getHijos().front()->getID()))
+                else if(((comp->getTipo() == 2 || comp->getTipo() == 0) && !exito) || (comp->getTipo() == 3 && exito && ID >= comp->getHijos().front()->getID()))
                 {
                     //Se iguala el ID al ultimo de los hijos para continuar
                     //la lectura del arbol en otra rama y no bajar a los hijos restantes
@@ -530,6 +530,10 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 {
                     arrayTareaObjetivo[0] = 15;
                 }
+                else if(strcmp(accion, constantes.NO_OYE) == 0)
+                {
+                    arrayTareaObjetivo[0] = 16;
+                }
 
                 //Objetivo
                 const char* objetivo = hoja->GetObjetivo();
@@ -561,7 +565,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 {
                     arrayTareaObjetivo[1] = 6;
                 }
-                else if(strcmp(objetivo, constantes.ULTIMA_PUERTA) == 0)
+                else if(strcmp(objetivo, constantes.ESCONDITE) == 0)
                 {
                     arrayTareaObjetivo[1] = 7;
                 }
@@ -577,7 +581,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 {
                     arrayTareaObjetivo[1] = 10;
                 }
-                else if(strcmp(objetivo, constantes.ESCONDITE) == 0)
+                else if(strcmp(objetivo, constantes.ULTIMA_PUERTA) == 0)
                 {
                     arrayTareaObjetivo[1] = 11;
                 }
