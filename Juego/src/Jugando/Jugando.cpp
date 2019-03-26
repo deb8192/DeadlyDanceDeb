@@ -129,7 +129,7 @@ void Jugando::ValoresPorDefecto()
     danyo2 = 0;
     contadorEnem = 0;
     int_cpw_aux = 0;
-    enSalaBoss = false;    
+    enSalaBoss = false;
     //Valores para el centro de las bandadas en el flocking
     posicionMediaEnemigos.vX = INT_MAX;
     posicionMediaEnemigos.vY = INT_MAX;
@@ -342,71 +342,6 @@ void Jugando::Update()
     //animacion
     _motor->cambiarAnimacionJugador(_jugador->getAnimacion());
 
-    if(_jugador->getArma() != nullptr)
-    {
-        //Ataque Animacion
-        if(strcmp(_jugador->getArma()->getNombre(),"guitarra") == 0)
-        {
-            if(_jugador->getTimeAt() == 1.5f)
-            {
-                mov_weapon_rotX = -90;
-                mov_weapon_posX = 3.5;
-                mov_weapon_posZ = 3.5;
-                mov_weapon_posY = 4.5;
-            }
-            else if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() < 1.5f)
-            {
-                if(mov_weapon_rotX < 0)mov_weapon_rotX += 15;
-                if(mov_weapon_posY > 0)mov_weapon_posY -= 0.7;
-                if(mov_weapon_posX < 5.5)mov_weapon_posX += 0.3;
-                if(mov_weapon_posZ < 5.5)mov_weapon_posZ += 0.3;
-            }
-            else
-            {
-                mov_weapon_posX=-1.5;
-                mov_weapon_posZ=-1.5;
-                mov_weapon_posY=3.3;
-                mov_weapon_rotX=90;
-                mov_weapon_rotY=0;
-                mov_weapon_rotZ=0;
-            }
-        }
-        else if(strcmp(_jugador->getArma()->getNombre(),"arpa") == 0)
-        {
-            if(_jugador->getTimeAt() == 1.5f)
-            {
-                proyectilFuera = false;
-                mov_weapon_rotX = 180;
-                mov_weapon_posX = 2;
-                mov_weapon_posZ = 2;
-                mov_weapon_posY = 2.5;
-            }
-            else if(_jugador->getTimeAt() <= 0.0f)
-            {
-                if(proyectilFuera == false)
-                {
-                    _motor->EraseProyectil();
-                    proyectilFuera = true;
-                }
-                mov_weapon_posX=-0.5;
-                mov_weapon_posZ=-0.5;
-                mov_weapon_posY=2.3;
-                mov_weapon_rotX=90;
-                mov_weapon_rotY=0;
-                mov_weapon_rotZ=0;
-            }
-        }
-
-        //METERLE LA FUNCION AL JUGADOR
-        float posArmaX = mov_weapon_posX*  sin(constantes.PI*  _jugador->getRY() / constantes.PI_RADIAN) + _jugador->getX();
-        float posArmaZ = mov_weapon_posZ*  cos(constantes.PI*  _jugador->getRY() / constantes.PI_RADIAN) + _jugador->getZ();//iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
-        _jugador->getArma()->setPosiciones(posArmaX, _jugador->getY()+3, posArmaZ);
-        //!METERLE LA FUNCION AL JUGADOR
-
-       _motor->llevarObjeto(posArmaX, _jugador->getY()+mov_weapon_posY,posArmaZ, _jugador->getRX()+mov_weapon_rotX, _jugador->getRY()+mov_weapon_rotY, _jugador->getRZ()+mov_weapon_rotZ );
-       _fisicas->llevarBox(posArmaX, _jugador->getY()+mov_weapon_posY,posArmaZ, _jugador->getArma()->getAncho()+mov_weapon_rotX, _jugador->getArma()->getLargo()+mov_weapon_rotY, _jugador->getArma()->getAlto()+mov_weapon_rotZ);
-    }
-
     //Comprueba la activacion de un powerup
     this->activarPowerUp();
 
@@ -422,7 +357,7 @@ void Jugando::Update()
 
     //colisiones con todos los objetos y enemigos que no se traspasan
     jugadorInmovil = _jugador->ColisionEntornoEne();
-    
+
     // Actualizar movimiento del jugador
     _jugador->movimiento(jugadorInmovil,
         _motor->EstaPulsado(KEY_A),
@@ -473,7 +408,7 @@ void Jugando::Update()
     {
         //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
         short contadorEnemigos = 0;
-        INnpc::VectorEspacial posicionTemporal;  
+        INnpc::VectorEspacial posicionTemporal;
 
         for(short i=0;(unsigned)i<_enemigos.size();i++)
         {
@@ -505,7 +440,7 @@ void Jugando::Update()
                     posicionTemporal.vX += _enemigos[i]->getX();
                     posicionTemporal.vY += _enemigos[i]->getY();
                     posicionTemporal.vZ += _enemigos[i]->getZ();
-                }                    
+                }
                 // TO DO: optimizar
                 if (_enemPideAyuda) {
                     _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
@@ -547,8 +482,8 @@ void Jugando::Update()
             posicionMediaEnemigos.vY = INT_MAX;
             posicionMediaEnemigos.vZ = INT_MAX;
         }
-        
-        
+
+
     }
         //_enemigos->MuereEnemigo(acumulator);
         //acumulator -= dt;
@@ -616,7 +551,7 @@ void Jugando::UpdateIA()
                     cout << "secreapower:" << secreapower << endl;
 
                     if(secreapower <= 100)
-                    { 
+                    {
                         //20% de posibilidades
                         //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
                         srand(time(NULL));
@@ -695,7 +630,7 @@ void Jugando::UpdateIA()
             }
         }
     }
-    
+
     //TO DO: borrar fisicas y cosas
     // Para cuando se mate al boss
     //Juego::GetInstance()->estado.CambioEstadoGanar();
@@ -703,6 +638,7 @@ void Jugando::UpdateIA()
 
 void Jugando::Render()
 {
+    Constantes constantes;
     _motor->FondoEscena(255,0,0,0); // Borra toda la pantalla
 
     _motor->clearDebug2();
@@ -725,6 +661,73 @@ void Jugando::Render()
 
     //Dibujado del personaje
     _jugador->Render(updateTime, resta);
+
+    //Armas
+    if(_jugador->getArma() != nullptr)
+    {
+        //Ataque Animacion
+        if(strcmp(_jugador->getArma()->getNombre(),"guitarra") == 0)
+        {
+            if(_jugador->getTimeAt() == 1.5f)
+            {
+                mov_weapon_rotX = -90;
+                mov_weapon_posX = 3.5;
+                mov_weapon_posZ = 3.5;
+                mov_weapon_posY = 4.5;
+            }
+            else if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() < 1.5f)
+            {
+                if(mov_weapon_rotX < 0)mov_weapon_rotX += 15;
+                if(mov_weapon_posY > 0)mov_weapon_posY -= 0.7;
+                if(mov_weapon_posX < 5.5)mov_weapon_posX += 0.3;
+                if(mov_weapon_posZ < 5.5)mov_weapon_posZ += 0.3;
+            }
+            else
+            {
+                mov_weapon_posX=-1.5;
+                mov_weapon_posZ=-1.5;
+                mov_weapon_posY=3.3;
+                mov_weapon_rotX=90;
+                mov_weapon_rotY=0;
+                mov_weapon_rotZ=0;
+            }
+        }
+        else if(strcmp(_jugador->getArma()->getNombre(),"arpa") == 0)
+        {
+            if(_jugador->getTimeAt() == 1.5f)
+            {
+                proyectilFuera = false;
+                mov_weapon_rotX = 180;
+                mov_weapon_posX = 2;
+                mov_weapon_posZ = 2;
+                mov_weapon_posY = 2.5;
+            }
+            else if(_jugador->getTimeAt() <= 0.0f)
+            {
+                if(proyectilFuera == false)
+                {
+                    _motor->EraseProyectil();
+                    proyectilFuera = true;
+                }
+                mov_weapon_posX=-0.5;
+                mov_weapon_posZ=-0.5;
+                mov_weapon_posY=2.3;
+                mov_weapon_rotX=90;
+                mov_weapon_rotY=0;
+                mov_weapon_rotZ=0;
+            }
+        }
+
+        //METERLE LA FUNCION AL JUGADOR
+        float posArmaX = mov_weapon_posX*  sin(constantes.PI*  _jugador->getRY() / constantes.PI_RADIAN) + _jugador->getX();
+        float posArmaZ = mov_weapon_posZ*  cos(constantes.PI*  _jugador->getRY() / constantes.PI_RADIAN) + _jugador->getZ();//iguala la posicion del arma a la del jugador y pasa a los motores las posiciones
+        _jugador->getArma()->setPosiciones(posArmaX, _jugador->getY()+3, posArmaZ);
+        //!METERLE LA FUNCION AL JUGADOR
+
+       _motor->llevarObjeto(posArmaX, _jugador->getY()+mov_weapon_posY,posArmaZ, _jugador->getRX()+mov_weapon_rotX, _jugador->getRY()+mov_weapon_rotY, _jugador->getRZ()+mov_weapon_rotZ );
+       _fisicas->llevarBox(posArmaX, _jugador->getY()+mov_weapon_posY,posArmaZ, _jugador->getArma()->getAncho()+mov_weapon_rotX, _jugador->getArma()->getLargo()+mov_weapon_rotY, _jugador->getArma()->getAlto()+mov_weapon_rotZ);
+    }
+
 
     //Dibujado de los enemigos
     for(unsigned short i = 0; i < _enemigos.size(); i++)
@@ -866,7 +869,7 @@ void Jugando::CrearJugador()
 
 }
 
-void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, 
+void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp,
     int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* modelo, const char* textura, int* propiedades,
     unsigned short tipoObjeto)
 {
@@ -874,7 +877,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     if(accion == 2)
     {
         Constantes constantes;
-        
+
         Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObjeto);
         _rec->setID(_recolectables.size());
         _rec->setPosiciones(x,y,z);
@@ -955,7 +958,7 @@ void Jugando::ConectarWaypoints()
             Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),
                 _jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),
                 _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),
-                _jugador->getX(),_jugador->getY(), _jugador->getZ(), 
+                _jugador->getX(),_jugador->getY(), _jugador->getZ(),
                 _jugador->getArma()->GetTipoObjeto());
 
             nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
@@ -1049,11 +1052,11 @@ void Jugando::AccionarMecanismo(int int_col)
             //_motora->getEvent("AbrirPuerta")->setVolume(0.8f);
             _motora->getEvent("AbrirPuerta")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
             _motora->getEvent("AbrirPuerta")->start();
-            _inter->setNewRotacion(_inter->getRX(), 
-                _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), 
+            _inter->setNewRotacion(_inter->getRX(),
+                _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
                 _inter->getRZ());
-            _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(), 
-                _inter->getRX(), _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), 
+            _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(),
+                _inter->getRX(), _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
                 _inter->getRZ(), _inter->GetDesplazamientos() , posicion);
         }
         else
@@ -1061,10 +1064,10 @@ void Jugando::AccionarMecanismo(int int_col)
             //Se cierra/desacciona la puerta / el mecanismo
             _motora->getEvent("CerrarPuerta")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
             _motora->getEvent("CerrarPuerta")->start();
-            _inter->setNewRotacion(_inter->getRX(), 
-                _inter->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), 
+            _inter->setNewRotacion(_inter->getRX(),
+                _inter->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
                 _inter->getRZ());
-            _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(), 
+            _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(),
                 _inter->getRX(),_inter->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
                 _inter->getRZ(), _inter->GetDesplazamientos(), posicion);
         }
@@ -1472,7 +1475,7 @@ void Jugando::AbrirPantallaPuzzle()
 void Jugando::AbrirCofre(Interactuable* _inter)
 {
     //Se abre el cofre (Animacion)
-    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), 
+    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(),
     _inter->getRZ() + 80.0);
     _inter->accionar();
 
@@ -1495,7 +1498,7 @@ void Jugando::CrearEnemigoArana()
         _eneA->GetAlto(),_eneA->GetLargo(),2,0,0);
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
-    
+
     std::string nameid = std::to_string(_eneA->getID()); //pasar id a string
     _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid); // TO DO: poner el suyo
     _motora->getEvent(nameid)->setPosition(x,y,z);
@@ -1518,7 +1521,7 @@ void Jugando::CargarBossEnMemoria()
     float x = _boss->getX();
     float y = _boss->getY();
     float z = _boss->getZ();
-    
+
     _motor->CargarEnemigos(x,y,z,_boss->GetModelo());//creamos la figura
     _fisicas->crearCuerpo(1,0,x/2,y/2,z/2,2,1,1,1,2,0,0);
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
