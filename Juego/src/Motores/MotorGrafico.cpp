@@ -505,10 +505,16 @@ void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, signed int i
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        _interfaz->DeclararBoton(_interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f),id);
-        wstring ws(texto);
-        string str(ws.begin(),ws.end());
-        CrearTexto(str,(x+25),(y+20),0,0);
+        unsigned short num = _interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f);
+        if(num != 0)
+        {
+            _interfaz->DeclararBoton(num,id);
+            _interfaz->DefinirIdPersonalizado(num,id);
+            wstring ws(texto);
+            string str(ws.begin(),ws.end());
+            unsigned short num2 = _interfaz->CrearTexto(str,(x+25),(y+20));
+            _interfaz->DefinirTextoBoton(num,num2);
+        }
     #else
         //codigo motor irrlicht
         _guienv->addButton(rect<s32>(x,y,x2,y2), 0, id, texto, texto2);
@@ -2194,7 +2200,7 @@ void MotorGrafico::SetDinero(int dinero)
         {
             string str = "";
             str += dinero;
-            std::cout << "recoges tantas: " << str << std::endl;
+            //std::cout << "recoges tantas: " << str << std::endl;
             _interfaz->CambiarTexto(moneyI,str);
         }
     #else
@@ -2653,6 +2659,7 @@ void MotorGrafico::BorrarElemento(signed int id)
         if(_interfaz)
         {
             //_interfaz->RemoveObject((unsigned short)id);
+            _interfaz->RemoveObjectForID(id);
         }
     #else
         //codigo motor irrlicht

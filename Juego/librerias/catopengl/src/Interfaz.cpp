@@ -418,6 +418,19 @@ Interfaz::Nodo * Interfaz::buscarNodo2(unsigned short id)
     return nullptr;
 }
 
+Interfaz::Nodo * Interfaz::buscarNodo3(signed int idPerson)
+{
+    for(unsigned int i = 0; i < nodos.size(); i++)
+    {
+        if (nodos[i] != nullptr && nodos[i]->idPersonalizado == idPerson)
+        {
+            cualborrar = i;
+            return nodos[i];
+        }
+    }
+    return nullptr;
+}
+
 void Interfaz::Trasladar(unsigned short id,float x,float y,float z)
 {
     Nodo * nodo = buscarNodo2(id);
@@ -722,17 +735,26 @@ void Interfaz::RemoveObject(unsigned short object)
         //borrar objeto que se le pasa
         Nodo * nodo = buscarNodo2(object);
 
+        unsigned short auxiliar = cualborrar;
         if(nodo != nullptr)
         {
+            if(nodo->id_texto != 0 && nodo->tipo == 3)
+            {
+               RemoveObject(nodo->id_texto);
+            }
+
             if(nodo->recurso != nullptr)
             {
                 _raiz->remHijo(nodo->recurso);
                 delete nodo->recurso;
                 nodo->recurso = nullptr;
-                eliminarID((nodo->id));
-                delete nodo;
             }
-            nodos.erase(nodos.begin()+cualborrar);
+ 
+            pulgarReferencia(nodo,nodo->tipo);
+            eliminarID((nodo->id));
+            delete nodo;
+            nodos.erase(nodos.begin()+auxiliar);
+ 
         }
     }
 }
@@ -771,7 +793,6 @@ void Interfaz::CambiarTexto(unsigned short nid,std::string texto)
     if(nid != 0)
     {
         Nodo * nodo = buscarNodo2(nid);
-        std::cout << "monedas " << texto << std::endl;
         if(nodo != nullptr)
         {            
             if(nodo->recurso != nullptr)
@@ -884,5 +905,85 @@ void Interfaz::setAnimationSpeed(unsigned short did,int velocidad)
                 }
             }
         }
+    }
+}
+
+void Interfaz::RemoveObjectForID(signed int idPerson)
+{
+    Nodo * nodo = buscarNodo3(idPerson);
+    if(nodo != nullptr)
+    {
+        RemoveObject(nodo->id);
+    }
+}
+
+void Interfaz::DefinirIdPersonalizado(unsigned short did, signed int idPerson)
+{
+    Nodo * nodo = buscarNodo2(did);
+
+    if(nodo != nullptr)
+    {
+        nodo->idPersonalizado = idPerson;
+    }
+}
+
+void Interfaz::pulgarReferencia(Nodo * referencia,unsigned short tipo)
+{
+        if(tipo == 0)
+        {
+            for(unsigned int i = 0; i < camaras.size(); i++)
+            {
+                if(camaras[i] != nullptr && referencia == camaras[i])
+                {
+                    camaras.erase(camaras.begin()+i);
+                    return;
+                }
+            }
+        }
+
+        if(tipo == 1)
+        {
+            for(unsigned int i = 0; i < luces.size(); i++)
+            {
+                if(luces[i] != nullptr && referencia == luces[i])
+                {
+                    luces.erase(luces.begin()+i);
+                    return;
+                }
+            }
+        }
+
+        if(tipo == 3)
+        {
+            for(unsigned int i = 0; i < imagenes.size(); i++)
+            {
+                if(imagenes[i] != nullptr && referencia == imagenes[i])
+                {
+                    imagenes.erase(imagenes.begin()+i);
+                    return;
+                }
+            }
+        }
+
+        if(tipo == 4)
+        {
+            for(unsigned int i = 0; i < textos.size(); i++)
+            {
+                if(textos[i] != nullptr && referencia == textos[i])
+                {
+                    textos.erase(textos.begin()+i);
+                    return;
+                }
+            }
+        }
+}
+
+void Interfaz::DefinirTextoBoton(unsigned short imagen,unsigned short texto)
+{
+    Nodo * nodo = buscarNodo2(imagen);
+
+    if(nodo != nullptr)
+    {
+        nodo->id_texto = texto;
     }
 }
