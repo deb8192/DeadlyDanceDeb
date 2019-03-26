@@ -52,8 +52,11 @@ MotorGrafico::~MotorGrafico()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        _interfaz = nullptr;
-
+        if(_interfaz)
+        {
+            delete _interfaz;
+            _interfaz = nullptr;
+        }
     #else
         //codigo motor irrlicht
         //Inputs input
@@ -610,6 +613,8 @@ bool MotorGrafico::EstaPulsado(short boton)
             case idsEventos::Enum::KEY_E:
                 return _interfaz->IsKeyDown(GLFW_KEY_E);//actua una sola vez aunque se mantenga pulsado
         }
+
+        return false;
     #else
         //codigo motor irrlicht
         switch(boton)
@@ -1242,7 +1247,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
             _interfaz->ChangeTargetCamara(camara,nodeCamTarget[0],nodeCamTarget[1],nodeCamTarget[2]);
 
             _interfaz->Trasladar(_jugEscena,x,y,z);
-            _interfaz->Rotar(_jugEscena,rx,ry+180,rx);
+            _interfaz->Rotar(_jugEscena,rx,ry-180,rx);
 
             delete nodeCamPosition;
 
@@ -1279,7 +1284,7 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
         if(Enemigos_Scena.size() > 0 && Enemigos_Scena.size() > i && Enemigos_Scena[i] != 0)
         {
             _interfaz->Trasladar(Enemigos_Scena[i],x,y,z);
-            _interfaz->Rotar(Enemigos_Scena[i],rx,ry,rz);
+            _interfaz->Rotar(Enemigos_Scena[i],rx,ry-180,rz);
         }
 
     #else
@@ -1907,8 +1912,8 @@ void MotorGrafico::CargarInterfaz()
         energia_textura = _interfaz->AddImagen("assets/images/21.png",10,58,1);
         dinero_textura = _interfaz->AddImagen("assets/images/61.png",680,10,1);
         arma_textura =_interfaz->AddImagen("assets/images/11.png",730,530,1);
-        barraVida_textura = _interfaz->AddImagen("assets/images/4.png",50,15,1);
-        barraEnergia_textura = _interfaz->AddImagen("assets/images/3.png",48,65,1);
+        barraVida_textura = _interfaz->AddImagen("assets/images/4.png",50,18,1);
+        barraEnergia_textura = _interfaz->AddImagen("assets/images/3.png",48,67,1);
         manos_textura = _interfaz->AddImagen("assets/images/manos.png",738,534,1);
         llave_textura = _interfaz->AddImagen("assets/images/llave.png",738,534,1);
         espada_textura = _interfaz->AddImagen("assets/images/espada.png",738,534,1);
@@ -2097,17 +2102,17 @@ void MotorGrafico::SetVida(int vida)
         if(barraVida_textura != 0)
         {
             float unidad = ((float)121/100);
-            float unidad_min = 0.01f;
+            float unidad_min = 0.0030f;
 
             float resultado = (unidad*(float)vida)*unidad_min;
 
             if(resultado <= 0)
             {
-                _interfaz->EscalarImagen(barraVida_textura,0.01f,1,true,false);
+                _interfaz->EscalarImagen(barraVida_textura,0.01f,0.48f,true,true);
             }
             else
             {
-                _interfaz->EscalarImagen(barraVida_textura,resultado,1,true,false);
+                _interfaz->EscalarImagen(barraVida_textura,resultado,0.48f,true,true);
             }
         }
 
@@ -2138,18 +2143,18 @@ void MotorGrafico::SetBarraEnergia(int barra)
         if(barraEnergia_textura != 0)
         {
             float unidad = ((float)63/100);
-            float unidad_min = 0.01f;
+            float unidad_min = 0.0030f;
 
             float resultado = (unidad*(float)barra)*unidad_min;
 
 
             if(resultado <= 0)
             {
-                _interfaz->EscalarImagen(barraEnergia_textura,0.01f,1,true,false);
+                _interfaz->EscalarImagen(barraEnergia_textura,0.01f,0.48f,true,true);
             }
             else
             {
-                _interfaz->EscalarImagen(barraEnergia_textura,resultado,1,true,false);
+                _interfaz->EscalarImagen(barraEnergia_textura,resultado,0.48f,true,true);
             }
         }
     #else
@@ -2277,35 +2282,35 @@ void MotorGrafico::RenderInterfaz(bool activada)
 
             if(energia_textura != 0)
             {
-                _interfaz->HabilitarObjeto(energia_textura);                
+                _interfaz->HabilitarObjeto(energia_textura);
             }
 
             if(dinero_textura != 0)
             {
-                _interfaz->HabilitarObjeto(dinero_textura);                
+                _interfaz->HabilitarObjeto(dinero_textura);
             }
 
             if(arma_textura != 0)
             {
-                _interfaz->HabilitarObjeto(arma_textura);                
+                _interfaz->HabilitarObjeto(arma_textura);
             }
 
             if(barraEnergia_textura != 0)
             {
-                _interfaz->HabilitarObjeto(barraEnergia_textura);                
-            }    
+                _interfaz->HabilitarObjeto(barraEnergia_textura);
+            }
 
             if(barraVida_textura != 0)
             {
-                _interfaz->HabilitarObjeto(barraVida_textura);                
-            }          
+                _interfaz->HabilitarObjeto(barraVida_textura);
+            }
 
             if(dinero_textura != 0)
             {
-                _interfaz->HabilitarObjeto(dinero_textura);                
-            }  
+                _interfaz->HabilitarObjeto(dinero_textura);
+            }
 
-        }   
+        }
         else
         {
             if(vida_textura != 0)
@@ -2315,46 +2320,46 @@ void MotorGrafico::RenderInterfaz(bool activada)
 
             if(energia_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(energia_textura);                
+                _interfaz->DeshabilitarObjeto(energia_textura);
             }
 
             if(dinero_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(dinero_textura);                
+                _interfaz->DeshabilitarObjeto(dinero_textura);
             }
 
             if(arma_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(arma_textura);                
+                _interfaz->DeshabilitarObjeto(arma_textura);
             }
 
             if(barraEnergia_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(barraEnergia_textura);                
-            }    
+                _interfaz->DeshabilitarObjeto(barraEnergia_textura);
+            }
 
             if(barraVida_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(barraVida_textura);                
-            }          
+                _interfaz->DeshabilitarObjeto(barraVida_textura);
+            }
 
             if(dinero_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(dinero_textura);                
-            }  
+                _interfaz->DeshabilitarObjeto(dinero_textura);
+            }
 
             if(espada_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(dinero_textura);                
+                _interfaz->DeshabilitarObjeto(dinero_textura);
             }
 
             if(llave_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(dinero_textura);                
-            }          
-            
+                _interfaz->DeshabilitarObjeto(dinero_textura);
+            }
+
         }
-            
+
     #else
         //codigo motor irrlicht
         if (activada)
@@ -2471,7 +2476,7 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
                 }
             }
         }
-        
+
     #else
         //codigo motor irrlicht
         int frame = _jugEscena->getStartFrame();
@@ -2637,7 +2642,7 @@ void MotorGrafico::BorrarElemento(signed int id)
         //codigo motor catopengl
         if(_interfaz)
         {
-            _interfaz->RemoveObject((unsigned short)id);
+            //_interfaz->RemoveObject((unsigned short)id);
         }
     #else
         //codigo motor irrlicht
@@ -2749,7 +2754,7 @@ void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        
+
     #else
         //codigo motor irrlicht
         std::wstring widestr = std::wstring(texto.begin(), texto.end());
