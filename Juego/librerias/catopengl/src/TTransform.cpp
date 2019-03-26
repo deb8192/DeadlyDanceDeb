@@ -40,6 +40,7 @@ void TTransform::trasladar(float x,float y,float z)
 
 void TTransform::rotar(float gx,float gy,float gz)
 {
+    if(gx != 0.0f)gx+=180.0f;
     identidad();
     *matriz = glm::rotate(*matriz, glm::radians(gx), glm::vec3(1,0,0));
     *matriz = glm::rotate(*matriz, glm::radians(gy), glm::vec3(0,1,0));

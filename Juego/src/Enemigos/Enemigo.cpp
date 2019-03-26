@@ -2,6 +2,7 @@
 #include "Pollo.hpp"
 #include "Murcielago.hpp"
 #include "MuerteBoss.hpp"
+#include "Guardian.hpp"
 #include "CofreArana.hpp"
 #include "../ConstantesComunes.hpp"
 #include "../Personajes/Jugador.hpp"
@@ -475,13 +476,29 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
                 murcielago->UpdateMurcielago(i, _jugador, _getZonas);
             }
                 break;
+            
             case 2:
             {
                 CofreArana* cofreArana = (CofreArana*) this;
                 cofreArana->UpdateCofreArana(i, _jugador);
             }
                 break;
-
+            
+            case 3:
+            {
+                Guardian *guardian = (Guardian*) this;
+                guardian->RunIA();
+                guardian->UpdateGuardian(i, _jugador, _getZonas);
+            }
+                break;
+            case 4:
+            {
+                Guardian *guardian = (Guardian*) this;
+                guardian->RunIA();
+                guardian->UpdateGuardian(i, _jugador, _getZonas);
+            }
+                break;
+            
             default:
             {
                 MuerteBoss* _boss = (MuerteBoss*) this;
@@ -732,11 +749,27 @@ void Enemigo::UpdateTimeRotate(float updTime)
  */
 void Enemigo::ModificarVida(int vid)
 {
+    Constantes constantes;
+    vida += vid;
     if(vid < 0)
     {
-        modo = MODO_ATAQUE;
+        if(tipoEnemigo == 3 || tipoEnemigo == 4)
+        {
+            if(vida <= vidaIni * constantes.UN_CUARTO)
+            {
+                modo = EN_PELIGRO;
+            }
+            else
+            {
+                modo = EN_ATAQUE;
+            }
+        }
+        else
+        {
+            modo = EN_ATAQUE;
+        }
+        
     }
-    vida += vid;
     if (vida > vidaIni)
         vida = vidaIni;
     else if (vida < 0)
@@ -1002,31 +1035,35 @@ int Enemigo::GetModo()
     return modo;
 }
 
-Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, short enemigo)
+Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas)
 {
     Constantes constantes;
-    Zona* zonaElegida = nullptr;
+    Zona* _zonaElegida = nullptr;
     VectorEspacial distanciaZonaActual, distanciaZonaElegida;
     vector<Zona*> zonasCompletas;
     zonasCompletas.reserve(zonas.size());
 
     unsigned short i = 0;
-    while(i < zonas.size() && (zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
+    while(i < zonas.size() && (_zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
     {
-        distanciaZonaActual.vX = abs(zonas.at(i)->getX() - posActual.x);
-        distanciaZonaActual.vY = abs(zonas.at(i)->getY() - posActual.y);
-        distanciaZonaActual.vZ = abs(zonas.at(i)->getZ() - posActual.z);
-        distanciaZonaActual.modulo = pow(distanciaZonaActual.vX, constantes.DOS) + pow(distanciaZonaActual.vY, constantes.DOS) + pow(distanciaZonaActual.vZ, constantes.DOS);
-        distanciaZonaActual.modulo = sqrt(distanciaZonaActual.modulo);
-
-        if(zonaElegida == nullptr || distanciaZonaElegida.modulo > distanciaZonaActual.modulo)
+        if(zonas.at(i) != nullptr && (zonas.at(i)->getTipo() == Zona::tiposZona::Z_DARK && tipoEnemigo == 1)
+        || (zonas.at(i)->getTipo() == Zona::tiposZona::Z_HIDE && (tipoEnemigo == 3) || (tipoEnemigo == 4)))
         {
-            distanciaZonaElegida = distanciaZonaActual;
-            zonaElegida = zonas.at(i);
+            distanciaZonaActual.vX = abs(zonas.at(i)->getX() - posActual.x);
+            distanciaZonaActual.vY = abs(zonas.at(i)->getY() - posActual.y);
+            distanciaZonaActual.vZ = abs(zonas.at(i)->getZ() - posActual.z);
+            distanciaZonaActual.modulo = pow(distanciaZonaActual.vX, constantes.DOS) + pow(distanciaZonaActual.vY, constantes.DOS) + pow(distanciaZonaActual.vZ, constantes.DOS);
+            distanciaZonaActual.modulo = sqrt(distanciaZonaActual.modulo);
+
+            if(_zonaElegida == nullptr || distanciaZonaElegida.modulo > distanciaZonaActual.modulo)
+            {
+                distanciaZonaElegida = distanciaZonaActual;
+                _zonaElegida = zonas.at(i);
+            }
         }
         i++;
     }
-    return zonaElegida;
+    return _zonaElegida;
 }
 //ia
 
@@ -1069,7 +1106,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 return false;
             break;
             case 1://ve al jugador
-                return ver(1);
+                return ver(1, 30);
             case 2://merodeo
                 return Merodear();//merodeo pollo
             case 3://esta cerca del jugador
@@ -1099,7 +1136,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         {
             pesoRotacion = 0.35f;
             contraRotacion = 1.0 - pesoRotacion;
-            if(this->ver(constantes.TRES))
+            if(this->ver(constantes.TRES, constantes.SEIS * constantes.CINCO))
             {
                 controlRotacion = true;
             }
@@ -1139,12 +1176,12 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         this->setVectorOrientacion();
     }
 
-    bool Enemigo::ver(int tipo)
+    bool Enemigo::ver(int tipo, int longitud)
     {
         Constantes constantes;
         bool ve = false;
         short posicionArray = 0;
-        int* loqueve = _eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotActual.y,30, tipo, true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
+        int* loqueve = _eventos->listaObjetos(posActual.x, posActual.y, posActual.z,rotActual.y,longitud, tipo, true); //le pedimos al motor de sentidos que nos diga lo que vemos y nos devuelve una lista
 
         //vamos a  ver si vemos al jugador
         if(tipo == 1)//ves al jugador ?
@@ -1544,6 +1581,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             recorridoAyuda = recorrido;
             modo = MODO_AUXILIAR_ALIADO;
         }
+    }
+
+    void Enemigo::ResetTree()
+    {
+        arbol->ResetTree();
     }
 
     bool Enemigo::ContestarAyuda()

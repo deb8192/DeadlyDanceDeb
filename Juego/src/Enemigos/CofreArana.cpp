@@ -112,7 +112,7 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug)
         {          
             case EN_VER: //El CofreArana ve al jugador
                 {
-                    if(this->ver(constantes.UNO))
+                    if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
                     {
                         funciona = true;
                     }

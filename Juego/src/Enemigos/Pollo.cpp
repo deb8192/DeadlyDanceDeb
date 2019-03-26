@@ -112,9 +112,9 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
         {          
             case EN_VER: //El Pollo ve al jugador
                 {
-                    if(this->ver(constantes.UNO))
+                    if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
                     {
-                        this->ver(constantes.DOS);
+                        this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
                         if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
                         {
                             funciona = true;
@@ -162,7 +162,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
 
             case EN_MERODEA: //El Pollo merodea
                 {
-                    this->ver(constantes.DOS);
+                    this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
                     if(!hecho)
                     {
                         //Merodea estableciendo un nuevo angulo de rotacion
@@ -171,7 +171,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                         this->setTimeMerodear(1.5f);
                         hecho = true;
                         //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO))
+                        if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
                         {
                             if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
                             {
@@ -197,7 +197,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                         }
                         this->Merodear();
                         //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO))
+                        if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
                         { 
                             if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
                             {

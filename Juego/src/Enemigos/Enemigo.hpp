@@ -131,7 +131,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int GetEnemigo();
         int GetModo();
 
-        bool ver(int tipo);//1 si ve al jugador
+        bool ver(int tipo, int longitud);//1 si ve al jugador
 
         //ia
         float randomBinomial();//devuelve un valor random entre -1 y 1
@@ -142,6 +142,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         short * RunIA(bool);//corre la ia del enemigo
         void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
         void AnnadirRecorridoAyuda(vector <Posiciones> recorrido);
+        void ResetTree();
         //fin ia
 
         const char* GetModelo(); // Malla 3D con la textura
@@ -176,7 +177,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool comprobarDistanciaFlocking();
         //fin comportamientos bases
 
-        Zona* getZonaMasCercana(vector <Zona*> zonas, short enemigo);
+        Zona* getZonaMasCercana(vector <Zona*> zonas);
         //Comparadores de la lectura de las acciones y objetivos de las tareas
         enum accionesEnemigo 
         {  
@@ -188,14 +189,34 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_OIR,
             EN_BUSCA,
             EN_RECUPERA,
-            EN_ACUDE_AYUDA
+            EN_ACUDE_AYUDA,
+            EN_DEFENDERSE,
+            EN_COMPROBAR,
+            EN_ATRAVESAR,
+            EN_NO_VER,
+            EN_CAMBIAR,
+            EN_DEBE,
+            EN_ESTA
         };
 
         enum objetivosEnemigo
         {
             EN_JUGADOR = 0,
             EN_ZONA_COFRES,
-            EN_AYUDA
+            EN_AYUDA,
+            EN_PELIGRO,
+            EN_ATAQUE,
+            EN_OCULTACION,
+            EN_NORMAL,
+            EN_ESCONDITE,
+            EN_ULTIMA_PUERTA,
+            EN_CAMBIAR_ESTADO,
+            EN_MECANISMO,
+            EN_PUERTA,
+            EN_PALANCA,
+            EN_COFRE,
+            EN_ACCIONADO,
+            EN_NO_ACCIONADO,
         };
 
         enum modosEnemigo 
@@ -203,7 +224,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             MODO_DEFAULT = 0,
             MODO_ATAQUE,
             MODO_HUIDA,
-            MODO_AUXILIAR_ALIADO
+            MODO_AUXILIAR_ALIADO,
+            MODO_BUSCAR_ESCONDITE,
+            MODO_OCULTACION
         };
 
         Sala* _estoy;//sala en la que esta el enemigo
@@ -227,6 +250,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         
         bool pedirAyuda;
         bool contestar;
+        bool defensa; //TO DO EXPANDIRLO AL JUGADOR cuando recibe danyo recibe la mitad si esta a true
         INnpc::VectorEspacial posicionComunBandada; //PUnto de cohesion de las bandadas
 };
 

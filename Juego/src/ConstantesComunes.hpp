@@ -19,9 +19,16 @@ using Constantes = struct
     const short SIETE = 7;
     const short OCHO = 8;
     const short NUEVE = 9;
+    const short DIEZ = 10;
+    const short DIECIOCHO = 18;
     const short CIEN = 100;
     const float DEG_TO_RAD = 0.0174532925199432957f;
     const float RAD_TO_DEG = 57.295779513082320876f;
+
+    /******************** Porcentajes *******************/
+    const float UN_CUARTO = 0.25f;
+    const float UN_MEDIO = 0.5f;
+    const float TRES_CUARTOS = 0.75f;
 
     /*************** Strings arbol de comportamiento **************/
     //Comparadores del cargado de arboles
@@ -52,15 +59,35 @@ using Constantes = struct
     const char* BUSCAR = "busca";
     const char* CURARSE = "curarse";
     const char* AUXILIAR = "acude";
+    const char* DEFENDERSE = "defensa";
+    const char* COMPROBAR = "comprueba";
+    const char* ATRAVESAR = "atraviesa";
+    const char* NO_VE = "no-ve";
+    const char* CAMBIA = "cambia";
+    const char* ESTA = "esta";
+    const char* DEBE = "debe";
+
 
     //Comparadores de la lectura de los objetivos de las tareas
     const char* JUGADOR = "jugador";
     const char* ZONA_COFRES = "zona-cofres";
     const char* AYUDA = "ayuda";
+    const char* NORMAL = "modo-normal";
+    const char* PELIGRO = "modo-peligro";
+    const char* ATAQUE = "modo-ataque";
+    const char* OCULTACION = "modo-ocultacion";
+    const char* ULTIMA_PUERTA = "ultima-puerta";
+    const char* PUERTA = "puerta";
+    const char* MECANISMO = "mecanismo";
+    const char* COFRE = "cofre";
+    const char* ESCONDITE = "escondite";
+    const char* ACCIONADO = "accionado";
+    const char* NO_ACCIONADO = "no-accionado";
 
     /**************************** String cargado mapas ************************/
     const char* ZCHEST = "zChest";
     const char* ZDARK = "zDark";
+    const char* ZHIDE = "zHide";
 
     // Tipos de objetos interactuables y recolectables
     const unsigned short PALANCA = 0;

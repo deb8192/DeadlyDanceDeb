@@ -728,8 +728,30 @@ void Interfaz::RemoveObject(unsigned short object)
 
 void Interfaz::EscalarImagen(unsigned short nid,float x,float y,bool enx, bool eny)
 {
-    //escalar la imagen
+    if(nid != 0)
+    {
+        Nodo * nodo = buscarNodo2(nid);
+        if(nodo != nullptr)
+        {            
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    //escalar la imagen
+                    if(enx)
+                    {
+                        dynamic_cast<TPlano*>(tnodo->GetEntidad())->setScaleX(x);
+                    }
 
+                    if(eny)
+                    {
+                        dynamic_cast<TPlano*>(tnodo->GetEntidad())->setScaleY(y);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void Interfaz::CambiarTexto(unsigned short nid,std::string texto)

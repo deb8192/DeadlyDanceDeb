@@ -41,6 +41,10 @@ class TPlano : public TEntidad
         bool Comprobar();
         void CambiarId(int);
         int getID();
+
+        //escalados
+        void setScaleY(float);
+        void setScaleX(float);
 };
 
 #endif
