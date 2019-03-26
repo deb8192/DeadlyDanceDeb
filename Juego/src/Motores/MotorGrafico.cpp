@@ -505,10 +505,16 @@ void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, signed int i
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        _interfaz->DeclararBoton(_interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f),id);
-        wstring ws(texto);
-        string str(ws.begin(),ws.end());
-        CrearTexto(str,(x+25),(y+20),0,0);
+        unsigned short num = _interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f);
+        if(num != 0)
+        {
+            _interfaz->DeclararBoton(num,id);
+            _interfaz->DefinirIdPersonalizado(num,id);
+            wstring ws(texto);
+            string str(ws.begin(),ws.end());
+            unsigned short num2 = _interfaz->CrearTexto(str,(x+25),(y+20));
+            _interfaz->DefinirTextoBoton(num,num2);
+        }
     #else
         //codigo motor irrlicht
         _guienv->addButton(rect<s32>(x,y,x2,y2), 0, id, texto, texto2);
@@ -613,6 +619,8 @@ bool MotorGrafico::EstaPulsado(short boton)
             case idsEventos::Enum::KEY_E:
                 return _interfaz->IsKeyDown(GLFW_KEY_E);//actua una sola vez aunque se mantenga pulsado
         }
+
+        return false;
     #else
         //codigo motor irrlicht
         switch(boton)
@@ -1181,8 +1189,8 @@ void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float 
         //codigo motor catopengl
         if(_armaProyectil != 0)
         {
-            _interfaz->Trasladar(_armaProyectil,x,y,z);
-            _interfaz->Rotar(_armaProyectil,rx,ry,rz);
+            _interfaz->Trasladar(_armaProyectil,x,y+2,z);
+            _interfaz->Rotar(_armaProyectil,rx,ry-180,rz);
         }
 
     #else
@@ -1328,7 +1336,7 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
             Constantes constantes;
             _interfaz->HabilitarObjeto(_armaEsp);//para verlo en escena y que se procese
             _interfaz->Trasladar(_armaEspJugador,x + 5*(sin(constantes.DEG_TO_RAD*ry)),y,z + 5*(cos(constantes.DEG_TO_RAD*ry)));//trasladamos
-            _interfaz->Rotar(_armaEspJugador,rx,ry,rz);//rotamo
+            _interfaz->Rotar(_armaEspJugador,rx,ry-180,rz);//rotamo
         }
 
 
@@ -1744,7 +1752,17 @@ void MotorGrafico::DibujarCofre(long unsigned int idx, bool dibujar)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        
+        if(Objetos_Scena[idx] != 0 && idx < Objetos_Scena.size())
+        {
+            if(dibujar)
+            {
+                _interfaz->HabilitarObjeto(Objetos_Scena[idx]);
+            }
+            else
+            {
+                _interfaz->DeshabilitarObjeto(Objetos_Scena[idx]);
+            }
+        }
     #else
         //codigo motor irrlicht
         if(Objetos_Scena[idx] && idx < Objetos_Scena.size())
@@ -1864,7 +1882,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
             if(_conoVision != 0)
             {
                 _interfaz->Trasladar(_conoVision,x,y,z);
-                _interfaz->Rotar(_conoVision,0,rotacion,0);
+                _interfaz->Rotar(_conoVision,0,rotacion-180,0);
                 _interfaz->Escalar(_conoVision,longitud/2,1.0f,0.01f);
                 Objetos_Debug.push_back(_conoVision);
             }
@@ -1910,8 +1928,8 @@ void MotorGrafico::CargarInterfaz()
         energia_textura = _interfaz->AddImagen("assets/images/21.png",10,58,1);
         dinero_textura = _interfaz->AddImagen("assets/images/61.png",680,10,1);
         arma_textura =_interfaz->AddImagen("assets/images/11.png",730,530,1);
-        barraVida_textura = _interfaz->AddImagen("assets/images/4.png",50,17,1);
-        barraEnergia_textura = _interfaz->AddImagen("assets/images/3.png",48,65,1);
+        barraVida_textura = _interfaz->AddImagen("assets/images/4.png",50,18,1);
+        barraEnergia_textura = _interfaz->AddImagen("assets/images/3.png",48,67,1);
         manos_textura = _interfaz->AddImagen("assets/images/manos.png",738,534,1);
         llave_textura = _interfaz->AddImagen("assets/images/llave.png",738,534,1);
         espada_textura = _interfaz->AddImagen("assets/images/espada.png",738,534,1);
@@ -2106,11 +2124,11 @@ void MotorGrafico::SetVida(int vida)
 
             if(resultado <= 0)
             {
-                _interfaz->EscalarImagen(barraVida_textura,0.01f,0.49f,true,true);
+                _interfaz->EscalarImagen(barraVida_textura,0.01f,0.48f,true,true);
             }
             else
             {
-                _interfaz->EscalarImagen(barraVida_textura,resultado,0.49f,true,true);
+                _interfaz->EscalarImagen(barraVida_textura,resultado,0.48f,true,true);
             }
         }
 
@@ -2141,18 +2159,18 @@ void MotorGrafico::SetBarraEnergia(int barra)
         if(barraEnergia_textura != 0)
         {
             float unidad = ((float)63/100);
-            float unidad_min = 0.0040f;
+            float unidad_min = 0.0030f;
 
             float resultado = (unidad*(float)barra)*unidad_min;
 
 
             if(resultado <= 0)
             {
-                _interfaz->EscalarImagen(barraEnergia_textura,0.01f,0.5f,true,true);
+                _interfaz->EscalarImagen(barraEnergia_textura,0.01f,0.48f,true,true);
             }
             else
             {
-                _interfaz->EscalarImagen(barraEnergia_textura,resultado,0.5f,true,true);
+                _interfaz->EscalarImagen(barraEnergia_textura,resultado,0.48f,true,true);
             }
         }
     #else
@@ -2182,7 +2200,7 @@ void MotorGrafico::SetDinero(int dinero)
         {
             string str = "";
             str += dinero;
-            std::cout << "recoges tantas: " << str << std::endl;
+            //std::cout << "recoges tantas: " << str << std::endl;
             _interfaz->CambiarTexto(moneyI,str);
         }
     #else
@@ -2640,7 +2658,8 @@ void MotorGrafico::BorrarElemento(signed int id)
         //codigo motor catopengl
         if(_interfaz)
         {
-            _interfaz->RemoveObject((unsigned short)id);
+            //_interfaz->RemoveObject((unsigned short)id);
+            _interfaz->RemoveObjectForID(id);
         }
     #else
         //codigo motor irrlicht

@@ -32,7 +32,9 @@ class TNodo
         void BorrarGui();//borramos todos los elementos que sean gui
         //pintado
         void draw(unsigned int);//se llama a las funciones de pintado
-
+        //habilita o deshabilita el draw
+        void HabilitarNodo();
+        void DeshabilitarNodo();
 };
 
 #endif
