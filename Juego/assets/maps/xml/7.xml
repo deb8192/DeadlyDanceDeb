@@ -297,7 +297,7 @@
 									<!--Decoracion-suelo--><Object tipoObj="17" Type="0" accion="7" ancho="0" largo="0" alto="24" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/DecoracionSalaBoss.obj"></Object>
 									<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="243" Y="0" Z="490" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat4.obj"></Object>
 	 								<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="182" Y="0" Z="490" despX="0" despZ="0" Texture="assets/texture/Suelo.jpg" Model="assets/models/Escenario/Plataformat2.obj"></Object>
-	 								<!--BossMuerte--><Enemy Type="1" enemigo="3" accion="1" ancho="1" largo="1" alto="10" X="242" Y="0" Z="490" Texture="" Model=""></Enemy>
+	 								<!--BossMuerte--><Enemy Type="1" enemigo="5" accion="1" ancho="1" largo="1" alto="10" X="242" Y="0" Z="490" Texture="" Model=""></Enemy>
 									<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="46" ancho="4" largo="4" alto="1" X="158" Y="0" Z="490" conexiones="45,47"></Waypoint>
 									<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="47" ancho="4" largo="4" alto="1" X="217" Y="0" Z="490" conexiones="46"></Waypoint>
 									</Platform>	
