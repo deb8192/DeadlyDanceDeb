@@ -1746,7 +1746,17 @@ void MotorGrafico::DibujarCofre(long unsigned int idx, bool dibujar)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        
+        if(Objetos_Scena[idx] != 0 && idx < Objetos_Scena.size())
+        {
+            if(dibujar)
+            {
+                _interfaz->HabilitarObjeto(Objetos_Scena[idx]);
+            }
+            else
+            {
+                _interfaz->DeshabilitarObjeto(Objetos_Scena[idx]);
+            }
+        }       
     #else
         //codigo motor irrlicht
         if(Objetos_Scena[idx] && idx < Objetos_Scena.size())
