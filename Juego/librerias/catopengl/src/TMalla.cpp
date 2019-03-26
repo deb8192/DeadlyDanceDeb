@@ -10,7 +10,7 @@ TMalla::TMalla(int ft)
     frame_final = ft;
     frame_actual = 0;
     actual_time = 0;
-    setVelocidadAnimacion(60);
+    setVelocidadAnimacion(300);
 }
 
 //Uso: destructor
@@ -125,14 +125,18 @@ void TMalla::endDraw()
 
 void TMalla::BucleAnimacion(unsigned short ini,unsigned short fin)
 {
-    if(ini > 0 && ini <= frames_totales && fin > 0 && fin <= frames_totales && ini < fin)
+    if(ini != frame_inicial && fin != frame_final)
     {
-        frame_inicial = ini;
-        frame_final = fin;
-    }
-    else
-    {
-        cout << "ERROR: Los frames del bucle tienen que estar entre 0 y " << frames_totales << endl;
+        if(ini > 0 && ini <= frames_totales && fin > 0 && fin <= frames_totales && ini < fin)
+        {
+            frame_inicial = ini;
+            frame_final = fin;
+            frame_actual = ini;
+        }
+        else
+        {
+            cout << "ERROR: Los frames del bucle tienen que estar entre 0 y " << frames_totales << endl;
+        }
     }
 }
 
