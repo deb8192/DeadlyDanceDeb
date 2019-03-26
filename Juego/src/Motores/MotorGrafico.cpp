@@ -1189,8 +1189,8 @@ void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float 
         //codigo motor catopengl
         if(_armaProyectil != 0)
         {
-            _interfaz->Trasladar(_armaProyectil,x,y,z);
-            _interfaz->Rotar(_armaProyectil,rx,ry,rz);
+            _interfaz->Trasladar(_armaProyectil,x,y+2,z);
+            _interfaz->Rotar(_armaProyectil,rx,ry-180,rz);
         }
 
     #else
@@ -1336,7 +1336,7 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
             Constantes constantes;
             _interfaz->HabilitarObjeto(_armaEsp);//para verlo en escena y que se procese
             _interfaz->Trasladar(_armaEspJugador,x + 5*(sin(constantes.DEG_TO_RAD*ry)),y,z + 5*(cos(constantes.DEG_TO_RAD*ry)));//trasladamos
-            _interfaz->Rotar(_armaEspJugador,rx,ry,rz);//rotamo
+            _interfaz->Rotar(_armaEspJugador,rx,ry-180,rz);//rotamo
         }
 
 
@@ -1762,7 +1762,7 @@ void MotorGrafico::DibujarCofre(long unsigned int idx, bool dibujar)
             {
                 _interfaz->DeshabilitarObjeto(Objetos_Scena[idx]);
             }
-        }       
+        }
     #else
         //codigo motor irrlicht
         if(Objetos_Scena[idx] && idx < Objetos_Scena.size())
@@ -1882,7 +1882,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
             if(_conoVision != 0)
             {
                 _interfaz->Trasladar(_conoVision,x,y,z);
-                _interfaz->Rotar(_conoVision,0,rotacion,0);
+                _interfaz->Rotar(_conoVision,0,rotacion-180,0);
                 _interfaz->Escalar(_conoVision,longitud/2,1.0f,0.01f);
                 Objetos_Debug.push_back(_conoVision);
             }
