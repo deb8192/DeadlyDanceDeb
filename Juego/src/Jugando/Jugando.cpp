@@ -532,6 +532,26 @@ void Jugando::Update()
                     }
                     _enemigos[i]->setTimeMerodear(tiempoMerodear);
                 }
+                //Este bloque se da si el enemigo (de momento guardian) esta en modo ocultacion
+                if(_enemigos[i]->getTimeOcultarse() > 0.0f)
+                {
+                    if(_enemigos[i]->getTimeOcultarse() == 1.5f)
+                    {
+                        //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                        _enemigos[i]->setLastTimeOcultarse(_controladorTiempo->GetTiempo(2));
+                    }
+                    float tiempoActual = 0.0f, tiempoOcultarse = 0.0f;
+                    tiempoActual = _controladorTiempo->GetTiempo(2);
+                    tiempoOcultarse = _enemigos[i]->getTimeOcultarse();
+                    tiempoOcultarse -= (tiempoActual - _enemigos[i]->getLastTimeOcultarse());
+                    if(tiempoActual > _enemigos[i]->getLastTimeOcultarse())
+                    {
+                        //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeOcultarse
+                        //por lo que guardamos en lastTimeOcultarse a tiempoActual
+                        _enemigos[i]->setLastTimeOcultarse(tiempoActual);
+                    }
+                    _enemigos[i]->setTimeOcultarse(tiempoOcultarse);
+                }
             }
             //_enemigos[i]->queVes();
         }
@@ -589,23 +609,24 @@ void Jugando::UpdateIA()
 
             if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte())
             {
-
-                    unsigned short tipoObj = 0;
-                if(_enemigos[i]->GetTipoEnemigo() == 3 || _enemigos[i]->GetTipoEnemigo() == 4)
-                {
+                    //DAtos comunes a todos
                     int x = _enemigos[i]->getX();
                     int y = _enemigos[i]->getY();
                     int z = _enemigos[i]->getZ();
                     int accion = 4;
                     int ancho = 0.5 ,largo = 0.5,alto = 0.5;
-                    int codigo = 20;
+                    int codigo = -2;
                     int*  propiedades = new int [6];
+                    unsigned short tipoObj = 0;
                     int ataque = 0;
-                    const char* nombre = "llave_boss";
-                    const char* modelo = "assets/models/llave.obj";
-                    const char* textura = "";
+                    const char* nombre = "";
+                if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A || _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
+                {
+                    ataque = 0;
+                    nombre = "llave_boss";
+                    accion = 2;
+                    codigo = 20;
                     tipoObj = constantes.LLAVE;
-                    this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades,tipoObj);
                 }
                 else
                 {
@@ -623,53 +644,34 @@ void Jugando::UpdateIA()
                         int numpow = 3;
                         int cualpower = rand() % numpow;
                         cout << "POWER: " << cualpower << endl;
-                        int ataque;
-                        const char* nombre,*modelo,*textura;
-
-                        //DAtos comunes a todos
-                        int x = _enemigos[i]->getX();
-                        int y = _enemigos[i]->getY();
-                        int z = _enemigos[i]->getZ();
-                        int accion = 4;
-                        int ancho = 0.5 ,largo = 0.5,alto = 0.5;
-                        int codigo = -2;
-                        int*  propiedades = new int [6];
 
                         if(cualpower == 0)
                         {
                         ataque = 0;
                         tipoObj = constantes.VIDA;
                         nombre = "vida_up";
-                        modelo = "assets/models/powerup0.obj";
-                        textura = "assets/texture/powerup0.png";
                         }
                         else if(cualpower == 1)
                         {
                         ataque = 1;
                         tipoObj = constantes.ENERGIA;
                         nombre = "energy_up";
-                        modelo = "assets/models/powerup1.obj";
-                        textura = "assets/texture/powerup1.png";
                         }
                         else if(cualpower == 2)
                         {
                         ataque = 2;
                         tipoObj = constantes.ORO;
                         nombre = "gold_up";
-                        modelo = "assets/models/gold.obj";
-                        textura = "assets/texture/gold.png";
                         //oro entre 1 y 5 monedas
                         srand(time(NULL));
                         int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
                         propiedades[0] = orocant; //para pasarlo a crear objeto
                         }
 
-                        //Crear objeto
-                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades,tipoObj);
                     }
                 }
-
-
+                //crear objeto
+                this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObj);
 
                 if (_enemigos[i]->GetPedirAyuda()) {
                     enemDejarDePedirAyuda();
@@ -867,7 +869,7 @@ void Jugando::CrearJugador()
 }
 
 void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, 
-    int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* modelo, const char* textura, int* propiedades,
+    int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, int* propiedades,
     unsigned short tipoObjeto)
 {
     //Arma
@@ -1240,7 +1242,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     cout << "Hay " << orocant << " de Oro!" << endl;
     propiedades[0] = orocant; //para pasarlo a crear objeto
   }
-   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,"","",propiedades,tipoObjeto);
+   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObjeto);
 }
 
 void Jugando::activarPowerUp()
