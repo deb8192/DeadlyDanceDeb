@@ -1938,7 +1938,7 @@ void MotorGrafico::CargarInterfaz()
         //calcular vida y energia
 
         //monedas y color de letra
-        moneyI = _interfaz->CrearTexto("0 M",710,21,255.0f,255.0f,255.0f);
+        moneyI = _interfaz->CrearTexto("0 M",710,25,255.0f,255.0f,255.0f);
 
     #else
         //codigo motor irrlicht
@@ -2198,8 +2198,7 @@ void MotorGrafico::SetDinero(int dinero)
         //codigo motor catopengl
         if(moneyI != 0)
         {
-            string str = "";
-            str += dinero;
+            string str = std::to_string(dinero);
             //std::cout << "recoges tantas: " << str << std::endl;
             _interfaz->CambiarTexto(moneyI,str);
         }
