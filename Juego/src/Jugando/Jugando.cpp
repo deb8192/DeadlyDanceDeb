@@ -673,20 +673,20 @@ void Jugando::Render()
                 mov_weapon_rotX = -90;
                 mov_weapon_posX = 3.5;
                 mov_weapon_posZ = 3.5;
-                mov_weapon_posY = 4.5;
+                mov_weapon_posY = 4.0;
             }
             else if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() < 1.5f)
             {
-                if(mov_weapon_rotX < 0)mov_weapon_rotX += 15;
-                if(mov_weapon_posY > 0)mov_weapon_posY -= 0.7;
+                if(mov_weapon_rotX < 0)mov_weapon_rotX += 4;
+                if(mov_weapon_posY > 1.5)mov_weapon_posY -= 0.2;
                 if(mov_weapon_posX < 5.5)mov_weapon_posX += 0.3;
                 if(mov_weapon_posZ < 5.5)mov_weapon_posZ += 0.3;
             }
             else
             {
-                mov_weapon_posX=-1.5;
+                mov_weapon_posX=-2.0;
                 mov_weapon_posZ=-1.5;
-                mov_weapon_posY=3.3;
+                mov_weapon_posY=5.0;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
                 mov_weapon_rotZ=0;
@@ -709,7 +709,7 @@ void Jugando::Render()
                     _motor->EraseProyectil();
                     proyectilFuera = true;
                 }
-                mov_weapon_posX=-0.5;
+                mov_weapon_posX=-0.7;
                 mov_weapon_posZ=-0.5;
                 mov_weapon_posY=2.3;
                 mov_weapon_rotX=90;
