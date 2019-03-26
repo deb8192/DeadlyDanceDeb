@@ -95,7 +95,7 @@ bool RMalla::CargarMalla(std::string _ruta)
 
     //Leer fichero de assimp
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(_ruta, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+    const aiScene* scene = importer.ReadFile(_ruta, aiProcess_OptimizeMeshes | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_CalcTangentSpace);
 
     //directory = _ruta.substr(0, _ruta.find_last_of('/'));
 
@@ -231,7 +231,7 @@ Mesh * RMalla::processMesh(aiMesh *mesh, const aiScene *scene)
                 glGenTextures(1, &textureID);
 
                 int width=1, height=1;
-                GLubyte datamat[] = { 35, 35, 35, 255 }; //RGBA
+                GLubyte datamat[] = { 231, 255, 50, 255 }; //RGBA
                 GLenum format = GL_RGBA;
 
                 glBindTexture(GL_TEXTURE_2D, textureID);
