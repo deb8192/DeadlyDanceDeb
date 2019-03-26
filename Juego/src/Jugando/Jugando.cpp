@@ -1286,7 +1286,7 @@ void Jugando::updateAt(int* danyo)
 {
     float tiempoActual = 0.0f;
     float tiempoAtaque = 0.0f;
-    if(_motor->EstaPulsado(KEY_ESPACIO) && _jugador->getTimeAt() <= 0.0f)
+    if((_motor->EstaPulsado(LMOUSE_PRESSED_DOWN) || _motor->EstaPulsado(KEY_ESPACIO)) && _jugador->getTimeAt() <= 0.0f)
     {
         *danyo = _jugador->Atacar(0);
         _motor->ResetKey(KEY_ESPACIO);
@@ -1332,11 +1332,11 @@ void Jugando::updateAtEsp()
     float tiempoActual = 0.0f;
     float tiempoAtaqueEsp = 0.0f;
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((_motor->EstaPulsado(RMOUSE_DOWN)||_motor->EstaPulsado(KEY_Q)) && _jugador->getTimeAtEsp() <= 0.0)
+    if((_motor->EstaPulsado(RMOUSE_PRESSED_DOWN) || _motor->EstaPulsado(KEY_Q)) && _jugador->getTimeAtEsp() <= 0.0)
     {
         danyo = _jugador->AtacarEspecial();
         _motor->ResetKey(KEY_Q);
-        _motor->ResetEvento(RMOUSE_DOWN);
+        _motor->ResetEvento(RMOUSE_PRESSED_DOWN);
         if(danyo > 0)
         {
             _motor->colorearJugador(255, 55, 0, 255);
