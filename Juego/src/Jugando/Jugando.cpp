@@ -590,7 +590,7 @@ void Jugando::UpdateIA()
             if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte())
             {
 
-                    unsigned short tipoObj = 1;
+                    unsigned short tipoObj = 0;
                 if(_enemigos[i]->GetTipoEnemigo() == 3 || _enemigos[i]->GetTipoEnemigo() == 4)
                 {
                     int x = _enemigos[i]->getX();
@@ -604,6 +604,7 @@ void Jugando::UpdateIA()
                     const char* nombre = "llave_boss";
                     const char* modelo = "assets/models/llave.obj";
                     const char* textura = "";
+                    tipoObj = constantes.LLAVE;
                     this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades,tipoObj);
                 }
                 else
@@ -637,6 +638,7 @@ void Jugando::UpdateIA()
                         if(cualpower == 0)
                         {
                         ataque = 0;
+                        tipoObj = constantes.VIDA;
                         nombre = "vida_up";
                         modelo = "assets/models/powerup0.obj";
                         textura = "assets/texture/powerup0.png";
@@ -644,6 +646,7 @@ void Jugando::UpdateIA()
                         else if(cualpower == 1)
                         {
                         ataque = 1;
+                        tipoObj = constantes.ENERGIA;
                         nombre = "energy_up";
                         modelo = "assets/models/powerup1.obj";
                         textura = "assets/texture/powerup1.png";
@@ -651,6 +654,7 @@ void Jugando::UpdateIA()
                         else if(cualpower == 2)
                         {
                         ataque = 2;
+                        tipoObj = constantes.ORO;
                         nombre = "gold_up";
                         modelo = "assets/models/gold.obj";
                         textura = "assets/texture/gold.png";
