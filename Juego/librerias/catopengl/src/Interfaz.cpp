@@ -656,7 +656,11 @@ void Interfaz::DeshabilitarObjeto(unsigned short did)
 {
     Nodo * nodo = buscarNodo2(did);
 
-    if(nodo != nullptr)
+    if(nodo->tipo == 2)
+    {
+        nodo->recurso->DeshabilitarNodo();
+    }
+    else
     {
         nodo->activo = false;
     }
@@ -668,7 +672,14 @@ void Interfaz::HabilitarObjeto(unsigned short did)
 
     if(nodo != nullptr)
     {
-        nodo->activo = true;
+        if(nodo->tipo == 2)
+        {
+            nodo->recurso->HabilitarNodo();
+        }
+        else
+        {
+            nodo->activo = true;
+        }
     }
 }
 
