@@ -770,7 +770,11 @@ void CargadorNiveles::CargarCofres()
                     ++aranasCreadas;
                     esArana = true;
                 }
-                
+
+                #ifdef WEMOTOR //codigo motor catopengl
+                    esArana = false; // Desactivamos las aranyas
+                #endif
+
                 Interactuable* _cofre = new Cofre(esArana, -1,"Cofre",2,2,2,
                     0, newx, newy, newz, 4, pos, //4=tipoObj
                     _zonas[zonasDisponibles[numAlt]]->GetSala());
