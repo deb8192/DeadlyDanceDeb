@@ -1209,11 +1209,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     distanciaEnemigoJugador.vZ = loqueve[posicionArray + 3] - posActual.z;
                     distanciaEnemigoJugador.modulo = sqrt(pow(distanciaEnemigoJugador.vX, constantes.DOS) + pow(distanciaEnemigoJugador.vY, constantes.DOS) + pow(distanciaEnemigoJugador.vZ, constantes.DOS));                
                     
-                    delete loqueve;
+                    delete [] loqueve;
                     return true;
                 }
             }
-            delete loqueve;
+            delete [] loqueve;
         }
         if(tipo == 2)//ves algun objeto ?
         {
@@ -1316,7 +1316,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     return true;                    
                 }
             }
-            delete loqueve;
+            delete [] loqueve;
         }
         if(tipo == 3) //Ves algun enemigo?
         {
@@ -1451,9 +1451,10 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     rotation = (constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ))) * pesoRotacion :
                     rotation = (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) * pesoRotacion ;
             }
-            delete loqueve;
+            delete [] loqueve;
             return colisiona;
         }
+        
         return false;
     }
 
