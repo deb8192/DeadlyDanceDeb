@@ -255,6 +255,15 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_C);
     }
 
+    if(_motor->EstaPulsado(KEY_Z))
+    {
+        /*_motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), true);
+        _cofreP->CrearFisica();
+        _cofreP->accionar();*/
+        //_cofreP=nullptr;
+        _motor->ResetKey(KEY_Z);
+    }
+
     if(_motor->EstaPulsado(KEY_B))
     {
         unsigned short desplaza = 10;
@@ -1507,7 +1516,6 @@ void Jugando::CrearEnemigoArana()
     // Borrar cofre
     _motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), false);
     _cofreP->BorrarFisica();
-    _cofreP=nullptr;
 }
 
 void Jugando::CargarBossEnMemoria()
