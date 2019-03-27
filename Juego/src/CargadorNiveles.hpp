@@ -10,6 +10,7 @@
 #include "Jugando/Zona.hpp"
 #include "Objetos/Interactuable.hpp"
 #include "Objetos/Recolectable.hpp"
+#include "Objetos/Pared.hpp"
 #include "Personajes/Jugador.hpp"
 #include "Enemigos/Enemigo.hpp"
 #include "Jugando/Waypoint.hpp"
@@ -37,6 +38,7 @@ class CargadorNiveles
         std::vector<Enemigo*> GetEneCofres();
         std::vector<Zona*> GetZonas();
         std::vector<Recolectable*> GetRecolectables();
+        std::vector<Pared*> GetParedes();
         std::vector<Interactuable*> GetInteractuables();
         std::vector<Recolectable*> GetPowerup();
         Enemigo* GetBoss();
@@ -74,6 +76,7 @@ class CargadorNiveles
         int chestsMax;
         std::vector<Enemigo*> _eneCofres;
         std::vector<Recolectable*> _recolectables;
+        std::vector<Pared*> _paredes;
         std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
         std::vector<Recolectable*> _powerup;
         std::vector<Zona*> _zonas; //Array de zonas

@@ -373,6 +373,11 @@ std::vector<Recolectable*> CargadorNiveles::GetRecolectables()
     return _recolectables;
 }
 
+std::vector<Pared*> CargadorNiveles::GetParedes()
+{
+    return _paredes;
+}
+
 std::vector<Interactuable*> CargadorNiveles::GetInteractuables()
 {
     return _interactuables;
@@ -441,7 +446,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     {
         case 0:
         {
-            Pollo* _ene = new Pollo(x,y,z, 75); // Posiciones, vida
+            Pollo* _ene = new Pollo(x,y,z, 50); // Posiciones, vida
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
@@ -460,7 +465,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             break;
         case 1:
         {
-            Murcielago* _ene = new Murcielago(x,y,z, 125); // Posiciones, vida
+            Murcielago* _ene = new Murcielago(x,y,z, 75); // Posiciones, vida
             //ia
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
             _ene->setVelocidadMaxima(1.5f);
@@ -478,7 +483,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
         case 3:
         {
-            Guardian* _ene = new Guardian(x,y,z, 625, enemigo);
+            Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
@@ -498,7 +503,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
         case 4:
         {
-            Guardian* _ene = new Guardian(x,y,z, 750, enemigo);
+            Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
@@ -514,6 +519,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             _motora->getEvent(nameid)->setVolume(0.4f);
             _motora->getEvent(nameid)->start();
         }
+        break;
 
         default:
             break;
@@ -549,7 +555,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
     int ancho, int largo, int alto, Sala* sala)
 {
-    _boss = new MuerteBoss(x,y,z, 2000); // Posiciones, vida
+    _boss = new MuerteBoss(x,y,z, 300); // Posiciones, vida
     _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
     //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
     _boss->setID(++id);//le damos el id unico en esta partida al enemigo
@@ -601,6 +607,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
 
     switch (accion)
     {
+        
         case 2: //Arma
         {
             Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
@@ -646,7 +653,19 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             _rec = nullptr;
         }
         break;
-
+        //TO DO corregir la creacion de obstaculos para hacerla correctamente
+        case 5: //Paredes rompibles
+        {
+            Pared* _par = new Pared(nombre,ancho,largo,alto,x,y,z,tipoObj);
+            _par->setID(_paredes.size());
+            _par->setPosiciones(x,y,z);
+            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+            _par->SetPosicionArrayObjetos(posicionObjeto);
+            _paredes.push_back(move(_par));
+            _par = nullptr;
+        }
+        break;
+        
         default:
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         break;

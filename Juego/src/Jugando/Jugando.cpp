@@ -397,11 +397,6 @@ void Jugando::Update()
         );
     }
 
-    /*if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
-    {
-        this->updateRecorridoPathfinding(nullptr);
-    }*/
-
     //Si se realiza el ataque se comprueban las colisiones
     if(_jugador->getTimeAtEsp() > 0.0)
     {
@@ -409,6 +404,14 @@ void Jugando::Update()
     }
     else if(_jugador->getTimeAt() > 0.0)
     {
+        unsigned int posicion = 0;
+        std::vector<short> indiceObjetosColisionados = _fisicas->collideAttackWall();
+        for(unsigned short i = 0; i < indiceObjetosColisionados.size(); i ++)
+        {
+            _fisicas->ErasePared(indiceObjetosColisionados[i]);
+            posicion = _fisicas->GetRelacionParedesObstaculos(indiceObjetosColisionados[i]);
+            _fisicas->EraseObstaculo(posicion);
+        }
         _jugador->AtacarUpdate(danyo2, _enemigos);
     }
 
@@ -476,6 +479,26 @@ void Jugando::Update()
                     }
                     _enemigos[i]->setTimeMerodear(tiempoMerodear);
                 }
+                //Este bloque se da si el enemigo (de momento guardian) esta en modo ocultacion
+                if(_enemigos[i]->getTimeOcultarse() > 0.0f)
+                {
+                    if(_enemigos[i]->getTimeOcultarse() == 1.5f)
+                    {
+                        //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                        _enemigos[i]->setLastTimeOcultarse(_controladorTiempo->GetTiempo(2));
+                    }
+                    float tiempoActual = 0.0f, tiempoOcultarse = 0.0f;
+                    tiempoActual = _controladorTiempo->GetTiempo(2);
+                    tiempoOcultarse = _enemigos[i]->getTimeOcultarse();
+                    tiempoOcultarse -= (tiempoActual - _enemigos[i]->getLastTimeOcultarse());
+                    if(tiempoActual > _enemigos[i]->getLastTimeOcultarse())
+                    {
+                        //Si no es la primera vez que entra al bucle de merodear, tiempoActual debe ser mayor que lastTimeOcultarse
+                        //por lo que guardamos en lastTimeOcultarse a tiempoActual
+                        _enemigos[i]->setLastTimeOcultarse(tiempoActual);
+                    }
+                    _enemigos[i]->setTimeOcultarse(tiempoOcultarse);
+                }
             }
             //_enemigos[i]->queVes();
         }
@@ -533,23 +556,24 @@ void Jugando::UpdateIA()
 
             if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte())
             {
-
-                    unsigned short tipoObj = 0;
-                if(_enemigos[i]->GetTipoEnemigo() == 3 || _enemigos[i]->GetTipoEnemigo() == 4)
-                {
+                    //DAtos comunes a todos
                     int x = _enemigos[i]->getX();
                     int y = _enemigos[i]->getY();
                     int z = _enemigos[i]->getZ();
                     int accion = 4;
                     int ancho = 0.5 ,largo = 0.5,alto = 0.5;
-                    int codigo = 20;
+                    int codigo = -2;
                     int*  propiedades = new int [6];
+                    unsigned short tipoObj = 0;
                     int ataque = 0;
-                    const char* nombre = "llave_boss";
-                    const char* modelo = "assets/models/llave.obj";
-                    const char* textura = "";
+                    const char* nombre = "";
+                if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A || _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
+                {
+                    ataque = 0;
+                    nombre = "llave_boss";
+                    accion = 2;
+                    codigo = 20;
                     tipoObj = constantes.LLAVE;
-                    this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades,tipoObj);
                 }
                 else
                 {
@@ -567,53 +591,34 @@ void Jugando::UpdateIA()
                         int numpow = 3;
                         int cualpower = rand() % numpow;
                         cout << "POWER: " << cualpower << endl;
-                        int ataque;
-                        const char* nombre,*modelo,*textura;
-
-                        //DAtos comunes a todos
-                        int x = _enemigos[i]->getX();
-                        int y = _enemigos[i]->getY();
-                        int z = _enemigos[i]->getZ();
-                        int accion = 4;
-                        int ancho = 0.5 ,largo = 0.5,alto = 0.5;
-                        int codigo = -2;
-                        int*  propiedades = new int [6];
 
                         if(cualpower == 0)
                         {
                         ataque = 0;
                         tipoObj = constantes.VIDA;
                         nombre = "vida_up";
-                        modelo = "assets/models/powerup0.obj";
-                        textura = "assets/texture/powerup0.png";
                         }
                         else if(cualpower == 1)
                         {
                         ataque = 1;
                         tipoObj = constantes.ENERGIA;
                         nombre = "energy_up";
-                        modelo = "assets/models/powerup1.obj";
-                        textura = "assets/texture/powerup1.png";
                         }
                         else if(cualpower == 2)
                         {
                         ataque = 2;
                         tipoObj = constantes.ORO;
                         nombre = "gold_up";
-                        modelo = "assets/models/gold.obj";
-                        textura = "assets/texture/gold.png";
                         //oro entre 1 y 5 monedas
                         srand(time(NULL));
                         int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
                         propiedades[0] = orocant; //para pasarlo a crear objeto
                         }
 
-                        //Crear objeto
-                        this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,modelo,textura,propiedades,tipoObj);
                     }
                 }
-
-
+                //crear objeto
+                this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObj);
 
                 if (_enemigos[i]->GetPedirAyuda()) {
                     enemDejarDePedirAyuda();
@@ -841,6 +846,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
 
     CrearJugador();
     _recolectables = cargador.GetRecolectables();
+    _paredes = cargador.GetParedes();
     _powerup = cargador.GetPowerup();
     _zonas = cargador.GetZonas();
     _enemigos = cargador.GetEnemigos();
@@ -879,8 +885,8 @@ void Jugando::CrearJugador()
 
 }
 
-void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp,
-    int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* modelo, const char* textura, int* propiedades,
+void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, 
+    int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, int* propiedades,
     unsigned short tipoObjeto)
 {
     //Arma
@@ -1189,6 +1195,11 @@ void Jugando::AccionarMecanismo(int int_col)
             unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(int_col);
             if(abrir)
             {
+                if(_inter->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
+                {
+                    enSalaBoss = true;
+                    this->CargarBossEnMemoria();
+                }
                 //Se abre/acciona la puerta / el mecanismo
                 _motora->getEvent("AbrirCerradura")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
                 _motora->getEvent("AbrirCerradura")->start();
@@ -1262,7 +1273,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     cout << "Hay " << orocant << " de Oro!" << endl;
     propiedades[0] = orocant; //para pasarlo a crear objeto
   }
-   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,"","",propiedades,tipoObjeto);
+   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObjeto);
 }
 
 void Jugando::activarPowerUp()
@@ -1325,7 +1336,7 @@ void Jugando::updateAt(int* danyo)
             _jugador->setLastTimeAt(tiempoActual);
             _jugador->setTimeAt(tiempoAtaque);
         }
-        if(atacktime > 0.5f)
+        /*if(atacktime > 0.5f)
         {
             if(atacktime > 0.0f)
             {
@@ -1339,7 +1350,7 @@ void Jugando::updateAt(int* danyo)
                 //Colorear gris
                 _motor->colorearJugador(255,150,150,150);
             }
-        }
+        }*/
 
         //clear
         if(_jugador->getTimeAt() <= 0.0f){
@@ -1552,6 +1563,12 @@ void Jugando::CargarBossEnMemoria()
     _fisicas->crearCuerpo(1,0,x/2,y/2,z/2,2,1,1,1,2,0,0);
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
+
+    std::string nameid = std::to_string(_boss->getID()); //pasar id a string
+    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid); // TO DO: poner el suyo
+    _motora->getEvent(nameid)->setPosition(x,y,z);
+    _motora->getEvent(nameid)->setVolume(0.4f);
+    _motora->getEvent(nameid)->start();
 
     _enemigos.push_back(move(_boss));
 }

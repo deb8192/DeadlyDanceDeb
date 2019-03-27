@@ -121,14 +121,49 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                     if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
                     {
                         funciona = false;
+                        this->setTimeOcultarse(1.5f);
                     }
                     else 
                     {
-                        funciona = true;
+                        if(this->getTimeOcultarse() <= 0)
+                        {
+                            funciona = true;
+                        }
+                        else
+                        {
+                            funciona = false;
+                        }
+                        
                     }
                 }
                 break;
-
+            case EN_NO_OIR:
+                {
+                    cout<<"ESTA ESCONDIDO EL SEÑOR GUARDIAN"<<endl;
+                    VectorEspacial posJugador;
+                    posJugador.vX = _jugador->getX();
+                    posJugador.vY = _jugador->getY();
+                    posJugador.vZ = _jugador->getZ();
+                    this->alinearse(&posJugador, false);
+                    if(this->oir(constantes.UNO))
+                    {
+                        funciona = false;
+                        this->setTimeOcultarse(1.5f);
+                    }
+                    else 
+                    {
+                        if(this->getTimeOcultarse() <= 0)
+                        {
+                            funciona = true;
+                        }
+                        else
+                        {
+                            funciona = false;
+                        }
+                        
+                    }
+                }
+                break;
             case EN_ATRAVESAR:
                 switch(_ordenes[1])
                 {
@@ -146,6 +181,61 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         break;
                 }
                 break;
+            case EN_CAMBIAR:
+            {
+                switch(_ordenes[1])
+                {
+                    case EN_PELIGRO:
+                        
+                        modo = MODO_HUIDA;
+                        funciona = true;
+
+                        break;
+                    case EN_ATAQUE:
+                        
+                        modo = MODO_ATAQUE;
+                        if(zonaElegida->getElementosActuales() >= 1)
+                        {
+                            zonaElegida->quitarElemento();
+                        }
+                        if(escondido)
+                        {
+                            escondido = false;
+                        }
+                        funciona = true;
+                        
+                        break;
+                    case EN_OCULTACION:
+                        
+                        modo = MODO_OCULTACION;
+                        if(zonaElegida->getElementosActuales() >= 1)
+                        {
+                            zonaElegida->quitarElemento();
+                        }
+                        if(escondido)
+                        {
+                            escondido = false;
+                        }
+                        funciona = true;
+                        
+                        break;
+                    case EN_NORMAL:
+
+                        modo = MODO_DEFAULT;
+                        if(zonaElegida->getElementosActuales() >= 1)
+                        {
+                            zonaElegida->quitarElemento();
+                        }
+                        if(escondido)
+                        {
+                            escondido = false;
+                        }
+                        funciona = true;
+                        
+                        break;
+                }
+            }
+            break;
             case EN_COMPROBAR:
             {
                 switch (_ordenes[1])
@@ -156,6 +246,10 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         {
                             funciona = true;
                         }
+                        else
+                        {
+                            funciona = false;
+                        }
                         break;
                     case EN_ATAQUE:
                         
@@ -164,6 +258,10 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                             cout<<"EL SEÑOR GUARDIAN ESTA EN MODO ATAQUE"<<endl;
                             funciona = true;
                         }
+                        else
+                        {
+                            funciona = false;
+                        }
                         break;
                     case EN_OCULTACION:
                         
@@ -171,9 +269,14 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         {
                             funciona = true;
                         }
+                        else
+                        {
+                            funciona = false;
+                        }
                         break;
                 }
             }
+            break;
             case EN_PERSIGUE: //El Guardian se persigue al jugador
                 {
                     funciona = this->perseguir(_jug);
@@ -233,7 +336,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
             {
                 if(modo == MODO_DEFAULT)
                 {
-                    this->ver(constantes.DOS, constantes.NUEVE * constantes.DIEZ);
+                    this->ver(constantes.DOS, constantes.CINCO * constantes.SEIS);
                     if(!hecho)
                     {
                         //Merodea estableciendo un nuevo angulo de rotacion
@@ -299,11 +402,12 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                                 {
                                     zonaElegida->annadirElemento();
                                     escondido = true;
+                                    this->setTimeOcultarse(1.5f);
                                     modo = MODO_OCULTACION;
                                     this->ForzarCambioNodo(&constantes.DIECIOCHO);
                                 }
                             }
-                            this->ver(constantes.DOS, constantes.NUEVE * constantes.DIEZ);
+                            //this->ver(constantes.DOS, constantes.NUEVE * constantes.DIEZ);
                         }
                         break; 
                     }
@@ -313,18 +417,47 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
             
             
             default:
-                if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
-                { 
-                    if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
-                    {
-                        modo = MODO_BUSCAR_ESCONDITE;
-                        this->setTimeMerodear(constantes.CERO);
-                        funciona = true;
-                    }
-                }
-                else
+                if(modo == MODO_DEFAULT)
                 {
-                    funciona = false;
+                    this->ver(constantes.DOS, constantes.CINCO * constantes.SEIS);
+                    if(!hecho)
+                    {
+                        //Merodea estableciendo un nuevo angulo de rotacion
+                        this->setRotation(this->randomBinomial() * maxRotacion);
+                        this->Merodear();
+                        this->setTimeMerodear(1.5f);
+                        hecho = true;
+                        //Comprueba si ve al jugador para atacarle en caso necesario
+                        if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
+                        {
+                            if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
+                            {   
+                                modo = MODO_BUSCAR_ESCONDITE;
+                                this->setTimeMerodear(constantes.CERO);
+                                funciona = true;
+                            }
+                        }
+                    }
+                    else 
+                    {
+                        //Merodea poniendo en positivo o negativo el angulo actual de rotacion
+                        int rota = rand() % 3 - 1;
+                        if (rota != 0)
+                        {
+                            rotation *= rota;
+                        }
+                        this->Merodear();
+                        //Comprueba si ve al jugador para atacarle en caso necesario
+                        if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
+                        { 
+                            if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
+                            {
+                                modo = MODO_BUSCAR_ESCONDITE;
+                                this->setTimeMerodear(constantes.CERO);
+                                funciona = true;
+                            }
+                        }
+                    }
                 }
                 
                 break;

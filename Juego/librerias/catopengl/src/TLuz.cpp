@@ -85,6 +85,7 @@ void TLuz::beginDraw()
 
         delete cola_compartida;//borramos la cola anterior porque esta vacia
         cola_compartida = cola_compartidaAuxiliar;//ponemos la nueva cola que tiene los elementos situados como la anterior
+        delete _matriz_resultado;//borrado de la luz
 
         shader->Use();
         shader->setFloat("material.shininess", brillos_shader); //Cantidad de Brillos
@@ -121,11 +122,11 @@ void TLuz::beginDraw()
             shader->setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));  //Punto de corte con el cono externo
         }
 
-        if(_matriz_resultado != nullptr)//si la matriz de resultado es nula es que no hay nada en la cola por lo que no hay nada que enviar al shader
-        {
+        //if(_matriz_resultado != nullptr)//si la matriz de resultado es nula es que no hay nada en la cola por lo que no hay nada que enviar al shader
+        //{
             //enviar a uniform
             //std::cout << (*_matriz_resultado)[3][0] << " " << (*_matriz_resultado)[3][1] << " " << (*_matriz_resultado)[3][2] << " " << (*_matriz_resultado)[3][3] << std::endl;
-        }
+        //}
     }
     else
     {
