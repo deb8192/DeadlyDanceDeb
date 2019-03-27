@@ -198,7 +198,7 @@ void Menu::calcularColor()
             g = g-1;
         }
 
-        if(g == 100)
+        if(g == 30)
         {
             gm = false;
         }
