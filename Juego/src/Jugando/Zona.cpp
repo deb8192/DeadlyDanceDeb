@@ -60,6 +60,11 @@ void Zona::annadirElemento()
   elementosActuales++;
 }
 
+void Zona::quitarElemento()
+{
+  elementosActuales--;
+}
+
 void Zona::setPosiciones(float newx,float newy,float newz)
 {
     posicionActual.x = newx;
