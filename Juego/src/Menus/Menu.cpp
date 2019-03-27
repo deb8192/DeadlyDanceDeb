@@ -45,7 +45,7 @@ void Menu::Iniciar()
 // Actualiza lo que se ve por pantalla
 void Menu::Render()
 {
-    calcularColor();
+    //calcularColor();
     _motor->FondoEscena(0,r,g,b);
     _motor->RenderEscena();               // Vuelve a pintar
     
