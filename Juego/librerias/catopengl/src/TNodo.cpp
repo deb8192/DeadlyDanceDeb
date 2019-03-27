@@ -231,3 +231,19 @@ void TNodo::BorrarGui()
         }      
     }
 }
+
+void TNodo::DeshabilitarNodo()
+{
+    if(entidad != nullptr)
+    {
+        entidad->NoEjecutar();
+    }
+}
+
+void TNodo::HabilitarNodo()
+{
+    if(entidad != nullptr)
+    {
+        entidad->Ejecutar();
+    }
+}
