@@ -417,6 +417,24 @@ bool MotorFisicas::collideAtackObstacle()
     return false;
 }
 
+vector<short> MotorFisicas::collideAttackWall()
+{
+    vector<short> paredes;
+    paredes.reserve(10);
+    for(unsigned short i = 0; i < obstaculos.size();i++)
+    {
+        if(obstaculos[i])
+        {
+            if(space->testOverlap(jugadorAtack,obstaculos[i]))
+            {
+                paredes.push_back(obstaculos[i])
+            }
+        }
+    }
+
+    return paredes;
+}
+
 bool MotorFisicas::enemyCollideObstacle(unsigned int enemigo)
 {
     //abra que indicar tipo de objeto de alguna manera (que sean obstaculos)
@@ -592,7 +610,6 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
         case 1:
             return jug;
         case 2:
-            //return obj;
             return obj;
         case 3:
             return ene;
@@ -751,7 +768,7 @@ void MotorFisicas::updateAtaquEspecEnemigos(float x, float y, float z, unsigned 
 vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z)
 {
     vector<unsigned int> atacados;
-    atacados.resize(enemigos.size());
+    atacados.reserve(enemigos.size());
     if(armaAtEsp != nullptr)
     {
         rp3d::Vector3 posiciones(x,y,z);

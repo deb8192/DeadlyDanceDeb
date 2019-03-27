@@ -39,6 +39,7 @@ using namespace reactphysics3d;
             CollisionBody* getObstacles(int n);
             bool collideObstaculos();
             bool collideAtackObstacle();
+            vector<short> collideAttackWall();
             bool collideObstacle();
             bool enemyCollideObstacle(unsigned int enemigo);
             bool collidePlatform();
