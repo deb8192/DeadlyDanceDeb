@@ -16,11 +16,14 @@ class Cofre : public Interactuable
         bool GetEsArana();
         Sala* GetSala();
         unsigned short GetPosArray();
+        void CrearFisica();
+        void BorrarFisica();
 
     private:
         bool esArana;
         Sala* _estoy;//sala en la que esta el cofre
-        unsigned short posArray;
+        unsigned short posArrayArana; // Vector de aranas
+        vector<int> posArrayFisicas;
 };
 
 #endif

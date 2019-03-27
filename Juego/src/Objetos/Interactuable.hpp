@@ -69,6 +69,10 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         const char* GetModelo(); // Malla 3D con la textura
         unsigned short GetTipoObjeto();
 
+        // Utilizadas de momento por el cofre
+        virtual void CrearFisica()=0;
+        virtual void BorrarFisica()=0;
+        
     protected:
         MotorGrafico* _motor;
         //Si codigoObjeto es > 0 es un numero comun entre dos objetos: una palanca con el mismo numero que una puerta abre dicha puerta
