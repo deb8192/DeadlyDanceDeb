@@ -156,13 +156,21 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
             break;
         case 3: //objetos
         {
+            //paredes rompibles que se interponen ante el jugador
+            if(accion == 5)
+            {
+                relacionParedesObstaculos.push_back(obstaculos.size());
+                paredes.push_back(cuerpo);
+                obstaculos.push_back(cuerpo);
+            }
             //Recolectable power ups
-            if(accion == 4)
+            else if(accion == 4)
             {
             recolectables_powerup.push_back(cuerpo);
             }
+
             //Objetos con los que interactuar como puertas, cofres
-            if(accion == 3)
+            else if(accion == 3)
             {
                 relacionInteractuablesObstaculos.push_back(obstaculos.size());
                 obstaculos.push_back(cuerpo);
@@ -176,12 +184,12 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
                 //interLargo.push_back(largo);
             }
             //Objetos que recoger como armas y llaves
-            if(accion == 2)
+            else if(accion == 2)
             {
                 recolectables.push_back(cuerpo);
             }
             //Obstaculos que se interponen ante el jugador
-            if(accion == 1)
+            else if(accion == 1)
             {
                 obstaculos.push_back(cuerpo);
             }
@@ -285,10 +293,19 @@ void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, 
 
     arma = cuerpo;
 }
+void MotorFisicas::EraseObstaculo(int idx)
+{
+    obstaculos.at(idx) = nullptr;
+}
 
 void MotorFisicas::EraseColectable(int idx)
 {
     recolectables.erase(recolectables.begin() + idx);
+}
+
+void MotorFisicas::ErasePared(int idx)
+{
+     paredes.at(idx) = nullptr;
 }
 
 void MotorFisicas::EraseColectablePowerup(int idx)
@@ -459,6 +476,24 @@ bool MotorFisicas::collideAtackObstacle()
     return false;
 }
 
+std::vector<short> MotorFisicas::collideAttackWall()
+{
+    std::vector<short> indicesParedes;
+    indicesParedes.reserve(10);
+    for(unsigned short i = 0; i < paredes.size();i++)
+    {
+        if(paredes[i])
+        {
+            if(space->testOverlap(jugadorAtack,paredes[i]))
+            {
+                indicesParedes.push_back(i);
+            }
+        }
+    }
+
+    return indicesParedes;
+}
+
 bool MotorFisicas::enemyCollideObstacle(unsigned int enemigo)
 {
     //abra que indicar tipo de objeto de alguna manera (que sean obstaculos)
@@ -607,7 +642,8 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
             unsigned int i = 0;
             while(i<obstaculos.size() && !colision)
             {
-                colision = obstaculos[i]->raycast(*rayo,intersection);
+                if(obstaculos[i])
+                    colision = obstaculos[i]->raycast(*rayo,intersection);
 
                 if(colision)
                 {
@@ -634,7 +670,6 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
         case 1:
             return jug;
         case 2:
-            //return obj;
             return obj;
         case 3:
             return ene;
@@ -793,7 +828,7 @@ void MotorFisicas::updateAtaquEspecEnemigos(float x, float y, float z, unsigned 
 vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z)
 {
     vector<unsigned int> atacados;
-    atacados.resize(enemigos.size());
+    atacados.reserve(enemigos.size());
     if(armaAtEsp != nullptr)
     {
         rp3d::Vector3 posiciones(x,y,z);
@@ -1048,4 +1083,10 @@ unsigned int MotorFisicas::GetRelacionInteractuablesObstaculos(int n)
 {
     unsigned int m = n;
     return relacionInteractuablesObstaculos.at(m);
+}
+
+unsigned int MotorFisicas::GetRelacionParedesObstaculos(int n)
+{
+    unsigned int m = n;
+    return relacionParedesObstaculos.at(m);
 }

@@ -110,6 +110,7 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                 {
                     if(std::strcmp(atributos[1], constantes.TAREA) == 0)
                     {
+                        tipo = 0;
                         generarTarea(tool, atributos, tarea, i, tipo);
                     }
                     else
@@ -158,6 +159,7 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
                 {
                     if(std::strcmp(atributos[1], constantes.TAREA) == 0)
                     {
+                        tipo = 0;
                         generarTarea(tool, atributos, tarea, i, tipo);
                     }
                     else

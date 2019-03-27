@@ -22,6 +22,9 @@ class Ventana
         short unsigned int getWidth();
         short unsigned int getHeight();
 
+        //cierra la ventana
+        void Close();
+
     private:
 
         ~Ventana();//destructor

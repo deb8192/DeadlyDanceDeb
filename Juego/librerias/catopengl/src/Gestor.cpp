@@ -7,12 +7,8 @@ Gestor::Gestor()
 
 Gestor::~Gestor()
 {
+    LimpiarRecursos();//borramos todos los recursos a nuestro cargo
 
-}
-
-void Gestor::Remove()
-{
-    this->~Gestor();
 }
 
 //Uso: se utiliza para buscar el recurso si lo encuentra y no lo tiene ya instanciado se instancia en memoria, devolviendo un id este id le sirve al que tiene la interfaz para crear objetos
@@ -159,4 +155,31 @@ Gestor::Archivador * Gestor::recuperarRecurso(unsigned short id)
         }
     }
     return nullptr;
+}
+
+bool Gestor::LimpiarRecursos()
+{
+    if(archivadores.size() < 1)
+    {
+        return false;
+    }
+
+    for(long unsigned int i = 0; i < archivadores.size();i++)
+    {
+        if(archivadores[i]->_recursos != nullptr)
+        {
+            delete archivadores[i]->_recursos;
+            archivadores[i]->_recursos = nullptr;
+        }
+
+/*         if(archivadores[i]->_nombre != nullptr)
+        {
+            delete [] archivadores[i]->_nombre;
+            archivadores[i]->_nombre = nullptr;
+        } */
+        delete archivadores[i];
+    }
+    archivadores.clear();
+
+    return true;
 }

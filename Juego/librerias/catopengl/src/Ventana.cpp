@@ -129,12 +129,15 @@ void Ventana::procesarInputs(GLFWwindow * _ventana)
 
 void Ventana::limpiar()
 {
-    //actualizar inputs(teclado y raton)
-    procesarInputs(_window);
+    if(_window != nullptr)
+    {
+        //actualizar inputs(teclado y raton)
+        procesarInputs(_window);
 
-    //Comandos de render
-    glClearColor(red, green, blue, alpha); //Designamos a el glClearColor un color
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);         //Borrarmos en el buffer con el glClearColor designado
+        //Comandos de render
+        glClearColor(red, green, blue, alpha); //Designamos a el glClearColor un color
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);         //Borrarmos en el buffer con el glClearColor designado
+    }
 }
 
 double * Ventana::RecuperarPosicionesMouse()
@@ -224,4 +227,12 @@ short unsigned int Ventana::getWidth()
 short unsigned int Ventana::getHeight()
 {
     return winheight;
+}
+
+void Ventana::Close()
+{
+    if(_window != nullptr)
+    {    
+        glfwSetWindowShouldClose(_window, true);
+    }
 }
