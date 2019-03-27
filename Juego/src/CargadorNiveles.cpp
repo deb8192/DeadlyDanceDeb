@@ -446,7 +446,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     {
         case 0:
         {
-            Pollo* _ene = new Pollo(x,y,z, 75); // Posiciones, vida
+            Pollo* _ene = new Pollo(x,y,z, 50); // Posiciones, vida
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
@@ -465,7 +465,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             break;
         case 1:
         {
-            Murcielago* _ene = new Murcielago(x,y,z, 125); // Posiciones, vida
+            Murcielago* _ene = new Murcielago(x,y,z, 75); // Posiciones, vida
             //ia
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
             _ene->setVelocidadMaxima(1.5f);
@@ -483,7 +483,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         
         case 3: 
         {
-            Guardian* _ene = new Guardian(x,y,z, 625, enemigo);
+            Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
@@ -503,7 +503,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
         case 4: 
         {
-            Guardian* _ene = new Guardian(x,y,z, 750, enemigo);
+            Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
@@ -555,7 +555,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z, 
     int ancho, int largo, int alto, Sala* sala)
 {
-    _boss = new MuerteBoss(x,y,z, 2000); // Posiciones, vida
+    _boss = new MuerteBoss(x,y,z, 300); // Posiciones, vida
     _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
     //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
     _boss->setID(++id);//le damos el id unico en esta partida al enemigo
