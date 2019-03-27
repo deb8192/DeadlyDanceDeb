@@ -2622,7 +2622,7 @@ void MotorGrafico::RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFr
                 _actualTexture = _driver->getTexture(buffer);//creas la textura
                 _actual = _guienv->addImage(_actualTexture,position2d<int>(0,0));//creo imagen actual
             }
-            elsedark grey
+            else
             {
                 _actualTexture = _driver->getTexture(buffer);//creo textura
                 _actual = _guienv->addImage(_driver->getTexture(buffer),position2d<int>(0,0));//creo imagen con textura
@@ -2770,7 +2770,7 @@ void MotorGrafico::CargarFondoPuzzle()
         //codigo motor catopengl
         _imgP = _interfaz->AddImagen(cfondo,0,0,1.0f);
         _interfaz->DefinirIdPersonalizado(_imgP,IDP);
-        _imagenesP.push_back(_imgP);
+        _imagenesP.push_back(IDP);
         _imgP = 0;
     #else
         //codigo motor irrlicht
@@ -2792,8 +2792,9 @@ void MotorGrafico::CargarIMGPuzzle(unsigned short x, unsigned short y, std::stri
     #ifdef WEMOTOR
         //codigo motor catopengl
         _imgP = _interfaz->AddImagen(cruta,x,y,1.0f);
-        _interfaz->DefinirIdPersonalizado(_imgP,++IDP);
-        _imagenesP.push_back(_imgP);
+        unsigned short nue = ++IDP;
+        _interfaz->DefinirIdPersonalizado(_imgP,nue);
+        _imagenesP.push_back(nue);
         _imgP = 0;
     #else
         //codigo motor irrlicht
@@ -2813,8 +2814,9 @@ void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short num = _interfaz->CrearTexto(texto,x1,y1);
-        _interfaz -> DefinirIdPersonalizado(num,++IDP);
-        _textosP.push_back(_txtP);
+        unsigned short nue = ++IDP;
+        _interfaz -> DefinirIdPersonalizado(num,nue);
+        _textosP.push_back(nue);
         _txtP = 0;
     #else
         //codigo motor irrlicht
