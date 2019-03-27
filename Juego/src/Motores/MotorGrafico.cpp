@@ -2627,7 +2627,7 @@ void MotorGrafico::RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFr
                 _actualTexture = _driver->getTexture(buffer);//creas la textura
                 _actual = _guienv->addImage(_actualTexture,position2d<int>(0,0));//creo imagen actual
             }
-            elsedark grey
+            else
             {
                 _actualTexture = _driver->getTexture(buffer);//creo textura
                 _actual = _guienv->addImage(_driver->getTexture(buffer),position2d<int>(0,0));//creo imagen con textura
