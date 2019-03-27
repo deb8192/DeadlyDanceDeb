@@ -373,6 +373,11 @@ std::vector<Recolectable*> CargadorNiveles::GetRecolectables()
     return _recolectables;
 }
 
+std::vector<Pared*> CargadorNiveles::GetParedes()
+{
+    return _paredes;
+}
+
 std::vector<Interactuable*> CargadorNiveles::GetInteractuables()
 {
     return _interactuables;
@@ -514,6 +519,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             _motora->getEvent(nameid)->setVolume(0.4f);
             _motora->getEvent(nameid)->start();
         }
+        break;
 
         default:
             break;
@@ -601,10 +607,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
 
     switch (accion)
     {
-        case 1: //Obstaculos
-        {
-            
-        }
+        
         case 2: //Arma
         {
             Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
@@ -650,7 +653,19 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             _rec = nullptr;
         }
         break;
-
+        //TO DO corregir la creacion de obstaculos para hacerla correctamente
+        case 5: //Paredes rompibles
+        {
+            Pared* _par = new Pared(nombre,ancho,largo,alto,x,y,z,tipoObj);
+            _par->setID(_paredes.size());
+            _par->setPosiciones(x,y,z);
+            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+            _par->SetPosicionArrayObjetos(posicionObjeto);
+            _paredes.push_back(move(_par));
+            _par = nullptr;
+        }
+        break;
+        
         default:
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         break;

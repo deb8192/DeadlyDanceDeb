@@ -29,7 +29,9 @@ using namespace reactphysics3d;
             void updateJugador(float x, float y, float z);//actualizamos al jugador en el espacio de las fisicas
             void updateEnemigos(float x, float y, float z, unsigned int i);//actualizamos al enemigo en el espacio de las fisicas
             void updatePuerta(float x, float y, float z, float rx, float ry, float rz, float* desplazamientos, unsigned int i);
+            void EraseObstaculo(int idx);
             void EraseColectable(int idx);
+            void ErasePared(int idx);
             void EraseColectablePowerup(int idx);
             void EraseEnemigo(std::size_t i);
             void EraseCofre(std::size_t i);
@@ -39,7 +41,7 @@ using namespace reactphysics3d;
             CollisionBody* getObstacles(int n);
             bool collideObstaculos();
             bool collideAtackObstacle();
-            vector<short> collideAttackWall();
+            std::vector<short> collideAttackWall();
             bool collideObstacle();
             bool enemyCollideObstacle(unsigned int enemigo);
             bool collidePlatform();
@@ -72,6 +74,7 @@ using namespace reactphysics3d;
             CollisionBody* getAtack();
             CollisionBody* getColectablesPowerup(int n);
             unsigned int GetRelacionInteractuablesObstaculos(int n);
+            unsigned int GetRelacionParedesObstaculos(int n);
 
             //para limpiar todas las fisicas
             void limpiarFisicas();
@@ -99,7 +102,9 @@ using namespace reactphysics3d;
            // std::vector<float> interLargo;//Vector de elementos con los que interactuar
 
             std::vector<unsigned int> relacionInteractuablesObstaculos;//vector que contiene en la posicion correspondiente a un interactuable en su vector el valor de su posicion en el vector de obstaculos
+            std::vector<unsigned int> relacionParedesObstaculos;//vector que contiene en la posicion correspondiente a una pared en su vector el valor de su posicion en el vector de obstaculos
             std::vector<CollisionBody *> obstaculos;//Vector de obstaculos que bloquean el movimiento
+            std::vector<CollisionBody *> paredes;//Vector de obstaculos que no son palancas o puertas
             std::vector<CollisionBody *> plataformas;//Vector de plataformas para caminar
             std::vector<rp3d::Transform> prevTransform;
 
