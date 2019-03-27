@@ -72,6 +72,9 @@
         </relationship>
     </object>
     <object class="EventMixerMaster" id="{67db8802-6c6c-4405-b162-4db6bc3ef673}">
+        <property name="volume">
+            <value>-7.5</value>
+        </property>
         <relationship name="effectChain">
             <destination>{380b21d3-c5b5-42fe-950c-49cbaf1856ed}</destination>
         </relationship>
@@ -115,6 +118,7 @@
     </object>
     <object class="MixerBusEffectChain" id="{380b21d3-c5b5-42fe-950c-49cbaf1856ed}">
         <relationship name="effects">
+            <destination>{da403bba-6a19-4900-8ea3-3fdc52945dfe}</destination>
             <destination>{2d19c153-94b4-456c-b018-5286da93ef48}</destination>
             <destination>{6e2744ad-5498-4848-a6f4-8dad43bd3e8a}</destination>
         </relationship>
@@ -127,6 +131,17 @@
         </relationship>
     </object>
     <object class="MixerBusPanner" id="{b5663c14-d0e2-4cfd-963b-b415e3347dde}"/>
+    <object class="ChorusEffect" id="{da403bba-6a19-4900-8ea3-3fdc52945dfe}">
+        <property name="rate">
+            <value>0.0540000014</value>
+        </property>
+        <property name="depth">
+            <value>97.5</value>
+        </property>
+        <property name="mix">
+            <value>89.5</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{2d19c153-94b4-456c-b018-5286da93ef48}"/>
     <object class="SpatialiserEffect" id="{6e2744ad-5498-4848-a6f4-8dad43bd3e8a}">
         <property name="minimumDistance">
