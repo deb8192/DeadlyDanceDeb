@@ -101,6 +101,9 @@ void TMalla::beginDraw()
         }
 
         delete cola_compartida;//borramos la cola anterior porque esta vacia
+        delete _matriz_escalado;
+        delete _matriz_traslade;
+        delete _matriz_rotacion;
         cola_compartida = cola_compartidaAuxiliar;//ponemos la nueva cola que tiene los elementos situados como la anterior
 
     }
