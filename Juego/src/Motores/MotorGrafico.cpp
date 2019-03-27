@@ -85,6 +85,30 @@ void MotorGrafico::LimpiarElementosJuego()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        _interfaz->LimpiarEscena();
+        _interfaz->LimpiarGui();
+        Plataformas_Scena.clear();
+        Luces_Scena.clear();
+        Enemigos_Scena.clear();
+        Textos_Scena.clear();
+        Recolectables_Scena.clear();
+        Objetos_Scena.clear();
+        PowerUP_Scena.clear();
+        Objetos_Debug.clear();
+        Objetos_Debug2.clear();
+
+        camara = 0;
+        _jugEscena = 0;
+        debugGrafico = false;
+        _armaEnEscena = 0;
+        _armaProyectil = 0;
+        camx = 0;
+        camz = 30;
+        cams = -1;
+        existearmaexp = false;
+
+        idCargando = 0;
+
     #else
         //codigo motor irrlicht
         _armaEnEscena = nullptr;
