@@ -83,14 +83,6 @@ void CargadorPuzzles::CargarPuzzlesXml()
             _puzzle = nullptr;
         }
     }
-
-    // Pruebas en consola
-    /*for (int a=0; a<listaPuzzles.size(); a++) {
-    	cout << "Tipo: " << listaPuzzles.at(a).GetTipo() <<endl;
-    	cout << "Acertijo: " << listaPuzzles.at(a).GetEnunciado() <<endl;
-    	cout << "Opciones: " << listaPuzzles.at(a).GetOpciones() <<endl;
-    }
-    cout << "FIN" << "\n" <<endl;*/
 }
 
 Puzzle* CargadorPuzzles::GetPuzzle(unsigned short pos) 
