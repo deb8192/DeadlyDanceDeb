@@ -369,6 +369,15 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short espada_textura;
                 unsigned short daga_textura;
 
+                //puzzles
+
+                // Variables para Puzzles
+                unsigned short IDP;
+                unsigned short _imgP;
+                unsigned short _txtP;
+                vector<unsigned short> _imagenesP;
+                vector<unsigned short> _textosP;
+
 
             #else
                 //variables y parametros motor irrlicht
