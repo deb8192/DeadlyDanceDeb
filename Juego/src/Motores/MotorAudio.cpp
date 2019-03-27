@@ -37,10 +37,12 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/SFX/SFX-Personaje cabezazo del heavy","SinArma");
   LoadEvent("event:/SFX/SFX-Personaje Guitarra golpea","GolpeGuitarra");
   LoadEvent("event:/SFX/SFX-Pollo Grito de alerta","Chicken2");
+  LoadEvent("event:/SFX/SFX-Murcielago enfadado","Murci2");
   LoadEvent("event:/SFX/SFX-Objetos Chirrido de abrir puerta","AbrirPuerta");
   LoadEvent("event:/SFX/SFX-Objetos Cerrar puerta","CerrarPuerta");
   LoadEvent("event:/SFX/SFX-Objetos Abrir cerradura con llave","AbrirCerradura");
   LoadEvent("event:/Ambientes/Ambiente-Gritos de lamentos","AmbienteGritos");
+  LoadEvent("event:/Ambientes/Ambiente-rio de lava","AmbienteLava");
   //LoadEvent("event:/Chicken1","Chicken1");
 
  //***********EJEMPLO DE EJECUCION MUSICA*****************

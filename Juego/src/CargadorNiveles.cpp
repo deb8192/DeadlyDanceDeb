@@ -1,4 +1,4 @@
-#include <stdlib.h> 
+#include <stdlib.h>
 #include "CargadorNiveles.hpp"
 
 #include "Personajes/Heavy.hpp"
@@ -77,7 +77,7 @@ CargadorNiveles::~CargadorNiveles()
         delete _waypoints.at(i);
     }
     _waypoints.clear();
-    
+
     delete _primeraSala;
 }
 
@@ -86,7 +86,7 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     this->tipoJug = tipoJug;
 
     //definimos los strings
-    std::string nivel = ""; //donde se almacenara el nombre del nivel   
+    std::string nivel = ""; //donde se almacenara el nombre del nivel
     std::string extension = ".xml"; // extension del archivo a abrir
     std::string ruta = "assets/maps/xml/"; // ruta del archivo
     std::string ruta_completa = ""; // ruta del archivo
@@ -116,10 +116,10 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     int doorsMax = hijo.attribute("Doors").as_int();//nos devuelve un int
     int zonesMax = hijo.attribute("Zones").as_int();//nos devuelve un int
     int waypointsMax = hijo.attribute("Waypoints").as_int();//nos devuelve un int
-    
+
     ReservarMemoriaVectores(eneMax, (doorsMax+leversMax+chestsMax),
         waypointsMax, zonesMax/*, wallsMax*/);
-    
+
     pugi::xml_node primera = doc.child("Level"); //partimos de nivel
     vector <pugi::xml_node> anterior;
     anterior.push_back(primera.child("Platform"));
@@ -130,10 +130,10 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     {
         int x = hijo.attribute("X").as_int();//nos devuelve un int
         int z = hijo.attribute("Y").as_int();//nos devuelve un int
-        int y = hijo.attribute("Z").as_int();//nos devuelve un int 
+        int y = hijo.attribute("Z").as_int();//nos devuelve un int
         CrearLuz(x,y,z); //cargamos el objeto
     }
-    
+
     //Se crea el arbol de salas del mapa del nivel
     for (pugi::xml_node plat = anterior.back().child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
@@ -157,7 +157,7 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
 void CargadorNiveles::GuardarNivelXml(int level)
 {
     //definimos los strings
-    std::string nivel = ""; //donde se almacenara el nombre del nivel   
+    std::string nivel = ""; //donde se almacenara el nombre del nivel
     std::string extension = ".xml"; // extension del archivo a abrir
     std::string ruta = "assets/maps/xml/"; // ruta del archivo
     std::string ruta_completa = ""; // ruta del archivo
@@ -178,14 +178,14 @@ void CargadorNiveles::GuardarNivelXml(int level)
 void CargadorNiveles::CargarNivelBin(int level)
 {
     //definimos los strings
-    std::string nivel = ""; //donde se almacenara el nombre del nivel   
+    std::string nivel = ""; //donde se almacenara el nombre del nivel
     std::string extension = ".bin"; // extension del archivo a abrir
     std::string ruta = "assets/maps/bin/"; // ruta del archivo
     std::string ruta_completa = ""; // ruta del archivo
     //ahora pasamos el nivel a texto
     nivel = std::to_string(level);
     //creamos la ruta completa
-    ruta_completa = ruta+nivel+extension; 
+    ruta_completa = ruta+nivel+extension;
 
     //esto transforma el string std 11 a char
     char cadena[sizeof(ruta_completa)];//le dice la longitud del char que sera igual a la longitud del string
@@ -198,28 +198,28 @@ void CargadorNiveles::CargarNivelBin(int level)
 void CargadorNiveles::GuardarNivelBin(int level)
 {
     //definimos los strings
-    std::string nivel = ""; //donde se almacenara el nombre del nivel   
+    std::string nivel = ""; //donde se almacenara el nombre del nivel
     std::string extension = ".bin"; // extension del archivo a abrir
     std::string ruta = "assets/maps/bin/"; // ruta del archivo
     std::string ruta_completa = ""; // ruta del archivo
     //ahora pasamos el nivel a texto
     nivel = std::to_string(level);
     //creamos la ruta completa
-    ruta_completa = ruta+nivel+extension; 
+    ruta_completa = ruta+nivel+extension;
 
     //esto transforma el string std 11 a char
     char cadena[sizeof(ruta_completa)];//le dice la longitud del char que sera igual a la longitud del string
     strcpy(cadena,ruta_completa.c_str()); //pasa el string a char
     //fin de la transformacion
 
-    //llamamos a las datos desde nivel para almacenarlos en formato binario 
+    //llamamos a las datos desde nivel para almacenarlos en formato binario
 }
 
 Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
 {
     Constantes constantes;
     Sala* padren = nullptr;//sala hijo
-    
+
     int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
     int x = plat.attribute("X").as_int();//nos devuelve un int
     int y = plat.attribute("Y").as_int();//nos devuelve un int
@@ -227,9 +227,9 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
     int rp = plat.attribute("RP").as_int();//nos devuelve un int
     int ancho = plat.attribute("ancho").as_int();//nos devuelve un int
     int largo = plat.attribute("largo").as_int();//nos devuelve un int
-    int alto = plat.attribute("alto").as_int();//nos devuelve un int 
+    int alto = plat.attribute("alto").as_int();//nos devuelve un int
     int centro = plat.attribute("TypeCenter").as_int();//nos devuelve el tipo de centro de masas del objeto
-    bool jugadorEstasAqui = plat.attribute("UserStar").as_bool();//nos devuelve true si es donde empieza el jugador 
+    bool jugadorEstasAqui = plat.attribute("UserStar").as_bool();//nos devuelve true si es donde empieza el jugador
     const char* textura = plat.attribute("Texture").value(); //nos da un char[] = string
     const char* modelo  =  plat.attribute("Model").value(); //nos da un char[] = string
     padren = CrearPlataforma(accion,rp,x,y,z,ancho,largo,alto,centro,modelo,textura); //cargamos el objeto
@@ -246,9 +246,9 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
         int Playerx = plat.attribute("StarX").as_int();//nos devuelve un int
         int Playery = plat.attribute("StarY").as_int();//nos devuelve un int
-        int Playerz = plat.attribute("StarZ").as_int();//nos devuelve un int 
+        int Playerz = plat.attribute("StarZ").as_int();//nos devuelve un int
         int ancho = 1;//nos devuelve un int
-        int largo = 1;//nos devuelve un int 
+        int largo = 1;//nos devuelve un int
         int alto = 5;//nos devuelve un int
         // El modelo esta dentro de sus clases de jugadores
 
@@ -257,7 +257,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
             case 2:
                 _jugador = new Bailaora(Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
                 break;
-        
+
             default:
                 _jugador = new Heavy(Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
                 break;
@@ -271,12 +271,12 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int accion = enem.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
         int x = enem.attribute("X").as_int();//nos devuelve un int
         int y = enem.attribute("Y").as_int();//nos devuelve un int
-        int z = enem.attribute("Z").as_int();//nos devuelve un int 
+        int z = enem.attribute("Z").as_int();//nos devuelve un int
         int ancho = enem.attribute("ancho").as_int();//nos devuelve un int
-        int largo = enem.attribute("largo").as_int();//nos devuelve un int 
+        int largo = enem.attribute("largo").as_int();//nos devuelve un int
         int alto = enem.attribute("ancho").as_int();//nos devuelve un int
         int enemigo = enem.attribute("enemigo").as_int(); //nos da un char[] = string
-        
+
         if (enemigo != constantes.BOSS)
         {
             CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,padren); //cargamos el enemigo
@@ -327,10 +327,10 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int ID = enem.attribute("id").as_int(); //lo vamos a usar para indentificar los waypoints de distintas salas
         int x = enem.attribute("X").as_int();//nos devuelve un int
         int y = enem.attribute("Y").as_int();//nos devuelve un int
-        int z = enem.attribute("Z").as_int();//nos devuelve un int 
+        int z = enem.attribute("Z").as_int();//nos devuelve un int
         int ancho = enem.attribute("ancho").as_int();//nos devuelve un int
-        int largo = enem.attribute("largo").as_int();//nos devuelve un int 
-        int alto = enem.attribute("alto").as_int();//nos devuelve un int 
+        int largo = enem.attribute("largo").as_int();//nos devuelve un int
+        int alto = enem.attribute("alto").as_int();//nos devuelve un int
         int compartido = enem.attribute("compartido").as_int();//nos devuelve un int
         char* conexiones = (char *) enem.attribute("conexiones").value(); //nos indica los ID de los waypoints con los que conecta este waypoint
         char* reading =  strtok(conexiones, ",");
@@ -438,7 +438,7 @@ void CargadorNiveles::CrearLuz(int x,int y,int z)
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
-void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z, 
+void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     int ancho, int largo, int alto, Sala* sala)
 {
     //accion indicara futuramente que tipo de enemigo sera (herencia)
@@ -474,14 +474,14 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
             std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+            _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(0.4f);
+            _motora->getEvent(nameid)->setVolume(0.7f);
             _motora->getEvent(nameid)->start();
         }
             break;
-        
-        case 3: 
+
+        case 3:
         {
             Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
@@ -501,7 +501,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         }
         break;
 
-        case 4: 
+        case 4:
         {
             Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
@@ -544,7 +544,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     _enemigos.back()->setVectorOrientacion();
     _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
-    
+
     _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo());//creamos la figura
 
     _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0);
@@ -552,7 +552,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
 }
 
-void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z, 
+void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
     int ancho, int largo, int alto, Sala* sala)
 {
     _boss = new MuerteBoss(x,y,z, 300); // Posiciones, vida
@@ -627,7 +627,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
                 _inter = new Palanca(codigo, nombre, ancho, largo, alto, 0,x,y,z,tipoObj);
             else // 2 o 3, Puertas
                 _inter = new Puerta(codigo, nombre, ancho, largo, alto, 0,x,y,z,tipoObj);
-            
+
             _inter->setID(++id);
             _inter->setPosiciones(x,y,z);
             _inter->setDesplazamientos(despX,despZ);
@@ -635,7 +635,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
 
             posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_inter->GetModelo(),NULL);
             _inter->SetPosicionArrayObjetos(posicionObjeto);
-            
+
             _interactuables.push_back(move(_inter));
             _inter = nullptr;
         }
@@ -702,9 +702,9 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
 unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     float ancho, float alto, float largo, Sala* sala)
 {
-    Constantes constantes; 
+    Constantes constantes;
     CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo); // Posiciones, vida
-    
+
     _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
     _eneA->setID(++id);//le damos el id unico en esta partida al enemigo
     _eneA->SetEnemigo(constantes.ARANA);
@@ -771,7 +771,7 @@ void CargadorNiveles::CargarCofres()
             {
                 srand(time(NULL));
                 int numAlt = rand() % zonasDisponibles.size();
-                
+
                 //Buscar zona donde colocar
                 newx = _zonas[zonasDisponibles[numAlt]]->getX();
                 newy = _zonas[zonasDisponibles[numAlt]]->getY();
@@ -808,7 +808,7 @@ void CargadorNiveles::CargarCofres()
 
                 int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
                     _cofre->GetModelo(), NULL);
-                    
+
                 _cofre->setID(++id);
                 _cofre->setPosiciones(newx,newy,newz);
                 _cofre->SetPosicionArrayObjetos(posicionObjeto);
