@@ -168,7 +168,8 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
             {
             recolectables_powerup.push_back(cuerpo);
             }
-            //Objetos con los que interactuar como puertas
+
+            //Objetos con los que interactuar como puertas, cofres
             else if(accion == 3)
             {
                 relacionInteractuablesObstaculos.push_back(obstaculos.size());
@@ -236,6 +237,44 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
     // std::cout << "pz: " << posiciones.z << std::endl;
 }
 
+//TO DO: pasar a vector de punteros
+std::vector<int> MotorFisicas::crearCuerpoCofre(float px, float py, float pz, 
+    float ancho, float alto, float largo, float despX, float despZ)
+{
+    rp3d::Vector3 posiciones(px+despX,py,pz+despZ); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
+    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+
+    Transform transformacion(posiciones,orientacion);
+
+    rp3d::CollisionBody * cuerpo;
+    cuerpo = space->createCollisionBody(transformacion);
+
+    //cubo (boundingbox)
+    rp3d::Vector3 medidas(ancho,alto,largo);
+    BoxShape * forma = new BoxShape(medidas);
+    cuerpo->addCollisionShape(forma,transformacion);
+    
+    relacionInteractuablesObstaculos.push_back(obstaculos.size());
+    obstaculos.push_back(cuerpo);
+
+    //Se le anade una zona de deteccion mediante colision
+    rp3d::CollisionBody * deteccion;
+    SphereShape * detector = new SphereShape(alto);
+    deteccion = space->createCollisionBody(transformacion);
+    deteccion->addCollisionShape(detector,transformacion);
+    interactuables.push_back(deteccion);
+
+    vector<int> _vector;
+    _vector.reserve(2);
+
+    int _num = obstaculos.size()-1;
+    _vector.push_back(move(_num));
+    _num = interactuables.size()-1;
+    _vector.push_back(move(_num));
+    
+    return _vector;
+}
+
 
 void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, int alt)
 {
@@ -289,11 +328,15 @@ void MotorFisicas::EraseEnemigo(std::size_t i)
     armaAtEspEne.erase(armaAtEspEne.begin() + i);
 }
 
-void MotorFisicas::EraseCofre(std::size_t i)
+void MotorFisicas::EraseCofre(std::size_t posObs, std::size_t posInter)
 {
-    /*space->destroyCollisionBody(interactuables[i]);//nos cargamos el contenido
-    interactuables[i]=nullptr;
-    interactuables.erase(interactuables.begin() + i);*/
+    relacionInteractuablesObstaculos.push_back(
+        obstaculos.size()-1);
+    obstaculos.erase(obstaculos.begin() + posObs);
+
+    space->destroyCollisionBody(interactuables[posInter]);
+    interactuables[posInter]=nullptr;
+    interactuables.erase(interactuables.begin() + posInter);
 }
 
 void MotorFisicas::EraseJugador(){

@@ -24,9 +24,19 @@ Interfaz::Interfaz()
 
 Interfaz::~Interfaz()
 {
-
+    LimpiarEscena();
+    LimpiarGui();
+    ventanaLimpiar();
+    delete gestorDeRecursos;
 }
 
+void Interfaz::CerrarVentana()
+{
+    if(window != nullptr && VentanaEstaAbierta())
+    {
+        window->Close();
+    }    
+}
 unsigned short Interfaz::AddCamara()
 {
     //std::cout << "SE CREA LUZ" << std::endl;
