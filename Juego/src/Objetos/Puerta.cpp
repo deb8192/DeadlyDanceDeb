@@ -14,3 +14,15 @@ Puerta::~Puerta()
 {
     _modelo = nullptr;
 }
+
+void Puerta::CrearFisica()
+{
+    //
+}
+
+void Puerta::BorrarFisica()
+{
+    //
+}
+
+// TO DO: al cargarlas pasarle la rotacion por defecto para que se puedan reiniciar
