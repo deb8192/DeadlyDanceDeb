@@ -13,7 +13,7 @@ Configuracion::~Configuracion()
 
 void Configuracion::Iniciar()
 {
-    _motor->FondoEscena(255,250,200,100);
+    _motor->FondoEscena(0,0,0,0);
     _motor->ActivarFuenteDefault();
     _motor->CrearTexto("Configuracion - ESC para salir", 0, 0, 300, 20); // Parametros: texto, x1, y1, x2, y2
 }
@@ -21,7 +21,7 @@ void Configuracion::Iniciar()
 // Actualiza lo que se ve por pantalla
 void Configuracion::Render()
 {
-    _motor->FondoEscena(255,250,200,100); // Borra
+    _motor->FondoEscena(0,0,0,0); // Borra
     _motor->RenderEscena();               // Vuelve a pintar
 }
 

@@ -2880,7 +2880,7 @@ void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        unsigned short num = _interfaz->CrearTexto(texto,x1,y1);
+        unsigned short num = _interfaz->CrearTexto(texto,x1,y1,255.0f,255.0f,255.0f);
         unsigned short nue = ++IDP;
         _interfaz -> DefinirIdPersonalizado(num,nue);
         _textosP.push_back(nue);
@@ -2916,6 +2916,26 @@ void MotorGrafico::BorrarCargando()
         if(idCargando != 0)
         {
             _interfaz->RemoveObject(idCargando);
+        }
+    #endif 
+}
+
+void MotorGrafico::DeshabilitarDinero()
+{
+    #ifdef WEMOTOR
+        if(moneyI != 0)
+        {
+            _interfaz->DeshabilitarObjeto(moneyI);
+        }
+    #endif 
+}
+
+void MotorGrafico::HabilitarDinero()
+{
+    #ifdef WEMOTOR
+        if(moneyI != 0)
+        {
+            _interfaz->HabilitarObjeto(moneyI);
         }
     #endif 
 }
