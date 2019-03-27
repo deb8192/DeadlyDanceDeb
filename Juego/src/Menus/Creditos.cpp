@@ -13,7 +13,7 @@ Creditos::~Creditos()
 
 void Creditos::Iniciar()
 {  
-    _motor->FondoEscena(255,200,200,200);
+    _motor->FondoEscena(0,0,0,0);
     _motor->ActivarFuenteDefault();
     _motor->CrearTexto("Creditos - ESC para salir", 0, 0, 300, 20); // Parametros: texto, x1, y1, x2, y2
 }
@@ -21,7 +21,7 @@ void Creditos::Iniciar()
 // Actualiza lo que se ve por pantalla
 void Creditos::Render()
 {
-    _motor->FondoEscena(255,200,200,200); // Borra
+    _motor->FondoEscena(0,0,0,0); // Borra
     _motor->RenderEscena();               // Vuelve a pintar
 }
 

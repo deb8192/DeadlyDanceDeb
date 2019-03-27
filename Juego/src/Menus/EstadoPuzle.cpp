@@ -23,7 +23,7 @@ void EstadoPuzle::Iniciar()
     width = _motor->GetWidth();
     height = _motor->GetHeight();
 
-    _motor->CrearBoton(700,height-80,750,height-50, GUI_ID_ATRAS_PUZ, L"Atrás", L"Salir del puzzle");
+    _motor->CrearBoton(560,height-115,720,height-50, GUI_ID_ATRAS_PUZ, L"          Atras", L"Salir del puzzle");
     _motor->CrearTextoPuzzles(_puzzle->GetEnunciado(), 60,80,700,110); // Parametros: texto, x1, y1, x2, y2
 
     tipo = _puzzle->GetTipo();
@@ -61,30 +61,31 @@ void EstadoPuzle::Iniciar()
         }
         else
         {
-            short altura = 100;
-            width_aux = (width/8)+10;
-            _motor->CrearBoton(width_aux,height_aux-altura,
+            short altura = 160;
+            width_aux = (width/8)-20;
+            _motor->CrearBoton(width_aux*2,height_aux-altura,
                     width_aux+anchoBtn,(height_aux-altura)+altoBtn,
-                GUI_ID_OP1, L"A", L"A");
+                GUI_ID_OP1, L"               A", L"A");
 
-            _motor->CrearBoton(width_aux*3,height_aux-altura,
+            _motor->CrearBoton(width_aux*5,height_aux-altura,
                     width_aux*3+anchoBtn,(height_aux-altura)+altoBtn,
-                GUI_ID_OP2, L"B", L"B");
+                GUI_ID_OP2, L"               B", L"B");
 
-            _motor->CargarIMGPuzzle(width_aux-xIMG, yIMG-altura, _puzzle->GetImagen(1));
-            _motor->CargarIMGPuzzle(width_aux*3-xIMG, yIMG-altura, _puzzle->GetImagen(2));
+            _motor->CargarIMGPuzzle(width_aux*3-23, yIMG-altura+30, _puzzle->GetImagen(1));
+            _motor->CargarIMGPuzzle(width_aux*6-23, yIMG-altura+30, _puzzle->GetImagen(2));
 
+
+            _motor->CrearBoton(width_aux*2,height_aux,
+                    width_aux*5+anchoBtn,height_aux+altoBtn,
+                GUI_ID_OP3, L"               C", L"C");
 
             _motor->CrearBoton(width_aux*5,height_aux,
-                    width_aux*5+anchoBtn,height_aux+altoBtn,
-                GUI_ID_OP3, L"C", L"C");
-
-            _motor->CrearBoton(width_aux*7,height_aux,
                     width_aux*7+anchoBtn,height_aux+altoBtn,
-                GUI_ID_OP4, L"D", L"D");
+                GUI_ID_OP4, L"               D", L"D");
 
-            _motor->CargarIMGPuzzle(width_aux*5-xIMG, yIMG, _puzzle->GetImagen(3));
-            _motor->CargarIMGPuzzle(width_aux*7-xIMG, yIMG, _puzzle->GetImagen(4));
+            _motor->CargarIMGPuzzle(width_aux*3-23, yIMG+30, _puzzle->GetImagen(3));
+            _motor->CargarIMGPuzzle(width_aux*6-23, yIMG+30, _puzzle->GetImagen(4));
+            _motor->DeshabilitarDinero();
         }
     }
     else // Torres de Hanoi
@@ -145,6 +146,7 @@ void EstadoPuzle::atras()
 {
     _motor->BorrarGuiPuzzle(tipo, opciones);
     Juego::GetInstance()->estado.QuitarPausa();
+    _motor->HabilitarDinero();
 }
 
 void EstadoPuzle::comprobarEventosOpciones()

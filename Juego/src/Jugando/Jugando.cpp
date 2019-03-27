@@ -243,12 +243,11 @@ void Jugando::ManejarEventos() {
     }
 
     //para modo debug
-    // Desactivado para la presentacion
-    /*if(_motor->EstaPulsado(KEY_G_DEBUG))
+    if(_motor->EstaPulsado(KEY_G_DEBUG))
     {
         _motor->activarDebugGrafico();
         _motor->ResetKey(KEY_G_DEBUG);
-    }*/
+    }
 
     // Debug para probar cofres
     if(_motor->EstaPulsado(KEY_C))
@@ -410,12 +409,6 @@ void Jugando::Update()
         std::vector<short> indiceObjetosColisionados = _fisicas->collideAttackWall();
         for(unsigned short i = 0; i < indiceObjetosColisionados.size(); i ++)
         {
-            //TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
-            //_motor->DibujarPared(indiceObjetosColisionados[i], false);
-
-            _motora->getEvent("RomperPared")->setPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
-            _motora->getEvent("RomperPared")->start();
-
             _fisicas->ErasePared(indiceObjetosColisionados[i]);
             posicion = _fisicas->GetRelacionParedesObstaculos(indiceObjetosColisionados[i]);
             _fisicas->EraseObstaculo(posicion);
@@ -836,6 +829,7 @@ void Jugando::EstPuzzle(bool ganar)
 {
     ganarPuzzle = ganar;
     puzzleResuelto = true;
+    _motor->HabilitarDinero();
 }
 
 bool Jugando::CargarNivel(int nivel, int tipoJug)
@@ -869,13 +863,10 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _boss = cargador.GetBoss();
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    _motora->getEvent("Nivel1")->setVolume(0.1);
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
-    _motora->getEvent("AmbienteGritos")->setVolume(0.5);
+    _motora->getEvent("Nivel1")->setVolume(0.3);
     _motora->getEvent("AmbienteGritos")->start(); //Reproducir ambiente
-    _motora->getEvent("AmbienteLava")->setPosition(145.0f,0.0f,18.0f);
-    _motora->getEvent("AmbienteLava")->setVolume(1.0);
-    _motora->getEvent("AmbienteLava")->start(); //Reproducir ambiente
+    _motora->getEvent("AmbienteGritos")->setVolume(0.5);
 
     //esta ya todo ejecutamos ia y interpolado
     return true;
@@ -896,7 +887,7 @@ void Jugando::CrearJugador()
 
 }
 
-void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp,
+void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, 
     int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, int* propiedades,
     unsigned short tipoObjeto)
 {
@@ -1550,11 +1541,10 @@ void Jugando::CrearEnemigoArana()
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
 
-    //Cargar sonido evento en una instancia con la id del enemigo como nombre
     std::string nameid = std::to_string(_eneA->getID()); //pasar id a string
-    _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
+    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid); // TO DO: poner el suyo
     _motora->getEvent(nameid)->setPosition(x,y,z);
-    _motora->getEvent(nameid)->setVolume(0.5f);
+    _motora->getEvent(nameid)->setVolume(0.4f);
     _motora->getEvent(nameid)->start();
 
     _enemigos.push_back(move(_eneA));
@@ -1577,9 +1567,9 @@ void Jugando::CargarBossEnMemoria()
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
 
     std::string nameid = std::to_string(_boss->getID()); //pasar id a string
-    _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
+    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid); // TO DO: poner el suyo
     _motora->getEvent(nameid)->setPosition(x,y,z);
-    _motora->getEvent(nameid)->setVolume(0.5f);
+    _motora->getEvent(nameid)->setVolume(0.4f);
     _motora->getEvent(nameid)->start();
 
     _enemigos.push_back(move(_boss));

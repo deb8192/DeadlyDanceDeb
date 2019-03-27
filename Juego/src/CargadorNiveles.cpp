@@ -796,7 +796,7 @@ void CargadorNiveles::CargarCofres()
                 }
 
                 #ifdef WEMOTOR //codigo motor catopengl
-                    esArana = false; // Desactivamos las aranyas
+                    esArana = true; // Desactivamos las aranyas
                 #endif
 
                 Interactuable* _cofre = new Cofre(esArana, -1,"Cofre",
