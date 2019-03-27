@@ -31,6 +31,9 @@
         <relationship name="timeline">
             <destination>{43fee474-8cc7-4f73-8a8c-42a206f3bfd6}</destination>
         </relationship>
+        <relationship name="banks">
+            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
+        </relationship>
     </object>
     <object class="EventMixer" id="{3a826796-5d56-4ce1-8da5-5854572036fe}">
         <relationship name="masterBus">
@@ -149,7 +152,14 @@
     </object>
     <object class="MixerBusPanner" id="{a6d4e33a-596b-4070-b742-e953316647f9}"/>
     <object class="MixerBusFader" id="{c387e5e1-a439-43dc-b292-be197eff662c}"/>
-    <object class="SpatialiserEffect" id="{1da7d097-bd6f-465d-a403-6cbe19ef3fba}"/>
+    <object class="SpatialiserEffect" id="{1da7d097-bd6f-465d-a403-6cbe19ef3fba}">
+        <property name="minimumDistance">
+            <value>5</value>
+        </property>
+        <property name="maximumDistance">
+            <value>55</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{ac60b191-c1c7-4bed-b402-3d0cacb6afcd}"/>
     <object class="SFXReverbEffect" id="{c17c0a4b-5972-48d4-b3ae-97717ca48568}">
         <property name="decayTime">

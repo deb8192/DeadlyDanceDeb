@@ -188,7 +188,13 @@
             <value>5</value>
         </property>
         <property name="maximumDistance">
-            <value>150</value>
+            <value>200</value>
+        </property>
+        <property name="extentMode">
+            <value>1</value>
+        </property>
+        <property name="soundSize">
+            <value>78</value>
         </property>
     </object>
     <object class="AutomationPoint" id="{fe4fa942-1a18-43fc-bf8c-766f0a193cd1}">

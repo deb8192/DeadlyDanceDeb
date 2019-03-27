@@ -494,9 +494,9 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
             std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+            _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(0.4f);
+            _motora->getEvent(nameid)->setVolume(0.5f);
             _motora->getEvent(nameid)->start();
         }
         break;
@@ -514,9 +514,9 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
             std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+            _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(0.4f);
+            _motora->getEvent(nameid)->setVolume(0.5f);
             _motora->getEvent(nameid)->start();
         }
         break;
