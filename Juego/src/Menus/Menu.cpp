@@ -5,6 +5,12 @@ Menu::Menu()
 {
     _motor = MotorGrafico::GetInstance();
     _motora = MotorAudioSystem::getInstance();
+    r = 0;
+    g = 0;
+    b = 0;
+    rm = true;
+    gm = true;
+    bm = true;
 }
 
 Menu::~Menu()
@@ -26,13 +32,23 @@ void Menu::Iniciar()
 
     // Llama al texto y los botones
     Reanudar();
+
+    //reinicia croma cambiante
+    r = 0;
+    g = 0;
+    b = 0;
+    rm = true;
+    gm = true;
+    bm = true;
 }
 
 // Actualiza lo que se ve por pantalla
 void Menu::Render()
 {
-    _motor->FondoEscena(0,0,0,0);
+    calcularColor();
+    _motor->FondoEscena(0,r,g,b);
     _motor->RenderEscena();               // Vuelve a pintar
+    
 }
 
 void Menu::Update()
@@ -118,4 +134,78 @@ void Menu::Reanudar()
     _motora->getEvent("Menu")->start(); //Reproducir musica Menu
     //_motor->CrearTexto("Deadly Dance", 0, 0, 80, 20); // Parametros: texto, x1, y1, x2, y2
     pintarBotones();
+}
+
+void Menu::calcularColor()
+{
+    unsigned short estavez = rand()%3+1;
+    std::cout << " color " << estavez << std::endl;
+    
+    if(estavez == 1)
+    {
+        if(rm)
+        {
+            r = r+1;
+        }
+        else
+        {
+            r = r-1;
+        }
+
+        if(r == 100)
+        {
+            rm = false;
+        }
+
+        if(r == 0)
+        {
+            rm = true;
+        }
+
+        std::cout << " col " << r << std::endl;
+    }
+
+     if(estavez == 2)
+    {
+        if(bm)
+        {
+            b = b+1;
+        }
+        else
+        {
+            b = b-1;
+        }
+
+        if(b == 100)
+        {
+            bm = false;
+        }
+
+        if(b == 0)
+        {
+            bm = true;
+        }
+    }
+
+/*    if(estavez == 3)
+    {
+        if(gm)
+        {
+            g = g+1;
+        }
+        else
+        {
+            g = g-1;
+        }
+
+        if(g == 100)
+        {
+            gm = false;
+        }
+
+        if(g == 0)
+        {
+            gm = true;
+        }
+    } */
 }

@@ -24,6 +24,10 @@ class Menu: public Estado {
         void configuracion();
         void creditos();
         void salir();
+        void calcularColor();
+
+        short r,g,b;
+        bool rm,gm,bm;
 
         MotorAudioSystem* _motora;//instancia de la fachada audio
 };
