@@ -73,6 +73,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
         void setSala(Sala* sala);
+        void setTimeOcultarse(float t);
+        void setLastTimeOcultarse(float t);
         void setTimeMerodear(float t);
         void setLastTimeMerodear(float t);
         void setAtackTime(float t);
@@ -98,6 +100,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getProAtaCritico();
         int* getBuffos();
         Sala* getSala();
+        float getTimeOcultarse();
+        float getLastTimeOcultarse();
         float getTimeMerodear();
         float getLastTimeMerodear();
         float getAtackTime();
@@ -197,7 +201,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_NO_VER,
             EN_CAMBIAR,
             EN_DEBE,
-            EN_ESTA
+            EN_ESTA,
+            EN_NO_OIR
         };
 
         enum objetivosEnemigo
@@ -205,19 +210,19 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_JUGADOR = 0,
             EN_ZONA_COFRES,
             EN_AYUDA,
+            EN_NORMAL,
             EN_PELIGRO,
             EN_ATAQUE,
             EN_OCULTACION,
-            EN_NORMAL,
             EN_ESCONDITE,
-            EN_ULTIMA_PUERTA,
             EN_CAMBIAR_ESTADO,
-            EN_MECANISMO,
             EN_PUERTA,
-            EN_PALANCA,
+            EN_MECANISMO,
             EN_COFRE,
+            EN_ULTIMA_PUERTA,
             EN_ACCIONADO,
             EN_NO_ACCIONADO,
+            EN_PALANCA,
         };
 
         enum modosEnemigo
@@ -233,7 +238,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Sala* _estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc,iniAtposX, iniAtposY, iniAtposZ, atposX, atposY, atposZ, atespposX, atespposY, atespposZ;
         float atacktime;
-        float tiempoMerodear, lastTiempoMerodear;
+        float tiempoMerodear, lastTiempoMerodear, tiempoOcultarse, lastTiempoOcultarse;
         Arma* _armaEspecial;
         const char* _rutaArmaEspecial = "assets/models/objeto.obj";
         int tipoEnemigo;//Tipo del enemigo: pollo, murcielago, guardian, boss
