@@ -173,10 +173,8 @@ void EstadoPuzle::corregirSolucion(unsigned short opcion)
      _motor->BorrarGuiPuzzle(tipo, opciones);
 
     if (opcion == solucion) {
-        cout << "Correcto" <<endl;
         Juego::GetInstance()->estado.ReanudarDesdePuzzle(true);
     } else {
-        cout << "Has fallado" <<endl;
        Juego::GetInstance()->estado.ReanudarDesdePuzzle(false);
     }
 }
