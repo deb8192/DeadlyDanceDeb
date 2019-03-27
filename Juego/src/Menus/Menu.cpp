@@ -21,7 +21,7 @@ void Menu::Iniciar()
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
 
     //Motor grafico, inicializar
-    _motor->FondoEscena(255,100,101,140);
+    _motor->FondoEscena(0,0,0,0);
     _motor->ActivarFuenteDefault();
 
     // Llama al texto y los botones
@@ -31,7 +31,7 @@ void Menu::Iniciar()
 // Actualiza lo que se ve por pantalla
 void Menu::Render()
 {
-    _motor->FondoEscena(255,100,101,140); // Borra
+    _motor->FondoEscena(0,0,0,0);
     _motor->RenderEscena();               // Vuelve a pintar
 }
 
@@ -69,6 +69,9 @@ void Menu::ManejarEventos()
 
 void Menu::pintarBotones()
 {
+    _motor->CrearImagen("assets/images/logo1.png",230,25,1.0f);
+    _motor->CrearImagen("assets/images/logo2.png",700,500,1.0f);
+    _motor->CrearImagen("assets/images/logo3.png",20,460,1.0f);
     _motor->CrearBoton(300,200,500,230, GUI_ID_EMPEZAR_BUTTON, L"Iniciar Juego", L"Empieza a jugar");
     _motor->CrearBoton(300,240,500,270, GUI_ID_CONFIGURACION_BUTTON, L"Configuracion", L"Configuracion del juego");
     _motor->CrearBoton(300,280,500,310, GUI_ID_CREDITOS_BUTTON, L"Creditos", L"Creditos del juego");
@@ -85,9 +88,9 @@ void Menu::borrarEscenaResetearEvento(short id)
 
 void Menu::jugar()
 {
-
     _motora->getEvent("Menu")->stop(); //Detener musica Menu
     Juego::GetInstance()->estado.CambioEstadoJugar();
+    _motor->AsignarCargando(_motor->CrearImagen("assets/images/cargando.png",540,330,1.0f));
 }
 
 void Menu::configuracion()
@@ -113,6 +116,6 @@ void Menu::Reanudar()
 {
     _motora->getEvent("Menu")->setVolume(0.1);
     _motora->getEvent("Menu")->start(); //Reproducir musica Menu
-    _motor->CrearTexto("Deadly Dance", 0, 0, 80, 20); // Parametros: texto, x1, y1, x2, y2
+    //_motor->CrearTexto("Deadly Dance", 0, 0, 80, 20); // Parametros: texto, x1, y1, x2, y2
     pintarBotones();
 }

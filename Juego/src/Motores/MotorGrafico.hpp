@@ -184,6 +184,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CerrarJuego();
             void LimpiarDevice();//elimina el dispositivo
             void ActivarFuenteDefault(); //define fuente por defecto
+            unsigned short CrearImagen(std::string texto,unsigned int,unsigned int,float);//creas una imagen con el escalado que le proporciones, y en la posicion x e y 
 
             void FondoEscena(short a, short r, short g, short b);
             void RenderEscena();
@@ -218,6 +219,11 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CrearCamara(); // crea una camara para ver el escenario
 
             bool GetDebugActivado(); // para saber si esta activado
+
+            //cargando
+            unsigned short idCargando;
+            void AsignarCargando(unsigned short);
+            void BorrarCargando();
 
             //----------------- Revisar
 
@@ -269,6 +275,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void EraseColectable(long unsigned int idx);
             void ErasePowerUP(long unsigned int idx);
             void DibujarCofre(long unsigned int idx, bool dibujar);
+            void DibujarPared(long unsigned int idx, bool dibujar);
             void EraseEnemigo(std::size_t i);
             void EraseJugador();
             void EraseArma();

@@ -49,7 +49,7 @@ void EstadoPuzle::Iniciar()
 
         if (opciones == 2)
         {
-            width_aux = width/4;
+            width_aux = (width/4);
             _motor->CrearBoton(width_aux,height_aux,width_aux+anchoBtn,height_aux+altoBtn,
                 GUI_ID_OP1, L"A", L"A");
 
@@ -61,14 +61,19 @@ void EstadoPuzle::Iniciar()
         }
         else
         {
-            width_aux = width/8;
-            _motor->CrearBoton(width_aux,height_aux,
-                    width_aux+anchoBtn,height_aux+altoBtn,
+            short altura = 100;
+            width_aux = (width/8)+10;
+            _motor->CrearBoton(width_aux,height_aux-altura,
+                    width_aux+anchoBtn,(height_aux-altura)+altoBtn,
                 GUI_ID_OP1, L"A", L"A");
 
-            _motor->CrearBoton(width_aux*3,height_aux,
-                    width_aux*3+anchoBtn,height_aux+altoBtn,
+            _motor->CrearBoton(width_aux*3,height_aux-altura,
+                    width_aux*3+anchoBtn,(height_aux-altura)+altoBtn,
                 GUI_ID_OP2, L"B", L"B");
+
+            _motor->CargarIMGPuzzle(width_aux-xIMG, yIMG-altura, _puzzle->GetImagen(1));
+            _motor->CargarIMGPuzzle(width_aux*3-xIMG, yIMG-altura, _puzzle->GetImagen(2));
+
 
             _motor->CrearBoton(width_aux*5,height_aux,
                     width_aux*5+anchoBtn,height_aux+altoBtn,
@@ -78,8 +83,6 @@ void EstadoPuzle::Iniciar()
                     width_aux*7+anchoBtn,height_aux+altoBtn,
                 GUI_ID_OP4, L"D", L"D");
 
-            _motor->CargarIMGPuzzle(width_aux-xIMG, yIMG, _puzzle->GetImagen(1));
-            _motor->CargarIMGPuzzle(width_aux*3-xIMG, yIMG, _puzzle->GetImagen(2));
             _motor->CargarIMGPuzzle(width_aux*5-xIMG, yIMG, _puzzle->GetImagen(3));
             _motor->CargarIMGPuzzle(width_aux*7-xIMG, yIMG, _puzzle->GetImagen(4));
         }
