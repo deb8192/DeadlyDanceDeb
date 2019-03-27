@@ -17,13 +17,23 @@
 		</Respuestas>
     </Puzzle>
 	
-	<Puzzle tipo="1" solucion="4" opciones="4">
+	<Puzzle tipo="1" solucion="1" opciones="4">
         <Descripcion>Elige la figura que coincida su alto y ancho con la del ejemplo:</Descripcion>
-		<Respuestas ejemplo="particle.bmp">
-			<Respuesta opcion="1" img="a.png"></Respuesta>
-			<Respuesta opcion="2" img="b.png"></Respuesta>
-			<Respuesta opcion="3" img="c.png"></Respuesta>
-			<Respuesta opcion="4" img="d.png"></Respuesta>
+		<Respuestas ejemplo="sombrero2/sombrero2Correcto.png">
+			<Respuesta opcion="1" img="sombrero2/sombrero2Correcto.png"></Respuesta>
+			<Respuesta opcion="2" img="sombrero2/sombrero2A.png"></Respuesta>
+			<Respuesta opcion="3" img="sombrero2/sombrero2B.png"></Respuesta>
+			<Respuesta opcion="4" img="sombrero2/sombrero2C.png"></Respuesta>
+		</Respuestas>
+    </Puzzle>
+
+    <Puzzle tipo="1" solucion="3" opciones="4">
+        <Descripcion>Elige la figura que coincida su alto y ancho con la del ejemplo:</Descripcion>
+		<Respuestas ejemplo="sombrero1/sombrero1Correcto.png">
+			<Respuesta opcion="1" img="sombrero1/sombrero1A.png"></Respuesta>
+			<Respuesta opcion="2" img="sombrero1/sombrero1B.png"></Respuesta>
+			<Respuesta opcion="3" img="sombrero1/sombrero1Correcto.png"></Respuesta>
+			<Respuesta opcion="4" img="sombrero1/sombrero1C.png"></Respuesta>
 		</Respuestas>
     </Puzzle>
 	
