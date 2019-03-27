@@ -301,7 +301,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             int getCamx();
             int getCamz();
             int getCams();
-            
+
             // Borra un elemento del arbol de nodos a traves de su ID
             void BorrarElemento(signed int id);
             unsigned short GetWidth();
@@ -312,7 +312,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void BorrarGuiPuzzle(unsigned short tipo, unsigned short opciones);
             void CargarFondoPuzzle();
             void CargarIMGPuzzle(unsigned short x, unsigned short y, std::string img);
-            void CrearTextoPuzzles(std::string texto, unsigned short x1, unsigned short y1, 
+            void CrearTextoPuzzles(std::string texto, unsigned short x1, unsigned short y1,
                 unsigned short x2, unsigned short y2);
 
         private: //clases solo accesibles por MotorGrafico
@@ -348,6 +348,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short _armaProyectil; //id del proyectil
                 unsigned short _armaEsp;//id del arma especial cargado en memoria
                 bool pathfinding;//sirve para sacar mensaje por pantalla de si esta activado o no
+                bool existearmaexp;
 
                 // Ventana
                 short WIDTH_AUX, WIDTH, HEIGHT;
@@ -380,7 +381,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             #else
                 //variables y parametros motor irrlicht
-                
+
                 Inputs input;
                 IrrlichtDevice* _device; //puntero a dispositivo por defecto
                 IVideoDriver* _driver;
@@ -455,7 +456,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 IGUIStaticText* _txtP;
                 vector<IGUIImage*> _imagenesP;
                 vector<IGUIStaticText*> _textosP;
-                
+
             #endif
     };
 
