@@ -21,6 +21,8 @@ class Interfaz
 
         ~Interfaz();
 
+        void CerrarVentana();//cierra la ventana
+
         unsigned short AddCamara();//creamos una camara
 
         unsigned short AddLuz(int);//creamos una luz
