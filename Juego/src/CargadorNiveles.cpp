@@ -476,7 +476,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             std::string nameid = std::to_string(id); //pasar id a string
             _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(0.7f);
+            _motora->getEvent(nameid)->setVolume(1.0f);
             _motora->getEvent(nameid)->start();
         }
             break;
@@ -607,7 +607,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
 
     switch (accion)
     {
-        
+
         case 2: //Arma
         {
             Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
@@ -665,7 +665,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             _par = nullptr;
         }
         break;
-        
+
         default:
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
         break;
