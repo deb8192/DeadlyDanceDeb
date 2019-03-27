@@ -330,13 +330,14 @@ void MotorFisicas::EraseEnemigo(std::size_t i)
 
 void MotorFisicas::EraseCofre(std::size_t posObs, std::size_t posInter)
 {
-    relacionInteractuablesObstaculos.push_back(
+    /*relacionInteractuablesObstaculos.push_back(
         obstaculos.size()-1);
     obstaculos.erase(obstaculos.begin() + posObs);
 
     space->destroyCollisionBody(interactuables[posInter]);
     interactuables[posInter]=nullptr;
-    interactuables.erase(interactuables.begin() + posInter);
+    interactuables.erase(interactuables.begin() + posInter);*/
+    EraseObstaculo(posObs);
 }
 
 void MotorFisicas::EraseJugador(){

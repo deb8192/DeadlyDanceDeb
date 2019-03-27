@@ -52,10 +52,10 @@ struct MotorAudioSystem
     MotorAudioSystem();                           //Singleton
     static MotorAudioSystem* maudio_instancia;
 
-    FMOD::Studio::System* pstudioSystem;          //Puntero de instancia a FMOD
-    FMOD::System *plowSystem;                     //Puntero de instancia low level
-    FMOD::Studio::Bank* masterBank;               //Puntero de Banko maestro
-  	FMOD::Studio::Bank* stringsBank;              //Puntero de Banko maestro string
+    FMOD::Studio::System* pstudioSystem;                    //Puntero de instancia a FMOD
+    FMOD::System *plowSystem;                               //Puntero de instancia low level
+    FMOD::Studio::Bank* masterBank;                         //Puntero de Banko maestro
+  	FMOD::Studio::Bank* stringsBank;                        //Puntero de Banko maestro string
     std::map<std::string, FMOD::Studio::Bank*> banks;       //Mapa de bancos
     std::map<std::string, FMOD::Studio::EventDescription*> eventDescriptions;  //Mapa de descripcion de eventos
     std::map<std::string, MotorAudioEvent*> MotorAudioEvents;                  //Mapa con MotorAudioEvents
