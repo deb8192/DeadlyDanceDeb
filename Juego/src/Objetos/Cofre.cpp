@@ -1,4 +1,5 @@
 #include "Cofre.hpp"
+#include "../Motores/MotorFisicas.hpp"
 
 Cofre::Cofre(bool esEne, int codigo, const char* nombre, 
     int anc, int lar, int alt, int posicion,
@@ -9,13 +10,16 @@ Cofre::Cofre(bool esEne, int codigo, const char* nombre,
     esArana = esEne;
     _modelo = "assets/models/Cofre/cofre.obj";
     _estoy = sala;
-    posArray = posA;
+    posArrayArana = posA;
 }
 
 Cofre::~Cofre()
 {
     _modelo = nullptr;
     _estoy = nullptr;
+    esArana=false;
+    posArrayArana=0;
+    //posArrayFisicas
 }
 
 bool Cofre::GetEsArana()
@@ -30,5 +34,22 @@ Sala* Cofre::GetSala()
 
 unsigned short Cofre::GetPosArray()
 {
-    return posArray;
+    return posArrayArana;
+}
+
+void Cofre::CrearFisica()
+{
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    posArrayFisicas = _fisicas->crearCuerpoCofre(
+        posActual.x/2,posActual.y/2,posActual.z/2,
+        2,4,2, // ancho, alto, largo
+        0,0); // despX, despZ
+    _fisicas = nullptr;
+}
+
+void Cofre::BorrarFisica()
+{
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _fisicas->EraseCofre(posArrayFisicas[0],posArrayFisicas[1]);
+    _fisicas = nullptr;
 }

@@ -7,7 +7,7 @@ TCamara::TCamara(GLuint ww, GLuint wh)
     //valores por defecto
     esPerspectiva = true;
     cercano=0.1f;
-    lejano=100.0f;
+    lejano=150.0f;
     height=wh;
     width=ww;
     setTarget(0.0f,0.0f,0.0f);
@@ -73,6 +73,7 @@ void TCamara::beginDraw()
 
         delete cola_compartida;//borramos la cola anterior porque esta vacia
         cola_compartida = cola_compartidaAuxiliar;//ponemos la nueva cola que tiene los elementos situados como la anterior
+        delete _matriz_resultado;//borrado de la matriz dode se calcula los resultados
 
         //Funcion lookAt, calculo de la matriz final
         glm::mat4 view;
@@ -90,11 +91,11 @@ void TCamara::beginDraw()
         //enviamos view
         shader->setMat4("view", view);
 
-        if(_matriz_resultado != nullptr)//si la matriz de resultado es nula es que no hay nada en la cola por lo que no hay nada que enviar al shader
-        {
+        //if(_matriz_resultado != nullptr)//si la matriz de resultado es nula es que no hay nada en la cola por lo que no hay nada que enviar al shader
+        //{
             //enviar a uniform
             //std::cout << (*_matriz_resultado)[3][0] << " " << (*_matriz_resultado)[3][1] << " " << (*_matriz_resultado)[3][2] << " " << (*_matriz_resultado)[3][3] << std::endl;
-        }
+        //}
     }
     else
     {

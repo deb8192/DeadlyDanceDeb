@@ -556,8 +556,8 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
     int ancho, int largo, int alto, Sala* sala)
 {
     _boss = new MuerteBoss(x,y,z, 2000); // Posiciones, vida
-    //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
-    _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
+    _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
+    //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
     _boss->setID(++id);//le damos el id unico en esta partida al enemigo
 
     _boss->SetEnemigo(enemigo); // Se utiliza en UpdateBehavior()
@@ -739,6 +739,7 @@ unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
 //Cargar los cofres del nivel
 void CargadorNiveles::CargarCofres()
 {
+    Constantes constantes;
     unsigned short eneAranas = chestsMax/4; // 1/4 de los cofres son enemigos
     unsigned short aranasCreadas = 0;
     unsigned short totalCofresPonible = 0;
@@ -770,8 +771,7 @@ void CargadorNiveles::CargarCofres()
             {
                 srand(time(NULL));
                 int numAlt = rand() % zonasDisponibles.size();
-                cout << "colocar en: " << zonasDisponibles[numAlt] << endl;
-
+                
                 //Buscar zona donde colocar
                 newx = _zonas[zonasDisponibles[numAlt]]->getX();
                 newy = _zonas[zonasDisponibles[numAlt]]->getY();
@@ -781,21 +781,29 @@ void CargadorNiveles::CargarCofres()
                 _zonas[zonasDisponibles[numAlt]]->annadirElemento();
 
                 //Colocar cofre
-                unsigned short pos = 0;
+                unsigned short posArrayArana = 0;
                 bool esArana = false;
                 if (aranasCreadas < eneAranas)
                 {
-                    pos = CrearCofreArana(newx,newy,newz, 2,4,2, _zonas[zonasDisponibles[numAlt]]->GetSala());
+                    posArrayArana = CrearCofreArana(newx,newy,newz, 2,4,2, _zonas[zonasDisponibles[numAlt]]->GetSala());
                     ++aranasCreadas;
                     esArana = true;
+
+                    // Debug: para cambiar la posicion del jugador al lado de un cofre
+                    posCofre[0] = newx;
+                    posCofre[1] = newy;
+                    posCofre[2] = newz;
                 }
 
                 #ifdef WEMOTOR //codigo motor catopengl
                     esArana = false; // Desactivamos las aranyas
                 #endif
 
-                Interactuable* _cofre = new Cofre(esArana, -1,"Cofre",2,2,2,
-                    0, newx, newy, newz, 4, pos, //4=tipoObj
+                Interactuable* _cofre = new Cofre(esArana, -1,"Cofre",
+                    2,2,2, //ancho, largo, alto
+                    0, //posicionObjeto inicializada
+                    newx, newy, newz,
+                    constantes.COFRE_OBJ, posArrayArana,
                     _zonas[zonasDisponibles[numAlt]]->GetSala());
 
                 int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
@@ -805,11 +813,9 @@ void CargadorNiveles::CargarCofres()
                 _cofre->setPosiciones(newx,newy,newz);
                 _cofre->SetPosicionArrayObjetos(posicionObjeto);
                 _cofre->setRotacion(0.0,0.0,0.0);
+                _cofre->CrearFisica();
                 _interactuables.push_back(move(_cofre));
                 _cofre = nullptr;
-
-                //Fisicas del cofre
-                _fisicas->crearCuerpo(3,0,newx/2,newy/2,newz/2,2,2,4,2,3,0,0);
 
                 //borrar del Array por que el proposito esta cumplido
                 if(_zonas[zonasDisponibles[numAlt]]->getTotalElementos() == _zonas[zonasDisponibles[numAlt]]->getElementosActuales())
@@ -821,11 +827,6 @@ void CargadorNiveles::CargarCofres()
                 chestsMax--; //un cofre menos
             }
             zonasDisponibles.resize(0);
-
-            // Debug: para cambiar la posicion del jugador al lado de un cofre
-            posCofre[0] = newx;
-            posCofre[1] = newy;
-            posCofre[2] = newz;
         }
         else
         {

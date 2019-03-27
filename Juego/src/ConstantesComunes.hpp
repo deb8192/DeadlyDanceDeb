@@ -94,6 +94,7 @@ using Constantes = struct
     const unsigned short PALANCA = 0;
     const unsigned short LLAVE = 1;
     
+    const unsigned short COFRE_OBJ = 4;
     const unsigned short ARMA = 5;
     const unsigned short POWERUP = 6;
 
@@ -106,7 +107,7 @@ using Constantes = struct
     // Sin utilizar por ahora
     /*const unsigned short PUERTA2 = 2;
     const unsigned short PUERTA = 3;
-    const unsigned short COFRE = 4;
+    
     const unsigned short PARED_INVISIBLE = 12;
     const unsigned short PARED_OBSTACULO = 13;
     const unsigned short PARED_ROMPIBLE = 14;

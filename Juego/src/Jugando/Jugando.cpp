@@ -255,6 +255,15 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_C);
     }
 
+    if(_motor->EstaPulsado(KEY_Z))
+    {
+        /*_motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), true);
+        _cofreP->CrearFisica();
+        _cofreP->accionar();*/
+        //_cofreP=nullptr;
+        _motor->ResetKey(KEY_Z);
+    }
+
     if(_motor->EstaPulsado(KEY_B))
     {
         unsigned short desplaza = 10;
@@ -636,7 +645,6 @@ void Jugando::UpdateIA()
         }
     }
 
-    //TO DO: borrar fisicas y cosas
     // Para cuando se mate al boss
     //Juego::GetInstance()->estado.CambioEstadoGanar();
 }
@@ -1146,12 +1154,21 @@ void Jugando::AccionarMecanismo(int int_col)
             if(activar)
             {
                 //Se abre/acciona la puerta / el mecanismo
-                _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()+50);
+                #ifdef WEMOTOR
+                    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()-50);
+                #else
+                    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()+50);
+                #endif
             }
             else
             {
                 //Se cierra/desacciona la puerta / el mecanismo
-                _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()-50);
+                #ifdef WEMOTOR
+                    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()+50);
+                #else
+                    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()-50);
+                #endif
+
             }
         }
     }
@@ -1372,6 +1389,8 @@ void Jugando::updateAtEsp()
             _jugador->setLastTimeAtEsp(tiempoActual);
             _jugador->setTimeAtEsp(tiempoAtaqueEsp);
             danyo = _jugador->AtacarEspecial();
+            cout << "tiempo: " << _jugador->getTimeAtEsp() << endl;
+            cout << "existe: " << _motor->getArmaEspecial() << endl;
         }
         /*if(_jugador->getTimeAtEsp() > 0.f && ((int) (_jugador->getTimeAtEsp()*  100) % 10 >= 4) && ((int) (_jugador->getTimeAtEsp()*  100) % 10 <= 4))
         {
@@ -1381,11 +1400,19 @@ void Jugando::updateAtEsp()
         {
             _motor->colorearEnemigo(255,255,255,255,0);
         }
-        if(_jugador->getTimeAtEsp() <= 0.5f && _motor->getArmaEspecial()) //Zona de pruebas
-        {
-            _motor->borrarArmaEspecial();
-            _motor->colorearJugador(255, 150, 150, 150);
-        }
+        #ifdef WEMOTOR
+            if(_jugador->getTimeAtEsp() <= 0.5f && _motor->getArmaEspecial()) //Zona de pruebas
+            {
+                 cout << "SE BORRA" << endl;
+                _motor->borrarArmaEspecial();
+            }
+        #else
+            if(_jugador->getTimeAtEsp() <= 0.5f && _motor->getArmaEspecial()) //Zona de pruebas
+            {
+                _motor->borrarArmaEspecial();
+                _motor->colorearJugador(255, 150, 150, 150);
+            }
+        #endif
     }
 }
 
@@ -1521,10 +1548,7 @@ void Jugando::CrearEnemigoArana()
 
     // Borrar cofre
     _motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), false);
-    //_fisicas->EraseCofre(_cofreP->GetPosicionArrayObjetos());
-    //_cofreP->~Cofre();//el destructor de enemigo
-    _cofreP=nullptr;
-    //_interactuables.erase(_interactuables.begin() + _cofreP->GetPosicionArrayObjetos());//begin le suma las posiciones
+    _cofreP->BorrarFisica();
 }
 
 void Jugando::CargarBossEnMemoria()
