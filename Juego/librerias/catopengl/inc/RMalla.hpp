@@ -21,7 +21,7 @@ class RMalla : public Recurso
     public:
 
         RMalla(int f);
-        void Remove();
+        ~RMalla();
 
         //te carga los datos en la matrix
         bool CargarMalla(std::string _ruta);
