@@ -44,7 +44,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
         void UpdateTimeMove(float);//actualiza el tiempo del movimiento de la interpolacion
         void UpdateTimeRotate(float);
-        
+
         //getters y setters
 
         void setID(int);
@@ -165,6 +165,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         MotorGrafico* _motor;
         SenseEventos* _eventos;
         short int maxRotacion;
+        std::string soundID;
 
         //comportamientos bases
         void alinearse(VectorEspacial*, bool huir);
@@ -183,8 +184,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         Zona* getZonaMasCercana(vector <Zona*> zonas);
         //Comparadores de la lectura de las acciones y objetivos de las tareas
-        enum accionesEnemigo 
-        {  
+        enum accionesEnemigo
+        {
             EN_PERSIGUE = 0,
             EN_ATACAR,
             EN_VER,
@@ -224,8 +225,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_PALANCA,
         };
 
-        enum modosEnemigo 
-        {  
+        enum modosEnemigo
+        {
             MODO_DEFAULT = 0,
             MODO_ATAQUE,
             MODO_HUIDA,
@@ -252,7 +253,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         VectorEspacial distanciaEnemigoJugador;
         int distanciaMinimaEsquivar; //Variable que contiene la distancia mínima para esquivar objetos;
         int distanciaMaximaCohesionBandada; //Distancia maxima de las bandadas con su centro con flocking
-        
+
         bool pedirAyuda;
         bool contestar;
         bool defensa; //TO DO EXPANDIRLO AL JUGADOR cuando recibe danyo recibe la mitad si esta a true
