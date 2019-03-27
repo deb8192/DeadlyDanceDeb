@@ -388,11 +388,6 @@ void Jugando::Update()
         );
     }
 
-    /*if(_enemPideAyuda != nullptr)   //Solo llama desde aqui a pathfinding si hay un enemigo pidiendo ayuda y enemigos buscandole.
-    {
-        this->updateRecorridoPathfinding(nullptr);
-    }*/
-
     //Si se realiza el ataque se comprueban las colisiones
     if(_jugador->getTimeAtEsp() > 0.0)
     {
@@ -400,6 +395,11 @@ void Jugando::Update()
     }
     else if(_jugador->getTimeAt() > 0.0)
     {
+        vector<short> indiceObjetosColisionados = _fisicas->collideAttackWall();
+        for(unsigned short i = 0; i < indiceObjetosColisionados.size(); i ++)
+        {
+            if()
+        }
         _jugador->AtacarUpdate(danyo2, _enemigos);
     }
 
@@ -1172,6 +1172,11 @@ void Jugando::AccionarMecanismo(int int_col)
             unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(int_col);
             if(abrir)
             {
+                if(_inter->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
+                {
+                    enSalaBoss = true;
+                    this->CargarBossEnMemoria();
+                }
                 //Se abre/acciona la puerta / el mecanismo
                 _motora->getEvent("AbrirCerradura")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
                 _motora->getEvent("AbrirCerradura")->start();
@@ -1308,7 +1313,7 @@ void Jugando::updateAt(int* danyo)
             _jugador->setLastTimeAt(tiempoActual);
             _jugador->setTimeAt(tiempoAtaque);
         }
-        if(atacktime > 0.5f)
+        /*if(atacktime > 0.5f)
         {
             if(atacktime > 0.0f)
             {
@@ -1322,7 +1327,7 @@ void Jugando::updateAt(int* danyo)
                 //Colorear gris
                 _motor->colorearJugador(255,150,150,150);
             }
-        }
+        }*/
 
         //clear
         if(_jugador->getTimeAt() <= 0.0f){

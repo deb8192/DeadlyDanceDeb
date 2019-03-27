@@ -601,6 +601,10 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
 
     switch (accion)
     {
+        case 1: //Obstaculos
+        {
+            
+        }
         case 2: //Arma
         {
             Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);

@@ -122,5 +122,8 @@ using Constantes = struct
     const unsigned short GUARDIAN_B = 4;
     const unsigned short BOSS = 5;
 
+    // Codigo de la puerta del boss
+    const unsigned short PUERTA_BOSS = 20;
+
 };
 #endif
