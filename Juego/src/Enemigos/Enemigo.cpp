@@ -449,7 +449,7 @@ void Enemigo::UpdateIA()
             default:
             {
                 MuerteBoss* _boss = (MuerteBoss*) this;
-                //_boss->RunIA();
+                _boss->RunIA();
             }
                 break;
         }
@@ -502,7 +502,7 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
             default:
             {
                 MuerteBoss* _boss = (MuerteBoss*) this;
-                _boss->UpdateMuerteBoss(_jugador);
+                _boss->UpdateMuerteBoss(i, _jugador, ayuda);
             }
                 break;
         }

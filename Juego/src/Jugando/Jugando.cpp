@@ -631,7 +631,6 @@ void Jugando::UpdateIA()
         }
     }
 
-    //TO DO: borrar fisicas y cosas
     // Para cuando se mate al boss
     //Juego::GetInstance()->estado.CambioEstadoGanar();
 }
@@ -1529,10 +1528,8 @@ void Jugando::CrearEnemigoArana()
 
     // Borrar cofre
     _motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), false);
-    //_fisicas->EraseCofre(_cofreP->GetPosicionArrayObjetos());
-    //_cofreP->~Cofre();//el destructor de enemigo
+    _cofreP->BorrarFisica();
     _cofreP=nullptr;
-    //_interactuables.erase(_interactuables.begin() + _cofreP->GetPosicionArrayObjetos());//begin le suma las posiciones
 }
 
 void Jugando::CargarBossEnMemoria()

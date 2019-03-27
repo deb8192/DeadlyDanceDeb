@@ -21,6 +21,8 @@ using namespace reactphysics3d;
             //fin singleton public
 
             void crearCuerpo(int accion, int rp, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator, float despX, float despZ);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
+            //TO DO: pasar a vector de punteros
+            std::vector<int> crearCuerpoCofre(float px, float py, float pz, float ancho, float alto, float largo, float despX, float despZ);
             //int crearCuerpo(float px, float py, float pz, int type, float ancho, float largo, float alto);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             void actualizarPosicionCuerpo(float px, float py, float pz,int posicion);//se le pasa las nuevas posiciones del cuerpo del array de cuerpos de la posicion
             Ray* crearRayo(float x, float y, float z, float rotation, float longitud);//crea un rayo en esas posiciones con la longitud
@@ -32,7 +34,7 @@ using namespace reactphysics3d;
             void EraseColectable(int idx);
             void EraseColectablePowerup(int idx);
             void EraseEnemigo(std::size_t i);
-            void EraseCofre(std::size_t i);
+            void EraseCofre(std::size_t posObs, std::size_t posInter);
             void EraseJugador();
             void EraseArma();
             CollisionBody* getColectables(int n);

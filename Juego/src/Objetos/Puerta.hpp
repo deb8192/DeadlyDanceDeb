@@ -10,6 +10,8 @@ class Puerta : public Interactuable
         Puerta(int codigo, const char* nombre, int anc, int lar, int alt,
             int posicion, float x, float y, float z, unsigned short tipoObj);
         
+        void CrearFisica();
+        void BorrarFisica();
 
     private:
 };
