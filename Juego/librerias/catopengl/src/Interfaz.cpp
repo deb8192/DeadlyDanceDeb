@@ -27,6 +27,7 @@ Interfaz::~Interfaz()
     LimpiarEscena();
     LimpiarGui();
     ventanaLimpiar();
+    delete gestorDeRecursos;
 }
 
 void Interfaz::CerrarVentana()
