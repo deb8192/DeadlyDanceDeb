@@ -359,7 +359,11 @@ bool MotorGrafico::VentanaAbierta()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        return _interfaz->VentanaEstaAbierta();
+        if(_interfaz != nullptr)
+        {
+            return _interfaz->VentanaEstaAbierta();
+        }
+        return false;
     #else
         //codigo motor irrlicht
         return _device->run();
@@ -372,7 +376,7 @@ void MotorGrafico::CerrarJuego()
         //codigo motor catopengl
         if(_interfaz != nullptr)
         {
-            delete _interfaz;
+            _interfaz->CerrarVentana();
         }
     #else
         //codigo motor irrlicht
@@ -387,6 +391,11 @@ void MotorGrafico::LimpiarDevice()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        if(_interfaz != nullptr)
+        {
+            delete _interfaz;
+            _interfaz = nullptr;
+        }
     #else
         //codigo motor irrlicht
         _device->drop();
