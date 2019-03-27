@@ -1268,8 +1268,8 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
         // Centrar la camara
         nodeCamPosition.X = x+(camx*cams);
-        nodeCamPosition.Y = y+100;
-        nodeCamPosition.Z = z+(camz*cams) - 70;
+        nodeCamPosition.Y = y+30;
+        nodeCamPosition.Z = z+(camz*cams);
         nodeCamTarget.X = x;
         nodeCamTarget.Y = y;
         nodeCamTarget.Z = z;

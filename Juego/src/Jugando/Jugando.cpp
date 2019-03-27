@@ -395,10 +395,13 @@ void Jugando::Update()
     }
     else if(_jugador->getTimeAt() > 0.0)
     {
-        vector<short> indiceObjetosColisionados = _fisicas->collideAttackWall();
+        unsigned int posicion = 0;
+        std::vector<short> indiceObjetosColisionados = _fisicas->collideAttackWall();
         for(unsigned short i = 0; i < indiceObjetosColisionados.size(); i ++)
         {
-            if()
+            _fisicas->ErasePared(indiceObjetosColisionados[i]);
+            posicion = _fisicas->GetRelacionParedesObstaculos(indiceObjetosColisionados[i]);
+            _fisicas->EraseObstaculo(posicion);
         }
         _jugador->AtacarUpdate(danyo2, _enemigos);
     }
@@ -835,6 +838,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
 
     CrearJugador();
     _recolectables = cargador.GetRecolectables();
+    _paredes = cargador.GetParedes();
     _powerup = cargador.GetPowerup();
     _zonas = cargador.GetZonas();
     _enemigos = cargador.GetEnemigos();

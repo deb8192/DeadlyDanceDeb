@@ -11,6 +11,7 @@
 #include "../Objetos/Interactuable.hpp"
 #include "../Objetos/Cofre.hpp"
 #include "../Objetos/Recolectable.hpp"
+#include "../Objetos/Pared.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/InterfazJugador.hpp"
 #include "Zona.hpp"
@@ -96,6 +97,7 @@ class Jugando: public Estado {
         Sala* _destinoPathFinding; //sala que se rellena al llamar a pathfinding y se vacía al terminar el recorrido del enemigo
 
         std::vector<Recolectable*> _recolectables;
+        std::vector<Pared*> _paredes;
         std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
         std::vector<Recolectable*> _powerup;
         std::vector<Zona*> _zonas; //Array de zonas
