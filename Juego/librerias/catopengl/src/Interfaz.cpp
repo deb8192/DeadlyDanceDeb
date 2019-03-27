@@ -24,7 +24,9 @@ Interfaz::Interfaz()
 
 Interfaz::~Interfaz()
 {
-
+    //LimpiarEscena();
+    //LimpiarGui();
+    ventanaLimpiar();
 }
 
 unsigned short Interfaz::AddCamara()

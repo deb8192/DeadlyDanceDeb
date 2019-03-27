@@ -369,6 +369,10 @@ void MotorGrafico::CerrarJuego()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        if(_interfaz != nullptr)
+        {
+            delete _interfaz;
+        }
     #else
         //codigo motor irrlicht
         _device->closeDevice();
@@ -2618,7 +2622,7 @@ void MotorGrafico::RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFr
                 _actualTexture = _driver->getTexture(buffer);//creas la textura
                 _actual = _guienv->addImage(_actualTexture,position2d<int>(0,0));//creo imagen actual
             }
-            else
+            elsedark grey
             {
                 _actualTexture = _driver->getTexture(buffer);//creo textura
                 _actual = _guienv->addImage(_driver->getTexture(buffer),position2d<int>(0,0));//creo imagen con textura
@@ -2682,6 +2686,7 @@ void MotorGrafico::IniIDPuzzles()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        IDP = idsEventos::Enum::GUI_ID_PUZZLE;
     #else
         //codigo motor irrlicht
         IDP = GUI_ID_PUZZLE;
@@ -2692,6 +2697,35 @@ void MotorGrafico::BorrarGuiPuzzle(unsigned short tipo, unsigned short opciones)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+
+        BorrarElemento(idsEventos::Enum::GUI_ID_ATRAS_PUZ);
+
+        if (tipo == 1)
+        {
+            unsigned short tam = _imagenesP.size();
+            for(unsigned short i=0; i < tam; i++)
+            {
+                BorrarElemento(_imagenesP.at(i));
+            }
+            _imagenesP.clear();
+
+            tam = _textosP.size();
+            for(unsigned short i=0; i < tam; i++)
+            {
+                BorrarElemento(_textosP.at(i));
+            }
+            _textosP.clear();
+
+            BorrarElemento(idsEventos::Enum::GUI_ID_OP1);
+            BorrarElemento(idsEventos::Enum::GUI_ID_OP2);
+
+            if (opciones > 2)
+            {
+                BorrarElemento(idsEventos::Enum::GUI_ID_OP3);
+                BorrarElemento(idsEventos::Enum::GUI_ID_OP4);
+            }
+        }
+
     #else
         //codigo motor irrlicht
 
@@ -2734,6 +2768,10 @@ void MotorGrafico::CargarFondoPuzzle()
 
     #ifdef WEMOTOR
         //codigo motor catopengl
+        _imgP = _interfaz->AddImagen(cfondo,0,0,1.0f);
+        _interfaz->DefinirIdPersonalizado(_imgP,IDP);
+        _imagenesP.push_back(_imgP);
+        _imgP = 0;
     #else
         //codigo motor irrlicht
         ITexture* _textura = _driver->getTexture(cfondo);
@@ -2753,6 +2791,10 @@ void MotorGrafico::CargarIMGPuzzle(unsigned short x, unsigned short y, std::stri
 
     #ifdef WEMOTOR
         //codigo motor catopengl
+        _imgP = _interfaz->AddImagen(cruta,x,y,1.0f);
+        _interfaz->DefinirIdPersonalizado(_imgP,++IDP);
+        _imagenesP.push_back(_imgP);
+        _imgP = 0;
     #else
         //codigo motor irrlicht
         ITexture* _textura = _driver->getTexture(cruta);
@@ -2770,7 +2812,10 @@ void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-
+        unsigned short num = _interfaz->CrearTexto(texto,x1,y1);
+        _interfaz -> DefinirIdPersonalizado(num,++IDP);
+        _textosP.push_back(_txtP);
+        _txtP = 0;
     #else
         //codigo motor irrlicht
         std::wstring widestr = std::wstring(texto.begin(), texto.end());
