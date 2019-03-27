@@ -318,7 +318,7 @@ int Jugador::Atacar(int i)
         {
             setAnimacion(2);
             _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,3,3,3,4,0,0);
-            _motora->getEvent("SinArma")->setVolume(0.8f);
+            _motora->getEvent("SinArma")->setVolume(0.4f);
             _motora->getEvent("SinArma")->start();
         }
         //ATAQUE CUERPO A CUERPO
@@ -326,7 +326,7 @@ int Jugador::Atacar(int i)
         {
             //Crear cuerpo de colision de ataque delante del jugador
             _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,1,5,0,0,4,0,0);
-            _motora->getEvent("GolpeGuitarra")->setVolume(0.8f);
+            _motora->getEvent("GolpeGuitarra")->setVolume(0.5f);
             _motora->getEvent("GolpeGuitarra")->start();
         }
         //ATAQUE A DISTANCIA
@@ -335,7 +335,7 @@ int Jugador::Atacar(int i)
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj","assets/texture/platform1.png");
             //Crear cuerpo de colision de ataque delante del jugador
             _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0);
-            _motora->getEvent("Arpa")->setVolume(0.8f);
+            _motora->getEvent("Arpa")->setVolume(0.5f);
             _motora->getEvent("Arpa")->start();
         }
         //Se calcula el danyo del ataque
@@ -408,8 +408,8 @@ int Jugador::AtacarEspecial()
             {
                 //Crear cuerpo de colision de ataque delante del jugador
                 _fisicas->crearCuerpo(0,0,_armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),2,8,1,8,5,0,0);
-                _motora->getEvent("Arpa")->setVolume(0.8f);
-                _motora->getEvent("Arpa")->start();
+                _motora->getEvent("GuitarraEspecial")->setVolume(0.5f);
+                _motora->getEvent("GuitarraEspecial")->start();
             }
             //ATAQUE ESPECIAL DE LA BAILAORA
             else if(strcmp(_armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
