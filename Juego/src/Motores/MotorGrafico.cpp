@@ -35,6 +35,8 @@ MotorGrafico::MotorGrafico()
         cams = -1;
         existearmaexp = false;
 
+        idCargando = 0;
+
     #else
         //codigo motor irrlicht
         input.setDevice(_device);//lo  utilizamos para que los eventos puedan llamar a funciones de
@@ -503,7 +505,7 @@ void MotorGrafico::CrearTexto(std::string texto, short x1, short y1, short x2, s
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        unsigned short num = _interfaz->CrearTexto(texto,x1,y1);//crea el texto en pantalla con los valores por defecto
+        unsigned short num = _interfaz->CrearTexto(texto,x1,y1,255.0f,255.0f,255.0f);//crea el texto en pantalla con los valores por defecto
         Textos_Scena.push_back(num);//lo introducimos en la matriz de objetos
 
     #else
@@ -526,7 +528,7 @@ void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, signed int i
             _interfaz->DefinirIdPersonalizado(num,id);
             wstring ws(texto);
             string str(ws.begin(),ws.end());
-            unsigned short num2 = _interfaz->CrearTexto(str,(x+25),(y+20));
+            unsigned short num2 = _interfaz->CrearTexto(str,(x+25),(y+20),255.0f,255.0f,255.0f);
             _interfaz->DefinirTextoBoton(num,num2);
         }
     #else
@@ -2843,4 +2845,28 @@ void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
         _textosP.push_back(move(_txtP));
         _txtP = nullptr;
     #endif
+}
+
+unsigned short MotorGrafico::CrearImagen(std::string texto,unsigned int x,unsigned int y,float scale)
+{
+    #ifdef WEMOTOR
+        return _interfaz->AddImagen(texto.c_str(),x,y,scale);
+    #endif
+}
+
+void MotorGrafico::AsignarCargando(unsigned short did)
+{
+    #ifdef WEMOTOR
+        idCargando = did;
+    #endif
+}
+
+void MotorGrafico::BorrarCargando()
+{
+    #ifdef WEMOTOR
+        if(idCargando != 0)
+        {
+            _interfaz->RemoveObject(idCargando);
+        }
+    #endif 
 }
