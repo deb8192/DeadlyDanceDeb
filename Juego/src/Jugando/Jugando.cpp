@@ -113,6 +113,7 @@ void Jugando::Iniciar()
 
     _motor->CrearCamara();
     _motor->FondoEscena(255,0,0,0);
+    _motor->BorrarCargando();
 }
 
 void Jugando::ValoresPorDefecto()
