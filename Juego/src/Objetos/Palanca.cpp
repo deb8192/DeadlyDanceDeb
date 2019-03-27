@@ -11,3 +11,13 @@ Palanca::~Palanca()
 {
     _modelo = nullptr;
 }
+
+void Palanca::CrearFisica()
+{
+    //
+}
+
+void Palanca::BorrarFisica()
+{
+    //
+}
