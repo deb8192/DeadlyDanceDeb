@@ -752,8 +752,7 @@ void CargadorNiveles::CargarCofres()
             {
                 srand(time(NULL));
                 int numAlt = rand() % zonasDisponibles.size();
-                cout << "colocar en: " << zonasDisponibles[numAlt] << endl;
-
+                
                 //Buscar zona donde colocar
                 newx = _zonas[zonasDisponibles[numAlt]]->getX();
                 newy = _zonas[zonasDisponibles[numAlt]]->getY();
