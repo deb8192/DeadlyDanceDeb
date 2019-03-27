@@ -1069,6 +1069,8 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
         }
 
     #endif
+
+    return -1;
 }
 
 void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
