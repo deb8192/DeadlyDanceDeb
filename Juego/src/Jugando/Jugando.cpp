@@ -243,11 +243,12 @@ void Jugando::ManejarEventos() {
     }
 
     //para modo debug
-    if(_motor->EstaPulsado(KEY_G_DEBUG))
+    // Desactivado para la presentacion
+    /*if(_motor->EstaPulsado(KEY_G_DEBUG))
     {
         _motor->activarDebugGrafico();
         _motor->ResetKey(KEY_G_DEBUG);
-    }
+    }*/
 
     // Debug para probar cofres
     if(_motor->EstaPulsado(KEY_C))
@@ -409,6 +410,9 @@ void Jugando::Update()
         std::vector<short> indiceObjetosColisionados = _fisicas->collideAttackWall();
         for(unsigned short i = 0; i < indiceObjetosColisionados.size(); i ++)
         {
+            //TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
+            //_motor->DibujarPared(indiceObjetosColisionados[i], false);
+            
             _fisicas->ErasePared(indiceObjetosColisionados[i]);
             posicion = _fisicas->GetRelacionParedesObstaculos(indiceObjetosColisionados[i]);
             _fisicas->EraseObstaculo(posicion);
