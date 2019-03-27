@@ -856,7 +856,9 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
+    _motora->getEvent("Nivel1")->setVolume(0.3);
     _motora->getEvent("AmbienteGritos")->start(); //Reproducir ambiente
+    _motora->getEvent("AmbienteGritos")->setVolume(0.5);
 
     //esta ya todo ejecutamos ia y interpolado
     return true;
