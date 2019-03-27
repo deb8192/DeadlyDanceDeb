@@ -33,6 +33,7 @@ MotorGrafico::MotorGrafico()
         camx = 0;
         camz = 30;
         cams = -1;
+        existearmaexp = false;
 
     #else
         //codigo motor irrlicht
@@ -369,6 +370,10 @@ void MotorGrafico::CerrarJuego()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        if(_interfaz != nullptr)
+        {
+            delete _interfaz;
+        }
     #else
         //codigo motor irrlicht
         _device->closeDevice();
@@ -505,10 +510,16 @@ void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, signed int i
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        _interfaz->DeclararBoton(_interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f),id);
-        wstring ws(texto);
-        string str(ws.begin(),ws.end());
-        CrearTexto(str,(x+25),(y+20),0,0);
+        unsigned short num = _interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f);
+        if(num != 0)
+        {
+            _interfaz->DeclararBoton(num,id);
+            _interfaz->DefinirIdPersonalizado(num,id);
+            wstring ws(texto);
+            string str(ws.begin(),ws.end());
+            unsigned short num2 = _interfaz->CrearTexto(str,(x+25),(y+20));
+            _interfaz->DefinirTextoBoton(num,num2);
+        }
     #else
         //codigo motor irrlicht
         _guienv->addButton(rect<s32>(x,y,x2,y2), 0, id, texto, texto2);
@@ -1183,8 +1194,8 @@ void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float 
         //codigo motor catopengl
         if(_armaProyectil != 0)
         {
-            _interfaz->Trasladar(_armaProyectil,x,y,z);
-            _interfaz->Rotar(_armaProyectil,rx,ry,rz);
+            _interfaz->Trasladar(_armaProyectil,x,y+2,z);
+            _interfaz->Rotar(_armaProyectil,rx,ry-180,rz);
         }
 
     #else
@@ -1306,7 +1317,7 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
         if(Objetos_Scena.size() > 0 && Objetos_Scena.size() > i && Objetos_Scena[i] != 0)
         {
             _interfaz->Trasladar(Objetos_Scena[i],x,y,z);
-            _interfaz->Rotar(Objetos_Scena[i],rx,ry,rz);
+            _interfaz->Rotar(Objetos_Scena[i],rx,ry-180,rz);
         }
 
     #else
@@ -1323,14 +1334,12 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
 
         if (_armaEsp != 0)
         {
-            if(_armaEspJugador != 0)
-            {
-                borrarArmaEspecial();
-            }
+            existearmaexp = true;
             Constantes constantes;
+            // cout << " x: " << x + 5*(sin(constantes.DEG_TO_RAD*ry)) << " y: " << y + 5 << " z: " << z + 5*(cos(constantes.DEG_TO_RAD*ry)) << endl;
             _interfaz->HabilitarObjeto(_armaEsp);//para verlo en escena y que se procese
-            _interfaz->Trasladar(_armaEspJugador,x + 5*(sin(constantes.DEG_TO_RAD*ry)),y,z + 5*(cos(constantes.DEG_TO_RAD*ry)));//trasladamos
-            _interfaz->Rotar(_armaEspJugador,rx,ry,rz);//rotamo
+            _interfaz->Trasladar(_armaEsp,x + 5*(sin(constantes.DEG_TO_RAD*ry)),y+1,z + 5*(cos(constantes.DEG_TO_RAD*ry)));//trasladamos
+            _interfaz->Rotar(_armaEsp,rx,ry-180,rz);//rotamo
         }
 
 
@@ -1343,6 +1352,7 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
             {
                 this->borrarArmaEspecial();
             }
+            // cout << " x: " << x + 5*(sin(constantes.DEG_TO_RAD*ry)) << " y: " << y + 5 << " z: " << z + 5*(cos(constantes.DEG_TO_RAD*ry)) << endl;
             _armaEspJugador = _smgr->addAnimatedMeshSceneNode(_armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario
             _armaEspJugador->setPosition(core::vector3df(x + 5*(sin(constantes.DEG_TO_RAD*ry)),y,z + 5*(cos(constantes.DEG_TO_RAD*ry))));
             _armaEspJugador->setRotation(core::vector3df(rx,ry,rz));
@@ -1356,8 +1366,10 @@ void MotorGrafico::borrarArmaEspecial()
     #ifdef WEMOTOR
 
         //codigo motor catopengl
-        _interfaz->RemoveObject(_armaEspJugador);//borramos el elemento que se le pasa
-        _armaEspJugador = 0;//lo ponemos a cero para decirle que es nulo
+        _interfaz->DeshabilitarObjeto(_armaEsp);
+        existearmaexp = false;
+        // _interfaz->RemoveObject(_armaEsp);//borramos el elemento que se le pasa
+        //_armaEsp = 0;//lo ponemos a cero para decirle que es nulo
 
     #else
         //codigo motor irrlicht
@@ -1684,12 +1696,15 @@ void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
     //codigo motor catopengl
     bool MotorGrafico::getArmaEspecial()
     {
-        if(_armaEspJugador == 0)
+        if(existearmaexp)
         {
-            return false;
+            if(_armaEsp != 0)
+            {
+                return true;
+            }
         }
 
-        return true;
+        return false;
     }
 #else
     //codigo motor irrlicht
@@ -1746,7 +1761,17 @@ void MotorGrafico::DibujarCofre(long unsigned int idx, bool dibujar)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        
+        if(Objetos_Scena[idx] != 0 && idx < Objetos_Scena.size())
+        {
+            if(dibujar)
+            {
+                _interfaz->HabilitarObjeto(Objetos_Scena[idx]);
+            }
+            else
+            {
+                _interfaz->DeshabilitarObjeto(Objetos_Scena[idx]);
+            }
+        }
     #else
         //codigo motor irrlicht
         if(Objetos_Scena[idx] && idx < Objetos_Scena.size())
@@ -1866,7 +1891,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
             if(_conoVision != 0)
             {
                 _interfaz->Trasladar(_conoVision,x,y,z);
-                _interfaz->Rotar(_conoVision,0,rotacion,0);
+                _interfaz->Rotar(_conoVision,0,rotacion-180,0);
                 _interfaz->Escalar(_conoVision,longitud/2,1.0f,0.01f);
                 Objetos_Debug.push_back(_conoVision);
             }
@@ -1922,7 +1947,7 @@ void MotorGrafico::CargarInterfaz()
         //calcular vida y energia
 
         //monedas y color de letra
-        moneyI = _interfaz->CrearTexto("0 M",710,21,255.0f,255.0f,255.0f);
+        moneyI = _interfaz->CrearTexto("0 M",710,25,255.0f,255.0f,255.0f);
 
     #else
         //codigo motor irrlicht
@@ -2182,9 +2207,8 @@ void MotorGrafico::SetDinero(int dinero)
         //codigo motor catopengl
         if(moneyI != 0)
         {
-            string str = "";
-            str += dinero;
-            std::cout << "recoges tantas: " << str << std::endl;
+            string str = std::to_string(dinero);
+            //std::cout << "recoges tantas: " << str << std::endl;
             _interfaz->CambiarTexto(moneyI,str);
         }
     #else
@@ -2643,6 +2667,7 @@ void MotorGrafico::BorrarElemento(signed int id)
         if(_interfaz)
         {
             //_interfaz->RemoveObject((unsigned short)id);
+            _interfaz->RemoveObjectForID(id);
         }
     #else
         //codigo motor irrlicht
@@ -2666,6 +2691,7 @@ void MotorGrafico::IniIDPuzzles()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        IDP = idsEventos::Enum::GUI_ID_PUZZLE;
     #else
         //codigo motor irrlicht
         IDP = GUI_ID_PUZZLE;
@@ -2676,6 +2702,35 @@ void MotorGrafico::BorrarGuiPuzzle(unsigned short tipo, unsigned short opciones)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+
+        BorrarElemento(idsEventos::Enum::GUI_ID_ATRAS_PUZ);
+
+        if (tipo == 1)
+        {
+            unsigned short tam = _imagenesP.size();
+            for(unsigned short i=0; i < tam; i++)
+            {
+                BorrarElemento(_imagenesP.at(i));
+            }
+            _imagenesP.clear();
+
+            tam = _textosP.size();
+            for(unsigned short i=0; i < tam; i++)
+            {
+                BorrarElemento(_textosP.at(i));
+            }
+            _textosP.clear();
+
+            BorrarElemento(idsEventos::Enum::GUI_ID_OP1);
+            BorrarElemento(idsEventos::Enum::GUI_ID_OP2);
+
+            if (opciones > 2)
+            {
+                BorrarElemento(idsEventos::Enum::GUI_ID_OP3);
+                BorrarElemento(idsEventos::Enum::GUI_ID_OP4);
+            }
+        }
+
     #else
         //codigo motor irrlicht
 
@@ -2718,6 +2773,10 @@ void MotorGrafico::CargarFondoPuzzle()
 
     #ifdef WEMOTOR
         //codigo motor catopengl
+        _imgP = _interfaz->AddImagen(cfondo,0,0,1.0f);
+        _interfaz->DefinirIdPersonalizado(_imgP,IDP);
+        _imagenesP.push_back(_imgP);
+        _imgP = 0;
     #else
         //codigo motor irrlicht
         ITexture* _textura = _driver->getTexture(cfondo);
@@ -2737,6 +2796,10 @@ void MotorGrafico::CargarIMGPuzzle(unsigned short x, unsigned short y, std::stri
 
     #ifdef WEMOTOR
         //codigo motor catopengl
+        _imgP = _interfaz->AddImagen(cruta,x,y,1.0f);
+        _interfaz->DefinirIdPersonalizado(_imgP,++IDP);
+        _imagenesP.push_back(_imgP);
+        _imgP = 0;
     #else
         //codigo motor irrlicht
         ITexture* _textura = _driver->getTexture(cruta);
@@ -2754,7 +2817,10 @@ void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-
+        unsigned short num = _interfaz->CrearTexto(texto,x1,y1);
+        _interfaz -> DefinirIdPersonalizado(num,++IDP);
+        _textosP.push_back(_txtP);
+        _txtP = 0;
     #else
         //codigo motor irrlicht
         std::wstring widestr = std::wstring(texto.begin(), texto.end());
