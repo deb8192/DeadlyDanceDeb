@@ -179,7 +179,14 @@
     </object>
     <object class="MixerBusPanner" id="{e8f50cde-463a-45fe-9db5-b0bfd404bee3}"/>
     <object class="MixerBusFader" id="{0f7f4f5c-7e7f-4be6-8f8e-809c872de960}"/>
-    <object class="SpatialiserEffect" id="{141af7bb-07f1-4dbb-b5b0-b2643f9ed9a5}"/>
+    <object class="SpatialiserEffect" id="{141af7bb-07f1-4dbb-b5b0-b2643f9ed9a5}">
+        <property name="minimumDistance">
+            <value>5.04999971</value>
+        </property>
+        <property name="maximumDistance">
+            <value>55</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{1cd82e89-997a-49f1-9c97-d3092d1d2de7}"/>
     <object class="SFXReverbEffect" id="{4110fd5b-8544-4cf2-a40c-7392448aab63}">
         <property name="decayTime">

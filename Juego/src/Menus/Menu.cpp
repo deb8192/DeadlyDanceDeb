@@ -111,6 +111,7 @@ void Menu::Pausar()
 
 void Menu::Reanudar()
 {
+    _motora->getEvent("Menu")->setVolume(0.1);
     _motora->getEvent("Menu")->start(); //Reproducir musica Menu
     _motor->CrearTexto("Deadly Dance", 0, 0, 80, 20); // Parametros: texto, x1, y1, x2, y2
     pintarBotones();
