@@ -45,7 +45,7 @@ void CofreArana::RunIA()
         {
             if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR)
             {
-                this->ForzarCambioNodo(&constantes.CUATRO);
+                this->ForzarCambioNodo(&constantes.DIEZ);
             }
         }
         if(atacado)
