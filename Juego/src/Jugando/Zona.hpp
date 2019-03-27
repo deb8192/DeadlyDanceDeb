@@ -22,6 +22,7 @@ class Zona
         ~Zona();
 
         void annadirElemento(); //Annade un elemento, ya sea un cofre que se pone, un murcielago que entra a una zona oscura...
+        void quitarElemento(); //Elimina un elemento, ya sea un cofre que se pone, un murcielago que entra a una zona oscura...
         
         //set atributos
         void setPosiciones(float newx,float newy,float newz);

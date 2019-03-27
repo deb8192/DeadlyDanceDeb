@@ -359,7 +359,11 @@ bool MotorGrafico::VentanaAbierta()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        return _interfaz->VentanaEstaAbierta();
+        if(_interfaz != nullptr)
+        {
+            return _interfaz->VentanaEstaAbierta();
+        }
+        return false;
     #else
         //codigo motor irrlicht
         return _device->run();
@@ -372,7 +376,7 @@ void MotorGrafico::CerrarJuego()
         //codigo motor catopengl
         if(_interfaz != nullptr)
         {
-            delete _interfaz;
+            _interfaz->CerrarVentana();
         }
     #else
         //codigo motor irrlicht
@@ -387,6 +391,11 @@ void MotorGrafico::LimpiarDevice()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        if(_interfaz != nullptr)
+        {
+            delete _interfaz;
+            _interfaz = nullptr;
+        }
     #else
         //codigo motor irrlicht
         _device->drop();
@@ -1069,6 +1078,8 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
         }
 
     #endif
+
+    return -1;
 }
 
 void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
@@ -2775,7 +2786,7 @@ void MotorGrafico::CargarFondoPuzzle()
         //codigo motor catopengl
         _imgP = _interfaz->AddImagen(cfondo,0,0,1.0f);
         _interfaz->DefinirIdPersonalizado(_imgP,IDP);
-        _imagenesP.push_back(_imgP);
+        _imagenesP.push_back(IDP);
         _imgP = 0;
     #else
         //codigo motor irrlicht
@@ -2797,8 +2808,9 @@ void MotorGrafico::CargarIMGPuzzle(unsigned short x, unsigned short y, std::stri
     #ifdef WEMOTOR
         //codigo motor catopengl
         _imgP = _interfaz->AddImagen(cruta,x,y,1.0f);
-        _interfaz->DefinirIdPersonalizado(_imgP,++IDP);
-        _imagenesP.push_back(_imgP);
+        unsigned short nue = ++IDP;
+        _interfaz->DefinirIdPersonalizado(_imgP,nue);
+        _imagenesP.push_back(nue);
         _imgP = 0;
     #else
         //codigo motor irrlicht
@@ -2818,8 +2830,9 @@ void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short num = _interfaz->CrearTexto(texto,x1,y1);
-        _interfaz -> DefinirIdPersonalizado(num,++IDP);
-        _textosP.push_back(_txtP);
+        unsigned short nue = ++IDP;
+        _interfaz -> DefinirIdPersonalizado(num,nue);
+        _textosP.push_back(nue);
         _txtP = 0;
     #else
         //codigo motor irrlicht

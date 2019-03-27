@@ -9,9 +9,9 @@ RMalla::RMalla(int f)
     frames.reserve(150);
 }
 
-void RMalla::Remove()
+RMalla::~RMalla()
 {
-
+    
 }
 
 // draws the model, and thus all its meshes

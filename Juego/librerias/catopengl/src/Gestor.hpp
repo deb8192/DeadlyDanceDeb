@@ -20,15 +20,19 @@ class Gestor
 
         bool LimpiarRecursos();//limpia todos los recursos en memoria (no en opengl) CUIDADO
 
-        void Remove();//se destruye el gestor
+        ~Gestor();//lo hacemos publico para borrarlo con  desde interfaz, esto a su vez llama a limpiarRecursos que hace delete de todos los recursos
 
     private:
-
-        ~Gestor();
 
         //clase que nos sirve para almacenar el recurso de forma mas organizada
         struct Archivador
         {
+            ~Archivador()
+            {
+                id = 0;
+                _nombre = nullptr;
+                _recursos = nullptr;
+            };
             unsigned short id;//id del archivo
             const char * _nombre;//nombre del archivo
             Recurso * _recursos;

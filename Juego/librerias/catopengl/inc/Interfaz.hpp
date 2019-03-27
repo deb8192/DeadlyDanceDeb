@@ -87,7 +87,12 @@ class Interfaz
 
         void setAnimationSpeed(unsigned short,int);//le asigna velocidad a la animacion
 
-        
+        void RemoveObjectForID(signed int idPerson);//borra por el id personalizado = si el id es -1 no funciona este metodo   
+
+        void DefinirIdPersonalizado(unsigned short did, signed int idPerson);//le asigna el id personalizado
+
+        void DefinirTextoBoton(unsigned short imagen,unsigned short texto);//le asigna a un boton(imagen), el texto
+
     private:
 
         bool  banco_ids [65535];
@@ -107,6 +112,16 @@ class Interfaz
         //nos sirve para buscar rapidamente un objeto y llamar a su funcion de pintado(esto se hace con una busqueda binaria)
         struct Nodo
         {
+            Nodo()
+            {
+                recurso = nullptr;//nodo que almacena escalado del objeto
+                id = 0;//almacena el id a nivel local
+                idRecurso = 0;//almacena el id del recurso (del gestor de recursos)
+                tipo=0;//1 camara, 2 luces, 3 mallas, 4 imagenes, 5 textos
+                activo = true;//solo para camaras
+                idPersonalizado = -1;//sirve para identificar el id por el id        
+                id_texto = 0;         
+            }
             ~Nodo()
             {
                 if(recurso != nullptr && recurso)
@@ -118,8 +133,10 @@ class Interfaz
             TNodo * recurso;//nodo que almacena escalado del objeto
             unsigned short id;//almacena el id a nivel local
             unsigned short idRecurso;//almacena el id del recurso (del gestor de recursos)
-            unsigned short tipo=0;//1 camara, 2 luces, 3 mallas, 4 imagenes, 5 textos
+            unsigned short tipo;//1 camara, 2 luces, 3 mallas, 4 imagenes, 5 textos
+            unsigned short id_texto;//esto sirve para los botones(imagenes), se borra automaticamente cuando se borra la imagen
             bool activo;//solo para camaras
+            int idPersonalizado;//sirve para identificar el id por el id 
         };
 
         std::vector<Nodo *> nodos;//almacena los nodos
@@ -138,6 +155,8 @@ class Interfaz
 
         Nodo * buscarNodo2(unsigned short);
 
+        Nodo * buscarNodo3(signed int);
+
         bool ventana_inicializada = true;//nos sirve para saber si tenemos que llamar a inicializar ventana
 
         void ventanaInicializar();
@@ -149,5 +168,7 @@ class Interfaz
         void eliminarID(unsigned short x);
 
         unsigned int cualborrar;
+
+        void pulgarReferencia(Nodo * referencia,unsigned short tipo);//limpia la referencia del tipo de objeto que le pases
 
 };

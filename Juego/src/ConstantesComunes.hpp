@@ -63,6 +63,7 @@ using Constantes = struct
     const char* COMPROBAR = "comprueba";
     const char* ATRAVESAR = "atraviesa";
     const char* NO_VE = "no-ve";
+    const char* NO_OYE = "no-oye";
     const char* CAMBIA = "cambia";
     const char* ESTA = "esta";
     const char* DEBE = "debe";
@@ -121,6 +122,9 @@ using Constantes = struct
     const unsigned short GUARDIAN_A = 3;
     const unsigned short GUARDIAN_B = 4;
     const unsigned short BOSS = 5;
+
+    // Codigo de la puerta del boss
+    const unsigned short PUERTA_BOSS = 20;
 
 };
 #endif
