@@ -33,6 +33,7 @@ MotorGrafico::MotorGrafico()
         camx = 0;
         camz = 30;
         cams = -1;
+        existearmaexp = false;
 
     #else
         //codigo motor irrlicht
@@ -1316,7 +1317,7 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
         if(Objetos_Scena.size() > 0 && Objetos_Scena.size() > i && Objetos_Scena[i] != 0)
         {
             _interfaz->Trasladar(Objetos_Scena[i],x,y,z);
-            _interfaz->Rotar(Objetos_Scena[i],rx,ry,rz);
+            _interfaz->Rotar(Objetos_Scena[i],rx,ry-180,rz);
         }
 
     #else
@@ -1333,14 +1334,12 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
 
         if (_armaEsp != 0)
         {
-            if(_armaEspJugador != 0)
-            {
-                borrarArmaEspecial();
-            }
+            existearmaexp = true;
             Constantes constantes;
+            // cout << " x: " << x + 5*(sin(constantes.DEG_TO_RAD*ry)) << " y: " << y + 5 << " z: " << z + 5*(cos(constantes.DEG_TO_RAD*ry)) << endl;
             _interfaz->HabilitarObjeto(_armaEsp);//para verlo en escena y que se procese
-            _interfaz->Trasladar(_armaEspJugador,x + 5*(sin(constantes.DEG_TO_RAD*ry)),y,z + 5*(cos(constantes.DEG_TO_RAD*ry)));//trasladamos
-            _interfaz->Rotar(_armaEspJugador,rx,ry-180,rz);//rotamo
+            _interfaz->Trasladar(_armaEsp,x + 5*(sin(constantes.DEG_TO_RAD*ry)),y+1,z + 5*(cos(constantes.DEG_TO_RAD*ry)));//trasladamos
+            _interfaz->Rotar(_armaEsp,rx,ry-180,rz);//rotamo
         }
 
 
@@ -1353,6 +1352,7 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
             {
                 this->borrarArmaEspecial();
             }
+            // cout << " x: " << x + 5*(sin(constantes.DEG_TO_RAD*ry)) << " y: " << y + 5 << " z: " << z + 5*(cos(constantes.DEG_TO_RAD*ry)) << endl;
             _armaEspJugador = _smgr->addAnimatedMeshSceneNode(_armaEsp); //metemos el objeto en el escenario para eso lo pasamos al escenario
             _armaEspJugador->setPosition(core::vector3df(x + 5*(sin(constantes.DEG_TO_RAD*ry)),y,z + 5*(cos(constantes.DEG_TO_RAD*ry))));
             _armaEspJugador->setRotation(core::vector3df(rx,ry,rz));
@@ -1366,8 +1366,10 @@ void MotorGrafico::borrarArmaEspecial()
     #ifdef WEMOTOR
 
         //codigo motor catopengl
-        _interfaz->RemoveObject(_armaEspJugador);//borramos el elemento que se le pasa
-        _armaEspJugador = 0;//lo ponemos a cero para decirle que es nulo
+        _interfaz->DeshabilitarObjeto(_armaEsp);
+        existearmaexp = false;
+        // _interfaz->RemoveObject(_armaEsp);//borramos el elemento que se le pasa
+        //_armaEsp = 0;//lo ponemos a cero para decirle que es nulo
 
     #else
         //codigo motor irrlicht
@@ -1694,12 +1696,15 @@ void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
     //codigo motor catopengl
     bool MotorGrafico::getArmaEspecial()
     {
-        if(_armaEspJugador == 0)
+        if(existearmaexp)
         {
-            return false;
+            if(_armaEsp != 0)
+            {
+                return true;
+            }
         }
 
-        return true;
+        return false;
     }
 #else
     //codigo motor irrlicht
