@@ -25,84 +25,88 @@
                     <Composition id="18" type="secuencia">
                         <Leaf id="19" type="tarea" action="comprueba" traget="modo-ocultacion"></Leaf>
                         <Decorator id="20" type="iterador" end="true">
-		                <Composition id="21" type="secuencia">
-		                    <Leaf id="22" type="tarea" action="no-ve" target="jugador"></Leaf>
-		                    <Leaf id="23" type="tarea" action="cambia" target="modo-normal"></Leaf>
+		             <Composition id="21" type="selector">
+                                <Composition id="22" type="secuencia">
+		                    <Leaf id="23" type="tarea" action="no-ve" target="jugador"></Leaf>
+		                    <Leaf id="24" type="tarea" action="no-oye" target="jugador"></Leaf>
+		                    <Leaf id="25" type="tarea" action="cambia" target="modo-normal"></Leaf>
 		                </Composition>
+                        	<Leaf id="26" type="tarea" action="comprueba" target="modo-ataque"></Leaf>
+			     </Composition>
                         </Decorator>
                     </Composition>
-                    <Decorator id="24" type="iterador" end="true">
-			<Composition id="25" type="secuencia">
-                            <Leaf id="26" type="tarea" action="busca" target="escondite"></Leaf>
-                            <Leaf id="27" type="tarea" action="cambia" target="modo-ocultacion"></Leaf>
+                    <Decorator id="27" type="iterador" end="true">
+			<Composition id="28" type="secuencia">
+                            <Leaf id="29" type="tarea" action="busca" target="escondite"></Leaf>
+                            <Leaf id="30" type="tarea" action="cambia" target="modo-ocultacion"></Leaf>
                         </Composition>
 		    </Decorator>
                 </Composition>
             </Composition>
-            <Composition id="28" type="secuencia">
-                <Leaf id="29" type="tarea" action="comprueba" target="modo-ataque"></Leaf>
-                <Leaf id="30" type="tarea" action="cambia" target="modo-normal"></Leaf>
-            </Composition>
             <Composition id="31" type="secuencia">
-                <Leaf id="32" type="tarea" action="oye" target="jugador"></Leaf>
-                <Leaf id="33" type="tarea" action="atraviesa" target="ultima-puerta"></Leaf>
+                <Leaf id="32" type="tarea" action="comprueba" target="modo-ataque"></Leaf>
+                <Leaf id="33" type="tarea" action="cambia" target="modo-normal"></Leaf>
             </Composition>
-            <Composition id="34" type="tarea" action="ve" target="mecanismo">
-                <Composition id="35" type="selector">
-                    <Composition id="36" type="tarea" action="ve" target="palanca">
-                        <Composition id="37" type="selector">
-                            <Composition id="38" type="secuencia">
-                                <Leaf id="39" type="tarea" action="esta" target="accionado"></Leaf>
-                                <Leaf id="40" type="tarea" action="busca" target="mecanismo"></Leaf>
-                                <Leaf id="41" type="tarea" action="cambia" target="mecanismo">
+            <Composition id="34" type="secuencia">
+                <Leaf id="35" type="tarea" action="oye" target="jugador"></Leaf>
+                <Leaf id="36" type="tarea" action="atraviesa" target="ultima-puerta"></Leaf>
+            </Composition>
+            <Composition id="37" type="tarea" action="ve" target="mecanismo">
+                <Composition id="38" type="selector">
+                    <Composition id="39" type="tarea" action="ve" target="palanca">
+                        <Composition id="40" type="selector">
+                            <Composition id="41" type="secuencia">
+                                <Leaf id="42" type="tarea" action="esta" target="accionado"></Leaf>
+                                <Leaf id="43" type="tarea" action="busca" target="mecanismo"></Leaf>
+                                <Leaf id="44" type="tarea" action="cambia" target="mecanismo">
                                     <Blackboard task="escribe" info="mecanismo"></Blackboard>
                                 </Leaf>
-                                <Leaf id="42" type="tarea" action="atraviesa" target="ultima-puerta">
+                                <Leaf id="45" type="tarea" action="atraviesa" target="ultima-puerta">
                                     <Blackboard task="lee" info="ultima-puerta"></Blackboard>
                                 </Leaf>
                             </Composition>
-                            <Leaf id="43" type="tarea" action="merodea" target=""></Leaf>
+                            <Leaf id="46" type="tarea" action="merodea" target=""></Leaf>
                         </Composition>
                     </Composition>
-		    <Composition id="44" type="tarea" action="ve" target="puerta">
-	                    <Composition id="45" type="selector">
-	                        <Composition id="46" type="tarea" action="esta" target="accionado">
-	                            <Composition id="47" type="selector">
-	                                <Composition id="48" type="secuencia">
-	                                    <Leaf id="49" type="tarea" action="debe" target="cambiar"></Leaf>
-	                                    <Leaf id="50" type="tarea" action="busca" target="puerta"></Leaf>
-	                                    <Leaf id="51" type="tarea" action="cambia" target="puerta"></Leaf>
-	                                    <Leaf id="52" type="tarea" action="atraviesa" target="ultima-puerta"></Leaf>
+		    <Composition id="47" type="tarea" action="ve" target="puerta">
+	                    <Composition id="48" type="selector">
+	                        <Composition id="49" type="tarea" action="esta" target="accionado">
+	                            <Composition id="50" type="selector">
+	                                <Composition id="51" type="secuencia">
+	                                    <Leaf id="52" type="tarea" action="debe" target="cambiar"></Leaf>
+	                                    <Leaf id="53" type="tarea" action="busca" target="puerta"></Leaf>
+	                                    <Leaf id="54" type="tarea" action="cambia" target="puerta"></Leaf>
+	                                    <Leaf id="55" type="tarea" action="atraviesa" target="ultima-puerta"></Leaf>
 	                                </Composition>
 	                            </Composition>
 	                        </Composition>
-	                        <Composition id="53" type="tarea" action="esta" target="no-accionado">
-	                            <Composition id="54" type="secuencia">
-	                                <Leaf id="55" type="tarea" action="busca" target="puerta"></Leaf>
-	                                <Leaf id="56" type="tarea" action="cambia" target="puerta"></Leaf>
-	                                <Composition id="57" type="selector">
-	                                    <Composition id="58" type="secuencia">
-	                                        <Leaf id="59" type="tarea" action="esta" target="accionado"></Leaf>
-	                                        <Leaf id="60" type="tarea" action="atraviesa" target="puerta"></Leaf>
+	                        <Composition id="56" type="tarea" action="esta" target="no-accionado">
+	                            <Composition id="57" type="secuencia">
+	                                <Leaf id="58" type="tarea" action="busca" target="puerta"></Leaf>
+	                                <Leaf id="59" type="tarea" action="cambia" target="puerta"></Leaf>
+	                                <Composition id="60" type="selector">
+	                                    <Composition id="61" type="secuencia">
+	                                        <Leaf id="62" type="tarea" action="esta" target="accionado"></Leaf>
+	                                        <Leaf id="63" type="tarea" action="atraviesa" target="puerta"></Leaf>
 	                                    </Composition>
-	                                    <Leaf id="61" type="tarea" action="merodea" target=""></Leaf>
+	                                    <Leaf id="64" type="tarea" action="merodea" target=""></Leaf>
 	                                </Composition>
 	                            </Composition>
 	                        </Composition>
 	                    </Composition>
                     </Composition>
-	            <Composition id="62" type="tarea" action="ve" target="cofre">
-	                <Composition id="63" type="selector">
-	                    <Composition id="64" type="secuencia">
-	                        <Leaf id="65" type="tarea" action="esta" target="accionado"></Leaf>
-	                        <Leaf id="66" type="tarea" action="atraviesa" target="ultima-puerta"></Leaf>
+	            <Composition id="65" type="tarea" action="ve" target="cofre">
+	                <Composition id="66" type="selector">
+	                    <Composition id="67" type="secuencia">
+	                        <Leaf id="68" type="tarea" action="esta" target="accionado"></Leaf>
+	                        <Leaf id="69" type="tarea" action="atraviesa" target="ultima-puerta"></Leaf>
 	                    </Composition>
-	                    <Leaf id="67" type="tarea" action="merodea" target=""></Leaf>
+	                    <Leaf id="70" type="tarea" action="merodea" target=""></Leaf>
 	                </Composition>
 	            </Composition>
                 </Composition>
             </Composition>
-            <Leaf id="68" type="tarea" action="merodea" target=""></Leaf>
+            <Leaf id="71" type="tarea" action="merodea" target=""></Leaf>
         </Composition>
     </Root>
 </BehaviorTree>

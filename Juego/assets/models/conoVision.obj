@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib conovision.mtl
+mtllib conoVision.mtl
 o Cone
 v 2.021372 -0.003691 0.983266
 v 2.021256 0.002697 0.964014
