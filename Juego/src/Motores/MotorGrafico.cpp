@@ -468,7 +468,19 @@ void MotorGrafico::ActivarFuenteDefault()
 }
 
 // Se puede dibujar cualquier cosa entre una llamada beginScene() y una llamada endScene()
-void MotorGrafico::FondoEscena(short a, short r, short g, short b)
+void MotorGrafico::FondoEscena(int a, int r, int g, int b)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        _interfaz->CambiarFondo(r,g,b,a);
+    #else
+        //codigo motor irrlicht
+        //Borra la pantalla con un color
+        _driver->beginScene(true, true, SColor(a,r,g,b));
+    #endif
+}
+
+void MotorGrafico::FondoEscena(float a, float r, float g, float b)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl

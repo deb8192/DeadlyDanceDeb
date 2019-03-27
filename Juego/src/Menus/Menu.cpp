@@ -27,7 +27,7 @@ void Menu::Iniciar()
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
 
     //Motor grafico, inicializar
-    _motor->FondoEscena(0,0,0,0);
+    _motor->FondoEscena(0.0f,0.0f,0.0f,0.0f);
     _motor->ActivarFuenteDefault();
 
     // Llama al texto y los botones
@@ -45,10 +45,10 @@ void Menu::Iniciar()
 // Actualiza lo que se ve por pantalla
 void Menu::Render()
 {
-    //calcularColor();
-    _motor->FondoEscena(0,r,g,b);
+    calcularColor();
+    float multi = 1.0f/400.0f;
+    _motor->FondoEscena(0.0f,(float)r*multi,(float)g*multi,(float)b*multi);
     _motor->RenderEscena();               // Vuelve a pintar
-    
 }
 
 void Menu::Update()
@@ -139,7 +139,7 @@ void Menu::Reanudar()
 void Menu::calcularColor()
 {
     unsigned short estavez = rand()%3+1;
-    std::cout << " color " << estavez << std::endl;
+    //std::cout << " color " << estavez << std::endl;
     
     if(estavez == 1)
     {
@@ -152,7 +152,7 @@ void Menu::calcularColor()
             r = r-1;
         }
 
-        if(r == 100)
+        if(r == 180)
         {
             rm = false;
         }
@@ -162,7 +162,7 @@ void Menu::calcularColor()
             rm = true;
         }
 
-        std::cout << " col " << r << std::endl;
+        //std::cout << " col " << r << std::endl;
     }
 
      if(estavez == 2)
@@ -176,7 +176,7 @@ void Menu::calcularColor()
             b = b-1;
         }
 
-        if(b == 100)
+        if(b == 180)
         {
             bm = false;
         }
@@ -187,7 +187,7 @@ void Menu::calcularColor()
         }
     }
 
-/*    if(estavez == 3)
+    if(estavez == 3)
     {
         if(gm)
         {
@@ -207,5 +207,5 @@ void Menu::calcularColor()
         {
             gm = true;
         }
-    } */
+    }
 }

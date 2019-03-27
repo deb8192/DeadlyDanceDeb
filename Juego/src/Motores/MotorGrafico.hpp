@@ -186,7 +186,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void ActivarFuenteDefault(); //define fuente por defecto
             unsigned short CrearImagen(std::string texto,unsigned int,unsigned int,float);//creas una imagen con el escalado que le proporciones, y en la posicion x e y 
 
-            void FondoEscena(short a, short r, short g, short b);
+            void FondoEscena(int a, int r, int g, int b);
+            void FondoEscena(float a, float r, float g, float b);
             void RenderEscena();
             void BorrarScena(); // borra todo lo que haya en la ventana
             void BorrarGui(); // borra todo lo que haya en la ventana relacionado con el gui
