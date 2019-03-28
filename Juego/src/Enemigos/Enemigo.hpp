@@ -182,7 +182,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool comprobarDistanciaFlocking();
         //fin comportamientos bases
 
-        Zona* getZonaMasCercana(vector <Zona*> zonas);
+        Zona* getZonaMasCercana(vector <Zona*> zonas, Zona*);
         //Comparadores de la lectura de las acciones y objetivos de las tareas
         enum accionesEnemigo
         {

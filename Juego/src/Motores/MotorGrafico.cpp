@@ -638,6 +638,10 @@ bool MotorGrafico::EstaPulsado(short boton)
 
             case idsEventos::Enum::KEY_2:
                 return _interfaz->IsKeyDown(GLFW_KEY_2);
+
+            case idsEventos::Enum::KEY_U:
+                return _interfaz->IsKeyDown(GLFW_KEY_U);//para desactivar colisiones jugador
+
             case idsEventos::Enum::KEY_P:
                 return _interfaz->IsKeyDown(GLFW_KEY_P);
 
@@ -781,12 +785,15 @@ void MotorGrafico::ResetKey(short event)
             case KEY_2:
                 input.ResetKey(irr::KEY_KEY_2);
             break;
+            case KEY_U:
+                input.ResetKey(irr::KEY_KEY_U);//para modo debug
+            break;
             case KEY_P:
                 input.ResetKey(irr::KEY_KEY_P);
             break;
-            case KEY_K:
+            case KEY_K:ASA
                 input.ResetKey(irr::KEY_KEY_K);
-            break;
+            break;SSA
             case KEY_C:
                 input.ResetKey(irr::KEY_KEY_C);
             break;

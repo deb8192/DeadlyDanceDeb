@@ -107,6 +107,7 @@ class Jugando: public Estado {
         
         bool reiniciando, puzzleResuelto; // Se utiliza solo en Reanudar por el cambio entre Estados
         bool ganarPuzzle;
+        bool desactivarColisionesJugador;
         Cofre* _cofreP;
 
         Jugador* _jugador;
