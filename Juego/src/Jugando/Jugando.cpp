@@ -1212,11 +1212,15 @@ void Jugando::AccionarMecanismo(int int_col)
             {
                 if(_inter->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
                 {
+                    _motora->getEvent("Nivel1")->stop();
+                    _motora->getEvent("Nivel2")->setVolume(0.4);
+                    _motora->getEvent("Nivel2")->start(); //Reproducir musica juego
                     enSalaBoss = true;
                     this->CargarBossEnMemoria();
                 }
                 //Se abre/acciona la puerta / el mecanismo
                 _motora->getEvent("AbrirCerradura")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
+                _motora->getEvent("AbrirCerradura")->setVolume(0.5);
                 _motora->getEvent("AbrirCerradura")->start();
                 _inter->setNewRotacion(_inter->getRX(), _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _inter->getRZ());
                 _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(), _inter->getRX(), _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _inter->getRZ(), _inter->GetDesplazamientos(), posicion);

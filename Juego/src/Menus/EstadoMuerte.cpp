@@ -85,6 +85,7 @@ void EstadoMuerte::menuPrincipal()
 {
     _motora->getEvent("AmbienteGritos")->stop(); //Detener musica ambiente
     _motora->getEvent("Nivel1")->stop(); //Detener musica Juego
+    _motora->getEvent("Nivel2")->stop(); //Detener musica Juego
     _motor->LimpiarElementosJuego();
     // Elimina todos los estados y anyade el de menu
     Juego::GetInstance()->estado.CambioDeJuegoAMenu();
