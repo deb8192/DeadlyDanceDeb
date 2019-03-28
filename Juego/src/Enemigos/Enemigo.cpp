@@ -34,7 +34,7 @@ Enemigo::Enemigo()
     posicionComunBandada.vY = INT_MAX;
     posicionComunBandada.vZ = INT_MAX;
 
-    distanciaMaximaCohesionBandada = 10;
+    distanciaMaximaCohesionBandada = 15;
 
     distanciaEnemigoJugador.vX = INT_MAX;
     distanciaEnemigoJugador.vY = INT_MAX;
@@ -768,22 +768,23 @@ void Enemigo::ModificarVida(int vid)
 {
     Constantes constantes;
     vida += vid;
+    float ultimoEstertor = vidaIni * constantes.UN_CUARTO;
     if(vid < 0)
     {
         if(tipoEnemigo == 3 || tipoEnemigo == 4)
         {
-            if(vida <= vidaIni * constantes.UN_CUARTO)
+            if(vida <= ultimoEstertor)
             {
-                modo = EN_PELIGRO;
+                modo = MODO_HUIDA;
             }
             else
             {
-                modo = EN_ATAQUE;
+                modo = MODO_ATAQUE;
             }
         }
         else
         {
-            modo = EN_ATAQUE;
+            modo = MODO_ATAQUE;
         }
 
     }
@@ -1073,7 +1074,7 @@ int Enemigo::GetModo()
     return modo;
 }
 
-Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas)
+Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, Zona* _zonaUsada)
 {
     Constantes constantes;
     Zona* _zonaElegida = nullptr;
@@ -1084,8 +1085,8 @@ Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas)
     unsigned short i = 0;
     while(i < zonas.size() && (_zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
     {
-        if((zonas.at(i) != nullptr && zonas.at(i)->getTipo() == Zona::tiposZona::Z_DARK && tipoEnemigo == 1)
-        || (zonas.at(i)->getTipo() == Zona::tiposZona::Z_HIDE && ((tipoEnemigo == 3) || (tipoEnemigo == 4))))
+        if(zonas.at(i) != nullptr && ((zonas.at(i)->getTipo() == Zona::tiposZona::Z_DARK && tipoEnemigo == 1)
+        || (zonas.at(i)->getTipo() == Zona::tiposZona::Z_HIDE && ((tipoEnemigo == 3) || (tipoEnemigo == 4)))))
         {
             distanciaZonaActual.vX = abs(zonas.at(i)->getX() - posActual.x);
             distanciaZonaActual.vY = abs(zonas.at(i)->getY() - posActual.y);
@@ -1095,8 +1096,11 @@ Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas)
 
             if(_zonaElegida == nullptr || distanciaZonaElegida.modulo > distanciaZonaActual.modulo)
             {
-                distanciaZonaElegida = distanciaZonaActual;
-                _zonaElegida = zonas.at(i);
+                
+                 distanciaZonaElegida = distanciaZonaActual;
+                    _zonaElegida = zonas.at(i);
+                
+                
             }
         }
         i++;
@@ -1538,7 +1542,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         this->alinearse(&objetivo, false);
 
         datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima * porcentajeVelocidad;
-        datosDesplazamiento.vZ = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+        datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima * porcentajeVelocidad ;
 
         if((abs(objetivo.vX - this->getX())) > abs(distancia) || (abs(objetivo.vZ - this->getZ()) > abs(distancia)))
         {

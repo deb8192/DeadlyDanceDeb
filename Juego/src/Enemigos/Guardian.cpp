@@ -13,6 +13,7 @@ Guardian::Guardian(float nX, float nY, float nZ, int maxVida, int disfraz)
     maxRotacion = constantes.PI_CUARTOS / constantes.TRES; 
     rotation = constantes.CERO;
     zonaElegida = nullptr;
+    zonaSeleccionada = false;
 
     switch(disfraz)
     {
@@ -43,6 +44,13 @@ Guardian::~Guardian()
 void Guardian::RunIA()
 {
     Constantes constantes;
+    if(modo == MODO_ATAQUE)
+    {
+         if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR && _ordenes[0] != EN_DEFENDERSE)
+        {
+            this->ForzarCambioNodo(&constantes.DIEZ);
+        }
+    }
     if(this->getTimeMerodear() <= 0)
     {
         if(atacado)
@@ -112,7 +120,6 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                 break;
             case EN_NO_VER:
                 {
-                    cout<<"ESTA ESCONDIDO EL SEÑOR GUARDIAN"<<endl;
                     VectorEspacial posJugador;
                     posJugador.vX = _jugador->getX();
                     posJugador.vY = _jugador->getY();
@@ -139,7 +146,6 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                 break;
             case EN_NO_OIR:
                 {
-                    cout<<"ESTA ESCONDIDO EL SEÑOR GUARDIAN"<<endl;
                     VectorEspacial posJugador;
                     posJugador.vX = _jugador->getX();
                     posJugador.vY = _jugador->getY();
@@ -170,7 +176,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                     case EN_ULTIMA_PUERTA:
                         if(!puertasAtravesadas.empty())
                         {
-                            funciona = this->buscar(&puertasAtravesadas.top());
+                            funciona = false;
                         }
                         break;
                     case EN_PUERTA:
@@ -197,6 +203,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         if(zonaElegida->getElementosActuales() >= 1)
                         {
                             zonaElegida->quitarElemento();
+                            zonaElegida = nullptr;
                         }
                         if(escondido)
                         {
@@ -211,6 +218,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         if(zonaElegida->getElementosActuales() >= 1)
                         {
                             zonaElegida->quitarElemento();
+                            zonaElegida = nullptr;
                         }
                         if(escondido)
                         {
@@ -225,6 +233,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         if(zonaElegida->getElementosActuales() >= 1)
                         {
                             zonaElegida->quitarElemento();
+                            zonaElegida = nullptr;
                         }
                         if(escondido)
                         {
@@ -285,6 +294,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
         
             case EN_ATACAR: //El Guardian ataca
                 {
+                    cout<<"ataca guardian"<<endl;
                     if(!atacado)
                     {
                         int danyo;
@@ -299,6 +309,10 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         {
                             funciona = false;
                         }
+                    }
+                    else 
+                    {
+                        funciona = false;
                     }
                 }
                 break;      
@@ -319,6 +333,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                             funciona = false;
                         }
                     }*/
+                    funciona = true;
                 }
                 break;      
             case EN_OIR: //El Guardian oye algo
@@ -383,6 +398,8 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                 {
                         case EN_ESCONDITE:
                         {
+                            if(modo != MODO_BUSCAR_ESCONDITE)
+                                modo = MODO_BUSCAR_ESCONDITE;
                             if(!escondido)
                             {
                                 VectorEspacial coordenadasZonaDestino;
@@ -392,8 +409,10 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                                     //TO DO: revisar por constr. copia
                                     vector<Zona*> zonas = _getZonas;
                                     zonas.reserve(zonas.size());
-                                    zonaElegida = this->getZonaMasCercana(zonas);
+                                    zonaElegida = this->getZonaMasCercana(zonas, zonaElegida);
+                                    
                                 }
+                                
                                 coordenadasZonaDestino.vX = zonaElegida->getX();
                                 coordenadasZonaDestino.vY = zonaElegida->getY();
                                 coordenadasZonaDestino.vZ = zonaElegida->getZ();

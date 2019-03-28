@@ -163,7 +163,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                         //TO DO: revisar por constr. copia
                         vector<Zona*> zonas = _getZonas;
                         zonas.reserve(zonas.size());
-                        zonaElegida = this->getZonaMasCercana(zonas);
+                        zonaElegida = this->getZonaMasCercana(zonas, zonaElegida);
                     }
                     coordenadasZonaDestino.vX = zonaElegida->getX();
                     coordenadasZonaDestino.vY = zonaElegida->getY();

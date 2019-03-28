@@ -16,9 +16,9 @@
 		        	<Leaf id="12" type="tarea" action="persigue" target="jugador"></Leaf>
                                 <Leaf id="13" type="tarea" action="ataca" target="jugador"></Leaf>
                                 <Leaf id="14" type="tarea" action="defensa" target=""></Leaf>
-		        	<Leaf id="15" type="tarea" action="persigue" target="jugador"></Leaf>
+		        	<Leaf id="15" type="tarea" action="defensa" target=""></Leaf>
                                 <Leaf id="16" type="tarea" action="ataca" target="jugador"></Leaf>
-                        	<Leaf id="17" type="tarea" action="atraviesa" target="ultima-puerta"></Leaf>
+                        	<Leaf id="17" type="tarea" action="busca" target="escondite"></Leaf>
                             </Composition>
                         </Decorator>
                     </Composition>
