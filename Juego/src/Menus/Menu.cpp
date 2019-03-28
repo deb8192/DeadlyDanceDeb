@@ -6,8 +6,8 @@ Menu::Menu()
     _motor = MotorGrafico::GetInstance();
     _motora = MotorAudioSystem::getInstance();
     r = 0;
-    g = 0;
-    b = 0;
+    g = 20;
+    b = 20;
     rm = true;
     gm = true;
     bm = true;
@@ -35,8 +35,8 @@ void Menu::Iniciar()
 
     //reinicia croma cambiante
     r = 0;
-    g = 0;
-    b = 0;
+    g = 20;
+    b = 20;
     rm = true;
     gm = true;
     bm = true;
@@ -145,14 +145,14 @@ void Menu::calcularColor()
     {
         if(rm)
         {
-            r = r+1;
+            r = r+2;
         }
         else
         {
-            r = r-1;
+            r = r-2;
         }
 
-        if(r == 180)
+        if(r == 220)
         {
             rm = false;
         }
@@ -165,7 +165,7 @@ void Menu::calcularColor()
         //std::cout << " col " << r << std::endl;
     }
 
-     if(estavez == 2)
+    /*if(estavez == 2)
     {
         if(bm)
         {
@@ -185,9 +185,9 @@ void Menu::calcularColor()
         {
             bm = true;
         }
-    }
+    }*/
 
-    if(estavez == 3)
+    /*if(estavez == 3)
     {
         if(gm)
         {
@@ -198,7 +198,7 @@ void Menu::calcularColor()
             g = g-1;
         }
 
-        if(g == 30)
+        if(g == 20)
         {
             gm = false;
         }
@@ -207,5 +207,5 @@ void Menu::calcularColor()
         {
             gm = true;
         }
-    }
+    }*/
 }
