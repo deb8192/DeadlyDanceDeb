@@ -791,9 +791,9 @@ void MotorGrafico::ResetKey(short event)
             case KEY_P:
                 input.ResetKey(irr::KEY_KEY_P);
             break;
-            case KEY_K:ASA
+            case KEY_K:
                 input.ResetKey(irr::KEY_KEY_K);
-            break;SSA
+            break;
             case KEY_C:
                 input.ResetKey(irr::KEY_KEY_C);
             break;
@@ -2920,6 +2920,7 @@ unsigned short MotorGrafico::CrearImagen(std::string texto,unsigned int x,unsign
     #ifdef WEMOTOR
         return _interfaz->AddImagen(texto.c_str(),x,y,scale);
     #endif
+    return 0;
 }
 
 void MotorGrafico::AsignarCargando(unsigned short did)

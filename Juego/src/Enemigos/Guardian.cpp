@@ -200,10 +200,9 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                     case EN_ATAQUE:
                         
                         modo = MODO_ATAQUE;
-                        if(zonaElegida->getElementosActuales() >= 1)
+                        if(zonaElegida !=nullptr && zonaElegida->getElementosActuales() >= 1)
                         {
                             zonaElegida->quitarElemento();
-                            zonaElegida = nullptr;
                         }
                         if(escondido)
                         {
@@ -215,10 +214,9 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                     case EN_OCULTACION:
                         
                         modo = MODO_OCULTACION;
-                        if(zonaElegida->getElementosActuales() >= 1)
+                        if(zonaElegida != nullptr && zonaElegida->getElementosActuales() >= 1)
                         {
                             zonaElegida->quitarElemento();
-                            zonaElegida = nullptr;
                         }
                         if(escondido)
                         {
@@ -230,10 +228,9 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                     case EN_NORMAL:
 
                         modo = MODO_DEFAULT;
-                        if(zonaElegida->getElementosActuales() >= 1)
+                        if(zonaElegida !=nullptr && zonaElegida->getElementosActuales() >= 1)
                         {
                             zonaElegida->quitarElemento();
-                            zonaElegida = nullptr;
                         }
                         if(escondido)
                         {

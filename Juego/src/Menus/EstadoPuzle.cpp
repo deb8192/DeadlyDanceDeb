@@ -805,7 +805,7 @@ void MotorGrafico::updateMotorPuzzles(short tipo)
         _smgr->drawAll();
         _guienv->drawAll();
 
-        /* Probando a dibujar objetos 2D
+         Probando a dibujar objetos 2D
         //Rectangulo
         _driver->draw2DRectangle(SColor(255, 255, 128, 64), rect<s32>(40, 40, 200, 200));
 
