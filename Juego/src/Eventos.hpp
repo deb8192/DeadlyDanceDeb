@@ -14,6 +14,7 @@ namespace idsEventos
         KEY_G_DEBUG,    // DEBUG
         KEY_1,
         KEY_2,
+        KEY_U,
 
         // TO DO: poner para que se utilizan
         KEY_ESPACIO,    // ATAQUE NORMAL
