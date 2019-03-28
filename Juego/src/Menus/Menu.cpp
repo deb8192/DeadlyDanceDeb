@@ -138,18 +138,18 @@ void Menu::Reanudar()
 
 void Menu::calcularColor()
 {
-    unsigned short estavez = rand()%3+1;
+    unsigned short estavez = 1;
     //std::cout << " color " << estavez << std::endl;
     
     if(estavez == 1)
     {
         if(rm)
         {
-            r = r+2;
+            r = r+4;
         }
         else
         {
-            r = r-2;
+            r = r-1;
         }
 
         if(r == 220)
