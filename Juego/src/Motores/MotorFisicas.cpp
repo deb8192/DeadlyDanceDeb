@@ -483,7 +483,7 @@ std::vector<short> MotorFisicas::collideAttackWall()
     indicesParedes.reserve(10);
     for(unsigned short i = 0; i < paredes.size();i++)
     {
-        if(paredes[i])
+        if(paredes[i] && jugadorAtack)
         {
             if(space->testOverlap(jugadorAtack,paredes[i]))
             {

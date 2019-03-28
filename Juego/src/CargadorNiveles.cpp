@@ -468,7 +468,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             Murcielago* _ene = new Murcielago(x,y,z, 75); // Posiciones, vida
             //ia
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
-            _ene->setVelocidadMaxima(1.5f);
+            _ene->setVelocidadMaxima(1.0f);
             _enemigos.push_back(_ene);//guardamos el enemigo en el vector
             _enemigos.back()->setID(++id);//le damos el id unico en esta partida al enemigo
 
@@ -487,7 +487,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
-            _ene->setVelocidadMaxima(2.5f);
+            _ene->setVelocidadMaxima(1.5f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
             _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
             _ene = nullptr;
@@ -507,7 +507,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             //ia
             //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
-            _ene->setVelocidadMaxima(2.5f);
+            _ene->setVelocidadMaxima(1.5f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
             _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
             _ene = nullptr;
@@ -556,7 +556,7 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
     int ancho, int largo, int alto, Sala* sala)
 {
     _boss = new MuerteBoss(x,y,z, 300); // Posiciones, vida
-    _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
+    _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));aasss
     //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
     _boss->setID(++id);//le damos el id unico en esta partida al enemigo
 
@@ -795,9 +795,9 @@ void CargadorNiveles::CargarCofres()
                     posCofre[2] = newz;
                 }
 
-                #ifdef WEMOTOR //codigo motor catopengl
+                /*#ifdef WEMOTOR //codigo motor catopengl
                     esArana = true; // Desactivamos las aranyas
-                #endif
+                #endif*/
 
                 Interactuable* _cofre = new Cofre(esArana, -1,"Cofre",
                     2,2,2, //ancho, largo, alto

@@ -138,6 +138,7 @@ void Jugando::ValoresPorDefecto()
     proyectilFuera = true;
     // Activamos la interfaz
     _interfaz->activar();
+    desactivarColisionesJugador = false;
 }
 
 void Jugando::ValoresPorDefectoJugador()
@@ -248,6 +249,11 @@ void Jugando::ManejarEventos() {
         _motor->activarDebugGrafico();
         _motor->ResetKey(KEY_G_DEBUG);
     }*/
+    if(_motor->EstaPulsado(KEY_U))
+    {
+        desactivarColisionesJugador = !desactivarColisionesJugador;
+        _motor->ResetKey(KEY_U);
+    }
 
     // Debug para probar cofres
     if(_motor->EstaPulsado(KEY_C))
@@ -367,6 +373,11 @@ void Jugando::Update()
 
     //colisiones con todos los objetos y enemigos que no se traspasan
     jugadorInmovil = _jugador->ColisionEntornoEne();
+
+    if(desactivarColisionesJugador)
+    {
+        jugadorInmovil = false;
+    }
 
     // Actualizar movimiento del jugador
     _jugador->movimiento(jugadorInmovil,

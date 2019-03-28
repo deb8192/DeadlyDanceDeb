@@ -186,7 +186,7 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     float componente;
     if((w || s || a || d) && !noMueve)
     {
-        componente = 1.5;
+        componente = 1.75;
     }
     else
     {
