@@ -907,7 +907,7 @@ void Jugando::CrearJugador()
         _jugador->GetModelo());
 
     _motor->CargarArmaEspecial(_jugador->getX(),_jugador->getY(),
-        _jugador->getZ(), _jugador->getRutaArmaEsp(),"");
+        _jugador->getZ(), _jugador->getRutaArmaEsp(),_jugador->getRutaTexturaArmaEsp());
 
 }
 
@@ -923,7 +923,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
         Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObjeto);
         _rec->setID(_recolectables.size());
         _rec->setPosiciones(x,y,z);
-        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),NULL);
+        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
         _rec->SetPosicionArrayObjetos(posicionObjeto);
         _recolectables.push_back(move(_rec));
         _rec = nullptr;
@@ -935,7 +935,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
         Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObjeto);
         _rec->setID(_powerup.size());
         _rec->setPosiciones(x,y,z);
-        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),NULL);
+        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
         _rec->SetPosicionArrayObjetos(posicionObjeto);
         _rec->setCantidad(propiedades[0]); //cantidad
         _powerup.push_back(move(_rec));
@@ -1563,7 +1563,7 @@ void Jugando::CrearEnemigoArana()
     float y = _eneA->getY();
     float z = _eneA->getZ();
 
-    _motor->CargarEnemigos(x,y,z,_eneA->GetModelo());//creamos la figura
+    _motor->CargarEnemigos(x,y,z,_eneA->GetModelo(),_eneA->GetTextura());//creamos la figura
     _fisicas->crearCuerpo(1,0,x/2,y/2,z/2,2,_eneA->GetAncho(),
         _eneA->GetAlto(),_eneA->GetLargo(),2,0,0);
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
@@ -1590,7 +1590,7 @@ void Jugando::CargarBossEnMemoria()
     float y = _boss->getY();
     float z = _boss->getZ();
 
-    _motor->CargarEnemigos(x,y,z,_boss->GetModelo());//creamos la figura
+    _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura());//creamos la figura
     _fisicas->crearCuerpo(1,0,x/2,y/2,z/2,2,1,1,1,2,0,0);
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales

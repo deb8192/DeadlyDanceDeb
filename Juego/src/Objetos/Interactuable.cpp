@@ -5,12 +5,12 @@ Interactuable::Interactuable(int codigo, const char* nombre,
     unsigned short tipoObj)
 {
     _motor = MotorGrafico::GetInstance();
-    
+
     // INdrawable
     posIni.x = x;
     posIni.y = y;
     posIni.z = z;
-    
+
     std::string name_nombre(nombre);
     cadena_nombre = new char[sizeof(name_nombre)];
     strcpy(cadena_nombre, name_nombre.c_str());
@@ -20,7 +20,7 @@ Interactuable::Interactuable(int codigo, const char* nombre,
     ancho = anc;
     largo = lar;
     alto = alt;
-    
+
     posicionArrayObjetos = posicion;
     accionado = false;
 
@@ -52,7 +52,7 @@ Interactuable::~Interactuable()
 
     ruta_textura = nullptr;
     delete cadena_textura;*/
-    
+
     ancho = 0;
     largo = 0;
     alto  = 0;
@@ -61,7 +61,7 @@ Interactuable::~Interactuable()
     posIni.x = 0;
     posIni.y = 0;
     posIni.z = 0;
-    
+
     posActual.x = 0;
     posActual.y = 0;
     posActual.z = 0;
@@ -89,7 +89,7 @@ Interactuable::~Interactuable()
     rotFutura.x = 0;
     rotFutura.y = 0;
     rotFutura.z = 0;
-    
+
     moveTime = 0;
     rotateTime = 0;
     rotation = 0;
@@ -100,9 +100,9 @@ Interactuable::~Interactuable()
 
 bool Interactuable::accionar()
 {
-    
+
     accionado = !accionado;
-    
+
     return accionado;
 }
 
@@ -379,6 +379,11 @@ void Interactuable::Render(float updTime, float drawTime)
 const char* Interactuable::GetModelo()
 {
     return _modelo;
+}
+
+const char* Interactuable::GetTextura()
+{
+    return _textura;
 }
 
 // Devuelve si es una puerta, palanca, cofre, llave

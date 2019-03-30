@@ -129,6 +129,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float getTimeAt();
         float getLastTimeAt();
         const char* getRutaArmaEsp();
+        const char* getRutaTexturaArmaEsp();
         void cambiarCamara();
         int getDinero();
         void ModificarDinero(int monedas);
@@ -166,6 +167,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         vector <Llave*> llaves;
         //PRUEBAS ATAQUE ESPECIAL
         const char* _rutaArmaEspecial = "assets/models/Arma.obj";
+        const char* _rutaTexturaArmaEspecial = "assets/texture/Arma.png";
         const char* _nombreJugador = "Heavy";
         //!PRUEBAS ATAQUE ESPECIAL
        //  core::vector3df dir;

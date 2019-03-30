@@ -10,10 +10,11 @@ MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
     funciona = true;
     atacado = false;
     _ordenes = new short [constantes.DOS];
-    maxRotacion = constantes.PI_CUARTOS; 
+    maxRotacion = constantes.PI_CUARTOS;
     rotation = constantes.CERO;
 
     _modelo = "assets/models/Muerte/Muerte.obj";
+    _textura = "assets/texture/Muerte.png";
 }
 
 MuerteBoss::~MuerteBoss()
@@ -21,14 +22,15 @@ MuerteBoss::~MuerteBoss()
     delete[] _ordenes;
     _ordenes = nullptr;
     _modelo = nullptr;
+    _textura = nullptr;
 }
 
 /***************** RunIA *****************
  * Funcion que llama a recorrer el arbol
  * de MuerteBoss comportamiento en Enemigo
- * 
+ *
  * Entradas:
- * 
+ *
  * Salidas:
 */
 void MuerteBoss::RunIA()
@@ -55,11 +57,11 @@ void MuerteBoss::RunIA()
 /***************** UpdateMuerteBoss *****************
  * Funcion que llama a la funcion actual donde se
  * ha quedado la lectura del arbol del MuerteBoss
- * 
+ *
  * Entradas:
  *      i: (sennala al MuerteBoss del array, NO NECESARIO APARENTEMENTE)
  * Salidas:
-*/ 
+*/
 
 void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
 {
@@ -73,21 +75,21 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
             case EN_PERSIGUE: //El Pollo se mueve
                 funciona = this->perseguir(_jug);
                 break;
-        
+
             case EN_ATACAR: //El Pollo ataca
                 {
                     if(!atacado)
                     {
                         int danyo;
                         danyo = this->Atacar(*i);
-                        
+
                         if(danyo > 0)
                         {
                             _jugador->ModificarVida(-danyo);
                             funciona = true;
                             atacado = true;
                         }
-                        else 
+                        else
                         {
                             funciona = false;
                         }
@@ -106,7 +108,7 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
     else if(_ordenes != nullptr)
     {
         switch (_ordenes[0])
-        {          
+        {
             case EN_VER: //El Pollo ve al jugador
                 {
                     if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
@@ -121,7 +123,7 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                             funciona = false;
                         }
                     }
-                    else 
+                    else
                     {
                         funciona = false;
                     }
@@ -137,14 +139,14 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                     funciona = true;
                 }
                 break;
-                
+
                 case EN_OIR: //El Pollo oye un enemigo pedir ayuda
                 {
                     if(this->oir(constantes.DOS))
                     {
                         funciona = true;
                     }
-                    else 
+                    else
                     {
                         funciona = false;
                     }
@@ -184,7 +186,7 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                             this->ContestarAyuda();
                         }
                     }
-                    else 
+                    else
                     {
                         //Merodea poniendo en positivo o negativo el angulo actual de rotacion
                         int rota = rand() % 3 - 1;
@@ -195,7 +197,7 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                         this->Merodear();
                         //Comprueba si ve al jugador para atacarle en caso necesario
                         if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
-                        { 
+                        {
                             if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
                             {
                                 modo = MODO_ATAQUE;

@@ -917,6 +917,7 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short objeto = _interfaz->AddMalla(ruta_objeto,1);//instanciamos el objeto y lo agregamos a la escena
+        _interfaz->SetTexture(objeto,ruta_textura);
         if(objeto != 0)
         {
             //cout << "colocar plataforma en: " << x << y << z << endl;
@@ -989,13 +990,14 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
     #endif
 }
 
-void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto)
+void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura)
 {
     #ifdef WEMOTOR
 
         //codigo motor catopengl
 
         unsigned short enemigo = _interfaz->AddMalla(ruta_objeto,1);
+        _interfaz->SetTexture(enemigo,ruta_textura);
 
         if(enemigo != 0)
         {
@@ -1033,6 +1035,9 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         //codigo motor catopengl
 
         _jugEscena = _interfaz->AddMalla(ruta_objeto,128);
+        //_interfaz->SetColor(_jugEscena,250,50,50,255); //color RGBA
+        _interfaz->SetTexture(_jugEscena,"assets/models/rockero/HeavyTex.png");
+
         CargarLuces(0,0,0);
         if(_jugEscena != 0)
         {
@@ -1066,6 +1071,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,1);
+        _interfaz->SetTexture(_objetoEnEscena,ruta_textura);
         //cout << "colocar objeto en: " << x << y << z << endl;
         if(_objetoEnEscena != 0)
         {
@@ -1133,6 +1139,7 @@ void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto,
 
         //codigo motor catopengl
         unsigned short _arma = _interfaz->AddMalla(ruta_objeto,1);
+        _interfaz->SetTexture(_arma,ruta_textura);
 
         if(_arma != 0)
         {
@@ -1159,6 +1166,7 @@ void MotorGrafico::CargarProyectil(int x,int y,int z, const char *ruta_objeto, c
 
         //codigo motor catopengl
         unsigned short _arma = _interfaz->AddMalla(ruta_objeto,1);
+        _interfaz->SetTexture(_arma,ruta_textura);
 
         if(_arma != 0)
         {
@@ -1185,6 +1193,7 @@ void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto
         //codigo motor catopengl
 
         _armaEsp = _interfaz->AddMalla(ruta_objeto,1);
+        _interfaz->SetTexture(_armaEsp,ruta_textura);
         if(_armaEsp != 0)
         {
             _interfaz->DeshabilitarObjeto(_armaEsp);
@@ -1203,6 +1212,7 @@ void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *rut
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short recol = _interfaz->AddMalla(ruta_objeto,1);
+        _interfaz->SetTexture(recol,ruta_textura);
 
         if(recol != 0)
         {

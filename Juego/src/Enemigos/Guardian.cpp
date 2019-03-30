@@ -10,7 +10,7 @@ Guardian::Guardian(float nX, float nY, float nZ, int maxVida, int disfraz)
     funciona = true;
     atacado = hecho = escondido = false;
     _ordenes = new short [constantes.DOS];
-    maxRotacion = constantes.PI_CUARTOS / constantes.TRES; 
+    maxRotacion = constantes.PI_CUARTOS / constantes.TRES;
     rotation = constantes.CERO;
     zonaElegida = nullptr;
     zonaSeleccionada = false;
@@ -19,10 +19,12 @@ Guardian::Guardian(float nX, float nY, float nZ, int maxVida, int disfraz)
     {
         case 3 :
             _modelo = "assets/models/guardian_m/GuardianMuerteConTextura.obj";
+            _textura = "assets/models/guardian_m/trocitos_G_M_prueba.jpg";
             break;
             //Cambiar por unicornio
         case 4 :
             _modelo = "assets/models/guardian_m/GuardianMuerteConTextura.obj";
+            _textura = "assets/models/guardian_m/trocitos_G_M_prueba.jpg";
     }
 }
 
@@ -31,14 +33,15 @@ Guardian::~Guardian()
     delete[] _ordenes;
     _ordenes = nullptr;
     _modelo = nullptr;
+    _textura = nullptr;
 }
 
 /***************** RunIA *****************
  * Funcion que llama a recorrer el arbol
  * de del Guardian comportamiento en Enemigo
- * 
+ *
  * Entradas:
- * 
+ *
  * Salidas:
 */
 void Guardian::RunIA()
@@ -70,18 +73,18 @@ void Guardian::RunIA()
         {
             _ordenes = this->Enemigo::RunIA(funciona);
             forzadoCambio = false;
-        }   
-    }      
+        }
+    }
 }
 
 /***************** UpdateGuardian *****************
  * Funcion que llama a la funcion actual donde se
  * ha quedado la lectura del arbol del Guardian
- * 
+ *
  * Entradas:
  *      i: (sennala al Guardian del array, NO NECESARIO APARENTEMENTE)
  * Salidas:
-*/ 
+*/
 
 void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas)
 {
@@ -93,7 +96,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
     if(_ordenes != nullptr)
     {
         switch (_ordenes[0])
-        {    
+        {
             case EN_VER: //El Pollo ve al jugador
                 {
                     switch(_ordenes[1])
@@ -111,7 +114,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                                     funciona = false;
                                 }
                             }
-                            else 
+                            else
                             {
                                 funciona = false;
                             }
@@ -130,7 +133,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         funciona = false;
                         this->setTimeOcultarse(1.5f);
                     }
-                    else 
+                    else
                     {
                         if(this->getTimeOcultarse() <= 0)
                         {
@@ -140,7 +143,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         {
                             funciona = false;
                         }
-                        
+
                     }
                 }
                 break;
@@ -156,7 +159,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         funciona = false;
                         this->setTimeOcultarse(1.5f);
                     }
-                    else 
+                    else
                     {
                         if(this->getTimeOcultarse() <= 0)
                         {
@@ -166,7 +169,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         {
                             funciona = false;
                         }
-                        
+
                     }
                 }
                 break;
@@ -192,13 +195,13 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                 switch(_ordenes[1])
                 {
                     case EN_PELIGRO:
-                        
+
                         modo = MODO_HUIDA;
                         funciona = true;
 
                         break;
                     case EN_ATAQUE:
-                        
+
                         modo = MODO_ATAQUE;
                         if(zonaElegida !=nullptr && zonaElegida->getElementosActuales() >= 1)
                         {
@@ -209,10 +212,10 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                             escondido = false;
                         }
                         funciona = true;
-                        
+
                         break;
                     case EN_OCULTACION:
-                        
+
                         modo = MODO_OCULTACION;
                         if(zonaElegida != nullptr && zonaElegida->getElementosActuales() >= 1)
                         {
@@ -223,7 +226,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                             escondido = false;
                         }
                         funciona = true;
-                        
+
                         break;
                     case EN_NORMAL:
 
@@ -237,7 +240,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                             escondido = false;
                         }
                         funciona = true;
-                        
+
                         break;
                 }
             }
@@ -247,7 +250,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                 switch (_ordenes[1])
                 {
                     case EN_PELIGRO:
-                        
+
                         if(modo == MODO_HUIDA)
                         {
                             funciona = true;
@@ -258,7 +261,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         }
                         break;
                     case EN_ATAQUE:
-                        
+
                         if(modo == MODO_ATAQUE)
                         {
                             cout<<"EL SEÑOR GUARDIAN ESTA EN MODO ATAQUE"<<endl;
@@ -270,7 +273,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         }
                         break;
                     case EN_OCULTACION:
-                        
+
                         if(modo == MODO_OCULTACION)
                         {
                             funciona = true;
@@ -288,7 +291,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                     funciona = this->perseguir(_jug);
                 }
                 break;
-        
+
             case EN_ATACAR: //El Guardian ataca
                 {
                     cout<<"ataca guardian"<<endl;
@@ -302,17 +305,17 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                             funciona = true;
                             atacado = true;
                         }
-                        else 
+                        else
                         {
                             funciona = false;
                         }
                     }
-                    else 
+                    else
                     {
                         funciona = false;
                     }
                 }
-                break;      
+                break;
             case EN_DEFENDERSE: //El Guardian se defiende
                 {
                     /*if(!atacado)
@@ -325,25 +328,25 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                             funciona = true;
                             atacado = true;
                         }
-                        else 
+                        else
                         {
                             funciona = false;
                         }
                     }*/
                     funciona = true;
                 }
-                break;      
+                break;
             case EN_OIR: //El Guardian oye algo
                     if(this->oir(constantes.UNO))
                     {
                         funciona = true;
                     }
-                    else 
+                    else
                     {
                         funciona = false;
                     }
                 break;
-            
+
             case EN_MERODEA: //El Guardian merodea
             {
                 if(modo == MODO_DEFAULT)
@@ -360,14 +363,14 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
                         {
                             if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
-                            {   
+                            {
                                 modo = MODO_BUSCAR_ESCONDITE;
                                 this->setTimeMerodear(constantes.CERO);
                                 funciona = true;
                             }
                         }
                     }
-                    else 
+                    else
                     {
                         //Merodea poniendo en positivo o negativo el angulo actual de rotacion
                         int rota = rand() % 3 - 1;
@@ -378,7 +381,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         this->Merodear();
                         //Comprueba si ve al jugador para atacarle en caso necesario
                         if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
-                        { 
+                        {
                             if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
                             {
                                 modo = MODO_BUSCAR_ESCONDITE;
@@ -407,9 +410,9 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                                     vector<Zona*> zonas = _getZonas;
                                     zonas.reserve(zonas.size());
                                     zonaElegida = this->getZonaMasCercana(zonas, zonaElegida);
-                                    
+
                                 }
-                                
+
                                 coordenadasZonaDestino.vX = zonaElegida->getX();
                                 coordenadasZonaDestino.vY = zonaElegida->getY();
                                 coordenadasZonaDestino.vZ = zonaElegida->getZ();
@@ -425,13 +428,13 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                             }
                             //this->ver(constantes.DOS, constantes.NUEVE * constantes.DIEZ);
                         }
-                        break; 
+                        break;
                     }
-                
-                
+
+
                 break;
-            
-            
+
+
             default:
                 if(modo == MODO_DEFAULT)
                 {
@@ -447,14 +450,14 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
                         {
                             if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
-                            {   
+                            {
                                 modo = MODO_BUSCAR_ESCONDITE;
                                 this->setTimeMerodear(constantes.CERO);
                                 funciona = true;
                             }
                         }
                     }
-                    else 
+                    else
                     {
                         //Merodea poniendo en positivo o negativo el angulo actual de rotacion
                         int rota = rand() % 3 - 1;
@@ -465,7 +468,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         this->Merodear();
                         //Comprueba si ve al jugador para atacarle en caso necesario
                         if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
-                        { 
+                        {
                             if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
                             {
                                 modo = MODO_BUSCAR_ESCONDITE;
@@ -475,7 +478,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                         }
                     }
                 }
-                
+
                 break;
         }
     }

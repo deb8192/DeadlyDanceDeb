@@ -35,7 +35,7 @@ void Interfaz::CerrarVentana()
     if(window != nullptr && VentanaEstaAbierta())
     {
         window->Close();
-    }    
+    }
 }
 unsigned short Interfaz::AddCamara()
 {
@@ -759,12 +759,12 @@ void Interfaz::RemoveObject(unsigned short object)
                 delete nodo->recurso;
                 nodo->recurso = nullptr;
             }
- 
+
             pulgarReferencia(nodo,nodo->tipo);
             eliminarID((nodo->id));
             delete nodo;
             nodos.erase(nodos.begin()+auxiliar);
- 
+
         }
     }
 }
@@ -775,7 +775,7 @@ void Interfaz::EscalarImagen(unsigned short nid,float x,float y,bool enx, bool e
     {
         Nodo * nodo = buscarNodo2(nid);
         if(nodo != nullptr)
-        {            
+        {
             if(nodo->recurso != nullptr)
             {
                 TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
@@ -799,12 +799,12 @@ void Interfaz::EscalarImagen(unsigned short nid,float x,float y,bool enx, bool e
 
 void Interfaz::CambiarTexto(unsigned short nid,std::string texto)
 {
-    //cambiar string del texto 
+    //cambiar string del texto
     if(nid != 0)
     {
         Nodo * nodo = buscarNodo2(nid);
         if(nodo != nullptr)
-        {            
+        {
             if(nodo->recurso != nullptr)
             {
                 TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
@@ -846,13 +846,13 @@ int Interfaz::getStartFrame(unsigned short did)
         Nodo * nodo = buscarNodo2(did);
 
         if(nodo != nullptr)
-        {            
+        {
             if(nodo->recurso != nullptr)
             {
                 TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
                 if(tnodo != nullptr)
                 {
-                    return (int)dynamic_cast<TMalla*>(tnodo->GetEntidad())->getFrameInicio();                
+                    return (int)dynamic_cast<TMalla*>(tnodo->GetEntidad())->getFrameInicio();
                 }
             }
         }
@@ -866,7 +866,7 @@ int Interfaz::getFrameNr(unsigned short did)
     {
         Nodo * nodo = buscarNodo2(did);
         if(nodo != nullptr)
-        {            
+        {
             if(nodo->recurso != nullptr)
             {
                 TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
@@ -886,7 +886,7 @@ void Interfaz::setFrameLoop(unsigned short did,int start,int end)
     {
         Nodo * nodo = buscarNodo2(did);
         if(nodo != nullptr)
-        {            
+        {
             if(nodo->recurso != nullptr)
             {
                 TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
@@ -905,7 +905,7 @@ void Interfaz::setAnimationSpeed(unsigned short did,int velocidad)
     {
         Nodo * nodo = buscarNodo2(did);
         if(nodo != nullptr)
-        {            
+        {
             if(nodo->recurso != nullptr)
             {
                 TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
@@ -917,6 +917,45 @@ void Interfaz::setAnimationSpeed(unsigned short did,int velocidad)
         }
     }
 }
+
+void Interfaz::SetColor(unsigned short did, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->setColor(r,g,b,a);
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::SetTexture(unsigned short did, const char * _ruta)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->setTexture(_ruta);
+                }
+            }
+        }
+    }
+}
+
 
 void Interfaz::RemoveObjectForID(signed int idPerson)
 {

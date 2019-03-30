@@ -67,7 +67,7 @@ protected:
     Posiciones rotActual;  //Rotacion
     Posiciones rotPasada;
     Posiciones rotFutura;
-    
+
     float moveTime, rotateTime; //variables para controlar la interpolacion del movimiento y la rotacion;
     float rotation; //en grados por defecto
     int id = -1;
@@ -75,7 +75,8 @@ protected:
     int animacionAnterior = 0; //nos sirve para saber si debemos cambiar de animacion por la nueva
     //fin posiciones
 
-    const char* _modelo; // Malla 3D con la textura
+    const char* _modelo; // Malla 3D
+    const char* _textura; // textura
 };
 
 #endif /* INdrawable_HPP */

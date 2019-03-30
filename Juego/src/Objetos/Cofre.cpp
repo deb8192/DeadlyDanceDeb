@@ -1,7 +1,7 @@
 #include "Cofre.hpp"
 #include "../Motores/MotorFisicas.hpp"
 
-Cofre::Cofre(bool esEne, int codigo, const char* nombre, 
+Cofre::Cofre(bool esEne, int codigo, const char* nombre,
     int anc, int lar, int alt, int posicion,
     float x, float y, float z, unsigned short tipoObj,
     unsigned short posA, Sala* sala)
@@ -9,6 +9,7 @@ Cofre::Cofre(bool esEne, int codigo, const char* nombre,
 {
     esArana = esEne;
     _modelo = "assets/models/Cofre/cofre.obj";
+    _textura = "assets/texture/cofreArana.png";
     _estoy = sala;
     posArrayArana = posA;
 }

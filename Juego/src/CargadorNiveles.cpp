@@ -545,7 +545,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
 
-    _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo());//creamos la figura
+    _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura());//creamos la figura
 
     _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0);
     _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
@@ -613,7 +613,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
             _rec->setID(_recolectables.size());
             _rec->setPosiciones(x,y,z);
-            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),NULL);
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
             _rec->SetPosicionArrayObjetos(posicionObjeto);
             _recolectables.push_back(move(_rec));
             _rec = nullptr;
@@ -633,7 +633,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             _inter->setDesplazamientos(despX,despZ);
             _inter->setRotacion(0.0,0.0,0.0);
 
-            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_inter->GetModelo(),NULL);
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_inter->GetModelo(),_inter->GetTextura());
             _inter->SetPosicionArrayObjetos(posicionObjeto);
 
             _interactuables.push_back(move(_inter));
@@ -646,7 +646,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
             _rec->setID(_powerup.size());
             _rec->setPosiciones(x,y,z);
-            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),NULL);
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
             _rec->SetPosicionArrayObjetos(posicionObjeto);
             _rec->setCantidad(propiedades[0]); //cantidad
             _powerup.push_back(move(_rec));
@@ -807,7 +807,7 @@ void CargadorNiveles::CargarCofres()
                     _zonas[zonasDisponibles[numAlt]]->GetSala());
 
                 int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
-                    _cofre->GetModelo(), NULL);
+                    _cofre->GetModelo(), _cofre->GetTextura());
 
                 _cofre->setID(++id);
                 _cofre->setPosiciones(newx,newy,newz);
