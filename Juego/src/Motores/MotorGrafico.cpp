@@ -1293,7 +1293,7 @@ int MotorGrafico::getCams()
         return cams;
 }
 
-void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry, float rz)
+void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry, float rz, float newy, float newz)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
@@ -1304,8 +1304,8 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
         {
             // Centrar la camara
             nodeCamPosition[0] = x+(camx*cams);
-            nodeCamPosition[1] = y+30;
-            nodeCamPosition[2] = z+(camz*cams);
+            nodeCamPosition[1] = y+30+newy;
+            nodeCamPosition[2] = z+newz+(camz*cams);
             nodeCamTarget[0] = x;
             nodeCamTarget[1] = y;
             nodeCamTarget[2] = -z;
@@ -2937,7 +2937,7 @@ void MotorGrafico::BorrarCargando()
         {
             _interfaz->RemoveObject(idCargando);
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::DeshabilitarDinero()
@@ -2947,7 +2947,7 @@ void MotorGrafico::DeshabilitarDinero()
         {
             _interfaz->DeshabilitarObjeto(moneyI);
         }
-    #endif 
+    #endif
 }
 
 void MotorGrafico::HabilitarDinero()
@@ -2957,5 +2957,5 @@ void MotorGrafico::HabilitarDinero()
         {
             _interfaz->HabilitarObjeto(moneyI);
         }
-    #endif 
+    #endif
 }

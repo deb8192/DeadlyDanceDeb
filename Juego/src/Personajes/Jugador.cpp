@@ -1197,11 +1197,26 @@ bool Jugador::ColisionEntornoEne()
 
 void Jugador::Render(float updTime, float drawTime)
 {
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     moverseEntidad(1 / updTime);
     RotarEntidad(1 / updTime);
     UpdateTimeMove(drawTime);
+
+    //Calculo de la camara
+    if(_fisicas->CamaraRotara())
+    {
+        if(newz < 20.0f)newz += 1.0f;
+        if(newy < 10.0f)newy += 0.5f;
+    }
+    else
+    {
+        if(newz > 0.0f)newz -= 1.0f;
+        if(newy > 0.0f)newy -= 0.5f;
+    }
+
+
     _motor->mostrarJugador(
         posActual.x, posActual.y, posActual.z,
-        getRX(), getRY(), getRZ()
+        getRX(), getRY(), getRZ(), newy, newz
     );
 }

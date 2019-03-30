@@ -77,6 +77,7 @@ using namespace reactphysics3d;
             CollisionBody* getColectablesPowerup(int n);
             unsigned int GetRelacionInteractuablesObstaculos(int n);
             unsigned int GetRelacionParedesObstaculos(int n);
+            bool CamaraRotara();
 
             //para limpiar todas las fisicas
             void limpiarFisicas();
@@ -108,6 +109,7 @@ using namespace reactphysics3d;
             std::vector<CollisionBody *> obstaculos;//Vector de obstaculos que bloquean el movimiento
             std::vector<CollisionBody *> paredes;//Vector de obstaculos que no son palancas o puertas
             std::vector<CollisionBody *> plataformas;//Vector de plataformas para caminar
+            std::vector<CollisionBody *> paredeInvisiblesCamara; //Vector con las paredes invisibles que cambian la camara
             std::vector<rp3d::Transform> prevTransform;
 
             CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)

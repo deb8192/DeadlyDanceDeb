@@ -184,7 +184,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CerrarJuego();
             void LimpiarDevice();//elimina el dispositivo
             void ActivarFuenteDefault(); //define fuente por defecto
-            unsigned short CrearImagen(std::string texto,unsigned int,unsigned int,float);//creas una imagen con el escalado que le proporciones, y en la posicion x e y 
+            unsigned short CrearImagen(std::string texto,unsigned int,unsigned int,float);//creas una imagen con el escalado que le proporciones, y en la posicion x e y
 
             void FondoEscena(int a, int r, int g, int b);
             void FondoEscena(float a, float r, float g, float b);
@@ -244,7 +244,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
             void dispararProyectil(float x, float y, float z, float rx, float ry, float rz);
 
-            void mostrarJugador(float x, float y, float z, float rx, float ry, float rz);
+            void mostrarJugador(float x, float y, float z, float rx, float ry, float rz, float newy, float newz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
@@ -324,7 +324,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short x2, unsigned short y2);
             void HabilitarDinero();
             void DeshabilitarDinero();
-            
+
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
