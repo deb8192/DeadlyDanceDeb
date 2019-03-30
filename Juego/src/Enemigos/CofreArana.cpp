@@ -11,10 +11,11 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
     funciona = true;
     atacado = false;
     _ordenes = new short [constantes.DOS];
-    maxRotacion = constantes.PI_CUARTOS; 
+    maxRotacion = constantes.PI_CUARTOS;
     rotation = constantes.CERO;
 
     _modelo = "assets/models/Cofre/cofreArana.obj";
+    _textura = "assets/texture/cofreArana.png";
 
     ancho = anchoN;
     largo = largoN;
@@ -26,14 +27,15 @@ CofreArana::~CofreArana()
     delete[] _ordenes;
     _ordenes = nullptr;
     _modelo = nullptr;
+    _textura = nullptr;
 }
 
 /***************** RunIA *****************
  * Funcion que llama a recorrer el arbol
  * de del CofreArana comportamiento en Enemigo
- * 
+ *
  * Entradas:
- * 
+ *
  * Salidas:
 */
 void CofreArana::RunIA()
@@ -63,11 +65,11 @@ void CofreArana::RunIA()
 /***************** UpdateCofreArana *****************
  * Funcion que llama a la funcion actual donde se
  * ha quedado la lectura del arbol del CofreArana
- * 
+ *
  * Entradas:
  *      i: (sennala al CofreArana del array, NO NECESARIO APARENTEMENTE)
  * Salidas:
-*/ 
+*/
 
 void CofreArana::UpdateCofreArana(short *i, int* _jug)
 {
@@ -81,7 +83,7 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug)
             case EN_PERSIGUE: //El CofreArana se mueve
                 funciona = this->perseguir(_jug);
                 break;
-        
+
             case EN_ATACAR: //El CofreArana ataca
                 {
                     if(!atacado)
@@ -89,7 +91,7 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug)
                         cout<<"intenta atacar"<<endl;
                         int danyo;
                         danyo = this->Atacar(*i);
-                        
+
                         if(danyo > 0)
                         {
                             _jugador->ModificarVida(-danyo);
@@ -97,7 +99,7 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug)
                             funciona = true;
                             atacado = true;
                         }
-                        else 
+                        else
                         {
                             funciona = false;
                         }
@@ -109,14 +111,14 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug)
     else if(_ordenes != nullptr)
     {
         switch (_ordenes[0])
-        {          
+        {
             case EN_VER: //El CofreArana ve al jugador
                 {
                     if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
                     {
                         funciona = true;
                     }
-                    else 
+                    else
                     {
                         funciona = false;
                     }

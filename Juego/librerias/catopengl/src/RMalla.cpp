@@ -11,7 +11,7 @@ RMalla::RMalla(int f)
 
 RMalla::~RMalla()
 {
-    
+    textures_loaded.clear();
 }
 
 // draws the model, and thus all its meshes
@@ -92,12 +92,9 @@ bool RMalla::CargarMalla(std::string _ruta)
 {
     //carga los datos con assimp, mete el numero de datos que tiene en objetos,
     //numeros de mallas que tiene en mallas
-
     //Leer fichero de assimp
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(_ruta, aiProcess_OptimizeMeshes | aiProcess_JoinIdenticalVertices | aiProcess_Triangulate | aiProcess_CalcTangentSpace);
-
-    //directory = _ruta.substr(0, _ruta.find_last_of('/'));
 
     //Mirar errores en la lectura
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -114,14 +111,7 @@ bool RMalla::CargarMalla(std::string _ruta)
         cout << " |- Malla " << i << ": " << meshes.at(i) << endl;
     }
 
-    // for(unsigned int i=0; i < textures_loaded.size(); i++)
-    // {
-    //     //cout << " |- Textura " << i << ": " << (std::string)textures_loaded.at(i) << endl;
-    // }
-    // cout << "--------------------" << endl;
-
     mallas = meshes.size();
-
     frames.push_back(meshes); //Guardar frame de animacion
     meshes.clear();
 
@@ -197,59 +187,49 @@ Mesh * RMalla::processMesh(aiMesh *mesh, const aiScene *scene)
             indices.push_back(face.mIndices[j]);
     }
 
+    //Mirar si ya existe la textura para no cargarla
     if(text_cargada == false)
     {
-        // Procesar materiales
-        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        // Asumimos unas lineas para los nombres de los samplers en los shaders. cada textura difusa tiene que ser nombrada
-        // como "texture_diffuseN", donde N es un número secuencial que va de 1 a MAX_SAMPLER_NUMBER.
-        // Lo mismo se aplica a otras texturas que se resumen en la siguiente lista:
-        // Difusa: texture_diffuseN
-        vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-
-        // Especular: texture_specularN
-        vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-
-        if(diffuseMaps.size() == 0 && specularMaps.size() == 0)
+        bool skip = false;
+        for(unsigned int j = 0; j < textures_loaded.size(); j++)
         {
-            //Mirar si ya existe la textura para no cargarla
-            bool skip = false;
-            for(unsigned int j = 0; j < textures_loaded.size(); j++)
+            if(textures_loaded.at(j).path == "default_texture")
             {
-                if(textures_loaded.at(j).path == "default_texture")
-                {
-                    textures.push_back(textures_loaded.at(j));
-                    skip = true; //Si la texgtura ya ha se ha creado no volverla a crearla
-                    break;
-                }
+                textures.push_back(textures_loaded.at(j));
+                skip = true; //Si la texgtura ya ha se ha creado no volverla a crearla
+                break;
             }
-            if(!skip)
-            {   //textura no cargada aún
-                unsigned int textureID;
-                glGenTextures(1, &textureID);
+        }
+        if(!skip)
+        {
+            unsigned char r = 231;
+            unsigned char g = 255;
+            unsigned char b = 50;
+            unsigned char a = 255;
+            std::cout << " texturecolor: (" << (float)r << " , " << (float)g << " , " << (float)b << " , " << (float)a << ")" << std::endl;
+            //textura no cargada
+            unsigned int textureID;
+            glGenTextures(1, &textureID);
 
-                int width=1, height=1;
-                GLubyte datamat[] = { 231, 255, 50, 255 }; //RGBA
-                GLenum format = GL_RGBA;
+            int width=1, height=1;
+            GLubyte datamat[] = {r,g,b,a}; //RGBA
+            GLenum format = GL_RGBA;
 
-                glBindTexture(GL_TEXTURE_2D, textureID);
-                glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, datamat);
-                glGenerateMipmap(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, textureID);
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, datamat);
+            glGenerateMipmap(GL_TEXTURE_2D);
 
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-                Texture texture;
-                texture.id = textureID;
-                texture.type = "texture_diffuse";
-                texture.path = "default_texture";
-                textures.push_back(texture);
-                textures_loaded.push_back(texture);
-            }
+            Texture texture;
+            texture.id = textureID;
+            texture.type = "texture_diffuse";
+            texture.path = "default_texture";
+            textures.push_back(texture);
+            textures_loaded.push_back(texture);
         }
     }
     else
@@ -264,47 +244,93 @@ Mesh * RMalla::processMesh(aiMesh *mesh, const aiScene *scene)
     return newmesh;
 }
 
-// checks all material textures of a given type and loads the textures if they're not loaded yet.
-// the required info is returned as a Texture struct.
-vector<Texture> RMalla::loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName)
+void RMalla::SetColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
-    vector<Texture> textures;
-    for(unsigned int i = 0; i < mat->GetTextureCount(type); i++)
-    {
-        aiString str;
-        mat->GetTexture(type, i, &str);
-        // check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
-        bool skip = false;
+    std::cout << " NUEVA::texturecolor: (" << (float)r << " , " << (float)g << " , " << (float)b << " , " << (float)a << ")" << std::endl;
 
-        for(unsigned int j = 0; j < textures_loaded.size(); j++)
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+
+    int width=1, height=1;
+    GLubyte datamat[] = { r, g, b, a }; //RGBA 231, 255, 50, 255
+    GLenum format = GL_RGBA;
+
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, datamat);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    Texture newtexture;
+    newtexture.id = textureID;
+    newtexture.type = "texture_diffuse";
+    newtexture.path = "default_texture";
+
+    //Pasar por cada una de las mallas
+    for(unsigned int i = 0; i < frames.size(); i++)
+    {
+        for(unsigned int j = 0; j < frames[i].size(); j++)
         {
-            if(textures_loaded.at(j).path == str.C_Str())
-            {
-                textures.push_back(textures_loaded.at(j));
-                skip = true; // a texture with the same filepath has already been loaded, continue to next one. (optimization)
-                break;
-            }
-        }
-        if(!skip)
-        {   // if texture hasn't been loaded already, load it
-            Texture texture;
-            texture.id = TextureFromFile(str.C_Str(), this->directory);
-            texture.type = typeName;
-            texture.path = str.C_Str();
-            textures.push_back(texture);
-            textures_loaded.push_back(texture);  // store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
+            frames[i][j]->ChangeTexture(newtexture);
         }
     }
-    return textures;
+
+}
+
+//Cambiar la textura de la malla
+void RMalla::SetTexture(const char * _ruta)
+{
+    if(_ruta != nullptr)
+    {
+        std::string filename = std::string(_ruta);
+
+        if(filename != " ")
+        {
+            Texture newtexture;
+
+            //Comprobar si ya existe
+            bool skip = false;
+            for(unsigned int j = 0; j < textures_loaded.size(); j++)
+            {
+                if(textures_loaded.at(j).path == filename.c_str())
+                {
+                    newtexture = textures_loaded.at(j);
+                    skip = true; //Si la texgtura ya ha se ha creado no volverla a crearla
+                    std::cout << " CARGADA::filename: " << filename << std::endl;
+                    break;
+                }
+            }
+            if(!skip)
+            {
+                //No existe la textura
+                //Nueva textura
+                newtexture.id = TextureFromFile(filename.c_str());
+                newtexture.type = "texture_diffuse";
+                newtexture.path = filename.c_str();
+
+                //Guardar para la proxima carga
+                textures_loaded.push_back(newtexture);
+            }
+            //Pasar por cada una de las mallas
+            for(unsigned int i = 0; i < frames.size(); i++)
+            {
+                for(unsigned int j = 0; j < frames[i].size(); j++)
+                {
+                    frames[i][j]->ChangeTexture(newtexture);
+                }
+            }
+        }
+    }
 }
 
 //Carga el fichero de textura
-unsigned int RMalla::TextureFromFile(const char *path, const std::string &directory)
+unsigned int RMalla::TextureFromFile(const char *path)
 {
     std::string filename = std::string(path);
-    filename = directory + '/' + filename;
-
-    std::cout << " filename: " << filename << std::endl;
+    std::cout << " NUEVA::filename: " << filename << std::endl;
 
     unsigned int textureID;
     glGenTextures(1, &textureID);
@@ -334,14 +360,9 @@ unsigned int RMalla::TextureFromFile(const char *path, const std::string &direct
     }
     else
     {
-        std::cout << "Texture failed to load at path: " << path << std::endl;
+        std::cout << "ERROR:: en la ruta de textura: " << path << std::endl;
         stbi_image_free(data);
     }
 
     return textureID;
 }
-/* datos * RMalla::GetMalla()
-{
-    return datos;
-}
-*/

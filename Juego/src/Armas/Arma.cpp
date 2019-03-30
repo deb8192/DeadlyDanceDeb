@@ -7,13 +7,13 @@ Arma::Arma()
 
 }
 
-Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt, 
+Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt,
     unsigned short tipoObj)
 {
     std::string name_nombre(nombre);
     cadena_nombre = new char[sizeof(name_nombre)];
     strcpy(cadena_nombre, name_nombre.c_str());
-    
+
     potenciaAtaque = ataque;
     _nombreArma = cadena_nombre;
     ancho = anc;
@@ -28,10 +28,12 @@ Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt,
     if (tipoObj == constantes.GUITARRA) // GUITARRA
     {
         _modelo = "assets/models/Arma.obj";
+        _textura = "assets/texture/Arma.png";
     }
     else if (tipoObj == constantes.ARPA)
     {
         _modelo = "assets/models/Arpa.obj";
+        _textura = "assets/texture/Arpa.png";
     }
 }
 
@@ -51,11 +53,12 @@ Arma::~Arma()
 
     // INdrawable
     _modelo = nullptr;
+    _textura = nullptr;
 
     posIni.x = 0;
     posIni.y = 0;
     posIni.z = 0;
-    
+
     posActual.x = 0;
     posActual.y = 0;
     posActual.z = 0;
@@ -83,7 +86,7 @@ Arma::~Arma()
     rotFutura.x = 0;
     rotFutura.y = 0;
     rotFutura.z = 0;
-    
+
     moveTime = 0;
     rotateTime = 0;
     rotation = 0;
@@ -360,4 +363,9 @@ unsigned short Arma::GetTipoObjeto()
 const char* Arma::GetModelo()
 {
     return _modelo;
+}
+
+const char* Arma::GetTextura()
+{
+    return _textura;
 }

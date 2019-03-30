@@ -62,6 +62,7 @@ Jugador::~Jugador()
     _armaEspecial = nullptr;
 
     _rutaArmaEspecial = nullptr;
+    _rutaTexturaArmaEspecial = nullptr;
     _nombreJugador = nullptr;
 
     dinero = 0;
@@ -332,7 +333,7 @@ int Jugador::Atacar(int i)
         //ATAQUE A DISTANCIA
         else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
         {
-            _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj","assets/texture/platform1.png");
+            _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj",NULL);
             //Crear cuerpo de colision de ataque delante del jugador
             _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0);
             _motora->getEvent("Arpa")->setVolume(0.5f);
@@ -861,6 +862,11 @@ float Jugador::getLastTimeAtEsp()
 const char*Jugador::getRutaArmaEsp()
 {
     return _rutaArmaEspecial;
+}
+
+const char*Jugador::getRutaTexturaArmaEsp()
+{
+    return _rutaTexturaArmaEspecial;
 }
 
 int Jugador::getDinero()

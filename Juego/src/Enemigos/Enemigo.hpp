@@ -149,7 +149,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void ResetTree();
         //fin ia
 
-        const char* GetModelo(); // Malla 3D con la textura
+        const char* GetModelo(); // Malla 3D
+        const char* GetTextura(); //textura
         bool GetPedirAyuda();
         void SetPedirAyuda(bool);
         bool GetContestar();

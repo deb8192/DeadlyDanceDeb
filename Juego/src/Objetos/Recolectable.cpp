@@ -34,36 +34,42 @@ Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
         case 7: // ARPA
         {
             _modelo = "assets/models/Arpa.obj";
+            _textura = "assets/texture/Arpa.png";
         }
         break;
-        
+
         case 8: // GUITARRA
         {
             _modelo = "assets/models/Arma.obj";
+            _textura = "assets/texture/Arma.png";
         }
         break;
 
         case 9: // ORO
         {
             _modelo = "assets/models/gold.obj";
+            _textura = "assets/texture/gold.png";
         }
         break;
 
         case 10: // VIDA
         {
             _modelo = "assets/models/powerup0.obj";
+            _textura = "assets/texture/powerup0.png";
         }
         break;
 
         case 11: // ENERGIA
         {
             _modelo = "assets/models/powerup1.obj";
+            _textura = "assets/texture/powerup1.png";
         }
         break;
 
         case 1: // Llave
         {
             _modelo = "assets/models/llave.obj";
+            _textura = nullptr;
         }
         break;
     }
@@ -87,11 +93,12 @@ Recolectable::~Recolectable()
 
     // INdrawable
     _modelo = nullptr;
-    
+    _textura = nullptr;
+
     posIni.x = 0;
     posIni.y = 0;
     posIni.z = 0;
-    
+
     posActual.x = 0;
     posActual.y = 0;
     posActual.z = 0;
@@ -119,7 +126,7 @@ Recolectable::~Recolectable()
     rotFutura.x = 0;
     rotFutura.y = 0;
     rotFutura.z = 0;
-    
+
     moveTime = 0;
     rotateTime = 0;
     rotation = 0;
@@ -391,4 +398,9 @@ unsigned short Recolectable::GetTipoObjeto()
 const char* Recolectable::GetModelo()
 {
     return _modelo;
+}
+
+const char* Recolectable::GetTextura()
+{
+    return _textura;
 }

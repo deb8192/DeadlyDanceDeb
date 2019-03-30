@@ -65,15 +65,13 @@ void Mesh::Draw(Shader* shader)
         string name = textures[i].type;
         if(name == "texture_diffuse")
         {
-            //number = std::to_string(diffuseNr++); //transformar unsigned int a string
-            stringstream ss; //Borrar cuando funcione tostring
+            stringstream ss;
             ss << diffuseNr++;
             number = ss.str();
         }
-        else if(name == "texture_specular")
+        else if(name == "default_texture")
         {
-            //number = std::to_string(specularNr++);
-            stringstream ss; //Borrar cuando funcione tostring
+            stringstream ss;
             ss << specularNr++;
             number = ss.str();
         }
@@ -91,4 +89,13 @@ void Mesh::Draw(Shader* shader)
 
     //Dejar en valor predeterminado antes de terminar
     glActiveTexture(GL_TEXTURE0);
+}
+
+//Cambio de textura
+void Mesh::ChangeTexture(Texture ntext)
+{
+    for(unsigned int i = 0; i < textures.size(); i++)
+    {
+        textures[i] = ntext;
+    }
 }

@@ -10,11 +10,12 @@ Murcielago::Murcielago(float nX, float nY, float nZ, int maxVida)
     funciona = true;
     atacado = enZonaOscura = false;
     _ordenes = new short [constantes.DOS];
-    maxRotacion = constantes.PI_CUARTOS; 
+    maxRotacion = constantes.PI_CUARTOS;
     rotation = constantes.CERO;
     zonaElegida = nullptr;
 
     _modelo = "assets/models/Murcielago.obj";
+    _textura = "assets/texture/texturas_murci.png";
 }
 
 Murcielago::~Murcielago()
@@ -22,14 +23,15 @@ Murcielago::~Murcielago()
     delete[] _ordenes;
     _ordenes = nullptr;
     _modelo = nullptr;
+    _textura = nullptr;
 }
 
 /***************** RunIA *****************
  * Funcion que llama a recorrer el arbol
  * de del Murcielago comportamiento en Enemigo
- * 
+ *
  * Entradas:
- * 
+ *
  * Salidas:
 */
 void Murcielago::RunIA()
@@ -54,17 +56,17 @@ void Murcielago::RunIA()
         }
         _ordenes = this->Enemigo::RunIA(funciona);
     }
-        
+
 }
 
 /***************** UpdateMurcielago *****************
  * Funcion que llama a la funcion actual donde se
  * ha quedado la lectura del arbol del Murcielago
- * 
+ *
  * Entradas:
  *      i: (sennala al Murcielago del array, NO NECESARIO APARENTEMENTE)
  * Salidas:
-*/ 
+*/
 
 void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZonas)
 {
@@ -86,7 +88,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                     funciona = this->perseguir(_jug);
                 }
                 break;
-        
+
             case EN_ATACAR: //El Murcielago ataca
                 {
                     if(!atacado)
@@ -99,7 +101,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                             funciona = true;
                             atacado = true;
                         }
-                        else 
+                        else
                         {
                             funciona = false;
                         }
@@ -112,7 +114,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
     else if(_ordenes != nullptr)
     {
         switch (_ordenes[0])
-        {          
+        {
             case EN_OIR: //El Murcielago oye al jugador
                     switch(_ordenes[1])
                         case EN_JUGADOR:
@@ -120,7 +122,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                             {
                                 funciona = true;
                             }
-                            else 
+                            else
                             {
                                 funciona = false;
                             }
@@ -130,7 +132,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                             {
                                 funciona = true;
                             }
-                            else 
+                            else
                             {
                                 funciona = false;
                             }
@@ -152,8 +154,8 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
             }
             break;
             case EN_BUSCA:  //El murcielago busca una zona oscura
-                
-                
+
+
                 if(!enZonaOscura)
                 {
                     VectorEspacial coordenadasZonaDestino;
@@ -186,7 +188,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                 }
                 else funciona = false;
                 break;
-            
+
             default:
                 break;
         }

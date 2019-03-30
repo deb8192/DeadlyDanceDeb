@@ -168,3 +168,13 @@ void TMalla::setRecursoObjeto(RMalla * objeto)
 {
     objetos = objeto;
 }
+
+void TMalla::setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+    objetos->SetColor(r,g,b,a);
+}
+
+void TMalla::setTexture(const char * _ruta)
+{
+    objetos->SetTexture(_ruta);
+}

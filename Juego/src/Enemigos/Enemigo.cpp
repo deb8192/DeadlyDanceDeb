@@ -1096,11 +1096,11 @@ Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, Zona* _zonaUsada)
 
             if(_zonaElegida == nullptr || distanciaZonaElegida.modulo > distanciaZonaActual.modulo)
             {
-                
+
                  distanciaZonaElegida = distanciaZonaActual;
                     _zonaElegida = zonas.at(i);
-                
-                
+
+
             }
         }
         i++;
@@ -1739,6 +1739,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 const char* Enemigo::GetModelo()
 {
     return _modelo;
+}
+
+const char* Enemigo::GetTextura()
+{
+    return _textura;
 }
 
 bool Enemigo::GetPedirAyuda()

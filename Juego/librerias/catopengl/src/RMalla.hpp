@@ -28,15 +28,14 @@ class RMalla : public Recurso
         bool CargarAnimacion(const char * _ruta);
         bool CargarRecurso(const char * _ruta);
         void Draw(Shader *shader, float time);
-        //datos * CargarFrames(unsigned short,unsigned short); //le pasas datos[x]
-
+        void SetColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+        void SetTexture(const char * _ruta);
 
     private:
 
         void processNode(aiNode *node, const aiScene *scene);
         Mesh * processMesh(aiMesh *mesh, const aiScene *scene);
-        vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
-        unsigned int TextureFromFile(const char *path, const std::string &directory);
+        unsigned int TextureFromFile(const char *path);
 
         vector< vector<Mesh *> > frames;    //Frames de animacion
         vector<Mesh *> meshes;              //Guardar mallas del modelo
@@ -44,7 +43,6 @@ class RMalla : public Recurso
         std::string directory;              //Directorio con los objetos
         unsigned int objetos,mallas;      //Numero de objetos y mallas
         bool text_cargada;
-        //datos * para pasarlos a la entidad
 
 };
 

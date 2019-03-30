@@ -12,9 +12,9 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
     public:
         Interactuable(int codigo, const char* nombre, int anc, int lar, int alt,
             int posicion, float x, float y, float z, unsigned short tipoObj);
-        
+
         ~Interactuable();
-        
+
         //metodos de interaccion
         bool accionar();
 
@@ -66,13 +66,14 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         int GetPosicionObjetos();
         bool getAccionado();
         void Render(float updTime, float drawTime);
-        const char* GetModelo(); // Malla 3D con la textura
+        const char* GetModelo(); // Malla 3D
+        const char* GetTextura(); //textura
         unsigned short GetTipoObjeto();
 
         // Utilizadas de momento por el cofre
         virtual void CrearFisica()=0;
         virtual void BorrarFisica()=0;
-        
+
     protected:
         MotorGrafico* _motor;
         //Si codigoObjeto es > 0 es un numero comun entre dos objetos: una palanca con el mismo numero que una puerta abre dicha puerta
@@ -82,7 +83,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
 
         unsigned short tam = 2;
         float* _desplazamientos = new float [tam];   //Desplazamientos en X y en Z para le giro de la puerta
-        
+
 };
 
 #endif /* Interactuable_HPP */
