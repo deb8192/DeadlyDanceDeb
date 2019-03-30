@@ -156,8 +156,23 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
             break;
         case 3: //objetos
         {
+            //paredes invisibles
+            if(accion == 6)
+            {
+                obstaculos.push_back(cuerpo);
+                //Para la camara
+                rp3d::Vector3 posiciones(px+despX,py,pz+despZ+2.5f); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
+                rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+                Transform transformacion(posiciones,orientacion);
+                rp3d::CollisionBody * cuerpo;
+                cuerpo = space->createCollisionBody(transformacion);
+                rp3d::Vector3 medicion(ancho,alto,largo+3.5f);
+                BoxShape * formapared = new BoxShape(medicion);
+                cuerpo->addCollisionShape(formapared,transformacion);
+                paredeInvisiblesCamara.push_back(cuerpo);
+            }
             //paredes rompibles que se interponen ante el jugador
-            if(accion == 5)
+            else if(accion == 5)
             {
                 relacionParedesObstaculos.push_back(obstaculos.size());
                 paredes.push_back(cuerpo);
@@ -225,7 +240,7 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
             arma = cuerpo;
         }
             break;
-        
+
         default:
         {
             // Nada por ahora
@@ -238,7 +253,7 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
 }
 
 //TO DO: pasar a vector de punteros
-std::vector<int> MotorFisicas::crearCuerpoCofre(float px, float py, float pz, 
+std::vector<int> MotorFisicas::crearCuerpoCofre(float px, float py, float pz,
     float ancho, float alto, float largo, float despX, float despZ)
 {
     rp3d::Vector3 posiciones(px+despX,py,pz+despZ); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
@@ -253,7 +268,7 @@ std::vector<int> MotorFisicas::crearCuerpoCofre(float px, float py, float pz,
     rp3d::Vector3 medidas(ancho,alto,largo);
     BoxShape * forma = new BoxShape(medidas);
     cuerpo->addCollisionShape(forma,transformacion);
-    
+
     relacionInteractuablesObstaculos.push_back(obstaculos.size());
     obstaculos.push_back(cuerpo);
 
@@ -271,7 +286,7 @@ std::vector<int> MotorFisicas::crearCuerpoCofre(float px, float py, float pz,
     _vector.push_back(move(_num));
     _num = interactuables.size()-1;
     _vector.push_back(move(_num));
-    
+
     return _vector;
 }
 
@@ -557,7 +572,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
 {
     Constantes constantes;
     //se recomiendan usar modos especificos para ahorrar costes.
-    
+
     Ray * rayo = crearRayo(x/*-(2*(sin(constantes.PI * rotation / constantes.PI_RADIAN)))*/,y,z/*-(2*(cos(constantes.PI * rotation / constantes.PI_RADIAN)))*/,(-1*(rotation-180)),longitud);
 
     RaycastInfo intersection;
@@ -617,10 +632,10 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
             while(i<enemigos.size() && !colision)
             {
                 colision = enemigos[i]->raycast(*rayo,intersection);
-                
+
                 if(colision)
                 {
-                  
+
                     ene[0] = 1;
                     ene[1] = intersection.worldPoint.x;
                     ene[2] = intersection.worldPoint.y;
@@ -1090,4 +1105,16 @@ unsigned int MotorFisicas::GetRelacionParedesObstaculos(int n)
 {
     unsigned int m = n;
     return relacionParedesObstaculos.at(m);
+}
+
+bool MotorFisicas::CamaraRotara()
+{
+    for(long unsigned int i = 0; i < paredeInvisiblesCamara.size();i++)
+    {
+        if(space->testOverlap(jugador,paredeInvisiblesCamara[i]))
+        {
+            return true;
+        }
+    }
+    return false;
 }

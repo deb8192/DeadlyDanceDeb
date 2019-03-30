@@ -158,6 +158,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
               az = 20.0f,
               deg;
         int gcam = 0;
+        float newy = 0;
+        float newz = 0;
 
         Arma* _armaEquipada;
         Arma* _armaEspecial;
