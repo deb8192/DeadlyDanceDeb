@@ -99,6 +99,13 @@ class Interfaz
 
         void DefinirTextoBoton(unsigned short imagen,unsigned short texto);//le asigna a un boton(imagen), el texto
 
+        void DistanciaLuz(unsigned short luz, float d); //Aplica una distancia a la luz
+
+        //Colores de luz
+        void ColorAmbiental(unsigned short luz, float r,float g,float b);
+        void ColorDifusa(unsigned short luz, float r,float g,float b);
+        void ColorSpecular(unsigned short luz, float r,float g,float b);
+
     private:
 
         bool  banco_ids [65535];
