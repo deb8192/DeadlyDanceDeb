@@ -6,12 +6,12 @@ TLuz::TLuz(int t)
     tipo_luz = t; //tipo de luz
     if(t == 0)
     {
-        // setAmbient(0.25f, 0.25f, 0.25f);
-        // setDiffuse(0.6f, 0.6f, 0.6f);
-        // setSpecular(0.7f, 0.7f, 0.7f);
-        setAmbient(0.35f, 0.25f, 0.25f);
-        setDiffuse(0.7f, 0.60f, 0.60f);
-        setSpecular(0.8f, 0.7f, 0.7f);
+        setAmbient(0.25f, 0.25f, 0.25f);
+        setDiffuse(0.6f, 0.6f, 0.6f);
+        setSpecular(0.7f, 0.7f, 0.7f);
+        // setAmbient(0.05f, 0.05f, 0.05f);
+        // setDiffuse(0.15f, 0.15f, 0.15f);
+        // setSpecular(0.25f, 0.2f, 0.2f);
         setDirection(-0.2f, -1.0f, -0.3f);
         setBrillos(8.0f);
     }
@@ -20,16 +20,16 @@ TLuz::TLuz(int t)
         setAmbient(0.05f, 0.05f, 0.05f);
         setDiffuse(0.8f, 0.8f, 0.8f);
         setSpecular(1.0f, 1.0f, 1.0f);
-        setLightRange(50.0f);
+        setLightRange(150.0f);
         setBrillos(32.0f);
     }
     else if(t == 2)
     {
-        setAmbient(0.0f, 0.0f, 0.0f);
+        setAmbient(1.0f, 1.0f, 1.0f);
         setDiffuse(1.0f, 1.0f, 1.0f);
         setSpecular(1.0f, 1.0f, 1.0f);
         setDirection(0.0f, -1.0f, 0.0f);
-        setLightRange(50.0f);
+        setLightRange(150.0f);
         setBrillos(32.0f);
     }
 }

@@ -1036,3 +1036,79 @@ void Interfaz::DefinirTextoBoton(unsigned short imagen,unsigned short texto)
         nodo->id_texto = texto;
     }
 }
+
+void Interfaz::DistanciaLuz(unsigned short luz, float d)
+{
+    if(luz != 0)
+    {
+        Nodo * nodo = buscarNodo2(luz);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TLuz*>(tnodo->GetEntidad())->setLightRange(d);
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::ColorAmbiental(unsigned short luz, float r,float g,float b)
+{
+    if(luz != 0)
+    {
+        Nodo * nodo = buscarNodo2(luz);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TLuz*>(tnodo->GetEntidad())->setAmbient(r,g,b);
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::ColorDifusa(unsigned short luz, float r,float g,float b)
+{
+    if(luz != 0)
+    {
+        Nodo * nodo = buscarNodo2(luz);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TLuz*>(tnodo->GetEntidad())->setDiffuse(r,g,b);
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::ColorSpecular(unsigned short luz, float r,float g,float b)
+{
+    if(luz != 0)
+    {
+        Nodo * nodo = buscarNodo2(luz);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TLuz*>(tnodo->GetEntidad())->setSpecular(r,g,b);
+                }
+            }
+        }
+    }
+}

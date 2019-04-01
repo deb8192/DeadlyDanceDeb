@@ -48,7 +48,7 @@ struct SpotLight {
     vec3 specular;      //Influencia de la luz especular en los objetos
 };
 
-#define NR_POINT_LIGHTS 20    //X puntos de luz maximo
+#define NR_POINT_LIGHTS 10    //X puntos de luz maximo
 
 in vec3 Normal;            //Recibimos las normales del vertex
 in vec3 FragPos;           //Recibimos la posicion del fragment actual
