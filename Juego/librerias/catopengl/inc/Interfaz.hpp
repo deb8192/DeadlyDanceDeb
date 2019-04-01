@@ -89,7 +89,11 @@ class Interfaz
 
         void setAnimationSpeed(unsigned short,int);//le asigna velocidad a la animacion
 
-        void RemoveObjectForID(signed int idPerson);//borra por el id personalizado = si el id es -1 no funciona este metodo   
+        void SetColor(unsigned short did, unsigned char r, unsigned char g, unsigned char b, unsigned char a); //Cambia el color de una malla
+
+        void SetTexture(unsigned short did, const char * _ruta); //Le asigna una texura a una malla
+
+        void RemoveObjectForID(signed int idPerson);//borra por el id personalizado = si el id es -1 no funciona este metodo
 
         void DefinirIdPersonalizado(unsigned short did, signed int idPerson);//le asigna el id personalizado
 
@@ -121,8 +125,8 @@ class Interfaz
                 idRecurso = 0;//almacena el id del recurso (del gestor de recursos)
                 tipo=0;//1 camara, 2 luces, 3 mallas, 4 imagenes, 5 textos
                 activo = true;//solo para camaras
-                idPersonalizado = -1;//sirve para identificar el id por el id        
-                id_texto = 0;         
+                idPersonalizado = -1;//sirve para identificar el id por el id
+                id_texto = 0;
             }
             ~Nodo()
             {
@@ -138,7 +142,7 @@ class Interfaz
             unsigned short tipo;//1 camara, 2 luces, 3 mallas, 4 imagenes, 5 textos
             unsigned short id_texto;//esto sirve para los botones(imagenes), se borra automaticamente cuando se borra la imagen
             bool activo;//solo para camaras
-            int idPersonalizado;//sirve para identificar el id por el id 
+            int idPersonalizado;//sirve para identificar el id por el id
         };
 
         std::vector<Nodo *> nodos;//almacena los nodos

@@ -642,7 +642,7 @@ void Jugando::UpdateIA()
                 //crear objeto
                 this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObj);
 
-                if (_enemigos[i]->GetPedirAyuda()) {
+                if (_enemigos[i] != nullptr && _enemigos[i]->GetPedirAyuda()) {
                     enemDejarDePedirAyuda();
                 }
 
@@ -1515,9 +1515,12 @@ void Jugando::EraseEnemigo(std::size_t i)
 
 void Jugando::enemDejarDePedirAyuda()
 {
-    cout << "\e[42m Deja de pedir ayuda \e[0m" << endl;
-    _enemPideAyuda->SetPedirAyuda(false);
-    _enemPideAyuda = nullptr;
+    if(_enemPideAyuda != nullptr)
+    {
+        cout << "\e[42m Deja de pedir ayuda \e[0m" << endl;
+        _enemPideAyuda->SetPedirAyuda(false);
+        _enemPideAyuda = nullptr;
+    }
 }
 
 Enemigo* Jugando::getEnemigoPideAyuda()

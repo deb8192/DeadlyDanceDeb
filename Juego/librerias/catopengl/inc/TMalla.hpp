@@ -32,6 +32,8 @@ class TMalla : public TEntidad
         unsigned short getFrameInicio();
         unsigned short getFrameFinal();
         unsigned short getFrameActual();
+        void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+        void setTexture(const char * _ruta);
 
 };
 
