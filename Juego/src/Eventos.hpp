@@ -14,16 +14,17 @@ namespace idsEventos
         KEY_G_DEBUG,    // DEBUG
         KEY_1,
         KEY_2,
-        KEY_U,
+        KEY_U,          // DESACTIVAR FISICAS JUGADOR
 
         // TO DO: poner para que se utilizan
         KEY_ESPACIO,    // ATAQUE NORMAL
         KEY_ACEPTAR,    // --------------- POR AHORA NO SE SABE
         KEY_B,          // TRASLADAR JUGADOR AL BOSS
-        KEY_C,          // ACTIVAR/DESACTIVAR PATHFINDING
+        KEY_C,          // MULTICAMARA
         KEY_E,          // COGER/SOLTAR OBJETOS
-        KEY_I,          // --------------- POR AHORA NADA
+        KEY_I,          // TRASLADAR JUGADOR DONDE COFRE ARANA
         KEY_J,          // BAJAR VIDA
+        KEY_H,          // SUBIR VIDA
         KEY_Z,          // --------------- POR AHORA NADA
         KEY_Q,          // ATAQUE ESPECIAL
         RMOUSE_DOWN,    // ATAQUE ESPECIAL

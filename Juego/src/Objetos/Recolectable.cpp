@@ -9,6 +9,8 @@ Recolectable::Recolectable()
 Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
     int anc, int lar, int alt, float x, float y, float z, unsigned short tipoObj)
 {
+    Constantes constantes;
+
     // INdrawable
     posIni.x = x;
     posIni.y = y;
@@ -18,12 +20,23 @@ Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
     cadena_nombre = new char[sizeof(name_nombre)];
     strcpy(cadena_nombre, name_nombre.c_str());
 
-    codigoObjeto = codigo;
-    potenciaAtaque = ataque;
     nombreObjeto = cadena_nombre;
     ancho = anc;
     largo = lar;
     alto = alt;
+
+    if ((tipoObj >= constantes.ARMA_INI) && 
+        (tipoObj <= constantes.ARMA_FIN))
+    {
+        potenciaAtaque = ataque;
+        codigoObjeto = constantes.ARMA;
+    }
+    else // Los powerups y la llave no tienen ataque
+    {
+        potenciaAtaque = 0;
+        codigoObjeto = constantes.POWERUP;
+        // Si es una llave, se reasigna en el switch
+    }
 
     //INobjetos
     tipoObjeto = tipoObj;
@@ -70,6 +83,7 @@ Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
         {
             _modelo = "assets/models/llave.obj";
             _textura = nullptr;
+            codigoObjeto = codigo;
         }
         break;
     }

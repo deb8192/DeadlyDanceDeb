@@ -250,16 +250,16 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int ancho = 1;//nos devuelve un int
         int largo = 1;//nos devuelve un int
         int alto = 5;//nos devuelve un int
-        // El modelo esta dentro de sus clases de jugadores
+        // El modelo y la textura estan dentro de sus clases de jugadores
 
         switch (tipoJug)
         {
             case 2:
-                _jugador = new Bailaora(Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
+                _jugador = new Bailaora(tipoJug,Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
                 break;
 
             default:
-                _jugador = new Heavy(Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
+                _jugador = new Heavy(tipoJug,Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
                 break;
         }
         _jugador->setID(++id);
