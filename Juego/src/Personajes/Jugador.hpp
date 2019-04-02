@@ -78,7 +78,6 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         void setAtaque(int ataq);
         void setArma(Arma* arma);
         void setArmaEspecial(int ataque);
-        void setNombre(const char* nombre);
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
@@ -120,7 +119,6 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         int getAtaque();
         Arma* getArma();
         Arma* getArmaEspecial();
-        const char* getNombre();//borrar
         int getSuerte();
         int getDanyoCritico();
         int getProAtaCritico();

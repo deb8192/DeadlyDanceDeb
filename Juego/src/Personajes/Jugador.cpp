@@ -62,7 +62,6 @@ Jugador::~Jugador()
 
     _rutaArmaEspecial = nullptr;
     _rutaTexturaArmaEspecial = nullptr;
-    _nombreJugador = nullptr;
 
     dinero = 0;
 
@@ -816,11 +815,6 @@ Arma* Jugador::getArmaEspecial()
     return _armaEspecial;
 }
 
-const char* Jugador::getNombre()//borrar
-{
-    return _nombreJugador;
-}
-
 int Jugador::getSuerte()
 {
     return -1;
@@ -1081,12 +1075,7 @@ void Jugador::setArma(Arma* arma)
 void Jugador::setArmaEspecial(int ataque)
 {
     Constantes constantes;
-    _armaEspecial = new Arma(ataque, _nombreJugador,3,3,3,constantes.ARMA);
-}
-
-void Jugador::setNombre(const char* nombre)
-{
-    _nombreJugador = nombre;
+    _armaEspecial = new Arma(ataque,3,3,3,constantes.ARMA);
 }
 
 void Jugador::setSuerte(int suer)

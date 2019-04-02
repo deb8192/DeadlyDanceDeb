@@ -6,7 +6,7 @@ Recolectable::Recolectable()
 
 }
 
-Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
+Recolectable::Recolectable(int codigo, int ataque, 
     int anc, int lar, int alt, float x, float y, float z, unsigned short tipoObj)
 {
     Constantes constantes;
@@ -16,11 +16,6 @@ Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
     posIni.y = y;
     posIni.z = z;
 
-    std::string name_nombre(nombre);
-    cadena_nombre = new char[sizeof(name_nombre)];
-    strcpy(cadena_nombre, name_nombre.c_str());
-
-    nombreObjeto = cadena_nombre;
     ancho = anc;
     largo = lar;
     alto = alt;
@@ -98,7 +93,6 @@ Recolectable::~Recolectable()
     cantidad = 0;
 
     // INobjetos
-    nombreObjeto = nullptr;
     delete cadena_nombre;
 
     ancho = 0;
@@ -278,11 +272,6 @@ int Recolectable::GetPosicionArrayObjetos()
 int Recolectable::getCodigo()
 {
     return codigoObjeto;
-}
-
-const char* Recolectable::getNombre()
-{
-    return nombreObjeto;
 }
 
 float Recolectable::getX()
