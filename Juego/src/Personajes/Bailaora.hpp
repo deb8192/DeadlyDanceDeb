@@ -6,7 +6,7 @@
 class Bailaora : public Jugador
 {
     public:
-        Bailaora(int nX,int nY,int nZ, int ancho, int largo, int alto, int accion, int maxVida);
+        Bailaora(unsigned short tipoJug,int nX,int nY,int nZ, int ancho, int largo, int alto, int accion, int maxVida);
         ~Bailaora();
 
         void AtacarEspecialUpdate(int* danyo, vector<Enemigo*> &_getEnemigos);
