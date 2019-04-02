@@ -610,7 +610,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
 
         case 2: //Arma
         {
-            Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
+            Recolectable* _rec = new Recolectable(codigo,ataque,ancho,largo,alto,x,y,z,tipoObj);
             _rec->setID(_recolectables.size());
             _rec->setPosiciones(x,y,z);
             posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
@@ -643,7 +643,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
 
         case 4: //Powerups
         {
-            Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
+            Recolectable* _rec = new Recolectable(codigo,ataque,ancho,largo,alto,x,y,z,tipoObj);
             _rec->setID(_powerup.size());
             _rec->setPosiciones(x,y,z);
             posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());

@@ -605,11 +605,9 @@ void Jugando::UpdateIA()
                     int*  propiedades = new int [6];
                     unsigned short tipoObj = 0;
                     int ataque = 0;
-                    const char* nombre = "";
                 if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A || _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
                 {
                     ataque = 0;
-                    nombre = "llave_boss";
                     accion = 2;
                     codigo = 20;
                     tipoObj = constantes.LLAVE;
@@ -635,18 +633,15 @@ void Jugando::UpdateIA()
                         {
                         ataque = 0;
                         tipoObj = constantes.VIDA;
-                        nombre = "vida_up";
                         }
                         else if(cualpower == 1)
                         {
                         ataque = 1;
                         tipoObj = constantes.ENERGIA;
-                        nombre = "energy_up";
                         }
                         else if(cualpower == 2)
                         {
                         tipoObj = constantes.ORO;
-                        nombre = "gold_up";
                         //oro entre 1 y 5 monedas
                         srand(time(NULL));
                         int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
@@ -656,7 +651,7 @@ void Jugando::UpdateIA()
                     }
                 }
                 //crear objeto
-                this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObj);
+                this->CrearObjeto(codigo,accion,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObj);
 
                 if (_enemigos[i] != nullptr && _enemigos[i]->GetPedirAyuda()) {
                     enemDejarDePedirAyuda();
@@ -927,7 +922,7 @@ void Jugando::CrearJugador()
 
 }
 
-void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp,
+void Jugando::CrearObjeto(int codigo, int accion, int ataque, int rp,
     int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, int* propiedades,
     unsigned short tipoObjeto)
 {
@@ -937,7 +932,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
         (tipoObjeto <= constantes.ARMA_FIN)) ||
         (tipoObjeto == constantes.LLAVE))
     {
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObjeto);
+        Recolectable* _rec = new Recolectable(codigo,ataque,ancho,largo,alto,x,y,z,tipoObjeto);
         _rec->setID(_recolectables.size());
         _rec->setPosiciones(x,y,z);
         int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
@@ -948,7 +943,7 @@ void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque
     }
     else  // Comprobamos si hay que crear un powerup
     {
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObjeto);
+        Recolectable* _rec = new Recolectable(codigo,ataque,ancho,largo,alto,x,y,z,tipoObjeto);
         _rec->setID(_powerup.size());
         _rec->setPosiciones(x,y,z);
         int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
@@ -1005,7 +1000,7 @@ void Jugando::ConectarWaypoints()
         {
             //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)_recolectables[rec_col];
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
-                _recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),
+                _recolectables[rec_col]->getAncho(),
                 _recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),
                 _recolectables[rec_col]->GetTipoObjeto());
             _jugador->setArma(nuArma);
@@ -1025,14 +1020,14 @@ void Jugando::ConectarWaypoints()
         {
             //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
             Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),
-                _jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),
+                _jugador->getArma()->getAncho(),
                 _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),
                 _jugador->getX(),_jugador->getY(), _jugador->getZ(),
                 _jugador->getArma()->GetTipoObjeto());
 
             nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
-                _recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),
+                _recolectables[rec_col]->getAncho(),
                 _recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),
                 _recolectables[rec_col]->GetTipoObjeto());
             _motor->EraseArma();
@@ -1068,7 +1063,7 @@ void Jugando::DejarObjeto()
     {
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
         Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),
-            _jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),
+            _jugador->getArma()->getAncho(),
             _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),
             _jugador->getX(),_jugador->getY(), _jugador->getZ(),
             _jugador->getArma()->GetTipoObjeto());
@@ -1279,7 +1274,6 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
   int z = _newObjeto->getZ();
   int ancho = 2 ,largo = 2,alto = 2;
   int codigo,ataque;
-  const char* nombre;
   int*  propiedades = new int [6];
     unsigned short tipoObjeto;
     Constantes constantes;
@@ -1291,7 +1285,6 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     codigo = 0; //0:arma
     srand(time(NULL));
     ataque = 22 + rand() % (33 - 22);
-    nombre = "guitarra";
     tipoObjeto = constantes.GUITARRA;
     cout << "Hay una guitarra!" << endl;
   }
@@ -1302,7 +1295,6 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     codigo = 0; //0:arma
     srand(time(NULL));
     ataque = 15 + rand() % (26 - 15);
-    nombre = "arpa";
     tipoObjeto = constantes.ARPA;
     cout << "Hay una arpa!" << endl;
   }
@@ -1311,7 +1303,6 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     //Oro
     accion = 4;
     codigo = -2;
-    nombre = "gold_up";
     tipoObjeto = constantes.ORO;
     //Cantidad de oro entre 20 y 30
     srand(time(NULL));
@@ -1319,7 +1310,7 @@ void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
     cout << "Hay " << orocant << " de Oro!" << endl;
     propiedades[0] = orocant; //para pasarlo a crear objeto
   }
-   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObjeto);
+   this->CrearObjeto(codigo,accion,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObjeto);
 }
 
 void Jugando::activarPowerUp()

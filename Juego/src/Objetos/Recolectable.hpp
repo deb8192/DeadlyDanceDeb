@@ -12,7 +12,7 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
     public:
         Recolectable();//esto le deja a la entidad el constructor por defecto
         ~Recolectable();//destructor del objeto
-        Recolectable(int codigo, int ataque, const char* nombre,
+        Recolectable(int codigo, int ataque,
             int anc, int lar, int alt, float x, float y, float z, unsigned short tipoObj);
 
         //drawable metodos
@@ -57,7 +57,6 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         int GetPosicionArrayObjetos();
         int getCodigo();
         int getAtaque();
-        const char* getNombre();
         float getAncho();
         float getLargo();
         float getAlto();
