@@ -131,6 +131,10 @@ void Arma::RotarEntidad(float updTime)
     {
         pt = 1.0f;
     }
+    else if(pt < 0.0f)
+    {
+        pt = 0.0f;
+    }
 
     if(rotFutura.y == 0.0 && rotFutura.y < rotPasada.y)
     {

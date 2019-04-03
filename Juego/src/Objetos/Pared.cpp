@@ -10,7 +10,45 @@ Pared::Pared(const char* nombre,
     posIni.x = x;
     posIni.y = y;
     posIni.z = z;
+
+    posActual.x = 0.0f;
+    posActual.y = 0.0f;
+    posActual.z = 0.0f;
+
+    posFutura.x = 0.0f;
+    posFutura.y = 0.0f;
+    posFutura.z = 0.0f;
+
+    posPasada.x = 0.0f;
+    posPasada.y = 0.0f;
+    posPasada.z = 0.0f;
+
+    rotActual.x = 0.0f;
+    rotActual.y = 0.0f;
+    rotActual.z = 0.0f;
+
+    rotFutura.x = 0.0f;
+    rotFutura.y = 0.0f;
+    rotFutura.z = 0.0f;
+
+    rotPasada.x = 0.0f;
+    rotPasada.y = 0.0f;
+    rotPasada.z = 0.0f;
+
+    posFisicas.x = 0.0f;
+    posFisicas.y = 0.0f;
+    posFisicas.z = 0.0f;
+
+    rotation = 0.0f;
+    moveTime = 0.0f;
+    rotateTime = 0.0f;
+
+    animacion = 0;
+    animacionAnterior = 0;
     
+    posicionArrayObjetos = 0;
+
+    //INobjetos
     std::string name_nombre(nombre);
     cadena_nombre = new char[sizeof(name_nombre)];
     strcpy(cadena_nombre, name_nombre.c_str());
@@ -19,32 +57,26 @@ Pared::Pared(const char* nombre,
     ancho = anc;
     largo = lar;
     alto = alt;
-    
-    posicionArrayObjetos = 0;
-    
-    //INobjetos
     tipoObjeto = tipoObj;
+
+    //Pared
+    tam = 2;
 }
 
 Pared::~Pared()
 {
     // Pared
     //_motor = nullptr;
-    posicionArrayObjetos=0;
 
     // INobjetos
     nombreObjeto = nullptr;
     delete cadena_nombre;
-
-    /*ruta_objeto = nullptr;
-    delete cadena_objeto;
-
-    ruta_textura = nullptr;
-    delete cadena_textura;*/
+    cadena_nombre = nullptr;
     
     ancho = 0;
     largo = 0;
     alto  = 0;
+    tipoObjeto = 0;
 
     // INdrawable
     posIni.x = 0;
@@ -78,13 +110,17 @@ Pared::~Pared()
     rotFutura.x = 0;
     rotFutura.y = 0;
     rotFutura.z = 0;
-    
+
     moveTime = 0;
     rotateTime = 0;
     rotation = 0;
     id = 0;
     animacion = 0;
     animacionAnterior = 0;
+    
+    //Pared
+    tam = 0;
+    posicionArrayObjetos = 0;
 }
 
 
@@ -122,6 +158,10 @@ void Pared::RotarEntidad(float updTime)
     if(pt > 1.0f)
     {
         pt = 1.0f;
+    }
+    else if(pt < 0.0f)
+    {
+        pt = 0.0f;
     }
 
     rotActual.x = rotPasada.x * (1 - pt) + rotFutura.x * pt;

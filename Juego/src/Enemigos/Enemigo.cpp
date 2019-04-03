@@ -739,6 +739,10 @@ void Enemigo::RotarEntidad(float updTime)
     {
         pt = 1.0f;
     }
+    else if(pt < 0.0f)
+    {
+        pt = 0.0f;
+    }
 
     rotActual.x = rotPasada.x * (1 - pt) + rotFutura.x * pt;
     rotActual.y = rotPasada.y * (1 - pt) + rotFutura.y * pt;
