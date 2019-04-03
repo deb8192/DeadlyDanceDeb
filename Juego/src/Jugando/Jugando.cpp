@@ -337,7 +337,7 @@ void Jugando::InteractuarNivel()
     {
         if(cambia <= 0)
         {
-            cout<<"Detecta el objeto"<<endl;
+            //cout<<"Detecta el objeto"<<endl;
             this->AccionarMecanismo(int_col);
         }
         cambia++;
@@ -1077,172 +1077,174 @@ void Jugando::AccionarMecanismo(int int_col)
     bool coincide = false;
     Interactuable* _inter = _interactuables.at(int_col);
 
-    //Si es una puerta sin llave o palanca asociada
-    if(_inter->getCodigo() == 0)
+    if(_inter != nullptr)
     {
-        //Se acciona o desacciona el mecanismo segun su estado actual
-        bool abrir = _inter->accionar();
-        unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(int_col);
-        if(abrir)
-        {
-            //Se abre/acciona la puerta / el mecanismo
-            //sonido
-            //_motora->getEvent("AbrirPuerta")->setVolume(0.8f);
-            _motora->getEvent("AbrirPuerta")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
-            _motora->getEvent("AbrirPuerta")->start();
-            _inter->setNewRotacion(_inter->getRX(),
-                _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
-                _inter->getRZ());
-            _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(),
-                _inter->getRX(), _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
-                _inter->getRZ(), _inter->GetDesplazamientos() , posicion);
-        }
-        else
-        {
-            //Se cierra/desacciona la puerta / el mecanismo
-            _motora->getEvent("CerrarPuerta")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
-            _motora->getEvent("CerrarPuerta")->start();
-            _inter->setNewRotacion(_inter->getRX(),
-                _inter->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
-                _inter->getRZ());
-            _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(),
-                _inter->getRX(),_inter->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
-                _inter->getRZ(), _inter->GetDesplazamientos(), posicion);
-        }
-    }
-    else if(_inter->getCodigo() == -1)
-    {
-        //Cofre no abierto
-        if(!_inter->getAccionado())
-        {
-            _cofreP = (Cofre*)_inter;
-            if (_cofreP->GetEsArana())
-            {
-                AbrirPantallaPuzzle();
-            }
-            else
-            {
-                _cofreP = nullptr;
-                AbrirCofre(_inter);
-            }
-        }
-        else
-        {
-            cout << "Cofre ya abierto" << endl;
-        }
-    }
-    else if(_inter->GetTipoObjeto() == constantes.PALANCA)
-    {
-        i = 0;
-        coincide = false;
-        //Busca la puerta que coincide con la palanca que se esta activando
-        while(i < _interactuables.size() && !coincide)
-        {
-            // TO DO: comprobar 1º si no es null, despues que sea una palanca y en caso de no serlo, que no coincida el codigo
-            if((_interactuables.at(i)->getCodigo() != _inter->getCodigo()) ||
-                (_interactuables.at(i)->GetTipoObjeto() == constantes.PALANCA))
-            {
-                i++;
-            }
-            else
-            {
-                coincide = true;
-            }
-
-        }
-        if(coincide)
-        {
-            cout<<"La palanca acciona una puerta"<<endl;
-            //Se acciona o desacciona el mecanismo segun su estado actual
-            bool activar = _inter->accionar();
-            bool abrir = _interactuables.at(i)->accionar();
-
-            unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(i);
-            if(abrir)
-            {
-                //Se abre/acciona la puerta / el mecanismo
-                _motora->getEvent("AbrirPuerta")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
-                _motora->getEvent("AbrirPuerta")->start();
-                _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ());
-                _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
-            }
-            else
-            {
-                //Se cierra/desacciona la puerta / el mecanismo
-                _motora->getEvent("CerrarPuerta")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
-                _motora->getEvent("CerrarPuerta")->start();
-                _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ());
-                _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
-            }
-
-            if(activar)
-            {
-                //Se abre/acciona la puerta / el mecanismo
-                #ifdef WEMOTOR
-                    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()-50);
-                #else
-                    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()+50);
-                #endif
-            }
-            else
-            {
-                //Se cierra/desacciona la puerta / el mecanismo
-                #ifdef WEMOTOR
-                    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()+50);
-                #else
-                    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()-50);
-                #endif
-
-            }
-        }
-    }
-    else
-    {
-        i = 0;
-        coincide = false;
-        //Comprueba las llaves que tiene el jugador
-        while(i < _jugador->GetLlaves().size() && !coincide)
-        {
-            if(_jugador->GetLlaves().at(i)->GetCodigoPuerta() == _inter->getCodigo())
-            {
-                //Si el jugador tiene la llave cuyo codigo coincide con la puerta la abre
-                coincide = true;
-            }
-            i++;
-        }
-        if(coincide)
+        //Si es una puerta sin llave o palanca asociada
+        if(_inter->getCodigo() == 0)
         {
             //Se acciona o desacciona el mecanismo segun su estado actual
             bool abrir = _inter->accionar();
             unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(int_col);
             if(abrir)
             {
-                if(_inter->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
-                {
-                    _motora->getEvent("Nivel1")->stop();
-                    _motora->getEvent("Nivel2")->setVolume(0.4);
-                    _motora->getEvent("Nivel2")->start(); //Reproducir musica juego
-                    enSalaBoss = true;
-                    this->CargarBossEnMemoria();
-                }
                 //Se abre/acciona la puerta / el mecanismo
-                _motora->getEvent("AbrirCerradura")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
-                _motora->getEvent("AbrirCerradura")->setVolume(0.5);
-                _motora->getEvent("AbrirCerradura")->start();
-                _inter->setNewRotacion(_inter->getRX(), _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _inter->getRZ());
-                _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(), _inter->getRX(), _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _inter->getRZ(), _inter->GetDesplazamientos(), posicion);
+                //sonido
+                //_motora->getEvent("AbrirPuerta")->setVolume(0.8f);
+                _motora->getEvent("AbrirPuerta")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
+                _motora->getEvent("AbrirPuerta")->start();
+                _inter->setNewRotacion(_inter->getRX(),
+                    _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
+                    _inter->getRZ());
+                _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(),
+                    _inter->getRX(), _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
+                    _inter->getRZ(), _inter->GetDesplazamientos() , posicion);
             }
             else
             {
                 //Se cierra/desacciona la puerta / el mecanismo
                 _motora->getEvent("CerrarPuerta")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
                 _motora->getEvent("CerrarPuerta")->start();
-                _inter->setNewRotacion(_inter->getRX(), _inter->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _inter->getRZ());
-                _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(), _inter->getRX(), _inter->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _inter->getRZ(), _inter->GetDesplazamientos(), posicion);
-                }
+                _inter->setNewRotacion(_inter->getRX(),
+                    _inter->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
+                    _inter->getRZ());
+                _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(),
+                    _inter->getRX(),_inter->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS),
+                    _inter->getRZ(), _inter->GetDesplazamientos(), posicion);
+            }
         }
+        else if(_inter->getCodigo() == -1)
+        {
+            //Cofre no abierto
+            if(!_inter->getAccionado())
+            {
+                _cofreP = (Cofre*)_inter;
+                if (_cofreP->GetEsArana())
+                {
+                    AbrirPantallaPuzzle();
+                }
+                else
+                {
+                    _cofreP = nullptr;
+                    AbrirCofre(_inter);
+                }
+            }
+            /*else
+            {
+                cout << "Cofre ya abierto" << endl;
+            }*/
+        }
+        else if(_inter->GetTipoObjeto() == constantes.PALANCA)
+        {
+            i = 0;
+            coincide = false;
+            //Busca la puerta que coincide con la palanca que se esta activando
+            while(i < _interactuables.size() && !coincide)
+            {
+                // TO DO: comprobar 1º si no es null, despues que sea una palanca y en caso de no serlo, que no coincida el codigo
+                if(_interactuable != nullptr && ((_interactuables.at(i)->GetTipoObjeto() == constantes.PALANCA) || (_interactuables.at(i)->getCodigo() != _inter->getCodigo())))
+                {
+                    i++;
+                }
+                else
+                {
+                    coincide = true;
+                }
+
+            }
+            if(coincide)
+            {
+                //cout<<"La palanca acciona una puerta"<<endl;
+                //Se acciona o desacciona el mecanismo segun su estado actual
+                bool activar = _inter->accionar();
+                bool abrir = _interactuables.at(i)->accionar();
+
+                unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(i);
+                if(abrir)
+                {
+                    //Se abre/acciona la puerta / el mecanismo
+                    _motora->getEvent("AbrirPuerta")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
+                    _motora->getEvent("AbrirPuerta")->start();
+                    _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ());
+                    _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
+                }
+                else
+                {
+                    //Se cierra/desacciona la puerta / el mecanismo
+                    _motora->getEvent("CerrarPuerta")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
+                    _motora->getEvent("CerrarPuerta")->start();
+                    _interactuables.at(i)->setNewRotacion(_interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ());
+                    _fisicas->updatePuerta(_interactuables.at(i)->getX(), _interactuables.at(i)->getY(), _interactuables.at(i)->getZ(), _interactuables.at(i)->getRX(), _interactuables.at(i)->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _interactuables.at(i)->getRZ(), _interactuables.at(i)->GetDesplazamientos(), posicion);
+                }
+
+                if(activar)
+                {
+                    //Se abre/acciona la puerta / el mecanismo
+                    #ifdef WEMOTOR
+                        _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()-50);
+                    #else
+                        _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()+50);
+                    #endif
+                }
+                else
+                {
+                    //Se cierra/desacciona la puerta / el mecanismo
+                    #ifdef WEMOTOR
+                        _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()+50);
+                    #else
+                        _inter->setNewRotacion(_inter->getRX(), _inter->getRY(), _inter->getRZ()-50);
+                    #endif
+
+                }
+            }
+        }
+        else
+        {
+            i = 0;
+            coincide = false;
+            //Comprueba las llaves que tiene el jugador
+            while(i < _jugador->GetLlaves().size() && !coincide)
+            {
+                if(_jugador->GetLlaves().at(i)->GetCodigoPuerta() == _inter->getCodigo())
+                {
+                    //Si el jugador tiene la llave cuyo codigo coincide con la puerta la abre
+                    coincide = true;
+                }
+                i++;
+            }
+            if(coincide)
+            {
+                //Se acciona o desacciona el mecanismo segun su estado actual
+                bool abrir = _inter->accionar();
+                unsigned int posicion = _fisicas->GetRelacionInteractuablesObstaculos(int_col);
+                if(abrir)
+                {
+                    if(_inter->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
+                    {
+                        _motora->getEvent("Nivel1")->stop();
+                        _motora->getEvent("Nivel2")->setVolume(0.4);
+                        _motora->getEvent("Nivel2")->start(); //Reproducir musica juego
+                        enSalaBoss = true;
+                        this->CargarBossEnMemoria();
+                    }
+                    //Se abre/acciona la puerta / el mecanismo
+                    _motora->getEvent("AbrirCerradura")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
+                    _motora->getEvent("AbrirCerradura")->setVolume(0.5);
+                    _motora->getEvent("AbrirCerradura")->start();
+                    _inter->setNewRotacion(_inter->getRX(), _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _inter->getRZ());
+                    _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(), _inter->getRX(), _inter->getRY() + (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _inter->getRZ(), _inter->GetDesplazamientos(), posicion);
+                }
+                else
+                {
+                    //Se cierra/desacciona la puerta / el mecanismo
+                    _motora->getEvent("CerrarPuerta")->setPosition(_inter->getX(), _inter->getY(), _inter->getZ());
+                    _motora->getEvent("CerrarPuerta")->start();
+                    _inter->setNewRotacion(_inter->getRX(), _inter->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _inter->getRZ());
+                    _fisicas->updatePuerta(_inter->getX(), _inter->getY(), _inter->getZ(), _inter->getRX(), _inter->getRY() - (constantes.PI_MEDIOS + constantes.PI_CUARTOS), _inter->getRZ(), _inter->GetDesplazamientos(), posicion);
+                    }
+            }
+        }
+        _inter = nullptr;
     }
-    _inter = nullptr;
 }
 
 void Jugando::activarPowerUp()
@@ -1257,19 +1259,19 @@ void Jugando::activarPowerUp()
         //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
         if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.VIDA /*&& _jugador->getVida() < 100*/)
         {
-            cout << "PowerUP Vida! TOTAL:" << _jugador->getVida() << endl;
+            //cout << "PowerUP Vida! TOTAL:" << _jugador->getVida() << endl;
             _jugador->ModificarVida(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ENERGIA /*&& _jugador->getBarraAtEs() < 100*/)
         {
-            cout << "PowerUP Energia! TOTAL:" << _jugador->getBarraAtEs() << endl;
+            //cout << "PowerUP Energia! TOTAL:" << _jugador->getBarraAtEs() << endl;
            _jugador->ModificarBarraAtEs(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ORO)
         {
-            cout << "Recoges " << _powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
+            //cout << "Recoges " << _powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
             _jugador->ModificarDinero(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
@@ -1362,8 +1364,8 @@ void Jugando::updateAtEsp()
             _jugador->setLastTimeAtEsp(tiempoActual);
             _jugador->setTimeAtEsp(tiempoAtaqueEsp);
             danyo = _jugador->AtacarEspecial();
-            cout << "tiempo: " << _jugador->getTimeAtEsp() << endl;
-            cout << "existe: " << _motor->getArmaEspecial() << endl;
+            //cout << "tiempo: " << _jugador->getTimeAtEsp() << endl;
+            //cout << "existe: " << _motor->getArmaEspecial() << endl;
         }
         /*if(_jugador->getTimeAtEsp() > 0.f && ((int) (_jugador->getTimeAtEsp()*  100) % 10 >= 4) && ((int) (_jugador->getTimeAtEsp()*  100) % 10 <= 4))
         {
@@ -1376,7 +1378,7 @@ void Jugando::updateAtEsp()
         #ifdef WEMOTOR
             if(_jugador->getTimeAtEsp() <= 0.5f && _motor->getArmaEspecial()) //Zona de pruebas
             {
-                 cout << "SE BORRA" << endl;
+                 //cout << "SE BORRA" << endl;
                 _motor->borrarArmaEspecial();
             }
         #else
@@ -1458,7 +1460,7 @@ void Jugando::enemDejarDePedirAyuda()
 {
     if(_enemPideAyuda != nullptr)
     {
-        cout << "\e[42m Deja de pedir ayuda \e[0m" << endl;
+        //cout << "\e[42m Deja de pedir ayuda \e[0m" << endl;
         _enemPideAyuda->SetPedirAyuda(false);
         _enemPideAyuda = nullptr;
     }
