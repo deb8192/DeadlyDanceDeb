@@ -4,8 +4,6 @@
 #include "../ConstantesComunes.hpp"
 #include "../Motores/MotorFisicas.hpp"
 
-#define NOMBREHEAVY "Heavy"
-#define NOMBREBAILAORA "Bailaora"
 
 Jugador::Jugador()
 {
@@ -28,7 +26,7 @@ Jugador::Jugador()
     _armaEquipada = NULL;
 }
 
-Jugador::Jugador(int nX,int nY,int nZ, int ancho,
+Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
     int largo, int alto, int accion, int maxVida)
 : Jugador()
 {
@@ -36,6 +34,7 @@ Jugador::Jugador(int nX,int nY,int nZ, int ancho,
     _fisicas->crearCuerpo(accion,0,nX/2,nY/2,nZ/2,3,2,2,2,1,0,0);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
     _fisicas = nullptr;
 
+    this->tipoJug = tipoJug;
     this->ancho = ancho;
     this->largo = largo;
     this->alto = alto;
@@ -63,7 +62,6 @@ Jugador::~Jugador()
 
     _rutaArmaEspecial = nullptr;
     _rutaTexturaArmaEspecial = nullptr;
-    _nombreJugador = nullptr;
 
     dinero = 0;
 
@@ -327,7 +325,7 @@ int Jugador::Atacar(int i)
             _motora->getEvent("SinArma")->start();
         }
         //ATAQUE CUERPO A CUERPO
-        else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
+        else if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)
         {
             //Crear cuerpo de colision de ataque delante del jugador
             _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,1,5,0,0,4,0,0);
@@ -335,7 +333,7 @@ int Jugador::Atacar(int i)
             _motora->getEvent("GolpeGuitarra")->start();
         }
         //ATAQUE A DISTANCIA
-        else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
+        else if(this->getArma()->GetTipoObjeto() == constantes.ARPA)
         {
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj",NULL);
             //Crear cuerpo de colision de ataque delante del jugador
@@ -409,19 +407,23 @@ int Jugador::AtacarEspecial()
             _armaEspecial->initPosicionesFisicas(atespx/2, getY()/2, atespz/2);
 
             //ATAQUE ESPECIAL DEL HEAVY
-            if(strcmp(_armaEspecial->getNombre(), NOMBREHEAVY) == 0)
+            if(tipoJug == constantes.HEAVY)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                _fisicas->crearCuerpo(0,0,_armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),2,8,1,8,5,0,0);
+                _fisicas->crearCuerpo(0,0,
+                    _armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),
+                    2,8,1,8,5,0,0);
                 _motora->getEvent("GuitarraEspecial")->setVolume(0.5f);
                 _motora->getEvent("GuitarraEspecial")->start();
             }
-            //ATAQUE ESPECIAL DE LA BAILAORA
-            else if(strcmp(_armaEspecial->getNombre(), NOMBREBAILAORA) == 0)
+            //ATAQUE ESPECIAL DE LA BAILAORA (castanyuelas)
+            else if(tipoJug == constantes.BAILAORA)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                _fisicas->crearCuerpo(0,0,_armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),2,8,8,8,5,0,0);
-                _motora->getEvent("Arpa")->start();
+                _fisicas->crearCuerpo(0,0,
+                    _armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),
+                    2,8,8,8,5,0,0);
+                _motora->getEvent("Arpa")->start(); // TO DO: Evento de sonido temporal
             }
         }
 
@@ -464,12 +466,12 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
             _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
             _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,2,1,1,2);
         }
-        else if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)
+        else if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)
         {
             _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
             _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,3,1,3,1);
         }
-        else if(strcmp(this->getArma()->getNombre(),"arpa") == 0)
+        else if(this->getArma()->GetTipoObjeto() == constantes.ARPA)
         {
             float velocidadflecha = 3.0f;
             int distance = 1.5;
@@ -817,11 +819,6 @@ Arma* Jugador::getArmaEspecial()
     return _armaEspecial;
 }
 
-const char* Jugador::getNombre()
-{
-    return _nombreJugador;
-}
-
 int Jugador::getSuerte()
 {
     return -1;
@@ -1052,30 +1049,25 @@ void Jugador::setAtaque(int ataq)
 
 void Jugador::setArma(Arma* arma)
 {
+    Constantes constantes;
     _armaEquipada = arma;
 
     if(_armaEquipada)
     {
-        if(strcmp(this->getArma()->getNombre(),"guitarra") == 0)//entonces es la guitarra cuerpo a cuerpo
+        if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)//entonces es la guitarra cuerpo a cuerpo
         {
             _interfaz->setArma(2);
         }
 
-        if(strcmp(this->getArma()->getNombre(),"arpa") == 0)//entonces es la guitarra cuerpo a cuerpo
+        if(this->getArma()->GetTipoObjeto() == constantes.ARPA)//entonces es el arpa a distancia
         {
             _interfaz->setArma(3);
         }
 
-        if(strcmp(this->getArma()->getNombre(),"llave") == 0)//entonces es la guitarra cuerpo a cuerpo
+        if(this->getArma()->GetTipoObjeto() == constantes.LLAVE)//entonces es la llave
         {
             _interfaz->setArma(1);
         }
-
-        // if(strcmp(this->getArma()->getNombre(),"dinero") == 0)//entonces es la guitarra cuerpo a cuerpo
-        // {
-        //     dinero = dinero+1;
-        //     _interfaz->setArma(0);
-        // }
     }
     else
     {
@@ -1087,12 +1079,7 @@ void Jugador::setArma(Arma* arma)
 void Jugador::setArmaEspecial(int ataque)
 {
     Constantes constantes;
-    _armaEspecial = new Arma(ataque, _nombreJugador,3,3,3,constantes.ARMA);
-}
-
-void Jugador::setNombre(const char* nombre)
-{
-    _nombreJugador = nombre;
+    _armaEspecial = new Arma(ataque,3,3,3,constantes.ARMA);
 }
 
 void Jugador::setSuerte(int suer)

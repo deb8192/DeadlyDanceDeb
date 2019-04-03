@@ -1,8 +1,8 @@
 #include "Heavy.hpp"
 #include "../ConstantesComunes.hpp"
 
-Heavy::Heavy(int nX,int nY,int nZ,int ancho,int largo,int alto,int accion, int maxVida)
-: Jugador(nX,nY,nZ,ancho,largo,alto,accion,maxVida)
+Heavy::Heavy(unsigned short tipoJug,int nX,int nY,int nZ,int ancho,int largo,int alto,int accion, int maxVida)
+: Jugador(tipoJug,nX,nY,nZ,ancho,largo,alto,accion,maxVida)
 {
     #ifdef WEMOTOR
     _modelo = "assets/models/rockero/rockero_rigging_000001.obj";

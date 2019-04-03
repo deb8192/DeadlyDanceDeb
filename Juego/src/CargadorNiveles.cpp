@@ -250,16 +250,16 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int ancho = 1;//nos devuelve un int
         int largo = 1;//nos devuelve un int
         int alto = 5;//nos devuelve un int
-        // El modelo esta dentro de sus clases de jugadores
+        // El modelo y la textura estan dentro de sus clases de jugadores
 
         switch (tipoJug)
         {
             case 2:
-                _jugador = new Bailaora(Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
+                _jugador = new Bailaora(tipoJug,Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
                 break;
 
             default:
-                _jugador = new Heavy(Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
+                _jugador = new Heavy(tipoJug,Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
                 break;
         }
         _jugador->setID(++id);
@@ -604,23 +604,27 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
     int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj)
 {
     int posicionObjeto;
-
-    switch (accion)
+    switch (tipoObj)
     {
-
-        case 2: //Arma
+        case 1: // LLAVE
         {
-            Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
+            ancho = 2;
+            largo = 2;
+            alto = 2;
+            Recolectable* _rec = new Recolectable(ancho,largo,alto,x,y,z,tipoObj,
+                accion, rp, despX, despZ);
             _rec->setID(_recolectables.size());
-            _rec->setPosiciones(x,y,z);
             posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
             _rec->SetPosicionArrayObjetos(posicionObjeto);
+            _rec->setCodigo(codigo);
             _recolectables.push_back(move(_rec));
             _rec = nullptr;
         }
         break;
 
-        case 3: //Puertas o palancas
+        case 0: // PALANCAS
+        case 2: // PUERTA2
+        case 3: // PUERTA
         {
             Interactuable* _inter;
             if (tipoObj == 0) // Palancas
@@ -641,20 +645,8 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         }
         break;
 
-        case 4: //Powerups
-        {
-            Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
-            _rec->setID(_powerup.size());
-            _rec->setPosiciones(x,y,z);
-            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
-            _rec->SetPosicionArrayObjetos(posicionObjeto);
-            _rec->setCantidad(propiedades[0]); //cantidad
-            _powerup.push_back(move(_rec));
-            _rec = nullptr;
-        }
-        break;
         //TO DO corregir la creacion de obstaculos para hacerla correctamente
-        case 5: //Paredes rompibles
+        case 14: // PARED_ROMPIBLE
         {
             Pared* _par = new Pared(nombre,ancho,largo,alto,x,y,z,tipoObj);
             _par->setID(_paredes.size());
@@ -671,7 +663,11 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         break;
     }
 
-    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
+    // TO DO: if temporal
+    Constantes constantes;
+    if (tipoObj != constantes.LLAVE)
+        _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
+    
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
 }

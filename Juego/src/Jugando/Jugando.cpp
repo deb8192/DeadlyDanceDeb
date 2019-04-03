@@ -96,11 +96,12 @@ void Jugando::Iniciar()
     // Cargamos todos los puzzles en memoria
     cargPuzzles.CargarPuzzlesXml();
 
+    Constantes constantes;
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
     #ifdef WEMOTOR
-        CargarNivel(7, 1); //(level, player) 1 = heavy / 2 = bailaora
+        CargarNivel(7, constantes.HEAVY);
     #else
-        CargarNivel(6, 1); //(level, player) 1 = heavy / 2 = bailaora
+        CargarNivel(6, constantes.HEAVY);
     #endif
     //TO DO: hacerle un reserve:
     //_auxiliadores.reserve(xx);
@@ -154,6 +155,7 @@ void Jugando::ValoresPorDefectoJugador()
     _jugador->setAtaque(15);
     _jugador->setArma(NULL);
     _jugador->setArmaEspecial(100);
+    _jugador->setTimeAt(0.0f);
     _jugador->setTimeAtEsp(0.0f);
     _jugador->setDanyoCritico(50);
     _jugador->setProAtaCritico(10);
@@ -244,22 +246,31 @@ void Jugando::ManejarEventos() {
     }
 
     //para modo debug
-    /*if(_motor->EstaPulsado(KEY_G_DEBUG))
+    if(_motor->EstaPulsado(KEY_G_DEBUG))
     {
         _motor->activarDebugGrafico();
         _motor->ResetKey(KEY_G_DEBUG);
-    }*/
+    }
+
+    // Desactivar fisicas jugador
     if(_motor->EstaPulsado(KEY_U))
     {
         desactivarColisionesJugador = !desactivarColisionesJugador;
         _motor->ResetKey(KEY_U);
     }
 
-    // Debug para probar cofres
+    // Multicamara
     if(_motor->EstaPulsado(KEY_C))
     {
-        cargador.TrasladarJugadorACofres();
+        // TO DO:
         _motor->ResetKey(KEY_C);
+    }
+
+    // Debug para probar cofres
+    if(_motor->EstaPulsado(KEY_I))
+    {
+        cargador.TrasladarJugadorACofres();
+        _motor->ResetKey(KEY_I);
     }
 
     if(_motor->EstaPulsado(KEY_Z))
@@ -557,10 +568,18 @@ void Jugando::UpdateIA()
 {
     Constantes constantes;
     /* *********** Teclas para probar cosas *************** */
+    // Bajar vida
     if (_motor->EstaPulsado(KEY_J))
     {
         _motor->ResetKey(KEY_J);
         _jugador->ModificarVida(-20);
+    }
+
+    // Subir vida
+    if (_motor->EstaPulsado(KEY_H))
+    {
+        _motor->ResetKey(KEY_H);
+        _jugador->ModificarVida(20);
     }
     /* **************************************************** */
 
@@ -578,69 +597,31 @@ void Jugando::UpdateIA()
 
             if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte())
             {
-                    //DAtos comunes a todos
-                    int x = _enemigos[i]->getX();
-                    int y = _enemigos[i]->getY();
-                    int z = _enemigos[i]->getZ();
-                    int accion = 4;
-                    int ancho = 0.5 ,largo = 0.5,alto = 0.5;
-                    int codigo = -2;
-                    int*  propiedades = new int [6];
-                    unsigned short tipoObj = 0;
-                    int ataque = 0;
-                    const char* nombre = "";
-                if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A || _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
+                //Datos comunes a todos
+                int x = _enemigos[i]->getX();
+                int y = _enemigos[i]->getY();
+                int z = _enemigos[i]->getZ();
+               
+                if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A || 
+                    _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
                 {
-                    ataque = 0;
-                    nombre = "llave_boss";
-                    accion = 2;
-                    codigo = 20;
-                    tipoObj = constantes.LLAVE;
+                    CrearObjeto(x,y,z,2,2,2,constantes.LLAVE,0);
                 }
+                // TO DO: anyadir cofre aranya
+                // else if (_enemigos[i]->GetTipoEnemigo() == constantes.ARANA)
                 else
                 {
-                    //Crear un power-up/dinero
-                    //Se crea un power-up?
-                    srand(time(NULL));
-                    int secreapower = rand() % 101; //Entre 0 y 100
-                    cout << "secreapower:" << secreapower << endl;
-
-                    if(secreapower <= 100)
-                    {
-                        //20% de posibilidades
-                        //Cual power-up? (ataque) 0 = vida, 1 = energia, 2 = monedas
-                        srand(time(NULL));
-                        int numpow = 3;
-                        int cualpower = rand() % numpow;
-                        cout << "POWER: " << cualpower << endl;
-
-                        if(cualpower == 0)
-                        {
-                        ataque = 0;
-                        tipoObj = constantes.VIDA;
-                        nombre = "vida_up";
-                        }
-                        else if(cualpower == 1)
-                        {
-                        ataque = 1;
-                        tipoObj = constantes.ENERGIA;
-                        nombre = "energy_up";
-                        }
-                        else if(cualpower == 2)
-                        {
-                        ataque = 2;
-                        tipoObj = constantes.ORO;
-                        nombre = "gold_up";
-                        //oro entre 1 y 5 monedas
-                        srand(time(NULL));
-                        int orocant = 1 + rand() % 5; //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
-                        propiedades[0] = orocant; //para pasarlo a crear objeto
-                        }
-
+                    unsigned short tipoObj = NumeroAleatorio(constantes.ORO,constantes.ENERGIA);
+                    unsigned short cantidad = 0;
+                    if (tipoObj == constantes.ORO) {
+                        cantidad = NumeroAleatorio(1,5);
+                    } else if (tipoObj == constantes.VIDA) {
+                        cantidad = NumeroAleatorio(20,50);
+                    } else { // ENERGIA
+                        cantidad = NumeroAleatorio(10,60);
                     }
+                    CrearPowerUp(x,y,z,tipoObj,cantidad);
                 }
-                //crear objeto
-                this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObj);
 
                 if (_enemigos[i] != nullptr && _enemigos[i]->GetPedirAyuda()) {
                     enemDejarDePedirAyuda();
@@ -701,7 +682,7 @@ void Jugando::Render()
     if(_jugador->getArma() != nullptr)
     {
         //Ataque Animacion
-        if(strcmp(_jugador->getArma()->getNombre(),"guitarra") == 0)
+        if (_jugador->getArma()->GetTipoObjeto() == constantes.GUITARRA)
         {
             if(_jugador->getTimeAt() == 1.5f)
             {
@@ -727,7 +708,7 @@ void Jugando::Render()
                 mov_weapon_rotZ=0;
             }
         }
-        else if(strcmp(_jugador->getArma()->getNombre(),"arpa") == 0)
+        else if(_jugador->getArma()->GetTipoObjeto() == constantes.ARPA)
         {
             if(_jugador->getTimeAt() == 1.5f)
             {
@@ -825,14 +806,12 @@ void Jugando::Reanudar()
     {
         if (ganarPuzzle)
         {
-            cout << "No Sale la araña, has ganado......"<<endl;
             // TO DO: Crear objeto chulo
             AbrirCofre((Interactuable*)_cofreP);
             _cofreP = nullptr;
         }
         else
         {
-            cout << "Sale la araña en ......"<<_cofreP->GetPosArray()<<endl;
             _cofreP->accionar();
             CrearEnemigoArana();
         }
@@ -911,37 +890,48 @@ void Jugando::CrearJugador()
 
 }
 
-void Jugando::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp,
-    int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, int* propiedades,
-    unsigned short tipoObjeto)
+unsigned short Jugando::NumeroAleatorio(unsigned short limite_inf, unsigned short limite_sup)
 {
-    //Arma
-    if(accion == 2)
-    {
-        Constantes constantes;
+    srand(time(NULL));
+    return (limite_inf + rand() % (limite_sup+1 - limite_inf));
+}
 
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObjeto);
-        _rec->setID(_recolectables.size());
-        _rec->setPosiciones(x,y,z);
-        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
-        _rec->SetPosicionArrayObjetos(posicionObjeto);
-        _recolectables.push_back(move(_rec));
-        _rec = nullptr;
-        _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
-    }
-    else if (accion == 4) // Nos aseguramos que es un powerup //Esto es temporal
+void Jugando::CrearPowerUp(int x,int y,int z, unsigned short tipoObjeto,
+    unsigned short cantidad)
+{
+    Recolectable* _rec = new Recolectable(1,1,1,x,y,z,tipoObjeto,
+        4,0,0,0);
+    int posicionObjeto = _motor->CargarObjetos(4,0,x,y,z,1,1,1,
+        _rec->GetModelo(),_rec->GetTextura());
+    _rec->SetPosicionArrayObjetos(posicionObjeto);
+    _rec->setID(_powerup.size());
+    // Obtiene la vida, energia o cantidad de oro dentro de un rango
+    _rec->setCantidad(cantidad);
+    _powerup.push_back(move(_rec));
+    _rec = nullptr;
+}
+
+void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
+    unsigned short tipoObjeto,unsigned short ataque)
+{
+    Constantes constantes;
+    Recolectable* _rec = new Recolectable(ancho,largo,alto,x,y,z,tipoObjeto,
+        2,0,0,0);
+    int posicionObjeto = _motor->CargarObjetos(2,0,x,y,z,ancho,largo,alto,
+        _rec->GetModelo(),_rec->GetTextura());
+    _rec->SetPosicionArrayObjetos(posicionObjeto);
+    _rec->setID(_recolectables.size());
+
+    if (tipoObjeto == constantes.LLAVE)
     {
-        Constantes constantes;
-        Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObjeto);
-        _rec->setID(_powerup.size());
-        _rec->setPosiciones(x,y,z);
-        int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
-        _rec->SetPosicionArrayObjetos(posicionObjeto);
-        _rec->setCantidad(propiedades[0]); //cantidad
-        _powerup.push_back(move(_rec));
-        _rec = nullptr;
-        _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
+        _rec->setCodigo(20);
     }
+    else  // ARMAS
+    {
+        _rec->setAtaque(ataque);
+    }
+    _recolectables.push_back(move(_rec));
+    _rec = nullptr;
 }
 
 /************ ConectarWaypoints ************
@@ -965,20 +955,31 @@ void Jugando::ConectarWaypoints()
     }
 }
 
- void Jugando::CogerObjeto()
+// Para coger una llave o un arma
+void Jugando::CogerObjeto()
 {
     Constantes constantes;
     long unsigned int rec_col = _fisicas->collideColectable();
     _jugador->setAnimacion(4);
 
-    //En caso de no ser llaves
-    if(_recolectables.at(rec_col)->getCodigo() == 0)
+    // Comprobamos si es una llave
+    if(_recolectables.at(rec_col)->GetTipoObjeto() == constantes.LLAVE)
+    {
+        Llave* llave = new Llave(_recolectables.at(rec_col)->getCodigo());
+        _jugador->AnnadirLlave(llave);
+
+        //borramos el recolectable de nivel, _motor grafico y motor fisicas
+        _recolectables.erase(_recolectables.begin() + rec_col);
+        _motor->EraseColectable(rec_col);
+        _fisicas->EraseColectable(rec_col);
+    } 
+    else // En el caso contrario, es un arma
     {
         if(_jugador->getArma() == nullptr)//si no tiene arma equipada
         {
             //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)_recolectables[rec_col];
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
-                _recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),
+                _recolectables[rec_col]->getAncho(),
                 _recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),
                 _recolectables[rec_col]->GetTipoObjeto());
             _jugador->setArma(nuArma);
@@ -997,17 +998,16 @@ void Jugando::ConectarWaypoints()
         else if(_jugador->getArma() != nullptr)//si tiene arma equipada
         {
             //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-            Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),
-                _jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),
-                _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),
+            Recolectable* nuRec = new Recolectable(
+                _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
+                _jugador->getArma()->getAlto(),
                 _jugador->getX(),_jugador->getY(), _jugador->getZ(),
-                _jugador->getArma()->GetTipoObjeto());
-
-            nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
+                _jugador->getArma()->GetTipoObjeto(),2,0,0,0);
+            nuRec->setAtaque(_jugador->getArma()->getAtaque());
+            
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
-                _recolectables[rec_col]->getNombre(),_recolectables[rec_col]->getAncho(),
-                _recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),
-                _recolectables[rec_col]->GetTipoObjeto());
+                _recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(),
+                _recolectables[rec_col]->getAlto(), _recolectables[rec_col]->GetTipoObjeto());
             _motor->EraseArma();
             _jugador->setArma(nuArma);
 
@@ -1015,10 +1015,12 @@ void Jugando::ConectarWaypoints()
             _jugador->getArma()->setRotacion(0.0, constantes.PI_RADIAN, 0.0);
             //!PROVISIONAL
             //lo cargamos por primera vez en el motor de graficos
-            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->GetModelo(), NULL);
+            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), 
+                _recolectables[rec_col]->GetModelo(), NULL);
 
             //lo cargamos en el motor de fisicas
-            _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2, _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),_jugador->getArma()->getAlto());
+            _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2, 
+                _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),_jugador->getArma()->getAlto());
 
             //borramos el recolectable anterior de nivel, _motor grafico y motor fisicas
             _recolectables.erase(_recolectables.begin() + rec_col);
@@ -1032,16 +1034,6 @@ void Jugando::ConectarWaypoints()
             atacktime = 0.0f; //Reiniciar tiempo de ataques
         }
     }
-    else if(_recolectables.at(rec_col)->getCodigo() > 0)
-    {
-        Llave* llave = new Llave(_recolectables.at(rec_col)->getCodigo());
-        _jugador->AnnadirLlave(llave);
-
-        //borramos el recolectable de nivel, _motor grafico y motor fisicas
-        _recolectables.erase(_recolectables.begin() + rec_col);
-        _motor->EraseColectable(rec_col);
-        _fisicas->EraseColectable(rec_col);
-    }
 }
 
 void Jugando::DejarObjeto()
@@ -1050,20 +1042,24 @@ void Jugando::DejarObjeto()
     if(_jugador->getArma() != nullptr)//si tiene arma equipada
     {
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-        Recolectable* nuRec = new Recolectable(0, _jugador->getArma()->getAtaque(),
-            _jugador->getArma()->getNombre(),_jugador->getArma()->getAncho(),
-            _jugador->getArma()->getLargo(), _jugador->getArma()->getAlto(),
+        Recolectable* nuRec = new Recolectable(
+            _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
+            _jugador->getArma()->getAlto(),
             _jugador->getX(),_jugador->getY(), _jugador->getZ(),
-            _jugador->getArma()->GetTipoObjeto());
-        nuRec->setPosiciones(_jugador->getX(),_jugador->getY(), _jugador->getZ());
+            _jugador->getArma()->GetTipoObjeto(),2,0,0,0);
+        nuRec->setAtaque(_jugador->getArma()->getAtaque());
+
         _motor->EraseArma();
         _fisicas->EraseArma();
         _jugador->setArma(NULL);
 
-        //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
-        _recolectables.push_back(nuRec);
-        _fisicas->setFormaRecolectable(_recolectables.size(),nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
-        _motor->CargarRecolectable(_recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->GetModelo(), NULL);
+        //por ultimo creamos una nueva y actualizamos informacion en motor grafico
+        _motor->CargarRecolectable(_recolectables.size(),
+            nuRec->getX(), nuRec->getY(),nuRec->getZ(),
+            nuRec->GetModelo(), NULL);
+
+        _recolectables.push_back(move(nuRec));
+        nuRec = nullptr;
     }
 }
 
@@ -1142,9 +1138,9 @@ void Jugando::AccionarMecanismo(int int_col)
         //Busca la puerta que coincide con la palanca que se esta activando
         while(i < _interactuables.size() && !coincide)
         {
+            // TO DO: comprobar 1º si no es null, despues que sea una palanca y en caso de no serlo, que no coincida el codigo
             if((_interactuables.at(i)->getCodigo() != _inter->getCodigo()) ||
-                _interactuables.at(i)->GetTipoObjeto() == constantes.PALANCA ||
-                _interactuables.at(i)->GetTipoObjeto() == constantes.LLAVE)
+                (_interactuables.at(i)->GetTipoObjeto() == constantes.PALANCA))
             {
                 i++;
             }
@@ -1249,65 +1245,9 @@ void Jugando::AccionarMecanismo(int int_col)
     _inter = nullptr;
 }
 
-void Jugando::crearObjetoCofre(Interactuable* _newObjeto)
-{
-  //Aleaotrio
-  srand(time(NULL));
-  int ntipos = 3;
-  int tipobj = 1 + rand() % ntipos; //aleatorio entre 1 y n tipos de objetos
-
-  int accion;
-  int x = _newObjeto->getX() + 5;
-  int y = _newObjeto->getY();
-  int z = _newObjeto->getZ();
-  int ancho = 2 ,largo = 2,alto = 2;
-  int codigo,ataque;
-  const char* nombre;
-  int*  propiedades = new int [6];
-    unsigned short tipoObjeto;
-    Constantes constantes;
-
-  if(tipobj == 1)
-  {
-    //crear guitarra
-    accion = 2;
-    codigo = 0; //0:arma
-    srand(time(NULL));
-    ataque = 22 + rand() % (33 - 22);
-    nombre = "guitarra";
-    tipoObjeto = constantes.GUITARRA;
-    cout << "Hay una guitarra!" << endl;
-  }
-  else if(tipobj == 2)
-  {
-    //crear arpa
-    accion = 2;
-    codigo = 0; //0:arma
-    srand(time(NULL));
-    ataque = 15 + rand() % (26 - 15);
-    nombre = "arpa";
-    tipoObjeto = constantes.ARPA;
-    cout << "Hay una arpa!" << endl;
-  }
-  else if(tipobj == 3)
-  {
-    //Oro
-    accion = 4;
-    codigo = -2;
-    ataque = 2;
-    nombre = "gold_up";
-    tipoObjeto = constantes.ORO;
-    //Cantidad de oro entre 20 y 30
-    srand(time(NULL));
-    int orocant = 20 + rand() % (31 - 20); //variable = limite_inf + rand() % (limite_sup + 1 - limite_inf)
-    cout << "Hay " << orocant << " de Oro!" << endl;
-    propiedades[0] = orocant; //para pasarlo a crear objeto
-  }
-   this->CrearObjeto(codigo,accion,nombre,ataque,0,x,y,z,0,0,ancho,largo,alto,propiedades,tipoObjeto);
-}
-
 void Jugando::activarPowerUp()
 {
+    Constantes constantes;
     int int_cpw = _fisicas->collideColectablePowerup();
 
     if(int_cpw >= 0 && int_cpw != int_cpw_aux)
@@ -1315,19 +1255,19 @@ void Jugando::activarPowerUp()
         bool locoges = false; //Comprobar si lo puedes coger
 
         //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
-        if(_powerup.at(int_cpw)->getAtaque() == 0 /*&& _jugador->getVida() < 100*/)
+        if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.VIDA /*&& _jugador->getVida() < 100*/)
         {
-            cout << "PowerUP! Curado 25 de vida. TOTAL:" << _jugador->getVida() << endl;
-            _jugador->ModificarVida(25);
+            cout << "PowerUP Vida! TOTAL:" << _jugador->getVida() << endl;
+            _jugador->ModificarVida(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
-        else if(_powerup.at(int_cpw)->getAtaque() == 1 /*&& _jugador->getBarraAtEs() < 100*/)
+        else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ENERGIA /*&& _jugador->getBarraAtEs() < 100*/)
         {
-            cout << "PowerUP! 50 de energia. TOTAL:" << _jugador->getBarraAtEs() << endl;
-           _jugador->ModificarBarraAtEs(50);
+            cout << "PowerUP Energia! TOTAL:" << _jugador->getBarraAtEs() << endl;
+           _jugador->ModificarBarraAtEs(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
-        else if(_powerup.at(int_cpw)->getAtaque() == 2)
+        else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ORO)
         {
             cout << "Recoges " << _powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
             _jugador->ModificarDinero(_powerup.at(int_cpw)->getCantidad());
@@ -1349,6 +1289,7 @@ void Jugando::updateAt(int* danyo)
 {
     float tiempoActual = 0.0f;
     float tiempoAtaque = 0.0f;
+
     if((_motor->EstaPulsado(LMOUSE_PRESSED_DOWN) || _motor->EstaPulsado(KEY_ESPACIO)) && _jugador->getTimeAt() <= 0.0f)
     {
         *danyo = _jugador->Atacar(0);
@@ -1552,8 +1493,26 @@ void Jugando::AbrirCofre(Interactuable* _inter)
     _inter->getRZ() + 80.0);
     _inter->accionar();
 
-    //Crear objeto aleatorio
-    this->crearObjetoCofre(_inter);
+    //Crear objeto aleatorio (GUITARRA, ARPA, ORO)
+    float x = _inter->getX() + 5;
+    float y = _inter->getY();
+    float z = _inter->getZ();
+
+    Constantes constantes;
+    switch (NumeroAleatorio(constantes.ARPA,constantes.ORO))
+    {
+        case 7: // ARPA
+            CrearObjeto(x,y,z,2,2,2,constantes.ARPA,NumeroAleatorio(15,25));
+            break;
+
+        case 8: // GUITARRA
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(22,32));
+            break;
+        
+        default: // ORO
+            CrearPowerUp(x,y,z,constantes.ORO,NumeroAleatorio(20,30));
+            break;
+    }
 }
 
 void Jugando::CrearEnemigoArana()
