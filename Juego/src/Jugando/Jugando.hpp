@@ -47,15 +47,17 @@ class Jugando: public Estado {
 
         bool CargarNivel(int nivel, int tipoJug); //Niveles en assets/maps/xml/
         void CrearJugador();//lo utilizamos para crear su objeto
-        void CrearObjeto(int codigo, int accion, int ataque, int rp, 
-            int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto,int* propiedades, unsigned short tipoObjeto);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        unsigned short NumeroAleatorio(unsigned short limite_inf, unsigned short limite_sup);
+        void CrearPowerUp(int x,int y,int z, unsigned short tipoObjeto,
+            unsigned short cantidad);
+        void CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
+            unsigned short tipoObjeto, unsigned short ataque);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void ConectarWaypoints();
 
         //Funciones de interacciones
         void CogerObjeto();
         void DejarObjeto();
         void AccionarMecanismo(int);    //Activa mecanismos y o puertas
-        void crearObjetoCofre(Interactuable* );
         void activarPowerUp();
 
         void updateAtEsp();//se actualiza la ejecucion de los ataques
