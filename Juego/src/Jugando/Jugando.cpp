@@ -1141,7 +1141,7 @@ void Jugando::AccionarMecanismo(int int_col)
             while(i < _interactuables.size() && !coincide)
             {
                 // TO DO: comprobar 1º si no es null, despues que sea una palanca y en caso de no serlo, que no coincida el codigo
-                if(_interactuable != nullptr && ((_interactuables.at(i)->GetTipoObjeto() == constantes.PALANCA) || (_interactuables.at(i)->getCodigo() != _inter->getCodigo())))
+                if(_interactuables.at(i) != nullptr && ((_interactuables.at(i)->GetTipoObjeto() == constantes.PALANCA) || (_interactuables.at(i)->getCodigo() != _inter->getCodigo())))
                 {
                     i++;
                 }
