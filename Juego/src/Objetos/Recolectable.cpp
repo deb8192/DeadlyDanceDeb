@@ -1,42 +1,31 @@
 #include "Recolectable.hpp"
-#include "../ConstantesComunes.hpp"
+#include "../Motores/MotorFisicas.hpp"
 
 Recolectable::Recolectable()
 {
 
 }
 
-Recolectable::Recolectable(int codigo, int ataque, 
-    int anc, int lar, int alt, float x, float y, float z, unsigned short tipoObj)
+Recolectable::Recolectable(int anc, int lar, int alt, 
+    float x, float y, float z, unsigned short tipoObj,
+    int accion, int rp, int despX, int despZ)
 {
-    Constantes constantes;
-
     // INdrawable
     posIni.x = x;
     posIni.y = y;
     posIni.z = z;
 
+    posActual.x = x;
+    posActual.y = y;
+    posActual.z = z;
+
     ancho = anc;
     largo = lar;
     alto = alt;
 
-    if ((tipoObj >= constantes.ARMA_INI) && 
-        (tipoObj <= constantes.ARMA_FIN))
-    {
-        potenciaAtaque = ataque;
-        codigoObjeto = constantes.ARMA;
-    }
-    else // Los powerups y la llave no tienen ataque
-    {
-        potenciaAtaque = 0;
-        codigoObjeto = constantes.POWERUP;
-        // Si es una llave, se reasigna en el switch
-    }
-
     //INobjetos
     tipoObjeto = tipoObj;
 
-    // TO DO: no me dejaba usar constantes
     switch (tipoObj)
     {
         case 7: // ARPA
@@ -78,10 +67,12 @@ Recolectable::Recolectable(int codigo, int ataque,
         {
             _modelo = "assets/models/llave.obj";
             _textura = nullptr;
-            codigoObjeto = codigo;
         }
         break;
     }
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
+    _fisicas = nullptr;
 }
 
 Recolectable::~Recolectable()
@@ -91,6 +82,7 @@ Recolectable::~Recolectable()
     codigoObjeto = 0;
     posicionArrayObjetos = 0;
     cantidad = 0;
+    tipoObjeto = 0;
 
     // INobjetos
     delete cadena_nombre;
@@ -259,6 +251,21 @@ void Recolectable::setCantidad(int can)
     cantidad = can;
 }
 
+int Recolectable::getCodigo()
+{
+    return codigoObjeto;
+}
+
+void Recolectable::setCodigo(int codigo)
+{
+    codigoObjeto = codigo;
+}
+
+void Recolectable::setAtaque(int potAtq)
+{
+    potenciaAtaque = potAtq;
+}
+
 int Recolectable::getAtaque()
 {
     return potenciaAtaque;
@@ -267,11 +274,6 @@ int Recolectable::getAtaque()
 int Recolectable::GetPosicionArrayObjetos()
 {
     return posicionArrayObjetos;
-}
-
-int Recolectable::getCodigo()
-{
-    return codigoObjeto;
 }
 
 float Recolectable::getX()

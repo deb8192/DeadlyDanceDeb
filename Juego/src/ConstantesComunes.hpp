@@ -104,8 +104,6 @@ using Constantes = struct
     // Meter las armas seguidas:
     const unsigned short ARPA = 7;
     const unsigned short GUITARRA = 8;
-    const unsigned short ARMA_INI = ARPA;
-    const unsigned short ARMA_FIN = GUITARRA;
 
     const unsigned short ORO = 9;
     const unsigned short VIDA = 10;
@@ -113,7 +111,7 @@ using Constantes = struct
 
     // Sin utilizar por ahora
     /*const unsigned short PUERTA2 = 2;
-    const unsigned short PUERTA = 3;
+    const unsigned short PUERTA_OBJ = 3;
     
     const unsigned short PARED_INVISIBLE = 12;
     const unsigned short PARED_OBSTACULO = 13;

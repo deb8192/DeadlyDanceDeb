@@ -167,7 +167,6 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         //PRUEBAS ATAQUE ESPECIAL
         const char* _rutaArmaEspecial = "assets/models/Arma.obj";
         const char* _rutaTexturaArmaEspecial = "assets/texture/Arma.png";
-        const char* _nombreJugador = "Heavy";
         unsigned short tipoJug; // Se asigna antes de cargar el nivel
         //!PRUEBAS ATAQUE ESPECIAL
        //  core::vector3df dir;
