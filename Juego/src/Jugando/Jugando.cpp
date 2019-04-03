@@ -1260,14 +1260,14 @@ void Jugando::activarPowerUp()
         //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
         if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.VIDA /*&& _jugador->getVida() < 100*/)
         {
-            cout << "PowerUP! Curado 25 de vida. TOTAL:" << _jugador->getVida() << endl;
-            _jugador->ModificarVida(25);
+            cout << "PowerUP Vida! TOTAL:" << _jugador->getVida() << endl;
+            _jugador->ModificarVida(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ENERGIA /*&& _jugador->getBarraAtEs() < 100*/)
         {
-            cout << "PowerUP! 50 de energia. TOTAL:" << _jugador->getBarraAtEs() << endl;
-           _jugador->ModificarBarraAtEs(50);
+            cout << "PowerUP Energia! TOTAL:" << _jugador->getBarraAtEs() << endl;
+           _jugador->ModificarBarraAtEs(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ORO)
