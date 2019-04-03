@@ -70,9 +70,9 @@ protected:
 
     float moveTime, rotateTime; //variables para controlar la interpolacion del movimiento y la rotacion;
     float rotation; //en grados por defecto
-    int id = -1;
-    int animacion = 0;  //nos sirve para cambiar de animacion //por defecto en reposo
-    int animacionAnterior = 0; //nos sirve para saber si debemos cambiar de animacion por la nueva
+    int id;
+    int animacion;  //nos sirve para cambiar de animacion //por defecto en reposo
+    int animacionAnterior; //nos sirve para saber si debemos cambiar de animacion por la nueva
     //fin posiciones
 
     const char* _modelo; // Malla 3D

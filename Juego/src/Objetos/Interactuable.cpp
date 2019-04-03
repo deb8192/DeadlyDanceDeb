@@ -4,13 +4,55 @@ Interactuable::Interactuable(int codigo, const char* nombre,
     int anc, int lar, int alt, int posicion, float x, float y, float z,
     unsigned short tipoObj)
 {
+    //TO DO INICIALIZAR TODAS LAS VARIABLES
     _motor = MotorGrafico::GetInstance();
+
+    id = -1;
 
     // INdrawable
     posIni.x = x;
     posIni.y = y;
     posIni.z = z;
 
+    posActual.x = 0.0f;
+    posActual.y = 0.0f;
+    posActual.z = 0.0f;
+
+    posFutura.x = 0.0f;
+    posFutura.y = 0.0f;
+    posFutura.z = 0.0f;
+
+    posPasada.x = 0.0f;
+    posPasada.y = 0.0f;
+    posPasada.z = 0.0f;
+
+    rotActual.x = 0.0f;
+    rotActual.y = 0.0f;
+    rotActual.z = 0.0f;
+
+    rotFutura.x = 0.0f;
+    rotFutura.y = 0.0f;
+    rotFutura.z = 0.0f;
+
+    rotPasada.x = 0.0f;
+    rotPasada.y = 0.0f;
+    rotPasada.z = 0.0f;
+
+    posFisicas.x = 0.0f;
+    posFisicas.y = 0.0f;
+    posFisicas.z = 0.0f;
+
+    rotation = 0.0f;
+    moveTime = 0.0f;
+    rotateTime = 0.0f;
+
+    animacion = 0;
+    animacionAnterior = 0;
+
+    posicionArrayObjetos = posicion;
+    accionado = false;
+
+    //INobjetos
     std::string name_nombre(nombre);
     cadena_nombre = new char[sizeof(name_nombre)];
     strcpy(cadena_nombre, name_nombre.c_str());
@@ -20,11 +62,6 @@ Interactuable::Interactuable(int codigo, const char* nombre,
     ancho = anc;
     largo = lar;
     alto = alt;
-
-    posicionArrayObjetos = posicion;
-    accionado = false;
-
-    //INobjetos
     tipoObjeto = tipoObj;
 }
 
@@ -140,6 +177,10 @@ void Interactuable::RotarEntidad(float updTime)
     if(pt > 1.0f)
     {
         pt = 1.0f;
+    }
+    else if(pt < 0.0f)
+    {
+        pt = 0.0f;
     }
 
     rotActual.x = rotPasada.x * (1 - pt) + rotFutura.x * pt;

@@ -63,7 +63,8 @@ class Pared : public INobjetos , public INdrawable //multiple herencia a esto se
 
     protected:
         
-        unsigned short tam = 2;
+        //TO DO creo que tam se deberia de borrar
+        unsigned short tam;
         int posicionArrayObjetos; //Posicion del elemento en el vector de objetos del motor grafico.
         
 };
