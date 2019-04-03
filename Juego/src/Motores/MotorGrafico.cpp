@@ -666,6 +666,12 @@ bool MotorGrafico::EstaPulsado(short boton)
             case idsEventos::Enum::KEY_Q:
                 return _interfaz->IsKeyDown(GLFW_KEY_Q);
 
+            case idsEventos::Enum::KEY_H:
+                return _interfaz->IsKeyDown(GLFW_KEY_H);
+
+            case idsEventos::Enum::KEY_I:
+                return _interfaz->IsKeyDown(GLFW_KEY_I);
+
             case idsEventos::Enum::KEY_J:
                 return _interfaz->IsKeyDown(GLFW_KEY_J);//Para matar al jugador (16)
 
@@ -733,6 +739,12 @@ bool MotorGrafico::EstaPulsado(short boton)
 
             case KEY_Q:
                 return input.IsKeyDown(irr::KEY_KEY_Q);
+
+            case KEY_H:
+                return input.IsKeyDown(irr::KEY_KEY_H);
+
+            case KEY_I:
+                return input.IsKeyDown(irr::KEY_KEY_I);
 
             case KEY_J:
                 return input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
@@ -802,6 +814,12 @@ void MotorGrafico::ResetKey(short event)
             break;
             case KEY_Q:
                 input.ResetKey(irr::KEY_KEY_Q);
+            break;
+            case KEY_H:
+                input.IsKeyDown(irr::KEY_KEY_H);
+            break;
+            case KEY_I:
+                input.IsKeyDown(irr::KEY_KEY_I);
             break;
             case KEY_J:
                 input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)

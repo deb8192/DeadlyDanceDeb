@@ -1,26 +1,24 @@
 #include "Recolectable.hpp"
-#include "../ConstantesComunes.hpp"
+#include "../Motores/MotorFisicas.hpp"
 
 Recolectable::Recolectable()
 {
 
 }
 
-Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
-    int anc, int lar, int alt, float x, float y, float z, unsigned short tipoObj)
+Recolectable::Recolectable(int anc, int lar, int alt, 
+    float x, float y, float z, unsigned short tipoObj,
+    int accion, int rp, int despX, int despZ)
 {
     // INdrawable
     posIni.x = x;
     posIni.y = y;
     posIni.z = z;
 
-    std::string name_nombre(nombre);
-    cadena_nombre = new char[sizeof(name_nombre)];
-    strcpy(cadena_nombre, name_nombre.c_str());
+    posActual.x = x;
+    posActual.y = y;
+    posActual.z = z;
 
-    codigoObjeto = codigo;
-    potenciaAtaque = ataque;
-    nombreObjeto = cadena_nombre;
     ancho = anc;
     largo = lar;
     alto = alt;
@@ -28,7 +26,6 @@ Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
     //INobjetos
     tipoObjeto = tipoObj;
 
-    // TO DO: no me dejaba usar constantes
     switch (tipoObj)
     {
         case 7: // ARPA
@@ -73,6 +70,9 @@ Recolectable::Recolectable(int codigo, int ataque, const char* nombre,
         }
         break;
     }
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
+    _fisicas = nullptr;
 }
 
 Recolectable::~Recolectable()
@@ -82,9 +82,9 @@ Recolectable::~Recolectable()
     codigoObjeto = 0;
     posicionArrayObjetos = 0;
     cantidad = 0;
+    tipoObjeto = 0;
 
     // INobjetos
-    nombreObjeto = nullptr;
     delete cadena_nombre;
 
     ancho = 0;
@@ -251,6 +251,21 @@ void Recolectable::setCantidad(int can)
     cantidad = can;
 }
 
+int Recolectable::getCodigo()
+{
+    return codigoObjeto;
+}
+
+void Recolectable::setCodigo(int codigo)
+{
+    codigoObjeto = codigo;
+}
+
+void Recolectable::setAtaque(int potAtq)
+{
+    potenciaAtaque = potAtq;
+}
+
 int Recolectable::getAtaque()
 {
     return potenciaAtaque;
@@ -259,16 +274,6 @@ int Recolectable::getAtaque()
 int Recolectable::GetPosicionArrayObjetos()
 {
     return posicionArrayObjetos;
-}
-
-int Recolectable::getCodigo()
-{
-    return codigoObjeto;
-}
-
-const char* Recolectable::getNombre()
-{
-    return nombreObjeto;
 }
 
 float Recolectable::getX()

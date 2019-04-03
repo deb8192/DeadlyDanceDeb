@@ -90,6 +90,9 @@ using Constantes = struct
     const char* ZDARK = "zDark";
     const char* ZHIDE = "zHide";
 
+    const unsigned short HEAVY = 1;
+    const unsigned short BAILAORA = 2;
+
     // Tipos de objetos interactuables y recolectables
     const unsigned short PALANCA = 0;
     const unsigned short LLAVE = 1;
@@ -98,15 +101,17 @@ using Constantes = struct
     const unsigned short ARMA = 5;
     const unsigned short POWERUP = 6;
 
+    // Meter las armas seguidas:
     const unsigned short ARPA = 7;
     const unsigned short GUITARRA = 8;
+
     const unsigned short ORO = 9;
     const unsigned short VIDA = 10;
     const unsigned short ENERGIA = 11;
 
     // Sin utilizar por ahora
     /*const unsigned short PUERTA2 = 2;
-    const unsigned short PUERTA = 3;
+    const unsigned short PUERTA_OBJ = 3;
     
     const unsigned short PARED_INVISIBLE = 12;
     const unsigned short PARED_OBSTACULO = 13;

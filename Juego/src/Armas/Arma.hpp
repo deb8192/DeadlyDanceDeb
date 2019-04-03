@@ -11,7 +11,7 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
 {
     public:
         Arma();         //esto le deja a la entidad el constructor por defecto
-        Arma(int ataque, const char* nombre, int anc, int lar, int alt, unsigned short tipoObj);
+        Arma(int ataque, int anc, int lar, int alt, unsigned short tipoObj);
         ~Arma();
 
         //drawable metodos
@@ -30,12 +30,10 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
         void initPosicionesFisicas(float nx,float ny,float nz);
 
         //setters
-        void setNombre(const char*);
         void setAtaque(int);
         //void getPosiciones();
 
         //getters
-        const char* getNombre();
         int getAtaque();
         void setID(int);
         int getID();
@@ -67,7 +65,6 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
 
     private:
         int potenciaAtaque;
-        const char* _nombreArma;
 };
 
 #endif /* Arma_HPP */
