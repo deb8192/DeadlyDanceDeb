@@ -155,6 +155,7 @@ void Jugando::ValoresPorDefectoJugador()
     _jugador->setAtaque(15);
     _jugador->setArma(NULL);
     _jugador->setArmaEspecial(100);
+    _jugador->setTimeAt(0.0f);
     _jugador->setTimeAtEsp(0.0f);
     _jugador->setDanyoCritico(50);
     _jugador->setProAtaCritico(10);
@@ -805,14 +806,12 @@ void Jugando::Reanudar()
     {
         if (ganarPuzzle)
         {
-            cout << "No Sale la araña, has ganado......"<<endl;
             // TO DO: Crear objeto chulo
             AbrirCofre((Interactuable*)_cofreP);
             _cofreP = nullptr;
         }
         else
         {
-            cout << "Sale la araña en ......"<<_cofreP->GetPosArray()<<endl;
             _cofreP->accionar();
             CrearEnemigoArana();
         }
@@ -1016,10 +1015,12 @@ void Jugando::CogerObjeto()
             _jugador->getArma()->setRotacion(0.0, constantes.PI_RADIAN, 0.0);
             //!PROVISIONAL
             //lo cargamos por primera vez en el motor de graficos
-            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->GetModelo(), NULL);
+            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), 
+                _recolectables[rec_col]->GetModelo(), NULL);
 
             //lo cargamos en el motor de fisicas
-            _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2, _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),_jugador->getArma()->getAlto());
+            _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2, 
+                _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),_jugador->getArma()->getAlto());
 
             //borramos el recolectable anterior de nivel, _motor grafico y motor fisicas
             _recolectables.erase(_recolectables.begin() + rec_col);
@@ -1052,11 +1053,7 @@ void Jugando::DejarObjeto()
         _fisicas->EraseArma();
         _jugador->setArma(NULL);
 
-        //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
-        _fisicas->setFormaRecolectable(_recolectables.size(),
-            nuRec->getX()/2, nuRec->getY()/2,nuRec->getZ()/2,
-            nuRec->getAncho(), nuRec->getLargo(),nuRec->getAlto());
-
+        //por ultimo creamos una nueva y actualizamos informacion en motor grafico
         _motor->CargarRecolectable(_recolectables.size(),
             nuRec->getX(), nuRec->getY(),nuRec->getZ(),
             nuRec->GetModelo(), NULL);
@@ -1292,6 +1289,7 @@ void Jugando::updateAt(int* danyo)
 {
     float tiempoActual = 0.0f;
     float tiempoAtaque = 0.0f;
+
     if((_motor->EstaPulsado(LMOUSE_PRESSED_DOWN) || _motor->EstaPulsado(KEY_ESPACIO)) && _jugador->getTimeAt() <= 0.0f)
     {
         *danyo = _jugador->Atacar(0);
