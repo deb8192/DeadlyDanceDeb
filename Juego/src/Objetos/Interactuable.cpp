@@ -39,9 +39,9 @@ Interactuable::Interactuable(int id, int codigo,
     rotPasada.y = 0.0f;
     rotPasada.z = 0.0f;
 
-    posFisicas.x = 0.0f;
-    posFisicas.y = 0.0f;
-    posFisicas.z = 0.0f;
+    posFisicas.x = x;
+    posFisicas.y = y;
+    posFisicas.z = z;
 
     rotation = 0.0f;
     moveTime = 0.0f;
