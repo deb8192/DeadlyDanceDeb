@@ -7,7 +7,7 @@ TCamara::TCamara(GLuint ww, GLuint wh)
     //valores por defecto
     esPerspectiva = true;
     cercano=0.1f;
-    lejano=120.0f;
+    lejano=300.0f;
     height=wh;
     width=ww;
     setTarget(0.0f,0.0f,0.0f);
@@ -91,6 +91,16 @@ void TCamara::beginDraw()
         //enviamos view
         shader->setMat4("view", view);
 
+
+        shader2->Use();//preparamos el shader
+
+        //posicion de la camara al shader
+        shader2->setVec3("viewPos", posicion);
+        //enviamos projection
+        shader2->setMat4("projection",projection);
+        //enviamos view
+        shader2->setMat4("view", view);
+
         //if(_matriz_resultado != nullptr)//si la matriz de resultado es nula es que no hay nada en la cola por lo que no hay nada que enviar al shader
         //{
             //enviar a uniform
@@ -110,7 +120,14 @@ void TCamara::beginDraw()
         shader->setMat4("projection",projection);
         //enviamos view
         shader->setMat4("view", view);
-        //se le da al uniform
+
+
+        shader2->Use();//preparamos el shader
+
+        //enviamos projection
+        //shader2->setMat4("projection",projection);
+        //enviamos view
+        shader2->setMat4("view", view);
     }
 
 }

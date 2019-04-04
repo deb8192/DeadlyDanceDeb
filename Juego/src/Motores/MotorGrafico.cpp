@@ -37,6 +37,8 @@ MotorGrafico::MotorGrafico()
         camx = 0;
         camz = 30;
         cams = -1;
+        altura = 0;
+        camara1 = true;
         existearmaexp = false;
 
         idCargando = 0;
@@ -680,6 +682,12 @@ bool MotorGrafico::EstaPulsado(short boton)
             case idsEventos::Enum::KEY_Q:
                 return _interfaz->IsKeyDown(GLFW_KEY_Q);
 
+            case idsEventos::Enum::KEY_H:
+                return _interfaz->IsKeyDown(GLFW_KEY_H);
+
+            case idsEventos::Enum::KEY_I:
+                return _interfaz->IsKeyDown(GLFW_KEY_I);
+
             case idsEventos::Enum::KEY_J:
                 return _interfaz->IsKeyDown(GLFW_KEY_J);//Para matar al jugador (16)
 
@@ -747,6 +755,12 @@ bool MotorGrafico::EstaPulsado(short boton)
 
             case KEY_Q:
                 return input.IsKeyDown(irr::KEY_KEY_Q);
+
+            case KEY_H:
+                return input.IsKeyDown(irr::KEY_KEY_H);
+
+            case KEY_I:
+                return input.IsKeyDown(irr::KEY_KEY_I);
 
             case KEY_J:
                 return input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
@@ -816,6 +830,12 @@ void MotorGrafico::ResetKey(short event)
             break;
             case KEY_Q:
                 input.ResetKey(irr::KEY_KEY_Q);
+            break;
+            case KEY_H:
+                input.IsKeyDown(irr::KEY_KEY_H);
+            break;
+            case KEY_I:
+                input.IsKeyDown(irr::KEY_KEY_I);
             break;
             case KEY_J:
                 input.IsKeyDown(irr::KEY_KEY_J);//Para matar al jugador (16)
@@ -1342,7 +1362,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
         {
             // Centrar la camara
             nodeCamPosition[0] = x+(camx*cams);
-            nodeCamPosition[1] = y+30+newy;
+            nodeCamPosition[1] = y+30+newy+altura;
             nodeCamPosition[2] = z+newz+(camz*cams);
             nodeCamTarget[0] = x;
             nodeCamTarget[1] = y;
@@ -1369,7 +1389,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
         // Centrar la camara
         nodeCamPosition.X = x+(camx*cams);
-        nodeCamPosition.Y = y+30;
+        nodeCamPosition.Y = y+30+altura;
         nodeCamPosition.Z = z+(camz*cams);
         nodeCamTarget.X = x;
         nodeCamTarget.Y = y;
@@ -3009,4 +3029,18 @@ void MotorGrafico::ActualizarAnimacionMotor(Animaciones * anima)
             }
         }
     #endif
+}
+
+void MotorGrafico::CambiarCamara()
+{
+    camara1 = !camara1;
+    if (camara1)
+    {
+        altura = 0;
+    }
+    else
+    {
+        altura = 300;
+    }
+
 }

@@ -7,15 +7,10 @@ Arma::Arma()
 
 }
 
-Arma::Arma(int ataque, const char*  nombre, int anc, int lar, int alt,
+Arma::Arma(int ataque, int anc, int lar, int alt,
     unsigned short tipoObj)
 {
-    std::string name_nombre(nombre);
-    cadena_nombre = new char[sizeof(name_nombre)];
-    strcpy(cadena_nombre, name_nombre.c_str());
-
     potenciaAtaque = ataque;
-    _nombreArma = cadena_nombre;
     ancho = anc;
     largo = lar;
     alto = alt;
@@ -41,12 +36,8 @@ Arma::~Arma()
 {
     // Arma
     potenciaAtaque = 0;
-    _nombreArma = nullptr;
 
     // INobjetos
-    nombreObjeto = nullptr;
-    delete cadena_nombre;
-
     ancho = 0;
     largo = 0;
     alto = 0;
@@ -130,6 +121,10 @@ void Arma::RotarEntidad(float updTime)
     if(pt > 1.0f)
     {
         pt = 1.0f;
+    }
+    else if(pt < 0.0f)
+    {
+        pt = 0.0f;
     }
 
     if(rotFutura.y == 0.0 && rotFutura.y < rotPasada.y)
@@ -222,19 +217,9 @@ void Arma::setPosicionesArmaEsp(float nx,float ny,float nz, float nry)
     this->setPosiciones((int)mx,(int)my,(int)mz);
 }
 
-void Arma::setNombre(const char* weaponName)
-{
-    _nombreArma = weaponName;
-}
-
 void Arma::setAtaque(int danyo)
 {
     potenciaAtaque = danyo;
-}
-
-const char* Arma::getNombre()
-{
-    return _nombreArma;
 }
 
 int Arma::getAtaque()
