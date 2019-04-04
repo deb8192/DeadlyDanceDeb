@@ -1,4 +1,5 @@
 #include "Puerta.hpp"
+#include "../Motores/MotorFisicas.hpp"
 
 Puerta::Puerta(int id, int codigo,
     int anc, int lar, int alt,
@@ -19,8 +20,10 @@ Puerta::~Puerta()
 
 void Puerta::GirarPuerta(float rotacion)
 {
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     setNewRotacion(rotActual.x, rotActual.y + rotacion, rotActual.z);
     _fisicas->updatePuerta(posActual.x, posActual.y, posActual.z,
         rotActual.x, rotActual.y + rotacion, rotActual.z,
         _desplazamientos[0], _desplazamientos[1], posObstaculos);
+    _fisicas = nullptr;
 }

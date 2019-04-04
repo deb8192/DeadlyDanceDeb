@@ -8,7 +8,6 @@
 #include <cstring>
 #include "Jugando/Sala.hpp"
 #include "Jugando/Zona.hpp"
-#include "Objetos/Interactuable.hpp"
 #include "Objetos/Recolectable.hpp"
 #include "Objetos/Pared.hpp"
 #include "Personajes/Jugador.hpp"
@@ -84,7 +83,6 @@ class CargadorNiveles
         std::vector<Enemigo*> _eneCofres;
         std::vector<Recolectable*> _recolectables;
         std::vector<Pared*> _paredes;
-        std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
         std::vector<Recolectable*> _powerup;
         std::vector<Zona*> _zonas; //Array de zonas
         std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel

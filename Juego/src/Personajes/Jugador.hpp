@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <ctime>
 #include <cstring>
-#include "../Enemigos/Enemigo.hpp"
+#include "../Enemigos/Enemigo.hpp" // Tambien incluye MotorFisicas.hpp
 #include "../Motores/INnpc.hpp"
 #include "../Motores/INdrawable.hpp"
 #include "../Motores/INsentidos.hpp"
@@ -15,6 +15,7 @@
 #include "../Motores/MotorGrafico.hpp"
 #include "../Motores/MotorAudio.hpp"
 #include "../Jugando/InterfazJugador.hpp"
+#include "../ConstantesComunes.hpp"
 
 using namespace std;
 
@@ -108,7 +109,6 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float getRX();
         float getRY();
         float getRZ();
-        float* GetDatosAtEsp();
         int getID();
 
         //gets de npc
@@ -182,6 +182,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         MotorGrafico* _motor;
         MotorAudioSystem* _motora;
         InterfazJugador* _interfaz;
+        MotorFisicas* _fisicas;
+        Constantes constantes;
 };
 
 #endif /* Jugador_HPP */

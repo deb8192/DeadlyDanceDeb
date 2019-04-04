@@ -277,7 +277,7 @@ void Jugando::ManejarEventos() {
     // Multicamara
     if(_motor->EstaPulsado(KEY_C))
     {
-        // TO DO:
+        _motor->CambiarCamara();
         _motor->ResetKey(KEY_C);
     }
 
