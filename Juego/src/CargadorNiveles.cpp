@@ -299,11 +299,23 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int largo = obj.attribute("largo").as_int();//nos devuelve un int
         int alto = obj.attribute("alto").as_int();//nos devuelve un int
         int ataque = obj.attribute("ataque").as_int();//nos devuelve un int
+        int numFrames = obj.attribute("Frames").as_int();//numero de frames de la animacion
+        const char* logicaAnimacion = obj.attribute("Animation").value();//contiene la ruta a la logica de la animacion
         const char* nombre = obj.attribute("nombre").value(); //nos da un char[] = string
         const char* textura = obj.attribute("Texture").value(); //nos da un char[] = string
         const char* modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
         short tipoObj = (short) obj.attribute("tipoObj").as_int();//nos devuelve un short
-        CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj); //cargamos el enemigo
+        
+        if(obj.attribute("Frames") && obj.attribute("Animation"))
+        {
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj, logicaAnimacion, numFrames); //cargamos el enemigo
+        }
+        else
+        {
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj);
+        }
+        
+
     }
     for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
@@ -601,7 +613,7 @@ void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
-    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj)
+    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj,const char * anima , int frame)
 {
     int posicionObjeto;
 
@@ -613,7 +625,8 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
             _rec->setID(_recolectables.size());
             _rec->setPosiciones(x,y,z);
-            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura(),anima,frame);
+
             _rec->SetPosicionArrayObjetos(posicionObjeto);
             _recolectables.push_back(move(_rec));
             _rec = nullptr;
@@ -633,7 +646,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             _inter->setDesplazamientos(despX,despZ);
             _inter->setRotacion(0.0,0.0,0.0);
 
-            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_inter->GetModelo(),_inter->GetTextura());
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_inter->GetModelo(),_inter->GetTextura(),anima,frame);
             _inter->SetPosicionArrayObjetos(posicionObjeto);
 
             _interactuables.push_back(move(_inter));
@@ -646,7 +659,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             Recolectable* _rec = new Recolectable(codigo,ataque,nombre,ancho,largo,alto,x,y,z,tipoObj);
             _rec->setID(_powerup.size());
             _rec->setPosiciones(x,y,z);
-            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura(),anima,frame);
             _rec->SetPosicionArrayObjetos(posicionObjeto);
             _rec->setCantidad(propiedades[0]); //cantidad
             _powerup.push_back(move(_rec));
@@ -659,7 +672,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             Pared* _par = new Pared(nombre,ancho,largo,alto,x,y,z,tipoObj);
             _par->setID(_paredes.size());
             _par->setPosiciones(x,y,z);
-            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura,anima,frame);
             _par->SetPosicionArrayObjetos(posicionObjeto);
             _paredes.push_back(move(_par));
             _par = nullptr;
@@ -667,7 +680,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         break;
 
         default:
-            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura,anima,frame);
         break;
     }
 

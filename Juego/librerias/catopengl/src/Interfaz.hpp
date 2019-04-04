@@ -106,6 +106,8 @@ class Interfaz
         void ColorDifusa(unsigned short luz, float r,float g,float b);
         void ColorSpecular(unsigned short luz, float r,float g,float b);
 
+        void setBucle(unsigned short,bool);
+
     private:
 
         bool  banco_ids [65535];
