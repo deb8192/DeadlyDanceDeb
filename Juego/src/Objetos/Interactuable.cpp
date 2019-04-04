@@ -1,4 +1,5 @@
 #include "Interactuable.hpp"
+#include "../ConstantesComunes.hpp"
 
 Interactuable::Interactuable(int id, int codigo,
     int anc, int lar, int alt, float x, float y, float z,
@@ -62,13 +63,6 @@ Interactuable::Interactuable(int id, int codigo,
 
     _desplazamientos[0] = despX;
     _desplazamientos[1] = despZ;
-
-    // Rotamos la puerta2
-    /*if (tipoObj == 2)
-    {
-        setRotacion(0.0,0.90,0.0);
-        setNewRotacion(0.0,90.0,0.0);
-    }*/
 
     posObstaculos = _fisicas->CrearCuerpoInter(tipoObj,x/2,y/2,z/2,ancho,alto,largo,despX,despZ);
 }
@@ -269,7 +263,6 @@ void Interactuable::SetPosicionArrayObjetos(int posicionObjeto)
     posicionArrayObjetos = posicionObjeto;
 }
 
-
 int Interactuable::GetPosicionArrayObjetos()
 {
     return posicionArrayObjetos;
@@ -411,14 +404,22 @@ void Interactuable::Render(float updTime, float drawTime)
 {
     RotarEntidad(1 / updTime);
     UpdateTimeRotate(drawTime);
-    _motor->mostrarObjetos(
-        posActual.x, posActual.y, posActual.z,
-        rotActual.x, rotActual.y, rotActual.z,
-        posicionArrayObjetos
-    );
 
-    _motor->dibujarObjetoTemporal(posActual.x+_desplazamientos[0],posActual.y,posActual.z+_desplazamientos[1],
-        rotActual.x,rotActual.y,rotActual.z,ancho,alto,largo,2);
+    Constantes constantes;
+    if (tipoObjeto == constantes.PUERTA2) // Para las puertas horizontales
+        _motor->mostrarObjetos(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y+90, rotActual.z,
+            posicionArrayObjetos
+        );
+    else
+    {
+        _motor->mostrarObjetos(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y, rotActual.z,
+            posicionArrayObjetos
+        );
+    }
 }
 
 const char* Interactuable::GetModelo()
