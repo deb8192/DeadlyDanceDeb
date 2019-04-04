@@ -1,30 +1,31 @@
 #include "Interactuable.hpp"
 
-Interactuable::Interactuable(int codigo, const char* nombre,
-    int anc, int lar, int alt, int posicion, float x, float y, float z,
-    unsigned short tipoObj)
+Interactuable::Interactuable(int id, int codigo,
+    int anc, int lar, int alt, float x, float y, float z,
+    unsigned short tipoObj, float despX, float despZ, int accion)
 {
     //TO DO INICIALIZAR TODAS LAS VARIABLES
     _motor = MotorGrafico::GetInstance();
+    _fisicas = MotorFisicas::getInstance();
 
-    id = -1;
+    this->id = id;
 
     // INdrawable
     posIni.x = x;
     posIni.y = y;
     posIni.z = z;
 
-    posActual.x = 0.0f;
-    posActual.y = 0.0f;
-    posActual.z = 0.0f;
+    posActual.x = x;
+    posActual.y = y;
+    posActual.z = z;
 
-    posFutura.x = 0.0f;
-    posFutura.y = 0.0f;
-    posFutura.z = 0.0f;
+    posFutura.x = x;
+    posFutura.y = y;
+    posFutura.z = z;
 
-    posPasada.x = 0.0f;
-    posPasada.y = 0.0f;
-    posPasada.z = 0.0f;
+    posPasada.x = x;
+    posPasada.y = y;
+    posPasada.z = z;
 
     rotActual.x = 0.0f;
     rotActual.y = 0.0f;
@@ -49,29 +50,38 @@ Interactuable::Interactuable(int codigo, const char* nombre,
     animacion = 0;
     animacionAnterior = 0;
 
-    posicionArrayObjetos = posicion;
+    posicionArrayObjetos = 0; // Se cambia con el SET
     accionado = false;
 
     //INobjetos
-    std::string name_nombre(nombre);
-    cadena_nombre = new char[sizeof(name_nombre)];
-    strcpy(cadena_nombre, name_nombre.c_str());
-
-    nombreObjeto = cadena_nombre;
     codigoObjeto = codigo;
     ancho = anc;
     largo = lar;
     alto = alt;
     tipoObjeto = tipoObj;
+
+    _desplazamientos[0] = despX;
+    _desplazamientos[1] = despZ;
+
+    // Rotamos la puerta2
+    /*if (tipoObj == 2)
+    {
+        setRotacion(0.0,0.90,0.0);
+        setNewRotacion(0.0,90.0,0.0);
+    }*/
+
+    posObstaculos = _fisicas->CrearCuerpoInter(tipoObj,x/2,y/2,z/2,ancho,alto,largo,despX,despZ);
 }
 
 Interactuable::~Interactuable()
 {
     // Interactuable
     _motor = nullptr;
+    _fisicas = nullptr;
     codigoObjeto=0;
     accionado=0;
     posicionArrayObjetos=0;
+    posObstaculos=0;
 
     // TO DO: revisar cuando se cambie
     for(unsigned short i=0; i<tam-1; ++i)
@@ -81,15 +91,6 @@ Interactuable::~Interactuable()
     delete[] _desplazamientos;
 
     // INobjetos
-    nombreObjeto = nullptr;
-    delete cadena_nombre;
-
-    /*ruta_objeto = nullptr;
-    delete cadena_objeto;
-
-    ruta_textura = nullptr;
-    delete cadena_textura;*/
-
     ancho = 0;
     largo = 0;
     alto  = 0;
@@ -415,6 +416,9 @@ void Interactuable::Render(float updTime, float drawTime)
         rotActual.x, rotActual.y, rotActual.z,
         posicionArrayObjetos
     );
+
+    _motor->dibujarObjetoTemporal(posActual.x+_desplazamientos[0],posActual.y,posActual.z+_desplazamientos[1],
+        rotActual.x,rotActual.y,rotActual.z,ancho,alto,largo,2);
 }
 
 const char* Interactuable::GetModelo()

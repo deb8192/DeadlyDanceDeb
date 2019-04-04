@@ -17,10 +17,14 @@
 
 #include "Motores/MotorAudio.hpp"
 #include "Motores/MotorGrafico.hpp"
-#include "Motores/MotorFisicas.hpp"
+//#include "Motores/MotorFisicas.hpp"
 
 //cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA()
 #include "CargadorBehaviorTrees.hpp"
+
+#include "Objetos/Puerta.hpp"
+#include "Objetos/Palanca.hpp"
+#include "Objetos/Cofre.hpp"
 
 class CargadorNiveles
 {
@@ -39,12 +43,15 @@ class CargadorNiveles
         std::vector<Zona*> GetZonas();
         std::vector<Recolectable*> GetRecolectables();
         std::vector<Pared*> GetParedes();
-        std::vector<Interactuable*> GetInteractuables();
         std::vector<Recolectable*> GetPowerup();
         Enemigo* GetBoss();
         std::vector<Waypoint*> GetWaypoints();
 
-        void ReservarMemoriaVectores(int eneMax, int interMax, int waypointsMax, int zonesMax);
+        std::vector<Puerta*> GetPuertas();
+        std::vector<Palanca*> GetPalancas();
+        std::vector<Cofre*> GetCofres();
+
+        void ReservarMemoriaVectores(int eneMax, int doorsMax, int leversMax, int chestsMax, int waypointsMax, int zonesMax);
         Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -88,6 +95,10 @@ class CargadorNiveles
 
         // Variables temporales de Debug
         float* posCofre = new float[3];
+
+        std::vector<Palanca*> _palancas;
+        std::vector<Puerta*> _puertas;
+        std::vector<Cofre*> _cofres;
 };
 
 #endif /* CargadorNiveles_HPP */

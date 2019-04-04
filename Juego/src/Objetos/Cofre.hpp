@@ -8,22 +8,21 @@ class Cofre : public Interactuable
 {
     public:
         ~Cofre();
-        Cofre(bool esEne, int codigo, const char* nombre, 
-            int anc, int lar, int alt, int posicion,
+        Cofre(bool esEne, int id,
             float x, float y, float z, unsigned short tipoObj,
-            unsigned short posA, Sala* sala);
+            unsigned short posA, Sala* sala,unsigned short posFis);
         
         bool GetEsArana();
         Sala* GetSala();
         unsigned short GetPosArray();
-        void CrearFisica();
-        void BorrarFisica();
+        void ActivarCofre();
+        void DesactivarCofre();
 
     private:
         bool esArana;
         Sala* _estoy;//sala en la que esta el cofre
-        unsigned short posArrayArana; // Vector de aranas
-        vector<int> posArrayFisicas;
+        unsigned short posArrayArana; // Posicion en el vector de aranas
+        unsigned short posFisCofre; // Posicion en el vector de cofres en fisicas
 };
 
 #endif

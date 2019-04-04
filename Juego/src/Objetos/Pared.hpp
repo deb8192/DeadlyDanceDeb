@@ -10,7 +10,7 @@ using namespace std;
 class Pared : public INobjetos , public INdrawable //multiple herencia a esto se le llama derivacion multiple
 {
     public:
-        Pared(const char* nombre, int anc, int lar, int alt,
+        Pared(int anc, int lar, int alt,
             float x, float y, float z, unsigned short tipoObj);
         
         ~Pared();

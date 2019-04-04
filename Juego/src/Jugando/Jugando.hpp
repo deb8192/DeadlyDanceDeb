@@ -9,6 +9,8 @@
 #include "../Personajes/Jugador.hpp"
 #include "../Enemigos/Enemigo.hpp"
 #include "../Objetos/Interactuable.hpp"
+#include "../Objetos/Puerta.hpp"
+#include "../Objetos/Palanca.hpp"
 #include "../Objetos/Cofre.hpp"
 #include "../Objetos/Recolectable.hpp"
 #include "../Objetos/Pared.hpp"
@@ -57,7 +59,7 @@ class Jugando: public Estado {
         //Funciones de interacciones
         void CogerObjeto();
         void DejarObjeto();
-        void AccionarMecanismo(int);    //Activa mecanismos y o puertas
+        void AccionarMecanismo(int,const unsigned short);    //Activa mecanismos y o puertas
         void activarPowerUp();
 
         void updateAtEsp();//se actualiza la ejecucion de los ataques
@@ -71,7 +73,7 @@ class Jugando: public Estado {
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
         
         void AbrirPantallaPuzzle();
-        void AbrirCofre(Interactuable* _inter);
+        void AbrirCofre(Cofre* _inter);
         void CrearEnemigoArana();
         void CargarBossEnMemoria();
 
@@ -100,10 +102,13 @@ class Jugando: public Estado {
 
         std::vector<Recolectable*> _recolectables;
         std::vector<Pared*> _paredes;
-        std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
         std::vector<Recolectable*> _powerup;
         std::vector<Zona*> _zonas; //Array de zonas
         std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
+
+        std::vector<Palanca*> _palancas;
+        std::vector<Puerta*> _puertas;
+        std::vector<Cofre*> _cofres;
 
         INnpc::VectorEspacial posicionMediaEnemigos;  //Posicion media que comparten los pollos que atacan en bandada
         
