@@ -7,7 +7,7 @@ TCamara::TCamara(GLuint ww, GLuint wh)
     //valores por defecto
     esPerspectiva = true;
     cercano=0.1f;
-    lejano=250.0f;
+    lejano=300.0f;
     height=wh;
     width=ww;
     setTarget(0.0f,0.0f,0.0f);
