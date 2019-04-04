@@ -11,6 +11,7 @@
 #include "TMalla.hpp"
 #include "TPlano.hpp"
 #include "TTexto.hpp"
+#include "TBillboard.hpp"
 #include "Shader.hpp"
 
 class Interfaz
@@ -32,6 +33,8 @@ class Interfaz
         unsigned short AddImagen(const char *, unsigned int, unsigned int, float );//creamos una imagen en plano
 
         unsigned short AddTexto(std::string, GLuint); //Crear un texto
+
+        unsigned short AddBoard(float , float , float ,float, float,const char *); //Crear un texto
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
@@ -80,6 +83,8 @@ class Interfaz
         void EscalarImagen(unsigned short nid,float x,float y,bool enx = true, bool eny = true);//escala la imagen en x e y,si solo se quiere escalar de un lado se le tiene que pasar false en enx o eny
 
         void CambiarTexto(unsigned short nid,std::string texto);//cambia el texto del elemento que le pases como nid
+
+        void CambiarPosicionTexto(unsigned short nid, float x, float y); //Cambia la posicion del texto
 
         int getStartFrame(unsigned short);//consigue el frame inicial
 
@@ -161,6 +166,8 @@ class Interfaz
         std::vector<Nodo *> imagenes;//registro de imagenes en interfaz
 
         std::vector<Nodo *> textos;//registro de imagenes en interfaz
+
+        std::vector<Nodo *> boards;//registro de billboards en interfaz
 
         CatOpengl::Gestor * gestorDeRecursos;
 
