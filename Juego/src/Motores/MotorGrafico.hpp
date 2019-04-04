@@ -470,10 +470,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 vector<IGUIImage*> _imagenesP;
                 vector<IGUIStaticText*> _textosP;
 
-                // Variables camara
+            #endif
+            // Variables camara
                 unsigned short altura;
                 bool camara1;
-            #endif
     };
 
 #endif /* MotorGrafico_HPP */
