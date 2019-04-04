@@ -316,6 +316,11 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_E);
         InteractuarNivel();
     }
+    else
+    {
+        cambia = 0;
+    }
+    
 }
 
 /************************** InteractuarNivel* ************************

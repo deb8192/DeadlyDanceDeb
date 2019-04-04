@@ -2996,7 +2996,7 @@ void MotorGrafico::CambiarCamara()
     if (camara1)
     {
         altura = 0;
-        setLejano(float newLejano)
+        //setLejano(float newLejano)
     }
     else
     {
