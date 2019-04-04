@@ -1195,3 +1195,53 @@ void Interfaz::ColorSpecular(unsigned short luz, float r,float g,float b)
         }
     }
 }
+
+void Interfaz::SetLejaniaCamara(unsigned short camara,float lejania)
+{
+    //cambiar lejania de la camara
+    if(camara != 0)
+    {
+        Nodo * nodo = buscarNodo2(camara);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    TCamara* _camara = dynamic_cast<TCamara*>(tnodo->GetEntidad());
+                    if(_camara != nullptr)
+                    {
+                        _camara->setLejano(lejania);
+                        _camara->setPerspectiva();//redefinimos la vista perspectiva
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::SetCercaniaCamara(unsigned short camara,float cercania)
+{
+    //cambiar cercania de la camara
+    if(camara != 0)
+    {
+        Nodo * nodo = buscarNodo2(camara);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    TCamara* _camara = dynamic_cast<TCamara*>(tnodo->GetEntidad());
+                    if(_camara != nullptr)
+                    {
+                        _camara->setCercano(cercania);
+                        _camara->setPerspectiva();//redefinimos la vista perspectiva
+                    }
+                }
+            }
+        }
+    }
+}
