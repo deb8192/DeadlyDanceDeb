@@ -277,8 +277,8 @@ void Jugando::ManejarEventos() {
     // Multicamara
     if(_motor->EstaPulsado(KEY_C))
     {
-        _motor->CambiarCamara();
         _motor->ResetKey(KEY_C);
+        _motor->CambiarCamara();
     }
 
     // Debug para probar cofres
