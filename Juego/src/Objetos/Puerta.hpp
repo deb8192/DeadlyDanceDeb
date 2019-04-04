@@ -7,11 +7,11 @@ class Puerta : public Interactuable
 {
     public:
         ~Puerta();
-        Puerta(int codigo, const char* nombre, int anc, int lar, int alt,
-            int posicion, float x, float y, float z, unsigned short tipoObj);
-        
-        void CrearFisica();
-        void BorrarFisica();
+        Puerta(int id, int codigo, int anc, int lar, int alt,
+            float x, float y, float z, unsigned short tipoObj,
+            float despX, float despZ, int accion);
+
+        void GirarPuerta(float rotacion);
 
     private:
 };

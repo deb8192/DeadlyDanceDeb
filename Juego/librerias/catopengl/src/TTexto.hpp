@@ -47,6 +47,7 @@ class TTexto : public TEntidad
 
         //para cambiar de texto
         void CambiarTexto(std::string newtext);
+        void CambiarPosicion(GLfloat xx, GLfloat yy);
 };
 
 #endif

@@ -328,6 +328,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void HabilitarDinero();
             void DeshabilitarDinero();
 
+            // En proceso
+            void CambiarCamara();
+
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
@@ -394,7 +397,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short _txtP;
                 vector<unsigned short> _imagenesP;
                 vector<unsigned short> _textosP;
-
 
             #else
                 //variables y parametros motor irrlicht
@@ -475,6 +477,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 vector<IGUIStaticText*> _textosP;
 
             #endif
+
+                            // Variables camara
+                unsigned short altura;
+                bool camara1;
     };
 
 #endif /* MotorGrafico_HPP */

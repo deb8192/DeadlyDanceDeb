@@ -1,8 +1,7 @@
 #include "Pared.hpp"
 
-Pared::Pared(const char* nombre,
-    int anc, int lar, int alt, float x, float y, float z,
-    unsigned short tipoObj)
+Pared::Pared(int anc, int lar, int alt, 
+    float x, float y, float z, unsigned short tipoObj)
 {
     //_motor = MotorGrafico::GetInstance();
     
@@ -10,19 +9,48 @@ Pared::Pared(const char* nombre,
     posIni.x = x;
     posIni.y = y;
     posIni.z = z;
-    
-    std::string name_nombre(nombre);
-    cadena_nombre = new char[sizeof(name_nombre)];
-    strcpy(cadena_nombre, name_nombre.c_str());
 
-    nombreObjeto = cadena_nombre;
+    posActual.x = x;
+    posActual.y = y;
+    posActual.z = z;
+
+    posFutura.x = x;
+    posFutura.y = y;
+    posFutura.z = z;
+
+    posPasada.x = x;
+    posPasada.y = y;
+    posPasada.z = z;
+
+    rotActual.x = 0.0f;
+    rotActual.y = 0.0f;
+    rotActual.z = 0.0f;
+
+    rotFutura.x = 0.0f;
+    rotFutura.y = 0.0f;
+    rotFutura.z = 0.0f;
+
+    rotPasada.x = 0.0f;
+    rotPasada.y = 0.0f;
+    rotPasada.z = 0.0f;
+
+    posFisicas.x = x;
+    posFisicas.y = y;
+    posFisicas.z = z;
+
+    rotation = 0.0f;
+    moveTime = 0.0f;
+    rotateTime = 0.0f;
+
+    animacion = 0;
+    animacionAnterior = 0;
+    
+    posicionArrayObjetos = 0;
+
+    //INobjetos
     ancho = anc;
     largo = lar;
     alto = alt;
-    
-    posicionArrayObjetos = 0;
-    
-    //INobjetos
     tipoObjeto = tipoObj;
 }
 
@@ -30,21 +58,12 @@ Pared::~Pared()
 {
     // Pared
     //_motor = nullptr;
-    posicionArrayObjetos=0;
 
     // INobjetos
-    nombreObjeto = nullptr;
-    delete cadena_nombre;
-
-    /*ruta_objeto = nullptr;
-    delete cadena_objeto;
-
-    ruta_textura = nullptr;
-    delete cadena_textura;*/
-    
     ancho = 0;
     largo = 0;
     alto  = 0;
+    tipoObjeto = 0;
 
     // INdrawable
     posIni.x = 0;
@@ -78,13 +97,16 @@ Pared::~Pared()
     rotFutura.x = 0;
     rotFutura.y = 0;
     rotFutura.z = 0;
-    
+
     moveTime = 0;
     rotateTime = 0;
     rotation = 0;
     id = 0;
     animacion = 0;
     animacionAnterior = 0;
+    
+    //Pared
+    posicionArrayObjetos = 0;
 }
 
 
@@ -122,6 +144,10 @@ void Pared::RotarEntidad(float updTime)
     if(pt > 1.0f)
     {
         pt = 1.0f;
+    }
+    else if(pt < 0.0f)
+    {
+        pt = 0.0f;
     }
 
     rotActual.x = rotPasada.x * (1 - pt) + rotFutura.x * pt;

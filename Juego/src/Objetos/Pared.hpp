@@ -10,7 +10,7 @@ using namespace std;
 class Pared : public INobjetos , public INdrawable //multiple herencia a esto se le llama derivacion multiple
 {
     public:
-        Pared(const char* nombre, int anc, int lar, int alt,
+        Pared(int anc, int lar, int alt,
             float x, float y, float z, unsigned short tipoObj);
         
         ~Pared();
@@ -62,10 +62,7 @@ class Pared : public INobjetos , public INdrawable //multiple herencia a esto se
         unsigned short GetTipoObjeto();
 
     protected:
-        
-        unsigned short tam = 2;
         int posicionArrayObjetos; //Posicion del elemento en el vector de objetos del motor grafico.
-        
 };
 
 #endif /* Pared_HPP */

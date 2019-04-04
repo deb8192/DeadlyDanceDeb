@@ -13,6 +13,7 @@
 #include "../Motores/MotorAudio.hpp"
 #include "../Motores/MotorGrafico.hpp"
 #include "../Motores/SenseEventos.hpp"
+#include "../Motores/MotorFisicas.hpp"
 
 class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple herencia a esto se le llama derivacion multiple
 {

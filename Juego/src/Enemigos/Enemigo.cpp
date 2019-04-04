@@ -7,7 +7,7 @@
 #include "../ConstantesComunes.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "cmath"
-#include "../Motores/MotorFisicas.hpp"
+//#include "../Motores/MotorFisicas.hpp"
 
 Enemigo::Enemigo()
 {
@@ -739,6 +739,10 @@ void Enemigo::RotarEntidad(float updTime)
     {
         pt = 1.0f;
     }
+    else if(pt < 0.0f)
+    {
+        pt = 0.0f;
+    }
 
     rotActual.x = rotPasada.x * (1 - pt) + rotFutura.x * pt;
     rotActual.y = rotPasada.y * (1 - pt) + rotFutura.y * pt;
@@ -833,7 +837,7 @@ void Enemigo::setAtaque(int ataq)
 void Enemigo::setArmaEspecial(int ataque)
 {
     Constantes constantes;
-    _armaEspecial = new Arma(ataque, "",2,2,2,constantes.ARMA);
+    _armaEspecial = new Arma(ataque,2,2,2,constantes.ARMA);
 }
 
 void Enemigo::setSuerte(int suer)

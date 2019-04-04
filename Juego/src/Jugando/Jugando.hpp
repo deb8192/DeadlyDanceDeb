@@ -6,9 +6,11 @@
 #include "../CargadorNiveles.hpp"
 #include "../CargadorPuzzles.hpp"
 #include "../Times.hpp"
-#include "../Personajes/Jugador.hpp"
+//#include "../Personajes/Jugador.hpp"
 #include "../Enemigos/Enemigo.hpp"
-#include "../Objetos/Interactuable.hpp"
+//#include "../Objetos/Interactuable.hpp"
+#include "../Objetos/Puerta.hpp"
+#include "../Objetos/Palanca.hpp"
 #include "../Objetos/Cofre.hpp"
 #include "../Objetos/Recolectable.hpp"
 #include "../Objetos/Pared.hpp"
@@ -47,15 +49,17 @@ class Jugando: public Estado {
 
         bool CargarNivel(int nivel, int tipoJug); //Niveles en assets/maps/xml/
         void CrearJugador();//lo utilizamos para crear su objeto
-        void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, 
-            int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto,int* propiedades, unsigned short tipoObjeto);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        unsigned short NumeroAleatorio(unsigned short limite_inf, unsigned short limite_sup);
+        void CrearPowerUp(int x,int y,int z, unsigned short tipoObjeto,
+            unsigned short cantidad);
+        void CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
+            unsigned short tipoObjeto, unsigned short ataque);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void ConectarWaypoints();
 
         //Funciones de interacciones
         void CogerObjeto();
         void DejarObjeto();
-        void AccionarMecanismo(int);    //Activa mecanismos y o puertas
-        void crearObjetoCofre(Interactuable* );
+        void AccionarMecanismo(int,const unsigned short);    //Activa mecanismos y o puertas
         void activarPowerUp();
 
         void updateAtEsp();//se actualiza la ejecucion de los ataques
@@ -69,7 +73,7 @@ class Jugando: public Estado {
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
         
         void AbrirPantallaPuzzle();
-        void AbrirCofre(Interactuable* _inter);
+        void AbrirCofre(Cofre* _inter);
         void CrearEnemigoArana();
         void CargarBossEnMemoria();
 
@@ -98,10 +102,13 @@ class Jugando: public Estado {
 
         std::vector<Recolectable*> _recolectables;
         std::vector<Pared*> _paredes;
-        std::vector<Interactuable*> _interactuables; //Objetos interactuables del mapa
         std::vector<Recolectable*> _powerup;
         std::vector<Zona*> _zonas; //Array de zonas
         std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
+
+        std::vector<Palanca*> _palancas;
+        std::vector<Puerta*> _puertas;
+        std::vector<Cofre*> _cofres;
 
         INnpc::VectorEspacial posicionMediaEnemigos;  //Posicion media que comparten los pollos que atacan en bandada
         
