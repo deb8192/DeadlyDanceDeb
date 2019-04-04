@@ -35,11 +35,11 @@ class TEntidad
         bool GetEjecutar();
 
         void SetShader(Shader *);
-
+        void SetShader2(Shader *);
         Shader * GetShader();
-
+        Shader * GetShader2();
         void RemoveShader();
-
+        void RemoveShader2();
         void TimeEngine();
 
         float getTime();
@@ -65,6 +65,7 @@ class TEntidad
         bool gui = false;//sirve para saber si es un gui
         bool camara = false;//sirve para saber si es una camara
         Shader * shader = nullptr;//puntero a shader
+        Shader * shader2 = nullptr;//puntero a shader
         float deltaTime = 0.0f;	// Tiempo entre el actual frame y el ultimo
         float lastFrame = 0.0f; // Tiempo del ultimo frame
 };

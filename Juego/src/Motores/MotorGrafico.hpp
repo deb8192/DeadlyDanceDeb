@@ -477,8 +477,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 vector<IGUIStaticText*> _textosP;
 
             #endif
-
-                            // Variables camara
+            // Variables camara
                 unsigned short altura;
                 bool camara1;
     };
