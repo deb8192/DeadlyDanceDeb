@@ -264,7 +264,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
 
                         if(modo == MODO_ATAQUE)
                         {
-                            cout<<"EL SEÑOR GUARDIAN ESTA EN MODO ATAQUE"<<endl;
+                            //cout<<"EL SEÑOR GUARDIAN ESTA EN MODO ATAQUE"<<endl;
                             funciona = true;
                         }
                         else
@@ -294,7 +294,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
 
             case EN_ATACAR: //El Guardian ataca
                 {
-                    cout<<"ataca guardian"<<endl;
+                    //cout<<"ataca guardian"<<endl;
                     if(!atacado)
                     {
                         int danyo;
@@ -351,11 +351,14 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
             {
                 if(modo == MODO_DEFAULT)
                 {
-                    this->ver(constantes.DOS, constantes.CINCO * constantes.SEIS);
+                    //this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
                     if(!hecho)
                     {
                         //Merodea estableciendo un nuevo angulo de rotacion
-                        this->setRotation(this->randomBinomial() * maxRotacion);
+                        if(!controlRotacion)
+                        {
+                            this->setRotation(this->randomBinomial() * maxRotacion);
+                        }
                         this->Merodear();
                         this->setTimeMerodear(1.5f);
                         hecho = true;
@@ -373,10 +376,13 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                     else
                     {
                         //Merodea poniendo en positivo o negativo el angulo actual de rotacion
-                        int rota = rand() % 3 - 1;
-                        if (rota != 0)
+                        if(!controlRotacion)
                         {
-                            rotation *= rota;
+                            int rota = rand() % 3 - 1;
+                            if (rota != 0)
+                            {
+                                rotation *= rota;
+                            }
                         }
                         this->Merodear();
                         //Comprueba si ve al jugador para atacarle en caso necesario

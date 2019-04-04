@@ -61,7 +61,7 @@ int Pathfinder::calcularCostes(struct NodeRecord nodo, Sala* destino)
     coste = sqrt(coste);
 
     int costeFinal = nodo.costSoFar + (int) coste;
-    cout << "Coste final " << costeFinal <<endl;
+    //cout << "Coste final " << costeFinal <<endl;
     return costeFinal;
 }
 /********** GetSmallest, devuelve la mas pequeña ************
@@ -122,7 +122,6 @@ std::vector <Waypoint *> Pathfinder::encontrarCamino(Sala *start, Sala *end)
     {
         listaCerrada.clear();//Si tiene datos, se vacia
     }
-    cout << "Entra" << endl;
     contador = 0;
     startNodo.nodo = start;
     startNodo.costSoFar = 0;
@@ -145,16 +144,11 @@ std::vector <Waypoint *> Pathfinder::encontrarCamino(Sala *start, Sala *end)
         //Si las salas coinciden, se ha llegado al final y se acaba la ejecucion.
         if(termina)                                 
         {
-            cout << "Termina" <<endl;
             //Se monta el camino de nodos que se devuelve en la funcion
             while(!coincide(actualNodo.nodo, start))
             {
-                cout << "¿Coincide?" <<endl;
-                cout << "Nodo " <<actualNodo.nodo->getPosicionEnGrafica() << endl;
-                cout << "Nodo " <<start->getPosicionEnGrafica() << endl;
-                cout << "Conexion " <<actualNodo.conexion.desde->getPosicionEnGrafica() << endl;
                 camino.insert(camino.begin(), actualNodo);
-
+            
                 i = 0;
                 //Busca los nodos de las conexiones en la lista de nodos procesados para hallar el siguiente nodo del camino
                 while (!coincide(actualNodo.conexion.desde, listaCerrada.at(i).nodo) || actualNodo.conexion.estimatedTotalCost != listaCerrada.at(i).estimatedTotalCost)
@@ -163,9 +157,10 @@ std::vector <Waypoint *> Pathfinder::encontrarCamino(Sala *start, Sala *end)
                 } 
                 actualNodo = listaCerrada.at(i);
             }
-            cout << "Sale" <<endl;
-            cout << "Nodo " <<actualNodo.nodo->getPosicionEnGrafica() << endl;
-            cout << "Nodo " <<start->getPosicionEnGrafica() << endl;
+            //cout << "Termina" <<endl;
+            //cout << "Sale" <<endl;
+            //cout << "Nodo " <<actualNodo.nodo->getPosicionEnGrafica() << endl;
+            //cout << "Nodo " <<start->getPosicionEnGrafica() << endl;
             camino.insert(camino.begin(), actualNodo);
             waypointsRecorridos.reserve(camino.size() * 3);
             bool encontrado = false;
@@ -234,7 +229,7 @@ std::vector <Waypoint *> Pathfinder::encontrarCamino(Sala *start, Sala *end)
         else
         {
             vector <Sala*> salas;
-            cout << "No devuelve el camino" << endl;
+            //cout << "No devuelve el camino" << endl;
             for(i = 0; i < actualNodo.nodo->getSalidas().size(); i++)
             {
                 salas.push_back(actualNodo.nodo->getSalidas().at(i));
