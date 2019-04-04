@@ -10,7 +10,7 @@ Pollo::Pollo(float nX, float nY, float nZ, int maxVida)
     funciona = true;
     atacado = false;
     _ordenes = new short [constantes.DOS];
-    maxRotacion = constantes.PI_CUARTOS;
+    maxRotacion = constantes.PI_OCTAVOS;
     rotation = constantes.CERO;
 
     _modelo = "assets/models/Pollo.obj";
@@ -164,11 +164,14 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
 
             case EN_MERODEA: //El Pollo merodea
                 {
-                    this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
+                    //this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
                     if(!hecho)
                     {
                         //Merodea estableciendo un nuevo angulo de rotacion
-                        this->setRotation(this->randomBinomial() * maxRotacion);
+                        if(!controlRotacion)
+                        {
+                            this->setRotation(this->randomBinomial() * maxRotacion);
+                        }
                         this->Merodear();
                         this->setTimeMerodear(1.5f);
                         hecho = true;
@@ -192,10 +195,13 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                     else
                     {
                         //Merodea poniendo en positivo o negativo el angulo actual de rotacion
-                        int rota = rand() % 3 - 1;
-                        if (rota != 0)
+                        if(!controlRotacion)
                         {
-                            rotation *= rota;
+                            int rota = rand() % 3 - 1;
+                            if (rota != 0)
+                            {
+                                rotation *= rota;
+                            }
                         }
                         this->Merodear();
                         //Comprueba si ve al jugador para atacarle en caso necesario
