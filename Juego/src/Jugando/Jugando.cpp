@@ -316,10 +316,6 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_E);
         InteractuarNivel();
     }
-    /*else{
-        cambia = 0;
-    }*/
-    //cout << "cambia: " << cambia << endl; //esto es para ver cuantas iteraciones de bucle pasan cuando coge objeto
 }
 
 /************************** InteractuarNivel* ************************
@@ -337,19 +333,15 @@ void Jugando::InteractuarNivel()
 
     if (int_puerta >= 0)
     {
-        cout<<"Detecta la puerta"<<endl;
         AccionarMecanismo(int_puerta, constantes.PUERTA_OBJ);
     }
-
-    if (int_palanca >= 0)
+    else if (int_palanca >= 0)
     {
-        cout<<"Detecta la palanca"<<endl;
         AccionarMecanismo(int_palanca, constantes.PALANCA);
     }
 
     if (int_cofre >= 0)
     {
-        cout<<"Detecta el cofre"<<endl;
         AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
     }
     
@@ -360,35 +352,8 @@ void Jugando::InteractuarNivel()
     }
     else if (rec_col >= 0)
     {
-        cout<<"Detecta recolectable"<<endl;
         CogerObjeto();
     }
-
-    /*if(rec_col < 0 && int_col < 0)
-    {
-        if(cambia <= 0)
-        {
-            DejarObjeto();
-        }
-        cambia++;
-    }
-    else if(rec_col >= 0)
-    {
-        if(cambia <= 0)
-        {
-            CogerObjeto();
-        }
-        cambia++;
-    }
-    else if(int_col >= 0)
-    {
-        if(cambia <= 0)
-        {
-            cout<<"Detecta el objeto"<<endl;
-            this->AccionarMecanismo(int_col);
-        }
-        cambia++;
-    }*/
 }
 
 /************** Update *************
@@ -1123,11 +1088,8 @@ void Jugando::DejarObjeto()
 }
 
 /*********** AccionarMecanismo ***********
-*  Funcion que, en funcion del valor codigo obtenida
-*  del vector interactuable en la posicion int_col,
-*  si codigo es -1 abre un cofre, 0 abre una puerta
-*  sin llave y si es mayor que 0 abrira la puerta
-*  indicada si el jugador tiene su llave.
+*  Funcion que depende del tipoObj, obtiene el interactuable
+*  de la posicion pos de su propio array.
 */
 void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
 {
@@ -1135,7 +1097,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
     unsigned int i = 0;
     bool coincide = false;
 
-    if (tipoObj == constantes.COFRE_OBJ) // TO DO: repasar todo lo de los cofres
+    if (tipoObj == constantes.COFRE_OBJ) // TO DO: repasar todo lo de los cofres al terminar la IA
     {
         _cofreP = _cofres.at(pos);
         if (_cofreP->GetEsArana())
@@ -1168,7 +1130,6 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
         }
         if (coincide)
         {
-            cout<<"La palanca acciona una puerta"<<endl;
             //Se acciona o desacciona el mecanismo segun su estado actual
             bool activar = _palanca->accionar();
             Puerta* _puerta = _puertas.at(i);
@@ -1292,19 +1253,19 @@ void Jugando::activarPowerUp()
         //Efecto del power up (ataque) 0 = vida, 1 = energia, 2 = monedas, 3 = danyo, 4 = defensa
         if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.VIDA /*&& _jugador->getVida() < 100*/)
         {
-            cout << "PowerUP Vida! TOTAL:" << _jugador->getVida() << endl;
+            //cout << "PowerUP Vida! TOTAL:" << _jugador->getVida() << endl;
             _jugador->ModificarVida(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ENERGIA /*&& _jugador->getBarraAtEs() < 100*/)
         {
-            cout << "PowerUP Energia! TOTAL:" << _jugador->getBarraAtEs() << endl;
+            //cout << "PowerUP Energia! TOTAL:" << _jugador->getBarraAtEs() << endl;
            _jugador->ModificarBarraAtEs(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ORO)
         {
-            cout << "Recoges " << _powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
+            //cout << "Recoges " << _powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
             _jugador->ModificarDinero(_powerup.at(int_cpw)->getCantidad());
             locoges = true;
         }
@@ -1397,8 +1358,8 @@ void Jugando::updateAtEsp()
             _jugador->setLastTimeAtEsp(tiempoActual);
             _jugador->setTimeAtEsp(tiempoAtaqueEsp);
             danyo = _jugador->AtacarEspecial();
-            cout << "tiempo: " << _jugador->getTimeAtEsp() << endl;
-            cout << "existe: " << _motor->getArmaEspecial() << endl;
+            //cout << "tiempo: " << _jugador->getTimeAtEsp() << endl;
+            //cout << "existe: " << _motor->getArmaEspecial() << endl;
         }
         /*if(_jugador->getTimeAtEsp() > 0.f && ((int) (_jugador->getTimeAtEsp()*  100) % 10 >= 4) && ((int) (_jugador->getTimeAtEsp()*  100) % 10 <= 4))
         {
@@ -1411,7 +1372,7 @@ void Jugando::updateAtEsp()
         #ifdef WEMOTOR
             if(_jugador->getTimeAtEsp() <= 0.5f && _motor->getArmaEspecial()) //Zona de pruebas
             {
-                 cout << "SE BORRA" << endl;
+                 //cout << "SE BORRA" << endl;
                 _motor->borrarArmaEspecial();
             }
         #else
@@ -1493,7 +1454,7 @@ void Jugando::enemDejarDePedirAyuda()
 {
     if(_enemPideAyuda != nullptr)
     {
-        cout << "\e[42m Deja de pedir ayuda \e[0m" << endl;
+        //cout << "\e[42m Deja de pedir ayuda \e[0m" << endl;
         _enemPideAyuda->SetPedirAyuda(false);
         _enemPideAyuda = nullptr;
     }
