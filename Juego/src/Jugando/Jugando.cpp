@@ -339,15 +339,18 @@ void Jugando::InteractuarNivel()
     if (int_puerta >= 0)
     {
         AccionarMecanismo(int_puerta, constantes.PUERTA_OBJ);
+        cambia++;
     }
     else if (int_palanca >= 0)
     {
         AccionarMecanismo(int_palanca, constantes.PALANCA);
+        cambia++;
     }
 
     if (int_cofre >= 0)
     {
         AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
+        cambia++;
     }
     
     if(rec_col < 0 && int_cofre < 0 && 
