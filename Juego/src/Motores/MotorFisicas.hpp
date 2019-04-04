@@ -20,9 +20,9 @@ using namespace reactphysics3d;
             }
             //fin singleton public
 
-            void crearCuerpo(int accion, int rp, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator, float despX, float despZ);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
-            //TO DO: pasar a vector de punteros
-            std::vector<int> crearCuerpoCofre(float px, float py, float pz, float ancho, float alto, float largo, float despX, float despZ);
+            void crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator, float despX, float despZ);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
+            unsigned short CrearCuerpoInter(unsigned short tipoObj, float px, float py, float pz, 
+                float ancho, float alto, float largo, float despX, float despZ);
             //int crearCuerpo(float px, float py, float pz, int type, float ancho, float largo, float alto);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             void actualizarPosicionCuerpo(float px, float py, float pz,int posicion);//se le pasa las nuevas posiciones del cuerpo del array de cuerpos de la posicion
             Ray* crearRayo(float x, float y, float z, float rotation, float longitud);//crea un rayo en esas posiciones con la longitud
@@ -30,13 +30,13 @@ using namespace reactphysics3d;
 
             void updateJugador(float x, float y, float z);//actualizamos al jugador en el espacio de las fisicas
             void updateEnemigos(float x, float y, float z, unsigned int i);//actualizamos al enemigo en el espacio de las fisicas
-            void updatePuerta(float x, float y, float z, float rx, float ry, float rz, float* desplazamientos, unsigned int i);
+            void updatePuerta(float x, float y, float z, float rx, float ry, float rz, float despX, float despZ, unsigned int pos);
             void EraseObstaculo(int idx);
             void EraseColectable(int idx);
             void ErasePared(int idx);
             void EraseColectablePowerup(int idx);
             void EraseEnemigo(std::size_t i);
-            void EraseCofre(std::size_t posObs, std::size_t posInter);
+            void DesactivarCofre(unsigned short pos);
             void EraseJugador();
             void EraseArma();
             CollisionBody* getColectables(int n);
@@ -50,7 +50,11 @@ using namespace reactphysics3d;
             bool enemyCollidePlatform(unsigned int enemigo);
             int collideColectable();
             int collideColectablePowerup();
-            int collideInteractuable();
+            
+            short collidePuerta();
+            short collidePalanca();
+            short collideCofre();
+
             void colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z);
             void llevarBox(float x, float y, float z, float anc, float lar, float alt);
             void cambiarCamara();
@@ -63,7 +67,6 @@ using namespace reactphysics3d;
             void updateAtaquEspecEnemigos(float x, float y, float z, unsigned int i);
 
             void setFormaArma(float px, float py, float pz, int anc, int lar, int alt);
-            void setFormaRecolectable(int id, float px, float py, float pz, int anc, int lar, int alt);
             void updateAtaqueEspecial(float x, float y, float z, float rx, float ry, float rz);
             void vaciarupdateArma();
 
@@ -100,9 +103,13 @@ using namespace reactphysics3d;
 
             std::vector<CollisionBody *> recolectables;//Vector de elementos que se pueden coger
             std::vector<CollisionBody *> recolectables_powerup;//Vector recolectables_powerup
-            std::vector<CollisionBody *> interactuables;//Vector de elementos con los que interactuar
+            
             //std::vector<float> interAncho;//Vector de elementos con los que interactuar
            // std::vector<float> interLargo;//Vector de elementos con los que interactuar
+            
+            std::vector<CollisionBody *> _puertas;
+            std::vector<CollisionBody *> _palancas;
+            std::vector<CollisionBody *> _cofres;
 
             std::vector<unsigned int> relacionInteractuablesObstaculos;//vector que contiene en la posicion correspondiente a un interactuable en su vector el valor de su posicion en el vector de obstaculos
             std::vector<unsigned int> relacionParedesObstaculos;//vector que contiene en la posicion correspondiente a una pared en su vector el valor de su posicion en el vector de obstaculos

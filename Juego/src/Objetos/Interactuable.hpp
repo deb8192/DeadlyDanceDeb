@@ -3,6 +3,7 @@
 #include "../Motores/INobjetos.hpp"
 #include "../Motores/INdrawable.hpp"
 #include "../Motores/MotorGrafico.hpp"
+#include "../Motores/MotorFisicas.hpp"
 
 using namespace std;
 
@@ -10,8 +11,9 @@ using namespace std;
 class Interactuable : public INobjetos , public INdrawable //multiple herencia a esto se le llama derivacion multiple
 {
     public:
-        Interactuable(int codigo, const char* nombre, int anc, int lar, int alt,
-            int posicion, float x, float y, float z, unsigned short tipoObj);
+        Interactuable(int id, int codigo, int anc, int lar, int alt,
+            float x, float y, float z, unsigned short tipoObj,
+            float despX, float despZ, int accion);
 
         ~Interactuable();
 
@@ -70,16 +72,15 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
         const char* GetTextura(); //textura
         unsigned short GetTipoObjeto();
 
-        // Utilizadas de momento por el cofre
-        virtual void CrearFisica()=0;
-        virtual void BorrarFisica()=0;
-
     protected:
         MotorGrafico* _motor;
+        MotorFisicas* _fisicas;
+        
         //Si codigoObjeto es > 0 es un numero comun entre dos objetos: una palanca con el mismo numero que una puerta abre dicha puerta
         int codigoObjeto;   //En caso de igualarse a 0 es una puerta sin llave, y si es -1 es un cofre
         bool accionado;     //Dado que son objetos accionables tendra dos estado segun este accionado o no
         int posicionArrayObjetos; //Posicion del elemento en el vector de objetos del motor grafico.
+        unsigned short posObstaculos;  //Posicion del elemento en el vector de obstaculos del motor de fisicas
 
         unsigned short tam = 2;
         float* _desplazamientos = new float [tam];   //Desplazamientos en X y en Z para le giro de la puerta

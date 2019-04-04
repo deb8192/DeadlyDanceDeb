@@ -31,7 +31,7 @@ Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
 : Jugador()
 {
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    _fisicas->crearCuerpo(accion,0,nX/2,nY/2,nZ/2,3,2,2,2,1,0,0);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
+    _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,3,2,2,2,1,0,0);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
     _fisicas = nullptr;
 
     this->tipoJug = tipoJug;
@@ -320,7 +320,7 @@ int Jugador::Atacar(int i)
         if(this->getArma() == nullptr)
         {
             setAnimacion(2);
-            _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,3,3,3,4,0,0);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,3,3,3,4,0,0);
             _motora->getEvent("SinArma")->setVolume(0.4f);
             _motora->getEvent("SinArma")->start();
         }
@@ -328,7 +328,7 @@ int Jugador::Atacar(int i)
         else if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)
         {
             //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,1,5,0,0,4,0,0);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4,0,0);
             _motora->getEvent("GolpeGuitarra")->setVolume(0.5f);
             _motora->getEvent("GolpeGuitarra")->start();
         }
@@ -337,7 +337,7 @@ int Jugador::Atacar(int i)
         {
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj",NULL);
             //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0);
             _motora->getEvent("Arpa")->setVolume(0.5f);
             _motora->getEvent("Arpa")->start();
         }
@@ -410,7 +410,7 @@ int Jugador::AtacarEspecial()
             if(tipoJug == constantes.HEAVY)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                _fisicas->crearCuerpo(0,0,
+                _fisicas->crearCuerpo(0,
                     _armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),
                     2,8,1,8,5,0,0);
                 _motora->getEvent("GuitarraEspecial")->setVolume(0.5f);
@@ -420,7 +420,7 @@ int Jugador::AtacarEspecial()
             else if(tipoJug == constantes.BAILAORA)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                _fisicas->crearCuerpo(0,0,
+                _fisicas->crearCuerpo(0,
                     _armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),
                     2,8,8,8,5,0,0);
                 _motora->getEvent("Arpa")->start(); // TO DO: Evento de sonido temporal

@@ -1,8 +1,7 @@
 #include "Pared.hpp"
 
-Pared::Pared(const char* nombre,
-    int anc, int lar, int alt, float x, float y, float z,
-    unsigned short tipoObj)
+Pared::Pared(int anc, int lar, int alt, 
+    float x, float y, float z, unsigned short tipoObj)
 {
     //_motor = MotorGrafico::GetInstance();
     
@@ -11,17 +10,17 @@ Pared::Pared(const char* nombre,
     posIni.y = y;
     posIni.z = z;
 
-    posActual.x = 0.0f;
-    posActual.y = 0.0f;
-    posActual.z = 0.0f;
+    posActual.x = x;
+    posActual.y = y;
+    posActual.z = z;
 
-    posFutura.x = 0.0f;
-    posFutura.y = 0.0f;
-    posFutura.z = 0.0f;
+    posFutura.x = x;
+    posFutura.y = y;
+    posFutura.z = z;
 
-    posPasada.x = 0.0f;
-    posPasada.y = 0.0f;
-    posPasada.z = 0.0f;
+    posPasada.x = x;
+    posPasada.y = y;
+    posPasada.z = z;
 
     rotActual.x = 0.0f;
     rotActual.y = 0.0f;
@@ -49,11 +48,6 @@ Pared::Pared(const char* nombre,
     posicionArrayObjetos = 0;
 
     //INobjetos
-    std::string name_nombre(nombre);
-    cadena_nombre = new char[sizeof(name_nombre)];
-    strcpy(cadena_nombre, name_nombre.c_str());
-
-    nombreObjeto = cadena_nombre;
     ancho = anc;
     largo = lar;
     alto = alt;
@@ -69,10 +63,6 @@ Pared::~Pared()
     //_motor = nullptr;
 
     // INobjetos
-    nombreObjeto = nullptr;
-    delete cadena_nombre;
-    cadena_nombre = nullptr;
-    
     ancho = 0;
     largo = 0;
     alto  = 0;
