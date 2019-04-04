@@ -7,10 +7,7 @@ Puerta::Puerta(int id, int codigo,
 : Interactuable(id, codigo, anc, lar, alt,
     x, y, z, tipoObj, despX, despZ, accion)
 {
-    if (tipoObj == 2)
-        _modelo = "assets/models/Puertas/Puerta2.obj";
-    else
-        _modelo = "assets/models/Puertas/Puerta.obj";
+    _modelo = "assets/models/Puertas/Puerta.obj";
     _textura = "assets/texture/Puerta.png";
 }
 
