@@ -64,6 +64,13 @@ Interactuable::Interactuable(int id, int codigo,
     _desplazamientos[0] = despX;
     _desplazamientos[1] = despZ;
 
+    // TO DO: descomentar cuando se cambien los valores de puertas2 en el XML
+    /*if (tipoObjeto == constantes.PUERTA2)
+    {
+        setRotation(0,90,0);
+        setNewRotation(0,90,0);
+    }*/
+
     posObstaculos = _fisicas->CrearCuerpoInter(tipoObj,x/2,y/2,z/2,ancho,alto,largo,despX,despZ);
 }
 
@@ -406,6 +413,7 @@ void Interactuable::Render(float updTime, float drawTime)
     UpdateTimeRotate(drawTime);
 
     Constantes constantes;
+    // TO DO: Para evitar esto, cambiar las puertas2 del XML con el ancho y alto de la puerta como si fuera vertical
     if (tipoObjeto == constantes.PUERTA2) // Para las puertas horizontales
         _motor->mostrarObjetos(
             posActual.x, posActual.y, posActual.z,
