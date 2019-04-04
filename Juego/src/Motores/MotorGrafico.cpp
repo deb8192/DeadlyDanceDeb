@@ -33,6 +33,8 @@ MotorGrafico::MotorGrafico()
         camx = 0;
         camz = 30;
         cams = -1;
+        altura = 0;
+        camara1 = true;
         existearmaexp = false;
 
         idCargando = 0;
@@ -1332,7 +1334,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
         {
             // Centrar la camara
             nodeCamPosition[0] = x+(camx*cams);
-            nodeCamPosition[1] = y+30+newy;
+            nodeCamPosition[1] = y+30+newy+altura;
             nodeCamPosition[2] = z+newz+(camz*cams);
             nodeCamTarget[0] = x;
             nodeCamTarget[1] = y;
@@ -1357,7 +1359,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
         // Centrar la camara
         nodeCamPosition.X = x+(camx*cams);
-        nodeCamPosition.Y = y+30;
+        nodeCamPosition.Y = y+30+altura;
         nodeCamPosition.Z = z+(camz*cams);
         nodeCamTarget.X = x;
         nodeCamTarget.Y = y;
@@ -2986,4 +2988,18 @@ void MotorGrafico::HabilitarDinero()
             _interfaz->HabilitarObjeto(moneyI);
         }
     #endif
+}
+
+void MotorGrafico::CambiarCamara()
+{
+    camara1 = !camara1;
+    if (camara1)
+    {
+        altura = 0;
+    }
+    else
+    {
+        altura = 245;
+    }
+    
 }

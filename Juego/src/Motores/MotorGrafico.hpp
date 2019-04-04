@@ -325,6 +325,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void HabilitarDinero();
             void DeshabilitarDinero();
 
+            // En proceso
+            void CambiarCamara();
+
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
@@ -467,6 +470,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 vector<IGUIImage*> _imagenesP;
                 vector<IGUIStaticText*> _textosP;
 
+                // Variables camara
+                unsigned short altura;
+                bool camara1;
             #endif
     };
 

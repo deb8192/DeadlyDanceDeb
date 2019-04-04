@@ -1,5 +1,5 @@
 #include "Cofre.hpp"
-//#include "../Motores/MotorFisicas.hpp"
+#include "../Motores/MotorFisicas.hpp"
 
 Cofre::Cofre(bool esEne, int id,
     float x, float y, float z, unsigned short tipoObj,
@@ -52,7 +52,9 @@ void Cofre::ActivarCofre()
 
 void Cofre::DesactivarCofre()
 {
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     if (esArana)
         _fisicas->EraseObstaculo(posObstaculos);
     _fisicas->DesactivarCofre(posFisCofre);
+    _fisicas = nullptr;
 }

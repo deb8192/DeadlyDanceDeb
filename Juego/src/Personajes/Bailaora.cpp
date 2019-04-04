@@ -1,5 +1,4 @@
 #include "Bailaora.hpp"
-#include "../ConstantesComunes.hpp"
 
 Bailaora::Bailaora(unsigned short tipoJug,int nX,int nY,int nZ,int ancho,int largo,int alto,int accion,int maxVida)
 : Jugador(tipoJug,nX,nY,nZ,ancho,largo,alto,accion,maxVida)
@@ -16,7 +15,6 @@ Bailaora::~Bailaora()
 //Si el ataque especial es el de la Bailaora, es circular a distancia
 void Bailaora::armaAtacarEspecialUpd()
 {
-    Constantes constantes;
     //Formula de ataque circular aumentando la distancia
     incrAtDisCirc += 1.5;
     atespz = this->getZ();
@@ -57,27 +55,16 @@ void Bailaora::AtacarEspecialUpdate(int* danyo, std::vector<Enemigo*> &_getEnemi
 
 void Bailaora::RenderAtaqueEsp(float updateTime, float drawTime)
 {
-    getArmaEspecial()->moverseEntidad(1 / updateTime);
-    getArmaEspecial()->RotarEntidad(1 / updateTime);
-    getArmaEspecial()->UpdateTimeMove(drawTime);
+    _armaEspecial->moverseEntidad(1 / updateTime);
+    _armaEspecial->RotarEntidad(1 / updateTime);
+    _armaEspecial->UpdateTimeMove(drawTime);
 
     _motor->mostrarArmaEspecial(
-        GetDatosAtEsp()[0],
-        GetDatosAtEsp()[1],
-        GetDatosAtEsp()[2],
-        GetDatosAtEsp()[3],
-        GetDatosAtEsp()[4],
-        GetDatosAtEsp()[5]);
+        _armaEspecial->getX(), _armaEspecial->getY(), _armaEspecial->getZ(),
+        _armaEspecial->getRX(), _armaEspecial->getRY(), _armaEspecial->getRZ());
 
     _motor->dibujarObjetoTemporal(
-        getArmaEspecial()->getFisX()*2,
-        getArmaEspecial()->getY(),
-        getArmaEspecial()->getFisZ()*2,
-        GetDatosAtEsp()[3],
-        GetDatosAtEsp()[4],
-        GetDatosAtEsp()[5],
-        8,
-        1,
-        8,
-        3);
+        _armaEspecial->getFisX()*2, _armaEspecial->getY(),_armaEspecial->getFisZ()*2,
+        _armaEspecial->getRX(), _armaEspecial->getRY(), _armaEspecial->getRZ(),
+        8, 1, 8, 3);
 }

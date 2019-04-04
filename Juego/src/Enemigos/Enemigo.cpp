@@ -7,7 +7,7 @@
 #include "../ConstantesComunes.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "cmath"
-#include "../Motores/MotorFisicas.hpp"
+//#include "../Motores/MotorFisicas.hpp"
 
 Enemigo::Enemigo()
 {

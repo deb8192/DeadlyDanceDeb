@@ -1,5 +1,4 @@
 #include "Heavy.hpp"
-#include "../ConstantesComunes.hpp"
 
 Heavy::Heavy(unsigned short tipoJug,int nX,int nY,int nZ,int ancho,int largo,int alto,int accion, int maxVida)
 : Jugador(tipoJug,nX,nY,nZ,ancho,largo,alto,accion,maxVida)
@@ -19,7 +18,6 @@ Heavy::~Heavy()
 //Si el ataque especial es el del Heavy, es cuerpo a cuerpo
 void Heavy::armaAtacarEspecialUpd()
 {
-    Constantes constantes;
     int distancia = 5;
     //Calculo de la posicion del arma delante  int getAnimacion();del jugador
     atespx = distancia * sin(constantes.PI * this->getRY() / constantes.PI_RADIAN) + this->getX();
@@ -43,27 +41,16 @@ void Heavy::AtacarEspecialUpdate(int* danyo, std::vector<Enemigo*> &_getEnemigos
 
 void Heavy::RenderAtaqueEsp(float updateTime, float drawTime)
 {
-    getArmaEspecial()->moverseEntidad(1 / updateTime);
-    getArmaEspecial()->RotarEntidad(1 / updateTime);
-    getArmaEspecial()->UpdateTimeMove(drawTime);
+    _armaEspecial->moverseEntidad(1 / updateTime);
+    _armaEspecial->RotarEntidad(1 / updateTime);
+    _armaEspecial->UpdateTimeMove(drawTime);
 
     _motor->mostrarArmaEspecial(
-        GetDatosAtEsp()[0],
-        getY(),
-        GetDatosAtEsp()[2],
-        getRX(),
-        getRY(),
-        getRZ());
+        _armaEspecial->getX(), _armaEspecial->getY(), _armaEspecial->getZ(),
+        _armaEspecial->getRX(), _armaEspecial->getRY(), _armaEspecial->getRZ());
 
     _motor->dibujarObjetoTemporal(
-        getArmaEspecial()->getFisX()*2,
-        getY(),
-        getArmaEspecial()->getFisZ()*2,
-        getRX(),
-        getRY(),
-        getRZ(),
-        8,
-        1,
-        8,
-        2);
+        _armaEspecial->getFisX()*2, _armaEspecial->getY(),_armaEspecial->getFisZ()*2,
+        _armaEspecial->getRX(), _armaEspecial->getRY(), _armaEspecial->getRZ(),
+        8, 1, 8, 2);
 }
