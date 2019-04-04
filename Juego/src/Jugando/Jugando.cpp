@@ -829,7 +829,7 @@ void Jugando::Reanudar()
     {
         if (ganarPuzzle)
         {
-            // TO DO: Crear objeto chulo y pasar pos
+            // TO DO: Crear objeto chulo
             _cofreP->DesactivarCofre();
             AbrirCofre(_cofreP);
             _cofreP = nullptr;
@@ -1118,7 +1118,6 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
         //Busca la puerta que coincide con la palanca que se esta activando
         while(i < _puertas.size() && !coincide)
         {
-            // TO DO: comprobar 1º si no es null, despues que no coincida el codigo
             if (_puertas.at(i)->getCodigo() != _palanca->getCodigo())
             {
                 i++;
