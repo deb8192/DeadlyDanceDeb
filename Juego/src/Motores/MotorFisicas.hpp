@@ -4,6 +4,7 @@
 #include "reactphysics3d.h"
 #include <vector>
 #include "math.h"
+#include "../ConstantesComunes.hpp"
 
 using namespace reactphysics3d;
 
@@ -128,6 +129,8 @@ using namespace reactphysics3d;
             //las siguientes variables son para movimiento, colisiones y giro de camara
             float ax = 1.0f, az = 20.0f, deg;
             int gcam = 0;
+            
+            Constantes constantes;
 
             // Ya no utilizar - MI
             //std::vector<CollisionBody *> objetos;

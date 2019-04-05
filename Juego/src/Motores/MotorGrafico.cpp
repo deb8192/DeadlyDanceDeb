@@ -1,5 +1,4 @@
 #include "MotorGrafico.hpp" //se llama a su cabecera para cargar las dependencias
-#include "../ConstantesComunes.hpp"
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 MotorGrafico* MotorGrafico::_unica_instancia = 0;
@@ -1421,7 +1420,6 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
         if (_armaEsp != 0)
         {
             existearmaexp = true;
-            Constantes constantes;
             // cout << " x: " << x + 5*(sin(constantes.DEG_TO_RAD*ry)) << " y: " << y + 5 << " z: " << z + 5*(cos(constantes.DEG_TO_RAD*ry)) << endl;
             _interfaz->HabilitarObjeto(_armaEsp);//para verlo en escena y que se procese
             _interfaz->Trasladar(_armaEsp,x + 5*(sin(constantes.DEG_TO_RAD*ry)),y+1,z + 5*(cos(constantes.DEG_TO_RAD*ry)));//trasladamos
@@ -1431,7 +1429,6 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
 
     #else
         //codigo motor irrlicht
-        Constantes constantes;
         if (_armaEsp)
         {
             if(_armaEspJugador)
@@ -2011,12 +2008,9 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
         //codigo motor irrlicht
         if(debugGrafico)
         {
-            Constantes constantes;
             if(!_conoVision)
             {
-
                 _conoVision = _smgr->getMesh("assets/models/conoVision.obj");
-
             }
 
             if(_conoVision) // Si se ha cargado

@@ -20,7 +20,7 @@
 #include "Waypoint.hpp"
 
 #include "../Pathfinder.hpp"
-
+#include "../ConstantesComunes.hpp"
 
 class Jugando: public Estado {
     public:
@@ -85,7 +85,8 @@ class Jugando: public Estado {
         MotorFisicas* _fisicas;
         Times* _controladorTiempo;
         InterfazJugador* _interfaz;
-
+        Constantes constantes;
+        
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         CargadorPuzzles cargPuzzles; // contiene todos los puzzles
         Puzzle* _puzzle;

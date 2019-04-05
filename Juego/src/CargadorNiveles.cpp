@@ -227,7 +227,6 @@ void CargadorNiveles::GuardarNivelBin(int level)
 
 Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
 {
-    Constantes constantes;
     Sala* padren = nullptr;//sala hijo
 
     int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
@@ -625,7 +624,6 @@ void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo
 void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
     int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj)
 {
-    Constantes constantes;
     int posicionObjeto;
     switch (tipoObj)
     {
@@ -722,7 +720,6 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
 unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     float ancho, float alto, float largo, Sala* sala)
 {
-    Constantes constantes;
     CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo); // Posiciones, vida
 
     _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
@@ -759,7 +756,6 @@ unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
 //Cargar los cofres del nivel
 void CargadorNiveles::CargarCofres()
 {
-    Constantes constantes;
     unsigned short eneAranas = chestsMax/4; // 1/4 de los cofres son enemigos
     unsigned short aranasCreadas = 0;
     unsigned short totalCofresPonible = 0;

@@ -18,8 +18,6 @@ Arma::Arma(int ataque, int anc, int lar, int alt,
 
     // INobjetos
     tipoObjeto = tipoObj;
-
-    Constantes constantes;
     if (tipoObj == constantes.GUITARRA) // GUITARRA
     {
         _modelo = "assets/models/Arma.obj";
@@ -113,7 +111,6 @@ void Arma::moverseEntidad(float updTime)
  */
 void Arma::RotarEntidad(float updTime)
 {
-    Constantes constantes;
     //pt es el porcentaje de tiempo pasado desde la posicion
     //de update antigua hasta la nueva
     float pt = moveTime / updTime;
@@ -209,7 +206,6 @@ void Arma::setPosicionesFisicas(float nx,float ny,float nz)
 
 void Arma::setPosicionesArmaEsp(float nx,float ny,float nz, float nry)
 {
-    Constantes constantes;
     float mx = nx + 6.5*(sin(constantes.DEG_TO_RAD*nry));
     float my = ny;
     float mz = nz + 6.5*(cos(constantes.DEG_TO_RAD*nry));

@@ -14,6 +14,7 @@
 #include "../Motores/MotorGrafico.hpp"
 #include "../Motores/SenseEventos.hpp"
 #include "../Motores/MotorFisicas.hpp"
+#include "../ConstantesComunes.hpp"
 
 class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple herencia a esto se le llama derivacion multiple
 {
@@ -168,6 +169,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         SenseEventos* _eventos;
         short int maxRotacion;
         std::string soundID;
+        Constantes constantes;
 
         //comportamientos bases
         void alinearse(VectorEspacial*, bool huir);

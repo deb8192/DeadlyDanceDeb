@@ -6,7 +6,6 @@
 Murcielago::Murcielago(float nX, float nY, float nZ, int maxVida)
 : Enemigo(nX,nY,nZ,maxVida)
 {
-    Constantes constantes;
     funciona = true;
     atacado = enZonaOscura = false;
     _ordenes = new short [constantes.DOS];
@@ -36,7 +35,6 @@ Murcielago::~Murcielago()
 */
 void Murcielago::RunIA()
 {
-    Constantes constantes;
     if(this->getTimeMerodear() <= 0)
     {
         if(modo == constantes.UNO)
@@ -70,9 +68,7 @@ void Murcielago::RunIA()
 
 void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZonas)
 {
-     Jugador* _jugador = (Jugador*)_jug;
-    Constantes constantes;
-
+    Jugador* _jugador = (Jugador*)_jug;
     funciona = true;
     if(modo == MODO_ATAQUE && _ordenes != nullptr)
     {

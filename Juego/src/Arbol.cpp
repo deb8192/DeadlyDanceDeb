@@ -1,5 +1,4 @@
 #include "Arbol.hpp"
-#include "ConstantesComunes.hpp"
 
 Arbol::Arbol(Nodo *root, const char* name)
 {
@@ -18,7 +17,6 @@ Arbol::Arbol(Nodo *root, const char* name)
  */
 Nodo* Arbol::anyadirHijo(Nodo * nod)
 {
-    Constantes constantes;
     unsigned int i = 0;
     bool desciende = true;
     Nodo* buscador = raiz;
@@ -150,7 +148,6 @@ void Arbol::finBucleDecorador()
 
 Composicion * Arbol::devolverPadre()
 {
-    Constantes constantes;
     nodoEnEjecucionDirecta = nodoEnEjecucionDirecta->getPadre();
     if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0)
     {
@@ -164,7 +161,6 @@ Composicion * Arbol::devolverPadre()
 
 void Arbol::CambiarNodo(const short *_nodo)
 {
-    Constantes constantes;
     ID = *_nodo;
     Nodo *_actual = raiz;
     size_t i = 0;
@@ -230,7 +226,6 @@ void Arbol::ResetTree()
 */
 short int* Arbol::ContinuarSiguienteNodo(bool exito)
 {
-    Constantes constantes;
     Composicion *comp = nullptr;
     Composicion *compo = nullptr;
     Decorador *deco = nullptr;

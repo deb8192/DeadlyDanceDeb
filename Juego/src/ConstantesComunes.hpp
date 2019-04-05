@@ -2,7 +2,8 @@
 #define ConstantesComunes_HPP
 
 //esto contiene todas las constantes y variables de texto para comparativas en el programa (es comodo si se quiere utilizar en el algun sitio)
-using Constantes = struct
+//using Constantes = struct 
+typedef struct
 {
     /** Angulos en grados y radianes y relacion para sus cambios de escala **/
     const float PI = 3.14159265358979323846;
@@ -131,5 +132,5 @@ using Constantes = struct
     // Codigo de la puerta del boss
     const unsigned short PUERTA_BOSS = 20;
 
-};
+} Constantes;
 #endif
