@@ -3171,7 +3171,7 @@ void MotorGrafico::updateTeclas()
 
         float tiempoactual = tempo->GetTiempo(1);//tiempo actual en milisegundos
 
-        if(tiempo == 0 || (tiempo+142.0f) < tiempoactual)
+        if(tiempo == 0 || (tiempo+100.0f) < tiempoactual)
         {
             //std::cout << " Actualizo teclas " << tiempoactual << std::endl;
             for(int i = 0; i <= numeroteclas;i++)
