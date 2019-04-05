@@ -1,14 +1,14 @@
 #include "TBillboard.hpp"
 
 // Constructor y destructor
-TBillboard::TBillboard(GLfloat x, GLfloat y, GLfloat z, const char * _ruta, Shader * sact, GLfloat movx, GLfloat movy)
+TBillboard::TBillboard(GLfloat x, GLfloat y, GLfloat z, const char * _ruta, Shader * sact, GLfloat movx, GLfloat movy, GLfloat movz)
 {
     this->SetShader(sact);
 
     posx = x;
     posy = y;
     posz = z;
-    localxy = glm::vec2(movx,movy);
+    localxyz = glm::vec3(movx,movy,movz);
 
     CargarBillboard(_ruta);
 }
@@ -19,7 +19,7 @@ TBillboard::~TBillboard()
 }
 
 //Cargar cuadrado de billboard
-bool TBillboard::CargarBillboard(const char * _ruta)
+void TBillboard::CargarBillboard(const char * _ruta)
 {
     //***********RECTANGULO***********
     //Vertices de un RECTANGULO
@@ -167,7 +167,7 @@ void TBillboard::beginDraw()
             glActiveTexture(GL_TEXTURE0);
             glBindTexture(GL_TEXTURE_2D, texture);
             shader->setVec2("scale", newscale);
-            shader->setVec2("localcoord", localxy);
+            shader->setVec3("localcoord", localxyz);
             // dibujar triangulo
             glBindVertexArray(VAO);
             shader->setMat4("model", (*_matriz_resultado));
@@ -192,7 +192,7 @@ void TBillboard::beginDraw()
             glBindTexture(GL_TEXTURE_2D, texture);
 
             shader->setVec2("scale", newscale);
-            shader->setVec2("localcoord", localxy);
+            shader->setVec3("localcoord", localxyz);
 
             // dibujar triangulo
             glBindVertexArray(VAO);
