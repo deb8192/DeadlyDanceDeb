@@ -16,15 +16,15 @@ class TBillboard : public TEntidad
         int width, height, nrComponents;
         GLfloat posx, posy, posz;
         glm::vec3 color;
-        glm::vec2 localxy;
+        glm::vec3 localxyz;
 
         //Cargar cuadrado de billboard
-        bool CargarBillboard(const char *);
+        void CargarBillboard(const char *);
 
     public:
 
         // Constructor y destructor
-        TBillboard(GLfloat, GLfloat, GLfloat, const char *, Shader *, GLfloat, GLfloat);
+        TBillboard(GLfloat, GLfloat, GLfloat, const char *, Shader *, GLfloat, GLfloat, GLfloat);
         ~TBillboard();
 
         //sobrecarga metodos TEntidad

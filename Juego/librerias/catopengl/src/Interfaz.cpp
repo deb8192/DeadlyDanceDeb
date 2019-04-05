@@ -327,7 +327,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
     return 0;
 }
 
-unsigned short Interfaz::AddBoard(float x, float y, float z, float movx, float movy, const char * _ruta)
+unsigned short Interfaz::AddBoard(float x, float y, float z, float movx, float movy, const char * _ruta, float priority)
 {
     if(ventana_inicializada)
     {
@@ -351,7 +351,7 @@ unsigned short Interfaz::AddBoard(float x, float y, float z, float movx, float m
     escalado->setEntidad(escaladoEnt);
 
     TNodo * board = new TNodo;
-    TBillboard * boardEn = new TBillboard(x,y,z,_ruta,shaders[3],movx,movy);
+    TBillboard * boardEn = new TBillboard(x,y,z,_ruta,shaders[3],movx,movy,priority);
     board->setEntidad(boardEn);
 
     escalado->addHijo(rotacion);
