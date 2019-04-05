@@ -19,13 +19,17 @@ MotorGrafico::MotorGrafico()
         Enemigos_Scena.reserve(50);//enemigos reservados
         Textos_Scena.reserve(18);//textos estaticos en la escena o gui
         Recolectables_Scena.reserve(50);
+        RecolectablesAni_Scena.reserve(50);
         Objetos_Scena.reserve(100);
+        ObjetosAni_Scena.reserve(100);//contiene las logicas de animaciones
         PowerUP_Scena.reserve(50);
+        PowerUPAni_Scena.reserve(50);
         Objetos_Debug.reserve(500);
         Objetos_Debug2.reserve(500);
 
         camara = 0;
         _jugEscena = 0;
+        _aniJugEscena = nullptr;
         debugGrafico = false;
         _armaEnEscena = 0;
         _armaProyectil = 0;
@@ -45,6 +49,7 @@ MotorGrafico::MotorGrafico()
         _actual = nullptr;
         _actualTexture = nullptr;
 
+        _aniJugEscena = nullptr;
         frame_actual = 0;
         camx = 0;
         camz = 30;
@@ -500,6 +505,15 @@ void MotorGrafico::RenderEscena()
         if(_interfaz != nullptr)
         {
             _interfaz->Draw();//pintamos la escena
+
+            for(unsigned int i = 0; i < ObjetosAni_Scena.size();i++)
+            {
+                if(ObjetosAni_Scena[i] != nullptr)
+                {
+                    ActualizarAnimacionMotor(ObjetosAni_Scena[i]);
+                }
+            }            
+
         }
     #else
         //codigo motor irrlicht
@@ -1055,13 +1069,15 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
 
         _jugEscena = _interfaz->AddMalla(ruta_objeto,128);
         //_interfaz->SetColor(_jugEscena,250,50,50,255); //color RGBA
-        _interfaz->SetTexture(_jugEscena,"assets/models/rockero/HeavyTex.png");
 
         CargarLuces(0,0,0);
         if(_jugEscena != 0)
         {
+            _interfaz->SetTexture(_jugEscena,"assets/models/rockero/HeavyTex.png");
             _interfaz->Trasladar(_jugEscena,(float)x,(float)y,(float)z);
             _interfaz->Escalar(_jugEscena,(float)1.75,(float)1.75,(float)1.75);
+            _aniJugEscena = new Animaciones("assets/animaciones/rockero.xml");//cargamos las animaciones
+            _aniJugEscena->AsignarID(_jugEscena);//definimos el id para cuando luego se actualice sepa que id tiene 
             //cout << _jugEscena << " INICIALMENTE: " << x << " " << y << " " << z << endl;
         }
 
@@ -1085,21 +1101,31 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     #endif
 }
 
-int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura)
+int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, const char * anima, int frame)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        unsigned short _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,1);
-        _interfaz->SetTexture(_objetoEnEscena,ruta_textura);
+        unsigned short _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,frame);
+
         //cout << "colocar objeto en: " << x << y << z << endl;
         if(_objetoEnEscena != 0)
         {
+            _interfaz->SetTexture(_objetoEnEscena,ruta_textura);
             _interfaz->Trasladar(_objetoEnEscena,(float)x,(float)y,(float)z);
             _interfaz->Rotar(_objetoEnEscena,0.0f,(float)rp,0.0f);
+            
+            Animaciones * logicaAnim = nullptr;
+
+            if(anima != nullptr)
+            {
+                logicaAnim = new Animaciones(anima);
+                logicaAnim->AsignarID(_objetoEnEscena);
+            }
 
             if(accion == 4)
             {
                 PowerUP_Scena.push_back(_objetoEnEscena);
+                PowerUPAni_Scena.push_back(logicaAnim);
                 return PowerUP_Scena.size() - 1;
             }
 
@@ -1107,11 +1133,13 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             if(accion == 2)
             {
                 Recolectables_Scena.push_back(_objetoEnEscena);
+                RecolectablesAni_Scena.push_back(logicaAnim);
                 return Recolectables_Scena.size() - 1;
             }
             else
             {
                 Objetos_Scena.push_back(_objetoEnEscena);
+                ObjetosAni_Scena.push_back(logicaAnim);
                 return Objetos_Scena.size() - 1;
             }
 
@@ -1349,6 +1377,8 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
             delete nodeCamTarget;
         }
+
+        ActualizarAnimacionMotor(_aniJugEscena);//para actualizar estado de la animacion
 
     #else
         //codigo motor irrlicht
@@ -2544,65 +2574,12 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
         int frame = _interfaz->getStartFrame(_jugEscena);
         int frame_actual = _interfaz->getFrameNr(_jugEscena);
 
-        if(estado == 0 && frame != 30 && frame != 120) //esta quieto
+        if(_aniJugEscena != nullptr)
         {
-            if(_jugEscena != 0)
+            if(_aniJugEscena->ExisteEstado(estado) && _aniJugEscena->SePuedeCambiarEstado(frame_actual))//comprobamos primero que sea posible
             {
-                _interfaz->setFrameLoop(_jugEscena,30, 44);
-                _interfaz->setAnimationSpeed(_jugEscena,10);
-            }
-        }
-
-        if(estado == 1 && frame != 0 && frame != 120) //se mueve
-        {
-            if(_jugEscena != 0)
-            {
-                _interfaz->setFrameLoop(_jugEscena,1, 30);
-                _interfaz->setAnimationSpeed(_jugEscena,20);
-            }
-        }
-
-        if(estado == 2 && frame != 48  && frame != 120) //ataca
-        {
-            if(_jugEscena != 0)
-            {
-                _interfaz->setFrameLoop(_jugEscena,48, 70);
-                _interfaz->setAnimationSpeed(_jugEscena,15);
-            }
-        }
-
-        if(estado == 3 && frame != 72  && frame != 120) //ataque especial
-        {
-            if(_jugEscena != 0)
-            {
-                _interfaz->setFrameLoop(_jugEscena,72, 98);
-                _interfaz->setAnimationSpeed(_jugEscena,10);
-            }
-        }
-
-        if(estado == 4  && frame != 99  && frame != 120) //coger objeto
-        {
-            if(_jugEscena != 0)
-            {
-                _interfaz->setFrameLoop(_jugEscena,99, 112);
-                _interfaz->setAnimationSpeed(_jugEscena,10);
-            }
-        }
-
-        if(estado == 5 && frame != 120) //muere
-        {
-            if(frame_actual == 119)
-            {
-                _interfaz->setFrameLoop(_jugEscena,120, 128); //lo dejamos definitivamente muerto
-                _interfaz->setAnimationSpeed(_jugEscena,10);
-            }
-            else
-            {
-                if(_interfaz && frame != 112)
-                {
-                    _interfaz->setFrameLoop(_jugEscena,112, 120);
-                    _interfaz->setAnimationSpeed(_jugEscena,10);
-                }
+                //std::cout << " se llama a cambiar estado " << estado << " " << frame << std::endl; 
+                _aniJugEscena->CambiarEstado(estado,frame,frame_actual);//si es posible llamamos a cambiarestado
             }
         }
 
@@ -2984,6 +2961,70 @@ void MotorGrafico::HabilitarDinero()
     #endif
 }
 
+void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y estado
+{
+    #ifdef WEMOTOR
+        unsigned short id;//id que tiene el objeto en el motor grafico
+        Animaciones * anim = nullptr;//animacion perteneciente al motor grafico
+
+        if(tipo == 0) //animaciones objetos
+        {
+            anim = ObjetosAni_Scena[did];
+            
+        }
+        else if(tipo == 1) //animaciones recolectables
+        {
+            anim = RecolectablesAni_Scena[did];
+        }
+        else if(tipo == 2) //animaciones powerup
+        {
+            anim = PowerUPAni_Scena[did];
+        }
+
+        //aqui mas 
+
+        if(anim != nullptr)
+        {
+            id = anim->GetID();
+            if(id != 0)
+            {
+                int frame = _interfaz->getStartFrame(id);
+                int frame_actual = _interfaz->getFrameNr(id);
+                if(anim->ExisteEstado(estado) && anim->SePuedeCambiarEstado(frame_actual))
+                {
+                    anim->CambiarEstado(estado,frame,frame_actual);
+                }
+            }
+        }
+    #endif
+}
+
+void MotorGrafico::ActualizarAnimacionMotor(Animaciones * anima)
+{       
+    #ifdef WEMOTOR
+        if(anima != nullptr)
+        {
+            int frame_actual = _interfaz->getFrameNr(anima->GetID());
+            if(frame_actual != -1)
+            {
+                anima->ProcesarAnimacion(frame_actual);//mira si debe cambiar de estado porque ha terminado la animacion y tiene salto automatico a otro
+                if(anima->SeCambiaEstado())//esto indica si se ha cambiado estado 
+                {
+                    unsigned int * devolucion = anima->Update();
+                    //si se cambia aun estado que ya esta no se actualiza por lo que te devuelve un nullptr
+                    if(devolucion != nullptr)
+                    {
+                        _interfaz->setBucle(anima->GetID(),anima->GetEstaEnBucle());
+                        _interfaz->setFrameLoop(anima->GetID(),devolucion[0], devolucion[1]);
+                        _interfaz->setAnimationSpeed(anima->GetID(),devolucion[2]);
+                        delete [] devolucion;
+                    }
+                }
+            }
+        }
+    #endif
+}
+
 void MotorGrafico::CambiarCamara()
 {
     camara1 = !camara1;
@@ -2993,7 +3034,7 @@ void MotorGrafico::CambiarCamara()
     }
     else
     {
-        altura = 245;
+        altura = 300;
     }
-    
+
 }

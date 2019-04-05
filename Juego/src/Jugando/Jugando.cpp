@@ -383,6 +383,7 @@ void Jugando::Update()
     {
         _jugador->MuereJugador(); // Animacion de muerte
         DesactivarDebug();
+        _motor->cambiarAnimacionJugador(5);//la muerte del jugador tiene este id
         Juego::GetInstance()->estado.CambioEstadoMuerte();
     }
 
@@ -463,7 +464,8 @@ void Jugando::Update()
             if(posicion != 0)
             {
                 //TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
-                _motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
+                //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
+                _motor->cambiarAnimacion(0,_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(),1);//se cambia la animacion de la pared
                 posicion = 0;
             }
         }

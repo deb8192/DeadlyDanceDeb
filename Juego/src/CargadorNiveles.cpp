@@ -312,7 +312,19 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         const char* textura = obj.attribute("Texture").value(); //nos da un char[] = string
         const char* modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
         short tipoObj = (short) obj.attribute("tipoObj").as_int();//nos devuelve un short
-        CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj); //cargamos el enemigo
+        int numFrames = obj.attribute("Frames").as_int();//numero de frames de la animacion
+        const char* logicaAnimacion = obj.attribute("Animation").value();//contiene la ruta a la logica de la animacion
+
+
+        if(obj.attribute("Frames") && obj.attribute("Animation"))
+        {
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj, logicaAnimacion, numFrames); //cargamos el enemigo
+        }
+        else
+        {
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj);//no tiene logica de animacion porque es un objeto con un unico estado y frame
+        }
+
     }
     for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
@@ -622,7 +634,7 @@ void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
-    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj)
+    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj, const char * anima , int frame)
 {
     int posicionObjeto;
     switch (tipoObj)
@@ -674,7 +686,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         {
             Pared* _par = new Pared(ancho,largo,alto,x,y,z,tipoObj);
             _par->setID(_paredes.size());
-            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura,anima,frame);
             _par->SetPosicionArrayObjetos(posicionObjeto);
             _paredes.push_back(move(_par));
             _par = nullptr;

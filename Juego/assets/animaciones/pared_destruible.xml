@@ -1,0 +1,5 @@
+<!--<Animacion nombre="" inicio="" final="" bucle="" salto="" dondesaltar="" terminar="" velocidad=""/>-->
+<Animaciones numeroAnimaciones="2">
+    <Animacion nombre="Entera" inicio="0" final="0" bucle="true" salto="false" dondesaltar="0" terminar="false" velocidad="10"/><!-- estado 0 -->
+    <Animacion nombre="Rompiendose" inicio="0" final="25" bucle="false" salto="false" dondesaltar="0" terminar="true" velocidad="20"/><!-- estado 1 -->
+</Animaciones>

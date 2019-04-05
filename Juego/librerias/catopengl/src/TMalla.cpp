@@ -10,6 +10,7 @@ TMalla::TMalla(int ft)
     frame_final = ft;
     frame_actual = 0;
     actual_time = 0;
+    bucle = true;//se ejecuta en bucle la animacion
     setVelocidadAnimacion(300);
 }
 
@@ -38,11 +39,18 @@ void TMalla::beginDraw()
     //cout << actual_time << "  " << end_time << endl;
     if(actual_time >= end_time)
     {
-        frame_actual++;
+        if(frame_actual < frame_final)
+        {
+            frame_actual++;
+        }
         actual_time = 0;
     }
+    
     //bucle de la animacion
-    if(frame_actual >= frame_final)frame_actual = frame_inicial;
+    if(frame_actual >= frame_final && bucle)
+    {
+        frame_actual = frame_inicial;
+    }
 
     if(matriz_compartida == nullptr)
     {
@@ -93,7 +101,7 @@ void TMalla::beginDraw()
 
         if(_matriz_resultado != nullptr)
         {
-            if(frame_actual < frame_final)//pasa por los frames de la animacion
+            if(frame_actual <= frame_final)//pasa por los frames de la animacion
             {
                 shader->setMat4("model", (*_matriz_resultado));
                 objetos->Draw(shader,frame_actual);
@@ -129,9 +137,7 @@ void TMalla::endDraw()
 
 void TMalla::BucleAnimacion(unsigned short ini,unsigned short fin)
 {
-    if(ini != frame_inicial && fin != frame_final)
-    {
-        if(ini > 0 && ini <= frames_totales && fin > 0 && fin <= frames_totales && ini < fin)
+        if(ini >= 0 && ini <= frames_totales && fin >= 0 && fin <= frames_totales && ini <= fin)
         {
             frame_inicial = ini;
             frame_final = fin;
@@ -141,7 +147,6 @@ void TMalla::BucleAnimacion(unsigned short ini,unsigned short fin)
         {
             cout << "ERROR: Los frames del bucle tienen que estar entre 0 y " << frames_totales << endl;
         }
-    }
 }
 
 void TMalla::setVelocidadAnimacion(float v)
@@ -177,4 +182,9 @@ void TMalla::setColor(unsigned char r, unsigned char g, unsigned char b, unsigne
 void TMalla::setTexture(const char * _ruta)
 {
     objetos->SetTexture(_ruta);
+}
+
+void TMalla::EstaEnBucleAnimacion(bool bu)
+{
+    bucle = bu;
 }
