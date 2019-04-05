@@ -1288,15 +1288,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 if(loqueve[0] == 1)
                 {
                     ve = true;
-                    //Reducimos la velocidad para evitar que se salga
-                    if(porcentajeVelocidad > 0.4)
-                    {
-                        porcentajeVelocidad *= 0.9;
-                    }
-                    else if(porcentajeVelocidad < 0.4)
-                    {
-                        porcentajeVelocidad = 0.4;
-                    }
                     distanciaEnemigoObstaculo.vX = loqueve[1] - posActual.x;
                     distanciaEnemigoObstaculo.vY = loqueve[2] - posActual.y;
                     distanciaEnemigoObstaculo.vZ = loqueve[3] - posActual.z;
@@ -1306,9 +1297,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     //y el enemigo en cuestion esta muy cerca del obstaculo que debe esquivar
                     if(distanciaEnemigoObstaculo.modulo <= distanciaMinimaEsquivar)
                     {
-                        porcentajeVelocidad = constantes.UN_CUARTO;
                         colisiona = true;
-                        controlRotacion = true;
                         destino[0] = loqueve[1];
                         destino[1] = loqueve[2];
                         destino[2] = loqueve[3];
@@ -1316,7 +1305,24 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                         destino[4] = loqueve[5];
                         destino[5] = loqueve[6];
 
+                        //Reducimos la velocidad para evitar que se salga
+                        if(porcentajeVelocidad > 0.0)
+                        {
+                            porcentajeVelocidad = 0.0;
+                        }
                         //cout<<"QUE SE SALE"<<endl;
+                    }
+                    else
+                    {
+                        //Reducimos la velocidad para evitar que se salga
+                        if(porcentajeVelocidad > 0.2)
+                        {
+                            porcentajeVelocidad *= 0.9;
+                        }
+                        else if(porcentajeVelocidad < 0.2)
+                        {
+                            porcentajeVelocidad = 0.2;
+                        }
                     }
                 }
                 //Si entra aqui dentro es que detecta un obstaculo con su visor izquierdo
@@ -1324,13 +1330,13 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 {
                     ve = true;
                     //Reducimos la velocidad para evitar que se salga
-                    if(porcentajeVelocidad > 0.4)
+                    if(porcentajeVelocidad > 0.0)
                     {
                         porcentajeVelocidad *= 0.9;
                     }
-                    else if(porcentajeVelocidad < 0.4)
+                    else if(porcentajeVelocidad < 0.0)
                     {
-                        porcentajeVelocidad = 0.4;
+                        porcentajeVelocidad = 0.0;
                     }
                     colisiona = true;
                     //Si entra aqui dentro es que detecta un obstaculo por delante con los visores laterales
@@ -1367,13 +1373,13 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 {
                     ve = true;
                     //Reducimos la velocidad para evitar que se salga
-                    if(porcentajeVelocidad > 0.4)
+                    if(porcentajeVelocidad > 0.0)
                     {
                         porcentajeVelocidad *= 0.9;
                     }
-                    else if(porcentajeVelocidad < 0.4)
+                    else if(porcentajeVelocidad < 0.0)
                     {
-                        porcentajeVelocidad = 0.4;
+                        porcentajeVelocidad = 0.0;
                     }
                     colisiona = true;
                     //Coordenadas del punto de obstaculo
@@ -1406,18 +1412,45 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 }
                 else if(controlRotacion)
                 {
-                    rotation = 0.0f;
                     controlRotacion = false;
+                    rotation = 0.0f;
+                    if(porcentajeVelocidad <= 0.0f)
+                    {
+                        porcentajeVelocidad = 0.2;
+                    }
                 }
-                if(!ve)
+                if(ve && !controlRotacion)
                 {
-                    if(porcentajeVelocidad < 1.0f)
+
+                    destino[0] = loqueve[1];
+                    destino[1] = loqueve[2];
+                    destino[2] = loqueve[3];
+                    destino[3] = loqueve[4];
+                    destino[4] = loqueve[5];
+                    destino[5] = loqueve[6];
+                    //Creamos un vector con una nueva direccion normalizando el vector director anterior
+                    VectorEspacial vectorDirector = this->normalizarVector(destino);
+                    //Se suma la normal del obstaculo aplicando pesos a la normal y al vector director
+                    this->modificarTrayectoria(&vectorDirector, destino); 
+                    //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
+                    vectorDirector.vZ < 0 ?
+                        rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
+                        rotation = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
+                    if(porcentajeVelocidad <= 0.0f)
+                    {
+                        porcentajeVelocidad = 0.2;
+                    }
+                }
+                else if(!ve)
+                {
+
+                    if(porcentajeVelocidad < velocidadMaxima)
                     {
                         porcentajeVelocidad /= 0.9;
                     }
-                    else if(porcentajeVelocidad > 1.0)
+                    else if(porcentajeVelocidad > velocidadMaxima)
                     {
-                        porcentajeVelocidad = 1.0;
+                        porcentajeVelocidad = velocidadMaxima;
                     }
                 }
                 delete loqueve;
@@ -1761,6 +1794,9 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         vectorDirector.vX /= vectorDirector.modulo;
         vectorDirector.vY /= vectorDirector.modulo;
         vectorDirector.vZ /= vectorDirector.modulo;
+        vectorDirector.modulo = sqrt(pow(vectorDirector.vX, constantes.DOS) + pow(vectorDirector.vY, constantes.DOS) + pow(vectorDirector.vZ, constantes.DOS));
+
+
 
         //vectorDirector.vX *= 0.75;
         //vectorDirector.vY *= 0.75;
@@ -1773,9 +1809,24 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         Constantes constantes;
         float contraRotacion = constantes.UNO - pesoRotacion;
         //Se obtiene la nueva direccion del movimiento sumando las componentes de la normal del obstaculo con las del vector director
-        vectorDirector->vX = vectorDirector->vX * contraRotacion + destino[3] * pesoRotacion;
+        //En caso de girar 180 grados, se multiplica por -1 la coordenada del vector que se acerque a +-1
+        if(constantes.UNO - abs(vectorDirector->vX) <= 0.1f && abs(destino[3]) == constantes.UNO)
+        {
+            vectorDirector->vX *= -constantes.UNO;
+        }
+        else
+        {
+            vectorDirector->vX = vectorDirector->vX * contraRotacion + destino[3] * pesoRotacion;
+        }
         vectorDirector->vY = vectorDirector->vY * contraRotacion + destino[4] * pesoRotacion;
-        vectorDirector->vZ = vectorDirector->vZ * contraRotacion + destino[5] * pesoRotacion;
+        if(constantes.UNO - abs(vectorDirector->vZ) <= 0.1f)
+        {
+            vectorDirector->vZ *= -constantes.UNO;
+        }
+        else
+        {
+            vectorDirector->vZ = vectorDirector->vZ * contraRotacion + destino[5] * pesoRotacion;
+        }
         vectorDirector->modulo = 1;
     }
 
