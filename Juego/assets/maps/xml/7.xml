@@ -68,7 +68,7 @@
 			<!--Zona-Escondite--><Zone Type="1" accion="1" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="-5" Y="0" Z="15"></Zone>
 
 				<!--Sala-04--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="231" Y="0" Z="124" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
-				<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="26" alto="24" RP="0" X="198" Y="0" Z="104" despX="0" despZ="0" Texture="assets/texture/Paredes.png"  Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+				<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="26" alto="24" RP="0" X="198" Y="0" Z="104" despX="0" despZ="0" Texture="assets/texture/Paredes.png"  Model="assets/models/pared_destruible/BreakWallLarge_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 				<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="12" largo="2" alto="24" RP="90" X="184" Y="0" Z="128" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 				<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="8" ancho="4" largo="4" alto="1" X="232" Y="0" Z="76" conexiones="7,9"></Waypoint>
 				<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="9" ancho="4" largo="4" alto="1" X="231" Y="0" Z="124" conexiones="8,10,18"></Waypoint>
@@ -143,7 +143,7 @@
 
 
 						<!--Sala-10--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="182" Y="0" Z="300" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
-						<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="26" alto="24" RP="0" X="192" Y="0" Z="300" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+						<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="26" alto="24" RP="0" X="192" Y="0" Z="300" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallLarge_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 						<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="180" Y="0" Z="290"></Zone>
 						<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="180" Y="0" Z="305"></Zone>
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="20" ancho="4" largo="4" alto="1" X="192" Y="0" Z="300" conexiones="19,21"></Waypoint>
@@ -161,7 +161,7 @@
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="26" ancho="4" largo="4" alto="1" X="336" Y="0" Z="330" conexiones="23,27"></Waypoint>
 
 							<!--Sala-12--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="294" Y="0" Z="262" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
-							<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="26" largo="2" alto="24" RP="90" X="294" Y="0" Z="272" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+							<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="26" largo="2" alto="24" RP="90" X="294" Y="0" Z="272" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallLarge_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 							<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="294" Y="0" Z="260"></Zone>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="24" ancho="4" largo="4" alto="1" X="294" Y="0" Z="272" conexiones="23,25"></Waypoint>
 							<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="25" ancho="4" largo="4" alto="1" X="294" Y="0" Z="262" conexiones="24"></Waypoint>
