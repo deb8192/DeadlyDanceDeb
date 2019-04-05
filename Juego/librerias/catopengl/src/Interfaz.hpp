@@ -111,9 +111,12 @@ class Interfaz
         void ColorDifusa(unsigned short luz, float r,float g,float b);
         void ColorSpecular(unsigned short luz, float r,float g,float b);
 
+        void setBucle(unsigned short,bool);
+
         //cercania y lejania de la camara
         void SetLejaniaCamara(unsigned short camara,float lejania);
         void SetCercaniaCamara(unsigned short camara,float cercania);
+
 
     private:
 

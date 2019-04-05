@@ -1196,6 +1196,30 @@ void Interfaz::ColorSpecular(unsigned short luz, float r,float g,float b)
     }
 }
 
+void Interfaz::setBucle(unsigned short idMalla, bool estaEnBucle)
+{
+    if(idMalla != 0)
+    {
+        Nodo * nodo = buscarNodo2(idMalla);
+
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    TMalla * malla = dynamic_cast<TMalla*>(tnodo->GetEntidad());
+                    if(malla != nullptr)
+                    {
+                        malla->EstaEnBucleAnimacion(estaEnBucle);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void Interfaz::SetLejaniaCamara(unsigned short camara,float lejania)
 {
     //cambiar lejania de la camara

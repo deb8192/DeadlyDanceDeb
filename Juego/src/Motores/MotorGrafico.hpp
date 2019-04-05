@@ -18,6 +18,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
 #include <vector>//para los objetos en escena
+#include "Animaciones.hpp"
 
 #ifdef WEMOTOR
     //namespaces de catopengl
@@ -236,7 +237,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarLuces(int x,int y,int z);
             void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
-            int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
+            int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1);
             void CargarArmaJugador(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
@@ -299,6 +300,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             //animaciones
             void cambiarAnimacionJugador(int);//nos sirve para cambiar de animacion al jugador
+            void cambiarAnimacion(int,int,int);//modo,id y estado
+            void ActualizarAnimacionMotor(Animaciones * anima);//se pasa la animacion a actualizar
 
             //getters & setters
             bool getPathfindingActivado();
@@ -334,7 +337,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             MotorGrafico();
             static MotorGrafico* _unica_instancia;
             //fin clase singleton private
-
+            Animaciones * _aniJugEscena;
             void propiedadesDevice();
 
             #ifdef WEMOTOR
@@ -350,6 +353,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Textos_Scena;//contiene los enemigos reservados (ids)
                 std::vector<unsigned short> Recolectables_Scena;//contiene los recolectables reservados (ids)
                 std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> ObjetosAni_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> RecolectablesAni_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> PowerUPAni_Scena;//contiene los objetos reservados (ids)
+                
                 std::vector<unsigned short> PowerUP_Scena;//contiene los power ups reservados (ids)
                 std::vector<unsigned short> Objetos_Debug;//contiene los elementos que se ven en modo debug
                 std::vector<unsigned short> Objetos_Debug2;//para objetos con tiempo para desaparecer
@@ -390,7 +397,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short _txtP;
                 vector<unsigned short> _imagenesP;
                 vector<unsigned short> _textosP;
-
 
             #else
                 //variables y parametros motor irrlicht
