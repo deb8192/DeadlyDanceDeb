@@ -42,6 +42,8 @@ MotorGrafico::MotorGrafico()
 
         idCargando = 0;
 
+        tiempo = 0;//tiempo de actualizacion botones
+
     #else
         //codigo motor irrlicht
         input.setDevice(_device);//lo  utilizamos para que los eventos puedan llamar a funciones de
@@ -153,6 +155,8 @@ void MotorGrafico::LimpiarElementosJuego()
         existearmaexp = false;
 
         idCargando = 0;
+
+        tiempo = 0;
 
     #else
         //codigo motor irrlicht
@@ -544,7 +548,7 @@ void MotorGrafico::RenderEscena()
         if(_interfaz != nullptr)
         {
             _interfaz->Draw();//pintamos la escena
-
+            updateTeclas();//actualiza los estados de los botones
             for(unsigned int i = 0; i < ObjetosAni_Scena.size();i++)
             {
                 if(ObjetosAni_Scena[i] != nullptr)
@@ -664,76 +668,76 @@ bool MotorGrafico::EstaPulsado(short boton)
         switch(boton)
         {
             case idsEventos::Enum::KEY_A:
-                return _interfaz->IsKeyDown(GLFW_KEY_A);
+                return estadoteclas[GLFW_KEY_A];
 
             case idsEventos::Enum::KEY_S:
-                return _interfaz->IsKeyDown(GLFW_KEY_S);
+                return estadoteclas[GLFW_KEY_S];
 
             case idsEventos::Enum::KEY_D:
-                return _interfaz->IsKeyDown(GLFW_KEY_D);
+                return estadoteclas[GLFW_KEY_D];
 
             case idsEventos::Enum::KEY_W:
-                return _interfaz->IsKeyDown(GLFW_KEY_W);
+                return estadoteclas[GLFW_KEY_W];
 
             case idsEventos::Enum::KEY_ESC:
-                return _interfaz->IsKeyDown(GLFW_KEY_ESCAPE);
+                return estadoteclas[GLFW_KEY_ESCAPE];
 
             case idsEventos::Enum::KEY_ESPACIO:
-                return _interfaz->IsKeyDown(GLFW_KEY_SPACE);
+                return estadoteclas[GLFW_KEY_SPACE];
 
             case idsEventos::Enum::KEY_ACEPTAR:
-                return _interfaz->IsKeyDown(GLFW_KEY_ENTER);
+                return estadoteclas[GLFW_KEY_ENTER];
 
             case idsEventos::Enum::KEY_G_DEBUG:
-                return _interfaz->IsKeyDown(GLFW_KEY_G);//para modo debug
+                return estadoteclas[GLFW_KEY_G];//para modo debug
 
             case idsEventos::Enum::KEY_1:
-                return _interfaz->IsKeyDown(GLFW_KEY_1);
+                return estadoteclas[GLFW_KEY_1];
 
             case idsEventos::Enum::KEY_2:
-                return _interfaz->IsKeyDown(GLFW_KEY_2);
+                return estadoteclas[GLFW_KEY_2];
 
             case idsEventos::Enum::KEY_U:
-                return _interfaz->IsKeyDown(GLFW_KEY_U);//para desactivar colisiones jugador
+                return estadoteclas[GLFW_KEY_U];//para desactivar colisiones jugador
 
             case idsEventos::Enum::KEY_P:
-                return _interfaz->IsKeyDown(GLFW_KEY_P);
+                return estadoteclas[GLFW_KEY_P];
 
             case idsEventos::Enum::KEY_K:
-                return _interfaz->IsKeyDown(GLFW_KEY_K);
+                return estadoteclas[GLFW_KEY_K];
 
             case idsEventos::Enum::KEY_C:
-                return _interfaz->IsKeyDown(GLFW_KEY_C);//activa pathdinding
+                return estadoteclas[GLFW_KEY_C];//activa pathdinding
 
             case idsEventos::Enum::KEY_B:
-                return _interfaz->IsKeyDown(GLFW_KEY_B);
+                return estadoteclas[GLFW_KEY_B];
 
             case idsEventos::Enum::RMOUSE_PRESSED_DOWN:
-                return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_RIGHT);
+                return estadoteclas[GLFW_MOUSE_BUTTON_RIGHT];
 
             case idsEventos::Enum::LMOUSE_PRESSED_DOWN:
-                return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_LEFT);
+                return estadoteclas[GLFW_MOUSE_BUTTON_LEFT];
 
             case idsEventos::Enum::MOUSE_MOVED:
-                return _interfaz->IsMouseClick(GLFW_MOUSE_MOVE);
+                return estadoteclas[GLFW_MOUSE_MOVE];
 
             case idsEventos::Enum::KEY_Q:
-                return _interfaz->IsKeyDown(GLFW_KEY_Q);
+                return estadoteclas[GLFW_KEY_Q];
 
             case idsEventos::Enum::KEY_H:
-                return _interfaz->IsKeyDown(GLFW_KEY_H);
+                return estadoteclas[GLFW_KEY_H];
 
             case idsEventos::Enum::KEY_I:
-                return _interfaz->IsKeyDown(GLFW_KEY_I);
+                return estadoteclas[GLFW_KEY_I];
 
             case idsEventos::Enum::KEY_J:
-                return _interfaz->IsKeyDown(GLFW_KEY_J);//Para matar al jugador (16)
+                return estadoteclas[GLFW_KEY_J];//Para matar al jugador (16)
 
             case idsEventos::Enum::KEY_Z:
-                return _interfaz->IsKeyDown(GLFW_KEY_Z);//Para abrir 1 puzzle
+                return estadoteclas[GLFW_KEY_Z];//Para abrir 1 puzzle
 
             case idsEventos::Enum::KEY_E:
-                return _interfaz->IsKeyDown(GLFW_KEY_E);//actua una sola vez aunque se mantenga pulsado
+                return estadoteclas[GLFW_KEY_E];//actua una sola vez aunque se mantenga pulsado
         }
 
         return false;
@@ -817,6 +821,80 @@ void MotorGrafico::ResetKey(short event)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        switch(event)
+        {
+            case idsEventos::Enum::KEY_A:
+                estadoteclas[GLFW_KEY_A] = false;
+
+            case idsEventos::Enum::KEY_S:
+                estadoteclas[GLFW_KEY_S] = false;
+
+            case idsEventos::Enum::KEY_D:
+                estadoteclas[GLFW_KEY_D] = false;
+
+            case idsEventos::Enum::KEY_W:
+                estadoteclas[GLFW_KEY_W]  = false;
+
+            case idsEventos::Enum::KEY_ESC:
+                estadoteclas[GLFW_KEY_ESCAPE] = false;
+
+            case idsEventos::Enum::KEY_ESPACIO:
+                estadoteclas[GLFW_KEY_SPACE] = false;
+
+            case idsEventos::Enum::KEY_ACEPTAR:
+                estadoteclas[GLFW_KEY_ENTER] = false;
+
+            case idsEventos::Enum::KEY_G_DEBUG:
+                estadoteclas[GLFW_KEY_G] = false;//para modo debug
+
+            case idsEventos::Enum::KEY_1:
+                estadoteclas[GLFW_KEY_1] = false;
+
+            case idsEventos::Enum::KEY_2:
+                estadoteclas[GLFW_KEY_2] = false;
+
+            case idsEventos::Enum::KEY_U:
+                estadoteclas[GLFW_KEY_U] = false;//para desactivar colisiones jugador
+
+            case idsEventos::Enum::KEY_P:
+                estadoteclas[GLFW_KEY_P] = false;
+
+            case idsEventos::Enum::KEY_K:
+                estadoteclas[GLFW_KEY_K] = false;
+
+            case idsEventos::Enum::KEY_C:
+                estadoteclas[GLFW_KEY_C] = false;//activa pathdinding
+
+            case idsEventos::Enum::KEY_B:
+                estadoteclas[GLFW_KEY_B] = false;
+
+            case idsEventos::Enum::RMOUSE_PRESSED_DOWN:
+                estadoteclas[GLFW_MOUSE_BUTTON_RIGHT] = false;
+
+            case idsEventos::Enum::LMOUSE_PRESSED_DOWN:
+                estadoteclas[GLFW_MOUSE_BUTTON_LEFT] = false;
+
+            case idsEventos::Enum::MOUSE_MOVED:
+                estadoteclas[GLFW_MOUSE_MOVE] = false;
+
+            case idsEventos::Enum::KEY_Q:
+                estadoteclas[GLFW_KEY_Q] = false;
+
+            case idsEventos::Enum::KEY_H:
+                estadoteclas[GLFW_KEY_H] = false;
+
+            case idsEventos::Enum::KEY_I:
+                estadoteclas[GLFW_KEY_I] = false;
+
+            case idsEventos::Enum::KEY_J:
+                estadoteclas[GLFW_KEY_J] = false;//Para matar al jugador (16)
+
+            case idsEventos::Enum::KEY_Z:
+                estadoteclas[GLFW_KEY_Z] = false;//Para abrir 1 puzzle
+
+            case idsEventos::Enum::KEY_E:
+                estadoteclas[GLFW_KEY_E] = false;//actua una sola vez aunque se mantenga pulsado
+        }
     #else
         //codigo motor irrlicht
         switch(event)
@@ -892,7 +970,7 @@ bool MotorGrafico::PulsadoClicDer()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_RIGHT);
+        return estadoteclas[GLFW_MOUSE_BUTTON_RIGHT];
     #else
         //codigo motor irrlicht
         return input.PulsadoClicDer();
@@ -903,7 +981,7 @@ bool MotorGrafico::PulsadoClicIzq()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_LEFT);
+        return estadoteclas[GLFW_MOUSE_BUTTON_LEFT];
     #else
         //codigo motor irrlicht
         return input.PulsadoClicIzq();
@@ -914,7 +992,7 @@ bool MotorGrafico::SueltoClicDer()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_RIGHT);
+       return estadoteclas[GLFW_MOUSE_BUTTON_RIGHT];
     #else
         //codigo motor irrlicht
         return input.SueltoClicDer();
@@ -925,7 +1003,7 @@ bool MotorGrafico::SueltoClicIzq()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        return _interfaz->IsMouseClick(GLFW_MOUSE_BUTTON_LEFT);
+        return estadoteclas[GLFW_MOUSE_BUTTON_LEFT];
     #else
         //codigo motor irrlicht
         return input.SueltoClicIzq();
@@ -936,6 +1014,7 @@ void MotorGrafico::ResetEventoMoveRaton()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        estadoteclas[GLFW_MOUSE_MOVE] = false;
     #else
         //codigo motor irrlicht
         input.ResetEventoRaton(irr::EMIE_MOUSE_MOVED);
@@ -3066,8 +3145,8 @@ void MotorGrafico::ActualizarAnimacionMotor(Animaciones * anima)
 
 void MotorGrafico::CambiarCamara()
 {
-    int lejano = 0;
     #ifdef WEMOTOR
+        int lejano = 0;
         camara1 = !camara1;
         if (camara1)
         {
@@ -3084,3 +3163,30 @@ void MotorGrafico::CambiarCamara()
     #endif
 
 }
+
+void MotorGrafico::updateTeclas()
+{
+    #ifdef WEMOTOR
+        Times * tempo = Times::GetInstance();
+
+        float tiempoactual = tempo->GetTiempo(1);//tiempo actual en milisegundos
+
+        if(tiempo == 0 || (tiempo+142.0f) < tiempoactual)
+        {
+            //std::cout << " Actualizo teclas " << tiempoactual << std::endl;
+            for(int i = 0; i <= numeroteclas;i++)
+            {
+                if(i != GLFW_MOUSE_BUTTON_RIGHT && i != GLFW_MOUSE_BUTTON_LEFT && i != GLFW_MOUSE_MOVE)
+                {
+                        estadoteclas[i]=_interfaz->IsKeyDown(i);
+                }
+                else
+                {
+                        estadoteclas[i]=_interfaz->IsMouseClick(i); 
+                }
+            }
+            tiempo = tiempoactual; 
+        }
+    #endif
+}
+
