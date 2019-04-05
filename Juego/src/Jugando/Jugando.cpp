@@ -280,6 +280,7 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_C);
         _motor->CambiarCamara();
     }
+    
 
     // Debug para probar cofres
     if(_motor->EstaPulsado(KEY_I))
@@ -336,31 +337,36 @@ void Jugando::InteractuarNivel()
     short int_cofre = _fisicas->collideCofre();
     Constantes constantes;
 
-    if (int_puerta >= 0)
+    if(cambia <= 0)
     {
-        AccionarMecanismo(int_puerta, constantes.PUERTA_OBJ);
-        cambia++;
-    }
-    else if (int_palanca >= 0)
-    {
-        AccionarMecanismo(int_palanca, constantes.PALANCA);
-        cambia++;
-    }
+        if (int_puerta >= 0)
+        {
+            AccionarMecanismo(int_puerta, constantes.PUERTA_OBJ);
+            cambia++;
+        }
+        else if (int_palanca >= 0)
+        {
+            AccionarMecanismo(int_palanca, constantes.PALANCA);
+            cambia++;
+        }
 
-    if (int_cofre >= 0)
-    {
-        AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
-        cambia++;
-    }
-    
-    if(rec_col < 0 && int_cofre < 0 && 
-        int_palanca < 0 && int_puerta < 0)
-    {
-        DejarObjeto();
-    }
-    else if (rec_col >= 0)
-    {
-        CogerObjeto();
+        if (int_cofre >= 0)
+        {
+            AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
+            cambia++;
+        }
+        
+        if(rec_col < 0 && int_cofre < 0 && 
+            int_palanca < 0 && int_puerta < 0)
+        {
+            DejarObjeto();
+            cambia++;
+        }
+        else if (rec_col >= 0)
+        {
+            CogerObjeto();
+            cambia++;
+        }
     }
 }
 
