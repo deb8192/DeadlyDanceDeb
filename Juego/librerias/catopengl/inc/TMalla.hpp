@@ -13,6 +13,7 @@ class TMalla : public TEntidad
         RMalla * objetos;//diferentes frames para animaciones
         float frames_totales,mallas_totales,frame_inicial,frame_final,frame_actual,velocidad_animacion;
         float actual_time;
+        bool bucle;//si esta activo esta en bucle si esta desactivado no esta en bucle, por defecto es true
     public:
         // Constructor y destructor
         TMalla(int ft);
@@ -32,6 +33,8 @@ class TMalla : public TEntidad
         unsigned short getFrameInicio();
         unsigned short getFrameFinal();
         unsigned short getFrameActual();
+        bool getBucle();//devuelve si esta en bucle o no la animacion
+        void EstaEnBucleAnimacion(bool);//si se le pasa true la animacion se repetira indefinidamente, si esta en false cuando llegue a frame final se quedara en ese frame
         void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
         void setTexture(const char * _ruta);
 
