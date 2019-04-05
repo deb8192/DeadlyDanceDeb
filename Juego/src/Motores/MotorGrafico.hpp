@@ -7,6 +7,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
     //motor catopengl
     #include <Interfaz.hpp>
     #include "../Eventos.hpp"
+    #include "../Times.hpp"
 #else
     //motorirrlicht
     #include <irrlicht/irrlicht.h> //la utilizaremos para las funcionalidades del motor
@@ -148,7 +149,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
     #define GLFW_KEY_RIGHT_ALT          346
     #define GLFW_KEY_RIGHT_SUPER        347
     #define GLFW_KEY_MENU               348
-    #define GLFW_MOUSE_MOVE             666 //para saber si se ha movido el raton
+    #define GLFW_MOUSE_MOVE             349 //para saber si se ha movido el raton
 #else
     //namespaces de irrlichts
     //para acortar lineas de programacion se cogen espacios definidos directamente
@@ -484,6 +485,12 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             // Camara
             unsigned short altura;
             bool camara1;
+
+            //mejoras en inputs
+            const int numeroteclas = 349;//contiene el numero de teclas a comprobar
+            bool estadoteclas[350];//contiene estado de las teclas
+            void updateTeclas(); //actualiza los estados de las teclas
+            float tiempo;//segun que valor se ponga los botones se actualizan mas rapido esta puesto para que se actualicen 10 veces por segundo
     };
 
 #endif /* MotorGrafico_HPP */
