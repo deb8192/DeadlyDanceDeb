@@ -9,6 +9,24 @@ Animaciones::Animaciones()
     id = 0;
 }
 
+ Animaciones::~Animaciones()
+ {
+    _ejecucion = nullptr;//se pone nullptr porque aqui no se borra se borra del array
+    
+    if( _animaciones != nullptr)//comprobamos que no sea nulo
+    {
+        short tam = numEstados;
+        for(short i=0; i < tam; i++)
+        {
+            if( _animaciones[i] != nullptr)
+            {
+                delete _animaciones[i];
+            }
+        }
+        delete [] _animaciones;
+    }
+ }
+
 Animaciones::Animaciones(const char * ruta)
 {
     pugi::xml_document doc;//instanciamos el objeto de la libreria xml

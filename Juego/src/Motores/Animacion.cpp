@@ -11,7 +11,6 @@ Animacion::Animacion()
     velocidad = 1;//velocidad a la que se ejecuta la animacion
 }
 
-
 Animacion::~Animacion()
 {
     _salta = nullptr;

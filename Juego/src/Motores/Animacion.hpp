@@ -3,6 +3,8 @@
 #ifndef ANIMACION
 #define ANIMACION 
 
+#include <iostream>
+
 class Animacion
 {
     public:
