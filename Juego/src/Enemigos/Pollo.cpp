@@ -10,7 +10,7 @@ Pollo::Pollo(float nX, float nY, float nZ, int maxVida)
     funciona = true;
     atacado = false;
     _ordenes = new short [constantes.DOS];
-    maxRotacion = constantes.PI_OCTAVOS;
+    maxRotacion = constantes.PI_CUARTOS;
     rotation = constantes.CERO;
 
     _modelo = "assets/models/Pollo.obj";
