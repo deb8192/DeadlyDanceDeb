@@ -1,6 +1,5 @@
 #include "Jugando.hpp"
 #include "../Juego.hpp"
-#include "../ConstantesComunes.hpp"
 #include "../Enemigos/CofreArana.hpp"
 #include "../Objetos/Puerta.hpp"
 
@@ -111,7 +110,6 @@ void Jugando::Iniciar()
     // Cargamos todos los puzzles en memoria
     cargPuzzles.CargarPuzzlesXml();
 
-    Constantes constantes;
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
     #ifdef WEMOTOR
         CargarNivel(7, constantes.HEAVY);
@@ -335,7 +333,6 @@ void Jugando::InteractuarNivel()
     short int_puerta = _fisicas->collidePuerta();
     short int_palanca = _fisicas->collidePalanca();
     short int_cofre = _fisicas->collideCofre();
-    Constantes constantes;
 
     if(cambia <= 0)
     {
@@ -378,7 +375,6 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
-    Constantes constantes;
     _motor->clearDebug();
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
@@ -592,7 +588,6 @@ void Jugando::Update()
 */
 void Jugando::UpdateIA()
 {
-    Constantes constantes;
     /* *********** Teclas para probar cosas *************** */
     // Bajar vida
     if (_motor->EstaPulsado(KEY_J))
@@ -680,7 +675,6 @@ void Jugando::UpdateIA()
 
 void Jugando::Render()
 {
-    Constantes constantes;
     _motor->FondoEscena(255,0,0,0); // Borra toda la pantalla
 
     _motor->clearDebug2();
@@ -953,7 +947,6 @@ void Jugando::CrearPowerUp(int x,int y,int z, unsigned short tipoObjeto,
 void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
     unsigned short tipoObjeto,unsigned short ataque)
 {
-    Constantes constantes;
     Recolectable* _rec = new Recolectable(-1,ancho,largo,alto,x,y,z,tipoObjeto,
         2,0,0);
     int posicionObjeto = _motor->CargarObjetos(2,0,x,y,z,ancho,largo,alto,
@@ -996,7 +989,6 @@ void Jugando::ConectarWaypoints()
 // Para coger una llave o un arma
 void Jugando::CogerObjeto()
 {
-    Constantes constantes;
     long unsigned int rec_col = _fisicas->collideColectable();
     _jugador->setAnimacion(4);
 
@@ -1076,7 +1068,6 @@ void Jugando::CogerObjeto()
 
 void Jugando::DejarObjeto()
 {
-    Constantes constantes;
     if(_jugador->getArma() != nullptr)//si tiene arma equipada
     {
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
@@ -1107,7 +1098,6 @@ void Jugando::DejarObjeto()
 */
 void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
 {
-    Constantes constantes;
     unsigned int i = 0;
     bool coincide = false;
 
@@ -1256,7 +1246,6 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
 
 void Jugando::activarPowerUp()
 {
-    Constantes constantes;
     int int_cpw = _fisicas->collideColectablePowerup();
 
     if(int_cpw >= 0 && int_cpw != int_cpw_aux)
@@ -1507,7 +1496,6 @@ void Jugando::AbrirCofre(Cofre* _inter)
     float y = _inter->getY();
     float z = _inter->getZ();
 
-    Constantes constantes;
     switch (NumeroAleatorio(constantes.ARPA,constantes.ORO))
     {
         case 7: // ARPA

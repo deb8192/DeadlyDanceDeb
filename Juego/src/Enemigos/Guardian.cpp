@@ -6,7 +6,6 @@
 Guardian::Guardian(float nX, float nY, float nZ, int maxVida, int disfraz)
 : Enemigo(nX,nY,nZ,maxVida)
 {
-    Constantes constantes;
     funciona = true;
     atacado = hecho = escondido = false;
     _ordenes = new short [constantes.DOS];
@@ -46,7 +45,6 @@ Guardian::~Guardian()
 */
 void Guardian::RunIA()
 {
-    Constantes constantes;
     if(modo == MODO_ATAQUE)
     {
          if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR && _ordenes[0] != EN_DEFENDERSE)
@@ -88,9 +86,7 @@ void Guardian::RunIA()
 
 void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas)
 {
-     Jugador* _jugador = (Jugador*)_jug;
-    Constantes constantes;
-
+    Jugador* _jugador = (Jugador*)_jug;
     funciona = true;
 
     if(_ordenes != nullptr)

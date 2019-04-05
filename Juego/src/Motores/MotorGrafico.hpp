@@ -14,7 +14,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #endif
 
 //#include "../Eventos.hpp" //este archivo contiene los ids de los eventos
-
+#include "../ConstantesComunes.hpp"
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
 #include <vector>//para los objetos en escena
@@ -471,9 +471,13 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 vector<IGUIStaticText*> _textosP;
 
             #endif
-            // Variables camara
-                unsigned short altura;
-                bool camara1;
+
+            // Variables comunes de para OpenGL/irrlicht
+            Constantes constantes;
+
+            // Camara
+            unsigned short altura;
+            bool camara1;
     };
 
 #endif /* MotorGrafico_HPP */

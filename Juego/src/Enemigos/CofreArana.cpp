@@ -1,5 +1,4 @@
 #include "CofreArana.hpp"
-#include "../ConstantesComunes.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "cmath"
 
@@ -7,7 +6,6 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
     float anchoN, float altoN, float largoN)
 : Enemigo(nX,nY,nZ,maxVida)
 {
-    Constantes constantes;
     funciona = true;
     atacado = false;
     _ordenes = new short [constantes.DOS];
@@ -40,7 +38,6 @@ CofreArana::~CofreArana()
 */
 void CofreArana::RunIA()
 {
-    Constantes constantes;
     if(this->getTimeMerodear() <= 0)
     {
         if(modo == constantes.UNO)
@@ -74,7 +71,6 @@ void CofreArana::RunIA()
 void CofreArana::UpdateCofreArana(short *i, int* _jug)
 {
     Jugador* _jugador = (Jugador*)_jug;
-    Constantes constantes;
     funciona = true;
     if(modo == MODO_ATAQUE && _ordenes != nullptr)
     {

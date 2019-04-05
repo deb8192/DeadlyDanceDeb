@@ -1,8 +1,9 @@
-#include <iostream>
-#include "Nodo.hpp"
-
 #ifndef Arbol_HPP
 #define Arbol_HPP
+
+#include <iostream>
+#include "Nodo.hpp"
+#include "ConstantesComunes.hpp"
 
 using namespace std;
 
@@ -33,5 +34,6 @@ class Arbol
         short int  *arrayTareaObjetivo;    //array de enteros que guarda la tarea y el objetivo del nodo hoja que se ejecuta en funcion continuarSiguienteNodo()
         short int ID;                             //Por cada descenso, aumentara el ID y servira para elegir al siguiente hijo
         short int contadorRandom;                 //Contador de las veces que se ejecuta un decorador de fin random
+        Constantes constantes;
 };
 #endif

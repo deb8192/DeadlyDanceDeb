@@ -1,6 +1,5 @@
 #include "MotorFisicas.hpp" //se llama a su cabezera para cargar las dependencias
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
-#include "../ConstantesComunes.hpp"
 #include <iostream>
 //#include <Matrix3x3.h>
 
@@ -361,7 +360,6 @@ void MotorFisicas::EraseArma()
 
 Ray * MotorFisicas::crearRayo(float x, float y, float z, float rotation, float longitud)
 {
-    Constantes constantes;
     rp3d::Vector3 inicio(x,y,z);//posicion inicial desde donde sale el rayo(desde el centro de la entidad o objeto)
 
     //calculamos segun la magnitud y la direccion donde debe apuntar el rayo
@@ -568,13 +566,9 @@ bool MotorFisicas::enemyCollidePlatform(unsigned int enemigo)
 // TO DO revisar
 int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,float longitud,int modo)
 {
-
-
-    Constantes constantes;
     //se recomiendan usar modos especificos para ahorrar costes.
 
     Ray * rayo = crearRayo(x/*-(2*(sin(constantes.PI * rotation / constantes.PI_RADIAN)))*/,y,z/*-(2*(cos(constantes.PI * rotation / constantes.PI_RADIAN)))*/,(-1*(rotation-180)),longitud);
-
     RaycastInfo intersection;
 
     int * jug;
@@ -702,8 +696,6 @@ void MotorFisicas::cambiarCamara()
 
 void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z)
 {
-
-    Constantes constantes;
     float px = x,
           pz = z;
 
@@ -811,7 +803,6 @@ void MotorFisicas::updatePuerta(float x, float y, float z,
 {
     if(obstaculos.at(pos) != nullptr)
     {
-        Constantes constantes;
         float rotacion = (ry * constantes.DEG_TO_RAD) / 2;
         rp3d::Vector3 posiciones((x+despX)/2,y,(z+despZ)/2);
         rp3d::Quaternion orientacion = rp3d::Quaternion(

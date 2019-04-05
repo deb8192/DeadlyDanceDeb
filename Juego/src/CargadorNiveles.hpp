@@ -90,6 +90,7 @@ class CargadorNiveles
         MotorGrafico* _motor;
         MotorFisicas* _fisicas;
         MotorAudioSystem* _motora;
+        Constantes constantes;
 
         // Variables temporales de Debug
         float* posCofre = new float[3];
