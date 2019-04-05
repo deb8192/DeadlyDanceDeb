@@ -3027,14 +3027,21 @@ void MotorGrafico::ActualizarAnimacionMotor(Animaciones * anima)
 
 void MotorGrafico::CambiarCamara()
 {
-    camara1 = !camara1;
-    if (camara1)
-    {
-        altura = 0;
-    }
-    else
-    {
-        altura = 300;
-    }
+    int lejano = 0;
+    #ifdef WEMOTOR
+        camara1 = !camara1;
+        if (camara1)
+        {
+            altura = 0;
+            lejano = 120;
+            _interfaz->SetLejaniaCamara(camara, lejano);
+        }
+        else
+        {
+            altura = 250;
+            lejano = 400;
+            _interfaz->SetLejaniaCamara(camara, lejano);
+        }
+    #endif
 
 }
