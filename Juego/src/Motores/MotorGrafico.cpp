@@ -103,6 +103,43 @@ void MotorGrafico::LimpiarElementosJuego()
         Objetos_Debug.clear();
         Objetos_Debug2.clear();
 
+        if(_aniJugEscena != nullptr)
+        {
+            delete _aniJugEscena;
+            _aniJugEscena = nullptr;
+        }
+
+        short tam = RecolectablesAni_Scena.size();
+        for(short i=0; i < tam; i++)
+        {
+            if( RecolectablesAni_Scena.at(i) != nullptr)
+            {
+                delete RecolectablesAni_Scena.at(i);
+            }
+        }
+
+        tam = ObjetosAni_Scena.size();
+        for(short i=0; i < tam; i++)
+        {
+            if( ObjetosAni_Scena.at(i) != nullptr)
+            {
+                delete ObjetosAni_Scena.at(i);
+            }
+        }
+
+        tam = PowerUPAni_Scena.size();
+        for(short i=0; i < tam; i++)
+        {
+            if( PowerUPAni_Scena.at(i) != nullptr)
+            {
+                delete PowerUPAni_Scena.at(i);
+            }
+        }
+
+        RecolectablesAni_Scena.clear();
+        ObjetosAni_Scena.clear();
+        PowerUPAni_Scena.clear();
+
         camara = 0;
         _jugEscena = 0;
         debugGrafico = false;
@@ -111,6 +148,8 @@ void MotorGrafico::LimpiarElementosJuego()
         camx = 0;
         camz = 30;
         cams = -1;
+        altura = 0;
+        camara1 = true;
         existearmaexp = false;
 
         idCargando = 0;
