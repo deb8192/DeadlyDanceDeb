@@ -34,8 +34,8 @@ class Interfaz
 
         unsigned short AddTexto(std::string, GLuint); //Crear un texto
 
-        unsigned short AddBoard(float ,float ,float ,float, float, const char *,float); //Crear un billboard (world x, world y, world z, local x, local y, ruta imagen/texto, prioridad)
-
+        unsigned short AddBoard(float , float , float ,float, float,const char *); //Crear un texto
+        
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
         void RemoveObject(unsigned short);//remueve objeto de la escena
