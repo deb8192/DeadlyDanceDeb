@@ -6,7 +6,6 @@
 Pollo::Pollo(float nX, float nY, float nZ, int maxVida)
 : Enemigo(nX,nY,nZ,maxVida)
 {
-    Constantes constantes;
     funciona = true;
     atacado = false;
     _ordenes = new short [constantes.DOS];
@@ -35,7 +34,6 @@ Pollo::~Pollo()
 */
 void Pollo::RunIA()
 {
-    Constantes constantes;
     if(this->getTimeMerodear() <= 0)
     {
         if(modo == constantes.UNO)
@@ -69,7 +67,6 @@ void Pollo::RunIA()
 void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
 {
     Jugador* _jugador = (Jugador*)_jug;
-    Constantes constantes;
     funciona = true;
     if(modo == MODO_ATAQUE && _ordenes != nullptr)
     {

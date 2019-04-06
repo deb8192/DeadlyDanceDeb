@@ -1,30 +1,33 @@
 #include "Interactuable.hpp"
+#include "../ConstantesComunes.hpp"
+#include "../Motores/MotorFisicas.hpp"
 
-Interactuable::Interactuable(int codigo, const char* nombre,
-    int anc, int lar, int alt, int posicion, float x, float y, float z,
-    unsigned short tipoObj)
+Interactuable::Interactuable(int id, int codigo,
+    int anc, int lar, int alt, float x, float y, float z,
+    unsigned short tipoObj, float despX, float despZ, int accion)
 {
     //TO DO INICIALIZAR TODAS LAS VARIABLES
     _motor = MotorGrafico::GetInstance();
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
 
-    id = -1;
+    this->id = id;
 
     // INdrawable
     posIni.x = x;
     posIni.y = y;
     posIni.z = z;
 
-    posActual.x = 0.0f;
-    posActual.y = 0.0f;
-    posActual.z = 0.0f;
+    posActual.x = x;
+    posActual.y = y;
+    posActual.z = z;
 
-    posFutura.x = 0.0f;
-    posFutura.y = 0.0f;
-    posFutura.z = 0.0f;
+    posFutura.x = x;
+    posFutura.y = y;
+    posFutura.z = z;
 
-    posPasada.x = 0.0f;
-    posPasada.y = 0.0f;
-    posPasada.z = 0.0f;
+    posPasada.x = x;
+    posPasada.y = y;
+    posPasada.z = z;
 
     rotActual.x = 0.0f;
     rotActual.y = 0.0f;
@@ -38,9 +41,9 @@ Interactuable::Interactuable(int codigo, const char* nombre,
     rotPasada.y = 0.0f;
     rotPasada.z = 0.0f;
 
-    posFisicas.x = 0.0f;
-    posFisicas.y = 0.0f;
-    posFisicas.z = 0.0f;
+    posFisicas.x = x;
+    posFisicas.y = y;
+    posFisicas.z = z;
 
     rotation = 0.0f;
     moveTime = 0.0f;
@@ -49,20 +52,28 @@ Interactuable::Interactuable(int codigo, const char* nombre,
     animacion = 0;
     animacionAnterior = 0;
 
-    posicionArrayObjetos = posicion;
+    posicionArrayObjetos = 0; // Se cambia con el SET
     accionado = false;
 
     //INobjetos
-    std::string name_nombre(nombre);
-    cadena_nombre = new char[sizeof(name_nombre)];
-    strcpy(cadena_nombre, name_nombre.c_str());
-
-    nombreObjeto = cadena_nombre;
     codigoObjeto = codigo;
     ancho = anc;
     largo = lar;
     alto = alt;
     tipoObjeto = tipoObj;
+
+    _desplazamientos[0] = despX;
+    _desplazamientos[1] = despZ;
+
+    // TO DO: descomentar cuando se cambien los valores de puertas2 en el XML
+    /*if (tipoObjeto == constantes.PUERTA2)
+    {
+        setRotation(0,90,0);
+        setNewRotation(0,90,0);
+    }*/
+
+    posObstaculos = _fisicas->CrearCuerpoInter(tipoObj,x/2,y/2,z/2,ancho,alto,largo,despX,despZ);
+    _fisicas = nullptr;
 }
 
 Interactuable::~Interactuable()
@@ -72,6 +83,7 @@ Interactuable::~Interactuable()
     codigoObjeto=0;
     accionado=0;
     posicionArrayObjetos=0;
+    posObstaculos=0;
 
     // TO DO: revisar cuando se cambie
     for(unsigned short i=0; i<tam-1; ++i)
@@ -81,15 +93,6 @@ Interactuable::~Interactuable()
     delete[] _desplazamientos;
 
     // INobjetos
-    nombreObjeto = nullptr;
-    delete cadena_nombre;
-
-    /*ruta_objeto = nullptr;
-    delete cadena_objeto;
-
-    ruta_textura = nullptr;
-    delete cadena_textura;*/
-
     ancho = 0;
     largo = 0;
     alto  = 0;
@@ -268,7 +271,6 @@ void Interactuable::SetPosicionArrayObjetos(int posicionObjeto)
     posicionArrayObjetos = posicionObjeto;
 }
 
-
 int Interactuable::GetPosicionArrayObjetos()
 {
     return posicionArrayObjetos;
@@ -410,11 +412,23 @@ void Interactuable::Render(float updTime, float drawTime)
 {
     RotarEntidad(1 / updTime);
     UpdateTimeRotate(drawTime);
-    _motor->mostrarObjetos(
-        posActual.x, posActual.y, posActual.z,
-        rotActual.x, rotActual.y, rotActual.z,
-        posicionArrayObjetos
-    );
+
+    Constantes constantes;
+    // TO DO: Para evitar esto, cambiar las puertas2 del XML con el ancho y alto de la puerta como si fuera vertical
+    if (tipoObjeto == constantes.PUERTA2) // Para las puertas horizontales
+        _motor->mostrarObjetos(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y+90, rotActual.z,
+            posicionArrayObjetos
+        );
+    else
+    {
+        _motor->mostrarObjetos(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y, rotActual.z,
+            posicionArrayObjetos
+        );
+    }
 }
 
 const char* Interactuable::GetModelo()

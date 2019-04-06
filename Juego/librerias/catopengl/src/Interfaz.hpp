@@ -11,6 +11,7 @@
 #include "TMalla.hpp"
 #include "TPlano.hpp"
 #include "TTexto.hpp"
+#include "TBillboard.hpp"
 #include "Shader.hpp"
 
 class Interfaz
@@ -32,6 +33,8 @@ class Interfaz
         unsigned short AddImagen(const char *, unsigned int, unsigned int, float );//creamos una imagen en plano
 
         unsigned short AddTexto(std::string, GLuint); //Crear un texto
+
+        unsigned short AddBoard(float ,float ,float ,float, float, const char *,float); //Crear un billboard (world x, world y, world z, local x, local y, ruta imagen/texto, prioridad)
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
@@ -81,6 +84,8 @@ class Interfaz
 
         void CambiarTexto(unsigned short nid,std::string texto);//cambia el texto del elemento que le pases como nid
 
+        void CambiarPosicionTexto(unsigned short nid, float x, float y); //Cambia la posicion del texto
+
         int getStartFrame(unsigned short);//consigue el frame inicial
 
         int getFrameNr(unsigned short);//consigue el frame actual
@@ -105,6 +110,13 @@ class Interfaz
         void ColorAmbiental(unsigned short luz, float r,float g,float b);
         void ColorDifusa(unsigned short luz, float r,float g,float b);
         void ColorSpecular(unsigned short luz, float r,float g,float b);
+
+        void setBucle(unsigned short,bool);
+
+        //cercania y lejania de la camara
+        void SetLejaniaCamara(unsigned short camara,float lejania);
+        void SetCercaniaCamara(unsigned short camara,float cercania);
+
 
     private:
 
@@ -161,6 +173,8 @@ class Interfaz
         std::vector<Nodo *> imagenes;//registro de imagenes en interfaz
 
         std::vector<Nodo *> textos;//registro de imagenes en interfaz
+
+        std::vector<Nodo *> boards;//registro de billboards en interfaz
 
         CatOpengl::Gestor * gestorDeRecursos;
 

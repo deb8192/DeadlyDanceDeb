@@ -3,6 +3,7 @@
 #include <iostream>
 #include "../Motores/INobjetos.hpp"
 #include "../Motores/INdrawable.hpp"
+#include "../ConstantesComunes.hpp"
 
 using namespace std;
 
@@ -65,6 +66,7 @@ class Arma : public INobjetos , public INdrawable //multiple herencia a esto se 
 
     private:
         int potenciaAtaque;
+        Constantes constantes;
 };
 
 #endif /* Arma_HPP */

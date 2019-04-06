@@ -1,12 +1,10 @@
 #include "MuerteBoss.hpp"
-#include "../ConstantesComunes.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "cmath"
 
 MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
 : Enemigo(nX,nY,nZ,maxVida)
 {
-    Constantes constantes;
     funciona = true;
     atacado = false;
     _ordenes = new short [constantes.DOS];
@@ -35,7 +33,6 @@ MuerteBoss::~MuerteBoss()
 */
 void MuerteBoss::RunIA()
 {
-    Constantes constantes;
     if(modo == constantes.UNO)
     {
         if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR)
@@ -66,7 +63,6 @@ void MuerteBoss::RunIA()
 void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
 {
     Jugador* _jugador = (Jugador*)_jug;
-    Constantes constantes;
     funciona = true;
     if(modo == MODO_ATAQUE && _ordenes != nullptr)
     {

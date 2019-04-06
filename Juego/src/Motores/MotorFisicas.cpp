@@ -1,6 +1,5 @@
 #include "MotorFisicas.hpp" //se llama a su cabezera para cargar las dependencias
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
-#include "../ConstantesComunes.hpp"
 #include <iostream>
 //#include <Matrix3x3.h>
 
@@ -66,19 +65,33 @@ MotorFisicas::~MotorFisicas()
     }
     recolectables.clear();
 
+    tam = _puertas.size();
+    for(short i=0; i < tam; i++)
+    {
+        _puertas.at(i) = nullptr;
+    }
+    _puertas.clear();
+
+    tam = _palancas.size();
+    for(short i=0; i < tam; i++)
+    {
+        _palancas.at(i) = nullptr;
+    }
+    _palancas.clear();
+
+    tam = _cofres.size();
+    for(short i=0; i < tam; i++)
+    {
+        _cofres.at(i) = nullptr;
+    }
+    _cofres.clear();
+
     tam = recolectables_powerup.size();
     for(short i=0; i < tam; i++)
     {
         recolectables_powerup.at(i) = nullptr;
     }
     recolectables_powerup.clear();
-
-    tam = interactuables.size();
-    for(short i=0; i < tam; i++)
-    {
-        interactuables.at(i) = nullptr;
-    }
-    interactuables.clear();
 
     tam = obstaculos.size();
     for(short i=0; i < tam; i++)
@@ -100,7 +113,7 @@ MotorFisicas::~MotorFisicas()
     delete _unica_instancia;
 }
 
-void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator, float despX, float despZ)
+void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator, float despX, float despZ)
 {
     rp3d::Vector3 posiciones(px+despX,py,pz+despZ); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
     rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
@@ -181,22 +194,7 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
             //Recolectable power ups
             else if(accion == 4)
             {
-            recolectables_powerup.push_back(cuerpo);
-            }
-
-            //Objetos con los que interactuar como puertas, cofres
-            else if(accion == 3)
-            {
-                relacionInteractuablesObstaculos.push_back(obstaculos.size());
-                obstaculos.push_back(cuerpo);
-                //Se le anade una zona de deteccion mediante colision
-                rp3d::CollisionBody * deteccion;
-                SphereShape * detector = new SphereShape(alto);
-                deteccion = space->createCollisionBody(transformacion);
-                deteccion->addCollisionShape(detector,transformacion);
-                interactuables.push_back(deteccion);
-                //interAncho.push_back(ancho);
-                //interLargo.push_back(largo);
+                recolectables_powerup.push_back(cuerpo);
             }
             //Objetos que recoger como armas y llaves
             else if(accion == 2)
@@ -252,8 +250,7 @@ void MotorFisicas::crearCuerpo(int accion, int rp, float px, float py, float pz,
     // std::cout << "pz: " << posiciones.z << std::endl;
 }
 
-//TO DO: pasar a vector de punteros
-std::vector<int> MotorFisicas::crearCuerpoCofre(float px, float py, float pz,
+unsigned short MotorFisicas::CrearCuerpoInter(unsigned short tipoObj, float px, float py, float pz, 
     float ancho, float alto, float largo, float despX, float despZ)
 {
     rp3d::Vector3 posiciones(px+despX,py,pz+despZ); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
@@ -261,39 +258,41 @@ std::vector<int> MotorFisicas::crearCuerpoCofre(float px, float py, float pz,
 
     Transform transformacion(posiciones,orientacion);
 
-    rp3d::CollisionBody * cuerpo;
+    rp3d::CollisionBody* cuerpo;
     cuerpo = space->createCollisionBody(transformacion);
 
-    //cubo (boundingbox)
     rp3d::Vector3 medidas(ancho,alto,largo);
-    BoxShape * forma = new BoxShape(medidas);
+    BoxShape* forma = new BoxShape(medidas);
     cuerpo->addCollisionShape(forma,transformacion);
 
     relacionInteractuablesObstaculos.push_back(obstaculos.size());
     obstaculos.push_back(cuerpo);
 
     //Se le anade una zona de deteccion mediante colision
-    rp3d::CollisionBody * deteccion;
-    SphereShape * detector = new SphereShape(alto);
+    rp3d::CollisionBody* deteccion;
+    SphereShape* detector = new SphereShape(alto);
     deteccion = space->createCollisionBody(transformacion);
     deteccion->addCollisionShape(detector,transformacion);
-    interactuables.push_back(deteccion);
 
-    vector<int> _vector;
-    _vector.reserve(2);
+    switch(tipoObj)
+    {
+        case 0: // PALANCA
+            _palancas.push_back(move(deteccion));
+        break;
 
-    int _num = obstaculos.size()-1;
-    _vector.push_back(move(_num));
-    _num = interactuables.size()-1;
-    _vector.push_back(move(_num));
+        case 4: // COFRE
+            _cofres.push_back(move(deteccion));
+        break;
 
-    return _vector;
+        default: // PUERTA2 y PUERTA
+            _puertas.push_back(move(deteccion));
+            break;
+    }
+    return obstaculos.size()-1;
 }
-
 
 void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, int alt)
 {
-
     rp3d::Vector3 posiciones(px,py,pz);
     rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
 
@@ -308,6 +307,7 @@ void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, 
 
     arma = cuerpo;
 }
+
 void MotorFisicas::EraseObstaculo(int idx)
 {
     obstaculos.at(idx) = nullptr;
@@ -320,7 +320,7 @@ void MotorFisicas::EraseColectable(int idx)
 
 void MotorFisicas::ErasePared(int idx)
 {
-     paredes.at(idx) = nullptr;
+    paredes.at(idx) = nullptr;
 }
 
 void MotorFisicas::EraseColectablePowerup(int idx)
@@ -343,16 +343,9 @@ void MotorFisicas::EraseEnemigo(std::size_t i)
     armaAtEspEne.erase(armaAtEspEne.begin() + i);
 }
 
-void MotorFisicas::EraseCofre(std::size_t posObs, std::size_t posInter)
+void MotorFisicas::DesactivarCofre(unsigned short pos)
 {
-    /*relacionInteractuablesObstaculos.push_back(
-        obstaculos.size()-1);
-    obstaculos.erase(obstaculos.begin() + posObs);
-
-    space->destroyCollisionBody(interactuables[posInter]);
-    interactuables[posInter]=nullptr;
-    interactuables.erase(interactuables.begin() + posInter);*/
-    EraseObstaculo(posObs);
+    _cofres.at(pos) = nullptr;
 }
 
 void MotorFisicas::EraseJugador(){
@@ -365,27 +358,8 @@ void MotorFisicas::EraseArma()
     arma = NULL;
 }
 
-void MotorFisicas::setFormaRecolectable(int id, float px, float py, float pz, int anc, int lar, int alt)
-{
-
-    rp3d::Vector3 posiciones(px,py,pz);
-    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
-
-    Transform transformacion(posiciones,orientacion);
-
-    rp3d::CollisionBody * cuerpo;
-    cuerpo = space->createCollisionBody(transformacion);
-
-    rp3d::Vector3 medidas(anc,alt,lar);
-    BoxShape * forma = new BoxShape(medidas);
-    cuerpo->addCollisionShape(forma,transformacion);
-
-    recolectables.push_back(cuerpo);
-}
-
 Ray * MotorFisicas::crearRayo(float x, float y, float z, float rotation, float longitud)
 {
-    Constantes constantes;
     rp3d::Vector3 inicio(x,y,z);//posicion inicial desde donde sale el rayo(desde el centro de la entidad o objeto)
 
     //calculamos segun la magnitud y la direccion donde debe apuntar el rayo
@@ -425,21 +399,43 @@ int MotorFisicas::collideColectablePowerup()
           return i; //posicion mas recolectables
       }
   }
-
   return -1;
 }
 
-int MotorFisicas::collideInteractuable()
+short MotorFisicas::collidePuerta()
 {
-    cout << "Colisiones: "<<interactuables.size() <<endl;
-    for(long unsigned int i = 0; i < interactuables.size();i++)
+    for (long unsigned int i = 0; i < _puertas.size(); i++)
     {
-      if(space->testOverlap(jugador,interactuables[i]))
-      {
-        return (int)i;
-      }
+        if (space->testOverlap(jugador,_puertas[i]))
+        {
+            return (int)i;
+        }
     }
+    return -1;
+}
 
+short MotorFisicas::collidePalanca()
+{
+    for (long unsigned int i = 0; i < _palancas.size(); i++)
+    {
+        if (space->testOverlap(jugador,_palancas[i]))
+        {
+            return (int)i;
+        }
+    }
+    return -1;
+}
+
+short MotorFisicas::collideCofre()
+{
+    for (long unsigned int i = 0; i < _cofres.size(); i++)
+    {
+        if (_cofres[i] != nullptr)
+            if (space->testOverlap(jugador,_cofres[i]))
+            {
+                return (int)i;
+            }
+    }
     return -1;
 }
 
@@ -570,11 +566,9 @@ bool MotorFisicas::enemyCollidePlatform(unsigned int enemigo)
 // TO DO revisar
 int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,float longitud,int modo)
 {
-    Constantes constantes;
     //se recomiendan usar modos especificos para ahorrar costes.
 
     Ray * rayo = crearRayo(x/*-(2*(sin(constantes.PI * rotation / constantes.PI_RADIAN)))*/,y,z/*-(2*(cos(constantes.PI * rotation / constantes.PI_RADIAN)))*/,(-1*(rotation-180)),longitud);
-
     RaycastInfo intersection;
 
     int * jug;
@@ -702,8 +696,6 @@ void MotorFisicas::cambiarCamara()
 
 void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z)
 {
-
-    Constantes constantes;
     float px = x,
           pz = z;
 
@@ -805,17 +797,20 @@ void MotorFisicas::updateEnemigos(float x, float y, float z, unsigned int i)
     }
 }
 
-void MotorFisicas::updatePuerta(float x, float y, float z, float rx, float ry, float rz, float * desplazamientos, unsigned int i)
+void MotorFisicas::updatePuerta(float x, float y, float z, 
+    float rx, float ry, float rz, float despX, float despZ,
+    unsigned int pos)
 {
-    Constantes constantes;
-    if(obstaculos.at(i) != nullptr)
+    if(obstaculos.at(pos) != nullptr)
     {
-        rp3d::Vector3 posiciones((x+desplazamientos[0])/2,y,(z+desplazamientos[1])/2);
-        rp3d::Quaternion orientacion = rp3d::Quaternion(cos((ry * constantes.DEG_TO_RAD) / 2),posiciones*(sin((ry * constantes.DEG_TO_RAD) / 2)));
+        float rotacion = (ry * constantes.DEG_TO_RAD) / 2;
+        rp3d::Vector3 posiciones((x+despX)/2,y,(z+despZ)/2);
+        rp3d::Quaternion orientacion = rp3d::Quaternion(
+            cos(rotacion),
+            posiciones*(sin(rotacion)));
 
         Transform transformacion(posiciones,orientacion);
-        obstaculos.at(i)->setTransform(transformacion);
-
+        obstaculos.at(pos)->setTransform(transformacion);
     }
 }
 
@@ -1078,21 +1073,47 @@ void MotorFisicas::limpiarFisicas()
         plataformas.resize(0);
     }
 
-    if(interactuables.size() > 0)
+    if(_puertas.size() > 0)
     {
-        for(std::size_t i=0 ; i < interactuables.size() ; i++)
+        for(std::size_t i=0 ; i < _puertas.size() ; i++)
         {
-            if(interactuables[i])
+            if(_puertas[i])
             {
-                space->destroyCollisionBody(interactuables[i]);
+                space->destroyCollisionBody(_puertas[i]);
             }
-            interactuables[i] = nullptr;
-            interactuables.erase(interactuables.begin() + i);
+            _puertas[i] = nullptr;
+            _puertas.erase(_puertas.begin() + i);
         }
-
-        interactuables.resize(0);
+        _puertas.resize(0);
     }
 
+    if(_palancas.size() > 0)
+    {
+        for(std::size_t i=0 ; i < _palancas.size() ; i++)
+        {
+            if(_palancas[i])
+            {
+                space->destroyCollisionBody(_palancas[i]);
+            }
+            _palancas[i] = nullptr;
+            _palancas.erase(_palancas.begin() + i);
+        }
+        _palancas.resize(0);
+    }
+
+    if(_cofres.size() > 0)
+    {
+        for(std::size_t i=0 ; i < _cofres.size() ; i++)
+        {
+            if(_cofres[i])
+            {
+                space->destroyCollisionBody(_cofres[i]);
+            }
+            _cofres[i] = nullptr;
+            _cofres.erase(_cofres.begin() + i);
+        }
+        _cofres.resize(0);
+    }
 }
 
 unsigned int MotorFisicas::GetRelacionInteractuablesObstaculos(int n)

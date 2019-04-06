@@ -6,10 +6,14 @@ Recolectable::Recolectable()
 
 }
 
-Recolectable::Recolectable(int anc, int lar, int alt, 
+Recolectable::Recolectable(int id, int anc, int lar, int alt, 
     float x, float y, float z, unsigned short tipoObj,
-    int accion, int rp, int despX, int despZ)
+    int accion, int despX, int despZ)
 {
+    // TO DO: revisar, solo tienen id los objetos cargados del XML
+    // el resto que se crea luego valen -1
+    this->id = id;
+
     // INdrawable
     posIni.x = x;
     posIni.y = y;
@@ -18,6 +22,14 @@ Recolectable::Recolectable(int anc, int lar, int alt,
     posActual.x = x;
     posActual.y = y;
     posActual.z = z;
+
+    posFutura.x = x;
+    posFutura.y = y;
+    posFutura.z = z;
+
+    posPasada.x = x;
+    posPasada.y = y;
+    posPasada.z = z;
 
     ancho = anc;
     largo = lar;
@@ -71,7 +83,7 @@ Recolectable::Recolectable(int anc, int lar, int alt,
         break;
     }
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
+    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
     _fisicas = nullptr;
 }
 
@@ -85,8 +97,6 @@ Recolectable::~Recolectable()
     tipoObjeto = 0;
 
     // INobjetos
-    delete cadena_nombre;
-
     ancho = 0;
     largo = 0;
     alto  = 0;

@@ -7,6 +7,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
     //motor catopengl
     #include <Interfaz.hpp>
     #include "../Eventos.hpp"
+    #include "../Times.hpp"
 #else
     //motorirrlicht
     #include <irrlicht/irrlicht.h> //la utilizaremos para las funcionalidades del motor
@@ -14,10 +15,11 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 #endif
 
 //#include "../Eventos.hpp" //este archivo contiene los ids de los eventos
-
+#include "../ConstantesComunes.hpp"
 #include <iostream> //la utilizamos para mostrar el log en la consola.
 #include <math.h>
 #include <vector>//para los objetos en escena
+#include "Animaciones.hpp"
 
 #ifdef WEMOTOR
     //namespaces de catopengl
@@ -147,7 +149,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
     #define GLFW_KEY_RIGHT_ALT          346
     #define GLFW_KEY_RIGHT_SUPER        347
     #define GLFW_KEY_MENU               348
-    #define GLFW_MOUSE_MOVE             666 //para saber si se ha movido el raton
+    #define GLFW_MOUSE_MOVE             349 //para saber si se ha movido el raton
 #else
     //namespaces de irrlichts
     //para acortar lineas de programacion se cogen espacios definidos directamente
@@ -236,7 +238,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarLuces(int x,int y,int z);
             void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
-            int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);
+            int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1);
             void CargarArmaJugador(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
@@ -299,6 +301,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             //animaciones
             void cambiarAnimacionJugador(int);//nos sirve para cambiar de animacion al jugador
+            void cambiarAnimacion(int,int,int);//modo,id y estado
+            void ActualizarAnimacionMotor(Animaciones * anima);//se pasa la animacion a actualizar
 
             //getters & setters
             bool getPathfindingActivado();
@@ -325,13 +329,16 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void HabilitarDinero();
             void DeshabilitarDinero();
 
+            // En proceso
+            void CambiarCamara();
+
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
             MotorGrafico();
             static MotorGrafico* _unica_instancia;
             //fin clase singleton private
-
+            Animaciones * _aniJugEscena;
             void propiedadesDevice();
 
             #ifdef WEMOTOR
@@ -347,6 +354,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Textos_Scena;//contiene los enemigos reservados (ids)
                 std::vector<unsigned short> Recolectables_Scena;//contiene los recolectables reservados (ids)
                 std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> ObjetosAni_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> RecolectablesAni_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> PowerUPAni_Scena;//contiene los objetos reservados (ids)
+                
                 std::vector<unsigned short> PowerUP_Scena;//contiene los power ups reservados (ids)
                 std::vector<unsigned short> Objetos_Debug;//contiene los elementos que se ven en modo debug
                 std::vector<unsigned short> Objetos_Debug2;//para objetos con tiempo para desaparecer
@@ -387,7 +398,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short _txtP;
                 vector<unsigned short> _imagenesP;
                 vector<unsigned short> _textosP;
-
 
             #else
                 //variables y parametros motor irrlicht
@@ -468,6 +478,19 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 vector<IGUIStaticText*> _textosP;
 
             #endif
+
+            // Variables comunes de para OpenGL/irrlicht
+            Constantes constantes;
+
+            // Camara
+            unsigned short altura;
+            bool camara1;
+
+            //mejoras en inputs
+            const int numeroteclas = 349;//contiene el numero de teclas a comprobar
+            bool estadoteclas[350];//contiene estado de las teclas
+            void updateTeclas(); //actualiza los estados de las teclas
+            float tiempo;//segun que valor se ponga los botones se actualizan mas rapido esta puesto para que se actualicen 10 veces por segundo
     };
 
 #endif /* MotorGrafico_HPP */

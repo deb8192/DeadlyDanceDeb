@@ -7,7 +7,7 @@
 #include "../ConstantesComunes.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "cmath"
-#include "../Motores/MotorFisicas.hpp"
+//#include "../Motores/MotorFisicas.hpp"
 
 Enemigo::Enemigo()
 {
@@ -531,7 +531,6 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
 
 int Enemigo::Atacar(int i)
 {
-    Constantes constantes;
     float danyoF = 0.f, critico = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
     bool atacado = false;
@@ -604,7 +603,6 @@ int Enemigo::Atacar(int i)
  */
 int Enemigo::AtacarEspecial()
 {
-    Constantes constantes;
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
@@ -784,7 +782,6 @@ void Enemigo::UpdateTimeRotate(float updTime)
  */
 void Enemigo::ModificarVida(int vid)
 {
-    Constantes constantes;
     vida += vid;
     float ultimoEstertor = vidaIni * constantes.UN_CUARTO;
     if(vid < 0)
@@ -850,7 +847,6 @@ void Enemigo::setAtaque(int ataq)
 
 void Enemigo::setArmaEspecial(int ataque)
 {
-    Constantes constantes;
     _armaEspecial = new Arma(ataque,2,2,2,constantes.ARMA);
 }
 
@@ -996,7 +992,6 @@ void Enemigo::setLastRotacion(float nrx, float nry, float nrz)
 
 void Enemigo::setVectorOrientacion()
 {
-    Constantes constantes;
     vectorOrientacion.vX = sin(constantes.PI * rotFutura.y / constantes.PI_RADIAN);
     vectorOrientacion.vY = 0.0f;
     vectorOrientacion.vZ = cos(constantes.PI * rotFutura.y / constantes.PI_RADIAN);
@@ -1099,7 +1094,6 @@ int Enemigo::GetModo()
 
 Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, Zona* _zonaUsada)
 {
-    Constantes constantes;
     Zona* _zonaElegida = nullptr;
     VectorEspacial distanciaZonaActual, distanciaZonaElegida;
     vector<Zona*> zonasCompletas;
@@ -1601,7 +1595,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     bool Enemigo::perseguir(int* _jug)
     {
         Jugador* _jugador = (Jugador*)_jug;
-        Constantes constantes;
         bool funciona = true;
         VectorEspacial datosDesplazamiento, objetivo;
         struct{
@@ -1695,7 +1688,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
     bool Enemigo::buscar(VectorEspacial* objetivo)
     {
-        Constantes constantes;
         bool funciona = true;
         VectorEspacial datosDesplazamiento;
         float distancia = 4.0f;
@@ -1791,7 +1783,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
     bool Enemigo::Merodear()
     {
-        Constantes constantes;
         struct
         {
             float x = 0.0f;
@@ -1824,7 +1815,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     }
     INnpc::VectorEspacial Enemigo::normalizarVector(int* destino)
     {
-        Constantes constantes;
         //Se obtiene el vector director del movimiento del enemigo y su modulo
         VectorEspacial vectorDirector;
         vectorDirector.vX = destino[0] - posActual.x;
@@ -1868,7 +1858,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
     bool Enemigo::comprobarDistanciaFlocking()
     {
-        Constantes constantes;
         if(posicionComunBandada.vX != INT_MAX)
         {
             VectorEspacial vectorDistancia;

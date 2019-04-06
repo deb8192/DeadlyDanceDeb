@@ -13,9 +13,7 @@ class INobjetos
         virtual unsigned short GetTipoObjeto()=0;
 
     /*el protected es para que tenga acceso sus descendientes o parientes*/
-    protected:    	
-    	const char * nombreObjeto;
-        char* cadena_nombre;
+    protected:
         float ancho, largo, alto;
         unsigned short tipoObjeto;
 };
