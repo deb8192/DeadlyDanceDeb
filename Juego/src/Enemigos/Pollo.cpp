@@ -181,6 +181,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                             if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
                             {
                                 modo = MODO_ATAQUE;
+                                porcentajeVelocidad = constantes.UNO;
                                 this->setTimeMerodear(constantes.CERO);
                                 //cout<<"Pide ayuda a los aliados"<<endl;
                                 this->PedirAyuda(ayuda);
@@ -210,6 +211,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                             if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
                             {
                                 modo = MODO_ATAQUE;
+                                porcentajeVelocidad = constantes.UNO;
                                 this->setTimeMerodear(constantes.CERO);
                                 //cout<<"Pide ayuda a los aliados"<<endl;
                                 this->PedirAyuda(ayuda);
