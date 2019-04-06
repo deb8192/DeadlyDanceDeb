@@ -17,8 +17,9 @@ RMalla::~RMalla()
 // draws the model, and thus all its meshes
 void RMalla::Draw(Shader *shader, float frame)
 {
-    for(unsigned int j = 0; j < frames[frame].size(); j++)
+    for(unsigned int j = 0; j < frames[frame].size() && frame < frames.size(); j++)
     {
+
         frames[frame][j]->Draw(shader);
     }
 }

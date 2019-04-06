@@ -1,19 +1,15 @@
 #include "Puerta.hpp"
+#include "../Motores/MotorFisicas.hpp"
 
-Puerta::Puerta(int codigo, const char* nombre,
-    int anc, int lar, int alt, int posicion, float x, float y, float z, unsigned short tipoObj)
-: Interactuable(codigo, nombre, anc, lar, alt, posicion, x, y, z, tipoObj)
+Puerta::Puerta(int id, int codigo,
+    int anc, int lar, int alt,
+    float x, float y, float z, unsigned short tipoObj,
+    float despX, float despZ, int accion)
+: Interactuable(id, codigo, anc, lar, alt,
+    x, y, z, tipoObj, despX, despZ, accion)
 {
-    if (tipoObj == 2)
-    {
-        _modelo = "assets/models/Puerta2.obj";
-        _textura = "assets/texture/Puerta.png";
-    }
-    else
-    {
-        _modelo = "assets/models/Puerta.obj";
-        _textura = "assets/texture/Puerta.png";
-    }
+    _modelo = "assets/models/Puertas/Puerta.obj";
+    _textura = "assets/texture/Puerta.png";
 }
 
 Puerta::~Puerta()
@@ -22,14 +18,12 @@ Puerta::~Puerta()
     _textura = nullptr;
 }
 
-void Puerta::CrearFisica()
+void Puerta::GirarPuerta(float rotacion)
 {
-    //
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    setNewRotacion(rotActual.x, rotActual.y + rotacion, rotActual.z);
+    _fisicas->updatePuerta(posActual.x, posActual.y, posActual.z,
+        rotActual.x, rotActual.y + rotacion, rotActual.z,
+        _desplazamientos[0], _desplazamientos[1], posObstaculos);
+    _fisicas = nullptr;
 }
-
-void Puerta::BorrarFisica()
-{
-    //
-}
-
-// TO DO: al cargarlas pasarle la rotacion por defecto para que se puedan reiniciar

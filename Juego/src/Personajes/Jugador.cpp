@@ -1,15 +1,13 @@
 #include "Jugador.hpp"
 #include <stdlib.h>
 #include "../Times.hpp"
-#include "../ConstantesComunes.hpp"
-#include "../Motores/MotorFisicas.hpp"
-
 
 Jugador::Jugador()
 {
     _motor = MotorGrafico::GetInstance();
     _motora = MotorAudioSystem::getInstance();
     _interfaz = InterfazJugador::getInstance();
+    _fisicas = MotorFisicas::getInstance();
 
     animacion = 0;
     //tiempos de animacion
@@ -32,9 +30,7 @@ Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
     int largo, int alto, int accion, int maxVida)
 : Jugador()
 {
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    _fisicas->crearCuerpo(accion,0,nX/2,nY/2,nZ/2,3,2,2,2,1,0,0);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
-    _fisicas = nullptr;
+    _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,3,2,2,2,1,0,0);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
 
     this->tipoJug = tipoJug;
     this->ancho = ancho;
@@ -51,6 +47,14 @@ Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
     posActual.x = nX;
     posActual.y = nY;
     posActual.z = nZ;
+
+    posPasada.x = nX;
+    posPasada.y = nY;
+    posPasada.z = nZ;
+    
+    posFutura.x = nX;
+    posFutura.y = nY;
+    posFutura.z = nZ;
 }
 
 Jugador::~Jugador()
@@ -58,6 +62,7 @@ Jugador::~Jugador()
     _motor = nullptr;
     _motora = nullptr;
     _interfaz = nullptr;
+    _fisicas = nullptr;
 
     _armaEquipada = nullptr;
     _armaEspecial = nullptr;
@@ -136,7 +141,6 @@ Jugador::~Jugador()
 
 void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 {
-    Constantes constantes;
     float px = posFutura.x,
           pz = posFutura.z;
 
@@ -316,8 +320,6 @@ void Jugador::MuereJugador()
 
 int Jugador::Atacar(int i)
 {
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    Constantes constantes;
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
     if(vida > 0)
@@ -341,7 +343,7 @@ int Jugador::Atacar(int i)
         if(this->getArma() == nullptr)
         {
             setAnimacion(2);
-            _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,3,3,3,4,0,0);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,3,3,3,4,0,0);
             _motora->getEvent("SinArma")->setVolume(0.4f);
             _motora->getEvent("SinArma")->start();
         }
@@ -349,7 +351,7 @@ int Jugador::Atacar(int i)
         else if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)
         {
             //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,1,5,0,0,4,0,0);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4,0,0);
             _motora->getEvent("GolpeGuitarra")->setVolume(0.5f);
             _motora->getEvent("GolpeGuitarra")->start();
         }
@@ -358,7 +360,7 @@ int Jugador::Atacar(int i)
         {
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj",NULL);
             //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0);
             _motora->getEvent("Arpa")->setVolume(0.5f);
             _motora->getEvent("Arpa")->start();
         }
@@ -384,7 +386,6 @@ int Jugador::Atacar(int i)
         danyo = roundf(danyoF * por10) / por10;
         atacados_normal.clear(); //Reiniciar vector con enemigos atacados
     }
-    _fisicas = nullptr;
     return danyo;
 }
 
@@ -398,8 +399,6 @@ int Jugador::Atacar(int i)
  */
 int Jugador::AtacarEspecial()
 {
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    Constantes constantes;
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
 
@@ -431,7 +430,7 @@ int Jugador::AtacarEspecial()
             if(tipoJug == constantes.HEAVY)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                _fisicas->crearCuerpo(0,0,
+                _fisicas->crearCuerpo(0,
                     _armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),
                     2,8,1,8,5,0,0);
                 _motora->getEvent("GuitarraEspecial")->setVolume(0.5f);
@@ -441,7 +440,7 @@ int Jugador::AtacarEspecial()
             else if(tipoJug == constantes.BAILAORA)
             {
                 //Crear cuerpo de colision de ataque delante del jugador
-                _fisicas->crearCuerpo(0,0,
+                _fisicas->crearCuerpo(0,
                     _armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),
                     2,8,8,8,5,0,0);
                 _motora->getEvent("Arpa")->start(); // TO DO: Evento de sonido temporal
@@ -469,17 +468,13 @@ int Jugador::AtacarEspecial()
         danyoF = ataque * critico * aumentosAtaque;
         danyo = roundf(danyoF * por10) / por10;
         setBarraAtEs(0);
-        _fisicas = nullptr;
         return danyo;
     }
-    _fisicas = nullptr;
     return danyo;
 }
 
 void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
 {
-    Constantes constantes;
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     if(vida > 0)
     {
         /***************************** Codigo repe  TO DO *******************************/
@@ -549,17 +544,14 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
             }
         }
     }
-    else
+    /*else
     {
         cout << "No supera las restricciones"<<endl;
-    }
-    _fisicas = nullptr;
+    }*/
 }
 
 void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
 {
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
-
     //lista de enteros que senyalan a los enemigos atacados
     vector <unsigned int> atacados = _fisicas->updateArmaEspecial(_armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ());
 
@@ -576,12 +568,10 @@ void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
             _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
         }
     }
-    _fisicas = nullptr;
 }
 
 void Jugador::generarSonido(int intensidad,double duracion,int tipo)
 {
-    Constantes constantes;
     EventoSonido * sonid = new EventoSonido(intensidad, duracion, posActual.x, posActual.y, posActual.z, constantes.DOS, tipo);
     SenseEventos * eventos = SenseEventos::getInstance();
     eventos->agregarEvento(sonid);
@@ -795,7 +785,6 @@ float* Jugador::GetDatosAtEsp()
 
     return atesp;
 }
-
 int Jugador::getVidaIni()
 {
     return vidaIni;
@@ -1083,7 +1072,6 @@ void Jugador::setAtaque(int ataq)
 
 void Jugador::setArma(Arma* arma)
 {
-    Constantes constantes;
     _armaEquipada = arma;
 
     if(_armaEquipada)
@@ -1109,10 +1097,8 @@ void Jugador::setArma(Arma* arma)
     }
 }
 
-
 void Jugador::setArmaEspecial(int ataque)
 {
-    Constantes constantes;
     _armaEspecial = new Arma(ataque,3,3,3,constantes.ARMA);
 }
 
@@ -1212,23 +1198,19 @@ int Jugador::GetAlto()
 
 bool Jugador::ColisionEntornoEne()
 {
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     //colisiones con todos los objetos y enemigos que no se traspasan
     if(_fisicas->collideObstacle()
         || !_fisicas->collidePlatform())
     {//colisiona
         setNewPosiciones(posActual.x, posActual.y, posActual.z);
-        _fisicas = nullptr;
         return true;
     }
     //no colisiona
-    _fisicas = nullptr;
     return false;
 }
 
 void Jugador::Render(float updTime, float drawTime)
 {
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     moverseEntidad(1 / updTime);
     RotarEntidad(1 / updTime);
     UpdateTimeMove(drawTime);
@@ -1244,10 +1226,9 @@ void Jugador::Render(float updTime, float drawTime)
         if(newz > 0.0f)newz -= 1.0f;
         if(newy > 0.0f)newy -= 0.5f;
     }
-
-
+    
     _motor->mostrarJugador(
         posActual.x, posActual.y, posActual.z,
-        getRX(), getRY(), getRZ(), newy, newz
+        rotActual.x, rotActual.y, rotActual.z, newy, newz
     );
 }

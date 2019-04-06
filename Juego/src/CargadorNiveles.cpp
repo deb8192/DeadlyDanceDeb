@@ -9,10 +9,6 @@
 #include "Enemigos/MuerteBoss.hpp"
 #include "Enemigos/Guardian.hpp"
 
-#include "Objetos/Puerta.hpp"
-#include "Objetos/Palanca.hpp"
-#include "Objetos/Cofre.hpp"
-
 CargadorNiveles::CargadorNiveles()
 {
     _motor = MotorGrafico::GetInstance();
@@ -50,13 +46,6 @@ CargadorNiveles::~CargadorNiveles()
     }
     _zonas.clear();
 
-    tam = _interactuables.size();
-    for(short i=0; i < tam; i++)
-    {
-        delete _interactuables.at(i);
-    }
-    _interactuables.clear();
-
     tam = _recolectables.size();
     for(short i=0; i < tam; i++)
     {
@@ -77,6 +66,27 @@ CargadorNiveles::~CargadorNiveles()
         delete _waypoints.at(i);
     }
     _waypoints.clear();
+
+    tam = _palancas.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _palancas.at(i);
+    }
+    _palancas.clear();
+
+    tam = _puertas.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _puertas.at(i);
+    }
+    _puertas.clear();
+
+    tam = _cofres.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _cofres.at(i);
+    }
+    _cofres.clear();
 
     delete _primeraSala;
 }
@@ -117,7 +127,7 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     int zonesMax = hijo.attribute("Zones").as_int();//nos devuelve un int
     int waypointsMax = hijo.attribute("Waypoints").as_int();//nos devuelve un int
 
-    ReservarMemoriaVectores(eneMax, (doorsMax+leversMax+chestsMax),
+    ReservarMemoriaVectores(eneMax, doorsMax, leversMax, chestsMax,
         waypointsMax, zonesMax/*, wallsMax*/);
 
     pugi::xml_node primera = doc.child("Level"); //partimos de nivel
@@ -217,7 +227,6 @@ void CargadorNiveles::GuardarNivelBin(int level)
 
 Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
 {
-    Constantes constantes;
     Sala* padren = nullptr;//sala hijo
 
     int accion = plat.attribute("accion").as_int(); //lo vamos a usar para decidir herencia y fisicas
@@ -303,7 +312,19 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         const char* textura = obj.attribute("Texture").value(); //nos da un char[] = string
         const char* modelo  =  obj.attribute("Model").value(); //nos da un char[] = string
         short tipoObj = (short) obj.attribute("tipoObj").as_int();//nos devuelve un short
-        CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj); //cargamos el enemigo
+        int numFrames = obj.attribute("Frames").as_int();//numero de frames de la animacion
+        const char* logicaAnimacion = obj.attribute("Animation").value();//contiene la ruta a la logica de la animacion
+
+
+        if(obj.attribute("Frames") && obj.attribute("Animation"))
+        {
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj, logicaAnimacion, numFrames); //cargamos el enemigo
+        }
+        else
+        {
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj);//no tiene logica de animacion porque es un objeto con un unico estado y frame
+        }
+
     }
     for (pugi::xml_node zon = plat.child("Zone"); zon; zon = zon.next_sibling("Zone"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
@@ -378,11 +399,6 @@ std::vector<Pared*> CargadorNiveles::GetParedes()
     return _paredes;
 }
 
-std::vector<Interactuable*> CargadorNiveles::GetInteractuables()
-{
-    return _interactuables;
-}
-
 std::vector<Recolectable*> CargadorNiveles::GetPowerup()
 {
     return _powerup;
@@ -398,11 +414,28 @@ std::vector<Waypoint*> CargadorNiveles::GetWaypoints()
     return _waypoints;
 }
 
-void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int interMax,
+std::vector<Puerta*> CargadorNiveles::GetPuertas()
+{
+    return _puertas;
+}
+
+std::vector<Palanca*> CargadorNiveles::GetPalancas()
+{
+    return _palancas;
+}
+
+std::vector<Cofre*> CargadorNiveles::GetCofres()
+{
+    return _cofres;
+}
+
+void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int doorsMax, int leversMax, int chestsMax,
     int waypointsMax, int zonesMax)
 {
     _enemigos.reserve(eneMax);
-    _interactuables.reserve(interMax);
+    _puertas.reserve(doorsMax);
+    _palancas.reserve(leversMax);
+    _cofres.reserve(chestsMax);
     _zonas.reserve(zonesMax);
     _waypoints.reserve(waypointsMax);
     _eneCofres.reserve(chestsMax/4);
@@ -422,7 +455,7 @@ Sala* CargadorNiveles::CrearPlataforma(int accion, int rp, int x,int y,int z, in
     //cout << "\e[36m datos de la sala: \e[0m" << datos[0] << " " << datos[1]  << " " << datos[2] << " " << datos[3] << " " << datos[4] << endl;
     int nId = _motor->CargarPlataformas(rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
     _sala->definirID(nId);
-    _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,6,0,0);
+    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,6,0,0);
 
     if(!_primeraSala)
     {
@@ -547,9 +580,9 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
     _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura());//creamos la figura
 
-    _fisicas->crearCuerpo(accion,0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0);
-    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
-    _fisicas->crearCuerpo(0,0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
+    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0);
+    _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
+    _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
 }
 
 void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
@@ -601,7 +634,7 @@ void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
-    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj)
+    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj, const char * anima , int frame)
 {
     int posicionObjeto;
     switch (tipoObj)
@@ -611,9 +644,8 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             ancho = 2;
             largo = 2;
             alto = 2;
-            Recolectable* _rec = new Recolectable(ancho,largo,alto,x,y,z,tipoObj,
-                accion, rp, despX, despZ);
-            _rec->setID(_recolectables.size());
+            Recolectable* _rec = new Recolectable(++id,ancho,largo,alto,x,y,z,tipoObj,
+                accion, despX, despZ);
             posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
             _rec->SetPosicionArrayObjetos(posicionObjeto);
             _rec->setCodigo(codigo);
@@ -623,50 +655,52 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         break;
 
         case 0: // PALANCAS
+        {
+            Palanca* _palanca = new Palanca(++id, codigo,
+                ancho,largo,alto,x,y,z,tipoObj,despX,despZ,accion);
+
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,
+                ancho,largo,alto,_palanca->GetModelo(),_palanca->GetTextura());
+            _palanca->SetPosicionArrayObjetos(posicionObjeto);
+            _palancas.push_back(move(_palanca));
+            _palanca = nullptr;
+        }
+        break;
+
         case 2: // PUERTA2
         case 3: // PUERTA
         {
-            Interactuable* _inter;
-            if (tipoObj == 0) // Palancas
-                _inter = new Palanca(codigo, nombre, ancho, largo, alto, 0,x,y,z,tipoObj);
-            else // 2 o 3, Puertas
-                _inter = new Puerta(codigo, nombre, ancho, largo, alto, 0,x,y,z,tipoObj);
+            Puerta* _puerta = new Puerta(++id, codigo, 
+                ancho,largo,alto,x,y,z,tipoObj,despX,despZ,accion);
 
-            _inter->setID(++id);
-            _inter->setPosiciones(x,y,z);
-            _inter->setDesplazamientos(despX,despZ);
-            _inter->setRotacion(0.0,0.0,0.0);
-
-            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_inter->GetModelo(),_inter->GetTextura());
-            _inter->SetPosicionArrayObjetos(posicionObjeto);
-
-            _interactuables.push_back(move(_inter));
-            _inter = nullptr;
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,
+                ancho,largo,alto,_puerta->GetModelo(),_puerta->GetTextura());
+            _puerta->SetPosicionArrayObjetos(posicionObjeto);
+            _puertas.push_back(move(_puerta));
+            _puerta = nullptr;
         }
         break;
 
         //TO DO corregir la creacion de obstaculos para hacerla correctamente
         case 14: // PARED_ROMPIBLE
         {
-            Pared* _par = new Pared(nombre,ancho,largo,alto,x,y,z,tipoObj);
+            Pared* _par = new Pared(ancho,largo,alto,x,y,z,tipoObj);
             _par->setID(_paredes.size());
-            _par->setPosiciones(x,y,z);
-            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura,anima,frame);
             _par->SetPosicionArrayObjetos(posicionObjeto);
             _paredes.push_back(move(_par));
             _par = nullptr;
+            _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
         }
         break;
 
         default:
+        {
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
+            _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
+        }
         break;
-    }
-
-    // TO DO: if temporal
-    Constantes constantes;
-    if (tipoObj != constantes.LLAVE)
-        _fisicas->crearCuerpo(accion,rp,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
+    }   
     
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
@@ -698,7 +732,6 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
 unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     float ancho, float alto, float largo, Sala* sala)
 {
-    Constantes constantes;
     CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo); // Posiciones, vida
 
     _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
@@ -735,7 +768,6 @@ unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
 //Cargar los cofres del nivel
 void CargadorNiveles::CargarCofres()
 {
-    Constantes constantes;
     unsigned short eneAranas = chestsMax/4; // 1/4 de los cofres son enemigos
     unsigned short aranasCreadas = 0;
     unsigned short totalCofresPonible = 0;
@@ -795,22 +827,17 @@ void CargadorNiveles::CargarCofres()
                     esArana = true; // Desactivamos las aranyas
                 #endif*/
 
-                Interactuable* _cofre = new Cofre(esArana, -1,"Cofre",
-                    2,2,2, //ancho, largo, alto
-                    0, //posicionObjeto inicializada
+                Cofre* _cofre = new Cofre(esArana, ++id,
                     newx, newy, newz,
                     constantes.COFRE_OBJ, posArrayArana,
-                    _zonas[zonasDisponibles[numAlt]]->GetSala());
+                    _zonas[zonasDisponibles[numAlt]]->GetSala(),
+                    _cofres.size());
 
                 int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
                     _cofre->GetModelo(), _cofre->GetTextura());
-
-                _cofre->setID(++id);
-                _cofre->setPosiciones(newx,newy,newz);
+                
                 _cofre->SetPosicionArrayObjetos(posicionObjeto);
-                _cofre->setRotacion(0.0,0.0,0.0);
-                _cofre->CrearFisica();
-                _interactuables.push_back(move(_cofre));
+                _cofres.push_back(move(_cofre));
                 _cofre = nullptr;
 
                 //borrar del Array por que el proposito esta cumplido

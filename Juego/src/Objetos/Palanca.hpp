@@ -7,11 +7,9 @@ class Palanca : public Interactuable
 {
     public:
         ~Palanca();
-        Palanca(int codigo, const char* nombre, int anc, int lar, int alt,
-            int posicion, float x, float y, float z, unsigned short tipoObj);
-        
-        void CrearFisica();
-        void BorrarFisica();
+        Palanca(int id, int codigo, int anc, int lar, int alt,
+            float x, float y, float z, unsigned short tipoObj,
+            float despX, float despZ, int accion);
         
     private:
 };

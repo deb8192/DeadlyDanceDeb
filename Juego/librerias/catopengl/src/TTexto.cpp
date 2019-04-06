@@ -24,7 +24,7 @@ TTexto::TTexto(GLuint width, GLuint height, Shader * sact)
 
 TTexto::~TTexto()
 {
-    
+
 }
 
 void TTexto::CargarFuente(std::string font, GLuint fontSize)
@@ -94,9 +94,15 @@ void TTexto::CambiarTexto(std::string newtext)
     texto = newtext;
 }
 
+void TTexto::CambiarPosicion(GLfloat xx, GLfloat yy)
+{
+    x = xx;
+    y = yy;
+}
+
 void TTexto::beginDraw()
 {
-    
+
     // Activar render
     shader->Use();
     shader->setVec3("textColor", color);

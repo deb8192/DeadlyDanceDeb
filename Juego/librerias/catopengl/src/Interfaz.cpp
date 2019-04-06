@@ -7,6 +7,7 @@ Interfaz::Interfaz()
     luces.reserve(40);//30 luces como maximo
     imagenes.reserve(20);//20 imagenes de interfaz
     textos.reserve(20);//20 imagenes de textos
+    boards.reserve(30); //30 billboards
     gestorDeRecursos = new CatOpengl::Gestor;
     ventana_inicializada = true;//se pone para que entra a inicializar por defecto
     window = nullptr;//se pone para saber que no esta inicializada
@@ -76,6 +77,7 @@ unsigned short Interfaz::AddCamara()
         TNodo * camara = new TNodo;
         TCamara * camaraEn = new TCamara(window->getWidth(),window->getHeight());
         camaraEn->SetShader(shaders[0]);
+        camaraEn->SetShader2(shaders[3]);
         camara->setEntidad(camaraEn);
 
         escalado->addHijo(rotacion);
@@ -325,6 +327,58 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
     return 0;
 }
 
+unsigned short Interfaz::AddBoard(float x, float y, float z, float movx, float movy, const char * _ruta, float priority)
+{
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
+    TNodo * traslacion = new TNodo;
+    TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
+    traslacion->setEntidad(traslacionEnt);
+
+    TNodo * rotacion = new TNodo;
+    TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0);
+    rotacion->setEntidad(rotacionEnt);
+
+    TNodo * escalado = new TNodo;
+    TTransform * escaladoEnt = new TTransform;
+    escaladoEnt->escalar(1,1,1);
+    escalado->setEntidad(escaladoEnt);
+
+    TNodo * board = new TNodo;
+    TBillboard * boardEn = new TBillboard(x,y,z,_ruta,shaders[3],movx,movy,priority);
+    board->setEntidad(boardEn);
+
+    escalado->addHijo(rotacion);
+    rotacion->addHijo(traslacion);
+    traslacion->addHijo(board);
+
+    if(_raiz != nullptr)
+    {
+        _raiz->addHijo(escalado);
+
+        unsigned short idnuevo = generarId();
+
+        Nodo * nodo = new Nodo();
+        nodo->id = idnuevo;//se pone el id
+        nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodo->tipo = 4;
+        nodo->activo = true;
+        nodos.push_back(nodo);//se agrega a la lista de nodos general
+        boards.push_back(nodo);//se agrega a la lista de billboards
+
+        return idnuevo;
+    }
+
+    return 0;
+}
+
+
 void Interfaz::Draw()
 {
     //std::cout << "TAMANO NODOS " << nodos.size() << std::endl;
@@ -362,6 +416,14 @@ void Interfaz::Draw()
             //esto seria lo ultimo vamos a las model
 
             _raiz->draw(0);
+
+            for(unsigned int i = 0; i < boards.size(); i++)
+            {
+                if(boards[i] != nullptr && boards[i]->recurso != nullptr && boards[i]->activo)
+                {
+                    boards[i]->recurso->draw(1);
+                }
+            }
 
             for(unsigned int i = 0; i < imagenes.size(); i++)
             {
@@ -505,6 +567,7 @@ void Interfaz::ventanaInicializar()
     shaders[0] = new Shader("assets/shaders/shaderlucesvs.glsl","assets/shaders/shaderlucesfs.glsl");
     shaders[1] = new Shader("assets/shaders/shaderguivs.glsl","assets/shaders/shaderguifs.glsl");
     shaders[2] = new Shader("assets/shaders/shadertextvs.glsl","assets/shaders/shadertextfs.glsl");
+    shaders[3] = new Shader("assets/shaders/shaderboardsvs.glsl","assets/shaders/shaderboardsfs.glsl");
 }
 
 void Interfaz::ventanaLimpiar()
@@ -817,6 +880,26 @@ void Interfaz::CambiarTexto(unsigned short nid,std::string texto)
     }
 }
 
+void Interfaz::CambiarPosicionTexto(unsigned short nid, float x, float y)
+{
+    //cambiar string del texto
+    if(nid != 0)
+    {
+        Nodo * nodo = buscarNodo2(nid);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TTexto*>(tnodo->GetEntidad())->CambiarPosicion(x,y);
+                }
+            }
+        }
+    }
+}
+
 void Interfaz::eliminarID(unsigned short x)
 {
     if(x >= 0 && x < 65535)
@@ -1107,6 +1190,80 @@ void Interfaz::ColorSpecular(unsigned short luz, float r,float g,float b)
                 if(tnodo != nullptr)
                 {
                     dynamic_cast<TLuz*>(tnodo->GetEntidad())->setSpecular(r,g,b);
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::setBucle(unsigned short idMalla, bool estaEnBucle)
+{
+    if(idMalla != 0)
+    {
+        Nodo * nodo = buscarNodo2(idMalla);
+
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    TMalla * malla = dynamic_cast<TMalla*>(tnodo->GetEntidad());
+                    if(malla != nullptr)
+                    {
+                        malla->EstaEnBucleAnimacion(estaEnBucle);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::SetLejaniaCamara(unsigned short camara,float lejania)
+{
+    //cambiar lejania de la camara
+    if(camara != 0)
+    {
+        Nodo * nodo = buscarNodo2(camara);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    TCamara* _camara = dynamic_cast<TCamara*>(tnodo->GetEntidad());
+                    if(_camara != nullptr)
+                    {
+                        _camara->setLejano(lejania);
+                        _camara->setPerspectiva();//redefinimos la vista perspectiva
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::SetCercaniaCamara(unsigned short camara,float cercania)
+{
+    //cambiar cercania de la camara
+    if(camara != 0)
+    {
+        Nodo * nodo = buscarNodo2(camara);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    TCamara* _camara = dynamic_cast<TCamara*>(tnodo->GetEntidad());
+                    if(_camara != nullptr)
+                    {
+                        _camara->setCercano(cercania);
+                        _camara->setPerspectiva();//redefinimos la vista perspectiva
+                    }
                 }
             }
         }
