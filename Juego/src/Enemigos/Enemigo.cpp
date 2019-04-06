@@ -1305,11 +1305,8 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                         destino[4] = loqueve[5];
                         destino[5] = loqueve[6];
 
-                        //Reducimos la velocidad para evitar que se salga
-                        if(porcentajeVelocidad > 0.0)
-                        {
-                            porcentajeVelocidad = 0.0;
-                        }
+                        
+                        porcentajeVelocidad = (float) constantes.UNO;
                         //cout<<"QUE SE SALE"<<endl;
                     }
                     else
@@ -1322,6 +1319,10 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                         else if(porcentajeVelocidad < 0.2)
                         {
                             porcentajeVelocidad = 0.2;
+                        }
+                        if(rotation <= 1.0f)
+                        {
+                            rotation = maxRotacion / constantes.DOS;
                         }
                     }
                 }
@@ -1419,28 +1420,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                         porcentajeVelocidad = 0.2;
                     }
                 }
-                if(ve && !controlRotacion)
-                {
-
-                    destino[0] = loqueve[1];
-                    destino[1] = loqueve[2];
-                    destino[2] = loqueve[3];
-                    destino[3] = loqueve[4];
-                    destino[4] = loqueve[5];
-                    destino[5] = loqueve[6];
-                    //Creamos un vector con una nueva direccion normalizando el vector director anterior
-                    VectorEspacial vectorDirector = this->normalizarVector(destino);
-                    //Se suma la normal del obstaculo aplicando pesos a la normal y al vector director
-                    this->modificarTrayectoria(&vectorDirector, destino); 
-                    //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
-                    vectorDirector.vZ < 0 ?
-                        rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
-                        rotation = constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ) ;
-                    if(porcentajeVelocidad <= 0.0f)
-                    {
-                        porcentajeVelocidad = 0.2;
-                    }
-                }
+                
                 else if(!ve)
                 {
 
@@ -1770,6 +1750,10 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
         this->setNewRotacion(rotActual.x, rotActual.y + rotation, rotActual.z);
         this->setVectorOrientacion();
+        if(rotation > maxRotacion)
+        {
+            rotation = maxRotacion;
+        }
         velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
         velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
         posiciones.x = posFutura.x + velocidad.x;
@@ -1804,30 +1788,24 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         return vectorDirector;
     }
 
+    //TO DO vectorDirector = colision + normal * distanciaEsquivar
     void Enemigo::modificarTrayectoria(INnpc::VectorEspacial* vectorDirector, int* destino)
     {
         Constantes constantes;
         float contraRotacion = constantes.UNO - pesoRotacion;
         //Se obtiene la nueva direccion del movimiento sumando las componentes de la normal del obstaculo con las del vector director
         //En caso de girar 180 grados, se multiplica por -1 la coordenada del vector que se acerque a +-1
-        if(constantes.UNO - abs(vectorDirector->vX) <= 0.1f && abs(destino[3]) == constantes.UNO)
+        /*vectorDirector->vX = vectorDirector->vX * contraRotacion + (destino[3] * distanciaMinimaEsquivar) * pesoRotacion;
+        vectorDirector->vY = vectorDirector->vY * contraRotacion + (destino[4] * distanciaMinimaEsquivar) * pesoRotacion;
+        vectorDirector->vZ = vectorDirector->vZ * contraRotacion + (destino[5] * distanciaMinimaEsquivar) * pesoRotacion;
+        vectorDirector->modulo = 1;*/
+        vectorDirector->vX = destino[0] + destino[3] * distanciaMinimaEsquivar;
+        vectorDirector->vY = destino[1] + destino[4] * distanciaMinimaEsquivar;
+        vectorDirector->vZ = destino[2] + destino[5] * distanciaMinimaEsquivar;
+        if(vectorDirector->vZ == 0.0)
         {
-            vectorDirector->vX *= -constantes.UNO;
+            vectorDirector->vZ = 0.1;
         }
-        else
-        {
-            vectorDirector->vX = vectorDirector->vX * contraRotacion + destino[3] * pesoRotacion;
-        }
-        vectorDirector->vY = vectorDirector->vY * contraRotacion + destino[4] * pesoRotacion;
-        if(constantes.UNO - abs(vectorDirector->vZ) <= 0.1f)
-        {
-            vectorDirector->vZ *= -constantes.UNO;
-        }
-        else
-        {
-            vectorDirector->vZ = vectorDirector->vZ * contraRotacion + destino[5] * pesoRotacion;
-        }
-        vectorDirector->modulo = 1;
     }
 
     bool Enemigo::comprobarDistanciaFlocking()
