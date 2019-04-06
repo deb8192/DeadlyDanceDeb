@@ -65,6 +65,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         void setRotacion(float nrx, float nry, float nrz);
         void setNewRotacion(float nrx, float nry, float nrz);
         void setLastRotacion(float nrx, float nry, float nrz);
+        void setVectorOrientacion();
         void setPosicionesFisicas(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
         void setID(int);
@@ -108,6 +109,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float getRX();
         float getRY();
         float getRZ();
+        INnpc::VectorEspacial GetVectorOrientacion();
         float* GetDatosAtEsp();
         int getID();
 

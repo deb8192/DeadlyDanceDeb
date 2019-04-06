@@ -128,6 +128,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getRX();
         float getRY();
         float getRZ();
+        INnpc::VectorEspacial GetVectorOrientacion();
         float GetRotation();
         float GetPesoRotacion();
         float getAtX();

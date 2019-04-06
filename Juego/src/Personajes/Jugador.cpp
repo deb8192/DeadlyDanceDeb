@@ -24,6 +24,8 @@ Jugador::Jugador()
 
     dinero = 0;
     _armaEquipada = NULL;
+    velocidadMaxima = 2.5f;
+    porcentajeVelocidad = 1.0f;
 }
 
 Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
@@ -88,6 +90,8 @@ Jugador::~Jugador()
     tiempoPasadoCogerObjeto = 0;
     tiempoEnMorir = 0;
     tiempoPasadoEnMorir = 0;
+    velocidadMaxima = 0;
+    porcentajeVelocidad = 0;
 
     // INdrawable
     posIni.x = 0;
@@ -136,6 +140,14 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     float px = posFutura.x,
           pz = posFutura.z;
 
+    struct
+    {
+        float x = 0.0f;
+        float y = 0.0f;
+        float z = 0.0f;
+    }
+    velocidad, posiciones;
+
     if(w || s || a || d)
     {
         setAnimacion(1);
@@ -180,26 +192,35 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
     az < 0 ?
         deg = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(ax/az)) :
-        deg =  constantes.RAD_TO_DEG * atan(ax/az) ;
+        deg = constantes.RAD_TO_DEG * atan(ax/az) ;
 
-    float componente;
     if((w || s || a || d) && !noMueve)
     {
-        componente = 1.75;
+        //TO DO  poner un evento para correr
+        /*if(shift)
+        {
+            porcentajeVelocidad = constantes.UNO;
+        }
+        else*/
+        porcentajeVelocidad = constantes.DOS_TERCIOS;
     }
     else
     {
-        componente = 0.0;
+        porcentajeVelocidad = 0.0;
     }
-
     //getGir se utiliza para orientar al jugador cuando se gira la camara
     deg -= gcam;
-    px += componente*sin(deg*constantes.DEG_TO_RAD);
-    pz += componente*cos(deg*constantes.DEG_TO_RAD);
+    
+    setNewRotacion(rotActual.x, deg, rotActual.z);
+    setVectorOrientacion();
+
+    velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+    velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+    posiciones.x = posFutura.x + velocidad.x;
+    posiciones.z = posFutura.z + velocidad.z;
 
     //ahora actualizas movimiento y rotacion
-    setNewPosiciones(px, posActual.y, pz);
-    setNewRotacion(rotActual.x, deg, rotActual.z);
+    setNewPosiciones(posiciones.x, posActual.y, posiciones.z);
 }
 
 /*************** moverseEntidad *****************
@@ -756,6 +777,11 @@ float Jugador::getRZ()
     return rotActual.z;
 }
 
+INnpc::VectorEspacial Jugador::GetVectorOrientacion()
+{
+    return vectorOrientacion;
+}
+
 //Devuelve la posicion y rotacion del ataque especial
 float* Jugador::GetDatosAtEsp()
 {
@@ -958,6 +984,14 @@ void Jugador::setLastRotacion(float nrx, float nry, float nrz)
     rotPasada.x = nrx;
     rotPasada.y = nry;
     rotPasada.z = nrz;
+}
+
+void Jugador::setVectorOrientacion()
+{
+    Constantes constantes;
+    vectorOrientacion.vX = sin(constantes.PI * rotFutura.y / constantes.PI_RADIAN);
+    vectorOrientacion.vY = 0.0f;
+    vectorOrientacion.vZ = cos(constantes.PI * rotFutura.y / constantes.PI_RADIAN);
 }
 
 void Jugador::setNewPosiciones(float nx,float ny,float nz)

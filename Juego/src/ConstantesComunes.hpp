@@ -31,6 +31,7 @@ using Constantes = struct
     const float UN_MEDIO = 0.5f;
     const float TRES_CUARTOS = 0.75f;
     const float UN_TERCIO = 0.33f;
+    const float DOS_TERCIOS = 0.66f;
 
     /*************** Strings arbol de comportamiento **************/
     //Comparadores del cargado de arboles
