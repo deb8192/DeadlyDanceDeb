@@ -1332,7 +1332,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
         {
             // Centrar la camara
             nodeCamPosition[0] = x+(camx*cams);
-            nodeCamPosition[1] = y+249+newy;
+            nodeCamPosition[1] = y+30+newy;
             nodeCamPosition[2] = z+newz+(camz*cams);
             nodeCamTarget[0] = x;
             nodeCamTarget[1] = y;
