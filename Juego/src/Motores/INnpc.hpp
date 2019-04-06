@@ -37,6 +37,7 @@ public:
     virtual void setLastTimeAtEsp(float time)=0;
     virtual void setDanyoCritico(int danyoC)=0;
     virtual void setProAtaCritico(int probabilidad)=0;
+    virtual void setVectorOrientacion()=0;
 
     virtual int getVidaIni()=0;
     virtual int getVida()=0;
@@ -51,6 +52,7 @@ public:
     virtual int getDanyoCritico()=0;
     virtual int getProAtaCritico()=0;
     virtual int* getBuffos()=0;
+    virtual INnpc::VectorEspacial GetVectorOrientacion()=0;
 
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:

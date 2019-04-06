@@ -851,10 +851,10 @@ void CargadorNiveles::CargarCofres()
             }
             zonasDisponibles.resize(0);
         }
-        else
+        /*else
         {
             cout << "No hay zonas de cofres suficientes en el nivel" << endl;
-        }
+        }*/
     }
 }
 
