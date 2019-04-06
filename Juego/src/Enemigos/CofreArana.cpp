@@ -84,14 +84,12 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug)
                 {
                     if(!atacado)
                     {
-                        cout<<"intenta atacar"<<endl;
                         int danyo;
                         danyo = this->Atacar(*i);
 
                         if(danyo > 0)
                         {
                             _jugador->ModificarVida(-danyo);
-                            cout<<"Ataca por la IA" <<endl;
                             funciona = true;
                             atacado = true;
                         }
@@ -119,10 +117,6 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug)
                         funciona = false;
                     }
                 }
-                break;
-
-            default:
-                cout<<"No hace nada"<<endl;
                 break;
         }
     }
