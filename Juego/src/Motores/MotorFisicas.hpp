@@ -24,6 +24,7 @@ using namespace reactphysics3d;
             void crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator, float despX, float despZ);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             unsigned short CrearCuerpoInter(unsigned short tipoObj, float px, float py, float pz, 
                 float ancho, float alto, float largo, float despX, float despZ);
+            unsigned short CrearCuerpoWaypoint(float px, float py, float pz, float alto);
             //int crearCuerpo(float px, float py, float pz, int type, float ancho, float largo, float alto);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             void actualizarPosicionCuerpo(float px, float py, float pz,int posicion);//se le pasa las nuevas posiciones del cuerpo del array de cuerpos de la posicion
             Ray* crearRayo(float x, float y, float z, float rotation, float longitud);//crea un rayo en esas posiciones con la longitud
@@ -42,6 +43,8 @@ using namespace reactphysics3d;
             void EraseArma();
             CollisionBody* getColectables(int n);
             CollisionBody* getObstacles(int n);
+            bool CollidePlayerWaypoint(unsigned short n);
+            bool CollideEnemiWaypoint(unsigned short n, unsigned short e);
             bool collideObstaculos();
             bool collideAtackObstacle();
             std::vector<short> collideAttackWall();
@@ -107,7 +110,7 @@ using namespace reactphysics3d;
             
             //std::vector<float> interAncho;//Vector de elementos con los que interactuar
            // std::vector<float> interLargo;//Vector de elementos con los que interactuar
-            
+            //Vectores con los tres tipos de objetos con los que el jugador puede interactuar
             std::vector<CollisionBody *> _puertas;
             std::vector<CollisionBody *> _palancas;
             std::vector<CollisionBody *> _cofres;
@@ -118,6 +121,7 @@ using namespace reactphysics3d;
             std::vector<CollisionBody *> paredes;//Vector de obstaculos que no son palancas o puertas
             std::vector<CollisionBody *> plataformas;//Vector de plataformas para caminar
             std::vector<CollisionBody *> paredeInvisiblesCamara; //Vector con las paredes invisibles que cambian la camara
+            std::vector<CollisionBody *> _waypoints; //Vector con los waypoints para detectar cuando el jugador o los enemigos merodeando cambian de sala
             std::vector<rp3d::Transform> prevTransform;
 
             CollisionBody * armaAtEsp;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
