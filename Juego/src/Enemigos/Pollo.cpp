@@ -161,11 +161,14 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
 
             case EN_MERODEA: //El Pollo merodea
                 {
-                    this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
+                    //this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
                     if(!hecho)
                     {
                         //Merodea estableciendo un nuevo angulo de rotacion
-                        this->setRotation(this->randomBinomial() * maxRotacion);
+                        if(!controlRotacion)
+                        {
+                            this->setRotation(this->randomBinomial() * maxRotacion);
+                        }
                         this->Merodear();
                         this->setTimeMerodear(1.5f);
                         hecho = true;
@@ -175,6 +178,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                             if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
                             {
                                 modo = MODO_ATAQUE;
+                                porcentajeVelocidad = constantes.UNO;
                                 this->setTimeMerodear(constantes.CERO);
                                 //cout<<"Pide ayuda a los aliados"<<endl;
                                 this->PedirAyuda(ayuda);
@@ -189,10 +193,13 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                     else
                     {
                         //Merodea poniendo en positivo o negativo el angulo actual de rotacion
-                        int rota = rand() % 3 - 1;
-                        if (rota != 0)
+                        if(!controlRotacion)
                         {
-                            rotation *= rota;
+                            int rota = rand() % 3 - 1;
+                            if (rota != 0)
+                            {
+                                rotation *= rota;
+                            }
                         }
                         this->Merodear();
                         //Comprueba si ve al jugador para atacarle en caso necesario
@@ -201,6 +208,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                             if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
                             {
                                 modo = MODO_ATAQUE;
+                                porcentajeVelocidad = constantes.UNO;
                                 this->setTimeMerodear(constantes.CERO);
                                 //cout<<"Pide ayuda a los aliados"<<endl;
                                 this->PedirAyuda(ayuda);

@@ -10,6 +10,7 @@ typedef struct
     const float PI_RADIAN = 180.0f;
     const float PI_MEDIOS = 90.0f;
     const float PI_CUARTOS = 45.0f;
+    const float PI_OCTAVOS = 22.5f;
     const short CERO = 0;
     const short UNO = 1;
     const short DOS = 2;
@@ -30,6 +31,8 @@ typedef struct
     const float UN_CUARTO = 0.25f;
     const float UN_MEDIO = 0.5f;
     const float TRES_CUARTOS = 0.75f;
+    const float UN_TERCIO = 0.33f;
+    const float DOS_TERCIOS = 0.66f;
 
     /*************** Strings arbol de comportamiento **************/
     //Comparadores del cargado de arboles
