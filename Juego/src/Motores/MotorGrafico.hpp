@@ -10,7 +10,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
     #include "../Times.hpp"
 #else
     //motorirrlicht
-    #include <irrlicht/irrlicht.h> //la utilizaremos para las funcionalidades del motor
+    #include <irrlicht.h> //la utilizaremos para las funcionalidades del motor
     #include "../Inputs.hpp"
 #endif
 
