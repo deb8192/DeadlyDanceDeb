@@ -590,6 +590,9 @@ void Jugando::Update()
 */
 void Jugando::UpdateIA()
 {
+    Constantes constantes;
+    bool colisionaWaypoint = false;
+    short i = 0;
     /* *********** Teclas para probar cosas *************** */
     // Bajar vida
     if (_motor->EstaPulsado(KEY_J))
@@ -606,17 +609,84 @@ void Jugando::UpdateIA()
     }
     /* **************************************************** */
 
-    //Aquí el jugador genera sonidos al caminar
-    if(!_jugador->EstaMuerto() && (!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
-     || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
+    //Aqui el jugador genera sonidos al caminar
+    if(!_jugador->EstaMuerto())
     {
-        _jugador->generarSonido(constantes.NUEVE * constantes.SEIS, constantes.CINCO, constantes.UNO);
+        if((!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
+        || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
+        {
+            _jugador->generarSonido(constantes.NUEVE * constantes.SEIS, constantes.CINCO, constantes.UNO);
+        }
+        //Aqui se comprueba si el jugador cambia de sala
+        while(!colisionaWaypoint && (unsigned) i < _waypoints.size())
+        {
+            colisionaWaypoint = _fisicas->CollidePlayerWaypoint(i);
+            if(!colisionaWaypoint)
+            {
+                i++;
+            }
+        }
+        //Ha colisionado con un waypoint
+        if(colisionaWaypoint)
+        {
+            //Se compara si es tipo B (de acceso horizontal)
+            if(_waypoints[i]->GetTipo() == constantes.WAYP_B)
+            {
+                //Si la x del jugador es mayor que la x del waypoint y la x de la sala
+                //actual del jugador es menor que la del waypoint, cambia de sala
+                if(_jugador->getX() > _waypoints[i]->GetPosicionWaypoint().x)
+                {
+                    if(_jugador->GetSala()->getSizes()[2] < _waypoints[i]->GetPosicionWaypoint().x)
+                    {
+                        {
+                            //Se busca la nueva sala a la que se accede
+                            this->CambiarSalaJugador(i);
+                        }
+                    }
+                }
+                //Si la x del jugador es menor que la x del waypoint y la x de la sala
+                //actual del jugador es mayor que la del waypoint, cambia de sala
+                else if(_jugador->getX() < _waypoints[i]->GetPosicionWaypoint().x)
+                {
+                    if(_jugador->GetSala()->getSizes()[2] > _waypoints[i]->GetPosicionWaypoint().x)
+                    {
+                        //Se busca la nueva sala a la que se accede
+                        this->CambiarSalaJugador(i);
+                    }
+                }
+            }
+            else if(_waypoints[i]->GetTipo() == constantes.WAYP_C)
+            {
+                //Si la z del jugador es mayor que la z del waypoint y la z de la sala
+                //actual del jugador es menor que la del waypoint, cambia de sala
+                if(_jugador->getZ() > _waypoints[i]->GetPosicionWaypoint().z)
+                {
+                    if(_jugador->GetSala()->getSizes()[4] < _waypoints[i]->GetPosicionWaypoint().z)
+                    {
+                        {
+                            //Se busca la nueva sala a la que se accede
+                            this->CambiarSalaJugador(i);
+                        }
+                    }
+                }
+                //Si la z del jugador es menor que la z del waypoint y la z de la sala
+                //actual del jugador es mayor que la del waypoint, cambia de sala
+                else if(_jugador->getZ() < _waypoints[i]->GetPosicionWaypoint().z)
+                {
+                    if(_jugador->GetSala()->getSizes()[4] > _waypoints[i]->GetPosicionWaypoint().z)
+                    {
+                        //Se busca la nueva sala a la que se accede
+                        this->CambiarSalaJugador(i);
+                    }
+                }
+            }
+        }
     }
 
     //En esta parte muere enemigo
     if(_enemigos.size() > 0){
         //comprobando los _enemigos para saber si estan muertos
-        for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+        for(i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
 
             if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte())
             {
@@ -984,6 +1054,56 @@ void Jugando::ConectarWaypoints()
             {
                 _waypoints[i]->AnnadirConexionesWaypoints(_waypoints[j]);
             }
+        }
+    }
+}
+
+void Jugando::CambiarSalaJugador(unsigned short i)
+{
+    unsigned short j = 0;
+    unsigned short k = 0;
+    bool cambioRealizado = false;
+    //Se comprueban las salidas
+    while(!cambioRealizado && j < _jugador->GetSala()->getSalidas().size())
+    {
+        while(!cambioRealizado && k < _jugador->GetSala()->getSalidas()[j]->GetWaypoints().size())
+        {
+            if(_waypoints[i] == _jugador->GetSala()->getSalidas()[j]->GetWaypoints()[k])
+            {
+                _jugador->SetSala(_jugador->GetSala()->getSalidas()[j]);
+                cambioRealizado = true;
+            }
+            else if(!cambioRealizado)
+            {
+                k++;
+            }
+        }
+        if(!cambioRealizado)
+        {
+            k = 0;
+            j++;
+        }
+    }
+    j=0;
+    //Si en las salidas no se haya la nueva sala se comprueban las entradas
+    while(!cambioRealizado && j < _jugador->GetSala()->getEntradas().size())
+    {
+        while(!cambioRealizado && k < _jugador->GetSala()->getEntradas()[j]->GetWaypoints().size())
+        {
+            if(_waypoints[i] == _jugador->GetSala()->getEntradas()[j]->GetWaypoints()[k])
+            {
+                _jugador->SetSala(_jugador->GetSala()->getEntradas()[j]);
+                cambioRealizado = true;
+            }
+            else if(!cambioRealizado)
+            {
+                k++;
+            }
+        }
+        if(!cambioRealizado)
+        {
+            k = 0;
+            j++;
         }
     }
 }

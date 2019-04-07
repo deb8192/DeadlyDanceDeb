@@ -1,19 +1,30 @@
 #include <cstring>
 #include "Waypoint.hpp"
+#include "../Motores/MotorFisicas.hpp"
 
 Waypoint::Waypoint()
 {
+    Constantes constantes;
     posicionWaypoint.x = 0.0f;
     posicionWaypoint.y = 0.0f;
     posicionWaypoint.z = 0.0f;
+    ID = -1;
+    tipo = constantes.WAYP_A;
+    sizeIDConexiones = 0;
+    IDConexiones = nullptr;
+    esCompartido = false;
+    posicionFisicasWaypoint = 0;
 }
 
-Waypoint::Waypoint(int ID_lectura, int x, int y, int z, int compartido, int* arrayConexiones, int sizeConexiones)
+Waypoint::Waypoint(int ID_lectura, int x, int y, int z, int compartido, int* arrayConexiones, const char& tipoWaypoint, int sizeConexiones, int ancho)
 {
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _motor = MotorGrafico::GetInstance();
     posicionWaypoint.x = x;
     posicionWaypoint.y = y;
     posicionWaypoint.z = z;
     ID = ID_lectura;
+    tipo = tipoWaypoint;
     sizeIDConexiones = sizeConexiones;
     IDConexiones = arrayConexiones;
     if(compartido == 1)
@@ -21,7 +32,8 @@ Waypoint::Waypoint(int ID_lectura, int x, int y, int z, int compartido, int* arr
         esCompartido = true;
     }
     else esCompartido = false;
-    _motor = MotorGrafico::GetInstance();
+    posicionFisicasWaypoint = _fisicas->CrearCuerpoWaypoint(x/2, y/2, z/2, ancho);
+    _fisicas = nullptr;
 }
 
 Waypoint::~Waypoint()
@@ -31,9 +43,11 @@ Waypoint::~Waypoint()
     posicionWaypoint.z = 0;
     sizeIDConexiones = 0;
     ID = 0;
+    tipo = 0;
     delete IDConexiones;
     IDConexiones = nullptr;
     esCompartido = false;
+    posicionFisicasWaypoint = 0;
 }
 
 void Waypoint::AnnadirConexionesWaypoints(Waypoint* waypointNivel)
@@ -72,6 +86,10 @@ bool Waypoint::GetCompartido()
     return esCompartido;
 }
 
+char Waypoint::GetTipo()
+{
+    return tipo;
+}
 
 INdrawable::Posiciones Waypoint::GetPosicionWaypoint()
 {

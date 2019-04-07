@@ -55,6 +55,7 @@ class Jugando: public Estado {
         void CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
             unsigned short tipoObjeto, unsigned short ataque);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void ConectarWaypoints();
+        void CambiarSalaJugador(unsigned short i);
 
         //Funciones de interacciones
         void CogerObjeto();
