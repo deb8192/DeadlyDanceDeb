@@ -58,6 +58,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setNewRotacion(float nrx, float nry, float nrz);
         void setLastRotacion(float nrx, float nry, float nrz);
         void setRotation(float rot);
+        void setPesoRotacion(float peso);
         void setVectorOrientacion();
         void setPosicionesFisicas(float nx,float ny,float nz);
 
@@ -129,7 +130,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getRX();
         float getRY();
         float getRZ();
+        INnpc::VectorEspacial GetVectorOrientacion();
         float GetRotation();
+        float GetPesoRotacion();
         float getAtX();
         float getAtY();
         float getAtZ();
@@ -183,6 +186,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void AuxiliarAliado();//se mueve hacia el proximo waypoint del camino a seguir
         bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         INnpc::VectorEspacial normalizarVector(int*);//Convierte el vector que se pasa en un vector con la misma direccion y sentido pero con modulo 1
+        void modificarTrayectoria(INnpc::VectorEspacial* vector, int* destino);
         bool comprobarDistanciaFlocking();
         //fin comportamientos bases
 
@@ -248,7 +252,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int tipoEnemigo;//Tipo del enemigo: pollo, murcielago, guardian, boss
         Arbol* arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
-        bool accionRealizada; //
+        bool accionRealizada, controlRotacion; //
         short modo;  //Modo de actuacion en que se encuentra el enemigo: normal, ataque, huida, esconderse
         float pesoRotacion;  //valor que sirve para dar mas importancia a un tipo de rotacion que a otra
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
