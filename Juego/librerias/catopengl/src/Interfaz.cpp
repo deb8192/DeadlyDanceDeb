@@ -1269,3 +1269,13 @@ void Interfaz::SetCercaniaCamara(unsigned short camara,float cercania)
         }
     }
 }
+
+bool Interfaz::IsKeyRelease(short tecla)
+{
+    if(window != nullptr)
+    {
+        return window->EstaLiberado(tecla);
+    }
+
+    return false;
+}

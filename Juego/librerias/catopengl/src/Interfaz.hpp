@@ -117,6 +117,8 @@ class Interfaz
         void SetLejaniaCamara(unsigned short camara,float lejania);
         void SetCercaniaCamara(unsigned short camara,float cercania);
 
+        //para saber si esta liberado
+        bool IsKeyRelease(short);
 
     private:
 
