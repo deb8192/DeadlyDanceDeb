@@ -489,6 +489,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             //mejoras en inputs
             const int numeroteclas = 349;//contiene el numero de teclas a comprobar
             bool estadoteclas[350];//contiene estado de las teclas
+            bool estadoteclas2[350];//contiene si esta pulsado
             void updateTeclas(); //actualiza los estados de las teclas
             float tiempo;//segun que valor se ponga los botones se actualizan mas rapido esta puesto para que se actualicen 10 veces por segundo
     };
