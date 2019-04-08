@@ -16,14 +16,24 @@ class Ventana
         void UpdateTitle(const char *);//cambia titulo de la ventana
         void UpdateSize(short unsigned int w, short unsigned int h);//cambia tamayo de la ventana
         bool EstaPulsada(short);//comprueba si la tecla esta pulsada
+        bool EstaLiberado(short);//comprueba si la tecla no esta pulsada
         bool MouseEstaPulsado(short);//comprueba que este pulsado alguna tecla o que se mueve
-
+        //void PortaPapeles();
         //devolver tamanyos de la ventana
         short unsigned int getWidth();
         short unsigned int getHeight();
 
         //cierra la ventana
         void Close();
+
+        //para recoger texto
+        void DesactivarRecogida();//desactivamos la recogida de texto
+        void ActivarRecogida();//activamos la recogida de texto
+
+        //devuelve texto cuando esta activa la recogida
+        char * RecogerLetra();//devuelve el texto que tiene en el momento el campo
+        void InicializarLetra(const char * letras);//inicializa el texto con lo que le pases
+        void BorrarUltimaTecla();//borra la ultima tecla
 
     private:
 
@@ -43,6 +53,14 @@ class Ventana
         double MouseY = 0;
 
         short unsigned int winwidth = 0,winheight = 0;
+
+        //para detectar las teclas que pulsa
+        static void character_callback(GLFWwindow* window, unsigned int codepoint);
+
+        static char tecla [30];//tecla que almacena cuando se recibe una tecla cuando se activa la recepcion de texto
+        static bool recogido;//esta a true si se ha recogido, y a false si no
+        bool cursor;// la line que te aparece y parpadea | 
+        static unsigned int numTecla;
 
 };
 #endif
