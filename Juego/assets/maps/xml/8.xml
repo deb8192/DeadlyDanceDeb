@@ -85,8 +85,71 @@
 		<!--Sala-02--></Platform>
 
 	<!--Luego se puede colocar cada una en su plataforma correspondiente, esto es lo que falta por colocar-->
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="16" alto="24" RP="90" X="-78" Y="0" Z="0" despX="0" despZ="0" Texture="" Model=""></Object>
-	
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="34" alto="24" RP="0" X="-37" Y="0" Z="0" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="34" largo="2" alto="24" RP="0" X="-1" Y="0" Z="-32" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="34" largo="2" alto="24" RP="0" X="-1" Y="0" Z="32" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="13" alto="24" RP="0" X="35" Y="0" Z="-21" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="18" largo="18" alto="24" RP="0" X="55" Y="0" Z="-26" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="34" largo="8" alto="24" RP="0" X="71" Y="0" Z="16" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="8" largo="16" alto="24" RP="0" X="97" Y="0" Z="-8" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="8" largo="16" alto="24" RP="0" X="129" Y="0" Z="-8" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="16" largo="8" alto="24" RP="0" X="137" Y="0" Z="16" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="40" largo="2" alto="24" RP="0" X="113" Y="0" Z="-42" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="68" alto="24" RP="0" X="155" Y="0" Z="24" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="10" largo="24" alto="24" RP="0" X="43" Y="0" Z="64" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="8" largo="34" alto="24" RP="0" X="77" Y="0" Z="74" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="34" largo="8" alto="24" RP="0" X="103" Y="0" Z="48" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="26" largo="8" alto="24" RP="0" X="127" Y="0" Z="80" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="48" largo="8" alto="24" RP="0" X="81" Y="0" Z="112" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="12" alto="24" RP="0" X="35" Y="0" Z="96" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="40" largo="2" alto="24" RP="0" X="117" Y="0" Z="146" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="22" alto="24" RP="0" X="155" Y="0" Z="122" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="14" alto="24" RP="0" X="57" Y="0" Z="134" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="70" alto="24" RP="0" X="35" Y="0" Z="78" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="57" largo="2" alto="24" RP="0" X="214" Y="0" Z="132" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="57" largo="2" alto="24" RP="0" X="214" Y="0" Z="36" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="32" alto="24" RP="0" X="269" Y="0" Z="102" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="14" alto="24" RP="0" X="269" Y="0" Z="48" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="14" largo="2" alto="24" RP="0" X="285" Y="0" Z="54" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="14" largo="2" alto="24" RP="0" X="285" Y="0" Z="78" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="301" Y="0" Z="74" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="297" Y="0" Z="50" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="14" largo="2" alto="24" RP="0" X="309" Y="0" Z="46" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="10" largo="2" alto="24" RP="0" X="309" Y="0" Z="70" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="321" Y="0" Z="50" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="317" Y="0" Z="78" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="13" largo="2" alto="24" RP="0" X="332" Y="0" Z="58" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="13" largo="2" alto="24" RP="0" X="328" Y="0" Z="82" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="343" Y="0" Z="66" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="339" Y="0" Z="90" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="13" largo="2" alto="24" RP="0" X="350" Y="0" Z="95" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="13" largo="2" alto="24" RP="0" X="358" Y="0" Z="70" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="369" Y="0" Z="78" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="365" Y="0" Z="100" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="13" largo="2" alto="24" RP="0" X="380" Y="0" Z="84" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="13" alto="24" RP="0" X="385" Y="0" Z="99" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="6" largo="2" alto="24" RP="0" X="361" Y="0" Z="108" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="6" largo="2" alto="24" RP="0" X="381" Y="0" Z="111" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="377" Y="0" Z="120" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="10" alto="24" RP="0" X="357" Y="0" Z="116" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="32" largo="2" alto="24" RP="0" X="331" Y="0" Z="128" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="32" largo="2" alto="24" RP="0" X="403" Y="0" Z="128" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="48" alto="24" RP="0" X="301" Y="0" Z="174" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="37" alto="24" RP="0" X="423" Y="0" Z="163" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="63" largo="2" alto="24" RP="0" X="362" Y="0" Z="220" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="12" largo="2" alto="24" RP="0" X="437" Y="0" Z="180" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="12" largo="2" alto="24" RP="0" X="437" Y="0" Z="288" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="52" alto="24" RP="0" X="447" Y="0" Z="234" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="30" alto="24" RP="0" X="423" Y="0" Z="238" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="30" alto="24" RP="0" X="423" Y="0" Z="306" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="63" largo="2" alto="24" RP="0" X="362" Y="0" Z="316" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="4" largo="39" alto="24" RP="0" X="379" Y="0" Z="280" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="4" largo="33" alto="24" RP="0" X="331" Y="0" Z="255" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="4" largo="33" alto="24" RP="0" X="291" Y="0" Z="279" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="17" alto="24" RP="0" X="301" Y="0" Z="301" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="74" largo="2" alto="24" RP="0" X="225" Y="0" Z="286" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="74" largo="2" alto="24" RP="0" X="225" Y="0" Z="194" despX="0" despZ="0" Texture="" Model=""></Object>
+					
 	<!--Sala-01--></Platform>
 
 </Level> <!-- Fin del nivel -->
