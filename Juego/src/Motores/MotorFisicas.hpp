@@ -58,7 +58,7 @@ using namespace reactphysics3d;
 
             void colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z);
             void llevarBox(float x, float y, float z, float anc, float lar, float alt);
-            void cambiarCamara();
+            void girarCamara();
             void updateJugador(float x, float y, float z, float rx, float ry, float rz);//actualizamos al jugador en el espacio de las fisicas
             std::vector <unsigned int> updateArmaEspecial(float x, float y, float z);
             std::vector<unsigned int> updateArma(float x, float y, float z);

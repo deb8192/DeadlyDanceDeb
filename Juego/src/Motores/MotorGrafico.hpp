@@ -309,7 +309,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             void RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame);
             bool finalCinematica();
-            void cambiarCamara();
+            void girarCamara();
             int getCamx();
             int getCamz();
             int getCams();
@@ -326,10 +326,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarIMGPuzzle(unsigned short x, unsigned short y, std::string img);
             void CrearTextoPuzzles(std::string texto, unsigned short x1, unsigned short y1,
                 unsigned short x2, unsigned short y2);
+            
             void HabilitarDinero();
             void DeshabilitarDinero();
-
-            // En proceso
             void CambiarCamara();
 
         private: //clases solo accesibles por MotorGrafico
