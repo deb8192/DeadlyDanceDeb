@@ -194,7 +194,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void BorrarScena(); // borra todo lo que haya en la ventana
             void BorrarGui(); // borra todo lo que haya en la ventana relacionado con el gui
 
-            void CrearTexto(std::string texto, short x1, short y1, short x2, short y2);
+            unsigned int CrearTexto(std::string texto, short x1, short y1, short x2, short y2);
             void CrearBoton(short x, short y, short x2, short y2, signed int id,
                 const wchar_t* texto, const wchar_t* texto2);
 
@@ -331,6 +331,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             // En proceso
             void CambiarCamara();
+
+            //cambiar propiedades del texto
+            void CambiarAnchuraTexto(unsigned short,unsigned int);
 
         private: //clases solo accesibles por MotorGrafico
 

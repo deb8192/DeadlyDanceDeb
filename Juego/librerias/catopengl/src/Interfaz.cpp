@@ -1280,3 +1280,26 @@ bool Interfaz::IsKeyRelease(short tecla)
 
     return false;
 }
+
+void Interfaz::AnchoTexto(unsigned short did,unsigned int anchoNuevo)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    TTexto* _texto = dynamic_cast<TTexto*>(tnodo->GetEntidad());
+                    if(_texto != nullptr)
+                    {
+                        _texto->CambiarAnchura(anchoNuevo);
+                    }
+                }
+            }
+        }
+    }  
+}

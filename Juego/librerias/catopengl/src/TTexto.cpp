@@ -163,3 +163,13 @@ void TTexto::endDraw()
 {
 
 }
+
+void TTexto::CambiarAnchura(unsigned int anchuraNueva)
+{
+    endx = anchuraNueva+x;
+}
+
+void TTexto::CambiarColor(float r, float g, float b)
+{
+    color = glm::vec3(r, g, b); 
+}

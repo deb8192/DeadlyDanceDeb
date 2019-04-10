@@ -549,6 +549,7 @@ void MotorGrafico::RenderEscena()
         {
             _interfaz->Draw();//pintamos la escena
             updateTeclas();//actualiza los estados de los botones
+            //std::cout << GetPosicionRaton()[0] << " " << GetPosicionRaton()[1] << std::endl;
             for(unsigned int i = 0; i < ObjetosAni_Scena.size();i++)
             {
                 if(ObjetosAni_Scena[i] != nullptr)
@@ -595,13 +596,13 @@ void MotorGrafico::BorrarGui()
     #endif
 }
 
-void MotorGrafico::CrearTexto(std::string texto, short x1, short y1, short x2, short y2)
+unsigned int MotorGrafico::CrearTexto(std::string texto, short x1, short y1, short x2, short y2)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short num = _interfaz->CrearTexto(texto,x1,y1,255.0f,255.0f,255.0f);//crea el texto en pantalla con los valores por defecto
         Textos_Scena.push_back(num);//lo introducimos en la matriz de objetos
-
+        return (unsigned int)num;
     #else
         //codigo motor irrlicht
         std::wstring widestr = std::wstring(texto.begin(), texto.end());
@@ -3200,3 +3201,10 @@ void MotorGrafico::updateTeclas()
     #endif
 }
 
+void MotorGrafico::CambiarAnchuraTexto(unsigned short did,unsigned int nuevoAncho)
+{
+    if(did != 0)
+    {
+        _interfaz->AnchoTexto(did,nuevoAncho);
+    }
+}

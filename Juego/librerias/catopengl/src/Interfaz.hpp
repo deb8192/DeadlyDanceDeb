@@ -111,6 +111,7 @@ class Interfaz
         void ColorDifusa(unsigned short luz, float r,float g,float b);
         void ColorSpecular(unsigned short luz, float r,float g,float b);
 
+        //define el bucle de la animacion
         void setBucle(unsigned short,bool);
 
         //cercania y lejania de la camara
@@ -119,6 +120,9 @@ class Interfaz
 
         //para saber si esta liberado
         bool IsKeyRelease(short);
+
+        //cambia propiedades de los textos
+        void AnchoTexto(unsigned short,unsigned int);
 
     private:
 
