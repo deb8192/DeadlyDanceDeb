@@ -1,4 +1,4 @@
-#include "MotorGrafico.hpp" //se llama a su cabecera para cargar las dependencias
+#include "MotorGrafico.hpp" //se llama a su cabecera para bos las dependencias
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 MotorGrafico* MotorGrafico::_unica_instancia = 0;
@@ -555,7 +555,7 @@ void MotorGrafico::RenderEscena()
                 {
                     ActualizarAnimacionMotor(ObjetosAni_Scena[i]);
                 }
-            }
+            }            
 
         }
     #else
@@ -825,73 +825,73 @@ void MotorGrafico::ResetKey(short event)
         {
             case idsEventos::Enum::KEY_A:
                 estadoteclas[GLFW_KEY_A] = false;
-
+            break;
             case idsEventos::Enum::KEY_S:
                 estadoteclas[GLFW_KEY_S] = false;
-
+            break;
             case idsEventos::Enum::KEY_D:
                 estadoteclas[GLFW_KEY_D] = false;
-
+            break;
             case idsEventos::Enum::KEY_W:
                 estadoteclas[GLFW_KEY_W]  = false;
-
+            break;
             case idsEventos::Enum::KEY_ESC:
                 estadoteclas[GLFW_KEY_ESCAPE] = false;
-
+            break;
             case idsEventos::Enum::KEY_ESPACIO:
                 estadoteclas[GLFW_KEY_SPACE] = false;
-
+            break;    
             case idsEventos::Enum::KEY_ACEPTAR:
                 estadoteclas[GLFW_KEY_ENTER] = false;
-
+            break;
             case idsEventos::Enum::KEY_G_DEBUG:
                 estadoteclas[GLFW_KEY_G] = false;//para modo debug
-
+            break;
             case idsEventos::Enum::KEY_1:
                 estadoteclas[GLFW_KEY_1] = false;
-
+            break;
             case idsEventos::Enum::KEY_2:
                 estadoteclas[GLFW_KEY_2] = false;
-
+            break;            
             case idsEventos::Enum::KEY_U:
                 estadoteclas[GLFW_KEY_U] = false;//para desactivar colisiones jugador
-
+            break;
             case idsEventos::Enum::KEY_P:
                 estadoteclas[GLFW_KEY_P] = false;
-
+            break;
             case idsEventos::Enum::KEY_K:
                 estadoteclas[GLFW_KEY_K] = false;
-
+            break;
             case idsEventos::Enum::KEY_C:
                 estadoteclas[GLFW_KEY_C] = false;//activa pathdinding
-
+            break;
             case idsEventos::Enum::KEY_B:
                 estadoteclas[GLFW_KEY_B] = false;
-
+            break;
             case idsEventos::Enum::RMOUSE_PRESSED_DOWN:
                 estadoteclas[GLFW_MOUSE_BUTTON_RIGHT] = false;
-
+            break;    
             case idsEventos::Enum::LMOUSE_PRESSED_DOWN:
                 estadoteclas[GLFW_MOUSE_BUTTON_LEFT] = false;
-
+            break;
             case idsEventos::Enum::MOUSE_MOVED:
                 estadoteclas[GLFW_MOUSE_MOVE] = false;
-
+            break;
             case idsEventos::Enum::KEY_Q:
                 estadoteclas[GLFW_KEY_Q] = false;
-
+            break;
             case idsEventos::Enum::KEY_H:
                 estadoteclas[GLFW_KEY_H] = false;
-
+            break;
             case idsEventos::Enum::KEY_I:
                 estadoteclas[GLFW_KEY_I] = false;
-
+            break;
             case idsEventos::Enum::KEY_J:
                 estadoteclas[GLFW_KEY_J] = false;//Para matar al jugador (16)
-
+            break;
             case idsEventos::Enum::KEY_Z:
                 estadoteclas[GLFW_KEY_Z] = false;//Para abrir 1 puzzle
-
+            break;
             case idsEventos::Enum::KEY_E:
                 estadoteclas[GLFW_KEY_E] = false;//actua una sola vez aunque se mantenga pulsado
         }
@@ -1106,71 +1106,14 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
 void MotorGrafico::CargarLuces(int x,int y,int z)
 {
     #ifdef WEMOTOR
-        unsigned short luz;
+
         //codigo motor catopengl
-        luz = _interfaz->AddLuz(0);//instanciamos el objeto y lo agregamos a la escena
+        unsigned short luz = _interfaz->AddLuz(0);//instanciamos el objeto y lo agregamos a la escena
         if(luz != 0)
         {
             _interfaz->Trasladar(luz,(float)x,(float)y,(float)z);//movemos el objeto
             Luces_Scena.push_back(luz);//agregamos la luz
         }
-        //
-        // luz = _interfaz->AddLuz(1);//instanciamos el objeto y lo agregamos a la escena
-        // if(luz != 0)
-        // {
-        //     _interfaz->Trasladar(luz,-9.0f,8.0f,-19.4f);//movemos el objeto
-        //     _interfaz->DistanciaLuz(luz,250.0f);
-        //     Luces_Scena.push_back(luz);//agregamos la luz
-        // }
-        //
-        // luz = _interfaz->AddLuz(1);//instanciamos el objeto y lo agregamos a la escena
-        // if(luz != 0)
-        // {
-        //     _interfaz->Trasladar(luz,-7.7f,8.0f,19.4f);//movemos el objeto
-        //     _interfaz->DistanciaLuz(luz,250.0f);
-        //     Luces_Scena.push_back(luz);//agregamos la luz
-        // }
-        //
-        // luz = _interfaz->AddLuz(1);//instanciamos el objeto y lo agregamos a la escena
-        // if(luz != 0)
-        // {
-        //     _interfaz->Trasladar(luz,49.1f,8.0f,-67.8f);//movemos el objeto
-        //     _interfaz->DistanciaLuz(luz,250.0f);
-        //     Luces_Scena.push_back(luz);//agregamos la luz
-        // }
-        //
-        // luz = _interfaz->AddLuz(1);//instanciamos el objeto y lo agregamos a la escena
-        // if(luz != 0)
-        // {
-        //     _interfaz->Trasladar(luz,49.1f,8.0f,67.8f);//movemos el objeto
-        //     _interfaz->DistanciaLuz(luz,250.0f);
-        //     Luces_Scena.push_back(luz);//agregamos la luz
-        // }
-        //
-        // luz = _interfaz->AddLuz(1);//instanciamos el objeto y lo agregamos a la escena
-        // if(luz != 0)
-        // {
-        //     _interfaz->Trasladar(luz,105.3f,8.0f,19.8f);//movemos el objeto
-        //     _interfaz->DistanciaLuz(luz,250.0f);
-        //     Luces_Scena.push_back(luz);//agregamos la luz
-        // }
-        //
-        // luz = _interfaz->AddLuz(1);//instanciamos el objeto y lo agregamos a la escena
-        // if(luz != 0)
-        // {
-        //     _interfaz->Trasladar(luz,105.3f,8.0f,-19.8f);//movemos el objeto
-        //     _interfaz->DistanciaLuz(luz,250.0f);
-        //     Luces_Scena.push_back(luz);//agregamos la luz
-        // }
-        //
-        // luz = _interfaz->AddLuz(2);//instanciamos el objeto y lo agregamos a la escena
-        // if(luz != 0)
-        // {
-        //     _interfaz->Trasladar(luz,46.1f,60.0f,-1.5f);//movemos el objeto
-        //     _interfaz->DistanciaLuz(luz,350.0f);
-        //     Luces_Scena.push_back(luz);//agregamos la luz
-        // }
-
 
     #else
         //codigo motor irrlicht
@@ -1252,7 +1195,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
             _interfaz->Trasladar(_jugEscena,(float)x,(float)y,(float)z);
             _interfaz->Escalar(_jugEscena,(float)1.75,(float)1.75,(float)1.75);
             _aniJugEscena = new Animaciones("assets/animaciones/rockero.xml");//cargamos las animaciones
-            _aniJugEscena->AsignarID(_jugEscena);//definimos el id para cuando luego se actualice sepa que id tiene
+            _aniJugEscena->AsignarID(_jugEscena);//definimos el id para cuando luego se actualice sepa que id tiene 
             //cout << _jugEscena << " INICIALMENTE: " << x << " " << y << " " << z << endl;
         }
 
@@ -1288,7 +1231,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             _interfaz->SetTexture(_objetoEnEscena,ruta_textura);
             _interfaz->Trasladar(_objetoEnEscena,(float)x,(float)y,(float)z);
             _interfaz->Rotar(_objetoEnEscena,0.0f,(float)rp,0.0f);
-
+            
             Animaciones * logicaAnim = nullptr;
 
             if(anima != nullptr)
@@ -1545,7 +1488,6 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
             _interfaz->Trasladar(camara,nodeCamPosition[0],nodeCamPosition[1],nodeCamPosition[2]);
             _interfaz->ChangeTargetCamara(camara,nodeCamTarget[0],nodeCamTarget[1],nodeCamTarget[2]);
 
-            // std::cout << "p: " << x << " " << z << std::endl;
             _interfaz->Trasladar(_jugEscena,x,y,z);
             _interfaz->Rotar(_jugEscena,rx,ry-180,rx);
 
@@ -2505,7 +2447,7 @@ void MotorGrafico::SetBarraEnergia(int barra)
                 BarraEnergiaI->setMaxSize(dimension2du(1,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
             }
             else
-            {
+            {            bool estadoteclas3[350];//contiene si se ha reseteado el boton 
                 BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
             }
         }
@@ -2754,7 +2696,7 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
         {
             if(_aniJugEscena->ExisteEstado(estado) && _aniJugEscena->SePuedeCambiarEstado(frame_actual))//comprobamos primero que sea posible
             {
-                //std::cout << " se llama a cambiar estado " << estado << " " << frame << std::endl;
+                //std::cout << " se llama a cambiar estado " << estado << " " << frame << std::endl; 
                 _aniJugEscena->CambiarEstado(estado,frame,frame_actual);//si es posible llamamos a cambiarestado
             }
         }
@@ -3146,7 +3088,7 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
         if(tipo == 0) //animaciones objetos
         {
             anim = ObjetosAni_Scena[did];
-
+            
         }
         else if(tipo == 1) //animaciones recolectables
         {
@@ -3157,7 +3099,7 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
             anim = PowerUPAni_Scena[did];
         }
 
-        //aqui mas
+        //aqui mas 
 
         if(anim != nullptr)
         {
@@ -3176,7 +3118,7 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
 }
 
 void MotorGrafico::ActualizarAnimacionMotor(Animaciones * anima)
-{
+{       
     #ifdef WEMOTOR
         if(anima != nullptr)
         {
@@ -3184,7 +3126,7 @@ void MotorGrafico::ActualizarAnimacionMotor(Animaciones * anima)
             if(frame_actual != -1)
             {
                 anima->ProcesarAnimacion(frame_actual);//mira si debe cambiar de estado porque ha terminado la animacion y tiene salto automatico a otro
-                if(anima->SeCambiaEstado())//esto indica si se ha cambiado estado
+                if(anima->SeCambiaEstado())//esto indica si se ha cambiado estado 
                 {
                     unsigned int * devolucion = anima->Update();
                     //si se cambia aun estado que ya esta no se actualiza por lo que te devuelve un nullptr
@@ -3229,21 +3171,32 @@ void MotorGrafico::updateTeclas()
 
         float tiempoactual = tempo->GetTiempo(1);//tiempo actual en milisegundos
 
-        if(tiempo == 0 || (tiempo+100.0f) < tiempoactual)
-        {
             //std::cout << " Actualizo teclas " << tiempoactual << std::endl;
             for(int i = 0; i <= numeroteclas;i++)
             {
                 if(i != GLFW_MOUSE_BUTTON_RIGHT && i != GLFW_MOUSE_BUTTON_LEFT && i != GLFW_MOUSE_MOVE)
                 {
-                        estadoteclas[i]=_interfaz->IsKeyDown(i);
+                        if((!_interfaz->IsKeyRelease(i)))
+                        {
+                            if(estadoteclas2[i])//esto significa que no esta pulsado de antes
+                            {
+                                estadoteclas[i] = _interfaz->IsKeyDown(i);
+                                estadoteclas2[i] = false;
+                            }
+                        }
+                        else
+                        {
+                            estadoteclas2[i] = true;
+                            estadoteclas[i]=false;     
+                        }
                 }
                 else
                 {
-                        estadoteclas[i]=_interfaz->IsMouseClick(i);
+                        estadoteclas[i]=_interfaz->IsMouseClick(i); 
                 }
             }
-            tiempo = tiempoactual;
-        }
+            tiempo = tiempoactual; 
+
     #endif
 }
+

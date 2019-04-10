@@ -1,5 +1,11 @@
 #include "CatOpengl.hpp"//cuidado aqui se pone asi para no tener que poner la ruta ya va incluida en el programa de compilacion (make)
 
+unsigned int Ventana::numTecla = 0;
+
+char Ventana::tecla [30]; 
+
+bool Ventana::recogido = false;
+
 //USO: inicializa las variables
 Ventana::Ventana()
 {
@@ -98,6 +104,7 @@ void Ventana::UpdateLimpiar()
 void Ventana::UpdateDraw()
 {
     draw();
+    //PortaPapeles();
 }
 
 //USO: limpia toda la informacion de la ventana
@@ -179,10 +186,6 @@ bool Ventana::EstaPulsada(short tecla)
 {
     if(glfwGetKey(_window,tecla) == GLFW_PRESS)  //Si pulsas Escape
     {
-        if(glfwGetKey(_window,GLFW_KEY_SPACE) == GLFW_PRESS)
-        {
-            std::cout << " se presiona espacio " << std::endl;
-        }
         return true;
     }
     else
@@ -234,5 +237,88 @@ void Ventana::Close()
     if(_window != nullptr)
     {    
         glfwSetWindowShouldClose(_window, true);
+    }
+}
+
+bool Ventana::EstaLiberado(short tecla)
+{
+    if(glfwGetKey(_window,tecla) == GLFW_RELEASE)  //Si pulsas Escape
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+    
+}
+
+/* void Ventana::PortaPapeles()
+{
+    const char* text = glfwGetClipboardString(_window);
+    if (text)
+    {
+        std::cout << text << std::endl;
+    }
+}
+ */
+
+void Ventana::character_callback(GLFWwindow* window, unsigned int codepoint)
+{
+    if(numTecla < 30)
+    {
+        tecla[numTecla] = (char)codepoint;
+        numTecla++;
+        //std::cout << " Recogido: " << tecla << std::endl;
+        recogido = false;
+    }  
+}
+
+void Ventana::ActivarRecogida()
+{
+    glfwSetCharCallback(_window,this->character_callback);
+    recogido = true;
+    numTecla = 0;
+    for(int i = 0; i < 30;i++)
+    {
+        tecla[i] = ' ';
+    }
+
+}
+
+void Ventana::DesactivarRecogida()
+{
+    glfwSetCharCallback(_window,nullptr);
+    recogido = true;
+    numTecla = 0;
+    for(int i = 0; i < 30;i++)
+    {
+        tecla[i] = ' ';
+    }
+
+}
+
+char * Ventana::RecogerLetra()
+{
+    return tecla;
+}
+
+void Ventana::InicializarLetra(const char * letras)
+{
+    //inicializamos a los valores que hayan
+    int longitud = strlen(letras);
+    numTecla = longitud;
+    for(int i = 0; i < 30 && i < longitud;i++)
+    { 
+        tecla[i] = letras[i];
+    } 
+}
+
+void Ventana::BorrarUltimaTecla()
+{
+    if(numTecla != 0)
+    {
+        numTecla--;
+        tecla[numTecla] = ' ';
     }
 }
