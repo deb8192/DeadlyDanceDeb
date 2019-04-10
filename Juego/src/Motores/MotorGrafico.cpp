@@ -1439,7 +1439,7 @@ void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float 
     #endif
 }
 
-void MotorGrafico::cambiarCamara()
+void MotorGrafico::girarCamara()
 {
         if(camx == 0)
         {
@@ -3161,7 +3161,6 @@ void MotorGrafico::CambiarCamara()
             _interfaz->SetLejaniaCamara(camara, lejano);
         }
     #endif
-
 }
 
 void MotorGrafico::updateTeclas()
