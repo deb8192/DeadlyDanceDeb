@@ -6,19 +6,19 @@ TLuz::TLuz(int t)
     tipo_luz = t; //tipo de luz
     if(t == 0)
     {
-        setAmbient(0.25f, 0.25f, 0.25f);
-        setDiffuse(0.6f, 0.6f, 0.6f);
-        setSpecular(0.7f, 0.7f, 0.7f);
+        setAmbient(0.45f, 0.45f, 0.45f);
+        setDiffuse(0.7f, 0.7f, 0.7f);
+        setSpecular(0.8f, 0.8f, 0.8f);
         // setAmbient(0.05f, 0.05f, 0.05f);
-        // setDiffuse(0.15f, 0.15f, 0.15f);
-        // setSpecular(0.25f, 0.2f, 0.2f);
+        // setDiffuse(0.08f, 0.08f, 0.08f);
+        // setSpecular(0.1f, 0.1f, 0.1f);
         setDirection(-0.2f, -1.0f, -0.3f);
         setBrillos(8.0f);
     }
     else if(t == 1)
     {
-        setAmbient(0.05f, 0.05f, 0.05f);
-        setDiffuse(0.8f, 0.8f, 0.8f);
+        setAmbient(0.7f, 0.7f, 0.7f);
+        setDiffuse(0.9f, 0.9f, 0.9f);
         setSpecular(1.0f, 1.0f, 1.0f);
         setLightRange(150.0f);
         setBrillos(32.0f);

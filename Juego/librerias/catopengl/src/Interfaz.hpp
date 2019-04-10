@@ -126,7 +126,7 @@ class Interfaz
 
         CatOpengl::Video::Ventana * window;
 
-        Shader * shaders[4];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[5];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 
