@@ -52,9 +52,7 @@ void Mesh::setupMesh()
 //Renderizar la Malla
 void Mesh::Draw(Shader* shader)
 {
-    //Enlazar las texturas apropiadas
-    unsigned int diffuseNr  = 1;
-    unsigned int specularNr = 1;
+    shader->Use();
 
     //Solucion al problema del numero indeterminado de texturas que puede tener una malla (definirlas como "uniform sampler2D texture_diffuseN" donde N es el numero de textura)
     for(unsigned int i = 0; i < textures.size(); i++)
@@ -65,19 +63,14 @@ void Mesh::Draw(Shader* shader)
         string name = textures[i].type;
         if(name == "texture_diffuse")
         {
-            stringstream ss;
-            ss << diffuseNr++;
-            number = ss.str();
+            shader->setInt("material.diffuse", i);
+
         }
         else if(name == "default_texture")
         {
-            stringstream ss;
-            ss << specularNr++;
-            number = ss.str();
+            shader->setInt("material.diffuse", i);
         }
 
-        //Ahora ajuste el sampler a la unidad de textura correcta
-        glUniform1i(glGetUniformLocation(shader->ID, (name + number).c_str()), i);
         //Finalmente enlazamos la textura
         glBindTexture(GL_TEXTURE_2D, textures[i].id);
     }

@@ -76,7 +76,7 @@ unsigned short Interfaz::AddCamara()
 
         TNodo * camara = new TNodo;
         TCamara * camaraEn = new TCamara(window->getWidth(),window->getHeight());
-        camaraEn->SetShader(shaders[0]);
+        camaraEn->SetShader(shaders[4]);
         camaraEn->SetShader2(shaders[3]);
         camara->setEntidad(camaraEn);
 
@@ -130,7 +130,7 @@ unsigned short Interfaz::AddLuz(int tipo)
 
     TNodo * luz = new TNodo;
     TLuz * luzEn = new TLuz(tipo);
-    luzEn->SetShader(shaders[0]);
+    luzEn->SetShader(shaders[4]);
     luzEn->setNumberoflight(luces.size());
     luz->setEntidad(luzEn);
 
@@ -185,7 +185,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
 
     TNodo * malla = new TNodo;
     TMalla * mallaEn = new TMalla(initf);
-    mallaEn->SetShader(shaders[0]);
+    mallaEn->SetShader(shaders[4]);
     malla->setEntidad(mallaEn);
 
     escalado->addHijo(rotacion);
@@ -568,6 +568,7 @@ void Interfaz::ventanaInicializar()
     shaders[1] = new Shader("assets/shaders/shaderguivs.glsl","assets/shaders/shaderguifs.glsl");
     shaders[2] = new Shader("assets/shaders/shadertextvs.glsl","assets/shaders/shadertextfs.glsl");
     shaders[3] = new Shader("assets/shaders/shaderboardsvs.glsl","assets/shaders/shaderboardsfs.glsl");
+    shaders[4] = new Shader("assets/shaders/shadertoonvs.glsl","assets/shaders/shadertoonfs.glsl");
 }
 
 void Interfaz::ventanaLimpiar()
