@@ -137,7 +137,8 @@ void Jugando::ValoresPorDefecto()
     drawTime = 0.0f;
     lastDrawTime = drawTime;
     atacktime = 0.0f;
-    cambia = 0;
+    // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
+    //cambia = 0;
     _enemPideAyuda = nullptr;
     _destinoPathFinding = nullptr;
     danyo = 0;
@@ -234,23 +235,13 @@ void Jugando::ManejarEventos() {
      //para modo camara
     if(_motor->EstaPulsado(KEY_1))
     {
-        _motor->cambiarCamara();
-        _fisicas->cambiarCamara();
-        _jugador->cambiarCamara();
+        _motor->girarCamara();
+        _fisicas->girarCamara();
+        _jugador->girarCamara();
         _motor->ResetKey(KEY_1);
     }
 
     /* *********** Teclas para probar cosas *************** */
-    // Camara libre
-    /*if (_motor->EstaPulsado(KEY_H))
-    {
-        _motor->ResetKey(KEY_H);
-        camLibre = !camLibre;
-
-        if (camLibre)
-            _motor->IniCamLibre(_jugador->getX(),
-                _jugador->getY(), _jugador->getZ());
-    }*/
 
     if (_motor->EstaPulsado(KEY_K))
     {
@@ -310,15 +301,17 @@ void Jugando::ManejarEventos() {
 
     //cambia se utiliza porque coge y suelta el objeto sucesivamente varias veces, la causa de este error
     //era porque ocurren varias iteraciones del bucle tal vez porque la interpolacion crea mas iteraciones en el bucle
+    // (Actualizacion: era cosa de los inputs de OpenGL) TO DO: borrar este mega comentario despues de asegurarnos
     if(_motor->EstaPulsado(KEY_E))
     {
         _motor->ResetKey(KEY_E);
         InteractuarNivel();
     }
-    else
+    // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
+    /*else
     {
         cambia = 0;
-    }
+    }*/
     
 }
 
@@ -334,37 +327,38 @@ void Jugando::InteractuarNivel()
     short int_palanca = _fisicas->collidePalanca();
     short int_cofre = _fisicas->collideCofre();
 
-    if(cambia <= 0)
-    {
+    // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
+    /*if(cambia <= 0)
+    {*/
         if (int_puerta >= 0)
         {
             AccionarMecanismo(int_puerta, constantes.PUERTA_OBJ);
-            cambia++;
+            //cambia++;
         }
         else if (int_palanca >= 0)
         {
             AccionarMecanismo(int_palanca, constantes.PALANCA);
-            cambia++;
+            //cambia++;
         }
 
         if (int_cofre >= 0)
         {
             AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
-            cambia++;
+            //cambia++;
         }
         
         if(rec_col < 0 && int_cofre < 0 && 
             int_palanca < 0 && int_puerta < 0)
         {
             DejarObjeto();
-            cambia++;
+            //cambia++;
         }
         else if (rec_col >= 0)
         {
             CogerObjeto();
-            cambia++;
+            //cambia++;
         }
-    }
+   // }
 }
 
 /************** Update *************

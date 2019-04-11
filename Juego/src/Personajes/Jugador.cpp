@@ -233,9 +233,9 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
  * el punto de origen al punto de destino
  */
 
-void Jugador::cambiarCamara()
+void Jugador::girarCamara()
 {
-        gcam >= 270 ? gcam = 0 : gcam += 90;
+    gcam >= 270 ? gcam = 0 : gcam += 90;
 }
 
 void Jugador::moverseEntidad(float updTime)

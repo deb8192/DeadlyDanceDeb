@@ -689,9 +689,9 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
 
 }
 
-void MotorFisicas::cambiarCamara()
+void MotorFisicas::girarCamara()
 {
-        gcam >= 270 ? gcam = 0 : gcam += 90;
+    gcam >= 270 ? gcam = 0 : gcam += 90;
 }
 
 void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z)

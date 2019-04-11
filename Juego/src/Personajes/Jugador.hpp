@@ -132,7 +132,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float getLastTimeAt();
         const char* getRutaArmaEsp();
         const char* getRutaTexturaArmaEsp();
-        void cambiarCamara();
+        void girarCamara();
         int getDinero();
         void ModificarDinero(int monedas);
         void setDinero(int monedas);

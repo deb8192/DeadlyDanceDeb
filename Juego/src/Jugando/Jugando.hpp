@@ -126,7 +126,8 @@ class Jugando: public Estado {
         float mov_weapon_rotX,mov_weapon_rotY,mov_weapon_rotZ;
         float proyectilFuera;
 
-        int cambia;
+        // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
+        //int cambia;
         int danyo, danyo2;
         int contadorEnem;
 
