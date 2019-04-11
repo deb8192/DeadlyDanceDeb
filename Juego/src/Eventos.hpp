@@ -43,6 +43,10 @@ namespace idsEventos
         GUI_ID_SUBIR_SONIDO,
         GUI_ID_CONFIGURACION_BUTTON,
         GUI_ID_CONTINUARPARTIDA_BUTTON,
+        GUI_ID_SLOT1,
+        GUI_ID_SLOT2,
+        GUI_ID_SLOT3,
+        GUI_ID_ATRAS,
         
         GUI_ID_ATRAS_BUTTON,
         GUI_ID_REINICIAR_HANOI,

@@ -26,6 +26,7 @@ class Menu: public Estado {
         void salir();
         void calcularColor();
         void continuar();//continua la partida por donde se queda anteriormente
+        void continuarPartida();//pasa al menu de continuar partida
 
         short r,g,b;
         bool rm,gm,bm;

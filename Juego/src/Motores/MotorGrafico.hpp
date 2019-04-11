@@ -335,6 +335,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             //cambiar propiedades del texto
             void CambiarAnchuraTexto(unsigned short,unsigned int);
 
+            //boton
+            unsigned int CrearBoton2(short xImagen, short yImagen, unsigned int escalado, short xTexto, short yTexto, unsigned int anchotexto, signed int id,const wchar_t* texto, const wchar_t * rutaimagen = L"assets/images/boton3.png",bool esTexto = true,const char * rutapulsado = nullptr,const char * rutaencima = nullptr);
+
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton

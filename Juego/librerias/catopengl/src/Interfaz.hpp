@@ -30,7 +30,7 @@ class Interfaz
 
         unsigned short AddMalla(const char *,int initf);//creamos una malla
 
-        unsigned short AddImagen(const char *, unsigned int, unsigned int, float );//creamos una imagen en plano
+        unsigned short AddImagen(const char *, unsigned int, unsigned int, float , const char * rutapulsado = nullptr, const char * rutaencima = nullptr );//creamos una imagen en plano
 
         unsigned short AddTexto(std::string, GLuint); //Crear un texto
 
@@ -65,6 +65,8 @@ class Interfaz
         bool IsKeyDown(short);//se le pasa la tecla que quiere comprobar, esto va a la ventana y le pregunta si esta pulsada
 
         bool IsMouseClick(short);// comprobaciones de los botones del raton
+
+        bool IsMouseUp(short);//comprueba si se ha liberado el boton
 
         void ChangeTargetCamara(unsigned short id, float x, float y, float z);//cambia donde apunta la camara
 
@@ -123,6 +125,9 @@ class Interfaz
 
         //cambia propiedades de los textos
         void AnchoTexto(unsigned short,unsigned int);
+
+        //cambiar estado imagen o boton
+        void CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado);
 
     private:
 

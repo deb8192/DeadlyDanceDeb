@@ -616,7 +616,7 @@ void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, signed int i
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        unsigned short num = _interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f);
+        unsigned short num = _interfaz->AddImagen("assets/images/boton3.png",x,y,1.0f,"assets/images/boton3p.png","assets/images/boton3e.png");
         if(num != 0)
         {
             _interfaz->DeclararBoton(num,id);
@@ -635,16 +635,33 @@ void MotorGrafico::CrearBoton(short x, short y, short x2, short y2, signed int i
 bool MotorGrafico::OcurreEvento(short event)
 {
     #ifdef WEMOTOR
+
         //codigo motor catopengl
-        if(EstaPulsado(idsEventos::Enum::LMOUSE_PRESSED_DOWN))
+        if(_interfaz != nullptr && _interfaz->DetectarPulsacion(event))
         {
-            return _interfaz->DetectarPulsacion(event);
+            if(EstaPulsado(idsEventos::Enum::LMOUSE_PRESSED_DOWN))
+            {
+                //si esta pulsado entonces cambiar estado 2 PRESIONADO
+                _interfaz->CambiarEstadoImagen(event,2);
+                //std::cout << "pulsado " << event << std::endl;
+                return true;
+            }
+            else
+            {
+                //si esta encima cambiar estado 3 ENCIMA
+                _interfaz->CambiarEstadoImagen(event,3);    
+                //std::cout << "encima " << event << std::endl;
+                return false;
+            }            
         }
         else
         {
+            //esto es que no ocurre le decimos que actualice con estado 1 (que es el normal) NORMAL
+            _interfaz->CambiarEstadoImagen(event,1);
+            //std::cout << "normal " << event << std::endl;
             return false;
         }
-
+        
     #else
         //codigo motor irrlicht
         return input.IsEventOn(event);
@@ -3193,7 +3210,19 @@ void MotorGrafico::updateTeclas()
                 }
                 else
                 {
-                        estadoteclas[i]=_interfaz->IsMouseClick(i); 
+                        if((!_interfaz->IsMouseUp(i)))
+                        {
+                            if(estadoteclas2[i])//esto significa que no esta pulsado de antes
+                            {
+                                estadoteclas[i] = _interfaz->IsMouseClick(i);
+                                estadoteclas2[i] = false;
+                            }
+                        }
+                        else
+                        {
+                            estadoteclas2[i] = true;
+                            estadoteclas[i]=false;     
+                        }
                 }
             }
             tiempo = tiempoactual; 
@@ -3203,8 +3232,44 @@ void MotorGrafico::updateTeclas()
 
 void MotorGrafico::CambiarAnchuraTexto(unsigned short did,unsigned int nuevoAncho)
 {
-    if(did != 0)
-    {
-        _interfaz->AnchoTexto(did,nuevoAncho);
-    }
+    #ifdef WEMOTOR
+        if(did != 0)
+        {
+            _interfaz->AnchoTexto(did,nuevoAncho);
+        }
+    #endif
+}
+
+unsigned int MotorGrafico::CrearBoton2(short xImagen, short yImagen, unsigned int escalado, short xTexto, short yTexto, unsigned int anchotexto, signed int id,const wchar_t* texto, const wchar_t* rutaimagen,bool esTexto,const char * rutapulsado,const char * rutaencima)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        wstring ws(rutaimagen);
+        string str(ws.begin(),ws.end());
+        const char * pru = str.c_str();
+        unsigned short num = 0;
+        
+        if(rutapulsado != nullptr || rutaencima != nullptr)
+        {
+            num = _interfaz->AddImagen(pru,xImagen,yImagen ,(float)escalado, rutapulsado , rutaencima );
+        }
+        else
+        {
+            num = _interfaz->AddImagen(pru,xImagen,yImagen ,(float)escalado);
+        }
+        
+        if(num != 0)
+        {
+            _interfaz->DeclararBoton(num,id);
+            _interfaz->DefinirIdPersonalizado(num,id);
+            if(esTexto)//si se debe crear texto con el boton
+            {
+                wstring ws(texto);
+                string str(ws.begin(),ws.end());
+                unsigned short num2 = _interfaz->CrearTexto(str,xImagen+xTexto,yImagen+yTexto,255.0f,255.0f,255.0f);
+                _interfaz->DefinirTextoBoton(num,num2);
+            }
+        } 
+        return (unsigned int)num;
+    #endif
 }

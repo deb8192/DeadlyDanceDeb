@@ -216,7 +216,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
     return 0;
 }
 
-unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigned int y, float scale)
+unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigned int y, float scale,  const char * rutapulsado , const char * rutaencima )
 {
     //std::cout << "SE CREA IMAGEN" << std::endl;
     if(ventana_inicializada)
@@ -244,7 +244,18 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
     escaladoEnt->NoEjecutar();
 
     TNodo * imagen = new TNodo;
-    TPlano * imagenEn = new TPlano(archivo,x,y,scale,shaders[1],window->getWidth(), window->getHeight());
+    
+    TPlano * imagenEn = nullptr;
+
+    if(rutapulsado != nullptr || rutaencima != nullptr)
+    {
+        imagenEn = new TPlano(archivo,x,y,scale,shaders[1],window->getWidth(), window->getHeight(), rutapulsado , rutaencima);
+    }
+    else
+    {
+        imagenEn = new TPlano(archivo,x,y,scale,shaders[1],window->getWidth(), window->getHeight());
+    }
+    
     imagen->setEntidad(imagenEn);
 
     escalado->addHijo(rotacion);
@@ -699,6 +710,15 @@ bool Interfaz::IsMouseClick(short boton)
     return false;
 }
 
+bool Interfaz::IsMouseUp(short boton)
+{
+    if(window != nullptr)
+    {
+        return window->MouseEstaLibre(boton);
+    }
+    return false;
+}
+
 void Interfaz::ChangeTargetCamara(unsigned short id, float x, float y, float z)
 {
     Nodo * nodo = buscarNodo2(id);
@@ -720,7 +740,7 @@ void Interfaz::DeclararBoton(unsigned short id, unsigned short newid)
     }
 }
 
-//Detectar pulsaciones de botones
+//Detectar si esta encima del boton
 bool Interfaz::DetectarPulsacion(int did)
 {
     for(unsigned int i = 0; i < imagenes.size(); i++)
@@ -731,8 +751,18 @@ bool Interfaz::DetectarPulsacion(int did)
             if(did == dynamic_cast<TPlano*>(tnodo->GetEntidad())->getID()) //Si es la misma id
             {
                 double * datos = window->RecuperarPosicionesMouse();
-                if(dynamic_cast<TPlano*>(tnodo->GetEntidad())->botonPulsado(datos))//Si pulsas el boton
-                    return true;
+                TPlano * imagen = dynamic_cast<TPlano*>(tnodo->GetEntidad());
+                if(imagen != nullptr)//Si pulsas el boton
+                {
+                    if(imagen->botonPulsado(datos))
+                    {
+                        //imagen->CambiarEstado(2);
+                        return true;
+                    }
+
+                    //imagen->CambiarEstado(1);
+                    return false;
+                }
             }
         }
     }
@@ -1302,4 +1332,23 @@ void Interfaz::AnchoTexto(unsigned short did,unsigned int anchoNuevo)
             }
         }
     }  
+}
+
+void Interfaz::CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado)
+{
+    for(unsigned int i = 0; i < imagenes.size(); i++)
+    {
+        TNodo * tnodo = imagenes[i]->recurso->GetNieto(1)->GetHijo(1);
+        if(dynamic_cast<TPlano*>(tnodo->GetEntidad())->Comprobar()) //Si la imagen es un boton
+        {
+            if(event == dynamic_cast<TPlano*>(tnodo->GetEntidad())->getID()) //Si es la misma id
+            {
+                TPlano * imagen = dynamic_cast<TPlano*>(tnodo->GetEntidad());
+                if(imagen != nullptr)//Si pulsas el boton
+                {
+                    imagen->CambiarEstado(nuevoEstado);
+                }
+            }
+        }
+    }
 }

@@ -61,6 +61,7 @@ void Menu::ManejarEventos()
     if (_motor->OcurreEvento(GUI_ID_EMPEZAR_BUTTON))//cambiamos de estado porque han pulsado boton jugar
     {
         borrarEscenaResetearEvento(GUI_ID_EMPEZAR_BUTTON);// reseteamos el evento
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         jugar();
     }
 
@@ -76,11 +77,19 @@ void Menu::ManejarEventos()
         creditos();
     }
 
+    if (_motor->OcurreEvento(GUI_ID_CONTINUARPARTIDA_BUTTON))
+    {
+        borrarEscenaResetearEvento(GUI_ID_CONTINUARPARTIDA_BUTTON);
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
+        continuarPartida();
+    }
+
     if (_motor->OcurreEvento(GUI_ID_SALIR_BUTTON))
     {
         borrarEscenaResetearEvento(GUI_ID_SALIR_BUTTON);
         salir();
     }
+
 }
 
 void Menu::pintarBotones()
@@ -105,15 +114,10 @@ void Menu::borrarEscenaResetearEvento(short id)
 
 void Menu::jugar()
 {
-    _motora->getEvent("Menu")->stop(); //Detener musica Menu
-    Juego::GetInstance()->estado.CambioEstadoJugar();
-    _motor->AsignarCargando(_motor->CrearImagen("assets/images/cargando.png",540,330,1.0f));
-    //_motor->CrearImagen("assets/images/pr2.png",150,100,10.0f);
-    //unsigned short did = _motor->CrearTexto("Seleccione slot de guardado:",180,120,0,0);
-    //_motor->CambiarAnchuraTexto(did,300);
-    //_motor->CrearImagen("assets/images/slot.png",205,160,8.0f);
-    //_motor->CrearImagen("assets/images/slot.png",205,260,8.0f);
-    //_motor->CrearImagen("assets/images/slot.png",205,360,8.0f);
+
+    //_motora->getEvent("Menu")->stop(); //Detener musica Menu
+    Juego::GetInstance()->estado.CambioEstadoIniciarPartida();
+    //_motor->AsignarCargando(_motor->CrearImagen("assets/images/cargando.png",540,330,1.0f));
 }
 
 void Menu::configuracion()
@@ -220,4 +224,9 @@ void Menu::calcularColor()
 void Menu::continuar()
 {
 
+}
+
+void Menu::continuarPartida()
+{
+    Juego::GetInstance()->estado.CambioEstadoContinuarPartida(); 
 }

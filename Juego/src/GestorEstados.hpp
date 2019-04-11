@@ -22,6 +22,8 @@ public:
     void CambioEstadoPausa();
     void CambioEstadoMuerte();
     void CambioEstadoGanar();
+    void CambioEstadoIniciarPartida();
+    void CambioEstadoContinuarPartida();
 
     void ProcesarPilaEstados();
     Estado* &GetEstadoActivo();

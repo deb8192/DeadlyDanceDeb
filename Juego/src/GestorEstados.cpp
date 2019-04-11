@@ -7,6 +7,8 @@
 #include "Menus/Pausa.hpp"
 #include "Menus/EstadoMuerte.hpp"
 #include "Menus/EstadoGanar.hpp"
+#include "Menus/EstadoIniciar.hpp"
+#include "Menus/EstadoContinuar.hpp"
 #include "Jugando/Jugando.hpp"
 
 GestorEstados::GestorEstados()
@@ -170,4 +172,14 @@ void GestorEstados::SaltarAlMenu()
         _estados.pop();
     }
     _estados.top()->Reanudar();
+}
+
+void GestorEstados::CambioEstadoIniciarPartida()
+{
+    anyadir(new EstadoIniciar(), false);
+}
+
+void GestorEstados::CambioEstadoContinuarPartida()
+{
+    anyadir(new EstadoContinuar(), false);    
 }
