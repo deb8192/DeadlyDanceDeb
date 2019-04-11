@@ -63,12 +63,12 @@ void Mesh::Draw(Shader* shader)
         string name = textures[i].type;
         if(name == "texture_diffuse")
         {
-            shader->setInt("material.diffuse", i);
+            shader->setInt("Texturediffuse", i);
 
         }
         else if(name == "default_texture")
         {
-            shader->setInt("material.diffuse", i);
+            shader->setInt("Texturediffuse", i);
         }
 
         //Finalmente enlazamos la textura
