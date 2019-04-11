@@ -167,7 +167,7 @@ void Jugando::ValoresPorDefectoJugador()
     _jugador->setVida(_jugador->getVidaIni());
     _jugador->setBarraAtEs(100);
     _jugador->setAtaque(15);
-    _jugador->setArma(NULL);
+    _jugador->setArma(nullptr);
     _jugador->setArmaEspecial(100);
     _jugador->setTimeAt(0.0f);
     _jugador->setTimeAtEsp(0.0f);
@@ -929,8 +929,7 @@ unsigned short Jugando::NumeroAleatorio(unsigned short limite_inf, unsigned shor
 void Jugando::CrearPowerUp(int x,int y,int z, unsigned short tipoObjeto,
     unsigned short cantidad)
 {
-    Recolectable* _rec = new Recolectable(-1,1,1,1,x,y,z,tipoObjeto,
-        4,0,0);
+    Recolectable* _rec = new Recolectable(-1,1,1,1,x,y,z,tipoObjeto,0,0);
     int posicionObjeto = _motor->CargarObjetos(4,0,x,y,z,1,1,1,
         _rec->GetModelo(),_rec->GetTextura());
     _rec->SetPosicionArrayObjetos(posicionObjeto);
@@ -943,8 +942,7 @@ void Jugando::CrearPowerUp(int x,int y,int z, unsigned short tipoObjeto,
 void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
     unsigned short tipoObjeto,unsigned short ataque)
 {
-    Recolectable* _rec = new Recolectable(-1,ancho,largo,alto,x,y,z,tipoObjeto,
-        2,0,0);
+    Recolectable* _rec = new Recolectable(-1,ancho,largo,alto,x,y,z,tipoObjeto,0,0);
     int posicionObjeto = _motor->CargarObjetos(2,0,x,y,z,ancho,largo,alto,
         _rec->GetModelo(),_rec->GetTextura());
     _rec->SetPosicionArrayObjetos(posicionObjeto);
@@ -1014,7 +1012,10 @@ void Jugando::CogerObjeto()
             //lo cargamos por primera vez en el motor de graficos
             _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->GetModelo(),NULL);
             //lo cargamos por primera vez en el motor de fisicas
-            _fisicas->crearCuerpo(0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,2,_recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(), 9,0,0);
+            _fisicas->crearCuerpo(0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,
+                2,
+                _recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(),
+                9,0,0);
             //borramos el recolectable de nivel, _motor grafico y motor fisicas
             _recolectables.erase(_recolectables.begin() + rec_col);
             _motor->EraseColectable(rec_col);
@@ -1028,7 +1029,7 @@ void Jugando::CogerObjeto()
                 _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
                 _jugador->getArma()->getAlto(),
                 _jugador->getX(),_jugador->getY(), _jugador->getZ(),
-                _jugador->getArma()->GetTipoObjeto(),2,0,0);
+                _jugador->getArma()->GetTipoObjeto(),0,0);
             nuRec->setAtaque(_jugador->getArma()->getAtaque());
             
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
@@ -1042,7 +1043,7 @@ void Jugando::CogerObjeto()
             //!PROVISIONAL
             //lo cargamos por primera vez en el motor de graficos
             _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), 
-                _recolectables[rec_col]->GetModelo(), NULL);
+                _recolectables[rec_col]->GetModelo(), _recolectables[rec_col]->GetTextura());
 
             //lo cargamos en el motor de fisicas
             _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2, 
@@ -1071,7 +1072,7 @@ void Jugando::DejarObjeto()
             _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
             _jugador->getArma()->getAlto(),
             _jugador->getX(),_jugador->getY(), _jugador->getZ(),
-            _jugador->getArma()->GetTipoObjeto(),2,0,0);
+            _jugador->getArma()->GetTipoObjeto(),0,0);
         nuRec->setAtaque(_jugador->getArma()->getAtaque());
 
         _motor->EraseArma();
@@ -1081,7 +1082,7 @@ void Jugando::DejarObjeto()
         //por ultimo creamos una nueva y actualizamos informacion en motor grafico
         _motor->CargarRecolectable(_recolectables.size(),
             nuRec->getX(), nuRec->getY(),nuRec->getZ(),
-            nuRec->GetModelo(), NULL);
+            nuRec->GetModelo(), nuRec->GetTextura());
 
         _recolectables.push_back(move(nuRec));
         nuRec = nullptr;

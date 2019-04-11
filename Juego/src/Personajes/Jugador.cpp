@@ -606,6 +606,9 @@ void Jugador::AnnadirLlave(Llave* llave)
 {
     llaves.push_back(llave);
     cout<<"Llave añadida. Nº de llaves: "<<llaves.size()<<endl;
+
+    // TO DO: terminar lo de la interfaz y la llave
+    //_interfaz->setArma(1);
 }
 
 /***********EliminarLlave************
