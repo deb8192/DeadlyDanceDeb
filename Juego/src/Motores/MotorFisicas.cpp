@@ -65,6 +65,13 @@ MotorFisicas::~MotorFisicas()
     }
     recolectables.clear();
 
+    tam = llaves.size();
+    for(short i=0; i < tam; i++)
+    {
+        llaves.at(i) = nullptr;
+    }
+    llaves.clear();
+
     tam = _puertas.size();
     for(short i=0; i < tam; i++)
     {
@@ -300,14 +307,19 @@ unsigned short MotorFisicas::CrearCuerpoRec(int accion, float px, float py, floa
     //Recolectable power ups
     if(accion == 4)
     {
-        recolectables_powerup.push_back(cuerpo);
+        recolectables_powerup.push_back(move(cuerpo));
         return recolectables_powerup.size()-1;
     }
     //Objetos que recoger como armas y llaves
     else if(accion == 2)
     {
-        recolectables.push_back(cuerpo);
+        recolectables.push_back(move(cuerpo));
         return recolectables.size()-1;
+    }
+    else
+    {
+        llaves.push_back(move(cuerpo));
+        return llaves.size()-1;
     }
 }
 
@@ -337,6 +349,11 @@ void MotorFisicas::EraseColectable(int idx)
 {
     recolectables.erase(recolectables.begin() + idx);
     //recolectables.at(idx) = nullptr;
+}
+
+void MotorFisicas::EraseLlave(int idx)
+{
+    llaves.at(idx) = nullptr;
 }
 
 void MotorFisicas::ErasePared(int idx)
@@ -404,6 +421,19 @@ int MotorFisicas::collideColectable()
     {
         if (recolectables[i] != nullptr)
             if (space->testOverlap(jugador,recolectables[i]))
+            {
+                return i;
+            }
+    }
+    return -1;
+}
+
+int MotorFisicas::collideLlave()
+{
+    for(long unsigned int i = 0; i < llaves.size();i++)
+    {
+        if (llaves[i] != nullptr)
+            if (space->testOverlap(jugador,llaves[i]))
             {
                 return i;
             }
@@ -1049,6 +1079,20 @@ void MotorFisicas::limpiarFisicas()
             recolectables.erase(recolectables.begin() + i);
         }
         recolectables.resize(0);
+    }
+
+    if(llaves.size() > 0)
+    {
+        for(std::size_t i=0 ; i < llaves.size() ; i++)
+        {
+            if(llaves[i])
+            {
+                space->destroyCollisionBody(llaves[i]);
+            }
+            llaves[i] = nullptr;
+            llaves.erase(llaves.begin() + i);
+        }
+        llaves.resize(0);
     }
 
     if(recolectables_powerup.size() > 0)
