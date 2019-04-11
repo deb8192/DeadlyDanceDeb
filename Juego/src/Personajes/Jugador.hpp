@@ -11,6 +11,7 @@
 #include "../Motores/INdrawable.hpp"
 #include "../Motores/INsentidos.hpp"
 #include "../Armas/Arma.hpp"
+#include "../Objetos/Recolectable.hpp"
 #include "../Objetos/Llave.hpp"
 #include "../Motores/MotorGrafico.hpp"
 #include "../Motores/MotorAudio.hpp"
