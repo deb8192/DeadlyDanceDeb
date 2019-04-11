@@ -580,7 +580,7 @@ void MotorGrafico::RenderEscena()
             updateTeclas();//actualiza los estados de los botones
             for(unsigned int i = 0; i < ObjetosAni_Scena.size();i++)
             {
-                if(ObjetosAni_Scena[i] != nullptr)
+                if(ObjetosAni_Scena[i] != nullptr)//solo esta objetos luego seran todos los objetos
                 {
                     ActualizarAnimacionMotor(ObjetosAni_Scena[i]);
                 }
@@ -1267,6 +1267,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             {
                 logicaAnim = new Animaciones(anima);
                 logicaAnim->AsignarID(_objetoEnEscena);
+                ObjetosAni_Scena.push_back(logicaAnim);
             }
 
             if(accion == 5)
