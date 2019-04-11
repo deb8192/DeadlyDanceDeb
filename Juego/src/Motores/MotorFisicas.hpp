@@ -36,6 +36,7 @@ using namespace reactphysics3d;
             void updatePuerta(float x, float y, float z, float rx, float ry, float rz, float despX, float despZ, unsigned int pos);
             void EraseObstaculo(int idx);
             void EraseColectable(int idx);
+            void EraseLlave(int idx);
             void ErasePared(int idx);
             void EraseColectablePowerup(int idx);
             void EraseEnemigo(std::size_t i);
@@ -52,6 +53,7 @@ using namespace reactphysics3d;
             bool collidePlatform();
             bool enemyCollidePlatform(unsigned int enemigo);
             int collideColectable();
+            int collideLlave();
             int collideColectablePowerup();
             
             short collidePuerta();
@@ -105,6 +107,7 @@ using namespace reactphysics3d;
             RigidBody * jugadorBody; //esto es para que el jugador colisiones con las puertas y funcione los joints
 
             std::vector<CollisionBody *> recolectables;//Vector de elementos que se pueden coger
+            std::vector<CollisionBody *> llaves;
             std::vector<CollisionBody *> recolectables_powerup;//Vector recolectables_powerup
             
             //std::vector<float> interAncho;//Vector de elementos con los que interactuar

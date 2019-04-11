@@ -53,6 +53,13 @@ CargadorNiveles::~CargadorNiveles()
     }
     _recolectables.clear();
 
+    tam = _llaves.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _llaves.at(i);
+    }
+    _llaves.clear();
+
     tam = _powerup.size();
     for(short i=0; i < tam; i++)
     {
@@ -394,6 +401,11 @@ std::vector<Recolectable*> CargadorNiveles::GetRecolectables()
     return _recolectables;
 }
 
+std::vector<Recolectable*> CargadorNiveles::GetLlaves()
+{
+    return _llaves;
+}
+
 std::vector<Pared*> CargadorNiveles::GetParedes()
 {
     return _paredes;
@@ -442,6 +454,7 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int doorsMax, int leve
 
     // TO DO:
     /*_recolectables.reserve(20);
+    _llaves.reserve(20);
     _powerup.reserve(20);
     */
 }
@@ -645,10 +658,10 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             largo = 2;
             alto = 2;
             Recolectable* _rec = new Recolectable(++id,ancho,largo,alto,x,y,z,tipoObj,despX, despZ);
-            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
+            posicionObjeto = _motor->CargarObjetos(5,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
             _rec->SetPosicionArrayObjetos(posicionObjeto);
             _rec->setCodigo(codigo);
-            _recolectables.push_back(move(_rec));
+            _llaves.push_back(move(_rec));
             _rec = nullptr;
         }
         break;

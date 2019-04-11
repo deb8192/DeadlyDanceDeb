@@ -19,7 +19,9 @@ MotorGrafico::MotorGrafico()
         Enemigos_Scena.reserve(50);//enemigos reservados
         Textos_Scena.reserve(18);//textos estaticos en la escena o gui
         Recolectables_Scena.reserve(50);
+        Llaves_Scena.reserve(50);
         RecolectablesAni_Scena.reserve(50);
+        LlavesAni_Scena.reserve(50);
         Objetos_Scena.reserve(100);
         ObjetosAni_Scena.reserve(100);//contiene las logicas de animaciones
         PowerUP_Scena.reserve(50);
@@ -100,6 +102,7 @@ void MotorGrafico::LimpiarElementosJuego()
         Enemigos_Scena.clear();
         Textos_Scena.clear();
         Recolectables_Scena.clear();
+        Llaves_Scena.clear();
         Objetos_Scena.clear();
         PowerUP_Scena.clear();
         Objetos_Debug.clear();
@@ -117,6 +120,15 @@ void MotorGrafico::LimpiarElementosJuego()
             if( RecolectablesAni_Scena.at(i) != nullptr)
             {
                 delete RecolectablesAni_Scena.at(i);
+            }
+        }
+
+        tam = LlavesAni_Scena.size();
+        for(short i=0; i < tam; i++)
+        {
+            if( LlavesAni_Scena.at(i) != nullptr)
+            {
+                delete LlavesAni_Scena.at(i);
             }
         }
 
@@ -139,6 +151,7 @@ void MotorGrafico::LimpiarElementosJuego()
         }
 
         RecolectablesAni_Scena.clear();
+        LlavesAni_Scena.clear();
         ObjetosAni_Scena.clear();
         PowerUPAni_Scena.clear();
 
@@ -229,6 +242,12 @@ void MotorGrafico::LimpiarElementosJuego()
             delete Recolectables_Scena.at(i);
         }
         Recolectables_Scena.clear();
+        tam = Llaves_Scena.size();
+        for(short i=0; i < tam; i++)
+        {
+            delete Llaves_Scena.at(i);
+        }
+        Llaves_Scena.clear();
         tam = PowerUP_Scena.size();
         for(short i=0; i < tam; i++)
         {
@@ -332,6 +351,16 @@ void MotorGrafico::LimpiarMotorGrafico()
             }
 
             Recolectables_Scena.resize(0);
+        }
+
+        if(Llaves_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < Llaves_Scena.size();i++)
+            {
+                Llaves_Scena[i] = nullptr;
+            }
+
+            Llaves_Scena.resize(0);
         }
 
         if(PowerUP_Scena.size() > 0)
@@ -1240,6 +1269,13 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
                 logicaAnim->AsignarID(_objetoEnEscena);
             }
 
+            if(accion == 5)
+            {
+                Llaves_Scena.push_back(_objetoEnEscena);
+                LlavesAni_Scena.push_back(logicaAnim);
+                return Llaves_Scena.size() - 1;
+            }
+
             if(accion == 4)
             {
                 PowerUP_Scena.push_back(_objetoEnEscena);
@@ -1260,8 +1296,6 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
                 ObjetosAni_Scena.push_back(logicaAnim);
                 return Objetos_Scena.size() - 1;
             }
-
-
         }
 
     #else
@@ -1273,6 +1307,12 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             _objetoEnEscena->setPosition(core::vector3df(x,y,z));
             _objetoEnEscena->setRotation(core::vector3df(0,rp,0));
             //if(accion != 3)_objetoEnEscena->setMaterialTexture(0, _driver->getTexture(ruta_textura));
+            
+            if(accion == 5)
+            {
+                Llaves_Scena.push_back(_objetoEnEscena);
+                return Llaves_Scena.size() - 1;
+            }
 
             if(accion == 4)
             {
@@ -1962,6 +2002,27 @@ void MotorGrafico::EraseColectable(long unsigned int idx)
             Recolectables_Scena[idx]->setVisible(false);
             Recolectables_Scena[idx]->remove();
             Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
+        }
+    #endif
+}
+
+void MotorGrafico::EraseLlave(long unsigned int idx)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        if(Llaves_Scena[idx] && idx < Llaves_Scena.size())
+        {
+            _interfaz->RemoveObject(Llaves_Scena[idx]);
+            Llaves_Scena.erase(Llaves_Scena.begin() + idx);
+            //Llaves_Scena.at(idx) = nullptr;
+        }
+    #else
+        //codigo motor irrlicht
+        if(Llaves_Scena[idx] && idx < Llaves_Scena.size())
+        {
+            Llaves_Scena[idx]->setVisible(false);
+            Llaves_Scena[idx]->remove();
+            Llaves_Scena.erase(Llaves_Scena.begin() + idx);
         }
     #endif
 }
@@ -3097,6 +3158,10 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
         else if(tipo == 2) //animaciones powerup
         {
             anim = PowerUPAni_Scena[did];
+        }
+        else if(tipo == 3) //animaciones llaves
+        {
+            anim = LlavesAni_Scena[did];
         }
 
         //aqui mas 

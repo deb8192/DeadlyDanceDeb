@@ -84,7 +84,7 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
         {
             _modelo = "assets/models/llave.obj";
             _textura = nullptr;
-            accion = 2;
+            accion = 5;
         }
         break;
     }

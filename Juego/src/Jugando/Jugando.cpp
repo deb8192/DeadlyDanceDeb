@@ -52,6 +52,13 @@ Jugando::~Jugando()
     }
     _recolectables.clear();
 
+    tam = _llaves.size();
+    for(short i=0; i < tam; i++)
+    {
+        _llaves.at(i) = nullptr;
+    }
+    _llaves.clear();
+
     tam = _powerup.size();
     for(short i=0; i < tam; i++)
     {
@@ -891,6 +898,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _cofres = cargador.GetCofres();
     _eneCofres = cargador.GetEneCofres();
     _boss = cargador.GetBoss();
+    _llaves = cargador.GetLlaves();
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     _motora->getEvent("Nivel1")->setVolume(0.1);
@@ -943,19 +951,20 @@ void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
     unsigned short tipoObjeto,unsigned short ataque)
 {
     Recolectable* _rec = new Recolectable(-1,ancho,largo,alto,x,y,z,tipoObjeto,0,0);
-    int posicionObjeto = _motor->CargarObjetos(2,0,x,y,z,ancho,largo,alto,
+    int posicionObjeto = _motor->CargarObjetos(5,0,x,y,z,ancho,largo,alto,
         _rec->GetModelo(),_rec->GetTextura());
     _rec->SetPosicionArrayObjetos(posicionObjeto);
 
     if (tipoObjeto == constantes.LLAVE)
     {
         _rec->setCodigo(20);
+        _llaves.push_back(move(_rec));
     }
     else  // ARMAS
     {
         _rec->setAtaque(ataque);
+        _recolectables.push_back(move(_rec));
     }
-    _recolectables.push_back(move(_rec));
     _rec = nullptr;
 }
 
@@ -983,22 +992,23 @@ void Jugando::ConectarWaypoints()
 // Para coger una llave o un arma
 void Jugando::CogerObjeto()
 {
-    long unsigned int rec_col = _fisicas->collideColectable();
+    long unsigned int rec_col = _fisicas->collideLlave();
     _jugador->setAnimacion(4);
 
     // Comprobamos si es una llave
-    if(_recolectables.at(rec_col)->GetTipoObjeto() == constantes.LLAVE)
+    if(rec_col >= 0)
     {
-        Llave* llave = new Llave(_recolectables.at(rec_col)->getCodigo());
+        Llave* llave = new Llave(_llaves.at(rec_col)->getCodigo());
         _jugador->AnnadirLlave(llave);
 
         //borramos el recolectable de nivel, _motor grafico y motor fisicas
-        _recolectables.erase(_recolectables.begin() + rec_col);
-        _motor->EraseColectable(rec_col);
-        _fisicas->EraseColectable(rec_col);
+        _llaves.at(rec_col) = nullptr;
+        _motor->EraseLlave(rec_col);
+        _fisicas->EraseLlave(rec_col);
     } 
     else // En el caso contrario, es un arma
     {
+        rec_col = _fisicas->collideColectable();
         if(_jugador->getArma() == nullptr)//si no tiene arma equipada
         {
             //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)_recolectables[rec_col];

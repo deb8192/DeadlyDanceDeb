@@ -276,6 +276,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             #endif
 
             void EraseColectable(long unsigned int idx);
+            void EraseLlave(long unsigned int idx);
             void ErasePowerUP(long unsigned int idx);
             void DibujarCofre(long unsigned int idx, bool dibujar);
             void DibujarPared(long unsigned int idx, bool dibujar);
@@ -352,9 +353,11 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Enemigos_Scena;//contiene los enemigos reservados (ids)
                 std::vector<unsigned short> Textos_Scena;//contiene los enemigos reservados (ids)
                 std::vector<unsigned short> Recolectables_Scena;//contiene los recolectables reservados (ids)
+                std::vector<unsigned short> Llaves_Scena;
                 std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> ObjetosAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> RecolectablesAni_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> LlavesAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> PowerUPAni_Scena;//contiene los objetos reservados (ids)
                 
                 std::vector<unsigned short> PowerUP_Scena;//contiene los power ups reservados (ids)
@@ -427,6 +430,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 IAnimatedMeshSceneNode* _armaEspJugador;//Malla del arma especial del jugador en escena
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
                 std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
+                std::vector<IAnimatedMeshSceneNode*> Llaves_Scena;//Objetos en scena
                 std::vector<IAnimatedMeshSceneNode*> PowerUP_Scena;//Objetos en scena
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
