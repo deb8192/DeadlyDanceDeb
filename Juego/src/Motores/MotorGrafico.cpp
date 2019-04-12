@@ -19,13 +19,15 @@ MotorGrafico::MotorGrafico()
         Enemigos_Scena.reserve(50);//enemigos reservados
         Textos_Scena.reserve(18);//textos estaticos en la escena o gui
         Recolectables_Scena.reserve(50);
-        Llaves_Scena.reserve(50);
         RecolectablesAni_Scena.reserve(50);
+        Llaves_Scena.reserve(50);
         LlavesAni_Scena.reserve(50);
         Objetos_Scena.reserve(100);
         ObjetosAni_Scena.reserve(100);//contiene las logicas de animaciones
         PowerUP_Scena.reserve(50);
         PowerUPAni_Scena.reserve(50);
+        Paredes_Scena.reserve(50);
+        ParedesAni_Scena.reserve(50);
         Objetos_Debug.reserve(500);
         Objetos_Debug2.reserve(500);
 
@@ -105,6 +107,7 @@ void MotorGrafico::LimpiarElementosJuego()
         Llaves_Scena.clear();
         Objetos_Scena.clear();
         PowerUP_Scena.clear();
+        Paredes_Scena.clear();
         Objetos_Debug.clear();
         Objetos_Debug2.clear();
 
@@ -150,10 +153,20 @@ void MotorGrafico::LimpiarElementosJuego()
             }
         }
 
+        tam = ParedesAni_Scena.size();
+        for(short i=0; i < tam; i++)
+        {
+            if( ParedesAni_Scena.at(i) != nullptr)
+            {
+                delete ParedesAni_Scena.at(i);
+            }
+        }
+
         RecolectablesAni_Scena.clear();
         LlavesAni_Scena.clear();
         ObjetosAni_Scena.clear();
         PowerUPAni_Scena.clear();
+        ParedesAni_Scena.clear();
 
         camara = 0;
         _jugEscena = 0;
@@ -254,6 +267,12 @@ void MotorGrafico::LimpiarElementosJuego()
             delete PowerUP_Scena.at(i);
         }
         PowerUP_Scena.clear();
+        tam = Paredes_Scena.size();
+        for(short i=0; i < tam; i++)
+        {
+            delete Paredes_Scena.at(i);
+        }
+        Paredes_Scena.clear();
         tam = Luces_Scena.size();
         for(short i=0; i < tam; i++)
         {
@@ -371,6 +390,16 @@ void MotorGrafico::LimpiarMotorGrafico()
             }
 
             PowerUP_Scena.resize(0);
+        }
+
+        if(Paredes_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < Paredes_Scena.size();i++)
+            {
+                Paredes_Scena[i] = nullptr;
+            }
+
+            Paredes_Scena.resize(0);
         }
 
         _armaEnEscena = nullptr;
@@ -1277,6 +1306,13 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
                 return Llaves_Scena.size() - 1;
             }
 
+            if(accion == 5)
+            {
+                Paredes_Scena.push_back(_objetoEnEscena);
+                ParedesAni_Scena.push_back(logicaAnim);
+                return Paredes_Scena.size() - 1;
+            }
+
             if(accion == 4)
             {
                 PowerUP_Scena.push_back(_objetoEnEscena);
@@ -1284,7 +1320,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
                 return PowerUP_Scena.size() - 1;
             }
 
-            //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
+            //Recolectables_Scena solo tiene armas
             if(accion == 2)
             {
                 Recolectables_Scena.push_back(_objetoEnEscena);
@@ -1315,13 +1351,19 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
                 return Llaves_Scena.size() - 1;
             }
 
+            if(accion == 5)
+            {
+                Paredes_Scena.push_back(_objetoEnEscena);
+                return Paredes_Scena.size() - 1;
+            }
+
             if(accion == 4)
             {
                 PowerUP_Scena.push_back(move(_objetoEnEscena));
                 return PowerUP_Scena.size() - 1;
             }
 
-            //de momento en el escenario solo se diferencia entre recolectables (2) y el resto de objetos al cargarlos
+            // Recolectables_Scena solo tiene armas
             if(accion == 2)
             {
                 Recolectables_Scena.push_back(move(_objetoEnEscena));
@@ -3151,7 +3193,6 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
         if(tipo == 0) //animaciones objetos
         {
             anim = ObjetosAni_Scena[did];
-            
         }
         else if(tipo == 1) //animaciones recolectables
         {
@@ -3164,6 +3205,10 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
         else if(tipo == 3) //animaciones llaves
         {
             anim = LlavesAni_Scena[did];
+        }
+        else if(tipo == 4) //animaciones paredes
+        {
+            anim = ParedesAni_Scena[did];
         }
 
         //aqui mas 

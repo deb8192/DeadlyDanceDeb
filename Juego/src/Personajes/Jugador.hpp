@@ -79,7 +79,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         void ModificarBarraAtEs(int bar);
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
-        void setArma(Arma* arma);
+        void setArma(Recolectable* _armaRec);
         void setArmaEspecial(int ataque);
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);

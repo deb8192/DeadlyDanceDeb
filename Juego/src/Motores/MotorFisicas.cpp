@@ -29,7 +29,6 @@ MotorFisicas::~MotorFisicas()
 {
     //TO DO: revisar
     //WorldSettings config;
-    //std::vector<unsigned int> relacionInteractuablesObstaculos
 
     jugador = nullptr;
     jugadorBody  = nullptr;
@@ -58,12 +57,12 @@ MotorFisicas::~MotorFisicas()
     }
     armaAtEspEne.clear();
 
-    tam = recolectables.size();
+    tam = recol_armas.size();
     for(short i=0; i < tam; i++)
     {
-        recolectables.at(i) = nullptr;
+        recol_armas.at(i) = nullptr;
     }
-    recolectables.clear();
+    recol_armas.clear();
 
     tam = llaves.size();
     for(short i=0; i < tam; i++)
@@ -195,9 +194,7 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
             //paredes rompibles que se interponen ante el jugador
             else if(accion == 5)
             {
-                relacionParedesObstaculos.push_back(obstaculos.size());
                 paredes.push_back(cuerpo);
-                obstaculos.push_back(cuerpo);
             }
             //Obstaculos que se interponen ante el jugador
             else if(accion == 1)
@@ -263,7 +260,6 @@ unsigned short MotorFisicas::CrearCuerpoInter(unsigned short tipoObj, float px, 
     BoxShape* forma = new BoxShape(medidas);
     cuerpo->addCollisionShape(forma,transformacion);
 
-    relacionInteractuablesObstaculos.push_back(obstaculos.size());
     obstaculos.push_back(cuerpo);
 
     //Se le anade una zona de deteccion mediante colision
@@ -313,34 +309,14 @@ unsigned short MotorFisicas::CrearCuerpoRec(int accion, float px, float py, floa
     // Armas
     else if(accion == 2)
     {
-        recolectables.push_back(move(cuerpo));
-        return recolectables.size()-1;
+        recol_armas.push_back(move(cuerpo));
+        return recol_armas.size()-1;
     }
     else // Llaves con accion=8
     {
-        cout <<"llave creada - fisica"<<endl;
-        cout <<"Tam llaves - fisica"<<llaves.size()<<endl;
-        llaves.push_back(move(cuerpo));
-        cout <<"Tam llaves - fisica"<<llaves.size()<<endl;
+        llaves.push_back(cuerpo);
         return llaves.size()-1;
     }
-}
-
-void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, int alt)
-{
-    rp3d::Vector3 posiciones(px,py,pz);
-    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
-
-    Transform transformacion(posiciones,orientacion);
-
-    rp3d::CollisionBody * cuerpo;
-    cuerpo = space->createCollisionBody(transformacion);
-
-    rp3d::Vector3 medidas(anc,alt,lar);
-    BoxShape * forma = new BoxShape(medidas);
-    cuerpo->addCollisionShape(forma,transformacion);
-
-    arma = cuerpo;
 }
 
 void MotorFisicas::EraseObstaculo(int idx)
@@ -348,16 +324,14 @@ void MotorFisicas::EraseObstaculo(int idx)
     obstaculos.at(idx) = nullptr;
 }
 
-void MotorFisicas::EraseColectable(int idx)
+void MotorFisicas::EraseColectableArma(int idx)
 {
-    recolectables.erase(recolectables.begin() + idx);
+    recol_armas.erase(recol_armas.begin() + idx);
 }
 
 void MotorFisicas::EraseLlave(int idx)
 {
-    cout <<"Tam llaves - fisica"<<llaves.size()<<endl;
-    llaves.erase(recolectables.begin() + idx);
-    cout <<"llave borrada - fisica"<<endl;
+    llaves.erase(llaves.begin() + idx);
 }
 
 void MotorFisicas::ErasePared(int idx)
@@ -392,7 +366,7 @@ void MotorFisicas::DesactivarCofre(unsigned short pos)
 
 void MotorFisicas::EraseJugador(){
     jugador = NULL;
-     jugadorBody  = NULL;
+    jugadorBody  = NULL;
 }
 
 void MotorFisicas::EraseArma()
@@ -419,12 +393,12 @@ Ray * MotorFisicas::crearRayo(float x, float y, float z, float rotation, float l
     return rayo;
 }
 
-int MotorFisicas::collideColectable()
+int MotorFisicas::collideColectableArma()
 {
-    for(long unsigned int i = 0; i < recolectables.size();i++)
+    for(long unsigned int i = 0; i < recol_armas.size();i++)
     {
-        if (recolectables[i] != nullptr)
-            if (space->testOverlap(jugador,recolectables[i]))
+        if (recol_armas[i] != nullptr)
+            if (space->testOverlap(jugador,recol_armas[i]))
             {
                 return i;
             }
@@ -506,6 +480,18 @@ bool MotorFisicas::collideObstaculos()
             }
         }
     }
+
+    // Paredes rompibles
+    for(long unsigned int i = 0; i < paredes.size();i++)
+    {
+        if(paredes[i])
+        {
+            if(space->testOverlap(jugador,paredes[i]))
+            {
+                return true;
+            }
+        }
+    }
     return false;
 }
 
@@ -556,7 +542,6 @@ std::vector<short> MotorFisicas::collideAttackWall()
             }
         }
     }
-
     return indicesParedes;
 }
 
@@ -970,39 +955,19 @@ bool MotorFisicas::IfCollision(CollisionBody * body1, CollisionBody * body2)
   return false;
 }
 
-CollisionWorld* MotorFisicas::getWorld()
-{
-  return space;
-}
-
 CollisionBody* MotorFisicas::getJugador()
 {
   return jugador;
 }
 
+CollisionBody* MotorFisicas::getJugadorAtack()
+{
+ return jugadorAtack;
+}
+
 CollisionBody* MotorFisicas::getEnemies(int n)
 {
  return enemigos[n];
-}
-
-CollisionBody* MotorFisicas::getColectables(int n)
-{
- return recolectables[n];
-}
-
-CollisionBody* MotorFisicas::getColectablesPowerup(int n)
-{
- return recolectables_powerup[n];
-}
-
-CollisionBody* MotorFisicas::getObstacles(int n)
-{
- return obstaculos[n];
-}
-
-CollisionBody* MotorFisicas::getAtack()
-{
- return jugadorAtack;
 }
 
 CollisionBody* MotorFisicas::getEnemiesAtack(int n)
@@ -1070,18 +1035,18 @@ void MotorFisicas::limpiarFisicas()
         jugadorBody = NULL;
     }
 
-    if(recolectables.size() > 0)
+    if(recol_armas.size() > 0)
     {
-        for(std::size_t i=0 ; i < recolectables.size() ; i++)
+        for(std::size_t i=0 ; i < recol_armas.size() ; i++)
         {
-            if(recolectables[i])
+            if(recol_armas[i])
             {
-                space->destroyCollisionBody(recolectables[i]);
+                space->destroyCollisionBody(recol_armas[i]);
             }
-            recolectables[i] = nullptr;
-            recolectables.erase(recolectables.begin() + i);
+            recol_armas[i] = nullptr;
+            recol_armas.erase(recol_armas.begin() + i);
         }
-        recolectables.resize(0);
+        recol_armas.resize(0);
     }
 
     if(llaves.size() > 0)
@@ -1182,18 +1147,6 @@ void MotorFisicas::limpiarFisicas()
         }
         _cofres.resize(0);
     }
-}
-
-unsigned int MotorFisicas::GetRelacionInteractuablesObstaculos(int n)
-{
-    unsigned int m = n;
-    return relacionInteractuablesObstaculos.at(m);
-}
-
-unsigned int MotorFisicas::GetRelacionParedesObstaculos(int n)
-{
-    unsigned int m = n;
-    return relacionParedesObstaculos.at(m);
 }
 
 bool MotorFisicas::CamaraRotara()
