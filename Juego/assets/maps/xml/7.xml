@@ -56,7 +56,7 @@
 			<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="12" largo="2" alto="24" RP="90" X="278" Y="0" Z="52" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 			<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="264" Y="0" Z="62" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 			<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="277" Y="0" Z="65"></Zone>
-			<!--Llave--><Object tipoObj="1" Type="1" codigo="1" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="269" Y="0" Z="5" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
+			<!--Llave--><Object tipoObj="1" Type="1" codigo="1" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="269" Y="0" Z="5" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
 			<!--Puerta2--><Object tipoObj="2" Type="1" codigo="1" accion="3" ancho="4" largo="1" alto="10" RP="90" X="228" Y="0" Z="76" despX="2" despZ="0" Texture="assets/texture/Puerta.png" Model=""></Object>
 			<!--Palanca--><Object tipoObj="0" Type="1" codigo="8" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="196" Y="0" Z="-8" despX="0" despZ="0" Texture="assets/texture/platform1.png" Model=""></Object>
 			<!--Base--><Object tipoObj="16" Type="1" accion="1" ancho="3" largo="2" alto="5" X="196" Y="0" Z="-8" Texture="assets/texture/platform1.png" Model="assets/models/Base.obj"></Object>
@@ -83,7 +83,7 @@
 					<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="316" Y="0" Z="90" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 	 				<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="330" Y="0" Z="128" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 	 				<!--Puerta--><Object tipoObj="3" Type="1" codigo="0" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="292" Y="0" Z="86" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
-					<!--Llave--><Object tipoObj="1" Type="1" codigo="2" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="330" Y="0" Z="120" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
+					<!--Llave--><Object tipoObj="1" Type="1" codigo="2" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="330" Y="0" Z="120" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
 					<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="10" ancho="4" largo="4" alto="1" X="292" Y="0" Z="90" conexiones="9,11"></Waypoint>
 					<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="11" ancho="4" largo="4" alto="1" X="318" Y="0" Z="116" conexiones="10,12"></Waypoint>
 					<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="12" ancho="4" largo="4" alto="1" X="344" Y="0" Z="142" conexiones="11,13"></Waypoint>
@@ -94,7 +94,7 @@
 						<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="344" Y="0" Z="150" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 						<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="16" alto="24" RP="0" X="344" Y="0" Z="122" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
 						<!--Puerta--><Object tipoObj="3" Type="1" codigo="2" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="344" Y="0" Z="138" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
-						<!--Llave--><Object tipoObj="1" Type="1" codigo="3" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="369" Y="0" Z="122" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
+						<!--Llave--><Object tipoObj="1" Type="1" codigo="3" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="369" Y="0" Z="122" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="12" ancho="4" largo="4" alto="1" X="344" Y="0" Z="142" conexiones="11,13"></Waypoint>
 						<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="13" ancho="4" largo="4" alto="1" X="366" Y="0" Z="130" conexiones="12,14"></Waypoint>
 						<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="14" ancho="4" largo="4" alto="1" X="366" Y="0" Z="156" conexiones="13,15"></Waypoint>
@@ -180,7 +180,7 @@
 								<!--Sala-14--><Platform Type="1" accion="0" ancho="24" largo="48" alto="4" RP="0" X="414" Y="0" Z="390" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 								<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="434" Y="0" Z="344" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 								<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="16" largo="2" alto="24" RP="90" X="406" Y="0" Z="344" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
-								<!--Llave--><Object tipoObj="1" Type="1" codigo="4" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="425" Y="0" Z="422" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
+								<!--Llave--><Object tipoObj="1" Type="1" codigo="4" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="425" Y="0" Z="422" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
 								<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="414" Y="0" Z="366" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
 	 							<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="414" Y="0" Z="414" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
 	 							<!--Puerta2--><Object tipoObj="2" Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="422" Y="0" Z="344" despX="2" despZ="0" Texture="assets/texture/Puerta.png" Model=""></Object>
@@ -248,7 +248,7 @@
 							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="94" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="22" largo="2" alto="24" RP="90" X="137" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo3.obj"></Object>
 							<!--Puerta2--><Object tipoObj="2" Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="98" Y="0" Z="384" despX="2" despZ="0" Texture="assets/texture/Puerta.png" Model=""></Object>
-							<!--Llave--><Object tipoObj="1" Type="1" codigo="6" nombre="llave" ataque="0" accion="2" ancho="4" largo="15" alto="10" X="146" Y="0" Z="339" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
+							<!--Llave--><Object tipoObj="1" Type="1" codigo="6" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="146" Y="0" Z="339" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="38" ancho="4" largo="4" alto="1" X="102" Y="0" Z="384" conexiones="37,39"></Waypoint>
 							<!--Waypoint-central--><Waypoint Type="1" compartido="0" accion="1" id="39" ancho="4" largo="4" alto="1" X="125" Y="0" Z="352" conexiones="38,40"></Waypoint>
 							<!--Waypoint-acceso--><Waypoint Type="1" compartido="1" accion="1" id="40" ancho="4" largo="4" alto="1" X="88" Y="0" Z="330" conexiones="39,41"></Waypoint>
