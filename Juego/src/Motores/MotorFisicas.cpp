@@ -324,7 +324,7 @@ void MotorFisicas::EraseObstaculo(int idx)
     obstaculos.at(idx) = nullptr;
 }
 
-void MotorFisicas::EraseColectableArma(int idx)
+void MotorFisicas::EraseRecoArma(int idx)
 {
     recol_armas.erase(recol_armas.begin() + idx);
 }
@@ -336,7 +336,7 @@ void MotorFisicas::EraseLlave(int idx)
 
 void MotorFisicas::ErasePared(int idx)
 {
-    paredes.at(idx) = nullptr;
+    paredes.erase(paredes.begin() + idx);
 }
 
 void MotorFisicas::EraseColectablePowerup(int idx)
@@ -467,6 +467,18 @@ short MotorFisicas::collideCofre()
     return -1;
 }
 
+short MotorFisicas::collideAttackWall()
+{
+    for(unsigned short i = 0; i < paredes.size();i++)
+    {
+        if(space->testOverlap(jugadorAtack,paredes[i]))
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 bool MotorFisicas::collideObstaculos()
 {
     //abra que indicar tipo de objeto de alguna manera (que sean obstaculos)
@@ -526,23 +538,6 @@ bool MotorFisicas::collideAtackObstacle()
     }
 
     return false;
-}
-
-std::vector<short> MotorFisicas::collideAttackWall()
-{
-    std::vector<short> indicesParedes;
-    indicesParedes.reserve(10);
-    for(unsigned short i = 0; i < paredes.size();i++)
-    {
-        if(paredes[i] && jugadorAtack)
-        {
-            if(space->testOverlap(jugadorAtack,paredes[i]))
-            {
-                indicesParedes.push_back(i);
-            }
-        }
-    }
-    return indicesParedes;
 }
 
 bool MotorFisicas::enemyCollideObstacle(unsigned int enemigo)

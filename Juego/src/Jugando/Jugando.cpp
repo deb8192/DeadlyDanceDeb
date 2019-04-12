@@ -455,19 +455,20 @@ void Jugando::Update()
     }
     else if(_jugador->getTimeAt() > 0.0)
     {
-        std::vector<short> indiceObjetosColisionados = 
-            _fisicas->collideAttackWall();
-        for(unsigned short i = 0; i < indiceObjetosColisionados.size(); i ++)
-        {
-            _motora->getEvent("RomperPared")->setPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
-            _motora->getEvent("RomperPared")->start();
+        short paredCol = _fisicas->collideAttackWall();
+        
+        _motora->getEvent("RomperPared")->setPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
+        _motora->getEvent("RomperPared")->start();
 
-            _fisicas->ErasePared(indiceObjetosColisionados[i]);
+        //TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
+        //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
+        _motor->cambiarAnimacion(4,paredCol,1);//se cambia la animacion de la pared
+        
+        /* TO DO: borrar despues de que termine la anim
+        _paredes.erase(_paredes.begin() + paredCol);
+        _fisicas->ErasePared(paredCol);
+        _motor->ErasePared(paredCol);*/
 
-            //TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
-            //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
-            _motor->cambiarAnimacion(4,_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(),1);//se cambia la animacion de la pared
-        }
         _jugador->AtacarUpdate(danyo2, _enemigos);
     }
 
@@ -1011,8 +1012,8 @@ void Jugando::RecogerArma(int rec_col)
 
         //borramos el recolectable de nivel, _motor grafico y motor fisicas
         _reco_armas.erase(_reco_armas.begin() + rec_col);
-        _motor->EraseColectable(rec_col);
-        _fisicas->EraseColectableArma(rec_col);
+        _motor->EraseRecoArma(rec_col);
+        _fisicas->EraseRecoArma(rec_col);
     }
     else if(_jugador->getArma() != nullptr)//si tiene arma equipada
     {
@@ -1028,8 +1029,8 @@ void Jugando::RecogerArma(int rec_col)
 
         //borramos el recolectable anterior de nivel, _motor grafico y motor fisicas
         _reco_armas.erase(_reco_armas.begin() + rec_col);
-        _motor->EraseColectable(rec_col);
-        _fisicas->EraseColectableArma(rec_col);
+        _motor->EraseRecoArma(rec_col);
+        _fisicas->EraseRecoArma(rec_col);
 
         //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
         int posicionObjeto = _motor->CargarObjetos(2,0,nuRec->getX(), nuRec->getY(),nuRec->getZ(),
@@ -1345,6 +1346,7 @@ void Jugando::updateAtEsp()
         {
             _motor->colorearEnemigo(255,255,255,255,0);
         }
+        // TO DO: revisar porque pilla arma especial del motor en vez del jugador
         #ifdef WEMOTOR
             if(_jugador->getTimeAtEsp() <= 0.5f && _motor->getArmaEspecial()) //Zona de pruebas
             {

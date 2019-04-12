@@ -35,7 +35,7 @@ using namespace reactphysics3d;
             void updateEnemigos(float x, float y, float z, unsigned int i);//actualizamos al enemigo en el espacio de las fisicas
             void updatePuerta(float x, float y, float z, float rx, float ry, float rz, float despX, float despZ, unsigned int pos);
             void EraseObstaculo(int idx);
-            void EraseColectableArma(int idx);
+            void EraseRecoArma(int idx);
             void EraseLlave(int idx);
             void ErasePared(int idx);
             void EraseColectablePowerup(int idx);
@@ -45,7 +45,6 @@ using namespace reactphysics3d;
             void EraseArma();
             bool collideObstaculos();
             bool collideAtackObstacle();
-            std::vector<short> collideAttackWall();
             bool collideObstacle();
             bool enemyCollideObstacle(unsigned int enemigo);
             bool collidePlatform();
@@ -57,6 +56,7 @@ using namespace reactphysics3d;
             short collidePuerta();
             short collidePalanca();
             short collideCofre();
+            short collideAttackWall();
 
             void colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z);
             void llevarBox(float x, float y, float z, float anc, float lar, float alt);

@@ -275,7 +275,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 IAnimatedMeshSceneNode* getArmaEspecial();
             #endif
 
-            void EraseColectable(long unsigned int idx);
+            void EraseRecoArma(long unsigned int idx);
             void EraseLlave(long unsigned int idx);
             void ErasePared(long unsigned int idx);
             void ErasePowerUP(long unsigned int idx);
@@ -355,13 +355,13 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Textos_Scena;//contiene los enemigos reservados (ids)
                 
                 std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
-                std::vector<unsigned short> Recolectables_Scena;//contiene los recolectables reservados (ids)
+                std::vector<unsigned short> RecoArmas_Scena;//contiene los recolectables reservados (ids)
                 std::vector<unsigned short> Llaves_Scena;
                 std::vector<unsigned short> PowerUP_Scena;//contiene los power ups reservados (ids)
                 std::vector<unsigned short> Paredes_Scena;//paredes rompibles
 
                 std::vector<Animaciones *> ObjetosAni_Scena;//contiene los objetos reservados (ids)
-                std::vector<Animaciones *> RecolectablesAni_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> RecoArmasAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> LlavesAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> PowerUPAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> ParedesAni_Scena;
@@ -434,7 +434,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 IAnimatedMesh* _armaEsp;//Malla del arma especial del jugador
                 IAnimatedMeshSceneNode* _armaEspJugador;//Malla del arma especial del jugador en escena
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
-                std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
+                std::vector<IAnimatedMeshSceneNode*> RecoArmas_Scena;//Objetos en scena
                 std::vector<IAnimatedMeshSceneNode*> Llaves_Scena;//Objetos en scena
                 std::vector<IAnimatedMeshSceneNode*> PowerUP_Scena;//Objetos en scena
                 std::vector<IAnimatedMeshSceneNode*> Paredes_Scena;
