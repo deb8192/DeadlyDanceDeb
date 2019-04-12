@@ -102,7 +102,7 @@ class Jugando: public Estado {
         std::vector<Waypoint*> recorrido;//Nodos a recorrer en el pathfinding
         Sala* _destinoPathFinding; //sala que se rellena al llamar a pathfinding y se vacía al terminar el recorrido del enemigo
 
-        std::vector<Recolectable*> _recolectables;
+        std::vector<Recolectable*> _reco_armas;
         std::vector<Recolectable*> _llaves;
         std::vector<Pared*> _paredes;
         std::vector<Recolectable*> _powerup;

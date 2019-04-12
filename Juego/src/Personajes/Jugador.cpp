@@ -1073,30 +1073,49 @@ void Jugador::setAtaque(int ataq)
     ataque = ataq;
 }
 
-void Jugador::setArma(Arma* arma)
+void Jugador::setArma(Recolectable* _armaRec)
 {
-    _armaEquipada = arma;
-
-    if(_armaEquipada)
+    // Al dejar el objeto o reiniciar partida, borra el arma puesta
+    if (_armaEquipada != nullptr)
     {
-        if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)//entonces es la guitarra cuerpo a cuerpo
+        _motor->EraseArma();
+        _fisicas->EraseArma();
+    }
+
+    // Se comprueba si ha recogido otra arma
+    if(_armaRec)
+    {
+        _armaEquipada = new Arma(_armaRec->getAtaque(),
+            _armaRec->getAncho(),_armaRec->getLargo(),_armaRec->getAlto(),
+            _armaRec->GetTipoObjeto());
+
+        //PROVISIONAL
+        _armaEquipada->setRotacion(0.0, constantes.PI_RADIAN, 0.0);
+        //!PROVISIONAL
+
+        //lo cargamos por primera vez en el motor de graficos
+        _motor->CargarArmaJugador(posActual.x, posActual.y, posActual.z,
+            _armaEquipada->GetModelo(),_armaEquipada->GetTextura());
+        
+        //lo cargamos por primera vez en el motor de fisicas
+        _fisicas->crearCuerpo(0,posActual.x/2,posActual.y/2,posActual.z/2,
+            2,
+            _armaEquipada->getAncho(),_armaEquipada->getLargo(),_armaEquipada->getAlto(),
+            9,0,0);
+
+        if(_armaEquipada->GetTipoObjeto() == constantes.GUITARRA)//entonces es la guitarra cuerpo a cuerpo
         {
             _interfaz->setArma(2);
         }
-
-        if(this->getArma()->GetTipoObjeto() == constantes.ARPA)//entonces es el arpa a distancia
+        else if(_armaEquipada->GetTipoObjeto() == constantes.ARPA)//entonces es el arpa a distancia
         {
             _interfaz->setArma(3);
-        }
-
-        if(this->getArma()->GetTipoObjeto() == constantes.LLAVE)//entonces es la llave
-        {
-            _interfaz->setArma(1);
         }
     }
     else
     {
         _interfaz->setArma(0);
+        _armaEquipada = nullptr;
     }
 }
 

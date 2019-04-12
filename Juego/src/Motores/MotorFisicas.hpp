@@ -35,7 +35,7 @@ using namespace reactphysics3d;
             void updateEnemigos(float x, float y, float z, unsigned int i);//actualizamos al enemigo en el espacio de las fisicas
             void updatePuerta(float x, float y, float z, float rx, float ry, float rz, float despX, float despZ, unsigned int pos);
             void EraseObstaculo(int idx);
-            void EraseColectable(int idx);
+            void EraseColectableArma(int idx);
             void EraseLlave(int idx);
             void ErasePared(int idx);
             void EraseColectablePowerup(int idx);
@@ -43,8 +43,6 @@ using namespace reactphysics3d;
             void DesactivarCofre(unsigned short pos);
             void EraseJugador();
             void EraseArma();
-            CollisionBody* getColectables(int n);
-            CollisionBody* getObstacles(int n);
             bool collideObstaculos();
             bool collideAtackObstacle();
             std::vector<short> collideAttackWall();
@@ -52,7 +50,7 @@ using namespace reactphysics3d;
             bool enemyCollideObstacle(unsigned int enemigo);
             bool collidePlatform();
             bool enemyCollidePlatform(unsigned int enemigo);
-            int collideColectable();
+            int collideColectableArma();
             int collideLlave();
             int collideColectablePowerup();
             
@@ -71,20 +69,16 @@ using namespace reactphysics3d;
             void updateAtaqueEnemigos(float x, float y, float z, unsigned int i);
             void updateAtaquEspecEnemigos(float x, float y, float z, unsigned int i);
 
-            void setFormaArma(float px, float py, float pz, int anc, int lar, int alt);
             void updateAtaqueEspecial(float x, float y, float z, float rx, float ry, float rz);
             void vaciarupdateArma();
 
             bool IfCollision(CollisionBody * body1, CollisionBody * body2);
-            CollisionWorld* getWorld();
             CollisionBody* getJugador();
+            CollisionBody* getJugadorAtack();
             CollisionBody* getEnemies(int n);
             CollisionBody* getEnemiesAtack(int n);
             CollisionBody* getEnemiesAtEsp(int n);
-            CollisionBody* getAtack();
-            CollisionBody* getColectablesPowerup(int n);
-            unsigned int GetRelacionInteractuablesObstaculos(int n);
-            unsigned int GetRelacionParedesObstaculos(int n);
+            
             bool CamaraRotara();
 
             //para limpiar todas las fisicas
@@ -106,7 +100,7 @@ using namespace reactphysics3d;
             CollisionBody * jugador;//esto contiene por decirlo de alguna forma la instancia(alma) del cuerpo se les tiene que agregar las formas de colisiones(cuadrados,circulos o mallas personalizadas)
             RigidBody * jugadorBody; //esto es para que el jugador colisiones con las puertas y funcione los joints
 
-            std::vector<CollisionBody *> recolectables;//Vector de elementos que se pueden coger
+            std::vector<CollisionBody *> recol_armas;//Vector de elementos que se pueden coger
             std::vector<CollisionBody *> llaves;
             std::vector<CollisionBody *> recolectables_powerup;//Vector recolectables_powerup
             
@@ -117,7 +111,6 @@ using namespace reactphysics3d;
             std::vector<CollisionBody *> _palancas;
             std::vector<CollisionBody *> _cofres;
 
-            std::vector<unsigned int> relacionInteractuablesObstaculos;//vector que contiene en la posicion correspondiente a un interactuable en su vector el valor de su posicion en el vector de obstaculos
             std::vector<unsigned int> relacionParedesObstaculos;//vector que contiene en la posicion correspondiente a una pared en su vector el valor de su posicion en el vector de obstaculos
             std::vector<CollisionBody *> obstaculos;//Vector de obstaculos que bloquean el movimiento
             std::vector<CollisionBody *> paredes;//Vector de obstaculos que no son palancas o puertas

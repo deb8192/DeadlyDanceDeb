@@ -46,12 +46,12 @@ CargadorNiveles::~CargadorNiveles()
     }
     _zonas.clear();
 
-    tam = _recolectables.size();
+    tam = _reco_armas.size();
     for(short i=0; i < tam; i++)
     {
-        delete _recolectables.at(i);
+        delete _reco_armas.at(i);
     }
-    _recolectables.clear();
+    _reco_armas.clear();
 
     tam = _llaves.size();
     for(short i=0; i < tam; i++)
@@ -398,7 +398,7 @@ std::vector<Zona*> CargadorNiveles::GetZonas()
 
 std::vector<Recolectable*> CargadorNiveles::GetRecolectables()
 {
-    return _recolectables;
+    return _reco_armas;
 }
 
 std::vector<Recolectable*> CargadorNiveles::GetLlaves()
@@ -453,7 +453,7 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int doorsMax, int leve
     _eneCofres.reserve(chestsMax/4);
 
     // TO DO:
-    /*_recolectables.reserve(20);
+    /*_reco_armas.reserve(20);
     _llaves.reserve(20);
     _powerup.reserve(20);
     */
