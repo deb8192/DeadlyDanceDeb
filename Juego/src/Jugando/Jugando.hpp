@@ -57,7 +57,8 @@ class Jugando: public Estado {
         void ConectarWaypoints();
 
         //Funciones de interacciones
-        void CogerObjeto();
+        void RecogerLlave(int rec_llave);
+        void RecogerArma(int rec_col);
         void DejarObjeto();
         void AccionarMecanismo(int,const unsigned short);    //Activa mecanismos y o puertas
         void activarPowerUp();

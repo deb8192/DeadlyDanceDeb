@@ -658,7 +658,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             largo = 2;
             alto = 2;
             Recolectable* _rec = new Recolectable(++id,ancho,largo,alto,x,y,z,tipoObj,despX, despZ);
-            posicionObjeto = _motor->CargarObjetos(5,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
+            posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
             _rec->SetPosicionArrayObjetos(posicionObjeto);
             _rec->setCodigo(codigo);
             _llaves.push_back(move(_rec));

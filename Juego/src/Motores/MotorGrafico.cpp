@@ -1270,7 +1270,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
                 ObjetosAni_Scena.push_back(logicaAnim);
             }
 
-            if(accion == 5)
+            if(accion == 8)
             {
                 Llaves_Scena.push_back(_objetoEnEscena);
                 LlavesAni_Scena.push_back(logicaAnim);
@@ -1309,7 +1309,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             _objetoEnEscena->setRotation(core::vector3df(0,rp,0));
             //if(accion != 3)_objetoEnEscena->setMaterialTexture(0, _driver->getTexture(ruta_textura));
             
-            if(accion == 5)
+            if(accion == 8)
             {
                 Llaves_Scena.push_back(_objetoEnEscena);
                 return Llaves_Scena.size() - 1;
@@ -1995,6 +1995,7 @@ void MotorGrafico::EraseColectable(long unsigned int idx)
         {
             _interfaz->RemoveObject(Recolectables_Scena[idx]);
             Recolectables_Scena.erase(Recolectables_Scena.begin() + idx);
+            RecolectablesAni_Scena.erase(RecolectablesAni_Scena.begin() + idx);
         }
     #else
         //codigo motor irrlicht
@@ -2015,7 +2016,7 @@ void MotorGrafico::EraseLlave(long unsigned int idx)
         {
             _interfaz->RemoveObject(Llaves_Scena[idx]);
             Llaves_Scena.erase(Llaves_Scena.begin() + idx);
-            //Llaves_Scena.at(idx) = nullptr;
+            LlavesAni_Scena.erase(LlavesAni_Scena.begin() + idx);
         }
     #else
         //codigo motor irrlicht

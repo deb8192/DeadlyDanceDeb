@@ -310,15 +310,18 @@ unsigned short MotorFisicas::CrearCuerpoRec(int accion, float px, float py, floa
         recolectables_powerup.push_back(move(cuerpo));
         return recolectables_powerup.size()-1;
     }
-    //Objetos que recoger como armas y llaves
+    // Armas
     else if(accion == 2)
     {
         recolectables.push_back(move(cuerpo));
         return recolectables.size()-1;
     }
-    else
+    else // Llaves con accion=8
     {
+        cout <<"llave creada - fisica"<<endl;
+        cout <<"Tam llaves - fisica"<<llaves.size()<<endl;
         llaves.push_back(move(cuerpo));
+        cout <<"Tam llaves - fisica"<<llaves.size()<<endl;
         return llaves.size()-1;
     }
 }
@@ -348,12 +351,13 @@ void MotorFisicas::EraseObstaculo(int idx)
 void MotorFisicas::EraseColectable(int idx)
 {
     recolectables.erase(recolectables.begin() + idx);
-    //recolectables.at(idx) = nullptr;
 }
 
 void MotorFisicas::EraseLlave(int idx)
 {
-    llaves.at(idx) = nullptr;
+    cout <<"Tam llaves - fisica"<<llaves.size()<<endl;
+    llaves.erase(recolectables.begin() + idx);
+    cout <<"llave borrada - fisica"<<endl;
 }
 
 void MotorFisicas::ErasePared(int idx)
@@ -432,11 +436,10 @@ int MotorFisicas::collideLlave()
 {
     for(long unsigned int i = 0; i < llaves.size();i++)
     {
-        if (llaves[i] != nullptr)
-            if (space->testOverlap(jugador,llaves[i]))
-            {
-                return i;
-            }
+        if (space->testOverlap(jugador,llaves[i]))
+        {
+            return i;
+        }
     }
     return -1;
 }
