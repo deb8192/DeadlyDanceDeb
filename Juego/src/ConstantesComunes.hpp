@@ -89,10 +89,17 @@ typedef struct
     const char* ACCIONADO = "accionado";
     const char* NO_ACCIONADO = "no-accionado";
 
-    /**************************** String cargado mapas ************************/
+    /**************************** String & char cargado mapas ************************/
+    // String de los tipos de zonas
     const char* ZCHEST = "zChest";
     const char* ZDARK = "zDark";
     const char* ZHIDE = "zHide";
+
+    // Chars que indican los tipos de waypoints
+
+    const char WAYP_A = 'a';   //Waypoint central
+    const char WAYP_B = 'b';   //Waypoint de acceso horizontal
+    const char WAYP_C = 'c';   //Waypoint de acceso vertical
 
     const unsigned short HEAVY = 1;
     const unsigned short BAILAORA = 2;
