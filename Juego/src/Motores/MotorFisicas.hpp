@@ -35,6 +35,7 @@ using namespace reactphysics3d;
             void updatePuerta(float x, float y, float z, float rx, float ry, float rz, float despX, float despZ, unsigned int pos);
             void EraseObstaculo(int idx);
             void EraseColectable(int idx);
+            void EraseWaypoint(unsigned short pos);
             void ErasePared(int idx);
             void EraseColectablePowerup(int idx);
             void EraseEnemigo(std::size_t i);

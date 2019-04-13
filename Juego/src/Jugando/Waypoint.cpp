@@ -38,12 +38,15 @@ Waypoint::Waypoint(int ID_lectura, int x, int y, int z, int compartido, int* arr
 
 Waypoint::~Waypoint()
 {
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _fisicas->EraseWaypoint(posicionFisicasWaypoint);
     posicionWaypoint.x = 0;
     posicionWaypoint.y = 0;
     posicionWaypoint.z = 0;
     sizeIDConexiones = 0;
     ID = 0;
     tipo = 0;
+    
     delete IDConexiones;
     IDConexiones = nullptr;
     esCompartido = false;

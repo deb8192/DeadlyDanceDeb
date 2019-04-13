@@ -75,7 +75,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
         void setProAtaCritico(int probabilidad);
-        void setSala(Sala* sala);
+        void SetSala(Sala* sala);
         void setTimeOcultarse(float t);
         void setLastTimeOcultarse(float t);
         void setTimeMerodear(float t);
@@ -102,7 +102,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getDanyoCritico();
         int getProAtaCritico();
         int* getBuffos();
-        Sala* getSala();
+        Sala* GetSala();
         float getTimeOcultarse();
         float getLastTimeOcultarse();
         float getTimeMerodear();
@@ -164,6 +164,16 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         void Render(short posArray, float updTime, float drawTime);
         void RenderAtaque();
+
+        enum modosEnemigo
+        {
+            MODO_DEFAULT = 0,
+            MODO_ATAQUE,
+            MODO_HUIDA,
+            MODO_AUXILIAR_ALIADO,
+            MODO_BUSCAR_ESCONDITE,
+            MODO_OCULTACION
+        };
 
     protected:
         Times* _tiempo;
@@ -231,16 +241,6 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_ACCIONADO,
             EN_NO_ACCIONADO,
             EN_PALANCA,
-        };
-
-        enum modosEnemigo
-        {
-            MODO_DEFAULT = 0,
-            MODO_ATAQUE,
-            MODO_HUIDA,
-            MODO_AUXILIAR_ALIADO,
-            MODO_BUSCAR_ESCONDITE,
-            MODO_OCULTACION
         };
 
         Sala* _estoy;//sala en la que esta el enemigo

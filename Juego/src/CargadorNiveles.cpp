@@ -727,6 +727,7 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
         _waypoints.push_back(waypoint);
         sala->AgregarWaypoint(_waypoints.back());
     }
+    
     waypoint = nullptr;
 }
 

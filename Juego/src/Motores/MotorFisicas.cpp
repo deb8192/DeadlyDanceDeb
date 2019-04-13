@@ -337,6 +337,11 @@ void MotorFisicas::EraseColectable(int idx)
     recolectables.erase(recolectables.begin() + idx);
 }
 
+void MotorFisicas::EraseWaypoint(unsigned short pos)
+{
+    _waypoints.erase(_waypoints.begin() + pos);
+}
+
 void MotorFisicas::ErasePared(int idx)
 {
     paredes.at(idx) = nullptr;
