@@ -309,6 +309,7 @@ unsigned short MotorFisicas::CrearCuerpoRec(int accion, float px, float py, floa
         recolectables.push_back(cuerpo);
         return recolectables.size()-1;
     }
+    return 0;
 }
 
 unsigned short MotorFisicas::CrearCuerpoWaypoint(float px, float py, float pz, float alto)
