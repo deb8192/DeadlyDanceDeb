@@ -14,7 +14,7 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         ~Recolectable();//destructor del objeto
         Recolectable(int id, int anc, int lar, int alt, 
             float x, float y, float z, unsigned short tipoObj,
-            int accion, int despX, int despZ);
+            int despX, int despZ);
 
         //drawable metodos
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
@@ -67,6 +67,7 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         const char* GetModelo(); // Malla 3D
         const char* GetTextura(); //Textura
         unsigned short GetTipoObjeto();
+        unsigned short GetPosArrayFis();
 
     private:
 
@@ -75,6 +76,7 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         //En caso de ser una llave, deberá tener un codigo mayor de 0
         int codigoObjeto;   //En caso de igualarse a 0 es un arma, si es -1 es diner y si es -2 es un power-up
         int posicionArrayObjetos;   //Posicion del recolectable en el array de objetos del nivel
+        unsigned short posArrayFisicas;  //Posicion del elemento en el vector del motor de fisicas
         int cantidad = 0; //Esta cantidad refleja un numero de efecto del power-up
 };
 

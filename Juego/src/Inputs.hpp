@@ -1,7 +1,7 @@
 #ifndef Inputs_HPP
 #define Inputs_CPP
 
-#include <irrlicht/irrlicht.h>
+#include <irrlicht.h>
 #include <iostream>
 #include "Eventos.hpp"
 

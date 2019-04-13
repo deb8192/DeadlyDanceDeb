@@ -137,7 +137,8 @@ void Jugando::ValoresPorDefecto()
     drawTime = 0.0f;
     lastDrawTime = drawTime;
     atacktime = 0.0f;
-    cambia = 0;
+    // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
+    //cambia = 0;
     _enemPideAyuda = nullptr;
     _destinoPathFinding = nullptr;
     danyo = 0;
@@ -166,7 +167,7 @@ void Jugando::ValoresPorDefectoJugador()
     _jugador->setVida(_jugador->getVidaIni());
     _jugador->setBarraAtEs(100);
     _jugador->setAtaque(15);
-    _jugador->setArma(NULL);
+    _jugador->setArma(nullptr);
     _jugador->setArmaEspecial(100);
     _jugador->setTimeAt(0.0f);
     _jugador->setTimeAtEsp(0.0f);
@@ -234,23 +235,13 @@ void Jugando::ManejarEventos() {
      //para modo camara
     if(_motor->EstaPulsado(KEY_1))
     {
-        _motor->cambiarCamara();
-        _fisicas->cambiarCamara();
-        _jugador->cambiarCamara();
+        _motor->girarCamara();
+        _fisicas->girarCamara();
+        _jugador->girarCamara();
         _motor->ResetKey(KEY_1);
     }
 
     /* *********** Teclas para probar cosas *************** */
-    // Camara libre
-    /*if (_motor->EstaPulsado(KEY_H))
-    {
-        _motor->ResetKey(KEY_H);
-        camLibre = !camLibre;
-
-        if (camLibre)
-            _motor->IniCamLibre(_jugador->getX(),
-                _jugador->getY(), _jugador->getZ());
-    }*/
 
     if (_motor->EstaPulsado(KEY_K))
     {
@@ -310,15 +301,17 @@ void Jugando::ManejarEventos() {
 
     //cambia se utiliza porque coge y suelta el objeto sucesivamente varias veces, la causa de este error
     //era porque ocurren varias iteraciones del bucle tal vez porque la interpolacion crea mas iteraciones en el bucle
+    // (Actualizacion: era cosa de los inputs de OpenGL) TO DO: borrar este mega comentario despues de asegurarnos
     if(_motor->EstaPulsado(KEY_E))
     {
         _motor->ResetKey(KEY_E);
         InteractuarNivel();
     }
-    else
+    // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
+    /*else
     {
         cambia = 0;
-    }
+    }*/
     
 }
 
@@ -334,37 +327,38 @@ void Jugando::InteractuarNivel()
     short int_palanca = _fisicas->collidePalanca();
     short int_cofre = _fisicas->collideCofre();
 
-    if(cambia <= 0)
-    {
+    // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
+    /*if(cambia <= 0)
+    {*/
         if (int_puerta >= 0)
         {
             AccionarMecanismo(int_puerta, constantes.PUERTA_OBJ);
-            cambia++;
+            //cambia++;
         }
         else if (int_palanca >= 0)
         {
             AccionarMecanismo(int_palanca, constantes.PALANCA);
-            cambia++;
+            //cambia++;
         }
 
         if (int_cofre >= 0)
         {
             AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
-            cambia++;
+            //cambia++;
         }
         
         if(rec_col < 0 && int_cofre < 0 && 
             int_palanca < 0 && int_puerta < 0)
         {
             DejarObjeto();
-            cambia++;
+            //cambia++;
         }
         else if (rec_col >= 0)
         {
             CogerObjeto();
-            cambia++;
+            //cambia++;
         }
-    }
+   // }
 }
 
 /************** Update *************
@@ -1094,8 +1088,7 @@ unsigned short Jugando::NumeroAleatorio(unsigned short limite_inf, unsigned shor
 void Jugando::CrearPowerUp(int x,int y,int z, unsigned short tipoObjeto,
     unsigned short cantidad)
 {
-    Recolectable* _rec = new Recolectable(-1,1,1,1,x,y,z,tipoObjeto,
-        4,0,0);
+    Recolectable* _rec = new Recolectable(-1,1,1,1,x,y,z,tipoObjeto,0,0);
     int posicionObjeto = _motor->CargarObjetos(4,0,x,y,z,1,1,1,
         _rec->GetModelo(),_rec->GetTextura());
     _rec->SetPosicionArrayObjetos(posicionObjeto);
@@ -1108,8 +1101,7 @@ void Jugando::CrearPowerUp(int x,int y,int z, unsigned short tipoObjeto,
 void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
     unsigned short tipoObjeto,unsigned short ataque)
 {
-    Recolectable* _rec = new Recolectable(-1,ancho,largo,alto,x,y,z,tipoObjeto,
-        2,0,0);
+    Recolectable* _rec = new Recolectable(-1,ancho,largo,alto,x,y,z,tipoObjeto,0,0);
     int posicionObjeto = _motor->CargarObjetos(2,0,x,y,z,ancho,largo,alto,
         _rec->GetModelo(),_rec->GetTextura());
     _rec->SetPosicionArrayObjetos(posicionObjeto);
@@ -1279,7 +1271,10 @@ void Jugando::CogerObjeto()
             //lo cargamos por primera vez en el motor de graficos
             _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->GetModelo(),NULL);
             //lo cargamos por primera vez en el motor de fisicas
-            _fisicas->crearCuerpo(0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,2,_recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(), 9,0,0);
+            _fisicas->crearCuerpo(0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,
+                2,
+                _recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(),
+                9,0,0);
             //borramos el recolectable de nivel, _motor grafico y motor fisicas
             _recolectables.erase(_recolectables.begin() + rec_col);
             _motor->EraseColectable(rec_col);
@@ -1293,7 +1288,7 @@ void Jugando::CogerObjeto()
                 _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
                 _jugador->getArma()->getAlto(),
                 _jugador->getX(),_jugador->getY(), _jugador->getZ(),
-                _jugador->getArma()->GetTipoObjeto(),2,0,0);
+                _jugador->getArma()->GetTipoObjeto(),0,0);
             nuRec->setAtaque(_jugador->getArma()->getAtaque());
             
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
@@ -1307,7 +1302,7 @@ void Jugando::CogerObjeto()
             //!PROVISIONAL
             //lo cargamos por primera vez en el motor de graficos
             _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), 
-                _recolectables[rec_col]->GetModelo(), NULL);
+                _recolectables[rec_col]->GetModelo(), _recolectables[rec_col]->GetTextura());
 
             //lo cargamos en el motor de fisicas
             _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2, 
@@ -1336,7 +1331,7 @@ void Jugando::DejarObjeto()
             _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
             _jugador->getArma()->getAlto(),
             _jugador->getX(),_jugador->getY(), _jugador->getZ(),
-            _jugador->getArma()->GetTipoObjeto(),2,0,0);
+            _jugador->getArma()->GetTipoObjeto(),0,0);
         nuRec->setAtaque(_jugador->getArma()->getAtaque());
 
         _motor->EraseArma();
@@ -1346,7 +1341,7 @@ void Jugando::DejarObjeto()
         //por ultimo creamos una nueva y actualizamos informacion en motor grafico
         _motor->CargarRecolectable(_recolectables.size(),
             nuRec->getX(), nuRec->getY(),nuRec->getZ(),
-            nuRec->GetModelo(), NULL);
+            nuRec->GetModelo(), nuRec->GetTextura());
 
         _recolectables.push_back(move(nuRec));
         nuRec = nullptr;

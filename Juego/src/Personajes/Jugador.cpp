@@ -234,9 +234,9 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
  * el punto de origen al punto de destino
  */
 
-void Jugador::cambiarCamara()
+void Jugador::girarCamara()
 {
-        gcam >= 270 ? gcam = 0 : gcam += 90;
+    gcam >= 270 ? gcam = 0 : gcam += 90;
 }
 
 void Jugador::moverseEntidad(float updTime)
@@ -607,6 +607,9 @@ void Jugador::AnnadirLlave(Llave* llave)
 {
     llaves.push_back(llave);
     cout<<"Llave añadida. Nº de llaves: "<<llaves.size()<<endl;
+
+    // TO DO: terminar lo de la interfaz y la llave
+    //_interfaz->setArma(1);
 }
 
 /***********EliminarLlave************

@@ -113,7 +113,8 @@ MotorFisicas::~MotorFisicas()
     delete _unica_instancia;
 }
 
-void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator, float despX, float despZ)
+void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int type,
+    float ancho, float alto, float largo, int typeCreator, float despX, float despZ)
 {
     rp3d::Vector3 posiciones(px+despX,py,pz+despZ); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
     rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
@@ -190,16 +191,6 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
                 relacionParedesObstaculos.push_back(obstaculos.size());
                 paredes.push_back(cuerpo);
                 obstaculos.push_back(cuerpo);
-            }
-            //Recolectable power ups
-            else if(accion == 4)
-            {
-                recolectables_powerup.push_back(cuerpo);
-            }
-            //Objetos que recoger como armas y llaves
-            else if(accion == 2)
-            {
-                recolectables.push_back(cuerpo);
             }
             //Obstaculos que se interponen ante el jugador
             else if(accion == 1)
@@ -291,6 +282,35 @@ unsigned short MotorFisicas::CrearCuerpoInter(unsigned short tipoObj, float px, 
     return obstaculos.size()-1;
 }
 
+unsigned short MotorFisicas::CrearCuerpoRec(int accion, float px, float py, float pz,
+    float ancho, float alto, float largo, float despX, float despZ)
+{
+    rp3d::Vector3 posiciones(px+despX,py,pz+despZ); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
+    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+
+    Transform transformacion(posiciones,orientacion);
+
+    rp3d::CollisionBody * cuerpo;
+    cuerpo = space->createCollisionBody(transformacion);
+
+    rp3d::Vector3 medidas(ancho,alto,largo);
+    BoxShape * forma = new BoxShape(medidas);
+    cuerpo->addCollisionShape(forma,transformacion);
+
+    //Recolectable power ups
+    if(accion == 4)
+    {
+        recolectables_powerup.push_back(cuerpo);
+        return recolectables_powerup.size()-1;
+    }
+    //Objetos que recoger como armas y llaves
+    else if(accion == 2)
+    {
+        recolectables.push_back(cuerpo);
+        return recolectables.size()-1;
+    }
+}
+
 unsigned short MotorFisicas::CrearCuerpoWaypoint(float px, float py, float pz, float alto)
 {
     //Se crea el cuerpo de los waypoints
@@ -300,15 +320,15 @@ unsigned short MotorFisicas::CrearCuerpoWaypoint(float px, float py, float pz, f
     Transform transformacion(posiciones,orientacion);
 
     rp3d::CollisionBody * cuerpo;
-    cuerpo = space->createCollisionBody(transformacion);
-
+    cuerpo = space->createCollisionBody(transformacion); 
+   
     //se le da forma de esfera
     SphereShape * forma = new SphereShape(alto);
     cuerpo->addCollisionShape(forma,transformacion);
 
     _waypoints.push_back(cuerpo);
     return _waypoints.size()-1;
-}
+} 
 
 void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, int alt)
 {
@@ -335,6 +355,7 @@ void MotorFisicas::EraseObstaculo(int idx)
 void MotorFisicas::EraseColectable(int idx)
 {
     recolectables.erase(recolectables.begin() + idx);
+    //recolectables.at(idx) = nullptr;
 }
 
 void MotorFisicas::EraseWaypoint(unsigned short pos)
@@ -405,12 +426,12 @@ int MotorFisicas::collideColectable()
 {
     for(long unsigned int i = 0; i < recolectables.size();i++)
     {
-        if(space->testOverlap(jugador,recolectables[i]))
-        {
-            return i;
-        }
+        if (recolectables[i] != nullptr)
+            if (space->testOverlap(jugador,recolectables[i]))
+            {
+                return i;
+            }
     }
-
     return -1;
 }
 
@@ -755,9 +776,9 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
 
 }
 
-void MotorFisicas::cambiarCamara()
+void MotorFisicas::girarCamara()
 {
-        gcam >= 270 ? gcam = 0 : gcam += 90;
+    gcam >= 270 ? gcam = 0 : gcam += 90;
 }
 
 void MotorFisicas::colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z)

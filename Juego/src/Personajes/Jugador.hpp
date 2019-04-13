@@ -11,6 +11,7 @@
 #include "../Motores/INdrawable.hpp"
 #include "../Motores/INsentidos.hpp"
 #include "../Armas/Arma.hpp"
+#include "../Objetos/Recolectable.hpp"
 #include "../Objetos/Llave.hpp"
 #include "../Motores/MotorGrafico.hpp"
 #include "../Motores/MotorAudio.hpp"
@@ -133,7 +134,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float getLastTimeAt();
         const char* getRutaArmaEsp();
         const char* getRutaTexturaArmaEsp();
-        void cambiarCamara();
+        void girarCamara();
         int getDinero();
         void ModificarDinero(int monedas);
         void setDinero(int monedas);

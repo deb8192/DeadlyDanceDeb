@@ -117,6 +117,8 @@ class Interfaz
         void SetLejaniaCamara(unsigned short camara,float lejania);
         void SetCercaniaCamara(unsigned short camara,float cercania);
 
+        //para saber si esta liberado
+        bool IsKeyRelease(short);
 
     private:
 
@@ -126,7 +128,7 @@ class Interfaz
 
         CatOpengl::Video::Ventana * window;
 
-        Shader * shaders[4];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[5];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 

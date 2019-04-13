@@ -56,7 +56,7 @@ uniform vec3 viewPos;         //Posicion de la camara
 uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform SpotLight spotLight;
-uniform Material material;    //materiales (pagina con distintos materiales: http://devernay.free.fr/cours/opengl/materials.html)
+uniform Material material;    //materiales
 
 uniform sampler2D Texturediffuse;  //Textura difusa
 uniform sampler2D Texturespecular; //Textura especular
@@ -72,10 +72,13 @@ void main()
     vec3 norm = normalize(Normal);                          //Normalizar las normales
     vec3 viewDir = normalize(viewPos - FragPos);            //Calculo de direccion de camara
 
+	vec4 black_silhouette = vec4(0.0, 0.0, 0.0, 1.0);       //Color de la silueta:
+	float silang = max(dot(norm, viewDir),0.0);             //Angulo de la silueta
+
     //Fase 1: Luz direccional
     vec3 result = CalcDirLight(dirLight, norm, viewDir);
 
-    //Fase 2: Puntos de Luz
+    //Fase 2: Puntos de Luz (Multiluces)
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
     {
         if(pointLights[i].constant > 0)
@@ -92,7 +95,12 @@ void main()
         result += spotres;
     }
 
-    FragColor = vec4(result, 1.0);
+    //Ajuste de silueta
+    silang /= 0.5;
+    if(silang > 1.0)silang = 1.0;
+
+    FragColor = vec4(result, 1.0) * silang + black_silhouette * (1 - silang);
+    //FragColor = vec4(result, 1.0);
 }
 
 //Calcular Luz Direccional
@@ -107,7 +115,34 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 reflectDir = reflect(-lightDir, normal);               //Reflejo (la direccion de la luz es negativa porque va desde la luz hasta la vista no hacia el fragment como en la difusa)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);    //Calculo del componente especular (max para asegurar que no sea negativo), material.shininess es el valor del brillo cambialo para mas o menos brillo (32,64,128,etc...)
 
-    vec3 ambient  = light.ambient  * vec3(texture(Texturediffuse, TexCoords));
+    //Efecto CellShading
+    float intensity = dot(lightDir,normalize(normal));
+    if (intensity > 0.85)
+    {
+        light.ambient = light.ambient;
+        light.specular = light.specular;
+        light.diffuse = light.diffuse;
+    }
+	else if (intensity > 0.5)
+    {
+        light.ambient = vec3(light.ambient.x * 0.6,light.ambient.y * 0.6,light.ambient.z * 0.6);
+        light.specular = vec3(light.specular.x * 0.6,light.specular.y * 0.6,light.specular.z * 0.6);
+        light.diffuse = vec3(light.diffuse.x * 0.6,light.diffuse.y * 0.6,light.diffuse.z * 0.6);
+    }
+	else if (intensity > 0.25)
+    {
+        light.ambient = vec3(light.ambient.x * 0.4,light.ambient.y * 0.4,light.ambient.z * 0.4);
+        light.specular = vec3(light.specular.x * 0.4,light.specular.y * 0.4,light.specular.z * 0.4);
+        light.diffuse = vec3(light.diffuse.x * 0.4,light.diffuse.y * 0.4,light.diffuse.z * 0.4);
+    }
+	else
+    {
+        light.ambient = vec3(light.ambient.x * 0.2,light.ambient.y * 0.2,light.ambient.z * 0.2);
+        light.specular = vec3(light.specular.x * 0.2,light.specular.y * 0.2,light.specular.z * 0.2);
+        light.diffuse = vec3(light.diffuse.x * 0.2,light.diffuse.y * 0.2,light.diffuse.z * 0.2);
+    }
+
+    vec3 ambient  = light.ambient  * 0.05 * vec3(texture(Texturediffuse, TexCoords));
     vec3 diffuse  = light.diffuse  * diff * vec3(texture(Texturediffuse, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(Texturespecular, TexCoords));
     return (ambient + diffuse + specular);
@@ -130,8 +165,36 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float attenuation = 1.0 / (light.constant + light.linear * distance +
   			            light.quadratic * (distance * distance));
 
+    //Efecto CellShading
+    float intensity = dot(lightDir,normalize(normal));
+    if (intensity > 0.85)
+    {
+        light.ambient = light.ambient;
+        light.specular = light.specular;
+        light.diffuse = light.diffuse;
+    }
+	else if (intensity > 0.5)
+    {
+        light.ambient = vec3(light.ambient.x * 0.6,light.ambient.y * 0.6,light.ambient.z * 0.6);
+        light.specular = vec3(light.specular.x * 0.6,light.specular.y * 0.6,light.specular.z * 0.6);
+        light.diffuse = vec3(light.diffuse.x * 0.6,light.diffuse.y * 0.6,light.diffuse.z * 0.6);
+    }
+	else if (intensity > 0.25)
+    {
+        light.ambient = vec3(light.ambient.x * 0.4,light.ambient.y * 0.4,light.ambient.z * 0.4);
+        light.specular = vec3(light.specular.x * 0.4,light.specular.y * 0.4,light.specular.z * 0.4);
+        light.diffuse = vec3(light.diffuse.x * 0.4,light.diffuse.y * 0.4,light.diffuse.z * 0.4);
+    }
+	else
+    {
+        light.ambient = vec3(light.ambient.x * 0.2,light.ambient.y * 0.2,light.ambient.z * 0.2);
+        light.specular = vec3(light.specular.x * 0.2,light.specular.y * 0.2,light.specular.z * 0.2);
+        light.diffuse = vec3(light.diffuse.x * 0.2,light.diffuse.y * 0.2,light.diffuse.z * 0.2);
+    }
+
+
     //Combinar resultados
-    vec3 ambient  = light.ambient  * vec3(texture(Texturediffuse, TexCoords));  //Luz Ambiental
+    vec3 ambient  = light.ambient  * 0.05 * vec3(texture(Texturediffuse, TexCoords));  //Luz Ambiental
     vec3 diffuse  = light.diffuse  * diff * vec3(texture(Texturediffuse, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(Texturespecular, TexCoords));
     //Aplicamos atenuacion a las luces
@@ -163,9 +226,35 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float epsilon = light.cutOff - light.outerCutOff;
     float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
 
+    //Efecto CellShading
+    if (intensity > 0.85)
+    {
+        light.ambient = light.ambient;
+        light.specular = light.specular;
+        light.diffuse = light.diffuse;
+    }
+	else if (intensity > 0.5)
+    {
+        light.ambient = vec3(light.ambient.x * 0.6,light.ambient.y * 0.6,light.ambient.z * 0.6);
+        light.specular = vec3(light.specular.x * 0.6,light.specular.y * 0.6,light.specular.z * 0.6);
+        light.diffuse = vec3(light.diffuse.x * 0.6,light.diffuse.y * 0.6,light.diffuse.z * 0.6);
+    }
+	else if (intensity > 0.25)
+    {
+        light.ambient = vec3(light.ambient.x * 0.4,light.ambient.y * 0.4,light.ambient.z * 0.4);
+        light.specular = vec3(light.specular.x * 0.4,light.specular.y * 0.4,light.specular.z * 0.4);
+        light.diffuse = vec3(light.diffuse.x * 0.4,light.diffuse.y * 0.4,light.diffuse.z * 0.4);
+    }
+	else
+    {
+        light.ambient = vec3(light.ambient.x * 0.2,light.ambient.y * 0.2,light.ambient.z * 0.2);
+        light.specular = vec3(light.specular.x * 0.2,light.specular.y * 0.2,light.specular.z * 0.2);
+        light.diffuse = vec3(light.diffuse.x * 0.2,light.diffuse.y * 0.2,light.diffuse.z * 0.2);
+    }
+
     //Combinar resultados
-    vec3 ambient = light.ambient * vec3(texture(Texturediffuse, TexCoords));
-    vec3 diffuse = light.diffuse * diff * vec3(texture(Texturediffuse, TexCoords));
+    vec3 ambient = light.ambient   * 0.05 * vec3(texture(Texturediffuse, TexCoords));
+    vec3 diffuse = light.diffuse   * diff * vec3(texture(Texturediffuse, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(Texturespecular, TexCoords));
     //Aplicamos atenuacion e intensidad a las luces
     ambient *= attenuation * intensity;

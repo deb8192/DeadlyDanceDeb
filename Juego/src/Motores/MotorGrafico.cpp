@@ -1,4 +1,4 @@
-#include "MotorGrafico.hpp" //se llama a su cabecera para cargar las dependencias
+#include "MotorGrafico.hpp" //se llama a su cabecera para bos las dependencias
 
 //para clases singleton deben tener un indicador de que se ha creado el unico objeto
 MotorGrafico* MotorGrafico::_unica_instancia = 0;
@@ -825,73 +825,73 @@ void MotorGrafico::ResetKey(short event)
         {
             case idsEventos::Enum::KEY_A:
                 estadoteclas[GLFW_KEY_A] = false;
-
+            break;
             case idsEventos::Enum::KEY_S:
                 estadoteclas[GLFW_KEY_S] = false;
-
+            break;
             case idsEventos::Enum::KEY_D:
                 estadoteclas[GLFW_KEY_D] = false;
-
+            break;
             case idsEventos::Enum::KEY_W:
                 estadoteclas[GLFW_KEY_W]  = false;
-
+            break;
             case idsEventos::Enum::KEY_ESC:
                 estadoteclas[GLFW_KEY_ESCAPE] = false;
-
+            break;
             case idsEventos::Enum::KEY_ESPACIO:
                 estadoteclas[GLFW_KEY_SPACE] = false;
-
+            break;    
             case idsEventos::Enum::KEY_ACEPTAR:
                 estadoteclas[GLFW_KEY_ENTER] = false;
-
+            break;
             case idsEventos::Enum::KEY_G_DEBUG:
                 estadoteclas[GLFW_KEY_G] = false;//para modo debug
-
+            break;
             case idsEventos::Enum::KEY_1:
                 estadoteclas[GLFW_KEY_1] = false;
-
+            break;
             case idsEventos::Enum::KEY_2:
                 estadoteclas[GLFW_KEY_2] = false;
-
+            break;            
             case idsEventos::Enum::KEY_U:
                 estadoteclas[GLFW_KEY_U] = false;//para desactivar colisiones jugador
-
+            break;
             case idsEventos::Enum::KEY_P:
                 estadoteclas[GLFW_KEY_P] = false;
-
+            break;
             case idsEventos::Enum::KEY_K:
                 estadoteclas[GLFW_KEY_K] = false;
-
+            break;
             case idsEventos::Enum::KEY_C:
                 estadoteclas[GLFW_KEY_C] = false;//activa pathdinding
-
+            break;
             case idsEventos::Enum::KEY_B:
                 estadoteclas[GLFW_KEY_B] = false;
-
+            break;
             case idsEventos::Enum::RMOUSE_PRESSED_DOWN:
                 estadoteclas[GLFW_MOUSE_BUTTON_RIGHT] = false;
-
+            break;    
             case idsEventos::Enum::LMOUSE_PRESSED_DOWN:
                 estadoteclas[GLFW_MOUSE_BUTTON_LEFT] = false;
-
+            break;
             case idsEventos::Enum::MOUSE_MOVED:
                 estadoteclas[GLFW_MOUSE_MOVE] = false;
-
+            break;
             case idsEventos::Enum::KEY_Q:
                 estadoteclas[GLFW_KEY_Q] = false;
-
+            break;
             case idsEventos::Enum::KEY_H:
                 estadoteclas[GLFW_KEY_H] = false;
-
+            break;
             case idsEventos::Enum::KEY_I:
                 estadoteclas[GLFW_KEY_I] = false;
-
+            break;
             case idsEventos::Enum::KEY_J:
                 estadoteclas[GLFW_KEY_J] = false;//Para matar al jugador (16)
-
+            break;
             case idsEventos::Enum::KEY_Z:
                 estadoteclas[GLFW_KEY_Z] = false;//Para abrir 1 puzzle
-
+            break;
             case idsEventos::Enum::KEY_E:
                 estadoteclas[GLFW_KEY_E] = false;//actua una sola vez aunque se mantenga pulsado
         }
@@ -1439,7 +1439,7 @@ void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float 
     #endif
 }
 
-void MotorGrafico::cambiarCamara()
+void MotorGrafico::girarCamara()
 {
         if(camx == 0)
         {
@@ -2447,7 +2447,7 @@ void MotorGrafico::SetBarraEnergia(int barra)
                 BarraEnergiaI->setMaxSize(dimension2du(1,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
             }
             else
-            {
+            {            bool estadoteclas3[350];//contiene si se ha reseteado el boton 
                 BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
             }
         }
@@ -3161,7 +3161,6 @@ void MotorGrafico::CambiarCamara()
             _interfaz->SetLejaniaCamara(camara, lejano);
         }
     #endif
-
 }
 
 void MotorGrafico::updateTeclas()
@@ -3171,14 +3170,24 @@ void MotorGrafico::updateTeclas()
 
         float tiempoactual = tempo->GetTiempo(1);//tiempo actual en milisegundos
 
-        if(tiempo == 0 || (tiempo+100.0f) < tiempoactual)
-        {
             //std::cout << " Actualizo teclas " << tiempoactual << std::endl;
             for(int i = 0; i <= numeroteclas;i++)
             {
                 if(i != GLFW_MOUSE_BUTTON_RIGHT && i != GLFW_MOUSE_BUTTON_LEFT && i != GLFW_MOUSE_MOVE)
                 {
-                        estadoteclas[i]=_interfaz->IsKeyDown(i);
+                        if((!_interfaz->IsKeyRelease(i)))
+                        {
+                            if(estadoteclas2[i])//esto significa que no esta pulsado de antes
+                            {
+                                estadoteclas[i] = _interfaz->IsKeyDown(i);
+                                estadoteclas2[i] = false;
+                            }
+                        }
+                        else
+                        {
+                            estadoteclas2[i] = true;
+                            estadoteclas[i]=false;     
+                        }
                 }
                 else
                 {
@@ -3186,7 +3195,7 @@ void MotorGrafico::updateTeclas()
                 }
             }
             tiempo = tiempoactual; 
-        }
+
     #endif
 }
 

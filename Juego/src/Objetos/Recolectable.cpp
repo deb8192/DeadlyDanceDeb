@@ -8,7 +8,7 @@ Recolectable::Recolectable()
 
 Recolectable::Recolectable(int id, int anc, int lar, int alt, 
     float x, float y, float z, unsigned short tipoObj,
-    int accion, int despX, int despZ)
+    int despX, int despZ)
 {
     // TO DO: revisar, solo tienen id los objetos cargados del XML
     // el resto que se crea luego valen -1
@@ -37,13 +37,14 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
 
     //INobjetos
     tipoObjeto = tipoObj;
-
+    unsigned short accion = 0;
     switch (tipoObj)
     {
         case 7: // ARPA
         {
             _modelo = "assets/models/Arpa.obj";
             _textura = "assets/texture/Arpa.png";
+            accion = 2;
         }
         break;
 
@@ -51,6 +52,7 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
         {
             _modelo = "assets/models/Arma.obj";
             _textura = "assets/texture/Arma.png";
+            accion = 2;
         }
         break;
 
@@ -58,6 +60,7 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
         {
             _modelo = "assets/models/gold.obj";
             _textura = "assets/texture/gold.png";
+            accion = 4;
         }
         break;
 
@@ -65,6 +68,7 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
         {
             _modelo = "assets/models/powerup0.obj";
             _textura = "assets/texture/powerup0.png";
+            accion = 4;
         }
         break;
 
@@ -72,6 +76,7 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
         {
             _modelo = "assets/models/powerup1.obj";
             _textura = "assets/texture/powerup1.png";
+            accion = 4;
         }
         break;
 
@@ -79,11 +84,12 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
         {
             _modelo = "assets/models/llave.obj";
             _textura = nullptr;
+            accion = 2;
         }
         break;
     }
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
+    posArrayFisicas = _fisicas->CrearCuerpoRec(accion,x/2,y/2,z/2,ancho,alto,largo,despX,despZ);
     _fisicas = nullptr;
 }
 
@@ -93,6 +99,7 @@ Recolectable::~Recolectable()
     potenciaAtaque = 0;
     codigoObjeto = 0;
     posicionArrayObjetos = 0;
+    posArrayFisicas = 0;
     cantidad = 0;
     tipoObjeto = 0;
 
@@ -422,4 +429,9 @@ const char* Recolectable::GetModelo()
 const char* Recolectable::GetTextura()
 {
     return _textura;
+}
+
+unsigned short Recolectable::GetPosArrayFis()
+{
+    return posArrayFisicas;
 }

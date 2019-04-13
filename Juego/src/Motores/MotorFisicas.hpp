@@ -24,6 +24,8 @@ using namespace reactphysics3d;
             void crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator, float despX, float despZ);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             unsigned short CrearCuerpoInter(unsigned short tipoObj, float px, float py, float pz, 
                 float ancho, float alto, float largo, float despX, float despZ);
+            unsigned short CrearCuerpoRec(int accion, float px, float py, float pz,
+                float ancho, float alto, float largo, float despX, float despZ);
             unsigned short CrearCuerpoWaypoint(float px, float py, float pz, float alto);
             //int crearCuerpo(float px, float py, float pz, int type, float ancho, float largo, float alto);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             void actualizarPosicionCuerpo(float px, float py, float pz,int posicion);//se le pasa las nuevas posiciones del cuerpo del array de cuerpos de la posicion
@@ -62,7 +64,7 @@ using namespace reactphysics3d;
 
             void colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z);
             void llevarBox(float x, float y, float z, float anc, float lar, float alt);
-            void cambiarCamara();
+            void girarCamara();
             void updateJugador(float x, float y, float z, float rx, float ry, float rz);//actualizamos al jugador en el espacio de las fisicas
             std::vector <unsigned int> updateArmaEspecial(float x, float y, float z);
             std::vector<unsigned int> updateArma(float x, float y, float z);

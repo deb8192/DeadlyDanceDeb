@@ -10,7 +10,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
     #include "../Times.hpp"
 #else
     //motorirrlicht
-    #include <irrlicht/irrlicht.h> //la utilizaremos para las funcionalidades del motor
+    #include <irrlicht.h> //la utilizaremos para las funcionalidades del motor
     #include "../Inputs.hpp"
 #endif
 
@@ -309,7 +309,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             void RenderMotorCinematica(float marcaTiempo, float tiempoUltimoFrame);
             bool finalCinematica();
-            void cambiarCamara();
+            void girarCamara();
             int getCamx();
             int getCamz();
             int getCams();
@@ -326,10 +326,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarIMGPuzzle(unsigned short x, unsigned short y, std::string img);
             void CrearTextoPuzzles(std::string texto, unsigned short x1, unsigned short y1,
                 unsigned short x2, unsigned short y2);
+            
             void HabilitarDinero();
             void DeshabilitarDinero();
-
-            // En proceso
             void CambiarCamara();
 
         private: //clases solo accesibles por MotorGrafico
@@ -489,6 +488,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             //mejoras en inputs
             const int numeroteclas = 349;//contiene el numero de teclas a comprobar
             bool estadoteclas[350];//contiene estado de las teclas
+            bool estadoteclas2[350];//contiene si esta pulsado
             void updateTeclas(); //actualiza los estados de las teclas
             float tiempo;//segun que valor se ponga los botones se actualizan mas rapido esta puesto para que se actualicen 10 veces por segundo
     };
