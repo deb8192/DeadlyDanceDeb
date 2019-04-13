@@ -372,7 +372,7 @@ void Enemigo::queVes()
 
 }
 
-Sala* Enemigo::getSala()
+Sala* Enemigo::GetSala()
 {
     return _estoy;
 }
@@ -895,7 +895,7 @@ void Enemigo::setLastTimeAtEsp(float time)
     lastAtackEspTime = time;
 }
 
-void Enemigo::setSala(Sala* sala)
+void Enemigo::SetSala(Sala* sala)
 {
     _estoy = sala;
 }

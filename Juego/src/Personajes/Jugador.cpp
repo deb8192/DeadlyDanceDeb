@@ -26,7 +26,7 @@ Jugador::Jugador()
     porcentajeVelocidad = 1.0f;
 }
 
-Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
+Jugador::Jugador(Sala* sala, unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
     int largo, int alto, int accion, int maxVida)
 : Jugador()
 {
@@ -55,6 +55,8 @@ Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
     posFutura.x = nX;
     posFutura.y = nY;
     posFutura.z = nZ;
+
+    salaActual = sala;
 }
 
 Jugador::~Jugador()
@@ -137,13 +139,12 @@ Jugador::~Jugador()
     id = 0;
     animacion = 0;
     animacionAnterior = 0;
+
+    salaActual = nullptr;
 }
 
 void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 {
-    float px = posFutura.x,
-          pz = posFutura.z;
-
     struct
     {
         float x = 0.0f;
@@ -1197,6 +1198,16 @@ int Jugador::GetLargo()
 int Jugador::GetAlto()
 {
     return alto;
+}
+
+Sala* Jugador::GetSala()
+{
+    return salaActual;
+}
+
+void Jugador::SetSala(Sala* sala)
+{
+    salaActual = sala;
 }
 
 bool Jugador::ColisionEntornoEne()

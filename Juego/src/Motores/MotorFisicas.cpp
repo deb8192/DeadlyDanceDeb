@@ -311,6 +311,25 @@ unsigned short MotorFisicas::CrearCuerpoRec(int accion, float px, float py, floa
     }
 }
 
+unsigned short MotorFisicas::CrearCuerpoWaypoint(float px, float py, float pz, float alto)
+{
+    //Se crea el cuerpo de los waypoints
+    rp3d::Vector3 posiciones(px,py,pz); 
+    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+
+    Transform transformacion(posiciones,orientacion);
+
+    rp3d::CollisionBody * cuerpo;
+    cuerpo = space->createCollisionBody(transformacion); 
+   
+    //se le da forma de esfera
+    SphereShape * forma = new SphereShape(alto);
+    cuerpo->addCollisionShape(forma,transformacion);
+
+    _waypoints.push_back(cuerpo);
+    return _waypoints.size()-1;
+} 
+
 void MotorFisicas::setFormaArma(float px, float py, float pz, int anc, int lar, int alt)
 {
     rp3d::Vector3 posiciones(px,py,pz);
@@ -337,6 +356,11 @@ void MotorFisicas::EraseColectable(int idx)
 {
     recolectables.erase(recolectables.begin() + idx);
     //recolectables.at(idx) = nullptr;
+}
+
+void MotorFisicas::EraseWaypoint(unsigned short pos)
+{
+    _waypoints.erase(_waypoints.begin() + pos);
 }
 
 void MotorFisicas::ErasePared(int idx)
@@ -458,6 +482,48 @@ short MotorFisicas::collideCofre()
             }
     }
     return -1;
+}
+
+/**************** CollidePlayerWaypoint ****************
+ * Funcion que detecta cuando el jugador colisiona con un
+ * waypoint para detectar un cambio de sala.
+ * 
+ *      Entradas:
+ *                  unsigned short n: indice del waypoint
+ *      Salidas:    bool var: booleano que indica si hay colision
+*/
+bool MotorFisicas::CollidePlayerWaypoint(unsigned short n)
+{
+    if(_waypoints[n])
+    {
+        if(space->testOverlap(jugador,_waypoints[n]))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**************** CollideEnemiWaypoint ****************
+ * Funcion que detecta cuando un enemigo colisiona con un
+ * waypoint para detectar un cambio de sala.
+ * 
+ *      Entradas:
+ *                  unsigned short n: indice del waypoint
+ *                  unsigned short e: indice del enemigo
+ *      Salidas:    
+ *                  bool var: booleano que indica si hay colision
+*/
+bool MotorFisicas::CollideEnemiWaypoint(unsigned short n, unsigned short e)
+{
+    if(_waypoints[n] && enemigos[e])
+    {
+        if(space->testOverlap(enemigos[e],_waypoints[n]))
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 bool MotorFisicas::collideObstaculos()
