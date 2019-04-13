@@ -376,7 +376,10 @@ void Jugando::InteractuarNivel()
 void Jugando::Update()
 {
     Constantes constantes;
+    bool colisionaWaypoint = false, waypointComun = false;
     _motor->clearDebug();
+    short contadorWaypoints = 0, contadorEnemigos = 0, i = 0;
+    INnpc::VectorEspacial posicionTemporal;
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
 
@@ -537,8 +540,6 @@ void Jugando::Update()
     if(_enemigos.size() > 0)//posiciones interpolacion
     {
         //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
-        short contadorEnemigos = 0;
-        INnpc::VectorEspacial posicionTemporal;
 
         for(short i=0;(unsigned)i<_enemigos.size();i++)
         {
@@ -563,13 +564,6 @@ void Jugando::Update()
                 {
                     if (_enemigos[i]->GetContestar())
                         updateRecorridoPathfinding(_enemigos[i]);
-                }
-                if(_enemigos[i]->GetModo() == constantes.UNO && _enemigos[i]->getVida() > 0)
-                {
-                    contadorEnemigos++;
-                    posicionTemporal.vX += _enemigos[i]->getX();
-                    posicionTemporal.vY += _enemigos[i]->getY();
-                    posicionTemporal.vZ += _enemigos[i]->getZ();
                 }
                 // TO DO: optimizar
                 if (_enemPideAyuda) {
@@ -617,65 +611,104 @@ void Jugando::Update()
                     }
                     _enemigos[i]->setTimeOcultarse(tiempoOcultarse);
                 }
-                short j = 0;
-                colisionaWaypoint = 0;
+                colisionaWaypoint = false;
                 //Aqui se comprueba si el jugador cambia de sala
-                while(!colisionaWaypoint && (unsigned) j < _waypoints.size())
+                while(!colisionaWaypoint && (unsigned) contadorWaypoints < _waypoints.size())
                 {
-                    colisionaWaypoint = _fisicas->CollideEnemiWaypoint(j,i);
+                    colisionaWaypoint = _fisicas->CollideEnemiWaypoint(contadorWaypoints,i);
                     if(!colisionaWaypoint)
                     {
-                        j++;
+                        contadorWaypoints++;
                     }
                 }
                 //Ha colisionado con un waypoint
                 if(colisionaWaypoint)
                 {
                     //Se compara si es tipo B (de acceso horizontal)
-                    if(_waypoints[j]->GetTipo() == constantes.WAYP_B)
+                    if(_waypoints[contadorWaypoints]->GetTipo() == constantes.WAYP_B)
                     {
                         //Si la x del jugador es mayor que la x del waypoint y la x de la sala
                         //actual del jugador es menor que la del waypoint, cambia de sala
-                        if(_enemigos[i]->getX() > _waypoints[j]->GetPosicionWaypoint().x)
+                        if(_enemigos[i]->getX() > _waypoints[contadorWaypoints]->GetPosicionWaypoint().x)
                         {
-                            if(_enemigos[i]->GetSala()->getSizes()[constantes.DOS] < _waypoints[j]->GetPosicionWaypoint().x)
+                            if(_enemigos[i]->GetSala()->getSizes()[constantes.DOS] < _waypoints[contadorWaypoints]->GetPosicionWaypoint().x)
                             {
                                 //Se busca la nueva sala a la que se accede
-                                this->CambiarSalaEnemigo(j,i);
+                                this->CambiarSalaEnemigo(contadorWaypoints,i);
                             }
                         }
                         //Si la x del jugador es menor que la x del waypoint y la x de la sala
                         //actual del jugador es mayor que la del waypoint, cambia de sala
-                        else if(_enemigos[i]->getX() < _waypoints[j]->GetPosicionWaypoint().x)
+                        else if(_enemigos[i]->getX() < _waypoints[contadorWaypoints]->GetPosicionWaypoint().x)
                         {
-                            if(_enemigos[i]->GetSala()->getSizes()[constantes.DOS] > _waypoints[j]->GetPosicionWaypoint().x)
+                            if(_enemigos[i]->GetSala()->getSizes()[constantes.DOS] > _waypoints[contadorWaypoints]->GetPosicionWaypoint().x)
                             {
                                 //Se busca la nueva sala a la que se accede
-                                this->CambiarSalaEnemigo(j,i);
+                                this->CambiarSalaEnemigo(contadorWaypoints,i);
                             }
                         }
                     }
-                    else if(_waypoints[j]->GetTipo() == constantes.WAYP_C)
+                    else if(_waypoints[contadorWaypoints]->GetTipo() == constantes.WAYP_C)
                     {
                         //Si la z del jugador es mayor que la z del waypoint y la z de la sala
                         //actual del jugador es menor que la del waypoint, cambia de sala
-                        if(_enemigos[i]->getZ() > _waypoints[j]->GetPosicionWaypoint().z)
+                        if(_enemigos[i]->getZ() > _waypoints[contadorWaypoints]->GetPosicionWaypoint().z)
                         {
-                            if(_enemigos[i]->GetSala()->getSizes()[constantes.CUATRO] < _waypoints[j]->GetPosicionWaypoint().z)
+                            if(_enemigos[i]->GetSala()->getSizes()[constantes.CUATRO] < _waypoints[contadorWaypoints]->GetPosicionWaypoint().z)
                             {
                                 //Se busca la nueva sala a la que se accede
-                                this->CambiarSalaEnemigo(j,i);
+                                this->CambiarSalaEnemigo(contadorWaypoints,i);
                             }
                         }
                         //Si la z del jugador es menor que la z del waypoint y la z de la sala
                         //actual del jugador es mayor que la del waypoint, cambia de sala
-                        else if(_enemigos[i]->getZ() < _waypoints[j]->GetPosicionWaypoint().z)
+                        else if(_enemigos[i]->getZ() < _waypoints[contadorWaypoints]->GetPosicionWaypoint().z)
                         {
-                            if(_enemigos[i]->GetSala()->getSizes()[constantes.CUATRO] > _waypoints[j]->GetPosicionWaypoint().z)
+                            if(_enemigos[i]->GetSala()->getSizes()[constantes.CUATRO] > _waypoints[contadorWaypoints]->GetPosicionWaypoint().z)
                             {
                                 //Se busca la nueva sala a la que se accede
-                                this->CambiarSalaEnemigo(j,i);
+                                this->CambiarSalaEnemigo(contadorWaypoints,i);
                             }
+                        }
+                    }
+                }
+                //Se tiene en cuenta al enemigo si esta en modo ataque para situar al nuevo centro del flocking
+                if(_enemigos[i]->GetModo() == Enemigo::modosEnemigo::MODO_ATAQUE)
+                {
+                    contadorEnemigos++;
+                    posicionTemporal.vX += _enemigos[i]->getX();
+                    posicionTemporal.vY += _enemigos[i]->getY();
+                    posicionTemporal.vZ += _enemigos[i]->getZ();
+
+                    //Ya que comprobamos el modo ataque, comprobamos aqui si esta en una sala distinta a la del jugador
+                    if(_enemigos[i]->GetSala() != _jugador->GetSala())
+                    {
+                        short contadorWaypointsJugador = 0;
+                        contadorWaypoints = 0;
+                        while((unsigned) contadorWaypoints < _enemigos[i]->GetSala()->GetWaypoints().size() && !waypointComun)
+                        {
+                            while((unsigned) contadorWaypointsJugador < _jugador->GetSala()->GetWaypoints().size() && !waypointComun)
+                            {
+                                //Si hay un waypoint en comun entre la sala del jugador y la del enemigo, estan en salas contiguas
+                                if(_jugador->GetSala()->GetWaypoints()[contadorWaypointsJugador] == _enemigos[i]->GetSala()->GetWaypoints()[contadorWaypoints])
+                                {
+                                    //Se hace al enemigo ir hacia el waypoint comun y cuando llegue se hace que persiga al jugador
+                                    waypointComun = true;
+                                    vector <INdrawable::Posiciones> posicionWaypoint;
+                                    posicionWaypoint.reserve(constantes.UNO);
+                                    posicionWaypoint.push_back(_jugador->GetSala()->GetWaypoints()[contadorWaypointsJugador]->GetPosicionWaypoint());
+                                    _enemigos[i]->AnnadirRecorridoAyuda(posicionWaypoint);
+                                    _enemigos[i]->SetSala(_jugador->GetSala());
+                                }
+                                else{contadorWaypointsJugador++;}
+                            }
+                            contadorWaypointsJugador = 0;
+                            contadorWaypoints++;
+                        }
+                        //Si el jugador no esta en la sala contigua, el enemigo pasa a su estado normal
+                        if(!waypointComun)
+                        {
+                            _enemigos[i]->SetModo(Enemigo::modosEnemigo::MODO_DEFAULT);
                         }
                     }
                 }
@@ -714,8 +747,6 @@ void Jugando::Update()
 void Jugando::UpdateIA()
 {
     Constantes constantes;
-    bool colisionaWaypoint = false;
-    short i = 0;
     /* *********** Teclas para probar cosas *************** */
     // Bajar vida
     if (_motor->EstaPulsado(KEY_J))
@@ -745,7 +776,7 @@ void Jugando::UpdateIA()
     //En esta parte muere enemigo
     if(_enemigos.size() > 0){
         //comprobando los _enemigos para saber si estan muertos
-        for(i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+        for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
             if(_enemigos[i] != nullptr)
             {
                 if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte())
