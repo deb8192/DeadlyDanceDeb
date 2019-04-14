@@ -398,6 +398,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
             case EN_BUSCA:  //El Guardian busca un escondite o un objeto
                 switch(_ordenes[1])
                 {
+                        //TO DO detectar si las zonas están en otra sala y usar pathfinding
                         case EN_ESCONDITE:
                         {
                             if(modo != MODO_BUSCAR_ESCONDITE)
