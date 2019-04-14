@@ -177,6 +177,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float danyo_arma = 10.0f;
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc;
         float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
+        float tamanyoflecha = 1.0f;
         int tipo_arma = 2;
         vector <unsigned int> atacados_normal;
         int dinero;

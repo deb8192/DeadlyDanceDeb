@@ -555,7 +555,7 @@ void MotorGrafico::RenderEscena()
                 {
                     ActualizarAnimacionMotor(ObjetosAni_Scena[i]);
                 }
-            }            
+            }
 
         }
     #else
@@ -840,7 +840,7 @@ void MotorGrafico::ResetKey(short event)
             break;
             case idsEventos::Enum::KEY_ESPACIO:
                 estadoteclas[GLFW_KEY_SPACE] = false;
-            break;    
+            break;
             case idsEventos::Enum::KEY_ACEPTAR:
                 estadoteclas[GLFW_KEY_ENTER] = false;
             break;
@@ -852,7 +852,7 @@ void MotorGrafico::ResetKey(short event)
             break;
             case idsEventos::Enum::KEY_2:
                 estadoteclas[GLFW_KEY_2] = false;
-            break;            
+            break;
             case idsEventos::Enum::KEY_U:
                 estadoteclas[GLFW_KEY_U] = false;//para desactivar colisiones jugador
             break;
@@ -870,7 +870,7 @@ void MotorGrafico::ResetKey(short event)
             break;
             case idsEventos::Enum::RMOUSE_PRESSED_DOWN:
                 estadoteclas[GLFW_MOUSE_BUTTON_RIGHT] = false;
-            break;    
+            break;
             case idsEventos::Enum::LMOUSE_PRESSED_DOWN:
                 estadoteclas[GLFW_MOUSE_BUTTON_LEFT] = false;
             break;
@@ -1195,7 +1195,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
             _interfaz->Trasladar(_jugEscena,(float)x,(float)y,(float)z);
             _interfaz->Escalar(_jugEscena,(float)1.75,(float)1.75,(float)1.75);
             _aniJugEscena = new Animaciones("assets/animaciones/rockero.xml");//cargamos las animaciones
-            _aniJugEscena->AsignarID(_jugEscena);//definimos el id para cuando luego se actualice sepa que id tiene 
+            _aniJugEscena->AsignarID(_jugEscena);//definimos el id para cuando luego se actualice sepa que id tiene
             //cout << _jugEscena << " INICIALMENTE: " << x << " " << y << " " << z << endl;
         }
 
@@ -1231,7 +1231,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             _interfaz->SetTexture(_objetoEnEscena,ruta_textura);
             _interfaz->Trasladar(_objetoEnEscena,(float)x,(float)y,(float)z);
             _interfaz->Rotar(_objetoEnEscena,0.0f,(float)rp,0.0f);
-            
+
             Animaciones * logicaAnim = nullptr;
 
             if(anima != nullptr)
@@ -1418,7 +1418,7 @@ void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, f
     #endif
 }
 
-void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float ry, float rz)
+void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float ry, float rz, float es)
 {
     #ifdef WEMOTOR
 
@@ -1427,6 +1427,7 @@ void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float 
         {
             _interfaz->Trasladar(_armaProyectil,x,y+2,z);
             _interfaz->Rotar(_armaProyectil,rx,ry-180,rz);
+            _interfaz->Escalar(_armaProyectil,es,es,es);
         }
 
     #else
@@ -1435,6 +1436,7 @@ void MotorGrafico::dispararProyectil(float x, float y, float z, float rx, float 
         {
             _armaProyectil->setPosition(core::vector3df(x,y,z));
             _armaProyectil->setRotation(core::vector3df(rx,ry,rz));
+            _armaProyectil->setScale(core::vector3df(es,es,es));
         }
     #endif
 }
@@ -2447,7 +2449,7 @@ void MotorGrafico::SetBarraEnergia(int barra)
                 BarraEnergiaI->setMaxSize(dimension2du(1,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
             }
             else
-            {            bool estadoteclas3[350];//contiene si se ha reseteado el boton 
+            {            bool estadoteclas3[350];//contiene si se ha reseteado el boton
                 BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
             }
         }
@@ -2696,7 +2698,7 @@ void MotorGrafico::cambiarAnimacionJugador(int estado)
         {
             if(_aniJugEscena->ExisteEstado(estado) && _aniJugEscena->SePuedeCambiarEstado(frame_actual))//comprobamos primero que sea posible
             {
-                //std::cout << " se llama a cambiar estado " << estado << " " << frame << std::endl; 
+                //std::cout << " se llama a cambiar estado " << estado << " " << frame << std::endl;
                 _aniJugEscena->CambiarEstado(estado,frame,frame_actual);//si es posible llamamos a cambiarestado
             }
         }
@@ -3088,7 +3090,7 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
         if(tipo == 0) //animaciones objetos
         {
             anim = ObjetosAni_Scena[did];
-            
+
         }
         else if(tipo == 1) //animaciones recolectables
         {
@@ -3099,7 +3101,7 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
             anim = PowerUPAni_Scena[did];
         }
 
-        //aqui mas 
+        //aqui mas
 
         if(anim != nullptr)
         {
@@ -3118,7 +3120,7 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
 }
 
 void MotorGrafico::ActualizarAnimacionMotor(Animaciones * anima)
-{       
+{
     #ifdef WEMOTOR
         if(anima != nullptr)
         {
@@ -3126,7 +3128,7 @@ void MotorGrafico::ActualizarAnimacionMotor(Animaciones * anima)
             if(frame_actual != -1)
             {
                 anima->ProcesarAnimacion(frame_actual);//mira si debe cambiar de estado porque ha terminado la animacion y tiene salto automatico a otro
-                if(anima->SeCambiaEstado())//esto indica si se ha cambiado estado 
+                if(anima->SeCambiaEstado())//esto indica si se ha cambiado estado
                 {
                     unsigned int * devolucion = anima->Update();
                     //si se cambia aun estado que ya esta no se actualiza por lo que te devuelve un nullptr
@@ -3186,16 +3188,15 @@ void MotorGrafico::updateTeclas()
                         else
                         {
                             estadoteclas2[i] = true;
-                            estadoteclas[i]=false;     
+                            estadoteclas[i]=false;
                         }
                 }
                 else
                 {
-                        estadoteclas[i]=_interfaz->IsMouseClick(i); 
+                        estadoteclas[i]=_interfaz->IsMouseClick(i);
                 }
             }
-            tiempo = tiempoactual; 
+            tiempo = tiempoactual;
 
     #endif
 }
-
