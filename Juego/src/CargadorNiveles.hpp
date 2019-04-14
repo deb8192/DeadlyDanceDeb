@@ -41,6 +41,7 @@ class CargadorNiveles
         std::vector<Enemigo*> GetEneCofres();
         std::vector<Zona*> GetZonas();
         std::vector<Recolectable*> GetRecolectables();
+        std::vector<Recolectable*> GetLlaves();
         std::vector<Pared*> GetParedes();
         std::vector<Recolectable*> GetPowerup();
         Enemigo* GetBoss();
@@ -81,9 +82,10 @@ class CargadorNiveles
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         int chestsMax;
         std::vector<Enemigo*> _eneCofres;
-        std::vector<Recolectable*> _recolectables;
+        std::vector<Recolectable*> _reco_armas;
         std::vector<Pared*> _paredes;
         std::vector<Recolectable*> _powerup;
+        std::vector<Recolectable*> _llaves;
         std::vector<Zona*> _zonas; //Array de zonas
         std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
 
