@@ -6,7 +6,7 @@ Recolectable::Recolectable()
 
 }
 
-Recolectable::Recolectable(int id, int anc, int lar, int alt, 
+Recolectable::Recolectable(int id, int anc, int lar, int alt,
     float x, float y, float z, unsigned short tipoObj,
     int despX, int despZ)
 {
@@ -56,7 +56,15 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
         }
         break;
 
-        case 9: // ORO
+        case 9: // FLAUTA
+        {
+            _modelo = "assets/models/Flauta.obj";
+            _textura = nullptr;
+            accion = 2;
+        }
+        break;
+
+        case 10: // ORO
         {
             _modelo = "assets/models/gold.obj";
             _textura = "assets/texture/gold.png";
@@ -64,7 +72,7 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
         }
         break;
 
-        case 10: // VIDA
+        case 11: // VIDA
         {
             _modelo = "assets/models/powerup0.obj";
             _textura = "assets/texture/powerup0.png";
@@ -72,7 +80,7 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
         }
         break;
 
-        case 11: // ENERGIA
+        case 12: // ENERGIA
         {
             _modelo = "assets/models/powerup1.obj";
             _textura = "assets/texture/powerup1.png";

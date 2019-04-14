@@ -271,11 +271,11 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         switch (tipoJug)
         {
             case 2:
-                _jugador = new Bailaora(tipoJug,Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
+                _jugador = new Bailaora(padren,tipoJug,Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
                 break;
 
             default:
-                _jugador = new Heavy(tipoJug,Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
+                _jugador = new Heavy(padren,tipoJug,Playerx,Playerz,Playery,ancho,largo,alto,accion, 100);
                 break;
         }
         _jugador->setID(++id);
@@ -359,8 +359,9 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int ancho = enem.attribute("ancho").as_int();//nos devuelve un int
         int largo = enem.attribute("largo").as_int();//nos devuelve un int
         int alto = enem.attribute("alto").as_int();//nos devuelve un int
+        char* tipoWaypoint = (char*) enem.attribute("tipoWaypoint").value();
         int compartido = enem.attribute("compartido").as_int();//nos devuelve un int
-        char* conexiones = (char *) enem.attribute("conexiones").value(); //nos indica los ID de los waypoints con los que conecta este waypoint
+        char* conexiones = (char*) enem.attribute("conexiones").value(); //nos indica los ID de los waypoints con los que conecta este waypoint
         char* reading =  strtok(conexiones, ",");
         int* arrayConexiones = new int [5];
         unsigned short i = 0;
@@ -370,7 +371,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
             reading = strtok(NULL, ",");
             i++;
         }
-        CrearWaypoint(padren,accion,compartido,ID,x,y,z,ancho,largo,alto,arrayConexiones,i); //cargamos el waypoint
+        CrearWaypoint(padren,accion,compartido,ID,x,y,z,ancho,largo,alto,arrayConexiones,tipoWaypoint[0],i); //cargamos el waypoint
     }
 
     return padren;
@@ -717,9 +718,9 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
 }
 
-void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int ID, int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones)
+void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int ID, int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, const char& tipoWaypoint, int sizeConexiones)
 {
-    Waypoint* waypoint = new Waypoint(ID, x, y, z, compartido, arrayConexiones, sizeConexiones);
+    Waypoint* waypoint = new Waypoint(ID, x, y, z, compartido, arrayConexiones, tipoWaypoint, sizeConexiones, alto);
     bool coincide = false;
     unsigned short i = 0;
     while(i < _waypoints.size() && !coincide)
@@ -737,6 +738,7 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
         _waypoints.push_back(waypoint);
         sala->AgregarWaypoint(_waypoints.back());
     }
+    
     waypoint = nullptr;
 }
 

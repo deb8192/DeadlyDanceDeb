@@ -107,6 +107,11 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
         }
     }
 
+    else if(modo == MODO_AUXILIAR_ALIADO)
+    {
+        this->AuxiliarAliado();
+    }
+
     else if(_ordenes != nullptr)
     {
         switch (_ordenes[0])

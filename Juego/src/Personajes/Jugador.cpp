@@ -26,7 +26,7 @@ Jugador::Jugador()
     porcentajeVelocidad = 1.0f;
 }
 
-Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
+Jugador::Jugador(Sala* sala, unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
     int largo, int alto, int accion, int maxVida)
 : Jugador()
 {
@@ -51,10 +51,12 @@ Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
     posPasada.x = nX;
     posPasada.y = nY;
     posPasada.z = nZ;
-    
+
     posFutura.x = nX;
     posFutura.y = nY;
     posFutura.z = nZ;
+
+    salaActual = sala;
 }
 
 Jugador::~Jugador()
@@ -137,13 +139,12 @@ Jugador::~Jugador()
     id = 0;
     animacion = 0;
     animacionAnterior = 0;
+
+    salaActual = nullptr;
 }
 
 void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 {
-    float px = posFutura.x,
-          pz = posFutura.z;
-
     struct
     {
         float x = 0.0f;
@@ -214,7 +215,7 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     }
     //getGir se utiliza para orientar al jugador cuando se gira la camara
     deg -= gcam;
-    
+
     setNewRotacion(rotActual.x, deg, rotActual.z);
     setVectorOrientacion();
 
@@ -364,6 +365,19 @@ int Jugador::Atacar(int i)
             _motora->getEvent("Arpa")->setVolume(0.5f);
             _motora->getEvent("Arpa")->start();
         }
+        //ATAQUE A MEDIA DISTANCIA
+        else if(this->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        {
+            tamanyoflecha = 1.0;
+            aty = getY()+4;
+            atposY = ((getY()+4)/2);
+            _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Onda.obj",NULL);
+            //Crear cuerpo de colision de ataque delante del jugador
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0);
+            _motora->getEvent("Flauta")->setVolume(0.3f);
+            _motora->getEvent("Flauta")->start();
+        }
+
         //Se calcula el danyo del ataque
         aumentosAtaque += por1;
         if(_armaEquipada != NULL)
@@ -499,6 +513,10 @@ void Jugador::CrearCuerpoAtaque()
                 atposX += velocidadflecha* (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
             }
             var1 = 1, var2 = 1, var3 = 2, var4 = 3;
+        }
+        else if(this->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        {
+            // TO DO: lo meto en el siguiente commit
         }
     }
 
@@ -1229,6 +1247,16 @@ int Jugador::GetAlto()
     return alto;
 }
 
+Sala* Jugador::GetSala()
+{
+    return salaActual;
+}
+
+void Jugador::SetSala(Sala* sala)
+{
+    salaActual = sala;
+}
+
 bool Jugador::ColisionEntornoEne()
 {
     //colisiones con todos los objetos y enemigos que no se traspasan
@@ -1260,7 +1288,7 @@ void Jugador::Render(float updTime, float drawTime)
         if(newz > 0.0f)newz -= 1.0f;
         if(newy > 0.0f)newy -= 0.5f;
     }
-    
+
     _motor->mostrarJugador(
         posActual.x, posActual.y, posActual.z,
         rotActual.x, rotActual.y, rotActual.z, newy, newz

@@ -244,7 +244,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
-            void dispararProyectil(float x, float y, float z, float rx, float ry, float rz);
+            void dispararProyectil(float x, float y, float z, float rx, float ry, float rz, float es);
 
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz, float newy, float newz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
@@ -328,7 +328,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarIMGPuzzle(unsigned short x, unsigned short y, std::string img);
             void CrearTextoPuzzles(std::string texto, unsigned short x1, unsigned short y1,
                 unsigned short x2, unsigned short y2);
-            
+
             void HabilitarDinero();
             void DeshabilitarDinero();
             void CambiarCamara();
@@ -365,7 +365,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<Animaciones *> LlavesAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> PowerUPAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> ParedesAni_Scena;
-
+      
                 std::vector<unsigned short> Objetos_Debug;//contiene los elementos que se ven en modo debug
                 std::vector<unsigned short> Objetos_Debug2;//para objetos con tiempo para desaparecer
 
