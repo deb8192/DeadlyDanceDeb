@@ -28,6 +28,11 @@ Arma::Arma(int ataque, int anc, int lar, int alt,
         _modelo = "assets/models/Arpa.obj";
         _textura = "assets/texture/Arpa.png";
     }
+    else if (tipoObj == constantes.FLAUTA)
+    {
+        _modelo = "assets/models/Flauta.obj";
+        _textura = nullptr;
+    }
 }
 
 Arma::~Arma()

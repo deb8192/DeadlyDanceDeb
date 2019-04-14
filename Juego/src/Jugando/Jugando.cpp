@@ -269,7 +269,7 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_C);
         _motor->CambiarCamara();
     }
-    
+
 
     // Debug para probar cofres
     if(_motor->EstaPulsado(KEY_I))
@@ -312,7 +312,7 @@ void Jugando::ManejarEventos() {
     {
         cambia = 0;
     }*/
-    
+
 }
 
 /************************** InteractuarNivel* ************************
@@ -346,8 +346,8 @@ void Jugando::InteractuarNivel()
             AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
             //cambia++;
         }
-        
-        if(rec_col < 0 && int_cofre < 0 && 
+
+        if(rec_col < 0 && int_cofre < 0 &&
             int_palanca < 0 && int_puerta < 0)
         {
             DejarObjeto();
@@ -618,8 +618,8 @@ void Jugando::UpdateIA()
                 int x = _enemigos[i]->getX();
                 int y = _enemigos[i]->getY();
                 int z = _enemigos[i]->getZ();
-               
-                if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A || 
+
+                if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A ||
                     _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
                 {
                     CrearObjeto(x,y,z,2,2,2,constantes.LLAVE,0);
@@ -754,6 +754,31 @@ void Jugando::Render()
                 }
                 mov_weapon_posX=-0.7;
                 mov_weapon_posZ=-0.5;
+                mov_weapon_posY=2.3;
+                mov_weapon_rotX=90;
+                mov_weapon_rotY=0;
+                mov_weapon_rotZ=0;
+            }
+        }
+        else if(_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        {
+            if(_jugador->getTimeAt() == 1.5f)
+            {
+                proyectilFuera = false;
+                mov_weapon_rotX = 180;
+                mov_weapon_posX = 2.1;
+                mov_weapon_posZ = 2;
+                mov_weapon_posY = 5.5;
+            }
+            else if(_jugador->getTimeAt() <= 0.0f)
+            {
+                if(proyectilFuera == false)
+                {
+                    _motor->EraseProyectil();
+                    proyectilFuera = true;
+                }
+                mov_weapon_posX=-0.7;
+                mov_weapon_posZ=-1.0;
                 mov_weapon_posY=2.3;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
@@ -996,7 +1021,7 @@ void Jugando::CogerObjeto()
         _recolectables.erase(_recolectables.begin() + rec_col);
         _motor->EraseColectable(rec_col);
         _fisicas->EraseColectable(rec_col);
-    } 
+    }
     else // En el caso contrario, es un arma
     {
         if(_jugador->getArma() == nullptr)//si no tiene arma equipada
@@ -1026,12 +1051,12 @@ void Jugando::CogerObjeto()
         {
             //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
             Recolectable* nuRec = new Recolectable(-1,
-                _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
+                _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),
                 _jugador->getArma()->getAlto(),
                 _jugador->getX(),_jugador->getY(), _jugador->getZ(),
                 _jugador->getArma()->GetTipoObjeto(),0,0);
             nuRec->setAtaque(_jugador->getArma()->getAtaque());
-            
+
             Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
                 _recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(),
                 _recolectables[rec_col]->getAlto(), _recolectables[rec_col]->GetTipoObjeto());
@@ -1042,11 +1067,11 @@ void Jugando::CogerObjeto()
             _jugador->getArma()->setRotacion(0.0, constantes.PI_RADIAN, 0.0);
             //!PROVISIONAL
             //lo cargamos por primera vez en el motor de graficos
-            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), 
+            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(),
                 _recolectables[rec_col]->GetModelo(), _recolectables[rec_col]->GetTextura());
 
             //lo cargamos en el motor de fisicas
-            _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2, 
+            _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2,
                 _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),_jugador->getArma()->getAlto());
 
             //borramos el recolectable anterior de nivel, _motor grafico y motor fisicas
@@ -1056,7 +1081,7 @@ void Jugando::CogerObjeto()
 
             //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
             _recolectables.push_back(nuRec);
-            
+
             _motor->CargarRecolectable(_recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->GetModelo(), NULL);
             atacktime = 0.0f; //Reiniciar tiempo de ataques
         }
@@ -1069,7 +1094,7 @@ void Jugando::DejarObjeto()
     {
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
         Recolectable* nuRec = new Recolectable(-1,
-            _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
+            _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),
             _jugador->getArma()->getAlto(),
             _jugador->getX(),_jugador->getY(), _jugador->getZ(),
             _jugador->getArma()->GetTipoObjeto(),0,0);
@@ -1502,7 +1527,11 @@ void Jugando::AbrirCofre(Cofre* _inter)
         case 8: // GUITARRA
             CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(22,32));
             break;
-        
+
+        case 9: // FLAUTA
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(11,21));
+            break;
+
         default: // ORO
             CrearPowerUp(x,y,z,constantes.ORO,NumeroAleatorio(20,30));
             break;

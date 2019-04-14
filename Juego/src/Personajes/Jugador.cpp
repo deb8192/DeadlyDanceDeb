@@ -51,7 +51,7 @@ Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
     posPasada.x = nX;
     posPasada.y = nY;
     posPasada.z = nZ;
-    
+
     posFutura.x = nX;
     posFutura.y = nY;
     posFutura.z = nZ;
@@ -214,7 +214,7 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     }
     //getGir se utiliza para orientar al jugador cuando se gira la camara
     deg -= gcam;
-    
+
     setNewRotacion(rotActual.x, deg, rotActual.z);
     setVectorOrientacion();
 
@@ -364,6 +364,19 @@ int Jugador::Atacar(int i)
             _motora->getEvent("Arpa")->setVolume(0.5f);
             _motora->getEvent("Arpa")->start();
         }
+        //ATAQUE A MEDIA DISTANCIA
+        else if(this->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        {
+            tamanyoflecha = 1.0;
+            aty = getY()+4;
+            atposY = ((getY()+4)/2);
+            _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Onda.obj",NULL);
+            //Crear cuerpo de colision de ataque delante del jugador
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0);
+            _motora->getEvent("Arpa")->setVolume(0.5f);
+            _motora->getEvent("Arpa")->start();
+        }
+
         //Se calcula el danyo del ataque
         aumentosAtaque += por1;
         if(_armaEquipada != NULL)
@@ -502,7 +515,35 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
 
             _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
             _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
-            _motor->dispararProyectil(atx,aty,atz,atgx,atgy,atgz);
+            _motor->dispararProyectil(atx,aty,atz,atgx,atgy,atgz,1);
+        }
+        else if(this->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        {
+            float velocidadflecha = 0;
+            int distance = 1.0;
+            if(_fisicas->collideAtackObstacle())
+            {
+                velocidadflecha = 0.4f;
+                if(tamanyoflecha > 0)tamanyoflecha -= 0.1;
+            }else
+            {
+                velocidadflecha = 1.0f;
+                tamanyoflecha += 0.2;
+            }
+
+            atz += velocidadflecha*(distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
+            atx += velocidadflecha*(distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
+
+            if(_fisicas->collideAtackObstacle() == false)
+            {
+                atposZ += velocidadflecha* (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
+                atposX += velocidadflecha* (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
+                //Solo sustitulle una variable no crea cuerpos constante
+                _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0);
+                //_fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
+            }
+            _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
+            _motor->dispararProyectil(atx,aty,atz,atgx,atgy,atgz,tamanyoflecha);
         }
         /***********************************************************************************/
 
@@ -1229,7 +1270,7 @@ void Jugador::Render(float updTime, float drawTime)
         if(newz > 0.0f)newz -= 1.0f;
         if(newy > 0.0f)newy -= 0.5f;
     }
-    
+
     _motor->mostrarJugador(
         posActual.x, posActual.y, posActual.z,
         rotActual.x, rotActual.y, rotActual.z, newy, newz
