@@ -53,7 +53,8 @@ class Zona
         {  
             Z_CHEST = 0,
             Z_DARK,
-            Z_HIDE
+            Z_HIDE,
+            Z_RESPAWN
         };
 
     private:

@@ -26,6 +26,10 @@ Zona::Zona(int anc, int lar, int alt, const char *tip)
   {
     tipo = Z_HIDE;
   }
+  else if(strcmp(cadena_tipo, constantes.ZRESPAWN) == 0)
+  {
+    tipo = Z_RESPAWN;
+  }
 
   tip = nullptr;
 

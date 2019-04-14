@@ -336,9 +336,10 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int ancho = zon.attribute("ancho").as_int();//nos devuelve un int
         int largo = zon.attribute("largo").as_int();//nos devuelve un int
         int alto = zon.attribute("ancho").as_int();//nos devuelve un int
+        int boss = zon.attribute("boss").as_int();
         short totalElementos = zon.attribute("elementos").as_int();
         const char* tipo = zon.attribute("tipo").value(); //nos da un char[] = string
-        CrearZona(accion,x,y,z,ancho,largo,alto,tipo,totalElementos,padren); //cargamos el enemigo
+        CrearZona(accion,x,y,z,ancho,largo,alto,boss,tipo,totalElementos,padren); //cargamos el enemigo
     }
 
     for (pugi::xml_node enem = plat.child("Waypoint"); enem; enem = enem.next_sibling("Waypoint"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -380,6 +381,12 @@ std::vector<Enemigo*> CargadorNiveles::GetEnemigos()
     return _enemigos;
 }
 
+unsigned int CargadorNiveles::GetEnemigosCapacity()
+{
+    return _enemigos.capacity();
+}
+
+
 std::vector<Enemigo*> CargadorNiveles::GetEneCofres()
 {
     return _eneCofres;
@@ -390,9 +397,29 @@ std::vector<Zona*> CargadorNiveles::GetZonas()
     return _zonas;
 }
 
+unsigned int CargadorNiveles::GetZonasCapacity()
+{
+    return _zonas.capacity();
+}
+
+std::vector<ZonaRespawn*> CargadorNiveles::GetZonasRespawn()
+{
+    return _zonasRespawn;
+}
+
+unsigned int CargadorNiveles::GetZonasRespawnCapacity()
+{
+    return _zonasRespawn.capacity();
+}
+
 std::vector<Recolectable*> CargadorNiveles::GetRecolectables()
 {
     return _recolectables;
+}
+
+unsigned int CargadorNiveles::GetRecolectablesCapacity()
+{
+    return _recolectables.capacity();
 }
 
 std::vector<Pared*> CargadorNiveles::GetParedes()
@@ -400,9 +427,19 @@ std::vector<Pared*> CargadorNiveles::GetParedes()
     return _paredes;
 }
 
+unsigned int CargadorNiveles::GetParedesCapacity()
+{
+    return _paredes.capacity();
+}
+
 std::vector<Recolectable*> CargadorNiveles::GetPowerup()
 {
     return _powerup;
+}
+
+unsigned int CargadorNiveles::GetPowerupCapacity()
+{
+    return _powerup.capacity();
 }
 
 Enemigo* CargadorNiveles::GetBoss()
@@ -413,6 +450,11 @@ Enemigo* CargadorNiveles::GetBoss()
 std::vector<Waypoint*> CargadorNiveles::GetWaypoints()
 {
     return _waypoints;
+}
+
+unsigned int CargadorNiveles::GetWaypointsCapacity()
+{
+    return _waypoints.capacity();
 }
 
 std::vector<Puerta*> CargadorNiveles::GetPuertas()
@@ -616,10 +658,23 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
 }
 
 //lo utilizamos para crear zonas
-void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem, Sala* sala)
+void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, int boss, const char* tipo, unsigned short totalElem, Sala* sala)
 {
+    Constantes constantes;
     //Crear zona
-    Zona* zon = new Zona(ancho,largo,alto,tipo);
+    //TEMPORAL PARA PRUEBAS
+    Zona* zon;
+    if(strcmp(tipo, constantes.ZRESPAWN) == 0)
+    {
+        ZonaRespawn* zonR = new ZonaRespawn(ancho,largo,alto,tipo,boss);
+        _zonasRespawn.push_back(zonR);
+        zon = (Zona*) zonR;
+        zonR = nullptr;
+    }
+    else
+    {
+        zon = new Zona(ancho,largo,alto,tipo);
+    }
 
     //ID propia y posicion
     int calcID = _zonas.size();

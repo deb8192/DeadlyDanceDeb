@@ -54,6 +54,7 @@ class Jugando: public Estado {
             unsigned short cantidad);
         void CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
             unsigned short tipoObjeto, unsigned short ataque);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        void RespawnEnemigos(bool lvDificil);
         void ConectarWaypoints();
         void CambiarSalaJugador(unsigned short i);
         void CambiarSalaEnemigo(unsigned short n, unsigned short m);
@@ -106,6 +107,7 @@ class Jugando: public Estado {
         std::vector<Recolectable*> _recolectables;
         std::vector<Pared*> _paredes;
         std::vector<Recolectable*> _powerup;
+        std::vector<ZonaRespawn*> _zonasRespawn;
         std::vector<Zona*> _zonas; //Array de zonas
         std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
 
@@ -122,7 +124,7 @@ class Jugando: public Estado {
 
         Jugador* _jugador;
         bool jugadorInmovil; // Para las colisiones
-        float drawTime, lastDrawTime;
+        float drawTime, lastDrawTime, respawnTime, lastRespawnTime;
         float atacktime; //tiempo de ejecucion del ataque
         float mov_weapon_posX,mov_weapon_posY,mov_weapon_posZ;
         float mov_weapon_rotX,mov_weapon_rotY,mov_weapon_rotZ;

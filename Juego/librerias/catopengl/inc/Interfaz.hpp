@@ -34,8 +34,8 @@ class Interfaz
 
         unsigned short AddTexto(std::string, GLuint); //Crear un texto
 
-        unsigned short AddBoard(float , float , float ,float, float,const char *); //Crear un texto
-        
+        unsigned short AddBoard(float ,float ,float ,float, float, const char *,float); //Crear un billboard (world x, world y, world z, local x, local y, ruta imagen/texto, prioridad)
+
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
         void RemoveObject(unsigned short);//remueve objeto de la escena
@@ -117,6 +117,8 @@ class Interfaz
         void SetLejaniaCamara(unsigned short camara,float lejania);
         void SetCercaniaCamara(unsigned short camara,float cercania);
 
+        //para saber si esta liberado
+        bool IsKeyRelease(short);
 
     private:
 
@@ -126,7 +128,7 @@ class Interfaz
 
         CatOpengl::Video::Ventana * window;
 
-        Shader * shaders[4];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[5];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 

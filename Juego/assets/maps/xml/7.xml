@@ -28,7 +28,7 @@
 	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="100" Y="0" Z="16"></Zone>
 	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="-4" Y="0" Z="-16"></Zone>
 	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="100" Y="0" Z="-16"></Zone>
-
+	<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="52" Y="0" Z="32"></Zone>
 
 		<!--Sala-00--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="-50" Y="0" Z="0" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 		<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="-26" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>

@@ -1,6 +1,8 @@
 #include "Jugando.hpp"
 #include "../Juego.hpp"
 #include "../Enemigos/CofreArana.hpp"
+#include "../Enemigos/Pollo.hpp"
+#include "../Enemigos/Murcielago.hpp"
 #include "../Objetos/Puerta.hpp"
 
 Jugando::Jugando()
@@ -44,6 +46,13 @@ Jugando::~Jugando()
         _zonas.at(i) = nullptr;
     }
     _zonas.clear();
+
+    tam = _zonasRespawn.size();
+    for(short i=0; i < tam; i++)
+    {
+        _zonasRespawn.at(i) = nullptr;
+    }
+    _zonasRespawn.clear();
 
     tam = _recolectables.size();
     for(short i=0; i < tam; i++)
@@ -136,6 +145,8 @@ void Jugando::ValoresPorDefecto()
     //drawTime = _controladorTiempo->GetTiempo(2);
     drawTime = 0.0f;
     lastDrawTime = drawTime;
+    respawnTime = 0.0f;
+    lastRespawnTime = respawnTime;
     atacktime = 0.0f;
     // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
     //cambia = 0;
@@ -374,6 +385,11 @@ void Jugando::Update()
     _motor->clearDebug();
     short contadorWaypoints = 0, contadorEnemigos = 0, i = 0;
     INnpc::VectorEspacial posicionTemporal;
+    if(lastRespawnTime == 0.0f)
+    {
+        lastRespawnTime = _controladorTiempo->GetTiempo(2);
+    }
+    respawnTime = _controladorTiempo->GetTiempo(2) - lastRespawnTime;
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
 
@@ -385,7 +401,12 @@ void Jugando::Update()
         Juego::GetInstance()->estado.CambioEstadoMuerte();
     }
 
-
+    // **********  Se actualiza el respawn si procede  **********
+    if(respawnTime - lastRespawnTime >= constantes.TIEMPO_RESPAWN)
+    {
+        this->RespawnEnemigos(false);
+        lastRespawnTime = respawnTime;
+    }
     // ********** se actualiza posiciones e interpolado **********
     //animacion
     _motor->cambiarAnimacionJugador(_jugador->getAnimacion());
@@ -1035,11 +1056,19 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
 
     CrearJugador();
     _recolectables = cargador.GetRecolectables();
+    _recolectables.reserve(cargador.GetRecolectablesCapacity());
     _paredes = cargador.GetParedes();
+    _paredes.reserve(cargador.GetParedesCapacity());
     _powerup = cargador.GetPowerup();
+    _powerup.reserve(cargador.GetPowerupCapacity());
     _zonas = cargador.GetZonas();
+    _zonas.reserve(cargador.GetZonasCapacity());
+    _zonasRespawn = cargador.GetZonasRespawn();
+    _zonasRespawn.reserve(cargador.GetZonasRespawnCapacity());
     _enemigos = cargador.GetEnemigos();
+    _enemigos.reserve(cargador.GetEnemigosCapacity());
     _waypoints = cargador.GetWaypoints();
+    _waypoints.reserve(cargador.GetWaypointsCapacity());
     ConectarWaypoints();
 
     //Cargar objetos con el nivel completo
@@ -1116,6 +1145,92 @@ void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
     }
     _recolectables.push_back(move(_rec));
     _rec = nullptr;
+}
+
+void Jugando::RespawnEnemigos(bool lvDificil)
+{
+    int x = _zonasRespawn.front()->getX();
+    int y = _zonasRespawn.front()->getY();
+    int z = _zonasRespawn.front()->getZ(); 
+    int ancho, alto, largo;
+    CargadorBehaviorTrees cargadorIA;
+    if(_enemigos.size() < _enemigos.capacity())
+    {
+        Constantes constantes;
+        /*for(short i = 0; i < constantes.CUATRO; i++)
+        {
+
+        }*/
+        short enemigo = this->NumeroAleatorio(0,1);
+        switch(enemigo)
+        {
+            case 0:
+            {
+                ancho = largo = 2;
+                alto = 3;
+                Pollo* _ene = new Pollo(x,y,z, 50); // Posiciones, vida
+                //ia
+                //cargadorIA.cargarBehaviorTreeXml("PolloBT");
+                _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
+                _ene->setVelocidadMaxima(1.0f);
+                _ene->setID(_enemigos.back()->getID() + 1);//le damos el id unico en esta partida al enemigo
+                _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
+                _ene = nullptr;
+
+                //Cargar sonido evento en una instancia con la id del enemigo como nombre
+                std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
+                _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+                _motora->getEvent(nameid)->setPosition(x,y,z);
+                _motora->getEvent(nameid)->setVolume(0.4f);
+                _motora->getEvent(nameid)->start();
+            }
+                break;
+            case 1:
+            {
+                ancho = largo = 2;
+                alto = 3;
+                Murcielago* _ene = new Murcielago(x,y,z, 75); // Posiciones, vida
+                //ia
+                _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
+                _ene->setVelocidadMaxima(1.0f);
+                _ene->setID(_enemigos.back()->getID() + 1);//le damos el id unico en esta partida al enemigo
+                _enemigos.push_back(_ene);//guardamos el enemigo en el vector
+
+                //Cargar sonido evento en una instancia con la id del enemigo como nombre
+                std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
+                _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid);
+                _motora->getEvent(nameid)->setPosition(x,y,z);
+                _motora->getEvent(nameid)->setVolume(1.0f);
+                _motora->getEvent(nameid)->start();
+            }
+            break;
+        }
+        _enemigos.back()->SetEnemigo(enemigo);
+        _enemigos.back()->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+        _enemigos.back()->setPosicionesAtaque(x,y,z);
+        _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+        _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+        _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+        _enemigos.back()->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+        _enemigos.back()->setBarraAtEs(0);
+        _enemigos.back()->definirSala(_zonasRespawn.front()->GetSala());//le pasamos la sala en donde esta
+        _enemigos.back()->setAtaque(5);
+        _enemigos.back()->setArmaEspecial(100);
+        _enemigos.back()->setTimeAtEsp(0.0f);
+        _enemigos.back()->setDanyoCritico(50);
+        _enemigos.back()->setProAtaCritico(10);
+        //_enemigos.back()->genemigos.back()rarSonido(20,5);
+        _enemigos.back()->setRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+        _enemigos.back()->setVectorOrientacion();
+        _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+        _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+
+        _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura());//creamos la figura
+
+        _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0);
+        _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
+        _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
+    }
 }
 
 /************ ConectarWaypoints ************

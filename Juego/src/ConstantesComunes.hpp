@@ -24,6 +24,7 @@ typedef struct
     const short DIEZ = 10;
     const short DIECIOCHO = 18;
     const short CIEN = 100;
+    const short TIEMPO_RESPAWN = 30;
     const float DEG_TO_RAD = 0.0174532925199432957f;
     const float RAD_TO_DEG = 57.295779513082320876f;
 
@@ -94,6 +95,7 @@ typedef struct
     const char* ZCHEST = "zChest";
     const char* ZDARK = "zDark";
     const char* ZHIDE = "zHide";
+    const char* ZRESPAWN = "zRespawn";
 
     // Chars que indican los tipos de waypoints
 
