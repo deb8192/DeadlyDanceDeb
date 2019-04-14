@@ -46,12 +46,19 @@ CargadorNiveles::~CargadorNiveles()
     }
     _zonas.clear();
 
-    tam = _recolectables.size();
+    tam = _reco_armas.size();
     for(short i=0; i < tam; i++)
     {
-        delete _recolectables.at(i);
+        delete _reco_armas.at(i);
     }
-    _recolectables.clear();
+    _reco_armas.clear();
+
+    tam = _llaves.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _llaves.at(i);
+    }
+    _llaves.clear();
 
     tam = _powerup.size();
     for(short i=0; i < tam; i++)
@@ -392,7 +399,12 @@ std::vector<Zona*> CargadorNiveles::GetZonas()
 
 std::vector<Recolectable*> CargadorNiveles::GetRecolectables()
 {
-    return _recolectables;
+    return _reco_armas;
+}
+
+std::vector<Recolectable*> CargadorNiveles::GetLlaves()
+{
+    return _llaves;
 }
 
 std::vector<Pared*> CargadorNiveles::GetParedes()
@@ -442,7 +454,8 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int doorsMax, int leve
     _eneCofres.reserve(chestsMax/4);
 
     // TO DO:
-    /*_recolectables.reserve(20);
+    /*_reco_armas.reserve(20);
+    _llaves.reserve(20);
     _powerup.reserve(20);
     */
 }
@@ -649,7 +662,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
             _rec->SetPosicionArrayObjetos(posicionObjeto);
             _rec->setCodigo(codigo);
-            _recolectables.push_back(move(_rec));
+            _llaves.push_back(move(_rec));
             _rec = nullptr;
         }
         break;
@@ -681,16 +694,15 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         }
         break;
 
-        //TO DO corregir la creacion de obstaculos para hacerla correctamente
         case 14: // PARED_ROMPIBLE
         {
-            Pared* _par = new Pared(ancho,largo,alto,x,y,z,tipoObj);
-            _par->setID(_paredes.size());
+            Pared* _par = new Pared(_paredes.size(), codigo,
+                ancho,largo,alto,x,y,z,tipoObj,despX,despZ,accion);
+
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura,anima,frame);
             _par->SetPosicionArrayObjetos(posicionObjeto);
             _paredes.push_back(move(_par));
             _par = nullptr;
-            _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
         }
         break;
 
