@@ -504,19 +504,48 @@ void Jugador::CrearCuerpoAtaque()
         {
             float velocidadflecha = 3.0f;
             int distance = 1.5;
-            //Si ha chocaco con un obstaculo no avanza
+            //Si ha chocado con un obstaculo no avanza
             if(_fisicas->collideAtackObstacle() == false)
             {
-                atz += velocidadflecha*(distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
-                atx += velocidadflecha*(distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
-                atposZ += velocidadflecha* (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
-                atposX += velocidadflecha* (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
+                atz += velocidadflecha*(distance * 
+                    cos(constantes.PI * atgy / constantes.PI_RADIAN));
+                atx += velocidadflecha*(distance * 
+                    sin(constantes.PI * atgy / constantes.PI_RADIAN));
+                atposZ += velocidadflecha*(distance *
+                    cos(constantes.PI * atgy / constantes.PI_RADIAN));
+                atposX += velocidadflecha*(distance *
+                    sin(constantes.PI * atgy / constantes.PI_RADIAN));
             }
             var1 = 1, var2 = 1, var3 = 2, var4 = 3;
+            tamanyoflecha = 1;
         }
         else if(this->getArma()->GetTipoObjeto() == constantes.FLAUTA)
         {
-            // TO DO: lo meto en el siguiente commit
+            float velocidadflecha = 0;
+            int distance = 1.0;
+            if(_fisicas->collideAtackObstacle())
+            {
+                velocidadflecha = 0.4f;
+                if(tamanyoflecha > 0)tamanyoflecha -= 0.1;
+            }else
+            {
+                velocidadflecha = 1.0f;
+                tamanyoflecha += 0.2;
+            }
+
+            atz += velocidadflecha*(distance *
+                cos(constantes.PI * atgy / constantes.PI_RADIAN));
+            atx += velocidadflecha*(distance *
+                sin(constantes.PI * atgy / constantes.PI_RADIAN));
+            
+            if(_fisicas->collideAtackObstacle() == false)
+            {
+                atposZ += velocidadflecha* (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
+                atposX += velocidadflecha* (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
+                //Solo sustitulle una variable no crea cuerpos constante
+                _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0);
+            }
+            var1 = 1, var2 = 1, var3 = 2, var4 = 3;
         }
     }
 
@@ -524,10 +553,11 @@ void Jugador::CrearCuerpoAtaque()
     _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,
         var1,var2,var3,var4);
         
-    if(this->getArma() != nullptr)
-        if(this->getArma()->GetTipoObjeto() == constantes.ARPA)
+    if (this->getArma() != nullptr)
+        if ((this->getArma()->GetTipoObjeto() == constantes.ARPA) ||
+            (this->getArma()->GetTipoObjeto() == constantes.FLAUTA))
         {
-            _motor->dispararProyectil(atx,aty,atz,atgx,atgy,atgz);
+            _motor->dispararProyectil(atx,aty,atz,atgx,atgy,atgz,tamanyoflecha);
         }
 }
 
