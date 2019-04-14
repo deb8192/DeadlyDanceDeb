@@ -519,6 +519,7 @@ bool MotorFisicas::collideParedesRompibles()
             {
                 return true;
             }
+        }
     }
     return false;
 }
