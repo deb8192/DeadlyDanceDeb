@@ -1,7 +1,7 @@
 <Level><!--- Esto nos indica que estamos definiendo un nivel -->
 
 	<!-- Para reservar memoria en los vectores --> 	<!-- TO DO: Poner todos los numeros a Walls -->
-	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="5" Levers="6" Chests="16" Waypoints="70" Zones="21"></MaxNumberOf>
+	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="6" Levers="6" Chests="16" Waypoints="70" Zones="21"></MaxNumberOf>
 	<!-- Tenemos 36/50 enemigos -->
 
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
@@ -55,7 +55,6 @@
 			<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="22" largo="2" alto="24" RP="90" X="259" Y="0" Z="76" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo3.obj"></Object>
 			<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="12" largo="2" alto="24" RP="90" X="278" Y="0" Z="52" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 			<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="264" Y="0" Z="62" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
-			<!--Llave--><Object tipoObj="1" Type="1" codigo="1" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="269" Y="0" Z="5" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
 			<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="277" Y="0" Z="65"></Zone>
 			<!--Llave--><Object tipoObj="1" Type="1" codigo="1" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="269" Y="0" Z="5" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
 			<!--Puerta2--><Object tipoObj="2" Type="1" codigo="1" accion="3" ancho="4" largo="1" alto="10" RP="90" X="228" Y="0" Z="76" despX="2" despZ="0" Texture="assets/texture/Puerta.png" Model=""></Object>
