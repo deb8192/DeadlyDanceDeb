@@ -404,7 +404,7 @@ void Jugando::Update()
     // **********  Se actualiza el respawn si procede  **********
     if(respawnTime - lastRespawnTime >= constantes.TIEMPO_RESPAWN)
     {
-        this->RespawnEnemigos(false);
+        this->RespawnEnemigos();
         lastRespawnTime = respawnTime;
     }
     // ********** se actualiza posiciones e interpolado **********
@@ -1147,89 +1147,122 @@ void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
     _rec = nullptr;
 }
 
-void Jugando::RespawnEnemigos(bool lvDificil)
+/************* RespawnEnemigos **************
+ * Funcion que hace aparecer enemigos en las
+ * zonas de respawn aleatoriamente o en una
+ * sala concreta en funcion del nivel de 
+ * dificultad actual del juego
+ *          Entradas:
+ *                      lvDificil
+*/
+void Jugando::RespawnEnemigos()
 {
-    int x = _zonasRespawn.front()->getX();
-    int y = _zonasRespawn.front()->getY();
-    int z = _zonasRespawn.front()->getZ(); 
+    Constantes constantes;
+    int x = 0.0f;
+    int y = 0.0f;
+    int z = 0.0f; 
     int ancho, alto, largo;
+    short enemigosRestantes = _enemigos.capacity() - _enemigos.size();
+    short i = 0;
     CargadorBehaviorTrees cargadorIA;
-    if(_enemigos.size() < _enemigos.capacity())
+
+    //Mientras haya hueco en el array de enemigos se crean los cuatro nuevos enemigos
+    if(enemigosRestantes > constantes.CERO)
     {
-        Constantes constantes;
-        /*for(short i = 0; i < constantes.CUATRO; i++)
+        while(i < constantes.CUATRO && enemigosRestantes > constantes.CERO)
         {
-
-        }*/
-        short enemigo = this->NumeroAleatorio(0,1);
-        switch(enemigo)
-        {
-            case 0:
+            i++;
+            enemigosRestantes--;
+            short enemigo = this->NumeroAleatorio(0,1);
+            short zonaElegida;
+            /*if(lvDificil)
             {
-                ancho = largo = 2;
-                alto = 3;
-                Pollo* _ene = new Pollo(x,y,z, 50); // Posiciones, vida
-                //ia
-                //cargadorIA.cargarBehaviorTreeXml("PolloBT");
-                _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
-                _ene->setVelocidadMaxima(1.0f);
-                _ene->setID(_enemigos.back()->getID() + 1);//le damos el id unico en esta partida al enemigo
-                _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
-                _ene = nullptr;
 
-                //Cargar sonido evento en una instancia con la id del enemigo como nombre
-                std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
-                _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
-                _motora->getEvent(nameid)->setPosition(x,y,z);
-                _motora->getEvent(nameid)->setVolume(0.4f);
-                _motora->getEvent(nameid)->start();
             }
+            else
+            {*/
+            //Se selecciona una zona de respawn que no haya generado ningun enemigo en el ultimo bucle
+            do  
+            {  
+                zonaElegida = this->NumeroAleatorio(0, _zonasRespawn.size() -1);
+            }
+            while(_zonasRespawn[zonaElegida]->getProposito());
+            //}
+            
+            //Se pone el proposito de la zona como cumplido y se crea el nuevo enemigo
+            x = _zonasRespawn[zonaElegida]->getX();
+            y = _zonasRespawn[zonaElegida]->getY();
+            z = _zonasRespawn[zonaElegida]->getZ(); 
+            _zonasRespawn[zonaElegida]->setProposito(true);
+            switch(enemigo)
+            {
+                case 0:
+                {
+                    ancho = largo = 2;
+                    alto = 3;
+                    Pollo* _ene = new Pollo(x,y,z, 50); // Posiciones, vida
+                    //ia
+                    //cargadorIA.cargarBehaviorTreeXml("PolloBT");
+                    _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
+                    _ene->setVelocidadMaxima(1.0f);
+                    _ene->setID(_enemigos.back()->getID() + 1);//le damos el id unico en esta partida al enemigo
+                    _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
+                    _ene = nullptr;
+
+                    //Cargar sonido evento en una instancia con la id del enemigo como nombre
+                    std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
+                    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+                    _motora->getEvent(nameid)->setPosition(x,y,z);
+                    _motora->getEvent(nameid)->setVolume(0.4f);
+                    _motora->getEvent(nameid)->start();
+                }
+                    break;
+                case 1:
+                {
+                    ancho = largo = 2;
+                    alto = 3;
+                    Murcielago* _ene = new Murcielago(x,y,z, 75); // Posiciones, vida
+                    //ia
+                    _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
+                    _ene->setVelocidadMaxima(1.0f);
+                    _ene->setID(_enemigos.back()->getID() + 1);//le damos el id unico en esta partida al enemigo
+                    _enemigos.push_back(_ene);//guardamos el enemigo en el vector
+
+                    //Cargar sonido evento en una instancia con la id del enemigo como nombre
+                    std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
+                    _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid);
+                    _motora->getEvent(nameid)->setPosition(x,y,z);
+                    _motora->getEvent(nameid)->setVolume(1.0f);
+                    _motora->getEvent(nameid)->start();
+                }
                 break;
-            case 1:
-            {
-                ancho = largo = 2;
-                alto = 3;
-                Murcielago* _ene = new Murcielago(x,y,z, 75); // Posiciones, vida
-                //ia
-                _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
-                _ene->setVelocidadMaxima(1.0f);
-                _ene->setID(_enemigos.back()->getID() + 1);//le damos el id unico en esta partida al enemigo
-                _enemigos.push_back(_ene);//guardamos el enemigo en el vector
-
-                //Cargar sonido evento en una instancia con la id del enemigo como nombre
-                std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
-                _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid);
-                _motora->getEvent(nameid)->setPosition(x,y,z);
-                _motora->getEvent(nameid)->setVolume(1.0f);
-                _motora->getEvent(nameid)->start();
             }
-            break;
+            _enemigos.back()->SetEnemigo(enemigo);
+            _enemigos.back()->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+            _enemigos.back()->setPosicionesAtaque(x,y,z);
+            _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+            _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+            _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+            _enemigos.back()->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+            _enemigos.back()->setBarraAtEs(0);
+            _enemigos.back()->definirSala(_zonasRespawn.front()->GetSala());//le pasamos la sala en donde esta
+            _enemigos.back()->setAtaque(5);
+            _enemigos.back()->setArmaEspecial(100);
+            _enemigos.back()->setTimeAtEsp(0.0f);
+            _enemigos.back()->setDanyoCritico(50);
+            _enemigos.back()->setProAtaCritico(10);
+            //_enemigos.back()->genemigos.back()rarSonido(20,5);
+            _enemigos.back()->setRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+            _enemigos.back()->setVectorOrientacion();
+            _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+            _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+
+            _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura());//creamos la figura
+
+            _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0);
+            _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
+            _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
         }
-        _enemigos.back()->SetEnemigo(enemigo);
-        _enemigos.back()->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-        _enemigos.back()->setPosicionesAtaque(x,y,z);
-        _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-        _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-        _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-        _enemigos.back()->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
-        _enemigos.back()->setBarraAtEs(0);
-        _enemigos.back()->definirSala(_zonasRespawn.front()->GetSala());//le pasamos la sala en donde esta
-        _enemigos.back()->setAtaque(5);
-        _enemigos.back()->setArmaEspecial(100);
-        _enemigos.back()->setTimeAtEsp(0.0f);
-        _enemigos.back()->setDanyoCritico(50);
-        _enemigos.back()->setProAtaCritico(10);
-        //_enemigos.back()->genemigos.back()rarSonido(20,5);
-        _enemigos.back()->setRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
-        _enemigos.back()->setVectorOrientacion();
-        _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
-        _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
-
-        _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura());//creamos la figura
-
-        _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0);
-        _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
-        _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
     }
 }
 

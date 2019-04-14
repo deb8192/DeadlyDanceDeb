@@ -54,7 +54,7 @@ class Jugando: public Estado {
             unsigned short cantidad);
         void CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
             unsigned short tipoObjeto, unsigned short ataque);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void RespawnEnemigos(bool lvDificil);
+        void RespawnEnemigos();
         void ConectarWaypoints();
         void CambiarSalaJugador(unsigned short i);
         void CambiarSalaEnemigo(unsigned short n, unsigned short m);
@@ -95,6 +95,7 @@ class Jugando: public Estado {
         Puzzle* _puzzle;
 
         bool enSalaBoss;
+        bool lvDificil;         //Nivel de dificultad del juego. Se modifica cada minuto
         Enemigo* _boss;
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         std::vector<Enemigo*> _eneCofres;//Cofres arana desactivados
