@@ -374,8 +374,8 @@ int Jugador::Atacar(int i)
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Onda.obj",NULL);
             //Crear cuerpo de colision de ataque delante del jugador
             _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0);
-            _motora->getEvent("Arpa")->setVolume(0.5f);
-            _motora->getEvent("Arpa")->start();
+            _motora->getEvent("Flauta")->setVolume(0.3f);
+            _motora->getEvent("Flauta")->start();
         }
 
         //Se calcula el danyo del ataque
