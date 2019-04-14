@@ -171,12 +171,12 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
             break;
         case 2: //enemigos
         {
-            enemigos.push_back(cuerpo);
+            enemigos.push_back(move(cuerpo));
         }
             break;
         case 3: //objetos
         {
-            //paredes invisibles
+            //_paredes invisibles
             if(accion == 6)
             {
                 obstaculos.push_back(cuerpo);
@@ -189,17 +189,12 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
                 rp3d::Vector3 medicion(ancho,alto,largo+3.5f);
                 BoxShape * formapared = new BoxShape(medicion);
                 cuerpo->addCollisionShape(formapared,transformacion);
-                paredeInvisiblesCamara.push_back(cuerpo);
-            }
-            //paredes rompibles que se interponen ante el jugador
-            else if(accion == 5)
-            {
-                paredes.push_back(cuerpo);
+                paredeInvisiblesCamara.push_back(move(cuerpo));
             }
             //Obstaculos que se interponen ante el jugador
             else if(accion == 1)
             {
-                obstaculos.push_back(cuerpo);
+                obstaculos.push_back(move(cuerpo));
             }
         }
             break;
@@ -215,17 +210,17 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
             break;
         case 6:
         {
-            plataformas.push_back(cuerpo);
+            plataformas.push_back(move(cuerpo));
         }
             break;
         case 7: //ataque enemigos
         {
-            enemigosAtack.push_back(cuerpo);
+            enemigosAtack.push_back(move(cuerpo));
         }
             break;
         case 8:
         {
-            armaAtEspEne.push_back(cuerpo);
+            armaAtEspEne.push_back(move(cuerpo));
         }
             break;
         case 9:
@@ -260,29 +255,36 @@ unsigned short MotorFisicas::CrearCuerpoInter(unsigned short tipoObj, float px, 
     BoxShape* forma = new BoxShape(medidas);
     cuerpo->addCollisionShape(forma,transformacion);
 
-    obstaculos.push_back(cuerpo);
-
-    //Se le anade una zona de deteccion mediante colision
-    rp3d::CollisionBody* deteccion;
-    SphereShape* detector = new SphereShape(alto);
-    deteccion = space->createCollisionBody(transformacion);
-    deteccion->addCollisionShape(detector,transformacion);
-
-    switch(tipoObj)
+    if (tipoObj == constantes.PARED_ROMPIBLE)
     {
-        case 0: // PALANCA
-            _palancas.push_back(move(deteccion));
-        break;
-
-        case 4: // COFRE
-            _cofres.push_back(move(deteccion));
-        break;
-
-        default: // PUERTA2 y PUERTA
-            _puertas.push_back(move(deteccion));
-            break;
+        _paredes.push_back(move(cuerpo));
+        return _paredes.size()-1;
     }
-    return obstaculos.size()-1;
+    else
+    {
+        obstaculos.push_back(move(cuerpo));
+        //Se le anade una zona de deteccion mediante colision
+        rp3d::CollisionBody* deteccion;
+        SphereShape* detector = new SphereShape(alto);
+        deteccion = space->createCollisionBody(transformacion);
+        deteccion->addCollisionShape(detector,transformacion);
+
+        switch(tipoObj)
+        {
+            case 0: // PALANCA
+                _palancas.push_back(move(deteccion));
+            break;
+
+            case 4: // COFRE
+                _cofres.push_back(move(deteccion));
+            break;
+
+            default: // PUERTA2 y PUERTA
+                _puertas.push_back(move(deteccion));
+                break;
+        }
+        return obstaculos.size()-1;
+    }
 }
 
 unsigned short MotorFisicas::CrearCuerpoRec(int accion, float px, float py, float pz,
@@ -336,7 +338,7 @@ void MotorFisicas::EraseLlave(int idx)
 
 void MotorFisicas::ErasePared(int idx)
 {
-    paredes.erase(paredes.begin() + idx);
+    _paredes.erase(_paredes.begin() + idx);
 }
 
 void MotorFisicas::EraseColectablePowerup(int idx)
@@ -458,7 +460,7 @@ short MotorFisicas::collideCofre()
 {
     for (long unsigned int i = 0; i < _cofres.size(); i++)
     {
-        if (_cofres[i] != nullptr)
+        if (_cofres[i])
             if (space->testOverlap(jugador,_cofres[i]))
             {
                 return (int)i;
@@ -469,36 +471,41 @@ short MotorFisicas::collideCofre()
 
 short MotorFisicas::collideAttackWall()
 {
-    for(unsigned short i = 0; i < paredes.size();i++)
+    for(unsigned short i = 0; i < _paredes.size();i++)
     {
-        if(space->testOverlap(jugadorAtack,paredes[i]))
-        {
-            return i;
-        }
+        if (_paredes[i])
+            if(space->testOverlap(jugadorAtack,_paredes[i]))
+            {
+                //jugadorAtack = nullptr;
+                return i;
+            }
     }
+    //jugadorAtack = nullptr;
     return -1;
 }
 
-bool MotorFisicas::collideObstaculos()
+bool MotorFisicas::collideParedesRompibles()
 {
-    //abra que indicar tipo de objeto de alguna manera (que sean obstaculos)
-    for(long unsigned int i = 0; i < obstaculos.size();i++)
+    for(long unsigned int i = 0; i < _paredes.size();i++)
     {
-        if(obstaculos[i])
+        if(_paredes[i])
         {
-            if(space->testOverlap(jugador,obstaculos[i]))
+            if(space->testOverlap(jugador,_paredes[i]))
             {
                 return true;
             }
         }
     }
+    return false;
+}
 
-    // Paredes rompibles
-    for(long unsigned int i = 0; i < paredes.size();i++)
+bool MotorFisicas::collideObstaculos()
+{
+    for(long unsigned int i = 0; i < obstaculos.size();i++)
     {
-        if(paredes[i])
+        if(obstaculos[i])
         {
-            if(space->testOverlap(jugador,paredes[i]))
+            if(space->testOverlap(jugador,obstaculos[i]))
             {
                 return true;
             }

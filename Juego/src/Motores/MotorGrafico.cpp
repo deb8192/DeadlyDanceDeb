@@ -2076,7 +2076,8 @@ void MotorGrafico::ErasePared(long unsigned int idx)
         //codigo motor catopengl
         if(Paredes_Scena[idx] && idx < Paredes_Scena.size())
         {
-            _interfaz->RemoveObject(Paredes_Scena[idx]);
+            // TO DO: No utilizo esto de la interfaz porque da problemas
+            //_interfaz->RemoveObject(Paredes_Scena[idx]);
             Paredes_Scena.erase(Paredes_Scena.begin() + idx);
             ParedesAni_Scena.erase(ParedesAni_Scena.begin() + idx);
         }
