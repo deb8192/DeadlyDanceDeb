@@ -1347,6 +1347,17 @@ void Jugando::DejarObjeto()
             _jugador->getArma()->GetTipoObjeto(),0,0);
         nuRec->setAtaque(_jugador->getArma()->getAtaque());
 
+        if ((_jugador->getArma()->GetTipoObjeto() == constantes.ARPA) ||
+            (_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA))
+        {
+            if(proyectilFuera == false)
+            {
+                _motor->EraseProyectil();
+                proyectilFuera = true;
+                _motora->getEvent("Flauta")->stop();
+                _motora->getEvent("Arpa")->stop();
+            }
+        }
         _jugador->setArma(nullptr);
 
         //por ultimo creamos una nueva y actualizamos informacion en motor grafico
