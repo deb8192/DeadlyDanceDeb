@@ -114,12 +114,13 @@ typedef struct
     const unsigned short VIDA = 10;
     const unsigned short ENERGIA = 11;
 
+    const unsigned short PARED_ROMPIBLE = 14;
+
     // Sin utilizar por ahora
     /*
     
     const unsigned short PARED_INVISIBLE = 12;
     const unsigned short PARED_OBSTACULO = 13;
-    const unsigned short PARED_ROMPIBLE = 14;
     const unsigned short SUELO = 15;
     const unsigned short BASE = 16;
     const unsigned short DECO = 17;*/

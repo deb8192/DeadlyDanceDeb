@@ -71,7 +71,6 @@ Interactuable::Interactuable(int id, int codigo,
         setRotation(0,90,0);
         setNewRotation(0,90,0);
     }*/
-
     posObstaculos = _fisicas->CrearCuerpoInter(tipoObj,x/2,y/2,z/2,ancho,alto,largo,despX,despZ);
     _fisicas = nullptr;
 }

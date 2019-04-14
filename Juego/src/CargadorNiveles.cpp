@@ -693,16 +693,15 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         }
         break;
 
-        //TO DO corregir la creacion de obstaculos para hacerla correctamente
         case 14: // PARED_ROMPIBLE
         {
-            Pared* _par = new Pared(ancho,largo,alto,x,y,z,tipoObj);
-            _par->setID(_paredes.size());
+            Pared* _par = new Pared(_paredes.size(), codigo,
+                ancho,largo,alto,x,y,z,tipoObj,despX,despZ,accion);
+
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura,anima,frame);
             _par->SetPosicionArrayObjetos(posicionObjeto);
             _paredes.push_back(move(_par));
             _par = nullptr;
-            _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
         }
         break;
 

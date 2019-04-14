@@ -43,9 +43,10 @@ using namespace reactphysics3d;
             void DesactivarCofre(unsigned short pos);
             void EraseJugador();
             void EraseArma();
+            bool collideParedesRompibles();
             bool collideObstaculos();
-            bool collideAtackObstacle();
             bool collideObstacle();
+            bool collideAtackObstacle();
             bool enemyCollideObstacle(unsigned int enemigo);
             bool collidePlatform();
             bool enemyCollidePlatform(unsigned int enemigo);
@@ -111,9 +112,8 @@ using namespace reactphysics3d;
             std::vector<CollisionBody *> _palancas;
             std::vector<CollisionBody *> _cofres;
 
-            std::vector<unsigned int> relacionParedesObstaculos;//vector que contiene en la posicion correspondiente a una pared en su vector el valor de su posicion en el vector de obstaculos
             std::vector<CollisionBody *> obstaculos;//Vector de obstaculos que bloquean el movimiento
-            std::vector<CollisionBody *> paredes;//Vector de obstaculos que no son palancas o puertas
+            std::vector<CollisionBody *> _paredes;//Vector de obstaculos que no son palancas o puertas
             std::vector<CollisionBody *> plataformas;//Vector de plataformas para caminar
             std::vector<CollisionBody *> paredeInvisiblesCamara; //Vector con las paredes invisibles que cambian la camara
             std::vector<rp3d::Transform> prevTransform;

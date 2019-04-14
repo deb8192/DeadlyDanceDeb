@@ -455,21 +455,28 @@ void Jugando::Update()
     }
     else if(_jugador->getTimeAt() > 0.0)
     {
+        _jugador->CrearCuerpoAtaque();
+
+        // Comprobamos si ataca a la pared
         short paredCol = _fisicas->collideAttackWall();
-        
-        _motora->getEvent("RomperPared")->setPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
-        _motora->getEvent("RomperPared")->start();
+        if (paredCol >= 0)
+        {
+            _motora->getEvent("RomperPared")->setPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
+            _motora->getEvent("RomperPared")->start();
 
-        //TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
-        //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
-        _motor->cambiarAnimacion(4,paredCol,1);//se cambia la animacion de la pared
-        
-        /* TO DO: borrar despues de que termine la anim
-        _paredes.erase(_paredes.begin() + paredCol);
-        _fisicas->ErasePared(paredCol);
-        _motor->ErasePared(paredCol);*/
-
-        _jugador->AtacarUpdate(danyo2, _enemigos);
+            /*//TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
+            //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
+            */
+           _motor->cambiarAnimacion(4,paredCol,1);//se cambia la animacion de la pared
+            
+            _paredes.at(paredCol)->Borrar(paredCol);
+            _paredes.erase(_paredes.begin() + paredCol);
+        }
+        else // en caso contrario, es a un enemigo
+        {
+            _jugador->AtacarUpdate(danyo2, _enemigos);
+        }
+        //_jugador->setTimeAt(0);
     }
 
     //actualizamos los enemigos

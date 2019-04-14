@@ -43,6 +43,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         //npc metodos
         int Atacar(int);//efectua un ataque normal, llama al motor para ejecutar la animacion.
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
+        void CrearCuerpoAtaque();
         void AtacarUpdate(int danyo, vector<Enemigo*> &_getEnemigos);
         void Interactuar(int, int);//llama a la mecanica de interactuar
 
