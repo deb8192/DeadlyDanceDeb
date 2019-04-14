@@ -17,6 +17,7 @@
 #include "../Motores/MotorAudio.hpp"
 #include "../Jugando/InterfazJugador.hpp"
 #include "../ConstantesComunes.hpp"
+#include "../Jugando/Sala.hpp"
 
 using namespace std;
 
@@ -26,7 +27,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
         ~Jugador();
-        Jugador(unsigned short tipoJug,int nX,int nY,int nZ,int ancho,int largo,int alto,
+        Jugador(Sala* sala, unsigned short tipoJug,int nX,int nY,int nZ,int ancho,int largo,int alto,
             int accion, int maxVida);//defines tu la informacion del jugador
 
         //Metodos de desplazamiento
@@ -147,6 +148,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         int GetAncho();
         int GetLargo();
         int GetAlto();
+        Sala* GetSala();
+        void SetSala(Sala* sala);
         bool ColisionEntornoEne();
 
         virtual void AtacarEspecialUpdate(int* danyo, vector<Enemigo*> &_getEnemigos) = 0;
@@ -178,9 +181,11 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float danyo_arma = 10.0f;
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc;
         float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
+        float tamanyoflecha = 1.0f;
         int tipo_arma = 2;
         vector <unsigned int> atacados_normal;
         int dinero;
+        Sala* salaActual;
 
         int ancho; int largo; int alto;
 

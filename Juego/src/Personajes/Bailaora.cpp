@@ -1,7 +1,7 @@
 #include "Bailaora.hpp"
 
-Bailaora::Bailaora(unsigned short tipoJug,int nX,int nY,int nZ,int ancho,int largo,int alto,int accion,int maxVida)
-: Jugador(tipoJug,nX,nY,nZ,ancho,largo,alto,accion,maxVida)
+Bailaora::Bailaora(Sala* sala,unsigned short tipoJug,int nX,int nY,int nZ,int ancho,int largo,int alto,int accion,int maxVida)
+: Jugador(sala,tipoJug,nX,nY,nZ,ancho,largo,alto,accion,maxVida)
 {
     // TO DO: cambiar por las suyas
     _modelo = "assets/models/rockero.b3d";

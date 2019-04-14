@@ -35,6 +35,7 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/Musica/Musica-menu principal","Menu");
 
   LoadEvent("event:/SFX/SFX-Personaje Arpa golpea","Arpa");
+  LoadEvent("event:/SFX/SFX-Arma flauta","Flauta");
   LoadEvent("event:/SFX/SFX-Personaje cabezazo del heavy","SinArma");
   LoadEvent("event:/SFX/SFX-Personaje Guitarra golpea","GolpeGuitarra");
   LoadEvent("event:/SFX/SFX-Personaje Guitarra Especial","GuitarraEspecial");

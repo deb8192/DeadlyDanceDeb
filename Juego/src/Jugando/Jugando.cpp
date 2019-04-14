@@ -276,7 +276,7 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_C);
         _motor->CambiarCamara();
     }
-    
+
 
     // Debug para probar cofres
     if(_motor->EstaPulsado(KEY_I))
@@ -319,7 +319,7 @@ void Jugando::ManejarEventos() {
     {
         cambia = 0;
     }*/
-    
+
 }
 
 /************************** InteractuarNivel* ************************
@@ -380,7 +380,11 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
+    Constantes constantes;
+    bool colisionaWaypoint = false, waypointComun = false;
     _motor->clearDebug();
+    short contadorWaypoints = 0, contadorEnemigos = 0, i = 0;
+    INnpc::VectorEspacial posicionTemporal;
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
 
@@ -438,6 +442,66 @@ void Jugando::Update()
     this->updateAtEsp();
     this->updateAt(&danyo2);
 
+    //Aqui se comprueba si el jugador cambia de sala
+    while(!colisionaWaypoint && (unsigned) i < _waypoints.size())
+    {
+        colisionaWaypoint = _fisicas->CollidePlayerWaypoint(i);
+        if(!colisionaWaypoint)
+        {
+            i++;
+        }
+    }
+    //Ha colisionado con un waypoint
+    if(colisionaWaypoint)
+    {
+        //Se compara si es tipo B (de acceso horizontal)
+        if(_waypoints[i]->GetTipo() == constantes.WAYP_B)
+        {
+            //Si la x del jugador es mayor que la x del waypoint y la x de la sala
+            //actual del jugador es menor que la del waypoint, cambia de sala
+            if(_jugador->getX() > _waypoints[i]->GetPosicionWaypoint().x)
+            {
+                if(_jugador->GetSala()->getSizes()[constantes.DOS] < _waypoints[i]->GetPosicionWaypoint().x)
+                {
+                    //Se busca la nueva sala a la que se accede
+                    this->CambiarSalaJugador(i);
+                }
+            }
+            //Si la x del jugador es menor que la x del waypoint y la x de la sala
+            //actual del jugador es mayor que la del waypoint, cambia de sala
+            else if(_jugador->getX() < _waypoints[i]->GetPosicionWaypoint().x)
+            {
+                if(_jugador->GetSala()->getSizes()[constantes.DOS] > _waypoints[i]->GetPosicionWaypoint().x)
+                {
+                    //Se busca la nueva sala a la que se accede
+                    this->CambiarSalaJugador(i);
+                }
+            }
+        }
+        else if(_waypoints[i]->GetTipo() == constantes.WAYP_C)
+        {
+            //Si la z del jugador es mayor que la z del waypoint y la z de la sala
+            //actual del jugador es menor que la del waypoint, cambia de sala
+            if(_jugador->getZ() > _waypoints[i]->GetPosicionWaypoint().z)
+            {
+                if(_jugador->GetSala()->getSizes()[constantes.CUATRO] < _waypoints[i]->GetPosicionWaypoint().z)
+                {
+                    //Se busca la nueva sala a la que se accede
+                    this->CambiarSalaJugador(i);
+                }
+            }
+            //Si la z del jugador es menor que la z del waypoint y la z de la sala
+            //actual del jugador es mayor que la del waypoint, cambia de sala
+            else if(_jugador->getZ() < _waypoints[i]->GetPosicionWaypoint().z)
+            {
+                if(_jugador->GetSala()->getSizes()[constantes.CUATRO] > _waypoints[i]->GetPosicionWaypoint().z)
+                {
+                    //Se busca la nueva sala a la que se accede
+                    this->CambiarSalaJugador(i);
+                }
+            }
+        }
+    }
 
     for(unsigned int i = 0; i < _enemigos.size(); i++)
     {
@@ -483,12 +547,10 @@ void Jugando::Update()
     if(_enemigos.size() > 0)//posiciones interpolacion
     {
         //float tiempoActual = 0.0f, tiempoAtaque = 0.0f, tiempoAtaqueEsp = 0.0f;
-        short contadorEnemigos = 0;
-        INnpc::VectorEspacial posicionTemporal;
 
         for(short i=0;(unsigned)i<_enemigos.size();i++)
         {
-            if(_enemigos[i] != nullptr)
+            if(_enemigos[i] != nullptr && _enemigos[i]->getVida() > 0)
             {
                 // Se coloca la posicionMedia de las bandadas
                 if(_enemigos[i]->GetModo() == constantes.UNO)
@@ -509,13 +571,6 @@ void Jugando::Update()
                 {
                     if (_enemigos[i]->GetContestar())
                         updateRecorridoPathfinding(_enemigos[i]);
-                }
-                if(_enemigos[i]->GetModo() == constantes.UNO && _enemigos[i]->getVida() > 0)
-                {
-                    contadorEnemigos++;
-                    posicionTemporal.vX += _enemigos[i]->getX();
-                    posicionTemporal.vY += _enemigos[i]->getY();
-                    posicionTemporal.vZ += _enemigos[i]->getZ();
                 }
                 // TO DO: optimizar
                 if (_enemPideAyuda) {
@@ -563,6 +618,107 @@ void Jugando::Update()
                     }
                     _enemigos[i]->setTimeOcultarse(tiempoOcultarse);
                 }
+                colisionaWaypoint = false;
+                //Aqui se comprueba si el jugador cambia de sala
+                while(!colisionaWaypoint && (unsigned) contadorWaypoints < _waypoints.size())
+                {
+                    colisionaWaypoint = _fisicas->CollideEnemiWaypoint(contadorWaypoints,i);
+                    if(!colisionaWaypoint)
+                    {
+                        contadorWaypoints++;
+                    }
+                }
+                //Ha colisionado con un waypoint
+                if(colisionaWaypoint)
+                {
+                    //Se compara si es tipo B (de acceso horizontal)
+                    if(_waypoints[contadorWaypoints]->GetTipo() == constantes.WAYP_B)
+                    {
+                        //Si la x del jugador es mayor que la x del waypoint y la x de la sala
+                        //actual del jugador es menor que la del waypoint, cambia de sala
+                        if(_enemigos[i]->getX() > _waypoints[contadorWaypoints]->GetPosicionWaypoint().x)
+                        {
+                            if(_enemigos[i]->GetSala()->getSizes()[constantes.DOS] < _waypoints[contadorWaypoints]->GetPosicionWaypoint().x)
+                            {
+                                //Se busca la nueva sala a la que se accede
+                                this->CambiarSalaEnemigo(contadorWaypoints,i);
+                            }
+                        }
+                        //Si la x del jugador es menor que la x del waypoint y la x de la sala
+                        //actual del jugador es mayor que la del waypoint, cambia de sala
+                        else if(_enemigos[i]->getX() < _waypoints[contadorWaypoints]->GetPosicionWaypoint().x)
+                        {
+                            if(_enemigos[i]->GetSala()->getSizes()[constantes.DOS] > _waypoints[contadorWaypoints]->GetPosicionWaypoint().x)
+                            {
+                                //Se busca la nueva sala a la que se accede
+                                this->CambiarSalaEnemigo(contadorWaypoints,i);
+                            }
+                        }
+                    }
+                    else if(_waypoints[contadorWaypoints]->GetTipo() == constantes.WAYP_C)
+                    {
+                        //Si la z del jugador es mayor que la z del waypoint y la z de la sala
+                        //actual del jugador es menor que la del waypoint, cambia de sala
+                        if(_enemigos[i]->getZ() > _waypoints[contadorWaypoints]->GetPosicionWaypoint().z)
+                        {
+                            if(_enemigos[i]->GetSala()->getSizes()[constantes.CUATRO] < _waypoints[contadorWaypoints]->GetPosicionWaypoint().z)
+                            {
+                                //Se busca la nueva sala a la que se accede
+                                this->CambiarSalaEnemigo(contadorWaypoints,i);
+                            }
+                        }
+                        //Si la z del jugador es menor que la z del waypoint y la z de la sala
+                        //actual del jugador es mayor que la del waypoint, cambia de sala
+                        else if(_enemigos[i]->getZ() < _waypoints[contadorWaypoints]->GetPosicionWaypoint().z)
+                        {
+                            if(_enemigos[i]->GetSala()->getSizes()[constantes.CUATRO] > _waypoints[contadorWaypoints]->GetPosicionWaypoint().z)
+                            {
+                                //Se busca la nueva sala a la que se accede
+                                this->CambiarSalaEnemigo(contadorWaypoints,i);
+                            }
+                        }
+                    }
+                }
+                //Se tiene en cuenta al enemigo si esta en modo ataque para situar al nuevo centro del flocking
+                if(_enemigos[i]->GetModo() == Enemigo::modosEnemigo::MODO_ATAQUE)
+                {
+                    contadorEnemigos++;
+                    posicionTemporal.vX += _enemigos[i]->getX();
+                    posicionTemporal.vY += _enemigos[i]->getY();
+                    posicionTemporal.vZ += _enemigos[i]->getZ();
+
+                    //Ya que comprobamos el modo ataque, comprobamos aqui si esta en una sala distinta a la del jugador
+                    if(_enemigos[i]->GetSala() != _jugador->GetSala())
+                    {
+                        short contadorWaypointsJugador = 0;
+                        contadorWaypoints = 0;
+                        while((unsigned) contadorWaypoints < _enemigos[i]->GetSala()->GetWaypoints().size() && !waypointComun)
+                        {
+                            while((unsigned) contadorWaypointsJugador < _jugador->GetSala()->GetWaypoints().size() && !waypointComun)
+                            {
+                                //Si hay un waypoint en comun entre la sala del jugador y la del enemigo, estan en salas contiguas
+                                if(_jugador->GetSala()->GetWaypoints()[contadorWaypointsJugador] == _enemigos[i]->GetSala()->GetWaypoints()[contadorWaypoints])
+                                {
+                                    //Se hace al enemigo ir hacia el waypoint comun y cuando llegue se hace que persiga al jugador
+                                    waypointComun = true;
+                                    vector <INdrawable::Posiciones> posicionWaypoint;
+                                    posicionWaypoint.reserve(constantes.UNO);
+                                    posicionWaypoint.push_back(_jugador->GetSala()->GetWaypoints()[contadorWaypointsJugador]->GetPosicionWaypoint());
+                                    _enemigos[i]->AnnadirRecorridoAyuda(posicionWaypoint);
+                                    _enemigos[i]->SetSala(_jugador->GetSala());
+                                }
+                                else{contadorWaypointsJugador++;}
+                            }
+                            contadorWaypointsJugador = 0;
+                            contadorWaypoints++;
+                        }
+                        //Si el jugador no esta en la sala contigua, el enemigo pasa a su estado normal
+                        if(!waypointComun)
+                        {
+                            _enemigos[i]->SetModo(Enemigo::modosEnemigo::MODO_DEFAULT);
+                        }
+                    }
+                }
             }
             //_enemigos[i]->queVes();
         }
@@ -597,6 +753,7 @@ void Jugando::Update()
 */
 void Jugando::UpdateIA()
 {
+    Constantes constantes;
     /* *********** Teclas para probar cosas *************** */
     // Bajar vida
     if (_motor->EstaPulsado(KEY_J))
@@ -613,64 +770,66 @@ void Jugando::UpdateIA()
     }
     /* **************************************************** */
 
-    //Aquí el jugador genera sonidos al caminar
-    if(!_jugador->EstaMuerto() && (!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
-     || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
+    //Aqui el jugador genera sonidos al caminar
+    if(!_jugador->EstaMuerto())
     {
-        _jugador->generarSonido(constantes.NUEVE * constantes.SEIS, constantes.CINCO, constantes.UNO);
+        if((!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
+        || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
+        {
+            _jugador->generarSonido(constantes.NUEVE * constantes.SEIS, constantes.CINCO, constantes.UNO);
+        }
     }
 
     //En esta parte muere enemigo
     if(_enemigos.size() > 0){
         //comprobando los _enemigos para saber si estan muertos
         for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
-
-            if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte())
+            if(_enemigos[i] != nullptr)
             {
-                //Datos comunes a todos
-                int x = _enemigos[i]->getX();
-                int y = _enemigos[i]->getY();
-                int z = _enemigos[i]->getZ();
-               
-                if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A || 
-                    _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
+                if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte())
                 {
-                    CrearObjeto(x,y,z,2,2,2,constantes.LLAVE,0);
-                }
-                // TO DO: anyadir cofre aranya
-                // else if (_enemigos[i]->GetTipoEnemigo() == constantes.ARANA)
-                else
-                {
-                    unsigned short tipoObj = NumeroAleatorio(constantes.ORO,constantes.ENERGIA);
-                    unsigned short cantidad = 0;
-                    if (tipoObj == constantes.ORO) {
-                        cantidad = NumeroAleatorio(1,5);
-                    } else if (tipoObj == constantes.VIDA) {
-                        cantidad = NumeroAleatorio(20,50);
-                    } else { // ENERGIA
-                        cantidad = NumeroAleatorio(10,60);
-                    }
-                    CrearPowerUp(x,y,z,tipoObj,cantidad);
-                }
+                    //Datos comunes a todos
+                    int x = _enemigos[i]->getX();
+                    int y = _enemigos[i]->getY();
+                    int z = _enemigos[i]->getZ();
 
-                if (_enemigos[i] != nullptr && _enemigos[i]->GetPedirAyuda()) {
-                    enemDejarDePedirAyuda();
-                }
-
-                //Borrar enemigo
-                _motor->EraseEnemigo(i);
-                _fisicas->EraseEnemigo(i);
-                EraseEnemigo(i);
-
-            }else{
-                if(_enemigos[i]->estasMuerto()){
-                    _enemigos[i]->MuereEnemigo(i);
-                }
-                else
-                {
-                    //si no esta muerto ni piensa morirse XD ejecutamos ia
-                    if(_enemigos[i] != nullptr)
+                    if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A ||
+                        _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
                     {
+                        CrearObjeto(x,y,z,2,2,2,constantes.LLAVE,0);
+                    }
+                    // TO DO: anyadir cofre aranya
+                    // else if (_enemigos[i]->GetTipoEnemigo() == constantes.ARANA)
+                    else
+                    {
+                        unsigned short tipoObj = NumeroAleatorio(constantes.ORO,constantes.ENERGIA);
+                        unsigned short cantidad = 0;
+                        if (tipoObj == constantes.ORO) {
+                            cantidad = NumeroAleatorio(1,5);
+                        } else if (tipoObj == constantes.VIDA) {
+                            cantidad = NumeroAleatorio(20,50);
+                        } else { // ENERGIA
+                            cantidad = NumeroAleatorio(10,60);
+                        }
+                        CrearPowerUp(x,y,z,tipoObj,cantidad);
+                    }
+
+                    if (_enemigos[i]->GetPedirAyuda()) {
+                        enemDejarDePedirAyuda();
+                    }
+
+                    //Borrar enemigo
+                    _motor->EraseEnemigo(i);
+                    _fisicas->EraseEnemigo(i);
+                    EraseEnemigo(i);
+
+                }else{
+                    if(_enemigos[i]->estasMuerto()){
+                        _enemigos[i]->MuereEnemigo(i);
+                    }
+                    else
+                    {
+                        //si no esta muerto ni piensa morirse XD ejecutamos ia
                         _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
                     }
                 }
@@ -757,6 +916,31 @@ void Jugando::Render()
                 mov_weapon_posX = 2;
                 mov_weapon_posZ = 2;
                 mov_weapon_posY = 2.5;
+            }
+            else if(_jugador->getTimeAt() <= 0.0f)
+            {
+                if(proyectilFuera == false)
+                {
+                    _motor->EraseProyectil();
+                    proyectilFuera = true;
+                }
+                mov_weapon_posX=-0.7;
+                mov_weapon_posZ=-0.5;
+                mov_weapon_posY=2.3;
+                mov_weapon_rotX=90;
+                mov_weapon_rotY=0;
+                mov_weapon_rotZ=0;
+            }
+        }
+        else if(_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        {
+            if(_jugador->getTimeAt() == 1.5f)
+            {
+                proyectilFuera = false;
+                mov_weapon_rotX = 180;
+                mov_weapon_posX = 2;
+                mov_weapon_posZ = 2;
+                mov_weapon_posY = 5.5;
             }
             else if(_jugador->getTimeAt() <= 0.0f)
             {
@@ -997,6 +1181,107 @@ void Jugando::ConectarWaypoints()
     }
 }
 
+void Jugando::CambiarSalaJugador(unsigned short i)
+{
+    unsigned short j = 0;
+    unsigned short k = 0;
+    bool cambioRealizado = false;
+    //Se comprueban las salidas
+    while(!cambioRealizado && j < _jugador->GetSala()->getSalidas().size())
+    {
+        while(!cambioRealizado && k < _jugador->GetSala()->getSalidas()[j]->GetWaypoints().size())
+        {
+            if(_waypoints[i] == _jugador->GetSala()->getSalidas()[j]->GetWaypoints()[k])
+            {
+                _jugador->SetSala(_jugador->GetSala()->getSalidas()[j]);
+                cambioRealizado = true;
+            }
+            else if(!cambioRealizado)
+            {
+                k++;
+            }
+        }
+        if(!cambioRealizado)
+        {
+            k = 0;
+            j++;
+        }
+    }
+    j=0;
+    //Si en las salidas no se haya la nueva sala se comprueban las entradas
+    while(!cambioRealizado && j < _jugador->GetSala()->getEntradas().size())
+    {
+        while(!cambioRealizado && k < _jugador->GetSala()->getEntradas()[j]->GetWaypoints().size())
+        {
+            if(_waypoints[i] == _jugador->GetSala()->getEntradas()[j]->GetWaypoints()[k])
+            {
+                _jugador->SetSala(_jugador->GetSala()->getEntradas()[j]);
+                cambioRealizado = true;
+            }
+            else if(!cambioRealizado)
+            {
+                k++;
+            }
+        }
+        if(!cambioRealizado)
+        {
+            k = 0;
+            j++;
+        }
+    }
+}
+
+void Jugando::CambiarSalaEnemigo(unsigned short n, unsigned short m)
+{
+    unsigned short j = 0;
+    unsigned short k = 0;
+    bool cambioRealizado = false;
+    //Se comprueban las salidas
+    while(!cambioRealizado && j < _enemigos[m]->GetSala()->getSalidas().size())
+    {
+        while(!cambioRealizado && k < _enemigos[m]->GetSala()->getSalidas()[j]->GetWaypoints().size())
+        {
+            if(_waypoints[n] == _enemigos[m]->GetSala()->getSalidas()[j]->GetWaypoints()[k])
+            {
+                _enemigos[m]->SetSala(_enemigos[m]->GetSala()->getSalidas()[j]);
+                cambioRealizado = true;
+            }
+            else if(!cambioRealizado)
+            {
+                k++;
+            }
+        }
+        if(!cambioRealizado)
+        {
+            k = 0;
+            j++;
+        }
+    }
+    j=0;
+    //Si en las salidas no se haya la nueva sala se comprueban las entradas
+    while(!cambioRealizado && j < _enemigos[m]->GetSala()->getEntradas().size())
+    {
+        while(!cambioRealizado && k < _enemigos[m]->GetSala()->getEntradas()[j]->GetWaypoints().size())
+        {
+            if(_waypoints[n] == _enemigos[m]->GetSala()->getEntradas()[j]->GetWaypoints()[k])
+            {
+                _enemigos[m]->SetSala(_enemigos[m]->GetSala()->getEntradas()[j]);
+                cambioRealizado = true;
+            }
+            else if(!cambioRealizado)
+            {
+                k++;
+            }
+        }
+        if(!cambioRealizado)
+        {
+            k = 0;
+            j++;
+        }
+    }
+}
+
+// Para recoger una llave
 void Jugando::RecogerLlave(int rec_llave)
 {
     Llave* llave = new Llave(_llaves.at(rec_llave)->getCodigo());
@@ -1009,7 +1294,7 @@ void Jugando::RecogerLlave(int rec_llave)
     _fisicas->EraseLlave(rec_llave);
 }
 
-// Para coger una llave o un arma
+// Para coger un arma
 void Jugando::RecogerArma(int rec_col)
 {
     if(_jugador->getArma() == nullptr)//si no tiene arma equipada
@@ -1056,7 +1341,7 @@ void Jugando::DejarObjeto()
     {
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
         Recolectable* nuRec = new Recolectable(-1,
-            _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
+            _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),
             _jugador->getArma()->getAlto(),
             _jugador->getX(),_jugador->getY(), _jugador->getZ(),
             _jugador->getArma()->GetTipoObjeto(),0,0);
@@ -1287,21 +1572,6 @@ void Jugando::updateAt(int* danyo)
             _jugador->setLastTimeAt(tiempoActual);
             _jugador->setTimeAt(tiempoAtaque);
         }
-        /*if(atacktime > 0.5f)
-        {
-            if(atacktime > 0.0f)
-            {
-                atacktime--;
-            }
-            if(atacktime > 500.0f)
-            {
-                //Colorear rojo
-                _motor->colorearJugador(255,255,0,0);
-            }else if(atacktime > 0.0f){
-                //Colorear gris
-                _motor->colorearJugador(255,150,150,150);
-            }
-        }*/
 
         //clear
         if(_jugador->getTimeAt() <= 0.0f){
@@ -1381,39 +1651,39 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
         auxiliarPathfinding = 0;
 
     }
-    //Si enem no es nulo se anade a la cola de enemigos _auxiliadores
+    //Si enem no es nulo y es distinto al que pide ayuda se annade a la cola de enemigos _auxiliadores
     if(_enem != nullptr && _enem != _enemPideAyuda )
     {
         _enem->SetContestar(false);
         _auxiliadores.push_back(_enem);
         contadorEnem++;
     }
-    //Si no hay sala de destino guardada, se guarda en este momento
+    //Si no hay sala de destino guardada y si hay enemigo que pide ayuda, se guarda en este momento
     if(_destinoPathFinding == nullptr && _enemPideAyuda != nullptr)
     {
-        _destinoPathFinding = _enemPideAyuda->getSala();
+        _destinoPathFinding = _enemPideAyuda->GetSala();
     }
     //Ejecucion del pathfinding si hay una sala de destino guardada
     if(_destinoPathFinding != nullptr)
     {
         while(!_auxiliadores.empty())
         {
-            if(_destinoPathFinding != _auxiliadores.front()->getSala() && _auxiliadores.front()->GetModo() != 3)
+            if(_destinoPathFinding != _auxiliadores.front()->GetSala() && _auxiliadores.front()->GetModo() != Enemigo::modosEnemigo::MODO_AUXILIAR_ALIADO)
             {
                 Pathfinder* path = Pathfinder::getInstance();
-                recorrido = path->encontrarCamino(_auxiliadores.front()->getSala(), _destinoPathFinding);
+                recorrido = path->encontrarCamino(_auxiliadores.front()->GetSala(), _destinoPathFinding);
                 vector<INdrawable::Posiciones> posicionesWaypoints;
                 posicionesWaypoints.clear();
                 for(unsigned short i = 0; i < recorrido.size(); i++)
                 {
                     posicionesWaypoints.push_back(recorrido[i]->GetPosicionWaypoint());
-                    _auxiliadores.front()->setSala(_destinoPathFinding);
+                    _auxiliadores.front()->SetSala(_destinoPathFinding);
                 }
                 _auxiliadores.front()->AnnadirRecorridoAyuda(posicionesWaypoints);
             }
-            else if(_destinoPathFinding == _auxiliadores.front()->getSala() && _auxiliadores.front()->GetModo() != 1 && _auxiliadores.front()->GetModo() != 3)
+            else if(_destinoPathFinding == _auxiliadores.front()->GetSala() && _auxiliadores.front()->GetModo() != Enemigo::modosEnemigo::MODO_ATAQUE)
             {
-                _auxiliadores.front()->SetModo(1);
+                _auxiliadores.front()->SetModo(Enemigo::modosEnemigo::MODO_ATAQUE);
             }
             contadorEnem--;
             _auxiliadores.erase(_auxiliadores.begin());
@@ -1488,7 +1758,11 @@ void Jugando::AbrirCofre(Cofre* _inter)
         case 8: // GUITARRA
             CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(22,32));
             break;
-        
+
+        case 9: // GUITARRA
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(13,23));
+            break;
+
         default: // ORO
             CrearPowerUp(x,y,z,constantes.ORO,NumeroAleatorio(20,30));
             break;
