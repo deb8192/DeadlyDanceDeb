@@ -631,8 +631,8 @@ int Enemigo::AtacarEspecial()
             _fisicas->updateAtaquEspecEnemigos(atespposX,atespposY,atespposZ,getPosAtaques());
 
             //Crear cuerpo de colision de ataque delante del jugador
-            _motora->getEvent("Arpa")->setVolume(0.8f);
-            _motora->getEvent("Arpa")->start();
+            /*_motora->getEvent("Arpa")->setVolume(0.8f);
+            _motora->getEvent("Arpa")->start();*/
             _motor->dibujarObjetoTemporal(atespx, atespy, atespz, atgx, atgy, atgz, 4, 4, 4, 2);
         }
 
