@@ -3,8 +3,6 @@
 out vec4 FragColor;
 
 struct Material {       //Estructura material
-    sampler2D diffuse;  //Luz de la textura (luz ambiental y difusa)
-    sampler2D specular; //Luz especular de la textura
     float shininess;    //Brillo (dispersion de punto de luz especular)
 };
 
@@ -58,7 +56,10 @@ uniform vec3 viewPos;         //Posicion de la camara
 uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform SpotLight spotLight;
-uniform Material material;    //materiales (pagina con distintos materiales: http://devernay.free.fr/cours/opengl/materials.html)
+uniform Material material;    //materiales
+
+uniform sampler2D Texturediffuse;  //Textura difusa
+uniform sampler2D Texturespecular; //Textura especular
 
 //Funciones de calculo de luces
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
@@ -95,7 +96,7 @@ void main()
     }
 
     //Ajuste de silueta
-    silang /= 0.9;
+    silang /= 0.5;
     if(silang > 1.0)silang = 1.0;
 
     FragColor = vec4(result, 1.0) * silang + black_silhouette * (1 - silang);
@@ -141,9 +142,9 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
         light.diffuse = vec3(light.diffuse.x * 0.2,light.diffuse.y * 0.2,light.diffuse.z * 0.2);
     }
 
-    vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, TexCoords));
-    vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.diffuse, TexCoords));
-    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+    vec3 ambient  = light.ambient  * 0.05 * vec3(texture(Texturediffuse, TexCoords));
+    vec3 diffuse  = light.diffuse  * diff * vec3(texture(Texturediffuse, TexCoords));
+    vec3 specular = light.specular * spec * vec3(texture(Texturespecular, TexCoords));
     return (ambient + diffuse + specular);
 }
 
@@ -193,9 +194,9 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 
 
     //Combinar resultados
-    vec3 ambient  = light.ambient  * vec3(texture(material.diffuse, TexCoords));  //Luz Ambiental
-    vec3 diffuse  = light.diffuse  * diff * vec3(texture(material.diffuse, TexCoords));
-    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+    vec3 ambient  = light.ambient  * 0.05 * vec3(texture(Texturediffuse, TexCoords));  //Luz Ambiental
+    vec3 diffuse  = light.diffuse  * diff * vec3(texture(Texturediffuse, TexCoords));
+    vec3 specular = light.specular * spec * vec3(texture(Texturespecular, TexCoords));
     //Aplicamos atenuacion a las luces
     ambient  *= attenuation;
     diffuse  *= attenuation;
@@ -252,9 +253,9 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     }
 
     //Combinar resultados
-    vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
-    vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
-    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+    vec3 ambient = light.ambient   * 0.05 * vec3(texture(Texturediffuse, TexCoords));
+    vec3 diffuse = light.diffuse   * diff * vec3(texture(Texturediffuse, TexCoords));
+    vec3 specular = light.specular * spec * vec3(texture(Texturespecular, TexCoords));
     //Aplicamos atenuacion e intensidad a las luces
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;

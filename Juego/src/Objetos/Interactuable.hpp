@@ -5,6 +5,7 @@
 #include "../Motores/INobjetos.hpp"
 #include "../Motores/INdrawable.hpp"
 #include "../Motores/MotorGrafico.hpp"
+#include "../Motores/MotorAudio.hpp"
 
 using namespace std;
 
@@ -75,6 +76,7 @@ class Interactuable : public INobjetos , public INdrawable //multiple herencia a
 
     protected:
         MotorGrafico* _motor;
+        MotorAudioSystem* _motora;
         
         //Si codigoObjeto es > 0 es un numero comun entre dos objetos: una palanca con el mismo numero que una puerta abre dicha puerta
         int codigoObjeto;   //En caso de igualarse a 0 es una puerta sin llave, y si es -1 es un cofre

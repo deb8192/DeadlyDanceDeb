@@ -372,7 +372,7 @@ void Enemigo::queVes()
 
 }
 
-Sala* Enemigo::getSala()
+Sala* Enemigo::GetSala()
 {
     return _estoy;
 }
@@ -631,8 +631,8 @@ int Enemigo::AtacarEspecial()
             _fisicas->updateAtaquEspecEnemigos(atespposX,atespposY,atespposZ,getPosAtaques());
 
             //Crear cuerpo de colision de ataque delante del jugador
-            _motora->getEvent("Arpa")->setVolume(0.8f);
-            _motora->getEvent("Arpa")->start();
+            /*_motora->getEvent("Arpa")->setVolume(0.8f);
+            _motora->getEvent("Arpa")->start();*/
             _motor->dibujarObjetoTemporal(atespx, atespy, atespz, atgx, atgy, atgz, 4, 4, 4, 2);
         }
 
@@ -895,7 +895,7 @@ void Enemigo::setLastTimeAtEsp(float time)
     lastAtackEspTime = time;
 }
 
-void Enemigo::setSala(Sala* sala)
+void Enemigo::SetSala(Sala* sala)
 {
     _estoy = sala;
 }
@@ -1840,7 +1840,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     void Enemigo::modificarTrayectoria(INnpc::VectorEspacial* vectorDirector, int* destino)
     {
         Constantes constantes;
-        float contraRotacion = constantes.UNO - pesoRotacion;
         //Se obtiene la nueva direccion del movimiento sumando las componentes de la normal del obstaculo con las del vector director
         //En caso de girar 180 grados, se multiplica por -1 la coordenada del vector que se acerque a +-1
         /*vectorDirector->vX = vectorDirector->vX * contraRotacion + (destino[3] * distanciaMinimaEsquivar) * pesoRotacion;

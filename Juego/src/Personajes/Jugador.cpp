@@ -26,7 +26,7 @@ Jugador::Jugador()
     porcentajeVelocidad = 1.0f;
 }
 
-Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
+Jugador::Jugador(Sala* sala, unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
     int largo, int alto, int accion, int maxVida)
 : Jugador()
 {
@@ -51,10 +51,12 @@ Jugador::Jugador(unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
     posPasada.x = nX;
     posPasada.y = nY;
     posPasada.z = nZ;
-    
+
     posFutura.x = nX;
     posFutura.y = nY;
     posFutura.z = nZ;
+
+    salaActual = sala;
 }
 
 Jugador::~Jugador()
@@ -137,13 +139,12 @@ Jugador::~Jugador()
     id = 0;
     animacion = 0;
     animacionAnterior = 0;
+
+    salaActual = nullptr;
 }
 
 void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 {
-    float px = posFutura.x,
-          pz = posFutura.z;
-
     struct
     {
         float x = 0.0f;
@@ -214,7 +215,7 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     }
     //getGir se utiliza para orientar al jugador cuando se gira la camara
     deg -= gcam;
-    
+
     setNewRotacion(rotActual.x, deg, rotActual.z);
     setVectorOrientacion();
 
@@ -364,6 +365,19 @@ int Jugador::Atacar(int i)
             _motora->getEvent("Arpa")->setVolume(0.5f);
             _motora->getEvent("Arpa")->start();
         }
+        //ATAQUE A MEDIA DISTANCIA
+        else if(this->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        {
+            tamanyoflecha = 1.0;
+            aty = getY()+4;
+            atposY = ((getY()+4)/2);
+            _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Onda.obj",NULL);
+            //Crear cuerpo de colision de ataque delante del jugador
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0);
+            _motora->getEvent("Flauta")->setVolume(0.3f);
+            _motora->getEvent("Flauta")->start();
+        }
+
         //Se calcula el danyo del ataque
         aumentosAtaque += por1;
         if(_armaEquipada != NULL)
@@ -473,39 +487,84 @@ int Jugador::AtacarEspecial()
     return danyo;
 }
 
-void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
+void Jugador::CrearCuerpoAtaque()
 {
-    if(vida > 0)
+    unsigned short var1, var2, var3, var4;
+    if(this->getArma() == nullptr)
     {
-        /***************************** Codigo repe  TO DO *******************************/
-        if(this->getArma() == nullptr) {
-            _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-            _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,2,1,1,2);
-        }
-        else if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)
+        var1 = 2, var2 = 1, var3 = 1, var4 = 2;
+    }
+    else
+    {
+        if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)
         {
-            _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-            _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,3,1,3,1);
+            var1 = 3, var2 = 1, var3 = 3, var4 = 1;
         }
         else if(this->getArma()->GetTipoObjeto() == constantes.ARPA)
         {
             float velocidadflecha = 3.0f;
             int distance = 1.5;
-            //Si ha chocaco con un obstaculo no avanza
+            //Si ha chocado con un obstaculo no avanza
             if(_fisicas->collideAtackObstacle() == false)
             {
-                atz += velocidadflecha*(distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
-                atx += velocidadflecha*(distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
-                atposZ += velocidadflecha* (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
-                atposX += velocidadflecha* (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
+                atz += velocidadflecha*(distance * 
+                    cos(constantes.PI * atgy / constantes.PI_RADIAN));
+                atx += velocidadflecha*(distance * 
+                    sin(constantes.PI * atgy / constantes.PI_RADIAN));
+                atposZ += velocidadflecha*(distance *
+                    cos(constantes.PI * atgy / constantes.PI_RADIAN));
+                atposX += velocidadflecha*(distance *
+                    sin(constantes.PI * atgy / constantes.PI_RADIAN));
+            }
+            var1 = 1, var2 = 1, var3 = 2, var4 = 3;
+            tamanyoflecha = 1;
+        }
+        else if(this->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        {
+            float velocidadflecha = 0;
+            int distance = 1.0;
+            if(_fisicas->collideAtackObstacle())
+            {
+                velocidadflecha = 0.4f;
+                if(tamanyoflecha > 0)tamanyoflecha -= 0.1;
+            }else
+            {
+                velocidadflecha = 1.0f;
+                tamanyoflecha += 0.2;
             }
 
-            _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
-            _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,1,1,2,3);
-            _motor->dispararProyectil(atx,aty,atz,atgx,atgy,atgz);
+            atz += velocidadflecha*(distance *
+                cos(constantes.PI * atgy / constantes.PI_RADIAN));
+            atx += velocidadflecha*(distance *
+                sin(constantes.PI * atgy / constantes.PI_RADIAN));
+            
+            if(_fisicas->collideAtackObstacle() == false)
+            {
+                atposZ += velocidadflecha* (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
+                atposX += velocidadflecha* (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
+                //Solo sustitulle una variable no crea cuerpos constante
+                _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0);
+            }
+            var1 = 1, var2 = 1, var3 = 2, var4 = 3;
         }
-        /***********************************************************************************/
+    }
 
+    _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
+    _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,
+        var1,var2,var3,var4);
+        
+    if (this->getArma() != nullptr)
+        if ((this->getArma()->GetTipoObjeto() == constantes.ARPA) ||
+            (this->getArma()->GetTipoObjeto() == constantes.FLAUTA))
+        {
+            _motor->dispararProyectil(atx,aty,atz,atgx,atgy,atgz,tamanyoflecha);
+        }
+}
+
+void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
+{
+    if(vida > 0)
+    {
         //Enteros con los enemigos colisionados (atacados)
         vector <unsigned int> atacados = _fisicas->updateArma(atposX,atposY,atposZ);
 
@@ -606,6 +665,9 @@ void Jugador::AnnadirLlave(Llave* llave)
 {
     llaves.push_back(llave);
     cout<<"Llave añadida. Nº de llaves: "<<llaves.size()<<endl;
+
+    // TO DO: terminar lo de la interfaz y la llave
+    //_interfaz->setArma(1);
 }
 
 /***********EliminarLlave************
@@ -1070,30 +1132,49 @@ void Jugador::setAtaque(int ataq)
     ataque = ataq;
 }
 
-void Jugador::setArma(Arma* arma)
+void Jugador::setArma(Recolectable* _armaRec)
 {
-    _armaEquipada = arma;
-
-    if(_armaEquipada)
+    // Al dejar el objeto o reiniciar partida, borra el arma puesta
+    if (_armaEquipada != nullptr)
     {
-        if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)//entonces es la guitarra cuerpo a cuerpo
+        _motor->EraseArma();
+        _fisicas->EraseArma();
+    }
+
+    // Se comprueba si ha recogido otra arma
+    if(_armaRec)
+    {
+        _armaEquipada = new Arma(_armaRec->getAtaque(),
+            _armaRec->getAncho(),_armaRec->getLargo(),_armaRec->getAlto(),
+            _armaRec->GetTipoObjeto());
+
+        //PROVISIONAL
+        _armaEquipada->setRotacion(0.0, constantes.PI_RADIAN, 0.0);
+        //!PROVISIONAL
+
+        //lo cargamos por primera vez en el motor de graficos
+        _motor->CargarArmaJugador(posActual.x, posActual.y, posActual.z,
+            _armaEquipada->GetModelo(),_armaEquipada->GetTextura());
+        
+        //lo cargamos por primera vez en el motor de fisicas
+        _fisicas->crearCuerpo(0,posActual.x/2,posActual.y/2,posActual.z/2,
+            2,
+            _armaEquipada->getAncho(),_armaEquipada->getLargo(),_armaEquipada->getAlto(),
+            9,0,0);
+
+        if(_armaEquipada->GetTipoObjeto() == constantes.GUITARRA)//entonces es la guitarra cuerpo a cuerpo
         {
             _interfaz->setArma(2);
         }
-
-        if(this->getArma()->GetTipoObjeto() == constantes.ARPA)//entonces es el arpa a distancia
+        else if(_armaEquipada->GetTipoObjeto() == constantes.ARPA)//entonces es el arpa a distancia
         {
             _interfaz->setArma(3);
-        }
-
-        if(this->getArma()->GetTipoObjeto() == constantes.LLAVE)//entonces es la llave
-        {
-            _interfaz->setArma(1);
         }
     }
     else
     {
         _interfaz->setArma(0);
+        _armaEquipada = nullptr;
     }
 }
 
@@ -1196,11 +1277,22 @@ int Jugador::GetAlto()
     return alto;
 }
 
+Sala* Jugador::GetSala()
+{
+    return salaActual;
+}
+
+void Jugador::SetSala(Sala* sala)
+{
+    salaActual = sala;
+}
+
 bool Jugador::ColisionEntornoEne()
 {
     //colisiones con todos los objetos y enemigos que no se traspasan
-    if(_fisicas->collideObstacle()
-        || !_fisicas->collidePlatform())
+    if(_fisicas->collideObstacle() ||
+        !_fisicas->collidePlatform() ||
+        _fisicas->collideParedesRompibles())
     {//colisiona
         setNewPosiciones(posActual.x, posActual.y, posActual.z);
         return true;
@@ -1226,7 +1318,7 @@ void Jugador::Render(float updTime, float drawTime)
         if(newz > 0.0f)newz -= 1.0f;
         if(newy > 0.0f)newy -= 0.5f;
     }
-    
+
     _motor->mostrarJugador(
         posActual.x, posActual.y, posActual.z,
         rotActual.x, rotActual.y, rotActual.z, newy, newz

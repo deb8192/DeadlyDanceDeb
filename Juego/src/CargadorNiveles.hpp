@@ -41,6 +41,7 @@ class CargadorNiveles
         std::vector<Enemigo*> GetEneCofres();
         std::vector<Zona*> GetZonas();
         std::vector<Recolectable*> GetRecolectables();
+        std::vector<Recolectable*> GetLlaves();
         std::vector<Pared*> GetParedes();
         std::vector<Recolectable*> GetPowerup();
         Enemigo* GetBoss();
@@ -57,7 +58,7 @@ class CargadorNiveles
         void CrearBoss(int accion,int enemigo,int x,int y,int z,int ancho, int largo, int alto, Sala* sala);
         void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem, Sala* sala); //lo usamos para crear zonas
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj, const char * anima = nullptr , int frame = 1);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void CrearWaypoint(Sala* sala, int accion, int compartido, int ID,  int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, int sizeConexiones); //Lo usamos para crear waypoints
+        void CrearWaypoint(Sala* sala, int accion, int compartido, int ID,  int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, const char& tipoWaypoint, int sizeConexiones); //Lo usamos para crear waypoints
         unsigned short CrearCofreArana(float x, float y, float z,
             float ancho, float alto, float largo, Sala* sala);
         void CargarCofres();  //Lo usamos para cargar los cofres en las distintas zonas de cofres
@@ -81,9 +82,10 @@ class CargadorNiveles
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         int chestsMax;
         std::vector<Enemigo*> _eneCofres;
-        std::vector<Recolectable*> _recolectables;
+        std::vector<Recolectable*> _reco_armas;
         std::vector<Pared*> _paredes;
         std::vector<Recolectable*> _powerup;
+        std::vector<Recolectable*> _llaves;
         std::vector<Zona*> _zonas; //Array de zonas
         std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
 

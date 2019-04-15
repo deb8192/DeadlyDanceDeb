@@ -55,9 +55,12 @@ class Jugando: public Estado {
         void CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
             unsigned short tipoObjeto, unsigned short ataque);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void ConectarWaypoints();
+        void CambiarSalaJugador(unsigned short i);
+        void CambiarSalaEnemigo(unsigned short n, unsigned short m);
 
         //Funciones de interacciones
-        void CogerObjeto();
+        void RecogerLlave(int rec_llave);
+        void RecogerArma(int rec_col);
         void DejarObjeto();
         void AccionarMecanismo(int,const unsigned short);    //Activa mecanismos y o puertas
         void activarPowerUp();
@@ -101,7 +104,8 @@ class Jugando: public Estado {
         std::vector<Waypoint*> recorrido;//Nodos a recorrer en el pathfinding
         Sala* _destinoPathFinding; //sala que se rellena al llamar a pathfinding y se vacía al terminar el recorrido del enemigo
 
-        std::vector<Recolectable*> _recolectables;
+        std::vector<Recolectable*> _reco_armas;
+        std::vector<Recolectable*> _llaves;
         std::vector<Pared*> _paredes;
         std::vector<Recolectable*> _powerup;
         std::vector<Zona*> _zonas; //Array de zonas

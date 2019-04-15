@@ -11,11 +11,13 @@
 #include "../Motores/INdrawable.hpp"
 #include "../Motores/INsentidos.hpp"
 #include "../Armas/Arma.hpp"
+#include "../Objetos/Recolectable.hpp"
 #include "../Objetos/Llave.hpp"
 #include "../Motores/MotorGrafico.hpp"
 #include "../Motores/MotorAudio.hpp"
 #include "../Jugando/InterfazJugador.hpp"
 #include "../ConstantesComunes.hpp"
+#include "../Jugando/Sala.hpp"
 
 using namespace std;
 
@@ -25,7 +27,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
     public:
         Jugador();//esto le deja a la entidad el constructor por defecto
         ~Jugador();
-        Jugador(unsigned short tipoJug,int nX,int nY,int nZ,int ancho,int largo,int alto,
+        Jugador(Sala* sala, unsigned short tipoJug,int nX,int nY,int nZ,int ancho,int largo,int alto,
             int accion, int maxVida);//defines tu la informacion del jugador
 
         //Metodos de desplazamiento
@@ -42,6 +44,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         //npc metodos
         int Atacar(int);//efectua un ataque normal, llama al motor para ejecutar la animacion.
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
+        void CrearCuerpoAtaque();
         void AtacarUpdate(int danyo, vector<Enemigo*> &_getEnemigos);
         void Interactuar(int, int);//llama a la mecanica de interactuar
 
@@ -78,7 +81,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         void ModificarBarraAtEs(int bar);
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
-        void setArma(Arma* arma);
+        void setArma(Recolectable* _armaRec);
         void setArmaEspecial(int ataque);
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
@@ -145,6 +148,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         int GetAncho();
         int GetLargo();
         int GetAlto();
+        Sala* GetSala();
+        void SetSala(Sala* sala);
         bool ColisionEntornoEne();
 
         virtual void AtacarEspecialUpdate(int* danyo, vector<Enemigo*> &_getEnemigos) = 0;
@@ -176,9 +181,11 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float danyo_arma = 10.0f;
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc;
         float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
+        float tamanyoflecha = 1.0f;
         int tipo_arma = 2;
         vector <unsigned int> atacados_normal;
         int dinero;
+        Sala* salaActual;
 
         int ancho; int largo; int alto;
 

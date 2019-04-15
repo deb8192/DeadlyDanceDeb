@@ -244,12 +244,13 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
-            void dispararProyectil(float x, float y, float z, float rx, float ry, float rz);
+            void dispararProyectil(float x, float y, float z, float rx, float ry, float rz, float es);
 
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz, float newy, float newz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
+            void mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoequipada, int tiposuelo, unsigned int i);
             void borrarArmaEspecial();
 
             //debug grafico
@@ -275,7 +276,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 IAnimatedMeshSceneNode* getArmaEspecial();
             #endif
 
-            void EraseColectable(long unsigned int idx);
+            void EraseRecoArma(long unsigned int idx);
+            void EraseLlave(long unsigned int idx);
+            void ErasePared(long unsigned int idx);
             void ErasePowerUP(long unsigned int idx);
             void DibujarCofre(long unsigned int idx, bool dibujar);
             void DibujarPared(long unsigned int idx, bool dibujar);
@@ -326,7 +329,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarIMGPuzzle(unsigned short x, unsigned short y, std::string img);
             void CrearTextoPuzzles(std::string texto, unsigned short x1, unsigned short y1,
                 unsigned short x2, unsigned short y2);
-            
+
             void HabilitarDinero();
             void DeshabilitarDinero();
             void CambiarCamara();
@@ -366,13 +369,20 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Luces_Scena;//contiene las luces de la escena
                 std::vector<unsigned short> Enemigos_Scena;//contiene los enemigos reservados (ids)
                 std::vector<unsigned short> Textos_Scena;//contiene los enemigos reservados (ids)
-                std::vector<unsigned short> Recolectables_Scena;//contiene los recolectables reservados (ids)
+                std::vector<unsigned short> BoardsArmas_Scena;//contiene los billboards de armas reservados (ids)
+
                 std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
-                std::vector<Animaciones *> ObjetosAni_Scena;//contiene los objetos reservados (ids)
-                std::vector<Animaciones *> RecolectablesAni_Scena;//contiene los objetos reservados (ids)
-                std::vector<Animaciones *> PowerUPAni_Scena;//contiene los objetos reservados (ids)
-                
+                std::vector<unsigned short> RecoArmas_Scena;//contiene los recolectables reservados (ids)
+                std::vector<unsigned short> Llaves_Scena;
                 std::vector<unsigned short> PowerUP_Scena;//contiene los power ups reservados (ids)
+                std::vector<unsigned short> Paredes_Scena;//paredes rompibles
+
+                std::vector<Animaciones *> ObjetosAni_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> RecoArmasAni_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> LlavesAni_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> PowerUPAni_Scena;//contiene los objetos reservados (ids)
+                std::vector<Animaciones *> ParedesAni_Scena;
+
                 std::vector<unsigned short> Objetos_Debug;//contiene los elementos que se ven en modo debug
                 std::vector<unsigned short> Objetos_Debug2;//para objetos con tiempo para desaparecer
 
@@ -441,8 +451,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 IAnimatedMesh* _armaEsp;//Malla del arma especial del jugador
                 IAnimatedMeshSceneNode* _armaEspJugador;//Malla del arma especial del jugador en escena
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Scena;//Objetos en scena
-                std::vector<IAnimatedMeshSceneNode*> Recolectables_Scena;//Objetos en scena
+                std::vector<IAnimatedMeshSceneNode*> RecoArmas_Scena;//Objetos en scena
+                std::vector<IAnimatedMeshSceneNode*> Llaves_Scena;//Objetos en scena
                 std::vector<IAnimatedMeshSceneNode*> PowerUP_Scena;//Objetos en scena
+                std::vector<IAnimatedMeshSceneNode*> Paredes_Scena;
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
                 IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena

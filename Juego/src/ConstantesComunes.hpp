@@ -2,7 +2,7 @@
 #define ConstantesComunes_HPP
 
 //esto contiene todas las constantes y variables de texto para comparativas en el programa (es comodo si se quiere utilizar en el algun sitio)
-//using Constantes = struct 
+//using Constantes = struct
 typedef struct
 {
     /** Angulos en grados y radianes y relacion para sus cambios de escala **/
@@ -89,10 +89,17 @@ typedef struct
     const char* ACCIONADO = "accionado";
     const char* NO_ACCIONADO = "no-accionado";
 
-    /**************************** String cargado mapas ************************/
+    /**************************** String & char cargado mapas ************************/
+    // String de los tipos de zonas
     const char* ZCHEST = "zChest";
     const char* ZDARK = "zDark";
     const char* ZHIDE = "zHide";
+
+    // Chars que indican los tipos de waypoints
+
+    const char WAYP_A = 'a';   //Waypoint central
+    const char WAYP_B = 'b';   //Waypoint de acceso horizontal
+    const char WAYP_C = 'c';   //Waypoint de acceso vertical
 
     const unsigned short HEAVY = 1;
     const unsigned short BAILAORA = 2;
@@ -109,17 +116,19 @@ typedef struct
     // Meter las armas seguidas:
     const unsigned short ARPA = 7;
     const unsigned short GUITARRA = 8;
+    const unsigned short FLAUTA = 9;
 
-    const unsigned short ORO = 9;
-    const unsigned short VIDA = 10;
-    const unsigned short ENERGIA = 11;
+    const unsigned short ORO = 10;
+    const unsigned short VIDA = 11;
+    const unsigned short ENERGIA = 12;
+
+    const unsigned short PARED_ROMPIBLE = 14;
 
     // Sin utilizar por ahora
     /*
-    
+
     const unsigned short PARED_INVISIBLE = 12;
     const unsigned short PARED_OBSTACULO = 13;
-    const unsigned short PARED_ROMPIBLE = 14;
     const unsigned short SUELO = 15;
     const unsigned short BASE = 16;
     const unsigned short DECO = 17;*/
