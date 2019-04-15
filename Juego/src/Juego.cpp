@@ -1,83 +1,68 @@
 #include "Juego.hpp"
 
-//para clases singleton deben tener un indicador de que se ha creado el unico objeto
-Juego* Juego::unica_instancia = 0;
-//fin indicador singleton
+// para clases singleton deben tener un indicador de que se ha creado el unico objeto
+Juego* Juego::_unicaInstancia = 0;
+// fin indicador singleton
 
 Juego::Juego()
 {
-    motor = MotorGrafico::getInstance();//se recoge instancia de motor
-    
-    //Motor de audio inicializar
-    motora = MotorAudioSystem::getInstance();
-    motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    motora->getEvent("Level02")->start(); //Reproducir musica Menu
-
-    nivel = Nivel::getInstance();//se recoge la instancia de nivel
-    estado = &menu;//se empieza en el estado menu
+    _motor = MotorGrafico::GetInstance();// se recoge instancia de_motor
+    _tiempo = Times::GetInstance();
 }
 
-bool Juego::Running()
+Juego::~Juego()
 {
-    return motor->sigueFuncionando();
+    // Punteros a clases singleton
+    _tiempo = nullptr;
+    _motor = nullptr;
+
+    // Liberar memoria
+    delete _unicaInstancia;
 }
 
-void Juego::LimpiarVentana()
+void Juego::inicializarVentana()
 {
-    motor->limpiarDevice();
+    cout << "\e[42m Iniciando Juego \e[0m" << endl;
+    _motor->CrearVentana(2);//crea ventana de 800x600
+
+    estado.CambioEstadoMenu();// temporal para pruebas, 
+    //estado.CambioEstadoCinematica();
 }
 
-void Juego::InicializarVentana()
+void Juego::Iniciar()
 {
-    motor->crearVentana(2);//crea ventana
-    motor->CrearCamara();//creamos la camara
-	motor->crearTextoDePrueba();//crea un texto
-    motor->activarFuenteDefault();//activa la fuente por defecto que trae irrlicht
-    motor->PintarBotonesMenu();//pinta los botones del menu -> esto mover a menu
+    inicializarVentana();
+
+    // se debe dar valor a las variables de interpolacion antes del bucle
+	_tiempo->SetFrames(60,15,4);//definimos a cuanto queremos que vaya el programa
+
+    // te devuelve true si esta en funcionamiento la ventana del juego, te devuelve false si se ha cerrado la ventana
+    while (_motor->VentanaAbierta())// comprobamos que esta activo el dispositivo
+	{
+        // Comprueba si hay que anyadir o eliminar un estado
+        estado.ProcesarPilaEstados();
+
+        if(_tiempo->EjecutoDraw())// Actualiza 60 veces por segundo
+		{
+            // Comprueba los eventos de teclado o botones
+            estado.GetEstadoActivo()->ManejarEventos();
+
+			if(_tiempo->EjecutoUpdate())// Actualiza 15 veces por segundo
+			{
+				if(_tiempo->EjecutoIA())// Actualiza 4 veces por segundo
+				{
+					estado.GetEstadoActivo()->UpdateIA();//si lo esta actualizamos la IA
+				}
+				estado.GetEstadoActivo()->Update();//si lo esta actualizamos la escena
+			}
+			estado.GetEstadoActivo()->Render();//si lo esta dibujamos la escena
+		}
+	}
+
+	limpiarVentana(); //si no lo esta borramos de memoria el dispositivo
 }
 
-void Juego::setNivelThen()
+void Juego::limpiarVentana()
 {
-    nivel->setThen();
-}
-
-void Juego::Update()
-{
-    estado->Actualizar();//con esto se llama al update adecuado
-    //cout << "\e[24m Aqui \e[0m" << endl;
-    if(motor->ocurreEvento(101))//cambiamos de estado porque han pulsado boton jugar
-    {
-        //limpiamos el gui y la scena
-        motor->borrarScena();
-        motor->borrarGui();
-        nivel->CargarNivel(1);//esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
-        motor->resetEvento(101);//reseteamos el evento
-        Jugar();
-    }
-    if(motor->ocurreEvento(102))//salimos del juego
-    {
-        motor->closeGame();
-    }
-    //para modo debug
-    if(motor->estaPulsado(7))
-    {
-        motor->activarDebugGrafico();
-    }
-}
-
-//se llama cuando se presiona un boton de salir del juego.
-void Juego::Salir()
-{
-
-}
-
-//cuando se presiona boton de jugar
-void Juego::Jugar()
-{
-    motora->getEvent("Level02")->stop(); //Detener musica Menu
-    motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    motora->getEvent("Level01")->start(); //Reproducir musica juego
-
-    estado = &jugando;//se cambia a estado jugando
-    estado->Ini();
+   _motor->LimpiarDevice();
 }

@@ -1,0 +1,33 @@
+Lee este documento para saber lo que tienes que hacer para ejecutar y compilar
+---------------------------------------------------------------------------------
+Informacion:
+
+Los archivos de c++ se realizan con el compilador g++, el tipo de instruccion que se
+utiliza permite debug tiene descripcion extensa de errores.
+---------------------------------------------------------------------------------
+Las carpetas:
+
+obj y src son necesarias para el correcto compilado.
+
+OBJ: almacena los .o que son los archivos compilados (archivos auto generados)
+
+SRC: almacena los archivos de objeto creado por el programador (el codigo escrito)
+lo normal es que si se trabaja con c++ es que se utilice correctamente sin
+depender de c, por lo que es aconsejable que utilicen solo archivos 
+.cpp(funciones) y .hpp(cabecera contiene solo la llamada a funcion, declaraciones 
+de variables y si son privadas o publicas)
+----------------------------------------------------------------------------------
+Para Compilar:
+
+Simplemente desde un terminal ejecuta "make"
+
+----------------------------------------------------------------------------------
+Para Compilar y Ejecutar:
+
+Escribe en el terminal "make run" se compilara y luego si todo va bien ejecutara
+
+----------------------------------------------------------------------------------
+Limpiar los archivos autogenerados:
+
+A veces puede pasar que falle make por los archivos ya existentes de versiones
+anteriores para ello ejecuta "make clean"

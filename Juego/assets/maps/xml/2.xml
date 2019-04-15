@@ -1,7 +1,18 @@
 <Level><!--- Esto nos indica que estamos definiendo un nivel -->
+	<!-- Para reservar memoria en los vectores -->
+	<!-- TO DO: Poner todos los numeros correctos menos de Chests -->
+	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="5" Levers="6" Chests="16" Waypoints="70" Zones="21"></MaxNumberOf>
 	
-	<Platform Type="1" Texture="assets/texture/platform1.png" TypeCenter="0" Model="assets/models/scene_example.obj" StarTexture="assets/texture/jugador.png" StarModel="assets/models/jugador.obj" UserStar="True" StarX="0" StarY="0" StarZ="0" X="0" Y="0" Z="0" ancho="100" largo="100">
-		<Enemy Type="1" Texture="assets/texture/enemigos.mtl" Model="assets/models/enemigos.obj" X="0" Y="0" Z="0" ></Enemy>
+	<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="0" Y="0" Z="0" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
+		<Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="10" X="-4" Y="0" Z="7" Model="assets/models/pollo.obj"></Enemy>	
+		<Object Type="1" nombre="arpa" ataque="10" accion="2" ancho="4" largo="4" alto="10" X="6" Y="0" Z="12" Texture="assets/texture/platform1.jpg" Model="assets/models/Arma.obj"></Object>									
+		<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="45" Y="0" Z="0" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="false">
+			<Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="10" X="35" Y="0" Z="-10" Texture="assets/texture/enemigos.mtl" Model="assets/models/ninja.b3d"></Enemy>	
+				<Platform Type="1" accion="0" ancho="22" largo="22" alto="22" X="0" Y="0" Z="45" Texture="assets/texture/platform1.jpg" TypeCenter="0" Model="assets/models/paredes_suelo.obj" UserStar="false">
+					<Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="10" X="-10" Y="0" Z="35" Texture="assets/texture/enemigos.mtl" Model="assets/models/ninja.b3d"></Enemy>	
+				</Platform>
+		</Platform>	
 	</Platform>
+	
 
 </Level> <!-- Fin del nivel -->

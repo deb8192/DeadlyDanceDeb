@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Arbol de comportamiento del Murcielago-->
+<BehaviorTree>
+    <Root id="1" type="selector">
+        <Composition id="2" type="secuencia">
+            <Leaf id="3" type="tarea" action="oye" target="jugador">
+                <Blackboard task="escribe" info="jugador"></Blackboard>
+            </Leaf>
+            <Leaf id="4" type="tarea" action="pide-ayuda" target="">
+                <Blackboard task="escribe" info="pos-ayuda"></Blackboard>
+            </Leaf>
+            <Composition id="5" type="selector">
+            	<Leaf id="6" type="tarea" action="ataca" target="jugador"></Leaf>
+                <Decorator id="7" type="iterador" end="true">
+		    <Composition id="8" type="secuencia">   
+		        <Leaf id="9" type="tarea" action="persigue" target="jugador"></Leaf>
+			<Leaf id="10" type="tarea" action="ataca" target="jugador"></Leaf>
+		    </Composition>
+                </Decorator>
+            </Composition>
+        </Composition>
+        <Composition id="11" type="secuencia">   
+            <Leaf id="12" type="tarea" action="oye" target="ayuda">
+                <Blackboard task="lee" info="ayuda"></Blackboard>
+            </Leaf>
+            <Leaf id="13" type="tarea" action="acude" target="ayuda"></Leaf>
+        </Composition>
+    	<Composition id="14" type="selector">
+	    <Leaf id="15" type="tarea" action="curarse" target=""></Leaf>
+	    <Decorator id="16" type="iterador" end="true">
+	    	<Leaf id="17" type="tarea" action="busca" target="zona-oscura"></Leaf>
+            </Decorator>
+	</Composition>
+    </Root>
+</BehaviorTree>
