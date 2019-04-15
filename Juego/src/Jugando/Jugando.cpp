@@ -112,7 +112,7 @@ void Jugando::Iniciar()
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
     #ifdef WEMOTOR
-        CargarNivel(7, constantes.HEAVY);
+        CargarNivel(8, constantes.HEAVY);
     #else
         CargarNivel(6, constantes.HEAVY);
     #endif

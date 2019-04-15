@@ -8,68 +8,67 @@
 	<Light Type="Ambiental" Intensity="50" Attenuation="0" Color="Red" RP="0" X="0" Y="10" Z="0"> </Light>
 
 	<!--Sala-01--><Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="0" Y="0" Z="0" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
-	<!--Decoracion-conjunto-Paredes--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedInvisibleTemporalEstructura.obj"></Object>
+	<!--Decoracion-cavernas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedInvisibleTemporalEstructura.obj"></Object>
+	<!--Decoracion-pinchos--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/DecoracionLaberinto.obj"></Object>
 	
-		<!--Sala-02--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="94" Y="0" Z="6" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
-
-			<!--Sala-03--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="94" Y="0" Z="98" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
-
-				<!--Sala-04--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="212" Y="0" Z="84" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+		<!--Sala-02--><Platform Type="1" accion="0" ancho="59" largo="92" alto="4" RP="0" X="94" Y="0" Z="52" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+		<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="94" Y="0" Z="6" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat3.obj"></Object>
+	 	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="94" Y="0" Z="98" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat3.obj"></Object>
+	 									
+			<!--Sala-03--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="212" Y="0" Z="84" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 				
-					<!--Sala-05--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="330" Y="0" Z="84" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+				<!--Sala-04--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="330" Y="0" Z="84" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 
-						<!--Sala-06--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="176" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+					<!--Sala-05--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="176" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 
-							<!--Sala-07--><Platform Type="1" accion="0" ancho="12" largo="52" alto="4" RP="0" X="433" Y="0" Z="234" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
-							<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="433" Y="0" Z="208" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
-	 						<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="433" Y="0" Z="260" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+						<!--Sala-06--><Platform Type="1" accion="0" ancho="12" largo="52" alto="4" RP="0" X="433" Y="0" Z="234" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+						<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="433" Y="0" Z="208" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+	 					<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="433" Y="0" Z="260" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 
-								<!--Sala-08--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="268" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+							<!--Sala-07--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="268" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 								
-									<!--Sala-09--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="244" Y="0" Z="238" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+								<!--Sala-08--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="244" Y="0" Z="238" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 									
-										<!--Sala-10--><Platform Type="1" accion="0" ancho="34" largo="35" alto="4" RP="90" X="151" Y="0" Z="249" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
+									<!--Sala-09--><Platform Type="1" accion="0" ancho="34" largo="35" alto="4" RP="90" X="151" Y="0" Z="249" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
 										
-											<!--Sala-11--><Platform Type="1" accion="0" ancho="12" largo="52" alto="4" RP="0" X="141" Y="0" Z="336" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
-											<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="141" Y="0" Z="310" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
-	 										<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="141" Y="0" Z="362" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+										<!--Sala-10--><Platform Type="1" accion="0" ancho="12" largo="52" alto="4" RP="0" X="141" Y="0" Z="336" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+										<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="141" Y="0" Z="310" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+	 									<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="141" Y="0" Z="362" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 											
-												<!--Sala-12--><Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="126" Y="0" Z="422" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
+											<!--Sala-11--><Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="126" Y="0" Z="422" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
 												
-													<!--Sala-13--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="65" Y="0" Z="426" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
-													<!--Sala-13--></Platform>
+												<!--Sala-12--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="65" Y="0" Z="426" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+												<!--Sala-12--></Platform>
 													
-													<!--Sala-14--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="220" Y="0" Z="434" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+												<!--Sala-13--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="220" Y="0" Z="434" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 													
-														<!--Sala-15--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="211" Y="0" Z="506" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
-														<!--Sala-15--></Platform>
+													<!--Sala-14--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="211" Y="0" Z="506" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+													<!--Sala-14--></Platform>
 
-														<!--Sala-16--><Platform Type="1" accion="0" ancho="46" largo="59" alto="4" RP="90" X="325" Y="0" Z="479" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+													<!--Sala-15--><Platform Type="1" accion="0" ancho="46" largo="59" alto="4" RP="90" X="325" Y="0" Z="479" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 														
-															<!--Sala-17--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="397" Y="0" Z="482" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+														<!--Sala-16--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="397" Y="0" Z="482" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 																
-																<!--Sala-18--><Platform Type="1" accion="0" ancho="34" largo="35" alto="4" RP="90" X="457" Y="0" Z="483" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
-																<!--Sala final boss -->
+															<!--Sala-17--><Platform Type="1" accion="0" ancho="34" largo="35" alto="4" RP="90" X="457" Y="0" Z="483" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
+															<!--Sala final boss -->
 
-																	<!--Sala-19--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="503" Y="0" Z="482" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
-																	<!--Sala-19--></Platform>
-
+																<!--Sala-18--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="503" Y="0" Z="482" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 																<!--Sala-18--></Platform>
 
 															<!--Sala-17--></Platform>
 
 														<!--Sala-16--></Platform>
 
-													<!--Sala-14--></Platform>
+													<!--Sala-15--></Platform>
 
-												<!--Sala-12--></Platform>
-											
+												<!--Sala-13--></Platform>
+
 											<!--Sala-11--></Platform>
-
+											
 										<!--Sala-10--></Platform>
-									
-									<!--Sala-09--></Platform>
 
+									<!--Sala-09--></Platform>
+									
 								<!--Sala-08--></Platform>
 
 							<!--Sala-07--></Platform>
@@ -149,7 +148,52 @@
 	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="17" alto="24" RP="0" X="301" Y="0" Z="301" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="74" largo="2" alto="24" RP="0" X="225" Y="0" Z="286" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="74" largo="2" alto="24" RP="0" X="225" Y="0" Z="194" despX="0" despZ="0" Texture="" Model=""></Object>
-					
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="3" largo="13" alto="24" RP="0" X="244" Y="0" Z="209" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="187" Y="0" Z="225" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="187" Y="0" Z="299" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="39" alto="24" RP="0" X="115" Y="0" Z="249" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="39" largo="2" alto="24" RP="0" X="146" Y="0" Z="212" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="39" largo="2" alto="24" RP="0" X="96" Y="0" Z="286" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="52" alto="24" RP="0" X="133" Y="0" Z="336" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="52" alto="24" RP="0" X="149" Y="0" Z="336" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="37" largo="2" alto="24" RP="0" X="98" Y="0" Z="386" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="15" alto="24" RP="0" X="93" Y="0" Z="399" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="37" largo="2" alto="24" RP="0" X="58" Y="0" Z="412" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="15" alto="24" RP="0" X="37" Y="0" Z="427" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="37" largo="2" alto="24" RP="0" X="58" Y="0" Z="439" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="15" alto="24" RP="0" X="93" Y="0" Z="453" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="37" largo="2" alto="24" RP="0" X="128" Y="0" Z="458" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="15" alto="24" RP="0" X="163" Y="0" Z="471" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="37" largo="2" alto="24" RP="0" X="162" Y="0" Z="478" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="30" alto="24" RP="0" X="197" Y="0" Z="506" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="16" largo="2" alto="24" RP="0" X="211" Y="0" Z="534" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="30" alto="24" RP="0" X="225" Y="0" Z="506" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="16" largo="2" alto="24" RP="0" X="239" Y="0" Z="478" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="16" largo="2" alto="24" RP="0" X="267" Y="0" Z="478" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="281" Y="0" Z="509" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="48" largo="2" alto="24" RP="0" X="327" Y="0" Z="540" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="373" Y="0" Z="519" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="399" Y="0" Z="496" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="421" Y="0" Z="527" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="443" Y="0" Z="520" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="471" Y="0" Z="520" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="493" Y="0" Z="541" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="515" Y="0" Z="510" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="517" Y="0" Z="485" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="515" Y="0" Z="454" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="493" Y="0" Z="423" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="471" Y="0" Z="446" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="443" Y="0" Z="446" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="421" Y="0" Z="437" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="399" Y="0" Z="468" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="373" Y="0" Z="445" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="347" Y="0" Z="422" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="303" Y="0" Z="422" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="281" Y="0" Z="391" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="66" largo="2" alto="24" RP="0" X="213" Y="0" Z="386" despX="0" despZ="0" Texture="" Model=""></Object>
+	
+
+
 	<!--Sala-01--></Platform>
 
 </Level> <!-- Fin del nivel -->

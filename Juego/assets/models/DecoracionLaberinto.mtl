@@ -1,0 +1,86 @@
+# Blender MTL File: 'DISPOSICIONICIONscene035.blend1.blend1'
+# Material Count: 8
+
+newmtl Material.008
+Ns 96.078443
+Ka 1.000000 1.000000 1.000000
+Kd 0.023024 0.123710 0.038431
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 0.362903
+illum 9
+map_Kd /run/media/usuario/1D28BAD32AB85620/Git-CrazyCats/Deadly-Dance/Juego/assets/models/Escenario/Paredes.png
+
+newmtl Material.009
+Ns 94.117644
+Ka 1.000000 1.000000 1.000000
+Kd 0.317486 0.317486 0.317486
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /run/media/usuario/1D28BAD32AB85620/Git-CrazyCats/Deadly-Dance/Juego/assets/models/Escenario/Suelo.png
+
+newmtl Material.010
+Ns 92.156872
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /run/media/usuario/1D28BAD32AB85620/Git-CrazyCats/Deadly-Dance/Juego/assets/models/Puerta.png
+
+newmtl Material.011
+Ns 94.117644
+Ka 1.000000 1.000000 1.000000
+Kd 0.381584 0.381584 0.381584
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /run/media/usuario/1D28BAD32AB85620/Git-CrazyCats/Deadly-Dance/Juego/assets/models/Escenario/Paredes.png
+
+newmtl Material.012
+Ns 94.117644
+Ka 1.000000 1.000000 1.000000
+Kd 0.000000 0.121856 0.002463
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material_NONE.002
+Ns 94.117644
+Ka 1.000000 1.000000 1.000000
+Kd 0.386448 0.252241 0.182341
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material__1
+Ns 96.078443
+Ka 1.000000 1.000000 1.000000
+Kd 0.023024 0.123710 0.038431
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 0.362903
+illum 9
+
+newmtl None.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.800000 0.800000 0.800000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
