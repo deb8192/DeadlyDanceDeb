@@ -111,6 +111,7 @@ void MotorGrafico::LimpiarElementosJuego()
         Paredes_Scena.clear();
         Objetos_Debug.clear();
         Objetos_Debug2.clear();
+        BoardsArmas_Scena.clear();
 
         if(_aniJugEscena != nullptr)
         {
@@ -1713,6 +1714,9 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
 void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoequipada, int tiposuelo, unsigned int i)
 {
     #ifdef WEMOTOR
+
+    if(BoardsArmas_Scena.size() > 0 && BoardsArmas_Scena.size() > i && BoardsArmas_Scena[i] != 0)
+    {
         int pos = i*6;
 
         //DANYO
@@ -1756,7 +1760,7 @@ void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoe
             _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+3]);
             _interfaz->HabilitarObjeto(BoardsArmas_Scena[pos+5]);
         }
-
+    }
     #endif
 }
 
