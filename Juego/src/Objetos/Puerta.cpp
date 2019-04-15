@@ -18,8 +18,52 @@ Puerta::~Puerta()
     _textura = nullptr;
 }
 
-void Puerta::GirarPuerta(float rotacion)
+void Puerta::GirarPuerta(float rotacion, bool desdePalanca)
 {
+    if (rotacion >= 0)
+    {
+        if (codigoObjeto == 0) // Puertas sin llave o palanca
+        {
+            //_motora->getEvent("AbrirPuerta")->setVolume(0.8f);
+            _motora->getEvent("AbrirPuerta")->setPosition(posActual.x, posActual.y, posActual.z);
+            _motora->getEvent("AbrirPuerta")->start();
+        }
+        else
+        {
+            if (desdePalanca) // Puertas con palancas
+            {
+                // TO DO: cambiar AbrirPuerta por sonido de engranaje
+                _motora->getEvent("AbrirPuerta")->setPosition(posActual.x, posActual.y, posActual.z);
+                _motora->getEvent("AbrirPuerta")->setVolume(0.5);
+                _motora->getEvent("AbrirPuerta")->start();
+            }
+            else // Puertas con llave
+            {
+                _motora->getEvent("AbrirCerradura")->setPosition(posActual.x, posActual.y, posActual.z);
+                _motora->getEvent("AbrirCerradura")->setVolume(0.5);
+                _motora->getEvent("AbrirCerradura")->start();
+            }
+        }
+    }
+    else
+    {
+        _motora->getEvent("AbrirPuerta")->stop();
+        _motora->getEvent("AbrirCerradura")->stop();
+
+        // TO DO: anyadir sonido engranaje si se cierra con palanca
+        /* if (desdePalanca) // Puertas con palancas
+        {
+
+        }
+        else
+        {
+
+        }*/
+
+        _motora->getEvent("CerrarPuerta")->setPosition(posActual.x, posActual.y, posActual.z);
+        _motora->getEvent("CerrarPuerta")->start();
+    }
+    
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     setNewRotacion(rotActual.x, rotActual.y + rotacion, rotActual.z);
     _fisicas->updatePuerta(posActual.x, posActual.y, posActual.z,
