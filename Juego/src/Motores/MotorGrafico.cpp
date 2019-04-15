@@ -1781,7 +1781,6 @@ void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoe
             _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+3]);
             _interfaz->HabilitarObjeto(BoardsArmas_Scena[pos+5]);
         }
-
     #endif
 }
 

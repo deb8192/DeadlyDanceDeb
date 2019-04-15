@@ -89,7 +89,6 @@ void Menu::ManejarEventos()
         borrarEscenaResetearEvento(GUI_ID_SALIR_BUTTON);
         salir();
     }
-
 }
 
 void Menu::pintarBotones()
