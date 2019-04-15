@@ -402,7 +402,7 @@ void Jugando::Update()
     }
 
     // **********  Se actualiza el respawn si procede  **********
-    if(respawnTime - lastRespawnTime >= constantes.TIEMPO_RESPAWN)
+    if(respawnTime - lastRespawnTime >= constantes.TIEMPO_RESPAWN && !enSalaBoss)
     {
         this->RespawnEnemigos();
         lastRespawnTime = respawnTime;
@@ -1152,8 +1152,7 @@ void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
  * zonas de respawn aleatoriamente o en una
  * sala concreta en funcion del nivel de 
  * dificultad actual del juego
- *          Entradas:
- *                      lvDificil
+ *                    
 */
 void Jugando::RespawnEnemigos()
 {
@@ -1161,9 +1160,11 @@ void Jugando::RespawnEnemigos()
     int x = 0.0f;
     int y = 0.0f;
     int z = 0.0f; 
+    int* zonasSeleccionadas = new int[4];
     int ancho, alto, largo;
     short enemigosRestantes = _enemigos.capacity() - _enemigos.size();
     short i = 0;
+    short zonaElegida;
     CargadorBehaviorTrees cargadorIA;
 
     //Mientras haya hueco en el array de enemigos se crean los cuatro nuevos enemigos
@@ -1171,10 +1172,8 @@ void Jugando::RespawnEnemigos()
     {
         while(i < constantes.CUATRO && enemigosRestantes > constantes.CERO)
         {
-            i++;
             enemigosRestantes--;
             short enemigo = this->NumeroAleatorio(0,1);
-            short zonaElegida;
             /*if(lvDificil)
             {
 
@@ -1182,11 +1181,17 @@ void Jugando::RespawnEnemigos()
             else
             {*/
             //Se selecciona una zona de respawn que no haya generado ningun enemigo en el ultimo bucle
-            do  
-            {  
-                zonaElegida = this->NumeroAleatorio(0, _zonasRespawn.size() -1);
+            zonaElegida = this->NumeroAleatorio(0, _zonasRespawn.size() -1);
+            while(_zonasRespawn[zonaElegida]->getProposito() || _zonasRespawn[zonaElegida]->GetRespawnBoss())
+            {
+                zonaElegida++;
+                if((unsigned) zonaElegida >= _zonasRespawn.size() || _zonasRespawn[zonaElegida]->GetRespawnBoss())
+                {
+                    zonaElegida = 0;
+                }
             }
-            while(_zonasRespawn[zonaElegida]->getProposito());
+            zonasSeleccionadas[i] = zonaElegida;
+            i++;
             //}
             
             //Se pone el proposito de la zona como cumplido y se crea el nuevo enemigo
@@ -1245,7 +1250,7 @@ void Jugando::RespawnEnemigos()
             _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
             _enemigos.back()->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
             _enemigos.back()->setBarraAtEs(0);
-            _enemigos.back()->definirSala(_zonasRespawn.front()->GetSala());//le pasamos la sala en donde esta
+            _enemigos.back()->definirSala(_zonasRespawn[zonaElegida]->GetSala());//le pasamos la sala en donde esta
             _enemigos.back()->setAtaque(5);
             _enemigos.back()->setArmaEspecial(100);
             _enemigos.back()->setTimeAtEsp(0.0f);
@@ -1263,6 +1268,12 @@ void Jugando::RespawnEnemigos()
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
         }
+        while(i > constantes.CERO)
+        {
+            i--;
+            _zonasRespawn[zonasSeleccionadas[i]]->setProposito(false);
+        }
+        delete[] zonasSeleccionadas;
     }
 }
 

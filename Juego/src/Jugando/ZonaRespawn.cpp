@@ -16,3 +16,8 @@ ZonaRespawn::~ZonaRespawn()
 {
     respawnBoss = false;
 }
+
+bool ZonaRespawn::GetRespawnBoss()
+{
+    return respawnBoss;
+}
