@@ -30,6 +30,7 @@ MotorGrafico::MotorGrafico()
         ParedesAni_Scena.reserve(50);
         Objetos_Debug.reserve(500);
         Objetos_Debug2.reserve(500);
+        BoardsArmas_Scena.reserve(500);
 
         camara = 0;
         _jugEscena = 0;
@@ -1323,6 +1324,39 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             //RecoArmas_Scena solo tiene armas
             if(accion == 2)
             {
+                //crear y guardar bill boards armas
+                unsigned short _board1 = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/masA.png", 0.01f);
+                _interfaz->Trasladar(_board1,(float)x,(float)y+4,(float)z);
+                _interfaz->Escalar(_board1,1.75f,1.25f,1.75f);
+                _interfaz->DeshabilitarObjeto(_board1);
+                unsigned short _board2 = _interfaz->AddBoard(0,0,0, 1.0f, 0, "assets/images/masD.png", 0.01f);
+                _interfaz->Trasladar(_board2,(float)x,(float)y+4,(float)z);
+                _interfaz->Escalar(_board2,1.75f,1.25f,1.75f);
+                _interfaz->DeshabilitarObjeto(_board2);
+                unsigned short _board3 = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/igualA.png", 0.01f);
+                _interfaz->Trasladar(_board3,(float)x,(float)y+4,(float)z);
+                _interfaz->Escalar(_board3,1.75f,1.25f,1.75f);
+                _interfaz->DeshabilitarObjeto(_board3);
+                unsigned short _board4 = _interfaz->AddBoard(0,0,0, 1.0f, 0, "assets/images/igualD.png", 0.01f);
+                _interfaz->Trasladar(_board4,(float)x,(float)y+4,(float)z);
+                _interfaz->Escalar(_board4,1.75f,1.25f,1.75f);
+                _interfaz->DeshabilitarObjeto(_board4);
+                unsigned short _board5 = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/menosA.png", 0.01f);
+                _interfaz->Trasladar(_board5,(float)x,(float)y+4,(float)z);
+                _interfaz->Escalar(_board5,1.75f,1.25f,1.75f);
+                _interfaz->DeshabilitarObjeto(_board5);
+                unsigned short _board6 = _interfaz->AddBoard(0,0,0, 1.0f, 0, "assets/images/menosD.png", 0.01f);
+                _interfaz->Trasladar(_board6,(float)x,(float)y+4,(float)z);
+                _interfaz->Escalar(_board6,1.75f,1.25f,1.75f);
+                _interfaz->DeshabilitarObjeto(_board6);
+
+                BoardsArmas_Scena.push_back(_board1);
+                BoardsArmas_Scena.push_back(_board2);
+                BoardsArmas_Scena.push_back(_board3);
+                BoardsArmas_Scena.push_back(_board4);
+                BoardsArmas_Scena.push_back(_board5);
+                BoardsArmas_Scena.push_back(_board6);
+
                 RecoArmas_Scena.push_back(_objetoEnEscena);
                 RecoArmasAni_Scena.push_back(logicaAnim);
                 return RecoArmas_Scena.size() - 1;
@@ -1344,7 +1378,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             _objetoEnEscena->setPosition(core::vector3df(x,y,z));
             _objetoEnEscena->setRotation(core::vector3df(0,rp,0));
             //if(accion != 3)_objetoEnEscena->setMaterialTexture(0, _driver->getTexture(ruta_textura));
-            
+
             if(accion == 8)
             {
                 Llaves_Scena.push_back(_objetoEnEscena);
@@ -1631,7 +1665,6 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
     #ifdef WEMOTOR
         //codigo motor catopengl
 
-
         if(Objetos_Scena.size() > 0 && Objetos_Scena.size() > i && Objetos_Scena[i] != 0)
         {
             _interfaz->Trasladar(Objetos_Scena[i],x,y,z);
@@ -1676,6 +1709,57 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
         }
     #endif
 }
+
+void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoequipada, int tiposuelo, unsigned int i)
+{
+    #ifdef WEMOTOR
+        int pos = i*6;
+
+        //DANYO
+        if(danyoequipada < danyosuelo)
+        {
+            _interfaz->HabilitarObjeto(BoardsArmas_Scena[pos]);
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+2]);
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+4]);
+        }else if(danyoequipada == danyosuelo)
+        {
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos]);
+            _interfaz->HabilitarObjeto(BoardsArmas_Scena[pos+2]);
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+4]);
+        }else if(danyoequipada > danyosuelo)
+        {
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos]);
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+2]);
+            _interfaz->HabilitarObjeto(BoardsArmas_Scena[pos+4]);
+        }
+
+        //DISTANCIA
+        if(tipoequipada == 7)tipoequipada = 2;
+        if(tipoequipada == 8)tipoequipada = 0;
+        if(tipoequipada == 9)tipoequipada = 1;
+        if(tiposuelo == 7)tiposuelo = 2;
+        if(tiposuelo == 8)tiposuelo = 0;
+        if(tiposuelo == 9)tiposuelo = 1;
+        if(tipoequipada < tiposuelo)
+        {
+            _interfaz->HabilitarObjeto(BoardsArmas_Scena[pos+1]);
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+3]);
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+5]);
+        }else if(tipoequipada == tiposuelo)
+        {
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+1]);
+            _interfaz->HabilitarObjeto(BoardsArmas_Scena[pos+3]);
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+5]);
+        }else if(tipoequipada > tiposuelo)
+        {
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+1]);
+            _interfaz->DeshabilitarObjeto(BoardsArmas_Scena[pos+3]);
+            _interfaz->HabilitarObjeto(BoardsArmas_Scena[pos+5]);
+        }
+
+    #endif
+}
+
 
 void MotorGrafico::borrarArmaEspecial()
 {
@@ -2036,6 +2120,20 @@ void MotorGrafico::EraseRecoArma(long unsigned int idx)
         //codigo motor catopengl
         if(RecoArmas_Scena[idx] && idx < RecoArmas_Scena.size())
         {
+            int boardpos = idx*6;
+            _interfaz->RemoveObject(BoardsArmas_Scena[boardpos]);
+            BoardsArmas_Scena.erase(BoardsArmas_Scena.begin() + boardpos);
+            _interfaz->RemoveObject(BoardsArmas_Scena[boardpos]);
+            BoardsArmas_Scena.erase(BoardsArmas_Scena.begin() + boardpos);
+            _interfaz->RemoveObject(BoardsArmas_Scena[boardpos]);
+            BoardsArmas_Scena.erase(BoardsArmas_Scena.begin() + boardpos);
+            _interfaz->RemoveObject(BoardsArmas_Scena[boardpos]);
+            BoardsArmas_Scena.erase(BoardsArmas_Scena.begin() + boardpos);
+            _interfaz->RemoveObject(BoardsArmas_Scena[boardpos]);
+            BoardsArmas_Scena.erase(BoardsArmas_Scena.begin() + boardpos);
+            _interfaz->RemoveObject(BoardsArmas_Scena[boardpos]);
+            BoardsArmas_Scena.erase(BoardsArmas_Scena.begin() + boardpos);
+
             _interfaz->RemoveObject(RecoArmas_Scena[idx]);
             RecoArmas_Scena.erase(RecoArmas_Scena.begin() + idx);
             RecoArmasAni_Scena.erase(RecoArmasAni_Scena.begin() + idx);
