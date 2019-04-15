@@ -129,6 +129,13 @@ class Interfaz
         //cambiar estado imagen o boton
         void CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado);
 
+        //para activar y desactivar captura de texto, tambien sirve para saber que ha capturado
+        void ActivarCapturaTexto();// habilita que el texto que se ponga se capture hasta un maximo de 30 digitos
+        void DesactivarCapturaTexto();// deshabilita que el texto se capture
+        void InicializarCapturaTexto(const char * texto);//inicializa el texto del capturador con lo que le pases
+        char * DevolverTextoCapturado();//devuelve el texto que hay en el capturador
+        void BorrarUltimaLetra();//borra la ultima letra del capturador
+
     private:
 
         bool  banco_ids [65535];

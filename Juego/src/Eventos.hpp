@@ -27,6 +27,7 @@ namespace idsEventos
         KEY_H,          // SUBIR VIDA
         KEY_Z,          // --------------- POR AHORA NADA
         KEY_Q,          // ATAQUE ESPECIAL
+        KEY_DEL,        //boton de borrado 
         RMOUSE_DOWN,    // ATAQUE ESPECIAL
         LMOUSE_DOWN,    // ATAQUE NORMAL
         RMOUSE_UP,      //
@@ -46,6 +47,7 @@ namespace idsEventos
         GUI_ID_SLOT1,
         GUI_ID_SLOT2,
         GUI_ID_SLOT3,
+        GUI_ID_CAMPONOMBRE,
         GUI_ID_ATRAS,
         
         GUI_ID_ATRAS_BUTTON,

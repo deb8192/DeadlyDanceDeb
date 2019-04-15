@@ -1341,7 +1341,7 @@ void Interfaz::CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado)
         TNodo * tnodo = imagenes[i]->recurso->GetNieto(1)->GetHijo(1);
         if(dynamic_cast<TPlano*>(tnodo->GetEntidad())->Comprobar()) //Si la imagen es un boton
         {
-            if(event == dynamic_cast<TPlano*>(tnodo->GetEntidad())->getID()) //Si es la misma id
+            if(event == (unsigned int)dynamic_cast<TPlano*>(tnodo->GetEntidad())->getID()) //Si es la misma id
             {
                 TPlano * imagen = dynamic_cast<TPlano*>(tnodo->GetEntidad());
                 if(imagen != nullptr)//Si pulsas el boton
@@ -1351,4 +1351,47 @@ void Interfaz::CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado)
             }
         }
     }
+}
+
+
+
+void Interfaz::ActivarCapturaTexto()
+{
+    if(window)
+    {
+        window->ActivarRecogida();
+    }
+}
+
+void Interfaz::DesactivarCapturaTexto()
+{
+    if(window)
+    {
+        window->DesactivarRecogida();
+    }    
+}
+
+void Interfaz::InicializarCapturaTexto(const char * texto)
+{
+    if(window)
+    {
+        window->InicializarLetra(texto);
+    }
+}
+
+char * Interfaz::DevolverTextoCapturado()
+{
+    if(window)
+    {
+        return window->RecogerLetra();
+    }
+    return nullptr;
+}
+
+void Interfaz::BorrarUltimaLetra()
+{
+    if(window)
+    {
+        window->BorrarUltimaTecla();
+    }    
 }

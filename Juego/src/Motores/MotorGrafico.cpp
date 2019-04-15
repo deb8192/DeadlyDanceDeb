@@ -756,6 +756,9 @@ bool MotorGrafico::EstaPulsado(short boton)
 
             case idsEventos::Enum::KEY_E:
                 return estadoteclas[GLFW_KEY_E];//actua una sola vez aunque se mantenga pulsado
+            
+            case idsEventos::Enum::KEY_DEL:
+                return estadoteclas[GLFW_KEY_BACKSPACE];
         }
 
         return false;
@@ -912,6 +915,10 @@ void MotorGrafico::ResetKey(short event)
             break;
             case idsEventos::Enum::KEY_E:
                 estadoteclas[GLFW_KEY_E] = false;//actua una sola vez aunque se mantenga pulsado
+            break;
+            case idsEventos::Enum::KEY_DEL:
+                estadoteclas[GLFW_KEY_BACKSPACE] = false;
+            break;
         }
     #else
         //codigo motor irrlicht
@@ -3271,4 +3278,67 @@ unsigned int MotorGrafico::CrearBoton2(short xImagen, short yImagen, unsigned in
         } 
         return (unsigned int)num;
     #endif
+}
+
+void MotorGrafico::ActivarCapturaTexto()
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            _interfaz->ActivarCapturaTexto();
+        }
+    #endif
+}
+
+void MotorGrafico::DesactivarCapturaTexto()
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            _interfaz->DesactivarCapturaTexto();
+        }
+    #endif
+}
+
+char * MotorGrafico::DevolverTextoCapturado()
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            return _interfaz->DevolverTextoCapturado();
+        }
+        return nullptr;
+    #endif
+}
+
+void MotorGrafico::InicializarCaptura(const char * texto)
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            _interfaz->InicializarCapturaTexto(texto);
+        }
+    #endif
+}
+
+void MotorGrafico::BorrarUltimaLetra()
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            _interfaz->BorrarUltimaLetra();
+        }
+    #endif
+}
+
+void MotorGrafico::CambiarTexto(unsigned int did, const char * texto)
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            string str = texto;
+            //std::cout << "recoges tantas: " << str << std::endl;
+            _interfaz->CambiarTexto(did,str);
+        }
+    #endif   
 }

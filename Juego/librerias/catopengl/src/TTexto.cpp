@@ -24,7 +24,7 @@ TTexto::TTexto(GLuint width, GLuint height, Shader * sact)
 
 TTexto::~TTexto()
 {
-
+    
 }
 
 void TTexto::CargarFuente(std::string font, GLuint fontSize)

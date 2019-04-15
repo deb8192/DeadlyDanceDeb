@@ -2,6 +2,8 @@
 #define ESTADOCONTINUAR_HPP
 
 #include "../Estado.hpp"
+#include "../Motores/MotorAudio.hpp"
+#include "../Jugando/Save.hpp"
 
 class EstadoContinuar: public Estado {
     public:
@@ -16,5 +18,8 @@ class EstadoContinuar: public Estado {
     private:
         void atras();
         unsigned int slotSeleccionado;
+        Save slots[3];//las partidas o slots cargados
+        unsigned int fase;
+        MotorAudioSystem* _motora;//instancia de la fachada audio
 };
 #endif /* ESTADOCONTINUAR_HPP */

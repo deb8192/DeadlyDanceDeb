@@ -115,7 +115,7 @@ void Menu::borrarEscenaResetearEvento(short id)
 void Menu::jugar()
 {
 
-    //_motora->getEvent("Menu")->stop(); //Detener musica Menu
+    _motora->getEvent("Menu")->stop(); //Detener musica Menu
     Juego::GetInstance()->estado.CambioEstadoIniciarPartida();
     //_motor->AsignarCargando(_motor->CrearImagen("assets/images/cargando.png",540,330,1.0f));
 }
