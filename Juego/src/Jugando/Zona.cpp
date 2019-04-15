@@ -87,7 +87,7 @@ void Zona::setProposito(bool p)
 }
 
 
-void Zona::setTotalElementos(unsigned short elementos)
+void Zona::SetTotalElementos(unsigned short elementos)
 {
   totalElementos = elementos;
 }
@@ -133,12 +133,12 @@ bool Zona::getProposito()
   return proposito;
 }
 
-unsigned short Zona::getTotalElementos()
+unsigned short Zona::GetTotalElementos()
 {
   return totalElementos;
 }
 
-unsigned short Zona::getElementosActuales()
+unsigned short Zona::GetElementosActuales()
 {
   return elementosActuales;
 }

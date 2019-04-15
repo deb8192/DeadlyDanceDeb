@@ -16,7 +16,10 @@
 #include "../Objetos/Pared.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/InterfazJugador.hpp"
-#include "Zona.hpp"
+#include "ZonaRespawn.hpp"
+#include "ZonaCofre.hpp"
+#include "ZonaEscondite.hpp"
+#include "ZonaOscura.hpp"
 #include "Waypoint.hpp"
 
 #include "../Pathfinder.hpp"
@@ -108,8 +111,10 @@ class Jugando: public Estado {
         std::vector<Recolectable*> _recolectables;
         std::vector<Pared*> _paredes;
         std::vector<Recolectable*> _powerup;
-        std::vector<ZonaRespawn*> _zonasRespawn;
-        std::vector<Zona*> _zonas; //Array de zonas
+        std::vector<ZonaCofre*> _zonasCofre; //Array de zonas de cofres
+        std::vector<ZonaRespawn*> _zonasRespawn; //Array de zonas de respawn
+        std::vector<ZonaOscura*> _zonasOscuras; //Array de zonas de oscuras
+        std::vector<ZonaEscondite*> _zonasEscondite; //Array de zonas de escondite
         std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
 
         std::vector<Palanca*> _palancas;

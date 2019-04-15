@@ -39,12 +39,33 @@ CargadorNiveles::~CargadorNiveles()
     }
     _eneCofres.clear();
 
-    tam = _zonas.size();
+    tam = _zonasRespawn.size();
     for(short i=0; i < tam; i++)
     {
-        delete _zonas.at(i);
+        delete _zonasRespawn.at(i);
     }
-    _zonas.clear();
+    _zonasRespawn.clear();
+
+    tam = _zonasCofre.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _zonasCofre.at(i);
+    }
+    _zonasCofre.clear();
+
+    tam = _zonasEscondite.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _zonasEscondite.at(i);
+    }
+    _zonasEscondite.clear();
+
+    tam = _zonasOscuras.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _zonasOscuras.at(i);
+    }
+    _zonasOscuras.clear();
 
     tam = _recolectables.size();
     for(short i=0; i < tam; i++)
@@ -661,31 +682,53 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
 void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, int boss, const char* tipo, unsigned short totalElem, Sala* sala)
 {
     Constantes constantes;
-    //Crear zona
-    //TEMPORAL PARA PRUEBAS
-    Zona* zon;
+    //Crear zonas
+    int calcID
     if(strcmp(tipo, constantes.ZRESPAWN) == 0)
     {
         ZonaRespawn* zonR = new ZonaRespawn(ancho,largo,alto,tipo,boss);
+        calcID = _zonasRespawn.size();
+        zonR->setID(calcID);
+        zonR->SetTotalElementos(totalElem);
+        zonR->setPosiciones(x,y,z);
+        zonR->SetSala(sala);
         _zonasRespawn.push_back(zonR);
-        zon = (Zona*) zonR;
         zonR = nullptr;
     }
-    else
+    else if(strcmp(tipo, constantes.ZCHEST) == 0)
     {
-        zon = new Zona(ancho,largo,alto,tipo);
+        ZonaCofre* zonC = new ZonaCofre(ancho,largo,alto,tipo);
+        calcID = _zonasCofre.size();
+        zonC->setID(calcID);
+        zonC->SetTotalElementos(totalElem);
+        zonC->setPosiciones(x,y,z);
+        zonC->SetSala(sala);
+        _zonasCofre.push_back(zonC);
+        zonC = nullptr;
+    }
+    else if(strcmp(tipo, constantes.ZDARK) == 0)
+    {
+        ZonaOscura* zonO= new ZonaOscura(ancho,largo,alto,tipo,boss);
+        calcID = _zonasOscuras.size();
+        zonO->setID(calcID);
+        zonO->SetTotalElementos(totalElem);
+        zonO->setPosiciones(x,y,z);
+        zonO->SetSala(sala);
+        _zonasOscuras.push_back(zonO);
+        zonO = nullptr;
+    }
+    else if(strcmp(tipo, constantes.ZHIDE) == 0)
+    {
+        ZonaEscondite* zonE= new ZonaEscondite(ancho,largo,alto,tipo,boss);
+        calcID = _zonasEscondite.size();
+        zonE->setID(calcID);
+        zonE->SetTotalElementos(totalElem);
+        zonE->setPosiciones(x,y,z);
+        zonE->SetSala(sala);
+        _zonasEscondite.push_back(move(zonE));
+        zonE = nullptr;
     }
 
-    //ID propia y posicion
-    int calcID = _zonas.size();
-    zon->setID(calcID);
-    zon->setPosiciones(x,y,z);
-    zon->setTotalElementos(totalElem);
-    zon->SetSala(sala);
-
-    //guardarla en el nivel
-    _zonas.push_back(move(zon));
-    zon = nullptr;
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -839,7 +882,7 @@ void CargadorNiveles::CargarCofres()
             //Se comprueba que es una zona de cofres y que le caben mas cofres
             if((_zonas.at(i)->getTipo() == 0) && (!_zonas.at(i)->getProposito()))
             {
-                totalCofresPonible += (_zonas[i]->getTotalElementos() - _zonas[i]->getElementosActuales());
+                totalCofresPonible += (_zonas[i]->GetTotalElementos() - _zonas[i]->GetElementosActuales());
                 zonasDisponibles.push_back(i);
             }
         }
@@ -897,7 +940,7 @@ void CargadorNiveles::CargarCofres()
                 _cofre = nullptr;
 
                 //borrar del Array por que el proposito esta cumplido
-                if(_zonas[zonasDisponibles[numAlt]]->getTotalElementos() == _zonas[zonasDisponibles[numAlt]]->getElementosActuales())
+                if(_zonas[zonasDisponibles[numAlt]]->GetTotalElementos() == _zonas[zonasDisponibles[numAlt]]->GetElementosActuales())
                 {
                     _zonas[zonasDisponibles[numAlt]]->setProposito(true);
                     zonasDisponibles.erase(zonasDisponibles.begin() + numAlt);

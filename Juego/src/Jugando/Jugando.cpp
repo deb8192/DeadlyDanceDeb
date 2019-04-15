@@ -40,19 +40,33 @@ Jugando::~Jugando()
     }
     _eneCofres.clear();
 
-    tam = _zonas.size();
-    for(short i=0; i < tam; i++)
-    {
-        _zonas.at(i) = nullptr;
-    }
-    _zonas.clear();
-
     tam = _zonasRespawn.size();
     for(short i=0; i < tam; i++)
     {
-        _zonasRespawn.at(i) = nullptr;
+        delete _zonasRespawn.at(i);
     }
     _zonasRespawn.clear();
+
+    tam = _zonasCofre.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _zonasCofre.at(i);
+    }
+    _zonasCofre.clear();
+
+    tam = _zonasEscondite.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _zonasEscondite.at(i);
+    }
+    _zonasEscondite.clear();
+
+    tam = _zonasOscuras.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _zonasOscuras.at(i);
+    }
+    _zonasOscuras.clear();
 
     tam = _recolectables.size();
     for(short i=0; i < tam; i++)
