@@ -350,6 +350,9 @@ unsigned short Interfaz::AddBoard(float x, float y, float z, float movx, float m
     escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
+    escaladoEnt->EsGui();
+    escaladoEnt->NoEjecutar();
+
     TNodo * board = new TNodo;
     TBillboard * boardEn = new TBillboard(x,y,z,_ruta,shaders[3],movx,movy,priority);
     board->setEntidad(boardEn);
@@ -367,7 +370,7 @@ unsigned short Interfaz::AddBoard(float x, float y, float z, float movx, float m
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
-        nodo->tipo = 4;
+        nodo->tipo = 5;
         nodo->activo = true;
         nodos.push_back(nodo);//se agrega a la lista de nodos general
         boards.push_back(nodo);//se agrega a la lista de billboards
@@ -1105,6 +1108,18 @@ void Interfaz::pulgarReferencia(Nodo * referencia,unsigned short tipo)
                 if(textos[i] != nullptr && referencia == textos[i])
                 {
                     textos.erase(textos.begin()+i);
+                    return;
+                }
+            }
+        }
+
+        if(tipo == 5)
+        {
+            for(unsigned int i = 0; i < boards.size(); i++)
+            {
+                if(boards[i] != nullptr && referencia == boards[i])
+                {
+                    boards.erase(boards.begin()+i);
                     return;
                 }
             }

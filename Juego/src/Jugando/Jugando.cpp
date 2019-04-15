@@ -532,7 +532,7 @@ void Jugando::Update()
             //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
             */
            _motor->cambiarAnimacion(4,paredCol,1);//se cambia la animacion de la pared
-            
+
             _paredes.at(paredCol)->Borrar(paredCol);
             _paredes.erase(_paredes.begin() + paredCol);
         }
@@ -873,7 +873,21 @@ void Jugando::Render()
         _cofres.at(i)->Render(updateTime, resta);
     }
     //*******************************************************************
-
+    //BILLBOARD RECOGER ARMAS
+    if(_reco_armas.size() >= 0)
+    {
+        for(unsigned short i = 0; i < _reco_armas.size(); i++)
+        {
+            if(_jugador->getArma() != nullptr)
+            {
+                _motor->mostrarBoardArma(_jugador->getArma()->getAtaque(),_reco_armas[i]->getAtaque(),_jugador->getArma()->GetTipoObjeto(),_reco_armas[i]->GetTipoObjeto(), i);
+            }
+            else{
+                _motor->mostrarBoardArma(10,_reco_armas[i]->getAtaque(),-1,0, i);
+            }
+        }
+    }
+    //********************************************************************
     //Dibujado del personaje
     _jugador->Render(updateTime, resta);
 
@@ -1311,12 +1325,12 @@ void Jugando::RecogerArma(int rec_col)
     {
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
         Recolectable* nuRec = new Recolectable(-1,
-            _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
+            _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),
             _jugador->getArma()->getAlto(),
             _jugador->getX(),_jugador->getY(), _jugador->getZ(),
             _jugador->getArma()->GetTipoObjeto(),0,0);
         nuRec->setAtaque(_jugador->getArma()->getAtaque());
-        
+
         _jugador->setArma(_reco_armas[rec_col]);
 
         //borramos el recolectable anterior de nivel, _motor grafico y motor fisicas
@@ -1750,11 +1764,11 @@ void Jugando::AbrirCofre(Cofre* _inter)
             break;
 
         case 8: // GUITARRA
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(22,32));
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(24,34));
             break;
 
-        case 9: // GUITARRA
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(13,23));
+        case 9: // FLAUTA
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(18,28));
             break;
 
         default: // ORO
