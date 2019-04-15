@@ -8,6 +8,7 @@ Interactuable::Interactuable(int id, int codigo,
 {
     //TO DO INICIALIZAR TODAS LAS VARIABLES
     _motor = MotorGrafico::GetInstance();
+    _motora = MotorAudioSystem::getInstance();
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
 
     this->id = id;
@@ -79,6 +80,7 @@ Interactuable::~Interactuable()
 {
     // Interactuable
     _motor = nullptr;
+    _motora = nullptr;
     codigoObjeto=0;
     accionado=0;
     posicionArrayObjetos=0;
