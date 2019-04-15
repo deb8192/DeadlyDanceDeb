@@ -1417,18 +1417,12 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
             bool abrir = _puerta->accionar();
             float rot = (constantes.PI_MEDIOS + constantes.PI_CUARTOS);
             if(abrir)
-            {
-                //Se abre/acciona la puerta / el mecanismo
-                _motora->getEvent("AbrirPuerta")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                _motora->getEvent("AbrirPuerta")->start();
-                _puerta->GirarPuerta(rot);
+            {   //Se abre/acciona la puerta / el mecanismo
+                _puerta->GirarPuerta(rot, true);
             }
             else
-            {
-                //Se cierra/desacciona la puerta / el mecanismo
-                _motora->getEvent("CerrarPuerta")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                _motora->getEvent("CerrarPuerta")->start();
-                _puerta->GirarPuerta(-rot);
+            {   //Se cierra/desacciona la puerta / el mecanismo
+                _puerta->GirarPuerta(-rot, true);
             }
 
             if(activar)
@@ -1464,17 +1458,12 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
             if(abrir)
             {
                 //Se abre/acciona la puerta / el mecanismo
-                //_motora->getEvent("AbrirPuerta")->setVolume(0.8f);
-                _motora->getEvent("AbrirPuerta")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                _motora->getEvent("AbrirPuerta")->start();
-                _puerta->GirarPuerta(rot);
+                _puerta->GirarPuerta(rot, false);
             }
             else
             {
                 //Se cierra/desacciona la puerta / el mecanismo
-                _motora->getEvent("CerrarPuerta")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                _motora->getEvent("CerrarPuerta")->start();
-                _puerta->GirarPuerta(-rot);
+                _puerta->GirarPuerta(-rot, false);
             }
         }
         else
@@ -1504,17 +1493,11 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                         this->CargarBossEnMemoria();
                     }
                     //Se abre/acciona la puerta / el mecanismo
-                    _motora->getEvent("AbrirCerradura")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                    _motora->getEvent("AbrirCerradura")->setVolume(0.5);
-                    _motora->getEvent("AbrirCerradura")->start();
-                    _puerta->GirarPuerta(constantes.PI_MEDIOS + constantes.PI_CUARTOS);
+                    _puerta->GirarPuerta((constantes.PI_MEDIOS + constantes.PI_CUARTOS), false);
                 }
                 else
-                {
-                    //Se cierra/desacciona la puerta / el mecanismo
-                    _motora->getEvent("CerrarPuerta")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                    _motora->getEvent("CerrarPuerta")->start();
-                    _puerta->GirarPuerta(-(constantes.PI_MEDIOS + constantes.PI_CUARTOS));
+                {   //Se cierra/desacciona la puerta / el mecanismo
+                    _puerta->GirarPuerta(-(constantes.PI_MEDIOS + constantes.PI_CUARTOS), false);
                 }
             }
         }

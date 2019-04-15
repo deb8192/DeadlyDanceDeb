@@ -11,7 +11,7 @@ class Puerta : public Interactuable
             float x, float y, float z, unsigned short tipoObj,
             float despX, float despZ, int accion);
 
-        void GirarPuerta(float rotacion);
+        void GirarPuerta(float rotacion, bool desdePalanca);
 
     private:
 };
