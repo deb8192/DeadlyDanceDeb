@@ -4,6 +4,7 @@
 #include "../Estado.hpp"
 #include "../Motores/MotorAudio.hpp"
 #include "../Jugando/Save.hpp"
+#include "../ConstantesComunes.hpp"
 
 class EstadoIniciar: public Estado {
     public:
@@ -26,5 +27,6 @@ class EstadoIniciar: public Estado {
         float tiempoCursor;//para saber cuando quitar o poner cursor
         unsigned int idCampoTexto;//  es el id del campo de texto que se esta controlando
         unsigned int tipo;//tipo de jugador
+        Constantes constantes;
 };
 #endif /* ESTADOINICIAR_HPP */

@@ -15,7 +15,7 @@ public:
     void ReanudarDesdePuzzle(bool ganar);
     void CambioDeJuegoAMenu();
     void CambioEstadoMenu();
-    void CambioEstadoJugar();
+    void CambioEstadoJugar(unsigned int nivel,unsigned int tipoJugador,unsigned int dinero, unsigned int slot);
     void CambioEstadoPuzle(int* puzzle);
     void CambioEstadoConfig();
     void CambioEstadoCreditos();

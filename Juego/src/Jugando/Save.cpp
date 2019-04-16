@@ -2,9 +2,9 @@
 
 Save::Save()
 {
-    save.tipo = 0;//rockero por defecto
-    save.dinero = 0;// nada de dinero por defecto
-    save.nivel = 0;// primer nivel por defecto
+    save.tipo = 0;// rockero por defecto
+    save.dinero = 100;// nada de dinero por defecto
+    save.nivel = 7;// primer nivel por defecto
     strcpy(save.nombre," Vacio ");//esta vacia la partida por defecto
     strcpy(save.fechaActual,"00-00-0000");//sin fecha
 }

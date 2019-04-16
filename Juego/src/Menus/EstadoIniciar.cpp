@@ -58,7 +58,7 @@ void EstadoIniciar::ManejarEventos()
             _motor->BorrarScena();
             _motor->BorrarGui();
             _motora->getEvent("Menu")->stop(); //Detener musica Menu
-            Juego::GetInstance()->estado.CambioEstadoJugar();
+            Juego::GetInstance()->estado.CambioEstadoJugar(slots[slotSeleccionado-1].GetNivel(),slots[slotSeleccionado-1].GetTipo(),slots[slotSeleccionado-1].GetDinero(),slotSeleccionado);
             _motor->AsignarCargando(_motor->CrearImagen("assets/images/cargando.png",540,330,1.0f));
             return;
         }
@@ -128,7 +128,7 @@ void EstadoIniciar::ManejarEventos()
 
         if(fase == 3 && _motor->OcurreEvento(999))
         {
-            //cambiamos a escoger personaje
+            //cambiamos a escoger personaje ---- aqui detectar si no hay solo espacios
             fase = 4;
             _motor->BorrarGui();
             _motor->CrearImagen("assets/images/pr2.png",150,100,10.0f);
@@ -141,13 +141,13 @@ void EstadoIniciar::ManejarEventos()
         {
             if(_motor->OcurreEvento(998))
             {
-                tipo = 1;
+                tipo = constantes.BAILAORA;
                 fase = 5;
             }
 
             if(_motor->OcurreEvento(997))
             {
-                tipo = 2;
+                tipo = constantes.HEAVY;
                 fase = 5;
             }
         }

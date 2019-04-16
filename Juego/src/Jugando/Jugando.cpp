@@ -3,9 +3,14 @@
 #include "../Enemigos/CofreArana.hpp"
 #include "../Objetos/Puerta.hpp"
 
-Jugando::Jugando()
+Jugando::Jugando(unsigned int nivel,unsigned int tipoJugador,unsigned int dinero, unsigned int slot)
 {
+    nivelJ = nivel;
+    tipoJugadorJ = tipoJugador;
+    dineroJ = dinero;
+    slotJ = slot;
 }
+
 
 Jugando::~Jugando()
 {
@@ -119,7 +124,7 @@ void Jugando::Iniciar()
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
     #ifdef WEMOTOR
-        CargarNivel(7, constantes.HEAVY);
+        CargarNivel(nivelJ,tipoJugadorJ);
     #else
         CargarNivel(6, constantes.HEAVY);
     #endif
@@ -170,7 +175,7 @@ void Jugando::ValoresPorDefectoJugador()
     float zIni = _jugador->getIniZ();
 
     jugadorInmovil = false;
-    _jugador->setDinero(0);
+    _jugador->setDinero(dineroJ);
     _jugador->setVida(_jugador->getVidaIni());
     _jugador->setBarraAtEs(100);
     _jugador->setAtaque(15);
