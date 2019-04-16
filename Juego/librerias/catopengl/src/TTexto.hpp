@@ -21,6 +21,7 @@ class TTexto : public TEntidad
     private:
 
         //opciones de texto
+        GLuint texture;
         GLuint VAO, VBO;
         std::string texto;
         GLfloat x, y, endx, endy, scale;

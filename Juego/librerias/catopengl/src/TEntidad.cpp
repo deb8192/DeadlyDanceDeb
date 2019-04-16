@@ -43,6 +43,11 @@ Shader * TEntidad::GetShader2()
     return shader2;
 }
 
+Shader * TEntidad::GetShader3()
+{
+    return shader3;
+}
+
 //Uso: asigna el shader a esta entidad, para que se llame en el draw
 //Entradas: Shader (programa que contiene el vextex y fragment)
 //Salidas: ninguna
@@ -56,6 +61,12 @@ void TEntidad::SetShader2(Shader * sha)
     shader2 = sha;
 }
 
+void TEntidad::SetShader3(Shader * sha)
+{
+    shader3 = sha;
+}
+
+
 //Uso: Pone el shader local nullptr
 //Entradas: ninguna
 //Salidas: ninguna
@@ -67,6 +78,11 @@ void TEntidad::RemoveShader()
 void TEntidad::RemoveShader2()
 {
     shader2 = nullptr;
+}
+
+void TEntidad::RemoveShader3()
+{
+    shader3 = nullptr;
 }
 
 void TEntidad::escalar(float,float,float)

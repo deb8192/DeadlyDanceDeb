@@ -238,7 +238,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarLuces(int x,int y,int z);
             void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
-            int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1);
+            int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
             void CargarArmaJugador(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
@@ -317,7 +317,6 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             int getCamz();
             int getCams();
 
-            
             void BorrarElemento(signed int id);// Borra un elemento del arbol de nodos a traves de su ID personalizado
             void BorrarElementoPorIdReal(unsigned int id);//borra elemento del arbol de nodos con el id que tiene
             unsigned short GetWidth();
@@ -347,10 +346,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             char * DevolverTextoCapturado();
             void InicializarCaptura(const char *);
             void BorrarUltimaLetra();
-            
+
             void CambiarTexto(unsigned int, const char *);//cambia el texto de un objeto tipo texto
             void CambiarColorTexto(unsigned int, float r, float g, float b);//cambia el color del texto
-            
+
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton

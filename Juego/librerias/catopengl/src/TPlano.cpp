@@ -34,7 +34,12 @@ TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale
 
 TPlano::~TPlano()
 {
-
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteTextures(1, &textureID);
+    glDeleteTextures(1, &textureIDPulsado);
+    glDeleteTextures(1, &textureIDEncima);
 }
 
 // sobrecarga metodos TEntidad
@@ -93,7 +98,7 @@ bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
         {
             glBindTexture(GL_TEXTURE_2D, textureID);
         }
-        
+
         if(mode == 2)//pulsado
         {
             glBindTexture(GL_TEXTURE_2D, textureIDPulsado);
@@ -105,7 +110,7 @@ bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
             glBindTexture(GL_TEXTURE_2D, textureIDEncima);
             esEncima = true;
         }
-        
+
         //Parametros de la textura
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);   //glTexParameteri(tipo_de_textura,opcion_y_eje,modo_de_ajuste)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -125,6 +130,7 @@ bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
         stbi_image_free(data);
         return false;
     }
+
     return true;
 }
 

@@ -28,7 +28,7 @@ class Interfaz
 
         unsigned short AddLuz(int);//creamos una luz
 
-        unsigned short AddMalla(const char *,int initf);//creamos una malla
+        unsigned short AddMalla(const char *,int initf,int shader);//creamos una malla
 
         unsigned short AddImagen(const char *, unsigned int, unsigned int, float , const char * rutapulsado = nullptr, const char * rutaencima = nullptr );//creamos una imagen en plano
 
@@ -145,7 +145,7 @@ class Interfaz
 
         CatOpengl::Video::Ventana * window;
 
-        Shader * shaders[5];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[6];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 
