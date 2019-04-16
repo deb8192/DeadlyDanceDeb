@@ -708,10 +708,10 @@ bool MotorGrafico::OcurreEvento(short event)
             else
             {
                 //si esta encima cambiar estado 3 ENCIMA
-                _interfaz->CambiarEstadoImagen(event,3);    
+                _interfaz->CambiarEstadoImagen(event,3);
                 //std::cout << "encima " << event << std::endl;
                 return false;
-            }            
+            }
         }
         else
         {
@@ -720,7 +720,7 @@ bool MotorGrafico::OcurreEvento(short event)
             //std::cout << "normal " << event << std::endl;
             return false;
         }
-        
+
     #else
         //codigo motor irrlicht
         return input.IsEventOn(event);
@@ -815,7 +815,7 @@ bool MotorGrafico::EstaPulsado(short boton)
 
             case idsEventos::Enum::KEY_E:
                 return estadoteclas[GLFW_KEY_E];//actua una sola vez aunque se mantenga pulsado
-            
+
             case idsEventos::Enum::KEY_DEL:
                 return estadoteclas[GLFW_KEY_BACKSPACE];
         }
@@ -1151,7 +1151,7 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        unsigned short objeto = _interfaz->AddMalla(ruta_objeto,1);//instanciamos el objeto y lo agregamos a la escena
+        unsigned short objeto = _interfaz->AddMalla(ruta_objeto,1,0);//instanciamos el objeto y lo agregamos a la escena
         _interfaz->SetTexture(objeto,ruta_textura);
         if(objeto != 0)
         {
@@ -1231,7 +1231,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
 
         //codigo motor catopengl
 
-        unsigned short enemigo = _interfaz->AddMalla(ruta_objeto,1);
+        unsigned short enemigo = _interfaz->AddMalla(ruta_objeto,1,0);
         _interfaz->SetTexture(enemigo,ruta_textura);
 
         if(enemigo != 0)
@@ -1269,7 +1269,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     #ifdef WEMOTOR
         //codigo motor catopengl
 
-        _jugEscena = _interfaz->AddMalla(ruta_objeto,128);
+        _jugEscena = _interfaz->AddMalla(ruta_objeto,128,0);
         //_interfaz->SetColor(_jugEscena,250,50,50,255); //color RGBA
 
         CargarLuces(0,0,0);
@@ -1303,11 +1303,16 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     #endif
 }
 
-int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, const char * anima, int frame)
+int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, const char * anima, int frame, bool afectaluz)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        unsigned short _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,frame);
+        unsigned short _objetoEnEscena;
+        if(afectaluz == true){
+            _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,frame,0);
+        }else{
+            _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,frame,1);
+        }
 
         //cout << "colocar objeto en: " << x << y << z << endl;
         if(_objetoEnEscena != 0)
@@ -1445,7 +1450,7 @@ void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto,
     #ifdef WEMOTOR
 
         //codigo motor catopengl
-        unsigned short _arma = _interfaz->AddMalla(ruta_objeto,1);
+        unsigned short _arma = _interfaz->AddMalla(ruta_objeto,1,0);
         _interfaz->SetTexture(_arma,ruta_textura);
 
         if(_arma != 0)
@@ -1472,7 +1477,7 @@ void MotorGrafico::CargarProyectil(int x,int y,int z, const char *ruta_objeto, c
     #ifdef WEMOTOR
 
         //codigo motor catopengl
-        unsigned short _arma = _interfaz->AddMalla(ruta_objeto,1);
+        unsigned short _arma = _interfaz->AddMalla(ruta_objeto,1,0);
         _interfaz->SetTexture(_arma,ruta_textura);
 
         if(_arma != 0)
@@ -1499,7 +1504,7 @@ void MotorGrafico::CargarArmaEspecial(int x,int y,int z, const char *ruta_objeto
     #ifdef WEMOTOR
         //codigo motor catopengl
 
-        _armaEsp = _interfaz->AddMalla(ruta_objeto,1);
+        _armaEsp = _interfaz->AddMalla(ruta_objeto,1,0);
         _interfaz->SetTexture(_armaEsp,ruta_textura);
         if(_armaEsp != 0)
         {
@@ -1518,7 +1523,7 @@ void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *rut
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        unsigned short recol = _interfaz->AddMalla(ruta_objeto,1);
+        unsigned short recol = _interfaz->AddMalla(ruta_objeto,1,0);
         _interfaz->SetTexture(recol,ruta_textura);
 
         if(recol != 0)
@@ -1926,7 +1931,7 @@ void MotorGrafico::dibujarCirculoEventoSonido(int x, int y, int z, float intensi
         //codigo motor catopengl
         if(debugGrafico)
         {
-            unsigned short circulo = _interfaz->AddMalla("assets/models/circuloDebugSonido.obj",1);
+            unsigned short circulo = _interfaz->AddMalla("assets/models/circuloDebugSonido.obj",1,0);
             if(circulo != 0)
             {
                 //vamos a cargar el circulo en su posicion con su intensidad
@@ -1966,7 +1971,7 @@ void MotorGrafico::dibujarZona(int x, int y, int z, float ancho, float alto, flo
         //codigo motor catopengl
         if(debugGrafico)
         {
-            unsigned short tmpObjEscena = _interfaz->AddMalla("assets/models/zona.obj",1);
+            unsigned short tmpObjEscena = _interfaz->AddMalla("assets/models/zona.obj",1,0);
             if(tmpObjEscena != 0)
             {
                 _interfaz->Trasladar(tmpObjEscena,(float)x,(float)y,(float)z);
@@ -2000,15 +2005,15 @@ void MotorGrafico::dibujarObjetoTemporal(int x, int y, int z, int rx, int ry, in
             unsigned short tmpobjt = 0;
             if(tipo == 1)
             {
-                tmpobjt = _interfaz->AddMalla("assets/models/sphere.obj",1);
+                tmpobjt = _interfaz->AddMalla("assets/models/sphere.obj",1,0);
             }
             else if(tipo == 2)
             {
-                tmpobjt = _interfaz->AddMalla("assets/models/cube.obj",1);
+                tmpobjt = _interfaz->AddMalla("assets/models/cube.obj",1,0);
             }
             else if(tipo == 3)
             {
-                tmpobjt = _interfaz->AddMalla("assets/models/capsule.otmpobjtj",1);
+                tmpobjt = _interfaz->AddMalla("assets/models/capsule.otmpobjtj",1,0);
             }
 
             if(tmpobjt != 0)
@@ -2393,7 +2398,7 @@ void MotorGrafico::debugVision(float x, float y, float z, float rotacion, float 
         //codigo motor catopengl
         if(debugGrafico)
         {
-            unsigned short _conoVision = _interfaz->AddMalla("assets/models/conoVision.obj",1);
+            unsigned short _conoVision = _interfaz->AddMalla("assets/models/conoVision.obj",1,0);
             if(_conoVision != 0)
             {
                 _interfaz->Trasladar(_conoVision,x,y,z);
@@ -3469,7 +3474,7 @@ void MotorGrafico::updateTeclas()
                         else
                         {
                             estadoteclas2[i] = true;
-                            estadoteclas[i]=false;     
+                            estadoteclas[i]=false;
                         }
                 }
             }
@@ -3496,7 +3501,7 @@ unsigned int MotorGrafico::CrearBoton2(short xImagen, short yImagen, unsigned in
         string str(ws.begin(),ws.end());
         const char * pru = str.c_str();
         unsigned short num = 0;
-        
+
         if(rutapulsado != nullptr || rutaencima != nullptr)
         {
             num = _interfaz->AddImagen(pru,xImagen,yImagen ,(float)escalado, rutapulsado , rutaencima );
@@ -3505,7 +3510,7 @@ unsigned int MotorGrafico::CrearBoton2(short xImagen, short yImagen, unsigned in
         {
             num = _interfaz->AddImagen(pru,xImagen,yImagen ,(float)escalado);
         }
-        
+
         if(num != 0)
         {
             _interfaz->DeclararBoton(num,id);
@@ -3517,7 +3522,7 @@ unsigned int MotorGrafico::CrearBoton2(short xImagen, short yImagen, unsigned in
                 unsigned short num2 = _interfaz->CrearTexto(str,xImagen+xTexto,yImagen+yTexto,255.0f,255.0f,255.0f);
                 _interfaz->DefinirTextoBoton(num,num2);
             }
-        } 
+        }
         return (unsigned int)num;
     #endif
 }
@@ -3582,7 +3587,7 @@ void MotorGrafico::CambiarTexto(unsigned int did, const char * texto)
             //std::cout << "recoges tantas: " << str << std::endl;
             _interfaz->CambiarTexto(did,str);
         }
-    #endif   
+    #endif
 }
 
 void MotorGrafico::CambiarColorTexto(unsigned int did, float r, float g, float b)
@@ -3592,5 +3597,5 @@ void MotorGrafico::CambiarColorTexto(unsigned int did, float r, float g, float b
         {
             _interfaz->CambiarColorTexto(did,r,g,b);
         }
-    #endif     
+    #endif
 }

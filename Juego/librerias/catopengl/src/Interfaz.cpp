@@ -78,6 +78,7 @@ unsigned short Interfaz::AddCamara()
         TCamara * camaraEn = new TCamara(window->getWidth(),window->getHeight());
         camaraEn->SetShader(shaders[4]);
         camaraEn->SetShader2(shaders[3]);
+        camaraEn->SetShader3(shaders[5]);
         camara->setEntidad(camaraEn);
 
         escalado->addHijo(rotacion);
@@ -159,7 +160,7 @@ unsigned short Interfaz::AddLuz(int tipo)
     return 0;//no se hizo la luz
 }
 
-unsigned short Interfaz::AddMalla(const char * archivo, int initf)
+unsigned short Interfaz::AddMalla(const char * archivo, int initf, int shader) //shader sinluz = 1, shader cartoon = other
 {
     //std::cout << "SE CREA MALLA" << std::endl;
     if(ventana_inicializada)
@@ -185,7 +186,16 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
 
     TNodo * malla = new TNodo;
     TMalla * mallaEn = new TMalla(initf);
-    mallaEn->SetShader(shaders[4]);
+    //Depende del shader
+    if(shader == 0)
+    {
+        mallaEn->SetShader(shaders[4]);
+    }
+    else
+    {
+        mallaEn->SetShader(shaders[5]);
+    }
+
     malla->setEntidad(mallaEn);
 
     escalado->addHijo(rotacion);
@@ -244,7 +254,7 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
     escaladoEnt->NoEjecutar();
 
     TNodo * imagen = new TNodo;
-    
+
     TPlano * imagenEn = nullptr;
 
     if(rutapulsado != nullptr || rutaencima != nullptr)
@@ -255,7 +265,7 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
     {
         imagenEn = new TPlano(archivo,x,y,scale,shaders[1],window->getWidth(), window->getHeight());
     }
-    
+
     imagen->setEntidad(imagenEn);
 
     escalado->addHijo(rotacion);
@@ -583,6 +593,7 @@ void Interfaz::ventanaInicializar()
     shaders[2] = new Shader("assets/shaders/shadertextvs.glsl","assets/shaders/shadertextfs.glsl");
     shaders[3] = new Shader("assets/shaders/shaderboardsvs.glsl","assets/shaders/shaderboardsfs.glsl");
     shaders[4] = new Shader("assets/shaders/shadertoonvs.glsl","assets/shaders/shadertoonfs.glsl");
+    shaders[5] = new Shader("assets/shaders/shadernolucesvs.glsl","assets/shaders/shadernolucesfs.glsl");
 }
 
 void Interfaz::ventanaLimpiar()
@@ -1346,7 +1357,7 @@ void Interfaz::AnchoTexto(unsigned short did,unsigned int anchoNuevo)
                 }
             }
         }
-    }  
+    }
 }
 
 void Interfaz::CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado)
@@ -1383,7 +1394,7 @@ void Interfaz::DesactivarCapturaTexto()
     if(window)
     {
         window->DesactivarRecogida();
-    }    
+    }
 }
 
 void Interfaz::InicializarCapturaTexto(const char * texto)
@@ -1408,7 +1419,7 @@ void Interfaz::BorrarUltimaLetra()
     if(window)
     {
         window->BorrarUltimaTecla();
-    }    
+    }
 }
 
 void Interfaz::CambiarColorTexto(unsigned int did,float r, float g, float b)
@@ -1431,5 +1442,5 @@ void Interfaz::CambiarColorTexto(unsigned int did,float r, float g, float b)
                 }
             }
         }
-    } 
+    }
 }

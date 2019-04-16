@@ -683,7 +683,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         case 2: // PUERTA2
         case 3: // PUERTA
         {
-            Puerta* _puerta = new Puerta(++id, codigo, 
+            Puerta* _puerta = new Puerta(++id, codigo,
                 ancho,largo,alto,x,y,z,tipoObj,despX,despZ,accion);
 
             posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,
@@ -706,14 +706,21 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         }
         break;
 
+        case 18: // OBJETOS QUE NO LE AFECTA LA LUZ
+        {
+            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura,nullptr,1,false);
+            _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
+        }
+        break;
+
         default:
         {
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
             _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
         }
         break;
-    }   
-    
+    }
+
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
 }
@@ -738,7 +745,7 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
         _waypoints.push_back(waypoint);
         sala->AgregarWaypoint(_waypoints.back());
     }
-    
+
     waypoint = nullptr;
 }
 
@@ -848,7 +855,7 @@ void CargadorNiveles::CargarCofres()
 
                 int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
                     _cofre->GetModelo(), _cofre->GetTextura());
-                
+
                 _cofre->SetPosicionArrayObjetos(posicionObjeto);
                 _cofres.push_back(move(_cofre));
                 _cofre = nullptr;
