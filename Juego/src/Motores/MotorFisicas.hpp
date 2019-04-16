@@ -41,6 +41,7 @@ using namespace reactphysics3d;
             void ErasePared(int idx);
             void EraseColectablePowerup(int idx);
             void EraseEnemigo(std::size_t i);
+            void EraseTodosEnemigos(std::size_t i);
             void DesactivarCofre(unsigned short pos);
             void EraseJugador();
             void EraseArma();

@@ -11,6 +11,7 @@ class ZonaEscondite : public Zona
         //Constructor y destructor
         ZonaEscondite(int anc, int lar, int alt, const char* tip, bool lastHide);
         ~ZonaEscondite();
+        void SetUltimoEscondite(bool esUltimo);
         bool GetUltimoEscondite();
 
     private:

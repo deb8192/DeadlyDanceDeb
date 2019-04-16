@@ -140,6 +140,13 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getVelocidadMaxima(); //se obtiene la VelocidadMaxima de desplazamiento
         int GetEnemigo();
         int GetModo();
+        const char* GetModelo(); // Malla 3D
+        const char* GetTextura(); //textura
+        bool GetPedirAyuda();
+        void SetPedirAyuda(bool);
+        bool GetContestar();
+        void SetContestar(bool);
+        int  GetTipoEnemigo();
 
         bool ver(int tipo, int longitud);//1 si ve al jugador
 
@@ -155,16 +162,10 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void ResetTree();
         //fin ia
 
-        const char* GetModelo(); // Malla 3D
-        const char* GetTextura(); //textura
-        bool GetPedirAyuda();
-        void SetPedirAyuda(bool);
-        bool GetContestar();
-        void SetContestar(bool);
-        int  GetTipoEnemigo();
-
+        //Funciones relacionadas con los motores
         void Render(short posArray, float updTime, float drawTime);
         void RenderAtaque();
+        void BorrarEnemigos(unsigned short n);
 
         enum modosEnemigo
         {
@@ -180,6 +181,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Times* _tiempo;
         MotorAudioSystem* _motora;
         MotorGrafico* _motor;
+        MotorFisicas* _fisicas;
         SenseEventos* _eventos;
         short int maxRotacion;
         std::string soundID;

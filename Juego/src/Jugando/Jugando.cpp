@@ -407,7 +407,7 @@ void Jugando::Update()
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
 
-    if (_jugador->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
+    if (_jugador != nullptr && _jugador->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
         _jugador->MuereJugador(); // Animacion de muerte
         DesactivarDebug();
@@ -441,6 +441,7 @@ void Jugando::Update()
     //colisiones con todos los objetos y enemigos que no se traspasan
     jugadorInmovil = _jugador->ColisionEntornoEne();
 
+    //ESTO ES DE DEBUG PARA ATRAVESAR PAREDES
     if(desactivarColisionesJugador)
     {
         jugadorInmovil = false;
@@ -467,12 +468,15 @@ void Jugando::Update()
     this->updateAt(&danyo2);
 
     //Aqui se comprueba si el jugador cambia de sala
-    while(!colisionaWaypoint && (unsigned) i < _waypoints.size())
+    if(!_waypoints.empty() && _waypoints.size() > 0)
     {
-        colisionaWaypoint = _fisicas->CollidePlayerWaypoint(i);
-        if(!colisionaWaypoint)
+        while(!colisionaWaypoint && (unsigned) i < _waypoints.size())
         {
-            i++;
+            colisionaWaypoint = _fisicas->CollidePlayerWaypoint(i);
+            if(!colisionaWaypoint)
+            {
+                i++;
+            }
         }
     }
     //Ha colisionado con un waypoint
@@ -529,11 +533,14 @@ void Jugando::Update()
 
     for(unsigned int i = 0; i < _enemigos.size(); i++)
     {
-        _fisicas->updateEnemigos(_enemigos.at(i)->getFisX(),
-            _enemigos.at(i)->getFisY(),
-            _enemigos.at(i)->getFisZ(),
-            i
-        );
+        if(_enemigos[i] != nullptr)
+        {
+            _fisicas->updateEnemigos(_enemigos.at(i)->getFisX(),
+                _enemigos.at(i)->getFisY(),
+                _enemigos.at(i)->getFisZ(),
+                i
+            );
+        }
     }
 
     //Si se realiza el ataque se comprueban las colisiones
@@ -841,8 +848,7 @@ void Jugando::UpdateIA()
                     }
 
                     //Borrar enemigo
-                    _motor->EraseEnemigo(i);
-                    _fisicas->EraseEnemigo(i);
+                    _enemigos[i]->BorrarEnemigos(i);
                     EraseEnemigo(i);
 
                 }else{
@@ -969,13 +975,19 @@ void Jugando::Render()
     //Dibujado de los enemigos
     for(unsigned short i = 0; i < _enemigos.size(); i++)
     {
-        _enemigos.at(i)->Render(i, updateTime, resta);
+        if(_enemigos[i])
+        {
+            _enemigos.at(i)->Render(i, updateTime, resta);
+        }
     }
 
     //Dibujado de ataques enemigos
     for(unsigned int i = 0; i < _enemigos.size(); i++)
     {
-        _enemigos.at(i)->RenderAtaque();
+        if(_enemigos[i])
+        {
+            _enemigos.at(i)->RenderAtaque();
+        }
     }
 
     //Dibujado del ataque especial del jugador
@@ -987,28 +999,43 @@ void Jugando::Render()
     //Dibujado zonas
     for(unsigned int i=0; i < _zonasOscuras.size(); i++)
     {
-        _zonasOscuras.at(i)->Render();
+        if(_zonasOscuras[i])
+        {
+            _zonasOscuras.at(i)->Render();
+        }
     }
 
     for(unsigned int i=0; i < _zonasCofre.size(); i++)
     {
-        _zonasCofre.at(i)->Render();
+        if(_zonasCofre[i])
+        {
+            _zonasCofre.at(i)->Render();
+        }
     }
 
     for(unsigned int i=0; i < _zonasEscondite.size(); i++)
     {
-        _zonasEscondite.at(i)->Render();
+        if(_zonasEscondite[i])
+        {
+            _zonasEscondite.at(i)->Render();
+        }
     }
 
     for(unsigned int i=0; i < _zonasRespawn.size(); i++)
     {
-        _zonasRespawn.at(i)->Render();
+        if(_zonasRespawn[i])
+        {
+            _zonasRespawn.at(i)->Render();
+        }
     }
 
     //Dibujado waypoints
     for(unsigned int i=0; i < _waypoints.size(); i++)
     {
-        _waypoints.at(i)->Render();
+        if(_waypoints[i])
+        {
+            _waypoints.at(i)->Render();
+        }
     }
     //_motor->clearDebug2(); //Pruebas debug
 
@@ -1201,7 +1228,7 @@ void Jugando::RespawnEnemigos()
     CargadorBehaviorTrees cargadorIA;
 
     //Mientras haya hueco en el array de enemigos se crean los cuatro nuevos enemigos
-    if(enemigosRestantes > constantes.CERO)
+    if(enemigosRestantes > constantes.CERO && !_zonasRespawn.empty())
     {
         while(i < constantes.CUATRO && enemigosRestantes > constantes.CERO)
         {
@@ -1215,7 +1242,7 @@ void Jugando::RespawnEnemigos()
             {*/
             //Se selecciona una zona de respawn que no haya generado ningun enemigo en el ultimo bucle
             zonaElegida = this->NumeroAleatorio(0, _zonasRespawn.size() -1);
-            while(_zonasRespawn[zonaElegida]->getProposito() || _zonasRespawn[zonaElegida]->GetRespawnBoss())
+            while(_zonasRespawn[zonaElegida] && (_zonasRespawn[zonaElegida]->getProposito() || _zonasRespawn[zonaElegida]->GetRespawnBoss()))
             {
                 zonaElegida++;
                 if((unsigned) zonaElegida >= _zonasRespawn.size() || _zonasRespawn[zonaElegida]->GetRespawnBoss())
@@ -1981,6 +2008,16 @@ void Jugando::CargarBossEnMemoria()
     float x = _boss->getX();
     float y = _boss->getY();
     float z = _boss->getZ();
+
+    short tam = _enemigos.size();
+    cargador.SetVectorEnemigos(_enemigos);
+    for(short i=0; i < tam; i++)
+    {
+        _enemigos.at(i) = nullptr;
+        _motor->EraseTodosEnemigos(i);
+        _fisicas->EraseTodosEnemigos(i);
+    }
+    cargador.BorrarVectorEnemigosBossActivado();
 
     _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura());//creamos la figura
     _fisicas->crearCuerpo(1,x/2,y/2,z/2,2,1,1,1,2,0,0);

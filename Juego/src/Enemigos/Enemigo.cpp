@@ -14,6 +14,7 @@ Enemigo::Enemigo()
     _tiempo = Times::GetInstance();
     _motora = MotorAudioSystem::getInstance();
     _motor = MotorGrafico::GetInstance();
+    _fisicas = MotorFisicas::getInstance();
     _eventos = SenseEventos::getInstance();
 
     tiempoMerodear = 0.0f;
@@ -66,11 +67,9 @@ Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida/*,
     largo = largoN;
     alto = altoN;
 
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,2,ancho,alto,largo,2);
     _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,7); //Para ataques
-    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,8); //Para ataques especiales
-    _fisicas = nullptr;*/
+    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,8); //Para ataques especiales*/
 }
 
 Enemigo::~Enemigo()
@@ -79,6 +78,7 @@ Enemigo::~Enemigo()
     _tiempo = nullptr;
     _motora = nullptr;
     _motor = nullptr;
+    _fisicas = nullptr;
     _eventos = nullptr;
 
     // Enemigo
@@ -536,7 +536,6 @@ int Enemigo::Atacar(int i)
     bool atacado = false;
     if(vida > 0 && atacktime == 0)
     {
-        MotorFisicas* _fisicas = MotorFisicas::getInstance();
         int distance = 0;
         //Temporal
         if (i >= 0) {
@@ -584,7 +583,6 @@ int Enemigo::Atacar(int i)
             danyoF = ataque * critico;
             danyo = roundf(danyoF * por10) / por10;
         }
-        _fisicas = nullptr;
     }
     else
     {
@@ -605,7 +603,6 @@ int Enemigo::AtacarEspecial()
 {
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
 
     //cout << vida << " " << barraAtEs << " " << por100 << endl;
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
@@ -657,14 +654,12 @@ int Enemigo::AtacarEspecial()
             danyo = roundf(danyoF * por10) / por10;
         }
         barraAtEs = 0;
-        _fisicas = nullptr;
         return danyo;
     }
     else
     {
         barraAtEs += 1;
     }
-    _fisicas = nullptr;
     return danyo;
 }
 
@@ -1965,4 +1960,9 @@ void Enemigo::RenderAtaque()
         rotActual.x, rotActual.y, rotActual.z,
         4, 4, 4, 2
     );
+}
+void Enemigo::BorrarEnemigos(unsigned short n)
+{
+    _motor->EraseEnemigo(n);
+    _fisicas->EraseEnemigo(n);
 }

@@ -10,6 +10,11 @@ ZonaEscondite::~ZonaEscondite()
     ultimoEscondite = false;
 }
 
+void ZonaEscondite::SetUltimoEscondite(bool esUltimo)
+{
+    ultimoEscondite = esUltimo;
+}
+
 bool ZonaEscondite::GetUltimoEscondite()
 {
     return ultimoEscondite;

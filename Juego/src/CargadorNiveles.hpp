@@ -38,7 +38,8 @@ class CargadorNiveles
         void GuardarNivelBin(int); //esta funcion guarda el nivel en formato bin con el numero que le pases
         void CargarNivelBin(int); //esta funcion carga el nivel desde un archivo binario  
         
-        
+        void SetVectorEnemigos(std::vector<Enemigo*>& _enemigosNuevos);
+
         Jugador* GetJugador();
         std::vector<Enemigo*> GetEnemigos();
         unsigned int GetEnemigosCapacity();
@@ -66,6 +67,7 @@ class CargadorNiveles
         std::vector<Cofre*> GetCofres();
 
         void ReservarMemoriaVectores(int eneMax, int doorsMax, int leversMax, int chestsMax, int waypointsMax, int zonesMax);
+        void BorrarVectorEnemigosBossActivado();
         Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto

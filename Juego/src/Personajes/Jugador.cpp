@@ -531,7 +531,7 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
                     }
                 }
                 //Si no se ha encontrado es que no se le a atacado
-                if (encontrado == false)
+                if (encontrado == false && _getEnemigos.at(atacados.at(i)))
                 {
                     float variacion = rand() % 7 - 3;
                     danyo += (int) variacion;
@@ -562,11 +562,14 @@ void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
     {
         for(unsigned int i = 0; i < atacados.size(); i++)
         {
-            float variacion = rand() % 7 - 3;
-            *danyo += (int) variacion;
-            _getEnemigos.at(atacados.at(i))->ModificarVida(-(*danyo));
-            *danyo -= (int) variacion;
-            _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
+            if(_getEnemigos.at(atacados.at(i)))
+            {
+                float variacion = rand() % 7 - 3;
+                *danyo += (int) variacion;
+                _getEnemigos.at(atacados.at(i))->ModificarVida(-(*danyo));
+                *danyo -= (int) variacion;
+                _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
+            }
         }
     }
 }

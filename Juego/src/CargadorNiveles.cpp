@@ -392,6 +392,11 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
     return padren;
 }
 
+void CargadorNiveles::SetVectorEnemigos(std::vector<Enemigo*>& _enemigosNuevos)
+{
+    _enemigos = _enemigosNuevos;
+}
+
 Jugador* CargadorNiveles::GetJugador()
 {
     return _jugador;
@@ -528,6 +533,15 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int doorsMax, int leve
     /*_recolectables.reserve(20);
     _powerup.reserve(20);
     */
+}
+
+void CargadorNiveles::BorrarVectorEnemigosBossActivado()
+{
+    short tam = _enemigos.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _enemigos.at(i);
+    }
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
