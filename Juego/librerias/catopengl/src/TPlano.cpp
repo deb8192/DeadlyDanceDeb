@@ -281,8 +281,18 @@ bool TPlano::botonPulsado(double * mouse)
     // cout << pixy << endl;
     // cout << pixy+(height * escalado) << endl;
     //Si el raton esta en rango
-    if(mouse[0] > pixx && mouse[0] < pixx+(width * escaladox) && mouse[1] > pixy && mouse[1] < pixy+(height * escaladoy))
-        return true;
+    float widthmedio = (width * escaladox)/2;
+    float heightmedio = (height * escaladoy)/2;
+    float pixxmedio = pixx+widthmedio;
+    float pixymedio = pixy+heightmedio;
+
+    if((pixxmedio+widthmedio+10 >= mouse[0] && pixx-10 <= mouse[0]) && (pixymedio+heightmedio >= mouse[1] && pixymedio-heightmedio <= mouse[1]))
+    {
+        return true; //desde punto medio
+    }
+
+    //if(mouse[0] > pixx && mouse[0] < pixx+(width * escaladox) && mouse[1] > pixy && mouse[1] < pixy+(height * escaladoy))
+        //return true;
 
     return false;
 }

@@ -1444,3 +1444,22 @@ void Interfaz::CambiarColorTexto(unsigned int did,float r, float g, float b)
         }
     }
 }
+
+void Interfaz::CambiarPosicionImagen(unsigned int event, float x, float y)
+{
+    for(unsigned int i = 0; i < imagenes.size(); i++)
+    {
+        TNodo * tnodo = imagenes[i]->recurso->GetNieto(1)->GetHijo(1);
+        if(dynamic_cast<TPlano*>(tnodo->GetEntidad())->Comprobar()) //Si la imagen es un boton
+        {
+            if(event == (unsigned int)dynamic_cast<TPlano*>(tnodo->GetEntidad())->getID()) //Si es la misma id
+            {
+                TPlano * imagen = dynamic_cast<TPlano*>(tnodo->GetEntidad());
+                if(imagen != nullptr)//Si pulsas el boton
+                {
+                    imagen->setPosition(x,y);
+                }
+            }
+        }
+    }  
+}

@@ -3599,3 +3599,13 @@ void MotorGrafico::CambiarColorTexto(unsigned int did, float r, float g, float b
         }
     #endif
 }
+
+void MotorGrafico::CambiarPosicionImagen(signed int event, float x, float y)
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            _interfaz->CambiarPosicionImagen(event,x,y);
+        }
+    #endif   
+}

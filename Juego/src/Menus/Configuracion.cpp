@@ -81,17 +81,29 @@ void Configuracion::ManejarEventos()
 {
     if(_motor->OcurreEvento(991))
     {
-
+        if((float)_motor->GetPosicionRaton()[0] >= 362.0f && (float)_motor->GetPosicionRaton()[0] <= 728.0f)
+        {
+            volAmbiente = ((float)_motor->GetPosicionRaton()[0]-362.0f)*(100.0f/366.0f);
+            _motor->CambiarPosicionImagen(991,(float)_motor->GetPosicionRaton()[0],105);
+        }
     }
 
     if(_motor->OcurreEvento(992))
     {
-
+        if((float)_motor->GetPosicionRaton()[0] >= 362.0f && (float)_motor->GetPosicionRaton()[0] <= 728.0f)
+        {
+            volEfectos = ((float)_motor->GetPosicionRaton()[0]-362.0f)*(100.0f/366.0f);
+            _motor->CambiarPosicionImagen(992,(float)_motor->GetPosicionRaton()[0],165);
+        }
     }
 
     if(_motor->OcurreEvento(993))
     {
-
+        if((float)_motor->GetPosicionRaton()[0] >= 362.0f && (float)_motor->GetPosicionRaton()[0] <= 728.0f)
+        {
+            volVoces = ((float)_motor->GetPosicionRaton()[0]-362.0f)*(100.0f/366.0f);
+            _motor->CambiarPosicionImagen(993,(float)_motor->GetPosicionRaton()[0],225);
+        }
     }
 
     if(_motor->OcurreEvento(994))
