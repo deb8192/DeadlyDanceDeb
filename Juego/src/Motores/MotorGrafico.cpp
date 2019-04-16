@@ -3125,6 +3125,16 @@ void MotorGrafico::BorrarElemento(signed int id)
     #endif
 }
 
+void MotorGrafico::BorrarElementoPorIdReal(unsigned int id)
+{
+    #ifdef WEMOTOR
+        if(_interfaz)
+        {
+            _interfaz->RemoveObject(id);
+        }
+    #endif
+}
+
 unsigned short MotorGrafico::GetWidth()
 {
     return width;

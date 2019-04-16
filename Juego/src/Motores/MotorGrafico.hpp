@@ -317,8 +317,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             int getCamz();
             int getCams();
 
-            // Borra un elemento del arbol de nodos a traves de su ID
-            void BorrarElemento(signed int id);
+            
+            void BorrarElemento(signed int id);// Borra un elemento del arbol de nodos a traves de su ID personalizado
+            void BorrarElementoPorIdReal(unsigned int id);//borra elemento del arbol de nodos con el id que tiene
             unsigned short GetWidth();
             unsigned short GetHeight();
 

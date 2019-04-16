@@ -5,11 +5,12 @@ EstadoContinuar::EstadoContinuar()
 {
     _motor = MotorGrafico::GetInstance();
     _motora = MotorAudioSystem::getInstance();
-    slots[0].RecuperarPartida("saves/slot1");
-    slots[1].RecuperarPartida("saves/slot2");
-    slots[2].RecuperarPartida("saves/slot3");
+    estadoSlot[0] = slots[0].RecuperarPartida("saves/slot1");
+    estadoSlot[1] = slots[1].RecuperarPartida("saves/slot2");
+    estadoSlot[2] = slots[2].RecuperarPartida("saves/slot3");
     slotSeleccionado = 0;
     fase = 0;
+    id = 0;
 }
 
 EstadoContinuar::~EstadoContinuar()
@@ -50,8 +51,29 @@ void EstadoContinuar::ManejarEventos()
     {
         if(fase == 1)//se ha escogido partida
         {
-            _motor->CrearBoton(300,500,0,0,999,L"   Cargar Partida",L"");
-            fase = 2;
+            if(estadoSlot[slotSeleccionado-1])
+            {
+                if(id != 0)
+                {
+                    _motor->BorrarElementoPorIdReal(id);
+                }
+
+                _motor->CrearBoton(300,500,0,0,999,L"   Cargar Partida",L"");
+                fase = 2;
+            }
+            else
+            {
+                if(id == 0)
+                {
+                    id = _motor->CrearTexto("La partida seleccionada no existe.", 250, 500, 300, 20);
+                    _motor->CambiarAnchuraTexto(id,300);
+                    _motor->CambiarColorTexto(id,255,0,0);
+                }
+                _motor->CambiarColorTexto(id,200,0,0);
+                slotSeleccionado = 0;
+                fase = 0;
+            }
+            
         }
 
         if(fase == 2 && _motor->OcurreEvento(999))
