@@ -329,6 +329,7 @@ void Jugando::ManejarEventos() {
 void Jugando::InteractuarNivel()
 {
     //lo siguiente es para saber que objeto colisiona con jugador
+    // TO DO: optimizar estas comprobaciones
     int rec_llave = _fisicas->collideLlave();
     int rec_col = _fisicas->collideColectableArma();
     short int_puerta = _fisicas->collidePuerta();
@@ -380,7 +381,6 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
-    Constantes constantes;
     bool colisionaWaypoint = false, waypointComun = false;
     _motor->clearDebug();
     short contadorWaypoints = 0, contadorEnemigos = 0, i = 0;
@@ -525,14 +525,6 @@ void Jugando::Update()
         short paredCol = _fisicas->collideAttackWall();
         if (paredCol >= 0)
         {
-            _motora->getEvent("RomperPared")->setPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
-            _motora->getEvent("RomperPared")->start();
-
-            /*//TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
-            //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
-            */
-           _motor->cambiarAnimacion(4,paredCol,1);//se cambia la animacion de la pared
-            
             _paredes.at(paredCol)->Borrar(paredCol);
             _paredes.erase(_paredes.begin() + paredCol);
         }
@@ -753,7 +745,6 @@ void Jugando::Update()
 */
 void Jugando::UpdateIA()
 {
-    Constantes constantes;
     /* *********** Teclas para probar cosas *************** */
     // Bajar vida
     if (_motor->EstaPulsado(KEY_J))
@@ -781,7 +772,8 @@ void Jugando::UpdateIA()
     }
 
     //En esta parte muere enemigo
-    if(_enemigos.size() > 0){
+    if(_enemigos.size() > 0)
+    {
         //comprobando los _enemigos para saber si estan muertos
         for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
             if(_enemigos[i] != nullptr)
@@ -792,14 +784,21 @@ void Jugando::UpdateIA()
                     int x = _enemigos[i]->getX();
                     int y = _enemigos[i]->getY();
                     int z = _enemigos[i]->getZ();
+                    unsigned short tipoEnemigo = _enemigos[i]->GetTipoEnemigo();
 
-                    if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A ||
-                        _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
+                    if( tipoEnemigo == constantes.GUARDIAN_A ||
+                        tipoEnemigo == constantes.GUARDIAN_B)
                     {
                         CrearObjeto(x,y,z,2,2,2,constantes.LLAVE,0);
                     }
-                    // TO DO: anyadir cofre aranya
-                    // else if (_enemigos[i]->GetTipoEnemigo() == constantes.ARANA)
+                    else if (tipoEnemigo == constantes.ARANA)
+                    {
+
+                    }
+                    else if (tipoEnemigo == constantes.BOSS)
+                    {
+                        Juego::GetInstance()->estado.CambioEstadoGanar();
+                    }
                     else
                     {
                         unsigned short tipoObj = NumeroAleatorio(constantes.ORO,constantes.ENERGIA);
@@ -836,9 +835,6 @@ void Jugando::UpdateIA()
             }
         }
     }
-
-    // Para cuando se mate al boss
-    //Juego::GetInstance()->estado.CambioEstadoGanar();
 }
 
 void Jugando::Render()
@@ -1753,7 +1749,7 @@ void Jugando::AbrirCofre(Cofre* _inter)
             CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(22,32));
             break;
 
-        case 9: // GUITARRA
+        case 9: // FLAUTA
             CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(13,23));
             break;
 

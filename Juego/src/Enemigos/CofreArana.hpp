@@ -11,7 +11,7 @@ class CofreArana : public Enemigo
         CofreArana(float nX, float nY, float nZ, int maxVida,
             float anchoN, float altoN, float largoN);
         void RunIA();
-        void UpdateCofreArana(short *i, int* _jug);
+        void UpdateCofreArana(short *i, int* _jug, bool ayuda);
         void SetNuevasOrdenes(short i);
         float GetAncho();
         float GetAlto();

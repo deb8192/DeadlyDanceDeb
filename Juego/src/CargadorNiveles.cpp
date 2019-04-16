@@ -495,7 +495,6 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         {
             Pollo* _ene = new Pollo(x,y,z, 50); // Posiciones, vida
             //ia
-            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
             _ene->setVelocidadMaxima(1.0f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
@@ -532,7 +531,6 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         {
             Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
-            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
             _ene->setVelocidadMaxima(1.5f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
@@ -552,7 +550,6 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         {
             Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
-            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
             _ene->setVelocidadMaxima(1.5f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
@@ -747,7 +744,8 @@ unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
 {
     CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo); // Posiciones, vida
 
-    _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
+    //_eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
+    _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
     _eneA->setID(++id);//le damos el id unico en esta partida al enemigo
     _eneA->SetEnemigo(constantes.ARANA);
 
