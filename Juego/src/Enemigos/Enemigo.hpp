@@ -5,7 +5,8 @@
 #include "../Motores/INsentidos.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/Sala.hpp"
-#include "../Jugando/Zona.hpp"
+#include "../Jugando/ZonaEscondite.hpp"
+#include "../Jugando/ZonaOscura.hpp"
 #include <vector>
 #include "../Arbol.hpp"
 
@@ -147,7 +148,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setArbol(Arbol);//asigna un arbol de ia al enemigo
         Arbol* getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
-        void UpdateBehavior(short *i, int* _jugador, std::vector<Zona*> &_getZonas, bool ayuda); //actualiza el comportamiento actual del pollo
+        void UpdateBehavior(short *i, int* _jugador, std::vector<ZonaOscura*> &_getZonasOscuras, std::vector<ZonaEscondite*> &_getZonasEscondite, bool ayuda); //actualiza el comportamiento actual del pollo
         short * RunIA(bool);//corre la ia del enemigo
         void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
         void AnnadirRecorridoAyuda(vector <Posiciones> recorrido);
@@ -200,7 +201,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool comprobarDistanciaFlocking();
         //fin comportamientos bases
 
-        Zona* getZonaMasCercana(vector <Zona*> zonas, Zona*);
+        ZonaOscura* getZonaOscuraMasCercana(vector <ZonaOscura*> &zonasOscuras, ZonaOscura*);
+        ZonaEscondite* getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zonasEscondite, ZonaEscondite*);
         //Comparadores de la lectura de las acciones y objetivos de las tareas
         enum accionesEnemigo
         {

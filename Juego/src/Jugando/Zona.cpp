@@ -36,8 +36,6 @@ Zona::Zona(int anc, int lar, int alt, const char *tip)
   posicionActual.x = 0.0f;
   posicionActual.y = 0.0f;
   posicionActual.z = 0.0f;
-  totalElementos = 0;
-  elementosActuales = 0;
   id = -1;
 
 }
@@ -59,16 +57,6 @@ Zona::~Zona()
   proposito = false;
 }
 
-void Zona::annadirElemento()
-{
-  elementosActuales++;
-}
-
-void Zona::quitarElemento()
-{
-  elementosActuales--;
-}
-
 void Zona::setPosiciones(float newx,float newy,float newz)
 {
     posicionActual.x = newx;
@@ -84,12 +72,6 @@ void Zona::setID(int newid)
 void Zona::setProposito(bool p)
 {
   proposito = p;
-}
-
-
-void Zona::SetTotalElementos(unsigned short elementos)
-{
-  totalElementos = elementos;
 }
 
 int Zona::getID()
@@ -131,16 +113,6 @@ float Zona::getLargo()
 bool Zona::getProposito()
 {
   return proposito;
-}
-
-unsigned short Zona::GetTotalElementos()
-{
-  return totalElementos;
-}
-
-unsigned short Zona::GetElementosActuales()
-{
-  return elementosActuales;
 }
 
 short Zona::getTipo()

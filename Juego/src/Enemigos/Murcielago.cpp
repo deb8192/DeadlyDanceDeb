@@ -66,7 +66,7 @@ void Murcielago::RunIA()
  * Salidas:
 */
 
-void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZonas)
+void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<ZonaOscura*> &_getZonasOscuras)
 {
     Jugador* _jugador = (Jugador*)_jug;
     funciona = true;
@@ -76,6 +76,11 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
         if(enZonaOscura)
         {
             enZonaOscura = false;
+            if(zonaElegida !=nullptr)
+            {
+                zonaElegida->quitarElemento();
+                zonaElegida = nullptr;
+            }
         }
         switch (_ordenes[0])
         {
@@ -164,9 +169,9 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<Zona*> &_getZ
                     if(zonaElegida == nullptr)
                     {
                         //TO DO: revisar por constr. copia
-                        vector<Zona*> zonas = _getZonas;
-                        zonas.reserve(zonas.size());
-                        zonaElegida = this->getZonaMasCercana(zonas, zonaElegida);
+                        /*vector<Zona*> zonas = _getZonas;
+                        zonas.reserve(zonas.size());*/
+                        zonaElegida = this->getZonaOscuraMasCercana(_getZonasOscuras, zonaElegida);
                     }
                     coordenadasZonaDestino.vX = zonaElegida->getX();
                     coordenadasZonaDestino.vY = zonaElegida->getY();

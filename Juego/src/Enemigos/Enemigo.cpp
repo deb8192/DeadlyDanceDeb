@@ -477,7 +477,7 @@ void Enemigo::UpdateIA()
 }
 
 void Enemigo::UpdateBehavior(short *i, int* _jugador,
-    std::vector<Zona*> &_getZonas, bool ayuda)
+    std::vector<ZonaOscura*> &_getZonasOscuras, std::vector<ZonaEscondite*> &_getZonasEscondite, bool ayuda)
 {
     if(vida > 0)
     {
@@ -493,7 +493,7 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
             case 1:
             {
                 Murcielago *murcielago = (Murcielago*) this;
-                murcielago->UpdateMurcielago(i, _jugador, _getZonas);
+                murcielago->UpdateMurcielago(i, _jugador, _getZonasOscuras);
             }
                 break;
 
@@ -508,14 +508,14 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
             {
                 Guardian *guardian = (Guardian*) this;
                 guardian->RunIA();
-                guardian->UpdateGuardian(i, _jugador, _getZonas);
+                guardian->UpdateGuardian(i, _jugador, _getZonasEscondite);
             }
                 break;
             case 4:
             {
                 Guardian *guardian = (Guardian*) this;
                 guardian->RunIA();
-                guardian->UpdateGuardian(i, _jugador, _getZonas);
+                guardian->UpdateGuardian(i, _jugador, _getZonasEscondite);
             }
                 break;
 
@@ -1092,22 +1092,21 @@ int Enemigo::GetModo()
     return modo;
 }
 
-Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, Zona* _zonaUsada)
+ZonaOscura* Enemigo::getZonaOscuraMasCercana(vector <ZonaOscura*>& zonasOscuras, ZonaOscura* _zonaUsada)
 {
-    Zona* _zonaElegida = nullptr;
+    ZonaOscura* _zonaElegida = nullptr;
     VectorEspacial distanciaZonaActual, distanciaZonaElegida;
     vector<Zona*> zonasCompletas;
-    zonasCompletas.reserve(zonas.size());
+    zonasCompletas.reserve(zonasOscuras.size());
 
     unsigned short i = 0;
-    while(i < zonas.size() && (_zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
+    while(i < zonasOscuras.size() && (_zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
     {
-        if(zonas.at(i) != nullptr && ((zonas.at(i)->getTipo() == Zona::tiposZona::Z_DARK && tipoEnemigo == 1)
-        || (zonas.at(i)->getTipo() == Zona::tiposZona::Z_HIDE && ((tipoEnemigo == 3) || (tipoEnemigo == 4)))))
+        if(zonasOscuras.at(i) != nullptr)
         {
-            distanciaZonaActual.vX = abs(zonas.at(i)->getX() - posActual.x);
-            distanciaZonaActual.vY = abs(zonas.at(i)->getY() - posActual.y);
-            distanciaZonaActual.vZ = abs(zonas.at(i)->getZ() - posActual.z);
+            distanciaZonaActual.vX = abs(zonasOscuras.at(i)->getX() - posActual.x);
+            distanciaZonaActual.vY = abs(zonasOscuras.at(i)->getY() - posActual.y);
+            distanciaZonaActual.vZ = abs(zonasOscuras.at(i)->getZ() - posActual.z);
             distanciaZonaActual.modulo = pow(distanciaZonaActual.vX, constantes.DOS) + pow(distanciaZonaActual.vY, constantes.DOS) + pow(distanciaZonaActual.vZ, constantes.DOS);
             distanciaZonaActual.modulo = sqrt(distanciaZonaActual.modulo);
 
@@ -1115,9 +1114,36 @@ Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, Zona* _zonaUsada)
             {
 
                  distanciaZonaElegida = distanciaZonaActual;
-                    _zonaElegida = zonas.at(i);
+                _zonaElegida = zonasOscuras.at(i);
+            }
+        }
+        i++;
+    }
+    return _zonaElegida;
+}
+ZonaEscondite* Enemigo::getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zonasEscondite, ZonaEscondite* _zonaUsada)
+{
+    ZonaEscondite* _zonaElegida = nullptr;
+    VectorEspacial distanciaZonaActual, distanciaZonaElegida;
+    vector<Zona*> zonasCompletas;
+    zonasCompletas.reserve(zonasEscondite.size());
 
+    unsigned short i = 0;
+    while(i < zonasEscondite.size() && (_zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
+    {
+        if(zonasEscondite.at(i) != nullptr)
+        {
+            distanciaZonaActual.vX = abs(zonasEscondite.at(i)->getX() - posActual.x);
+            distanciaZonaActual.vY = abs(zonasEscondite.at(i)->getY() - posActual.y);
+            distanciaZonaActual.vZ = abs(zonasEscondite.at(i)->getZ() - posActual.z);
+            distanciaZonaActual.modulo = pow(distanciaZonaActual.vX, constantes.DOS) + pow(distanciaZonaActual.vY, constantes.DOS) + pow(distanciaZonaActual.vZ, constantes.DOS);
+            distanciaZonaActual.modulo = sqrt(distanciaZonaActual.modulo);
 
+            if(_zonaElegida == nullptr || distanciaZonaElegida.modulo > distanciaZonaActual.modulo)
+            {
+
+                 distanciaZonaElegida = distanciaZonaActual;
+                    _zonaElegida = zonasEscondite.at(i);
             }
         }
         i++;

@@ -43,10 +43,14 @@ class CargadorNiveles
         std::vector<Enemigo*> GetEnemigos();
         unsigned int GetEnemigosCapacity();
         std::vector<Enemigo*> GetEneCofres();
-        std::vector<Zona*> GetZonas();
-        unsigned int GetZonasCapacity();
+        std::vector<ZonaOscura*> GetZonasOscuras();
+        unsigned int GetZonasOscurasCapacity();
         std::vector<ZonaRespawn*> GetZonasRespawn();
         unsigned int GetZonasRespawnCapacity();
+        std::vector<ZonaCofre*> GetZonasCofre();
+        unsigned int GetZonasCofreCapacity();
+        std::vector<ZonaEscondite*> GetZonasEscondite();
+        unsigned int GetZonasEsconditeCapacity();
         std::vector<Recolectable*> GetRecolectables();
         unsigned int GetRecolectablesCapacity();
         std::vector<Pared*> GetParedes();

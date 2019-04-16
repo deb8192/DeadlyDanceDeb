@@ -596,9 +596,9 @@ void Jugando::Update()
                 }
                 // TO DO: optimizar
                 if (_enemPideAyuda) {
-                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                 } else {
-                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                 }
                 //Este bloque se da si el enemigo esta en el proceso de merodear
                 if(_enemigos[i]->getTimeMerodear() > 0.0f)
@@ -985,9 +985,24 @@ void Jugando::Render()
     }
 
     //Dibujado zonas
-    for(unsigned int i=0; i < _zonas.size(); i++)
+    for(unsigned int i=0; i < _zonasOscuras.size(); i++)
     {
-        _zonas.at(i)->Render();
+        _zonasOscuras.at(i)->Render();
+    }
+
+    for(unsigned int i=0; i < _zonasCofre.size(); i++)
+    {
+        _zonasCofre.at(i)->Render();
+    }
+
+    for(unsigned int i=0; i < _zonasEscondite.size(); i++)
+    {
+        _zonasEscondite.at(i)->Render();
+    }
+
+    for(unsigned int i=0; i < _zonasRespawn.size(); i++)
+    {
+        _zonasRespawn.at(i)->Render();
     }
 
     //Dibujado waypoints
@@ -1075,8 +1090,12 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _paredes.reserve(cargador.GetParedesCapacity());
     _powerup = cargador.GetPowerup();
     _powerup.reserve(cargador.GetPowerupCapacity());
-    _zonas = cargador.GetZonas();
-    _zonas.reserve(cargador.GetZonasCapacity());
+    _zonasOscuras = cargador.GetZonasOscuras();
+    _zonasOscuras.reserve(cargador.GetZonasOscurasCapacity());
+    _zonasEscondite = cargador.GetZonasEscondite();
+    _zonasEscondite.reserve(cargador.GetZonasEsconditeCapacity());
+    _zonasCofre = cargador.GetZonasCofre();
+    _zonasCofre.reserve(cargador.GetZonasCofreCapacity());
     _zonasRespawn = cargador.GetZonasRespawn();
     _zonasRespawn.reserve(cargador.GetZonasRespawnCapacity());
     _enemigos = cargador.GetEnemigos();
