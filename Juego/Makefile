@@ -18,6 +18,7 @@ DIRECTIVA =#definimos la variable que detecta que motorgrafico compilar el viejo
 # File names
 EXEC = Ejecutable
 BEGIN = Comienzo
+BEGIN2 = Comienzo2
 
 SOURCES = $(shell ls src/*.cpp)
 SOURCESM = $(shell ls src/Menus/*.cpp)
@@ -88,11 +89,15 @@ BUSQ2O = $(shell find ./src/Objetos  -maxdepth 1 -name "*.o" | wc -l)
 BUSQ2A = $(shell find ./src/Armas  -maxdepth 1 -name "*.o" | wc -l)
 BUSQ2MO = $(shell find ./src/Motores  -maxdepth 1 -name "*.o" | wc -l)
 
+#esto lo ejecuta si haces make (sin nada) solo compila no ejecuta
+$(BEGIN2):
+	$(MAKE) newmotor
+	$(MAKE) $(BEGIN)
 # Aqui es donde se hace la magia y se unifican las clases en una sola, basicamente se le pasa las clases de objeto (.o) para unificarlas
 $(BEGIN):
 	@echo -e '\e[45m Paso 1 Revision Libreria Grafica \e[0m';
 	$(MAKE) $(LG)
-	@echo -e '\e[45m Paso 2 Precuaciones \e[0m';
+	@echo -e '\e[45m Paso 2 Precauciones \e[0m';
 	$(MAKE) $(PRECA)
 	$(MAKE) $(RECUR)
 	@echo -e '\e[45m Paso 3 Creando Objetos (con $(CPUCOUNT) hilos) \e[0m';
@@ -171,15 +176,21 @@ clean:
 	cd librerias/catopengl/; make clean; \
 
 # si ejecutas "make run" despues de compilar ejecutara automaticamente el ejecutable
-run: $(BEGIN)
+run: #para motor de opengl
+	$(MAKE) newmotor
+	$(MAKE) $(BEGIN)
 	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia
 	export LD_LIBRARY_PATH="$(LIBRERIAS_CARPETAS)";\
 	./$(EXEC)
 
-ru:
-	$(MAKE) newmotor run
+ru: $(BEGIN) #para irrlicht
+	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia
+	export LD_LIBRARY_PATH="$(LIBRERIAS_CARPETAS)";\
+	./$(EXEC)
 
-val: $(BEGIN)
+val: 
+	$(MAKE) newmotor
+	$(MAKE) $(BEGIN)
 	#CUIDADO hay que tener valgrind para instalarlo "sudo pacman -S valgrind"
 	#ADVERTENCIA: las librerias exportadas solo sirven para esta ejecucion si quiere que esten hay durante la sesion debe ejecuta el comando manualmente desde una consola propia
 	export LD_LIBRARY_PATH="$(LIBRERIAS_CARPETAS)";\
