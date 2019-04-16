@@ -3574,3 +3574,13 @@ void MotorGrafico::CambiarTexto(unsigned int did, const char * texto)
         }
     #endif   
 }
+
+void MotorGrafico::CambiarColorTexto(unsigned int did, float r, float g, float b)
+{
+    #ifdef WEMOTOR
+        if( _interfaz && did != 0)
+        {
+            _interfaz->CambiarColorTexto(did,r,g,b);
+        }
+    #endif     
+}

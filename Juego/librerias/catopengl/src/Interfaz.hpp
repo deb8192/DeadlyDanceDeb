@@ -124,10 +124,11 @@ class Interfaz
         bool IsKeyRelease(short);
 
         //cambia propiedades de los textos
-        void AnchoTexto(unsigned short,unsigned int);
+        void AnchoTexto(unsigned short,unsigned int);//cambia ancho del texto
+        void CambiarColorTexto(unsigned int did,float r, float g, float b);//cambia el color del texto
 
         //cambiar estado imagen o boton
-        void CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado);
+        void CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado);//estado sobretodo para botones
 
         //para activar y desactivar captura de texto, tambien sirve para saber que ha capturado
         void ActivarCapturaTexto();// habilita que el texto que se ponga se capture hasta un maximo de 30 digitos

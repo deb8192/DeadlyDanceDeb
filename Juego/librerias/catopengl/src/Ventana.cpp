@@ -300,7 +300,13 @@ void Ventana::DesactivarRecogida()
 
 char * Ventana::RecogerLetra()
 {
-    return tecla;
+    if(!recogido)
+    {
+        recogido = true;
+        return tecla;
+    }
+
+    return nullptr;
 }
 
 void Ventana::InicializarLetra(const char * letras)

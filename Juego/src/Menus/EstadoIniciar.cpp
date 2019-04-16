@@ -71,6 +71,7 @@ void EstadoIniciar::ManejarEventos()
             _motor->CrearImagen("assets/images/pr2.png",150,100,10.0f);
             _motor->CrearBoton2(300,240,2.0f,170,40,300,GUI_ID_CAMPONOMBRE,L"Slot 1",L"assets/images/campoTexto.png",false);//no creamos texto
             idCampoTexto = _motor->CrearTexto("",310,260,0,0);
+            _motor->CambiarColorTexto(idCampoTexto,0,0,0);
             _motor->CrearBoton(300,300,0,0,999,L"       Siguiente",L"");
             _motor->CambiarAnchuraTexto(idCampoTexto,180);
             tiempoCursor = 0.0f;
@@ -98,7 +99,7 @@ void EstadoIniciar::ManejarEventos()
 
             Times * tiempo = Times::GetInstance();
             
-            if(tiempoCursor == 0.0f || tiempo->CalcularTiempoPasado(tiempoCursor) > 500.0f)
+            if(tiempoCursor == 0.0f || tiempo->CalcularTiempoPasado(tiempoCursor) > 700.0f)
             {
                 if(cursor)
                 {

@@ -348,7 +348,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void BorrarUltimaLetra();
             
             void CambiarTexto(unsigned int, const char *);//cambia el texto de un objeto tipo texto
-
+            void CambiarColorTexto(unsigned int, float r, float g, float b);//cambia el color del texto
+            
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton
