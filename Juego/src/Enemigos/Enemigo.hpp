@@ -179,6 +179,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Times* _tiempo;
         MotorAudioSystem* _motora;
         MotorGrafico* _motor;
+        MotorFisicas* _fisicas;
         SenseEventos* _eventos;
         short int maxRotacion;
         std::string soundID;

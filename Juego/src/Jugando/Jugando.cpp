@@ -793,7 +793,7 @@ void Jugando::UpdateIA()
                     }
                     else if (tipoEnemigo == constantes.ARANA)
                     {
-
+                        AbrirCofre(x,y,z,true);
                     }
                     else if (tipoEnemigo == constantes.BOSS)
                     {
@@ -1026,9 +1026,8 @@ void Jugando::Reanudar()
     {
         if (ganarPuzzle)
         {
-            // TO DO: Crear objeto chulo
             _cofreP->DesactivarCofre();
-            AbrirCofre(_cofreP);
+            AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),true);
             _cofreP = nullptr;
         }
         else
@@ -1384,8 +1383,13 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
         }
         else
         {
+            //Se abre el cofre (Animacion)
+            _cofreP->setNewRotacion(_cofreP->getRX(), _cofreP->getRY(),
+                _cofreP->getRZ() + 80.0);
+            _cofreP->accionar();
+
             _cofreP->DesactivarCofre();
-            AbrirCofre(_cofreP);
+            AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),false);
             _cofreP = nullptr;
         }
     }
@@ -1727,30 +1731,39 @@ void Jugando::AbrirPantallaPuzzle()
     Juego::GetInstance()->estado.CambioEstadoPuzle((int*)cargPuzzles.GetPuzzle(2));
 }
 
-void Jugando::AbrirCofre(Cofre* _inter)
+void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
 {
-    //Se abre el cofre (Animacion)
-    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(),
-    _inter->getRZ() + 80.0);
-    _inter->accionar();
+    unsigned short objeto = 0;
+    unsigned short minArpa = 15;
+    unsigned short minGuitar = 22;
+    unsigned short minFlauta = 13;
 
-    //Crear objeto aleatorio (GUITARRA, ARPA, ORO)
-    float x = _inter->getX() + 5;
-    float y = _inter->getY();
-    float z = _inter->getZ();
+    // El cofre suelta armas normales y oro, la arana suelta armas mas fuertes
+    if (esArana)
+    {
+        objeto = NumeroAleatorio(constantes.ARPA,constantes.ULTIMA_ARMA);
+        minArpa = 22;
+        minGuitar = 31;
+        minFlauta = 25;
+    }
+    else
+    {
+        objeto = NumeroAleatorio(constantes.ARPA,constantes.ORO);
+        x = x + 5;
+    }
 
-    switch (NumeroAleatorio(constantes.ARPA,constantes.ORO))
+    switch (objeto)
     {
         case 7: // ARPA
-            CrearObjeto(x,y,z,2,2,2,constantes.ARPA,NumeroAleatorio(15,25));
+            CrearObjeto(x,y,z,2,2,2,constantes.ARPA,NumeroAleatorio(minArpa,25));
             break;
 
         case 8: // GUITARRA
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(22,32));
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(minGuitar,32));
             break;
 
         case 9: // FLAUTA
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(13,23));
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(minFlauta,23));
             break;
 
         default: // ORO

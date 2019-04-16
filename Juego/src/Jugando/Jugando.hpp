@@ -76,7 +76,7 @@ class Jugando: public Estado {
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
         
         void AbrirPantallaPuzzle();
-        void AbrirCofre(Cofre* _inter);
+        void AbrirCofre(float x, float y, float z, bool esArana);
         void CrearEnemigoArana();
         void CargarBossEnMemoria();
 
