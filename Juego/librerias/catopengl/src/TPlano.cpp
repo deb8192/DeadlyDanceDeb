@@ -1,6 +1,6 @@
 #include "TPlano.hpp"
 
-TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale, Shader * sact, GLuint ww, GLuint wh)
+TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale, Shader * sact, GLuint ww, GLuint wh, const char * rutapulsado , const char * rutaencima )
 {
     winwidth = ww;
     winheight = wh;
@@ -13,15 +13,33 @@ TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale
     shader->Use();
     bool recurso = CargarTextura(archivo);
     id = -1;
+    esEncima = false;
+    esPulsable = false;
     if(recurso)
     {
         CargarMalla(pixx,pixy,escaladox,escaladoy);
+    }
+
+    //ahora vamos a cargar las imagenes que seran los recursos de pulsado y encima
+    if(rutapulsado != nullptr)
+    {
+        CargarTextura(rutapulsado,2);
+    }
+
+    if(rutaencima != nullptr)
+    {
+        CargarTextura(rutaencima,3);
     }
 }
 
 TPlano::~TPlano()
 {
-
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteTextures(1, &textureID);
+    glDeleteTextures(1, &textureIDPulsado);
+    glDeleteTextures(1, &textureIDEncima);
 }
 
 // sobrecarga metodos TEntidad
@@ -39,7 +57,7 @@ void TPlano::beginDraw()
     // Aplicar Textura
     glActiveTexture(GL_TEXTURE0);
     shader->setInt("texture1", 0);
-    glBindTexture(GL_TEXTURE_2D, textureID);
+    glBindTexture(GL_TEXTURE_2D, estado);
 
     // dibujar triangulo
     glBindVertexArray(VAO);
@@ -51,18 +69,47 @@ void TPlano::beginDraw()
     glEnable(GL_CULL_FACE);
 }
 
-bool TPlano::CargarTextura(const char * _ruta)
+bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
 {
     //Crear textura
-    glGenTextures(1, &textureID);
+    if(mode == 1)//normal
+    {
+        glGenTextures(1, &textureID);
+        estado = textureID;
+    }
+
+    if(mode == 2)//pulsado
+    {
+        glGenTextures(1, &textureIDPulsado);
+    }
+
+    if(mode == 3)//encima
+    {
+        glGenTextures(1, &textureIDEncima);
+    }
 
     //Cargar y generar textura
     stbi_set_flip_vertically_on_load(true);  // le dices a stb_image.h que gire la textura cargada en el y-axis
-    unsigned char *data = stbi_load(_ruta, &width, &height, &nrComponents, 0);
+    unsigned char *data = stbi_load(_ruta, &width, &height, &nrComponents, 0);//esto hay que ponerlo en la zona de recursos
     if (data)
     {
         //Enlazar textura
-        glBindTexture(GL_TEXTURE_2D, textureID);
+        if(mode == 1)//normal
+        {
+            glBindTexture(GL_TEXTURE_2D, textureID);
+        }
+
+        if(mode == 2)//pulsado
+        {
+            glBindTexture(GL_TEXTURE_2D, textureIDPulsado);
+            esPulsable = true;
+        }
+
+        if(mode == 3)//encima
+        {
+            glBindTexture(GL_TEXTURE_2D, textureIDEncima);
+            esEncima = true;
+        }
 
         //Parametros de la textura
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);   //glTexParameteri(tipo_de_textura,opcion_y_eje,modo_de_ajuste)
@@ -83,6 +130,7 @@ bool TPlano::CargarTextura(const char * _ruta)
         stbi_image_free(data);
         return false;
     }
+
     return true;
 }
 
@@ -233,8 +281,18 @@ bool TPlano::botonPulsado(double * mouse)
     // cout << pixy << endl;
     // cout << pixy+(height * escalado) << endl;
     //Si el raton esta en rango
-    if(mouse[0] > pixx && mouse[0] < pixx+(width * escaladox) && mouse[1] > pixy && mouse[1] < pixy+(height * escaladoy))
-        return true;
+    float widthmedio = (width * escaladox)/2;
+    float heightmedio = (height * escaladoy)/2;
+    float pixxmedio = pixx+widthmedio;
+    float pixymedio = pixy+heightmedio;
+
+    if((pixxmedio+widthmedio+10 >= mouse[0] && pixx-10 <= mouse[0]) && (pixymedio+heightmedio >= mouse[1] && pixymedio-heightmedio <= mouse[1]))
+    {
+        return true; //desde punto medio
+    }
+
+    //if(mouse[0] > pixx && mouse[0] < pixx+(width * escaladox) && mouse[1] > pixy && mouse[1] < pixy+(height * escaladoy))
+        //return true;
 
     return false;
 }
@@ -242,4 +300,31 @@ bool TPlano::botonPulsado(double * mouse)
 int TPlano::getID()
 {
     return id;
+}
+
+bool TPlano::GetEsPulsable()
+{
+    return esPulsable;
+}
+
+bool TPlano::GetEsEncima()
+{
+    return esEncima;
+}
+
+void TPlano::CambiarEstado(unsigned int newEstado)
+{
+    if(newEstado == 3 && esEncima)
+    {
+        //std::cout << "esta encima" << std::endl;
+        estado = textureIDEncima;
+        return;
+    }
+    if(newEstado == 2 && esPulsable)
+    {
+        estado = textureIDPulsado;
+        return;
+    }
+
+    estado = textureID;//cualquier otro estado
 }

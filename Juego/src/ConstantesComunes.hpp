@@ -2,7 +2,7 @@
 #define ConstantesComunes_HPP
 
 //esto contiene todas las constantes y variables de texto para comparativas en el programa (es comodo si se quiere utilizar en el algun sitio)
-//using Constantes = struct 
+//using Constantes = struct
 typedef struct
 {
     /** Angulos en grados y radianes y relacion para sus cambios de escala **/
@@ -118,17 +118,19 @@ typedef struct
     // Meter las armas seguidas:
     const unsigned short ARPA = 7;
     const unsigned short GUITARRA = 8;
+    const unsigned short FLAUTA = 9;
 
-    const unsigned short ORO = 9;
-    const unsigned short VIDA = 10;
-    const unsigned short ENERGIA = 11;
+    const unsigned short ORO = 10;
+    const unsigned short VIDA = 11;
+    const unsigned short ENERGIA = 12;
+
+    const unsigned short PARED_ROMPIBLE = 14;
 
     // Sin utilizar por ahora
     /*
-    
+
     const unsigned short PARED_INVISIBLE = 12;
     const unsigned short PARED_OBSTACULO = 13;
-    const unsigned short PARED_ROMPIBLE = 14;
     const unsigned short SUELO = 15;
     const unsigned short BASE = 16;
     const unsigned short DECO = 17;*/

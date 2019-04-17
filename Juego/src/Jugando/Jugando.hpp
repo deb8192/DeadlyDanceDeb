@@ -27,7 +27,7 @@
 
 class Jugando: public Estado {
     public:
-        Jugando();
+        Jugando(unsigned int nivel,unsigned int tipoJugador,unsigned int dinero, unsigned int slot);
         ~Jugando();
 
         // Funciones de Estado
@@ -63,7 +63,8 @@ class Jugando: public Estado {
         void CambiarSalaEnemigo(unsigned short n, unsigned short m);
 
         //Funciones de interacciones
-        void CogerObjeto();
+        void RecogerLlave(int rec_llave);
+        void RecogerArma(int rec_col);
         void DejarObjeto();
         void AccionarMecanismo(int,const unsigned short);    //Activa mecanismos y o puertas
         void activarPowerUp();
@@ -108,7 +109,8 @@ class Jugando: public Estado {
         std::vector<Waypoint*> recorrido;//Nodos a recorrer en el pathfinding
         Sala* _destinoPathFinding; //sala que se rellena al llamar a pathfinding y se vacía al terminar el recorrido del enemigo
 
-        std::vector<Recolectable*> _recolectables;
+        std::vector<Recolectable*> _reco_armas;
+        std::vector<Recolectable*> _llaves;
         std::vector<Pared*> _paredes;
         std::vector<Recolectable*> _powerup;
         std::vector<ZonaCofre*> _zonasCofre; //Array de zonas de cofres
@@ -153,5 +155,12 @@ class Jugando: public Estado {
         bool cogerObjeto = false;
         int objetoCogido = -1;
         */
+
+       //valores pasados por los estados del menu iniciar o continuar
+       unsigned int nivelJ;
+       unsigned int tipoJugadorJ;
+       unsigned int dineroJ;
+       unsigned int slotJ;
+       
 };
 #endif /* JUGANDO_HPP */

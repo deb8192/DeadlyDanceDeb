@@ -1,0 +1,16 @@
+# Blender v2.79 (sub 0) OBJ File: 'DISPOSICIONICIONescenario077.blend'
+# www.blender.org
+mtllib DecoracionAlfombra.mtl
+o Cube.006_Cube.006_Cube.006_Cube.005
+v -422.999969 0.010037 494.000031
+v -370.999969 0.010037 494.000000
+v -371.000000 0.010033 469.999969
+v -422.999969 0.010033 470.000000
+vt 0.142374 0.999930
+vt 0.142374 0.000070
+vt 0.866360 0.000070
+vt 0.866360 0.999929
+vn 0.0000 1.0000 -0.0000
+usemtl Material.015
+s 1
+f 1/1/1 2/2/1 3/3/1 4/4/1

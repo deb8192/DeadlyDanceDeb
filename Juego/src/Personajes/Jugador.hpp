@@ -44,6 +44,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         //npc metodos
         int Atacar(int);//efectua un ataque normal, llama al motor para ejecutar la animacion.
         int AtacarEspecial();//efectua el ataque especial segun el tipo, esto llama a motor grafico para realizar la animacion, cuando se termina se pone a cero la barra
+        void CrearCuerpoAtaque();
         void AtacarUpdate(int danyo, vector<Enemigo*> &_getEnemigos);
         void Interactuar(int, int);//llama a la mecanica de interactuar
 
@@ -80,7 +81,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         void ModificarBarraAtEs(int bar);
         void setBarraAtEs(int bar);
         void setAtaque(int ataq);
-        void setArma(Arma* arma);
+        void setArma(Recolectable* _armaRec);
         void setArmaEspecial(int ataque);
         void setSuerte(int suer);
         void setDanyoCritico(int danyoC);
@@ -180,6 +181,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float danyo_arma = 10.0f;
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc;
         float atposX, atespposX, atposY, atespposY, atposZ, atespposZ;
+        float tamanyoflecha = 1.0f;
         int tipo_arma = 2;
         vector <unsigned int> atacados_normal;
         int dinero;

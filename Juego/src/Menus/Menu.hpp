@@ -20,11 +20,13 @@ class Menu: public Estado {
     private:
         void pintarBotones();
         void borrarEscenaResetearEvento(short id);
-        void jugar();
+        void jugar();//empieza una nueva partida
         void configuracion();
         void creditos();
         void salir();
         void calcularColor();
+        void continuar();//continua la partida por donde se queda anteriormente
+        void continuarPartida();//pasa al menu de continuar partida
 
         short r,g,b;
         bool rm,gm,bm;

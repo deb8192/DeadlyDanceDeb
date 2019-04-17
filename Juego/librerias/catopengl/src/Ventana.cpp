@@ -300,7 +300,13 @@ void Ventana::DesactivarRecogida()
 
 char * Ventana::RecogerLetra()
 {
-    return tecla;
+    if(!recogido)
+    {
+        recogido = true;
+        return tecla;
+    }
+
+    return nullptr;
 }
 
 void Ventana::InicializarLetra(const char * letras)
@@ -321,4 +327,32 @@ void Ventana::BorrarUltimaTecla()
         numTecla--;
         tecla[numTecla] = ' ';
     }
+}
+
+bool Ventana::MouseEstaLibre(short boton)
+{
+    if(boton == 666)
+    {
+        double * datos = Ventana::RecuperarPosicionesMouse();
+
+        if(MouseX != datos[0] || MouseY != datos[1])
+        {
+            MouseX = datos[0];
+            MouseY = datos[1];
+            return true;
+        }
+
+        delete datos;
+
+    }
+    else
+    {
+        if(glfwGetMouseButton(_window,boton) == GLFW_RELEASE)
+        {
+            //esta libre
+            return true;
+        }
+    }
+
+    return false;
 }

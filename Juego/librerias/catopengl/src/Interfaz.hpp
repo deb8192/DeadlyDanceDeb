@@ -28,9 +28,9 @@ class Interfaz
 
         unsigned short AddLuz(int);//creamos una luz
 
-        unsigned short AddMalla(const char *,int initf);//creamos una malla
+        unsigned short AddMalla(const char *,int initf,int shader);//creamos una malla
 
-        unsigned short AddImagen(const char *, unsigned int, unsigned int, float );//creamos una imagen en plano
+        unsigned short AddImagen(const char *, unsigned int, unsigned int, float , const char * rutapulsado = nullptr, const char * rutaencima = nullptr );//creamos una imagen en plano
 
         unsigned short AddTexto(std::string, GLuint); //Crear un texto
 
@@ -65,6 +65,8 @@ class Interfaz
         bool IsKeyDown(short);//se le pasa la tecla que quiere comprobar, esto va a la ventana y le pregunta si esta pulsada
 
         bool IsMouseClick(short);// comprobaciones de los botones del raton
+
+        bool IsMouseUp(short);//comprueba si se ha liberado el boton
 
         void ChangeTargetCamara(unsigned short id, float x, float y, float z);//cambia donde apunta la camara
 
@@ -111,6 +113,7 @@ class Interfaz
         void ColorDifusa(unsigned short luz, float r,float g,float b);
         void ColorSpecular(unsigned short luz, float r,float g,float b);
 
+        //define el bucle de la animacion
         void setBucle(unsigned short,bool);
 
         //cercania y lejania de la camara
@@ -120,6 +123,23 @@ class Interfaz
         //para saber si esta liberado
         bool IsKeyRelease(short);
 
+        //cambia propiedades de los textos
+        void AnchoTexto(unsigned short,unsigned int);//cambia ancho del texto
+        void CambiarColorTexto(unsigned int did,float r, float g, float b);//cambia el color del texto
+
+        //cambiar estado imagen o boton
+        void CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado);//estado sobretodo para botones
+        void CambiarPosicionImagen(unsigned int event, float x, float y);//mueve la imagen a la posicion que le digas
+        
+        //para activar y desactivar captura de texto, tambien sirve para saber que ha capturado
+        void ActivarCapturaTexto();// habilita que el texto que se ponga se capture hasta un maximo de 30 digitos
+        void DesactivarCapturaTexto();// deshabilita que el texto se capture
+        void InicializarCapturaTexto(const char * texto);//inicializa el texto del capturador con lo que le pases
+        char * DevolverTextoCapturado();//devuelve el texto que hay en el capturador
+        void BorrarUltimaLetra();//borra la ultima letra del capturador
+
+
+
     private:
 
         bool  banco_ids [65535];
@@ -128,7 +148,7 @@ class Interfaz
 
         CatOpengl::Video::Ventana * window;
 
-        Shader * shaders[5];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[6];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 

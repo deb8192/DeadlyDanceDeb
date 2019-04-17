@@ -5,9 +5,14 @@
 #include "../Enemigos/Murcielago.hpp"
 #include "../Objetos/Puerta.hpp"
 
-Jugando::Jugando()
+Jugando::Jugando(unsigned int nivel,unsigned int tipoJugador,unsigned int dinero, unsigned int slot)
 {
+    nivelJ = nivel;
+    tipoJugadorJ = tipoJugador;
+    dineroJ = dinero;
+    slotJ = slot;
 }
+
 
 Jugando::~Jugando()
 {
@@ -68,12 +73,19 @@ Jugando::~Jugando()
     }
     _zonasOscuras.clear();
 
-    tam = _recolectables.size();
+    tam = _reco_armas.size();
     for(short i=0; i < tam; i++)
     {
-        _recolectables.at(i) = nullptr;
+        _reco_armas.at(i) = nullptr;
     }
-    _recolectables.clear();
+    _reco_armas.clear();
+
+    tam = _llaves.size();
+    for(short i=0; i < tam; i++)
+    {
+        _llaves.at(i) = nullptr;
+    }
+    _llaves.clear();
 
     tam = _powerup.size();
     for(short i=0; i < tam; i++)
@@ -135,7 +147,7 @@ void Jugando::Iniciar()
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
     #ifdef WEMOTOR
-        CargarNivel(7, constantes.HEAVY);
+        CargarNivel(nivelJ,tipoJugadorJ);
     #else
         CargarNivel(6, constantes.HEAVY);
     #endif
@@ -188,7 +200,7 @@ void Jugando::ValoresPorDefectoJugador()
     float zIni = _jugador->getIniZ();
 
     jugadorInmovil = false;
-    _jugador->setDinero(0);
+    _jugador->setDinero(dineroJ);
     _jugador->setVida(_jugador->getVidaIni());
     _jugador->setBarraAtEs(100);
     _jugador->setAtaque(15);
@@ -294,7 +306,7 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_C);
         _motor->CambiarCamara();
     }
-    
+
 
     // Debug para probar cofres
     if(_motor->EstaPulsado(KEY_I))
@@ -337,7 +349,7 @@ void Jugando::ManejarEventos() {
     {
         cambia = 0;
     }*/
-    
+
 }
 
 /************************** InteractuarNivel* ************************
@@ -347,7 +359,8 @@ void Jugando::ManejarEventos() {
 void Jugando::InteractuarNivel()
 {
     //lo siguiente es para saber que objeto colisiona con jugador
-    int rec_col = _fisicas->collideColectable();
+    int rec_llave = _fisicas->collideLlave();
+    int rec_col = _fisicas->collideColectableArma();
     short int_puerta = _fisicas->collidePuerta();
     short int_palanca = _fisicas->collidePalanca();
     short int_cofre = _fisicas->collideCofre();
@@ -365,22 +378,25 @@ void Jugando::InteractuarNivel()
             AccionarMecanismo(int_palanca, constantes.PALANCA);
             //cambia++;
         }
-
-        if (int_cofre >= 0)
+        else if (int_cofre >= 0)
         {
             AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
             //cambia++;
         }
-        
-        if(rec_col < 0 && int_cofre < 0 && 
-            int_palanca < 0 && int_puerta < 0)
+        else if (rec_llave >= 0)
         {
-            DejarObjeto();
-            //cambia++;
+            _jugador->setAnimacion(4);
+            RecogerLlave(rec_llave);
         }
         else if (rec_col >= 0)
         {
-            CogerObjeto();
+            _jugador->setAnimacion(4);
+            RecogerArma(rec_col);
+            //cambia++;
+        }
+        else
+        {
+            DejarObjeto();
             //cambia++;
         }
    // }
@@ -550,26 +566,28 @@ void Jugando::Update()
     }
     else if(_jugador->getTimeAt() > 0.0)
     {
-        unsigned int posicion = 0;
-        std::vector<short> indiceObjetosColisionados = _fisicas->collideAttackWall();
-        for(unsigned short i = 0; i < indiceObjetosColisionados.size(); i ++)
+        _jugador->CrearCuerpoAtaque();
+
+        // Comprobamos si ataca a la pared
+        short paredCol = _fisicas->collideAttackWall();
+        if (paredCol >= 0)
         {
             _motora->getEvent("RomperPared")->setPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
             _motora->getEvent("RomperPared")->start();
 
-            _fisicas->ErasePared(indiceObjetosColisionados[i]);
-            posicion = _fisicas->GetRelacionParedesObstaculos(indiceObjetosColisionados[i]);
-            _fisicas->EraseObstaculo(posicion);
+            /*//TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
+            //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
+            */
+           _motor->cambiarAnimacion(4,paredCol,1);//se cambia la animacion de la pared
 
-            if(posicion != 0)
-            {
-                //TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
-                //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
-                _motor->cambiarAnimacion(0,_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(),1);//se cambia la animacion de la pared
-                posicion = 0;
-            }
+            _paredes.at(paredCol)->Borrar(paredCol);
+            _paredes.erase(_paredes.begin() + paredCol);
         }
-        _jugador->AtacarUpdate(danyo2, _enemigos);
+        else // en caso contrario, es a un enemigo
+        {
+            _jugador->AtacarUpdate(danyo2, _enemigos);
+        }
+        //_jugador->setTimeAt(0);
     }
 
     //actualizamos los enemigos
@@ -821,8 +839,8 @@ void Jugando::UpdateIA()
                     int x = _enemigos[i]->getX();
                     int y = _enemigos[i]->getY();
                     int z = _enemigos[i]->getZ();
-                
-                    if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A || 
+
+                    if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A ||
                         _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
                     {
                         CrearObjeto(x,y,z,2,2,2,constantes.LLAVE,0);
@@ -901,7 +919,21 @@ void Jugando::Render()
         _cofres.at(i)->Render(updateTime, resta);
     }
     //*******************************************************************
-
+    //BILLBOARD RECOGER ARMAS
+    if(_reco_armas.size() >= 0)
+    {
+        for(unsigned short i = 0; i < _reco_armas.size(); i++)
+        {
+            if(_jugador->getArma() != nullptr)
+            {
+                _motor->mostrarBoardArma(_jugador->getArma()->getAtaque(),_reco_armas[i]->getAtaque(),_jugador->getArma()->GetTipoObjeto(),_reco_armas[i]->GetTipoObjeto(), i);
+            }
+            else{
+                _motor->mostrarBoardArma(10,_reco_armas[i]->getAtaque(),-1,0, i);
+            }
+        }
+    }
+    //********************************************************************
     //Dibujado del personaje
     _jugador->Render(updateTime, resta);
 
@@ -944,6 +976,31 @@ void Jugando::Render()
                 mov_weapon_posX = 2;
                 mov_weapon_posZ = 2;
                 mov_weapon_posY = 2.5;
+            }
+            else if(_jugador->getTimeAt() <= 0.0f)
+            {
+                if(proyectilFuera == false)
+                {
+                    _motor->EraseProyectil();
+                    proyectilFuera = true;
+                }
+                mov_weapon_posX=-0.7;
+                mov_weapon_posZ=-0.5;
+                mov_weapon_posY=2.3;
+                mov_weapon_rotX=90;
+                mov_weapon_rotY=0;
+                mov_weapon_rotZ=0;
+            }
+        }
+        else if(_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        {
+            if(_jugador->getTimeAt() == 1.5f)
+            {
+                proyectilFuera = false;
+                mov_weapon_rotX = 180;
+                mov_weapon_posX = 2;
+                mov_weapon_posZ = 2;
+                mov_weapon_posY = 5.5;
             }
             else if(_jugador->getTimeAt() <= 0.0f)
             {
@@ -1111,8 +1168,8 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     cargador.CargarNivelXml(nivel, tipoJug); //se llama al constructor vacio
 
     CrearJugador();
-    _recolectables = cargador.GetRecolectables();
-    _recolectables.reserve(cargador.GetRecolectablesCapacity());
+    _reco_armas = cargador.GetRecolectables();
+    _reco_armas.reserve(cargador.GetRecolectablesCapacity());
     _paredes = cargador.GetParedes();
     _paredes.reserve(cargador.GetParedesCapacity());
     _powerup = cargador.GetPowerup();
@@ -1139,6 +1196,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _cofres = cargador.GetCofres();
     _eneCofres = cargador.GetEneCofres();
     _boss = cargador.GetBoss();
+    _llaves = cargador.GetLlaves();
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
     _motora->getEvent("Nivel1")->setVolume(0.1);
@@ -1191,19 +1249,22 @@ void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
     unsigned short tipoObjeto,unsigned short ataque)
 {
     Recolectable* _rec = new Recolectable(-1,ancho,largo,alto,x,y,z,tipoObjeto,0,0);
-    int posicionObjeto = _motor->CargarObjetos(2,0,x,y,z,ancho,largo,alto,
-        _rec->GetModelo(),_rec->GetTextura());
-    _rec->SetPosicionArrayObjetos(posicionObjeto);
-
+    unsigned short accion = 0;
     if (tipoObjeto == constantes.LLAVE)
     {
         _rec->setCodigo(20);
+        _llaves.push_back(move(_rec));
+        accion = 8;
     }
     else  // ARMAS
     {
         _rec->setAtaque(ataque);
+        _reco_armas.push_back(move(_rec));
+        accion = 2;
     }
-    _recolectables.push_back(move(_rec));
+    int posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,
+        _rec->GetModelo(),_rec->GetTextura());
+    _rec->SetPosicionArrayObjetos(posicionObjeto);
     _rec = nullptr;
 }
 
@@ -1458,87 +1519,58 @@ void Jugando::CambiarSalaEnemigo(unsigned short n, unsigned short m)
     }
 }
 
-// Para coger una llave o un arma
-void Jugando::CogerObjeto()
+// Para recoger una llave
+void Jugando::RecogerLlave(int rec_llave)
 {
-    long unsigned int rec_col = _fisicas->collideColectable();
-    _jugador->setAnimacion(4);
+    Llave* llave = new Llave(_llaves.at(rec_llave)->getCodigo());
+    _jugador->AnnadirLlave(llave);
+    llave = nullptr;
 
-    // Comprobamos si es una llave
-    if(_recolectables.at(rec_col)->GetTipoObjeto() == constantes.LLAVE)
+    //borramos el recolectable de nivel, _motor grafico y motor fisicas
+    _llaves.erase(_llaves.begin() + rec_llave);
+    _motor->EraseLlave(rec_llave);
+    _fisicas->EraseLlave(rec_llave);
+}
+
+// Para coger un arma
+void Jugando::RecogerArma(int rec_col)
+{
+    if(_jugador->getArma() == nullptr)//si no tiene arma equipada
     {
-        Llave* llave = new Llave(_recolectables.at(rec_col)->getCodigo());
-        _jugador->AnnadirLlave(llave);
+        //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)_reco_armas[rec_col];
+        _jugador->setArma(_reco_armas[rec_col]);
 
         //borramos el recolectable de nivel, _motor grafico y motor fisicas
-        _recolectables.erase(_recolectables.begin() + rec_col);
-        _motor->EraseColectable(rec_col);
-        _fisicas->EraseColectable(rec_col);
-    } 
-    else // En el caso contrario, es un arma
-    {
-        if(_jugador->getArma() == nullptr)//si no tiene arma equipada
-        {
-            //creamos una nueva arma a partir del recolectable con el que colisionamos //Arma* nuArma = (Arma)_recolectables[rec_col];
-            Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
-                _recolectables[rec_col]->getAncho(),
-                _recolectables[rec_col]->getLargo(),_recolectables[rec_col]->getAlto(),
-                _recolectables[rec_col]->GetTipoObjeto());
-            _jugador->setArma(nuArma);
-            //PROVISIONAL
-            _jugador->getArma()->setRotacion(0.0, constantes.PI_RADIAN, 0.0);//!PROVISIONAL
-            //lo cargamos por primera vez en el motor de graficos
-            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), _recolectables[rec_col]->GetModelo(),NULL);
-            //lo cargamos por primera vez en el motor de fisicas
-            _fisicas->crearCuerpo(0,_jugador->getX()/2,_jugador->getY()/2,_jugador->getZ()/2,
-                2,
-                _recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(), _recolectables[rec_col]->getAlto(),
-                9,0,0);
-            //borramos el recolectable de nivel, _motor grafico y motor fisicas
-            _recolectables.erase(_recolectables.begin() + rec_col);
-            _motor->EraseColectable(rec_col);
-            _fisicas->EraseColectable(rec_col);
-            atacktime = 0.0f; //Reiniciar tiempo de ataques
-        }
-        else if(_jugador->getArma() != nullptr)//si tiene arma equipada
-        {
-            //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
-            Recolectable* nuRec = new Recolectable(-1,
-                _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
-                _jugador->getArma()->getAlto(),
-                _jugador->getX(),_jugador->getY(), _jugador->getZ(),
-                _jugador->getArma()->GetTipoObjeto(),0,0);
-            nuRec->setAtaque(_jugador->getArma()->getAtaque());
-            
-            Arma* nuArma = new Arma(_recolectables[rec_col]->getAtaque(),
-                _recolectables[rec_col]->getAncho(), _recolectables[rec_col]->getLargo(),
-                _recolectables[rec_col]->getAlto(), _recolectables[rec_col]->GetTipoObjeto());
-            _motor->EraseArma();
-            _jugador->setArma(nuArma);
-
-            //PROVISIONAL
-            _jugador->getArma()->setRotacion(0.0, constantes.PI_RADIAN, 0.0);
-            //!PROVISIONAL
-            //lo cargamos por primera vez en el motor de graficos
-            _motor->CargarArmaJugador(_jugador->getX(), _jugador->getY(), _jugador->getZ(), 
-                _recolectables[rec_col]->GetModelo(), _recolectables[rec_col]->GetTextura());
-
-            //lo cargamos en el motor de fisicas
-            _fisicas->setFormaArma(_jugador->getX()/2, _jugador->getY()/2, _jugador->getZ()/2, 
-                _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),_jugador->getArma()->getAlto());
-
-            //borramos el recolectable anterior de nivel, _motor grafico y motor fisicas
-            _recolectables.erase(_recolectables.begin() + rec_col);
-            _motor->EraseColectable(rec_col);
-            _fisicas->EraseColectable(rec_col);
-
-            //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
-            _recolectables.push_back(nuRec);
-            
-            _motor->CargarRecolectable(_recolectables.size(),nuRec->getX(), nuRec->getY(),nuRec->getZ(),nuRec->GetModelo(), NULL);
-            atacktime = 0.0f; //Reiniciar tiempo de ataques
-        }
+        _reco_armas.erase(_reco_armas.begin() + rec_col);
+        _motor->EraseRecoArma(rec_col);
+        _fisicas->EraseRecoArma(rec_col);
     }
+    else if(_jugador->getArma() != nullptr)//si tiene arma equipada
+    {
+        //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
+        Recolectable* nuRec = new Recolectable(-1,
+            _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),
+            _jugador->getArma()->getAlto(),
+            _jugador->getX(),_jugador->getY(), _jugador->getZ(),
+            _jugador->getArma()->GetTipoObjeto(),0,0);
+        nuRec->setAtaque(_jugador->getArma()->getAtaque());
+
+        _jugador->setArma(_reco_armas[rec_col]);
+
+        //borramos el recolectable anterior de nivel, _motor grafico y motor fisicas
+        _reco_armas.erase(_reco_armas.begin() + rec_col);
+        _motor->EraseRecoArma(rec_col);
+        _fisicas->EraseRecoArma(rec_col);
+
+        //por ultimo creamos un nuevo y actualizamos informacion en motores grafico y fisicas
+        int posicionObjeto = _motor->CargarObjetos(2,0,nuRec->getX(), nuRec->getY(),nuRec->getZ(),
+            nuRec->getAncho(),nuRec->getLargo(),nuRec->getAlto(),
+            nuRec->GetModelo(),nuRec->GetTextura());
+        nuRec->SetPosicionArrayObjetos(posicionObjeto);
+        _reco_armas.push_back(nuRec);
+        nuRec = nullptr;
+    }
+    atacktime = 0.0f; //Reiniciar tiempo de ataques
 }
 
 void Jugando::DejarObjeto()
@@ -1547,22 +1579,31 @@ void Jugando::DejarObjeto()
     {
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
         Recolectable* nuRec = new Recolectable(-1,
-            _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(), 
+            _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),
             _jugador->getArma()->getAlto(),
             _jugador->getX(),_jugador->getY(), _jugador->getZ(),
             _jugador->getArma()->GetTipoObjeto(),0,0);
         nuRec->setAtaque(_jugador->getArma()->getAtaque());
 
-        _motor->EraseArma();
-        _fisicas->EraseArma();
-        _jugador->setArma(NULL);
+        if ((_jugador->getArma()->GetTipoObjeto() == constantes.ARPA) ||
+            (_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA))
+        {
+            if(proyectilFuera == false)
+            {
+                _motor->EraseProyectil();
+                proyectilFuera = true;
+                _motora->getEvent("Flauta")->stop();
+                _motora->getEvent("Arpa")->stop();
+            }
+        }
+        _jugador->setArma(nullptr);
 
         //por ultimo creamos una nueva y actualizamos informacion en motor grafico
-        _motor->CargarRecolectable(_recolectables.size(),
-            nuRec->getX(), nuRec->getY(),nuRec->getZ(),
-            nuRec->GetModelo(), nuRec->GetTextura());
-
-        _recolectables.push_back(move(nuRec));
+        int posicionObjeto = _motor->CargarObjetos(2,0,nuRec->getX(), nuRec->getY(),nuRec->getZ(),
+            nuRec->getAncho(),nuRec->getLargo(),nuRec->getAlto(),
+            nuRec->GetModelo(),nuRec->GetTextura());
+        nuRec->SetPosicionArrayObjetos(posicionObjeto);
+        _reco_armas.push_back(nuRec);
         nuRec = nullptr;
     }
 }
@@ -1614,18 +1655,12 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
             bool abrir = _puerta->accionar();
             float rot = (constantes.PI_MEDIOS + constantes.PI_CUARTOS);
             if(abrir)
-            {
-                //Se abre/acciona la puerta / el mecanismo
-                _motora->getEvent("AbrirPuerta")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                _motora->getEvent("AbrirPuerta")->start();
-                _puerta->GirarPuerta(rot);
+            {   //Se abre/acciona la puerta / el mecanismo
+                _puerta->GirarPuerta(rot, true);
             }
             else
-            {
-                //Se cierra/desacciona la puerta / el mecanismo
-                _motora->getEvent("CerrarPuerta")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                _motora->getEvent("CerrarPuerta")->start();
-                _puerta->GirarPuerta(-rot);
+            {   //Se cierra/desacciona la puerta / el mecanismo
+                _puerta->GirarPuerta(-rot, true);
             }
 
             if(activar)
@@ -1661,17 +1696,12 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
             if(abrir)
             {
                 //Se abre/acciona la puerta / el mecanismo
-                //_motora->getEvent("AbrirPuerta")->setVolume(0.8f);
-                _motora->getEvent("AbrirPuerta")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                _motora->getEvent("AbrirPuerta")->start();
-                _puerta->GirarPuerta(rot);
+                _puerta->GirarPuerta(rot, false);
             }
             else
             {
                 //Se cierra/desacciona la puerta / el mecanismo
-                _motora->getEvent("CerrarPuerta")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                _motora->getEvent("CerrarPuerta")->start();
-                _puerta->GirarPuerta(-rot);
+                _puerta->GirarPuerta(-rot, false);
             }
         }
         else
@@ -1701,17 +1731,11 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                         this->CargarBossEnMemoria();
                     }
                     //Se abre/acciona la puerta / el mecanismo
-                    _motora->getEvent("AbrirCerradura")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                    _motora->getEvent("AbrirCerradura")->setVolume(0.5);
-                    _motora->getEvent("AbrirCerradura")->start();
-                    _puerta->GirarPuerta(constantes.PI_MEDIOS + constantes.PI_CUARTOS);
+                    _puerta->GirarPuerta((constantes.PI_MEDIOS + constantes.PI_CUARTOS), false);
                 }
                 else
-                {
-                    //Se cierra/desacciona la puerta / el mecanismo
-                    _motora->getEvent("CerrarPuerta")->setPosition(_puerta->getX(), _puerta->getY(), _puerta->getZ());
-                    _motora->getEvent("CerrarPuerta")->start();
-                    _puerta->GirarPuerta(-(constantes.PI_MEDIOS + constantes.PI_CUARTOS));
+                {   //Se cierra/desacciona la puerta / el mecanismo
+                    _puerta->GirarPuerta(-(constantes.PI_MEDIOS + constantes.PI_CUARTOS), false);
                 }
             }
         }
@@ -1831,6 +1855,7 @@ void Jugando::updateAtEsp()
         {
             _motor->colorearEnemigo(255,255,255,255,0);
         }
+        // TO DO: revisar porque pilla arma especial del motor en vez del jugador
         #ifdef WEMOTOR
             if(_jugador->getTimeAtEsp() <= 0.5f && _motor->getArmaEspecial()) //Zona de pruebas
             {
@@ -1963,9 +1988,13 @@ void Jugando::AbrirCofre(Cofre* _inter)
             break;
 
         case 8: // GUITARRA
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(22,32));
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(24,34));
             break;
-        
+
+        case 9: // FLAUTA
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(18,28));
+            break;
+
         default: // ORO
             CrearPowerUp(x,y,z,constantes.ORO,NumeroAleatorio(20,30));
             break;

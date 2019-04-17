@@ -54,6 +54,7 @@ class CargadorNiveles
         unsigned int GetZonasEsconditeCapacity();
         std::vector<Recolectable*> GetRecolectables();
         unsigned int GetRecolectablesCapacity();
+        std::vector<Recolectable*> GetLlaves();
         std::vector<Pared*> GetParedes();
         unsigned int GetParedesCapacity();
         std::vector<Recolectable*> GetPowerup();
@@ -98,13 +99,14 @@ class CargadorNiveles
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         int chestsMax;
         std::vector<Enemigo*> _eneCofres;
-        std::vector<Recolectable*> _recolectables;
+        std::vector<Recolectable*> _reco_armas;
         std::vector<Pared*> _paredes;
         std::vector<Recolectable*> _powerup;
         std::vector<ZonaCofre*> _zonasCofre; //Array de zonas de cofres
         std::vector<ZonaRespawn*> _zonasRespawn; //Array de zonas de respawn
         std::vector<ZonaOscura*> _zonasOscuras; //Array de zonas de oscuras
         std::vector<ZonaEscondite*> _zonasEscondite; //Array de zonas de escondite
+        std::vector<Recolectable*> _llaves;
         std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
 
         MotorGrafico* _motor;

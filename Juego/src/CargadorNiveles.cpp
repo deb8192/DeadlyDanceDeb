@@ -67,12 +67,19 @@ CargadorNiveles::~CargadorNiveles()
     }
     _zonasOscuras.clear();
 
-    tam = _recolectables.size();
+    tam = _reco_armas.size();
     for(short i=0; i < tam; i++)
     {
-        delete _recolectables.at(i);
+        delete _reco_armas.at(i);
     }
-    _recolectables.clear();
+    _reco_armas.clear();
+
+    tam = _llaves.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _llaves.at(i);
+    }
+    _llaves.clear();
 
     tam = _powerup.size();
     for(short i=0; i < tam; i++)
@@ -460,12 +467,17 @@ unsigned int CargadorNiveles::GetZonasEsconditeCapacity()
 
 std::vector<Recolectable*> CargadorNiveles::GetRecolectables()
 {
-    return _recolectables;
+    return _reco_armas;
+}
+
+std::vector<Recolectable*> CargadorNiveles::GetLlaves()
+{
+    return _llaves;
 }
 
 unsigned int CargadorNiveles::GetRecolectablesCapacity()
 {
-    return _recolectables.capacity();
+    return _reco_armas.capacity();
 }
 
 std::vector<Pared*> CargadorNiveles::GetParedes()
@@ -533,8 +545,8 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int doorsMax, int leve
     /*
     _zonasEscondite.reserve();
     _zonasOscuras.reserve();
-    _zonasCofre.reserve();
-    _recolectables.reserve(20);
+    _zonasCofre.reserve();_reco_armas.reserve(20);
+    _llaves.reserve(20);
     _powerup.reserve(20);
     */
 }
@@ -783,7 +795,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,ancho,largo,alto,_rec->GetModelo(),_rec->GetTextura());
             _rec->SetPosicionArrayObjetos(posicionObjeto);
             _rec->setCodigo(codigo);
-            _recolectables.push_back(move(_rec));
+            _llaves.push_back(move(_rec));
             _rec = nullptr;
         }
         break;
@@ -804,7 +816,7 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         case 2: // PUERTA2
         case 3: // PUERTA
         {
-            Puerta* _puerta = new Puerta(++id, codigo, 
+            Puerta* _puerta = new Puerta(++id, codigo,
                 ancho,largo,alto,x,y,z,tipoObj,despX,despZ,accion);
 
             posicionObjeto = _motor->CargarObjetos(accion,0,x,y,z,
@@ -815,15 +827,21 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         }
         break;
 
-        //TO DO corregir la creacion de obstaculos para hacerla correctamente
         case 14: // PARED_ROMPIBLE
         {
-            Pared* _par = new Pared(ancho,largo,alto,x,y,z,tipoObj);
-            _par->setID(_paredes.size());
+            Pared* _par = new Pared(_paredes.size(), codigo,
+                ancho,largo,alto,x,y,z,tipoObj,despX,despZ,accion);
+
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura,anima,frame);
             _par->SetPosicionArrayObjetos(posicionObjeto);
             _paredes.push_back(move(_par));
             _par = nullptr;
+        }
+        break;
+
+        case 18: // OBJETOS QUE NO LE AFECTA LA LUZ
+        {
+            posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura,nullptr,1,false);
             _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
         }
         break;
@@ -834,8 +852,8 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
             _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ);
         }
         break;
-    }   
-    
+    }
+
     //motor->debugBox(x,y,z,ancho,alto,largo);
     //fisicas->crearCuerpo(x,y,z,1,10,10,10,3); //esto lo ha tocado debora y yo arriba
 }
@@ -860,7 +878,7 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
         _waypoints.push_back(waypoint);
         sala->AgregarWaypoint(_waypoints.back());
     }
-    
+
     waypoint = nullptr;
 }
 
@@ -970,7 +988,7 @@ void CargadorNiveles::CargarCofres()
 
                 int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
                     _cofre->GetModelo(), _cofre->GetTextura());
-                
+
                 _cofre->SetPosicionArrayObjetos(posicionObjeto);
                 _cofres.push_back(move(_cofre));
                 _cofre = nullptr;

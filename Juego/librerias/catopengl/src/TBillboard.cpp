@@ -15,7 +15,10 @@ TBillboard::TBillboard(GLfloat x, GLfloat y, GLfloat z, const char * _ruta, Shad
 
 TBillboard::~TBillboard()
 {
-
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteTextures(1, &texture);
 }
 
 //Cargar cuadrado de billboard
@@ -35,6 +38,7 @@ void TBillboard::CargarBillboard(const char * _ruta)
         1, 2, 3  // second triangle
     };
     // Crear buffers/arrays
+
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
