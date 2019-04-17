@@ -129,6 +129,7 @@ Jugando::~Jugando()
         delete _auxiliadores.at(i);
     }
     _auxiliadores.clear();
+    contadorWaypointsJugador = 0;
 }
 
 void Jugando::Iniciar()
@@ -191,6 +192,7 @@ void Jugando::ValoresPorDefecto()
     // Activamos la interfaz
     _interfaz->activar();
     desactivarColisionesJugador = false;
+    contadorWaypointsJugador = 0;
 }
 
 void Jugando::ValoresPorDefectoJugador()
@@ -411,7 +413,7 @@ void Jugando::InteractuarNivel()
 void Jugando::Update()
 {
     Constantes constantes;
-    bool colisionaWaypoint = false, waypointComun = false;
+    bool colisionaWaypoint = false, waypointComun = false, cercaJugador = false;
     _motor->clearDebug();
     short contadorWaypoints = 0, contadorEnemigos = 0, i = 0;
     INnpc::VectorEspacial posicionTemporal;
@@ -597,6 +599,7 @@ void Jugando::Update()
 
         for(short i=0;(unsigned)i<_enemigos.size();i++)
         {
+            cercaJugador = false;
             if(_enemigos[i] != nullptr && _enemigos[i]->getVida() > 0)
             {
                 // Se coloca la posicionMedia de las bandadas
@@ -620,10 +623,25 @@ void Jugando::Update()
                         updateRecorridoPathfinding(_enemigos[i]);
                 }
                 // TO DO: optimizar
-                if (_enemPideAyuda) {
-                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
-                } else {
-                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                if(_enemigos[i]->GetSala() == _jugador->GetSala())
+                {
+                    if (_enemPideAyuda) {
+                        _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    } else {
+                        _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    }
+                }
+                else
+                {
+                    cercaJugador = this->ComprobarEnemigoSalaContiguaJugador(i);
+                    if(cercaJugador)
+                    {
+                        if (_enemPideAyuda) {
+                        _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                        } else {
+                            _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                        }
+                    }
                 }
                 //Este bloque se da si el enemigo esta en el proceso de merodear
                 if(_enemigos[i]->getTimeMerodear() > 0.0f)
@@ -737,30 +755,17 @@ void Jugando::Update()
                     //Ya que comprobamos el modo ataque, comprobamos aqui si esta en una sala distinta a la del jugador
                     if(_enemigos[i]->GetSala() != _jugador->GetSala())
                     {
-                        short contadorWaypointsJugador = 0;
-                        contadorWaypoints = 0;
-                        while((unsigned) contadorWaypoints < _enemigos[i]->GetSala()->GetWaypoints().size() && !waypointComun)
+                        waypointComun = this->ComprobarEnemigoSalaContiguaJugador(i);
+                        if(waypointComun)
                         {
-                            while((unsigned) contadorWaypointsJugador < _jugador->GetSala()->GetWaypoints().size() && !waypointComun)
-                            {
-                                //Si hay un waypoint en comun entre la sala del jugador y la del enemigo, estan en salas contiguas
-                                if(_jugador->GetSala()->GetWaypoints()[contadorWaypointsJugador] == _enemigos[i]->GetSala()->GetWaypoints()[contadorWaypoints])
-                                {
-                                    //Se hace al enemigo ir hacia el waypoint comun y cuando llegue se hace que persiga al jugador
-                                    waypointComun = true;
-                                    vector <INdrawable::Posiciones> posicionWaypoint;
-                                    posicionWaypoint.reserve(constantes.UNO);
-                                    posicionWaypoint.push_back(_jugador->GetSala()->GetWaypoints()[contadorWaypointsJugador]->GetPosicionWaypoint());
-                                    _enemigos[i]->AnnadirRecorridoAyuda(posicionWaypoint);
-                                    _enemigos[i]->SetSala(_jugador->GetSala());
-                                }
-                                else{contadorWaypointsJugador++;}
-                            }
-                            contadorWaypointsJugador = 0;
-                            contadorWaypoints++;
+                            //Se hace al enemigo ir hacia el waypoint comun y cuando llegue se hace que persiga al jugador
+                            vector <INdrawable::Posiciones> posicionWaypoint;
+                            posicionWaypoint.reserve(constantes.UNO);
+                            posicionWaypoint.push_back(_jugador->GetSala()->GetWaypoints()[contadorWaypointsJugador]->GetPosicionWaypoint());
+                            _enemigos[i]->AnnadirRecorridoAyuda(posicionWaypoint);
+                            _enemigos[i]->SetSala(_jugador->GetSala());
                         }
-                        //Si el jugador no esta en la sala contigua, el enemigo pasa a su estado normal
-                        if(!waypointComun)
+                        else
                         {
                             _enemigos[i]->SetModo(Enemigo::modosEnemigo::MODO_DEFAULT);
                         }
@@ -801,6 +806,7 @@ void Jugando::Update()
 void Jugando::UpdateIA()
 {
     Constantes constantes;
+    bool cercaJugador = false;
     /* *********** Teclas para probar cosas *************** */
     // Bajar vida
     if (_motor->EstaPulsado(KEY_J))
@@ -831,6 +837,7 @@ void Jugando::UpdateIA()
     if(_enemigos.size() > 0){
         //comprobando los _enemigos para saber si estan muertos
         for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
+            cercaJugador = false;
             if(_enemigos[i] != nullptr)
             {
                 if(_enemigos[i]->estasMuerto() && _enemigos[i]->finalAnimMuerte())
@@ -873,10 +880,21 @@ void Jugando::UpdateIA()
                     if(_enemigos[i]->estasMuerto()){
                         _enemigos[i]->MuereEnemigo(i);
                     }
+                    //si no esta muerto ni piensa morirse XD ejecutamos ia
                     else
                     {
-                        //si no esta muerto ni piensa morirse XD ejecutamos ia
-                        _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                        if(_enemigos[i]->GetSala() == _jugador->GetSala())
+                        {
+                            _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                        }
+                        else
+                        {
+                            cercaJugador = this->ComprobarEnemigoSalaContiguaJugador(i);
+                            if(cercaJugador)
+                            {
+                                _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                            }
+                        }
                     }
                 }
             }
@@ -1519,6 +1537,32 @@ void Jugando::CambiarSalaEnemigo(unsigned short n, unsigned short m)
     }
 }
 
+//Comprueba si el enemigo esta en la sala contigua
+bool Jugando::ComprobarEnemigoSalaContiguaJugador(unsigned int n)
+{
+    bool waypointComun = false;
+    int contadorWaypoints = 0;
+    contadorWaypointsJugador = 0;
+    while((unsigned) contadorWaypoints < _enemigos[n]->GetSala()->GetWaypoints().size() && !waypointComun)
+    {
+        while((unsigned) contadorWaypointsJugador < _jugador->GetSala()->GetWaypoints().size() && !waypointComun)
+        {
+            //Si hay un waypoint en comun entre la sala del jugador y la del enemigo, estan en salas contiguas
+            if(_jugador->GetSala()->GetWaypoints()[contadorWaypointsJugador] == _enemigos[n]->GetSala()->GetWaypoints()[contadorWaypoints])
+            {
+                //Se hace al enemigo ir hacia el waypoint comun y cuando llegue se hace que persiga al jugador
+                waypointComun = true;
+                return waypointComun;
+            }
+            else{contadorWaypointsJugador++;}
+        }
+        contadorWaypointsJugador = 0;
+        contadorWaypoints++;
+    }
+    //Si llega aqui, el jugador no esta en la sala contigua
+    return false;
+}
+
 // Para recoger una llave
 void Jugando::RecogerLlave(int rec_llave)
 {
@@ -2047,6 +2091,10 @@ void Jugando::CargarBossEnMemoria()
         _fisicas->EraseTodosEnemigos(i);
     }
     cargador.BorrarVectorEnemigosBossActivado();
+    if(_jugador->GetSala() != _boss->GetSala())
+    {
+        _jugador->SetSala(_boss->GetSala());
+    }
 
     _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura());//creamos la figura
     _fisicas->crearCuerpo(1,x/2,y/2,z/2,2,1,1,1,2,0,0);

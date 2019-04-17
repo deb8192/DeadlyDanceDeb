@@ -61,6 +61,7 @@ class Jugando: public Estado {
         void ConectarWaypoints();
         void CambiarSalaJugador(unsigned short i);
         void CambiarSalaEnemigo(unsigned short n, unsigned short m);
+        bool ComprobarEnemigoSalaContiguaJugador(unsigned int n);
 
         //Funciones de interacciones
         void RecogerLlave(int rec_llave);
@@ -142,6 +143,7 @@ class Jugando: public Estado {
         //int cambia;
         int danyo, danyo2;
         int contadorEnem;
+        short contadorWaypointsJugador;
 
         //Comprobacion de powerup
         //int powerupYES = -1; //no se utiliza

@@ -743,13 +743,15 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
     if(modo == 0 || modo == 3)
     {
         bool colision = false;
-        if(enemigos.size() > 0)//posiciones interpolacion
+        if(!enemigos.empty() && enemigos.size() > 0)//posiciones interpolacion
         {
             unsigned int i = 0;
             while(i<enemigos.size() && !colision)
             {
-                colision = enemigos[i]->raycast(*rayo,intersection);
-
+                if(enemigos[i])
+                {
+                    colision = enemigos[i]->raycast(*rayo,intersection);
+                }
                 if(colision)
                 {
 
