@@ -1084,6 +1084,25 @@ void Interfaz::SetTexture(unsigned short did, const char * _ruta)
     }
 }
 
+void Interfaz::SetTransparencia(unsigned short did, float transp)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->setTransparencia(transp);
+                }
+            }
+        }
+    }
+}
+
 
 void Interfaz::RemoveObjectForID(signed int idPerson)
 {
@@ -1461,5 +1480,5 @@ void Interfaz::CambiarPosicionImagen(unsigned int event, float x, float y)
                 }
             }
         }
-    }  
+    }
 }

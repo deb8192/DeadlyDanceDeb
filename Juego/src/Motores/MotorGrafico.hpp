@@ -253,6 +253,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoequipada, int tiposuelo, unsigned int i);
             void borrarArmaEspecial();
 
+            //TRansparencias
+            void mallaTransparente(unsigned int id, float t);
+
             //debug grafico
             void activarDebugGrafico();//se activa o desactiva el modo debug grafico
             void activarPathfinding(); //Temporal, se activa o desactiva el pathfinding
@@ -351,7 +354,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CambiarTexto(unsigned int, const char *);//cambia el texto de un objeto tipo texto
             void CambiarColorTexto(unsigned int, float r, float g, float b);//cambia el color del texto
             void CambiarPosicionImagen(signed int event, float x, float y);//cambiar posicion de un evento (imagen)
-            
+
         private: //clases solo accesibles por MotorGrafico
 
             //clase singleton

@@ -61,6 +61,8 @@ uniform Material material;    //materiales
 uniform sampler2D Texturediffuse;  //Textura difusa
 uniform sampler2D Texturespecular; //Textura especular
 
+uniform float trasparencia = 1.0;
+
 //Funciones de calculo de luces
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
@@ -99,8 +101,7 @@ void main()
     silang /= 0.5;
     if(silang > 1.0)silang = 1.0;
 
-    FragColor = vec4(result, 1.0) * silang + black_silhouette * (1 - silang);
-    //FragColor = vec4(result, 1.0);
+    FragColor = vec4(result, trasparencia) * silang + black_silhouette * (1 - silang);
 }
 
 //Calcular Luz Direccional

@@ -1701,6 +1701,8 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
             _interfaz->Rotar(Objetos_Scena[i],rx,ry-180,rz);
         }
 
+
+
     #else
         //codigo motor irrlicht
         Objetos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
@@ -1789,7 +1791,6 @@ void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoe
     #endif
 }
 
-
 void MotorGrafico::borrarArmaEspecial()
 {
     #ifdef WEMOTOR
@@ -1804,6 +1805,13 @@ void MotorGrafico::borrarArmaEspecial()
         //codigo motor irrlicht
         _armaEspJugador->remove();
         _armaEspJugador = nullptr;
+    #endif
+}
+
+void MotorGrafico::mallaTransparente(unsigned int id, float t)
+{
+    #ifdef WEMOTOR
+        _interfaz->SetTransparencia(id,t);
     #endif
 }
 
@@ -3630,5 +3638,5 @@ void MotorGrafico::CambiarPosicionImagen(signed int event, float x, float y)
         {
             _interfaz->CambiarPosicionImagen(event,x,y);
         }
-    #endif   
+    #endif
 }

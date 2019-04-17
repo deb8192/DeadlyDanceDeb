@@ -100,6 +100,8 @@ class Interfaz
 
         void SetTexture(unsigned short did, const char * _ruta); //Le asigna una texura a una malla
 
+        void SetTransparencia(unsigned short did, float transp); //Se pone transparente la malla
+
         void RemoveObjectForID(signed int idPerson);//borra por el id personalizado = si el id es -1 no funciona este metodo
 
         void DefinirIdPersonalizado(unsigned short did, signed int idPerson);//le asigna el id personalizado
@@ -130,7 +132,7 @@ class Interfaz
         //cambiar estado imagen o boton
         void CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado);//estado sobretodo para botones
         void CambiarPosicionImagen(unsigned int event, float x, float y);//mueve la imagen a la posicion que le digas
-        
+
         //para activar y desactivar captura de texto, tambien sirve para saber que ha capturado
         void ActivarCapturaTexto();// habilita que el texto que se ponga se capture hasta un maximo de 30 digitos
         void DesactivarCapturaTexto();// deshabilita que el texto se capture
