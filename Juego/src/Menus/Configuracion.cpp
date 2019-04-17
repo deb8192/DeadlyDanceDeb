@@ -102,33 +102,37 @@ void Configuracion::Update()
 
 void Configuracion::ManejarEventos()
 {
-    if(_motor->OcurreEvento(991))
-    {
-        if((float)_motor->GetPosicionRaton()[0] >= 362.0f && (float)_motor->GetPosicionRaton()[0] <= 728.0f)
-        {
-            volAmbiente = ((float)_motor->GetPosicionRaton()[0]-362.0f)*(100.0f/366.0f);
-            _motor->CambiarPosicionImagen(991,(float)_motor->GetPosicionRaton()[0],125);
-        }
-    }
+    #ifdef WEMOTOR
 
-    if(_motor->OcurreEvento(992))
-    {
-        if((float)_motor->GetPosicionRaton()[0] >= 362.0f && (float)_motor->GetPosicionRaton()[0] <= 728.0f)
+        if(_motor->OcurreEvento(991))
         {
-            volEfectos = ((float)_motor->GetPosicionRaton()[0]-362.0f)*(100.0f/366.0f);
-            _motor->CambiarPosicionImagen(992,(float)_motor->GetPosicionRaton()[0],185);
+            if((float)_motor->GetPosicionRaton()[0] >= 362.0f && (float)_motor->GetPosicionRaton()[0] <= 728.0f)
+            {
+                volAmbiente = ((float)_motor->GetPosicionRaton()[0]-362.0f)*(100.0f/366.0f);
+                _motor->CambiarPosicionImagen(991,(float)_motor->GetPosicionRaton()[0],125);
+            }
         }
-    }
 
-    if(_motor->OcurreEvento(993))
-    {
-        if((float)_motor->GetPosicionRaton()[0] >= 362.0f && (float)_motor->GetPosicionRaton()[0] <= 728.0f)
+        if(_motor->OcurreEvento(992))
         {
-            volVoces = ((float)_motor->GetPosicionRaton()[0]-362.0f)*(100.0f/366.0f);
-            _motor->CambiarPosicionImagen(993,(float)_motor->GetPosicionRaton()[0],245);
+            if((float)_motor->GetPosicionRaton()[0] >= 362.0f && (float)_motor->GetPosicionRaton()[0] <= 728.0f)
+            {
+                volEfectos = ((float)_motor->GetPosicionRaton()[0]-362.0f)*(100.0f/366.0f);
+                _motor->CambiarPosicionImagen(992,(float)_motor->GetPosicionRaton()[0],185);
+            }
         }
-    }
 
+        if(_motor->OcurreEvento(993))
+        {
+            if((float)_motor->GetPosicionRaton()[0] >= 362.0f && (float)_motor->GetPosicionRaton()[0] <= 728.0f)
+            {
+                volVoces = ((float)_motor->GetPosicionRaton()[0]-362.0f)*(100.0f/366.0f);
+                _motor->CambiarPosicionImagen(993,(float)_motor->GetPosicionRaton()[0],245);
+            }
+        }
+
+    #endif
+    
     if(_motor->OcurreEvento(994))
     {
         if(muteAll)

@@ -2702,7 +2702,7 @@ void MotorGrafico::SetBarraEnergia(int barra)
                 BarraEnergiaI->setMaxSize(dimension2du(1,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
             }
             else
-            {            bool estadoteclas3[350];//contiene si se ha reseteado el boton
+            {
                 BarraEnergiaI->setMaxSize(dimension2du(resultado,27));//maximo 121/100 y esto multiplicado por la cantidad de vida
             }
         }
