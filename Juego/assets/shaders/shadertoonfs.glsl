@@ -70,6 +70,10 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main()
 {
+    if (texture(Texturediffuse, TexCoords).a == 0.0) {
+        discard;
+    }
+
     //Propiedades
     vec3 norm = normalize(Normal);                          //Normalizar las normales
     vec3 viewDir = normalize(viewPos - FragPos);            //Calculo de direccion de camara
@@ -102,6 +106,7 @@ void main()
     if(silang > 1.0)silang = 1.0;
 
     FragColor = vec4(result, trasparencia) * silang + black_silhouette * (1 - silang);
+
 }
 
 //Calcular Luz Direccional
