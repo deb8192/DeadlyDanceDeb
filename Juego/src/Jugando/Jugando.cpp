@@ -1,6 +1,8 @@
 #include "Jugando.hpp"
 #include "../Juego.hpp"
 #include "../Enemigos/CofreArana.hpp"
+#include "../Enemigos/Pollo.hpp"
+#include "../Enemigos/Murcielago.hpp"
 #include "../Objetos/Puerta.hpp"
 
 Jugando::Jugando(unsigned int nivel,unsigned int tipoJugador,unsigned int dinero, unsigned int slot)
@@ -43,12 +45,33 @@ Jugando::~Jugando()
     }
     _eneCofres.clear();
 
-    tam = _zonas.size();
+    tam = _zonasRespawn.size();
     for(short i=0; i < tam; i++)
     {
-        _zonas.at(i) = nullptr;
+        delete _zonasRespawn.at(i);
     }
-    _zonas.clear();
+    _zonasRespawn.clear();
+
+    tam = _zonasCofre.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _zonasCofre.at(i);
+    }
+    _zonasCofre.clear();
+
+    tam = _zonasEscondite.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _zonasEscondite.at(i);
+    }
+    _zonasEscondite.clear();
+
+    tam = _zonasOscuras.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _zonasOscuras.at(i);
+    }
+    _zonasOscuras.clear();
 
     tam = _reco_armas.size();
     for(short i=0; i < tam; i++)
@@ -148,6 +171,8 @@ void Jugando::ValoresPorDefecto()
     //drawTime = _controladorTiempo->GetTiempo(2);
     drawTime = 0.0f;
     lastDrawTime = drawTime;
+    respawnTime = 0.0f;
+    lastRespawnTime = respawnTime;
     atacktime = 0.0f;
     // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
     //cambia = 0;
@@ -390,10 +415,15 @@ void Jugando::Update()
     _motor->clearDebug();
     short contadorWaypoints = 0, contadorEnemigos = 0, i = 0;
     INnpc::VectorEspacial posicionTemporal;
+    if(lastRespawnTime == 0.0f)
+    {
+        lastRespawnTime = _controladorTiempo->GetTiempo(2);
+    }
+    respawnTime = _controladorTiempo->GetTiempo(2) - lastRespawnTime;
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
 
-    if (_jugador->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
+    if (_jugador != nullptr && _jugador->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
         _jugador->MuereJugador(); // Animacion de muerte
         DesactivarDebug();
@@ -401,7 +431,12 @@ void Jugando::Update()
         Juego::GetInstance()->estado.CambioEstadoMuerte();
     }
 
-
+    // **********  Se actualiza el respawn si procede  **********
+    if(respawnTime - lastRespawnTime >= constantes.TIEMPO_RESPAWN && !enSalaBoss)
+    {
+        this->RespawnEnemigos();
+        lastRespawnTime = respawnTime;
+    }
     // ********** se actualiza posiciones e interpolado **********
     //animacion
     _motor->cambiarAnimacionJugador(_jugador->getAnimacion());
@@ -422,6 +457,7 @@ void Jugando::Update()
     //colisiones con todos los objetos y enemigos que no se traspasan
     jugadorInmovil = _jugador->ColisionEntornoEne();
 
+    //ESTO ES DE DEBUG PARA ATRAVESAR PAREDES
     if(desactivarColisionesJugador)
     {
         jugadorInmovil = false;
@@ -448,12 +484,15 @@ void Jugando::Update()
     this->updateAt(&danyo2);
 
     //Aqui se comprueba si el jugador cambia de sala
-    while(!colisionaWaypoint && (unsigned) i < _waypoints.size())
+    if(!_waypoints.empty() && _waypoints.size() > 0)
     {
-        colisionaWaypoint = _fisicas->CollidePlayerWaypoint(i);
-        if(!colisionaWaypoint)
+        while(!colisionaWaypoint && (unsigned) i < _waypoints.size())
         {
-            i++;
+            colisionaWaypoint = _fisicas->CollidePlayerWaypoint(i);
+            if(!colisionaWaypoint)
+            {
+                i++;
+            }
         }
     }
     //Ha colisionado con un waypoint
@@ -510,11 +549,14 @@ void Jugando::Update()
 
     for(unsigned int i = 0; i < _enemigos.size(); i++)
     {
-        _fisicas->updateEnemigos(_enemigos.at(i)->getFisX(),
-            _enemigos.at(i)->getFisY(),
-            _enemigos.at(i)->getFisZ(),
-            i
-        );
+        if(_enemigos[i] != nullptr)
+        {
+            _fisicas->updateEnemigos(_enemigos.at(i)->getFisX(),
+                _enemigos.at(i)->getFisY(),
+                _enemigos.at(i)->getFisZ(),
+                i
+            );
+        }
     }
 
     //Si se realiza el ataque se comprueban las colisiones
@@ -579,9 +621,9 @@ void Jugando::Update()
                 }
                 // TO DO: optimizar
                 if (_enemPideAyuda) {
-                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                 } else {
-                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonas, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                 }
                 //Este bloque se da si el enemigo esta en el proceso de merodear
                 if(_enemigos[i]->getTimeMerodear() > 0.0f)
@@ -824,8 +866,7 @@ void Jugando::UpdateIA()
                     }
 
                     //Borrar enemigo
-                    _motor->EraseEnemigo(i);
-                    _fisicas->EraseEnemigo(i);
+                    _enemigos[i]->BorrarEnemigos(i);
                     EraseEnemigo(i);
 
                 }else{
@@ -991,13 +1032,19 @@ void Jugando::Render()
     //Dibujado de los enemigos
     for(unsigned short i = 0; i < _enemigos.size(); i++)
     {
-        _enemigos.at(i)->Render(i, updateTime, resta);
+        if(_enemigos[i])
+        {
+            _enemigos.at(i)->Render(i, updateTime, resta);
+        }
     }
 
     //Dibujado de ataques enemigos
     for(unsigned int i = 0; i < _enemigos.size(); i++)
     {
-        _enemigos.at(i)->RenderAtaque();
+        if(_enemigos[i])
+        {
+            _enemigos.at(i)->RenderAtaque();
+        }
     }
 
     //Dibujado del ataque especial del jugador
@@ -1007,15 +1054,45 @@ void Jugando::Render()
     }
 
     //Dibujado zonas
-    for(unsigned int i=0; i < _zonas.size(); i++)
+    for(unsigned int i=0; i < _zonasOscuras.size(); i++)
     {
-        _zonas.at(i)->Render();
+        if(_zonasOscuras[i])
+        {
+            _zonasOscuras.at(i)->Render();
+        }
+    }
+
+    for(unsigned int i=0; i < _zonasCofre.size(); i++)
+    {
+        if(_zonasCofre[i])
+        {
+            _zonasCofre.at(i)->Render();
+        }
+    }
+
+    for(unsigned int i=0; i < _zonasEscondite.size(); i++)
+    {
+        if(_zonasEscondite[i])
+        {
+            _zonasEscondite.at(i)->Render();
+        }
+    }
+
+    for(unsigned int i=0; i < _zonasRespawn.size(); i++)
+    {
+        if(_zonasRespawn[i])
+        {
+            _zonasRespawn.at(i)->Render();
+        }
     }
 
     //Dibujado waypoints
     for(unsigned int i=0; i < _waypoints.size(); i++)
     {
-        _waypoints.at(i)->Render();
+        if(_waypoints[i])
+        {
+            _waypoints.at(i)->Render();
+        }
     }
     //_motor->clearDebug2(); //Pruebas debug
 
@@ -1092,11 +1169,23 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
 
     CrearJugador();
     _reco_armas = cargador.GetRecolectables();
+    _reco_armas.reserve(cargador.GetRecolectablesCapacity());
     _paredes = cargador.GetParedes();
+    _paredes.reserve(cargador.GetParedesCapacity());
     _powerup = cargador.GetPowerup();
-    _zonas = cargador.GetZonas();
+    _powerup.reserve(cargador.GetPowerupCapacity());
+    _zonasOscuras = cargador.GetZonasOscuras();
+    _zonasOscuras.reserve(cargador.GetZonasOscurasCapacity());
+    _zonasEscondite = cargador.GetZonasEscondite();
+    _zonasEscondite.reserve(cargador.GetZonasEsconditeCapacity());
+    _zonasCofre = cargador.GetZonasCofre();
+    _zonasCofre.reserve(cargador.GetZonasCofreCapacity());
+    _zonasRespawn = cargador.GetZonasRespawn();
+    _zonasRespawn.reserve(cargador.GetZonasRespawnCapacity());
     _enemigos = cargador.GetEnemigos();
+    _enemigos.reserve(cargador.GetEnemigosCapacity());
     _waypoints = cargador.GetWaypoints();
+    _waypoints.reserve(cargador.GetWaypointsCapacity());
     ConectarWaypoints();
 
     //Cargar objetos con el nivel completo
@@ -1177,6 +1266,136 @@ void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
         _rec->GetModelo(),_rec->GetTextura());
     _rec->SetPosicionArrayObjetos(posicionObjeto);
     _rec = nullptr;
+}
+
+/************* RespawnEnemigos **************
+ * Funcion que hace aparecer enemigos en las
+ * zonas de respawn aleatoriamente o en una
+ * sala concreta en funcion del nivel de 
+ * dificultad actual del juego
+ *                    
+*/
+void Jugando::RespawnEnemigos()
+{
+    Constantes constantes;
+    int x = 0.0f;
+    int y = 0.0f;
+    int z = 0.0f; 
+    int* zonasSeleccionadas = new int[4];
+    int ancho, alto, largo;
+    short enemigosRestantes = _enemigos.capacity() - _enemigos.size();
+    short i = 0;
+    short zonaElegida;
+    CargadorBehaviorTrees cargadorIA;
+
+    //Mientras haya hueco en el array de enemigos se crean los cuatro nuevos enemigos
+    if(enemigosRestantes > constantes.CERO && !_zonasRespawn.empty())
+    {
+        while(i < constantes.CUATRO && enemigosRestantes > constantes.CERO)
+        {
+            enemigosRestantes--;
+            short enemigo = this->NumeroAleatorio(0,1);
+            /*if(lvDificil)
+            {
+
+            }
+            else
+            {*/
+            //Se selecciona una zona de respawn que no haya generado ningun enemigo en el ultimo bucle
+            zonaElegida = this->NumeroAleatorio(0, _zonasRespawn.size() -1);
+            while(_zonasRespawn[zonaElegida] && (_zonasRespawn[zonaElegida]->getProposito() || _zonasRespawn[zonaElegida]->GetRespawnBoss()))
+            {
+                zonaElegida++;
+                if((unsigned) zonaElegida >= _zonasRespawn.size() || _zonasRespawn[zonaElegida]->GetRespawnBoss())
+                {
+                    zonaElegida = 0;
+                }
+            }
+            zonasSeleccionadas[i] = zonaElegida;
+            i++;
+            //}
+            
+            //Se pone el proposito de la zona como cumplido y se crea el nuevo enemigo
+            x = _zonasRespawn[zonaElegida]->getX();
+            y = _zonasRespawn[zonaElegida]->getY();
+            z = _zonasRespawn[zonaElegida]->getZ(); 
+            _zonasRespawn[zonaElegida]->setProposito(true);
+            switch(enemigo)
+            {
+                case 0:
+                {
+                    ancho = largo = 2;
+                    alto = 3;
+                    Pollo* _ene = new Pollo(x,y,z, 50); // Posiciones, vida
+                    //ia
+                    //cargadorIA.cargarBehaviorTreeXml("PolloBT");
+                    _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
+                    _ene->setVelocidadMaxima(1.0f);
+                    _ene->setID(_enemigos.back()->getID() + 1);//le damos el id unico en esta partida al enemigo
+                    _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
+                    _ene = nullptr;
+
+                    //Cargar sonido evento en una instancia con la id del enemigo como nombre
+                    std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
+                    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+                    _motora->getEvent(nameid)->setPosition(x,y,z);
+                    _motora->getEvent(nameid)->setVolume(0.4f);
+                    _motora->getEvent(nameid)->start();
+                }
+                    break;
+                case 1:
+                {
+                    ancho = largo = 2;
+                    alto = 3;
+                    Murcielago* _ene = new Murcielago(x,y,z, 75); // Posiciones, vida
+                    //ia
+                    _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
+                    _ene->setVelocidadMaxima(1.0f);
+                    _ene->setID(_enemigos.back()->getID() + 1);//le damos el id unico en esta partida al enemigo
+                    _enemigos.push_back(_ene);//guardamos el enemigo en el vector
+
+                    //Cargar sonido evento en una instancia con la id del enemigo como nombre
+                    std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
+                    _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid);
+                    _motora->getEvent(nameid)->setPosition(x,y,z);
+                    _motora->getEvent(nameid)->setVolume(1.0f);
+                    _motora->getEvent(nameid)->start();
+                }
+                break;
+            }
+            _enemigos.back()->SetEnemigo(enemigo);
+            _enemigos.back()->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+            _enemigos.back()->setPosicionesAtaque(x,y,z);
+            _enemigos.back()->setNewPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+            _enemigos.back()->setLastPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+            _enemigos.back()->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+            _enemigos.back()->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
+            _enemigos.back()->setBarraAtEs(0);
+            _enemigos.back()->definirSala(_zonasRespawn[zonaElegida]->GetSala());//le pasamos la sala en donde esta
+            _enemigos.back()->setAtaque(5);
+            _enemigos.back()->setArmaEspecial(100);
+            _enemigos.back()->setTimeAtEsp(0.0f);
+            _enemigos.back()->setDanyoCritico(50);
+            _enemigos.back()->setProAtaCritico(10);
+            //_enemigos.back()->genemigos.back()rarSonido(20,5);
+            _enemigos.back()->setRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+            _enemigos.back()->setVectorOrientacion();
+            _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+            _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+
+            _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura());//creamos la figura
+
+            _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0);
+            _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0); //Para ataques
+            _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0); //Para ataques especiales
+        }
+        while(i > constantes.CERO)
+        {
+            i--;
+            _zonasRespawn[zonasSeleccionadas[i]]->setProposito(false);
+        }
+        delete[] zonasSeleccionadas;
+    }
 }
 
 /************ ConectarWaypoints ************
@@ -1818,6 +2037,16 @@ void Jugando::CargarBossEnMemoria()
     float x = _boss->getX();
     float y = _boss->getY();
     float z = _boss->getZ();
+
+    short tam = _enemigos.size();
+    cargador.SetVectorEnemigos(_enemigos);
+    for(short i=0; i < tam; i++)
+    {
+        _enemigos.at(i) = nullptr;
+        _motor->EraseTodosEnemigos(i);
+        _fisicas->EraseTodosEnemigos(i);
+    }
+    cargador.BorrarVectorEnemigosBossActivado();
 
     _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura());//creamos la figura
     _fisicas->crearCuerpo(1,x/2,y/2,z/2,2,1,1,1,2,0,0);

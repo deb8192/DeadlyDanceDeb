@@ -14,6 +14,7 @@ Enemigo::Enemigo()
     _tiempo = Times::GetInstance();
     _motora = MotorAudioSystem::getInstance();
     _motor = MotorGrafico::GetInstance();
+    _fisicas = MotorFisicas::getInstance();
     _eventos = SenseEventos::getInstance();
 
     tiempoMerodear = 0.0f;
@@ -66,11 +67,9 @@ Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida/*,
     largo = largoN;
     alto = altoN;
 
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,2,ancho,alto,largo,2);
     _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,7); //Para ataques
-    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,8); //Para ataques especiales
-    _fisicas = nullptr;*/
+    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,8); //Para ataques especiales*/
 }
 
 Enemigo::~Enemigo()
@@ -79,6 +78,7 @@ Enemigo::~Enemigo()
     _tiempo = nullptr;
     _motora = nullptr;
     _motor = nullptr;
+    _fisicas = nullptr;
     _eventos = nullptr;
 
     // Enemigo
@@ -477,7 +477,7 @@ void Enemigo::UpdateIA()
 }
 
 void Enemigo::UpdateBehavior(short *i, int* _jugador,
-    std::vector<Zona*> &_getZonas, bool ayuda)
+    std::vector<ZonaOscura*> &_getZonasOscuras, std::vector<ZonaEscondite*> &_getZonasEscondite, bool ayuda)
 {
     if(vida > 0)
     {
@@ -493,7 +493,7 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
             case 1:
             {
                 Murcielago *murcielago = (Murcielago*) this;
-                murcielago->UpdateMurcielago(i, _jugador, _getZonas);
+                murcielago->UpdateMurcielago(i, _jugador, _getZonasOscuras);
             }
                 break;
 
@@ -508,14 +508,14 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
             {
                 Guardian *guardian = (Guardian*) this;
                 guardian->RunIA();
-                guardian->UpdateGuardian(i, _jugador, _getZonas);
+                guardian->UpdateGuardian(i, _jugador, _getZonasEscondite);
             }
                 break;
             case 4:
             {
                 Guardian *guardian = (Guardian*) this;
                 guardian->RunIA();
-                guardian->UpdateGuardian(i, _jugador, _getZonas);
+                guardian->UpdateGuardian(i, _jugador, _getZonasEscondite);
             }
                 break;
 
@@ -536,7 +536,6 @@ int Enemigo::Atacar(int i)
     bool atacado = false;
     if(vida > 0 && atacktime == 0)
     {
-        MotorFisicas* _fisicas = MotorFisicas::getInstance();
         int distance = 0;
         //Temporal
         if (i >= 0) {
@@ -584,7 +583,6 @@ int Enemigo::Atacar(int i)
             danyoF = ataque * critico;
             danyo = roundf(danyoF * por10) / por10;
         }
-        _fisicas = nullptr;
     }
     else
     {
@@ -605,7 +603,6 @@ int Enemigo::AtacarEspecial()
 {
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
-    MotorFisicas* _fisicas = MotorFisicas::getInstance();
 
     //cout << vida << " " << barraAtEs << " " << por100 << endl;
     //Se comprueban las restricciones (de momento solo que esta vivo y la barra de ataque especial)
@@ -657,14 +654,12 @@ int Enemigo::AtacarEspecial()
             danyo = roundf(danyoF * por10) / por10;
         }
         barraAtEs = 0;
-        _fisicas = nullptr;
         return danyo;
     }
     else
     {
         barraAtEs += 1;
     }
-    _fisicas = nullptr;
     return danyo;
 }
 
@@ -1092,22 +1087,21 @@ int Enemigo::GetModo()
     return modo;
 }
 
-Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, Zona* _zonaUsada)
+ZonaOscura* Enemigo::getZonaOscuraMasCercana(vector <ZonaOscura*>& zonasOscuras, ZonaOscura* _zonaUsada)
 {
-    Zona* _zonaElegida = nullptr;
+    ZonaOscura* _zonaElegida = nullptr;
     VectorEspacial distanciaZonaActual, distanciaZonaElegida;
     vector<Zona*> zonasCompletas;
-    zonasCompletas.reserve(zonas.size());
+    zonasCompletas.reserve(zonasOscuras.size());
 
     unsigned short i = 0;
-    while(i < zonas.size() && (_zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
+    while(i < zonasOscuras.size() && (_zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
     {
-        if(zonas.at(i) != nullptr && ((zonas.at(i)->getTipo() == Zona::tiposZona::Z_DARK && tipoEnemigo == 1)
-        || (zonas.at(i)->getTipo() == Zona::tiposZona::Z_HIDE && ((tipoEnemigo == 3) || (tipoEnemigo == 4)))))
+        if(zonasOscuras.at(i) != nullptr)
         {
-            distanciaZonaActual.vX = abs(zonas.at(i)->getX() - posActual.x);
-            distanciaZonaActual.vY = abs(zonas.at(i)->getY() - posActual.y);
-            distanciaZonaActual.vZ = abs(zonas.at(i)->getZ() - posActual.z);
+            distanciaZonaActual.vX = abs(zonasOscuras.at(i)->getX() - posActual.x);
+            distanciaZonaActual.vY = abs(zonasOscuras.at(i)->getY() - posActual.y);
+            distanciaZonaActual.vZ = abs(zonasOscuras.at(i)->getZ() - posActual.z);
             distanciaZonaActual.modulo = pow(distanciaZonaActual.vX, constantes.DOS) + pow(distanciaZonaActual.vY, constantes.DOS) + pow(distanciaZonaActual.vZ, constantes.DOS);
             distanciaZonaActual.modulo = sqrt(distanciaZonaActual.modulo);
 
@@ -1115,9 +1109,36 @@ Zona* Enemigo::getZonaMasCercana(vector <Zona*> zonas, Zona* _zonaUsada)
             {
 
                  distanciaZonaElegida = distanciaZonaActual;
-                    _zonaElegida = zonas.at(i);
+                _zonaElegida = zonasOscuras.at(i);
+            }
+        }
+        i++;
+    }
+    return _zonaElegida;
+}
+ZonaEscondite* Enemigo::getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zonasEscondite, ZonaEscondite* _zonaUsada)
+{
+    ZonaEscondite* _zonaElegida = nullptr;
+    VectorEspacial distanciaZonaActual, distanciaZonaElegida;
+    vector<Zona*> zonasCompletas;
+    zonasCompletas.reserve(zonasEscondite.size());
 
+    unsigned short i = 0;
+    while(i < zonasEscondite.size() && (_zonaElegida == nullptr || distanciaZonaElegida.modulo > 0.0f))
+    {
+        if(zonasEscondite.at(i) != nullptr)
+        {
+            distanciaZonaActual.vX = abs(zonasEscondite.at(i)->getX() - posActual.x);
+            distanciaZonaActual.vY = abs(zonasEscondite.at(i)->getY() - posActual.y);
+            distanciaZonaActual.vZ = abs(zonasEscondite.at(i)->getZ() - posActual.z);
+            distanciaZonaActual.modulo = pow(distanciaZonaActual.vX, constantes.DOS) + pow(distanciaZonaActual.vY, constantes.DOS) + pow(distanciaZonaActual.vZ, constantes.DOS);
+            distanciaZonaActual.modulo = sqrt(distanciaZonaActual.modulo);
 
+            if(_zonaElegida == nullptr || distanciaZonaElegida.modulo > distanciaZonaActual.modulo)
+            {
+
+                 distanciaZonaElegida = distanciaZonaActual;
+                    _zonaElegida = zonasEscondite.at(i);
             }
         }
         i++;
@@ -1938,4 +1959,9 @@ void Enemigo::RenderAtaque()
         rotActual.x, rotActual.y, rotActual.z,
         4, 4, 4, 2
     );
+}
+void Enemigo::BorrarEnemigos(unsigned short n)
+{
+    _motor->EraseEnemigo(n);
+    _fisicas->EraseEnemigo(n);
 }

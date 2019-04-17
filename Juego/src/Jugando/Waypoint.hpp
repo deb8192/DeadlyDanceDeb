@@ -27,14 +27,17 @@ class Waypoint
         INdrawable::Posiciones GetPosicionWaypoint();
         vector <Waypoint*> GetConexiones();
 
+    private:
+    
+        //Variables
         INdrawable::Posiciones posicionWaypoint;        //Coordenadas en el mapa del waypoint
-        vector <Waypoint*> conexiones;      //Waypoints con los que se conecta
-        short ID;                  //ID del waypoint 
-        int* IDConexiones;       //array con los ID de las conexiones que ayuda a rellenar el vector de conexiones
-        short sizeIDConexiones;     //Total de conexiones del waypoint
-        char tipo;                   //tipo del waypoint: a->central, b->acceso horizontal, c->acceso vertical
-        unsigned short posicionFisicasWaypoint;    //Posicion del waypoint en el array de waypoints de las fisicas
-        bool esCompartido;
+        vector <Waypoint*> conexiones;                  //Waypoints con los que se conecta
+        short ID;                                       //ID del waypoint 
+        int* IDConexiones;                              //array con los ID de las conexiones que ayuda a rellenar el vector de conexiones
+        short sizeIDConexiones;                         //Total de conexiones del waypoint
+        char tipo;                                      //tipo del waypoint: a->central, b->acceso horizontal, c->acceso vertical
+        unsigned short posicionFisicasWaypoint;         //Posicion del waypoint en el array de waypoints de las fisicas
+        bool esCompartido;                              //Booleano que indica si esta entre 2 salas (puertas) o en una
         MotorGrafico *_motor;
 };
 #endif

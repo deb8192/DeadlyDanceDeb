@@ -386,6 +386,21 @@ void MotorFisicas::EraseEnemigo(std::size_t i)
     armaAtEspEne.erase(armaAtEspEne.begin() + i);
 }
 
+void MotorFisicas::EraseTodosEnemigos(std::size_t i)
+{
+    Constantes constantes;
+    unsigned int valor = i;
+
+    space->destroyCollisionBody(enemigos[valor]);//nos cargamos el contenido
+    enemigos[i]=nullptr;
+
+    space->destroyCollisionBody(enemigosAtack[valor]);//nos cargamos el contenido
+    enemigosAtack[i]=nullptr;
+
+    space->destroyCollisionBody(armaAtEspEne[valor]);//nos cargamos el contenido
+    armaAtEspEne[i]=nullptr;
+}
+
 void MotorFisicas::DesactivarCofre(unsigned short pos)
 {
     _cofres.at(pos) = nullptr;
@@ -589,7 +604,7 @@ bool MotorFisicas::collideObstacle()
     //tampoco debe intersectar en el espacio con los enemigos
     for(long unsigned int i = 0; i < enemigos.size();i++)
     {
-        if(space->testOverlap(jugador,enemigos[i]))
+        if(enemigos[i] && space->testOverlap(jugador,enemigos[i]))
         {
             return true;
         }
@@ -956,7 +971,7 @@ vector<unsigned int> MotorFisicas::updateArmaEspecial(float x, float y, float z)
         armaAtEsp->setTransform(transformacion);
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            if(space->testOverlap(armaAtEsp, enemigos.at(i)))
+            if(enemigos[i] && space->testOverlap(armaAtEsp, enemigos.at(i)))
             {
                 atacados.push_back(i);
             }
@@ -976,7 +991,7 @@ vector<unsigned int> MotorFisicas::updateArma(float x, float y, float z)
         jugadorAtack->setTransform(transformacion);
         for(unsigned int i = 0; i < enemigos.size(); i++)
         {
-            if(space->testOverlap(jugadorAtack, enemigos.at(i)))
+            if(enemigos[i] && space->testOverlap(jugadorAtack, enemigos.at(i)))
             {
                 atacados.push_back(i);
             }

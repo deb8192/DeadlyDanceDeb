@@ -2317,6 +2317,29 @@ void MotorGrafico::EraseEnemigo(std::size_t i)
     #endif
 }
 
+//Cuando se activa el boss se vacia el vector de enemigos del motor grafico
+void MotorGrafico::EraseTodosEnemigos(std::size_t i)
+{
+    Constantes constantes;
+    unsigned int valor = i;
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+
+        if(valor >= 0 && valor < Enemigos_Scena.size())
+        {
+            _interfaz->RemoveObject(Enemigos_Scena[valor]);
+        }
+
+    #else
+        //codigo motor irrlicht
+        if(valor >= 0 && valor < Enemigos_Scena.size())
+        {
+            Enemigos_Scena[valor]->setVisible(false);
+            Enemigos_Scena[valor]->remove();
+        }
+    #endif
+}
+
 //Cuando jugador muere lo borramos
 void MotorGrafico::EraseJugador()
 {

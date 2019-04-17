@@ -5,7 +5,8 @@
 #include "../Motores/INsentidos.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/Sala.hpp"
-#include "../Jugando/Zona.hpp"
+#include "../Jugando/ZonaEscondite.hpp"
+#include "../Jugando/ZonaOscura.hpp"
 #include <vector>
 #include "../Arbol.hpp"
 
@@ -139,21 +140,6 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getVelocidadMaxima(); //se obtiene la VelocidadMaxima de desplazamiento
         int GetEnemigo();
         int GetModo();
-
-        bool ver(int tipo, int longitud);//1 si ve al jugador
-
-        //ia
-        float randomBinomial();//devuelve un valor random entre -1 y 1
-        void setArbol(Arbol);//asigna un arbol de ia al enemigo
-        Arbol* getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
-        void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
-        void UpdateBehavior(short *i, int* _jugador, std::vector<Zona*> &_getZonas, bool ayuda); //actualiza el comportamiento actual del pollo
-        short * RunIA(bool);//corre la ia del enemigo
-        void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
-        void AnnadirRecorridoAyuda(vector <Posiciones> recorrido);
-        void ResetTree();
-        //fin ia
-
         const char* GetModelo(); // Malla 3D
         const char* GetTextura(); //textura
         bool GetPedirAyuda();
@@ -162,8 +148,24 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void SetContestar(bool);
         int  GetTipoEnemigo();
 
+        bool ver(int tipo, int longitud);//1 si ve al jugador
+
+        //ia
+        float randomBinomial();//devuelve un valor random entre -1 y 1
+        void setArbol(Arbol);//asigna un arbol de ia al enemigo
+        Arbol* getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
+        void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
+        void UpdateBehavior(short *i, int* _jugador, std::vector<ZonaOscura*> &_getZonasOscuras, std::vector<ZonaEscondite*> &_getZonasEscondite, bool ayuda); //actualiza el comportamiento actual del pollo
+        short * RunIA(bool);//corre la ia del enemigo
+        void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
+        void AnnadirRecorridoAyuda(vector <Posiciones> recorrido);
+        void ResetTree();
+        //fin ia
+
+        //Funciones relacionadas con los motores
         void Render(short posArray, float updTime, float drawTime);
         void RenderAtaque();
+        void BorrarEnemigos(unsigned short n);
 
         enum modosEnemigo
         {
@@ -179,6 +181,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Times* _tiempo;
         MotorAudioSystem* _motora;
         MotorGrafico* _motor;
+        MotorFisicas* _fisicas;
         SenseEventos* _eventos;
         short int maxRotacion;
         std::string soundID;
@@ -200,7 +203,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool comprobarDistanciaFlocking();
         //fin comportamientos bases
 
-        Zona* getZonaMasCercana(vector <Zona*> zonas, Zona*);
+        ZonaOscura* getZonaOscuraMasCercana(vector <ZonaOscura*> &zonasOscuras, ZonaOscura*);
+        ZonaEscondite* getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zonasEscondite, ZonaEscondite*);
         //Comparadores de la lectura de las acciones y objetivos de las tareas
         enum accionesEnemigo
         {

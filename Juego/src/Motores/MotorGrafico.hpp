@@ -283,6 +283,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void DibujarCofre(long unsigned int idx, bool dibujar);
             void DibujarPared(long unsigned int idx, bool dibujar);
             void EraseEnemigo(std::size_t i);
+            void EraseTodosEnemigos(std::size_t i);
             void EraseJugador();
             void EraseArma();
             void EraseProyectil();

@@ -16,7 +16,10 @@
 #include "../Objetos/Pared.hpp"
 #include "../Armas/Arma.hpp"
 #include "../Jugando/InterfazJugador.hpp"
-#include "Zona.hpp"
+#include "ZonaRespawn.hpp"
+#include "ZonaCofre.hpp"
+#include "ZonaEscondite.hpp"
+#include "ZonaOscura.hpp"
 #include "Waypoint.hpp"
 
 #include "../Pathfinder.hpp"
@@ -54,6 +57,7 @@ class Jugando: public Estado {
             unsigned short cantidad);
         void CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
             unsigned short tipoObjeto, unsigned short ataque);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        void RespawnEnemigos();
         void ConectarWaypoints();
         void CambiarSalaJugador(unsigned short i);
         void CambiarSalaEnemigo(unsigned short n, unsigned short m);
@@ -95,6 +99,7 @@ class Jugando: public Estado {
         Puzzle* _puzzle;
 
         bool enSalaBoss;
+        bool lvDificil;         //Nivel de dificultad del juego. Se modifica cada minuto
         Enemigo* _boss;
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         std::vector<Enemigo*> _eneCofres;//Cofres arana desactivados
@@ -108,7 +113,10 @@ class Jugando: public Estado {
         std::vector<Recolectable*> _llaves;
         std::vector<Pared*> _paredes;
         std::vector<Recolectable*> _powerup;
-        std::vector<Zona*> _zonas; //Array de zonas
+        std::vector<ZonaCofre*> _zonasCofre; //Array de zonas de cofres
+        std::vector<ZonaRespawn*> _zonasRespawn; //Array de zonas de respawn
+        std::vector<ZonaOscura*> _zonasOscuras; //Array de zonas de oscuras
+        std::vector<ZonaEscondite*> _zonasEscondite; //Array de zonas de escondite
         std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
 
         std::vector<Palanca*> _palancas;
@@ -124,7 +132,7 @@ class Jugando: public Estado {
 
         Jugador* _jugador;
         bool jugadorInmovil; // Para las colisiones
-        float drawTime, lastDrawTime;
+        float drawTime, lastDrawTime, respawnTime, lastRespawnTime;
         float atacktime; //tiempo de ejecucion del ataque
         float mov_weapon_posX,mov_weapon_posY,mov_weapon_posZ;
         float mov_weapon_rotX,mov_weapon_rotY,mov_weapon_rotZ;
