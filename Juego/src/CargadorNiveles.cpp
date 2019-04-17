@@ -530,7 +530,11 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int doorsMax, int leve
     _eneCofres.reserve(chestsMax/4);
 
     // TO DO:
-    /*_recolectables.reserve(20);
+    /*
+    _zonasEscondite.reserve();
+    _zonasOscuras.reserve();
+    _zonasCofre.reserve();
+    _recolectables.reserve(20);
     _powerup.reserve(20);
     */
 }

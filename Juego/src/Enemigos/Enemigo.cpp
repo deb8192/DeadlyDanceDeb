@@ -1861,7 +1861,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     void Enemigo::modificarTrayectoria(INnpc::VectorEspacial* vectorDirector, int* destino)
     {
         Constantes constantes;
-        float contraRotacion = constantes.UNO - pesoRotacion;
+        //float contraRotacion = constantes.UNO - pesoRotacion;
         //Se obtiene la nueva direccion del movimiento sumando las componentes de la normal del obstaculo con las del vector director
         //En caso de girar 180 grados, se multiplica por -1 la coordenada del vector que se acerque a +-1
         /*vectorDirector->vX = vectorDirector->vX * contraRotacion + (destino[3] * distanciaMinimaEsquivar) * pesoRotacion;
