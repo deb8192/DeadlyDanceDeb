@@ -16,6 +16,7 @@ class Configuracion: public Estado {
 
     private:
         void atras();
+        void borrarResoluciones();//borra los desplegables de las resoluciones
         Configuration configuracion;
         unsigned int volAmbiente;
         unsigned int volEfectos;
@@ -26,6 +27,7 @@ class Configuracion: public Estado {
         bool vsync;
         bool suavizadoMsax1;
         unsigned int idsElementos[8];
+        unsigned int resolucion[6];//contiene los desplegables de la resolucion
         
 };
 #endif /* CONFIGURACION_HPP */
