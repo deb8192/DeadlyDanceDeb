@@ -7,9 +7,15 @@ Puerta::Puerta(int id, int codigo,
     float despX, float despZ, int accion)
 : Interactuable(id, codigo, anc, lar, alt,
     x, y, z, tipoObj, despX, despZ, accion)
-{
+{    
     _modelo = "assets/models/Puertas/Puerta.obj";
     _textura = "assets/texture/Puerta.png";
+
+    if(accion == 10)
+    {
+        _modelo = "assets/models/Puertas/PuertaPiedra.obj";
+        _textura = "assets/texture/rocasuelo.png";
+    }
 }
 
 Puerta::~Puerta()

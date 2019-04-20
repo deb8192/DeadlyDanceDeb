@@ -1330,6 +1330,14 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
                 ObjetosAni_Scena.push_back(logicaAnim);
             }
 
+            if(accion == 9)
+            {
+                Objetos_Scena.push_back(_objetoEnEscena);
+                ObjetosAni_Scena.push_back(logicaAnim);
+                mallaTransparente(_objetoEnEscena, 0.4);
+                return Objetos_Scena.size() - 1;
+            }
+
             if(accion == 8)
             {
                 Llaves_Scena.push_back(_objetoEnEscena);
