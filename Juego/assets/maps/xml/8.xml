@@ -1,17 +1,58 @@
 <Level><!--- Esto nos indica que estamos definiendo un nivel -->
 
 	<!-- Para reservar memoria en los vectores --> 	<!-- TO DO: Poner todos los numeros a Walls -->
-	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="6" Levers="6" Chests="6" Waypoints="70" Zones="21"></MaxNumberOf>
+	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="6" Levers="6" Chests="7" Waypoints="70" Zones="21"></MaxNumberOf>
 	<!-- Tenemos 36/50 enemigos -->
 
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
 	<Light Type="Ambiental" Intensity="50" Attenuation="0" Color="Red" RP="0" X="0" Y="10" Z="0"> </Light>
 
-	<!--Posiciones luces antorchas falta pocer-->
- 	<!--luz X="0" Y="0" Z="0"-->
-  	<!--luz X="0" Y="0" Z="0"-->
-    <!--luz X="0" Y="0" Z="0"-->
-    <!--luz X="0" Y="0" Z="0"-->
+
+	<!--Posiciones luces antorchas falta poner-->
+ 	<!--luz X="-36" Z="-31" Y="5"-->
+  <!--luz X="-36" Z="31" Y="5"-->
+  <!--luz X="26" Z="-33" Y="5"-->
+  <!--luz X="25" Z="33" Y="5"-->	
+	<!--luz X="38" Z="33" Y="5"-->
+	<!--luz X="151" Z="-30" Y="5"-->
+	<!--luz X="150" Z="70" Y="5"-->
+	<!--luz X="157" Z="70" Y="5"-->
+	<!--luz X="182" Z="133" Y="5"-->
+	<!--luz X="229" Z="133" Y="5"-->
+	<!--luz X="194" Z="36" Y="5"-->
+	<!--luz X="239" Z="34" Y="5"-->
+	<!--luz X="266" Z="111" Y="0"-->
+	<!--luz X="307" Z="90" Y="-10"-->
+	<!--luz X="329" Z="88" Y="-10"-->
+	<!--luz X="353" Z="58" Y="-10"-->
+	<!--luz X="379" Z="74" Y="-10"-->
+	<!--luz X="386" Z="131" Y="5"-->
+	<!--luz X="317" Z="130" Y="5"-->
+	<!--luz X="301" Z="156" Y="5"-->
+	<!--luz X="300" Z="180" Y="5"-->
+	<!--luz X="354" Z="217" Y="5"-->
+	<!--luz X="403" Z="217" Y="5"-->
+	<!--luz X="449" Z="208" Y="5"-->
+	<!--luz X="449" Z="272" Y="5"-->
+	<!--luz X="404" Z="312" Y="5"-->
+	<!--luz X="357" Z="312" Y="5"-->
+	<!--luz X="313" Z="316" Y="5"-->
+	<!--luz X="269" Z="281" Y="5"-->
+	<!--luz X="218" Z="286" Y="5"-->
+	<!--luz X="191" Z="225" Y="5"-->
+	<!--luz X="301" Z="220" Y="5"-->
+	<!--luz X="384" Z="222" Y="5"-->
+	<!--luz X="117" Z="217" Y="5"-->
+	<!--luz X="118" Z="279" Y="5"-->
+	<!--luz X="111" Z="461" Y="5"-->
+	<!--luz X="158" Z="459" Y="5"-->
+	<!--luz X="268" Z="482" Y="5"-->
+	<!--luz X="309" Z="541" Y="5"-->
+	<!--luz X="356" Z="541" Y="5"-->
+	<!--luz X="343" Z="417" Y="5"-->
+	<!--luz X="262" Z="384" Y="5"-->
+	<!--luz X="207" Z="386" Y="5"-->
+	<!--luz X="0" Z="0" Y="5"-->
 	
 	<!--Sala-01--><Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="0" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
 	<!--Decoracion-cavernas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/RocaCaverna.png" Model="assets/models/Escenario/DecoracionCavernas.obj"></Object>
@@ -25,13 +66,18 @@
 	<!--Decoracion-Puente-Colgante--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/cartoonwood.png" Model="assets/models/Escenario/PuenteColganteMadera.obj"></Object>
 	<!--Decoracion-Puente-estacas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Palos.png" Model="assets/models/Escenario/PuenteColganteEstacas.obj"></Object>
 	<!--Decoracion-Laguna--><Object tipoObj="17" Type="0" accion="9" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/dcatyft.png" Model="assets/models/Escenario/LagunaSubterranea.obj"></Object>
-	<!--Decoracion-Cascada-Animada--><Object tipoObj="17" Type="0" accion="9" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/dcascada.png" Model="assets/models/Escenario/CascadaAnimada.obj"></Object>
+<!--ANIMACION-->	<!--Decoracion-Cascada-Animada--><Object tipoObj="17" Type="0" accion="9" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/dcascada.png" Model="assets/models/cascada_animada/CascadaAnimada_000001.obj" Animation="" Frames="22"></Object>
 	<!--Decoracion-Vegetacion-Lianas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Lianas.png" Model="assets/models/Escenario/DecoracionLianas.obj"></Object>
 	<!--Decoracion-Pinturas-Rupestres--><Object tipoObj="18" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/tribal.png" Model="assets/models/Escenario/DecoracionRupestre.obj"></Object>
 	<!--Decoracion-Alfombra-roja--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/carpet.png" Model="assets/models/Escenario/DecoracionAlfombra.obj"></Object>
-	<!--Puerta--><Object tipoObj="3" Type="1" codigo="3" accion="10" ancho="1" largo="8" alto="10" RP="90" X="33" Y="0" Z="-8" despX="0" despZ="4" Texture="assets/texture/rocasuelo.png" Model=""></Object>
+	<!--Puerta--><Object tipoObj="3" Type="1" codigo="3" accion="10" ancho="1" largo="8" alto="10" RP="90" X="33" Y="0" Z="8" despX="0" despZ="-4" Texture="assets/texture/rocasuelo.png" Model=""></Object>
 	<!--Palanca--><Object tipoObj="0" Type="1" codigo="3" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="-24" Y="0" Z="-23" despX="0" despZ="0" Texture="assets/texture/platform1.png" Model=""></Object>
 	<!--Base--><Object tipoObj="16" Type="1" accion="1" ancho="3" largo="2" alto="5" X="-24" Y="0" Z="-23" Texture="assets/texture/platform1.png" Model="assets/models/Base.obj"></Object>
+	<!--Guardian--><Enemy Type="1" enemigo="3" accion="0" ancho="2" largo="2" alto="3" X="15" Y="0" Z="5" Texture="" Model=""></Enemy>
+	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="-4" Y="0" Z="16"></Zone>
+	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="24" Y="0" Z="16"></Zone>
+	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="-4" Y="0" Z="-16"></Zone>
+	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="24" Y="0" Z="-16"></Zone>
 						
 		<!--Sala-02--><Platform Type="1" accion="0" ancho="59" largo="92" alto="4" RP="0" X="94" Y="0" Z="52" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 		<!--Llave--><Object tipoObj="1" Type="1" codigo="2" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="45" Y="0" Z="92" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
@@ -140,9 +186,12 @@
 														<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="397" Y="0" Z="482" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 														<!--Modelo-Suelo--><Object tipoObj="18" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="457" Y="0" Z="483" despX="0" despZ="0" Texture="assets/texture/discofloor.png" Model="assets/models/Escenario/PistaDisco.obj"></Object>
 														<!--Puerta--><Object tipoObj="3" Type="1" codigo="0" accion="3" ancho="1" largo="4" alto="10" RP="90" X="373" Y="0" Z="478" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
-																									
+														<!--BossMuerte--><Enemy Type="1" enemigo="5" accion="1" ancho="1" largo="1" alto="10" X="453" Y="0" Z="468" Texture="" Model=""></Enemy>
+																				
 																<!--Sala-16--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="503" Y="0" Z="482" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 																<!--Sala oculta final-->
+																<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="493" Y="0" Z="482" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+																<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="506" Y="0" Z="484"></Zone>
 																<!--Sala-16--></Platform>
 
 														<!--Sala-15--></Platform>
@@ -265,7 +314,7 @@
 	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="4" largo="33" alto="24" RP="0" X="495" Y="0" Z="527" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="515" Y="0" Z="510" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="517" Y="0" Z="485" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="515" Y="0" Z="454" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="515" Y="0" Z="474" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="4" largo="33" alto="24" RP="0" X="495" Y="0" Z="439" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="471" Y="0" Z="446" despX="0" despZ="0" Texture="" Model=""></Object>
 	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="443" Y="0" Z="446" despX="0" despZ="0" Texture="" Model=""></Object>

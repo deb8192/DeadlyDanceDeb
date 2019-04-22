@@ -7,6 +7,63 @@
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
 	<Light Type="Ambiental" Intensity="50" Attenuation="0" Color="Red" RP="0" X="0" Y="10" Z="0"> </Light>
 
+	<!--Posiciones luces antorchas falta poner-->
+	<!--luz X="-71" Z="0" Y="10"-->
+	<!--luz X="-7" Z="19" Y="10"-->
+	<!--luz X="-8" Z="-19" Y="10"-->
+	<!--luz X="49" Z="67" Y="10"-->
+	<!--luz X="49" Z="-67" Y="10"-->
+	<!--luz X="105" Z="19" Y="10"-->
+	<!--luz X="105" Z="-19" Y="10"-->
+	<!--luz X="177" Z="44" Y="10"-->
+	<!--luz X="199" Z="68" Y="10"-->
+	<!--luz X="208" Z="-10" Y="10"-->
+	<!--luz X="249" Z="68" Y="10"-->
+	<!--luz X="250" Z="-10" Y="10"-->
+	<!--luz X="285" Z="20" Y="10"-->
+	<!--luz X="177" Z="152" Y="10"-->
+	<!--luz X="205" Z="164" Y="10"-->
+	<!--luz X="256" Z="164" Y="10"-->
+	<!--luz X="285" Z="145" Y="10"-->
+	<!--luz X="331" Z="82" Y="10"-->
+	<!--luz X="331" Z="148" Y="10"-->
+	<!--luz X="385" Z="132" Y="10"-->
+	<!--luz X="366" Z="200" Y="10"-->
+	<!--luz X="259" Z="311" Y="10"-->
+	<!--luz X="199" Z="344" Y="10"-->
+	<!--luz X="259" Z="398" Y="10"-->
+	<!--luz X="232" Z="405" Y="10"-->
+	<!--luz X="300" Z="336" Y="10"-->
+	<!--luz X="329" Z="297" Y="10"-->
+	<!--luz X="363" Z="336" Y="10"-->
+	<!--luz X="384" Z="322" Y="10"-->
+	<!--luz X="401" Z="336" Y="10"-->
+	<!--luz X="362" Z="380" Y="10"-->
+	<!--luz X="345" Z="380" Y="10"-->
+	<!--luz X="357" Z="432" Y="10"-->
+	<!--luz X="391" Z="480" Y="10"-->
+	<!--luz X="155" Z="350" Y="10"-->
+	<!--luz X="133" Z="376" Y="10"-->
+	<!--luz X="127" Z="322" Y="10"-->
+	<!--luz X="95" Z="357" Y="10"-->
+	<!--luz X="-5" Z="344" Y="10"-->
+	<!--luz X="151" Z="439" Y="10"-->
+	<!--luz X="43" Z="439" Y="10"-->
+	<!--luz X="43" Z="480" Y="10"-->
+	<!--luz X="104" Z="497" Y="10"-->
+	<!--luz X="200" Z="456" Y="10"-->
+	<!--luz X="215" Z="442" Y="10"-->
+	<!--luz X="243" Z="434" Y="10"-->
+	<!--luz X="269" Z="442" Y="10"-->
+	<!--luz X="288" Z="459" Y="10"-->
+	<!--luz X="298" Z="489" Y="10"-->
+	<!--luz X="287" Z="520" Y="10"-->
+	<!--luz X="269" Z="536" Y="10"-->
+	<!--luz X="242" Z="544" Y="10"-->
+	<!--luz X="217" Z="536" Y="10"-->
+	<!--luz X="201" Z="523" Y="10"-->
+	<!--luz X="0" Z="0" Y="10"-->
+
 	<!--Sala-01--><Platform Type="1" accion="0" ancho="72" largo="72" alto="4" RP="0" X="48" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
 	<!--Decoracion-conjunto-Paredes--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/DecoracionParedes.obj"></Object>
 	<!--Decoracion-cueva-roca--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Roca.png" Model="assets/models/Escenario/DecoracionRoca.obj"></Object>
