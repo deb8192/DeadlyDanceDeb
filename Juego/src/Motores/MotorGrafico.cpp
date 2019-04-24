@@ -616,6 +616,13 @@ void MotorGrafico::RenderEscena()
                     ActualizarAnimacionMotor(ObjetosAni_Scena[i]);
                 }
             }
+            Times * tiempo = Times::GetInstance();
+            unsigned int fps = tiempo->GetFramesPorSegundo();
+            
+            //if(debugGrafico)
+            //{
+                _interfaz->DefinirVentana(800,600,std::to_string(fps).c_str());
+            //}
 
         }
     #else

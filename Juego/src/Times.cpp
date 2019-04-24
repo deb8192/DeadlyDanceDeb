@@ -7,6 +7,8 @@ Times* Times::_unica_instancia = 0;
 Times::Times()
 {
     Inicializar();
+    fps_pasados = 0;
+    fps_actuales = 0;
 }
 
 //destructor de la clase
@@ -40,18 +42,23 @@ bool Times::EjecutoDraw()
         if(tiempo_pasado >= tiempo_frame)
         {
            //pasamos frame
-           int cuantos_sumar = (tiempo_pasado/tiempo_frame);
-           if((frame_actual+cuantos_sumar)  < numero_frames)
+           int cuantos_sumar = (tiempo_pasado/tiempo_frame);//calculo el tiempo de frames que debe de saltarse
+
+           if((frame_actual+cuantos_sumar)  < numero_frames) //si el nuevo de frames mas la suma es menor que el numero de frames totales entra en el for
            {
-               frame_actual=frame_actual+cuantos_sumar;   
+               frame_actual=frame_actual+cuantos_sumar;  
+               fps_actuales++; 
                //std::cout << frame_actual << std::endl;
            }
            else //si no se pasa al siguiente frame del nuevo ciclo 
            { 
-               //std::cout << clock()/CLOCKS_PER_SEC << std::endl;
+               fps_pasados = fps_actuales+1;//se suma uno porque es el ultimo pero el primero del nuevo
+               //std::cout << fps_pasados << "\n" ;
                tiempoInicio2 = clock();
                frame_actual = 1;
+               fps_actuales = 1;//al ser el primero se pone a 1
            }
+
            tiempoInicio = clock();//cogemos el contador ahora de tiempo
            return true;//ya se puede ejecutar
        }
@@ -90,7 +97,7 @@ bool Times::EjecutoUpdate()
            int cuantos_sumar = (tiempo_restante/tiempo_update);
            if((update_actual+cuantos_sumar)  < numero_update)
            {
-               update_actual=update_actual+cuantos_sumar;   
+               update_actual=update_actual+cuantos_sumar;  
                //std::cout << frame_actual << std::endl;
            }
            else //si no se pasa al siguiente frame del nuevo ciclo 
@@ -206,3 +213,8 @@ float Times::GetUpdateFrame()
 {
 
 }*/
+
+unsigned int Times::GetFramesPorSegundo()
+{
+    return fps_pasados;
+}
