@@ -11,15 +11,15 @@ Interfaz::Interfaz()
     gestorDeRecursos = new CatOpengl::Gestor;
     ventana_inicializada = true;//se pone para que entra a inicializar por defecto
     window = nullptr;//se pone para saber que no esta inicializada
-    nodos.reserve(600);//para almacenar el objeto
     x = 0.0f;
     y = 0.0f;
     z = 0.0f;
     ModoOneCamara = true;
 
-    for(unsigned int e = 0;e < 65535;e++)
+    //inicializamos todos los punteros a nullptr por si acaso
+    for(unsigned int e = 0;e < maxNodos;e++)
     {
-        banco_ids[e] = false;
+        banco[e] = nullptr;
     }
 }
 
@@ -95,7 +95,7 @@ unsigned short Interfaz::AddCamara()
             nodo->tipo = 0;
             nodo->activo = true;//activo la camara por defecto cuando se activa
             camaras.push_back(nodo);
-            nodos.push_back(nodo);//se agrega a la lista de nodos general
+            banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
             return idnuevo;
         }
     }
@@ -151,7 +151,7 @@ unsigned short Interfaz::AddLuz(int tipo)
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodo->tipo = 1;
         nodo->activo = true;
-        nodos.push_back(nodo);//se agrega a la lista de nodos general
+        banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
         luces.push_back(nodo);//se agrega la luz a la lista de luces
 
         return idnuevo;
@@ -218,7 +218,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf, int shader) /
             nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
             nodo->tipo = 2;
             nodo->activo = true;
-            nodos.push_back(nodo);//se agrega a la lista de nodos general
+            banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
             return idnuevo;
         }
     }
@@ -283,7 +283,7 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodo->tipo = 3;
         nodo->activo = true;
-        nodos.push_back(nodo);//se agrega a la lista de nodos general
+        banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
         imagenes.push_back(nodo);//se agrega a la lista de imagenes
         return idnuevo;
     }
@@ -339,7 +339,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodo->tipo = 4;
         nodo->activo = true;
-        nodos.push_back(nodo);//se agrega a la lista de nodos general
+        banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
         textos.push_back(nodo);//se agrega a la lista de textos
 
         return idnuevo;
@@ -393,7 +393,7 @@ unsigned short Interfaz::AddBoard(float x, float y, float z, float movx, float m
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodo->tipo = 5;
         nodo->activo = true;
-        nodos.push_back(nodo);//se agrega a la lista de nodos general
+        banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
         boards.push_back(nodo);//se agrega a la lista de billboards
 
         return idnuevo;
@@ -470,58 +470,19 @@ void Interfaz::Draw()
     window->UpdateDraw();
 }
 
-Interfaz::Nodo * Interfaz::buscarNodo(unsigned short id)
-{
-    if(id != 0)
-    {
-        unsigned short Iarriba = ((unsigned short)(nodos.size()-1));
-        unsigned short Iabajo = 0;
-        unsigned short Icentro;
-        while (Iabajo <= Iarriba)
-        {
-            Icentro = (Iarriba + Iabajo)/2;
-            if (nodos[Icentro]->id == id)
-            {
-                cualborrar = Icentro;
-                return nodos[Icentro];
-            }
-            else
-            {
-                if (id < nodos[Icentro]->id)
-                {
-                    Iarriba=Icentro-1;
-                }
-                else
-                {
-                    Iabajo=Icentro+1;
-                }
-            }
-        }
-    }
-    return nullptr;
-}
-
 Interfaz::Nodo * Interfaz::buscarNodo2(unsigned short id)
 {
-    for(unsigned int i = 0; i < nodos.size(); i++)
-    {
-        if (nodos[i] != nullptr && nodos[i]->id == id)
-        {
-            cualborrar = i;
-            return nodos[i];
-        }
-    }
-    return nullptr;
+    return banco[id-1];
 }
 
 Interfaz::Nodo * Interfaz::buscarNodo3(signed int idPerson)
 {
-    for(unsigned int i = 0; i < nodos.size(); i++)
+    for(unsigned int i = 0; i < maxNodos; i++)
     {
-        if (nodos[i] != nullptr && nodos[i]->idPersonalizado == idPerson)
+        if (banco[i] != nullptr && banco[i]->idPersonalizado == idPerson)
         {
             cualborrar = i;
-            return nodos[i];
+            return banco[i];
         }
     }
     return nullptr;
@@ -624,15 +585,13 @@ void Interfaz::LimpiarEscena()
         _raiz->BorrarEscena();
         luces.resize(0);
         luces.reserve(40);//30 luces como maximo
-        for(std::size_t i=0 ; i < nodos.size() ; i++)
+        for(std::size_t i=0 ; i < maxNodos; i++)
         {
-            if(nodos[i] != nullptr && (nodos[i]->tipo == 2 || nodos[i]->tipo == 1))
+            if(banco[i] != nullptr && (banco[i]->tipo == 2 || banco[i]->tipo == 1))
             {
-                nodos[i]->recurso = nullptr;
-                eliminarID((nodos[i]->id));
-                delete nodos[i];
-                nodos.erase(nodos.begin()+i);
-                i--;
+                banco[i]->recurso = nullptr;
+                delete banco[i];
+                banco[i] = nullptr;
             }
         }
     }
@@ -648,15 +607,13 @@ void Interfaz::LimpiarGui()
         imagenes.reserve(20);
         textos.resize(0);
         textos.reserve(20);
-        for(std::size_t i=0 ; i < nodos.size() ; i++)
+        for(unsigned short i=0 ; i < maxNodos; i++)
         {
-            if(nodos[i] != nullptr && (nodos[i]->tipo == 3 || nodos[i]->tipo == 4))
+            if(banco[i] != nullptr && (banco[i]->tipo == 3 || banco[i]->tipo == 4))
             {
-                nodos[i]->recurso = nullptr;
-                eliminarID((nodos[i]->id));
-                delete nodos[i];
-                nodos.erase(nodos.begin()+i);
-                i--;
+                banco[i]->recurso = nullptr;
+                delete banco[i];
+                banco[i] = nullptr;
             }
         }
     }
@@ -853,7 +810,7 @@ void Interfaz::RemoveObject(unsigned short object)
         //borrar objeto que se le pasa
         Nodo * nodo = buscarNodo2(object);
 
-        unsigned short auxiliar = cualborrar;
+        unsigned short auxiliar = object-1;
         if(nodo != nullptr)
         {
             if(nodo->id_texto != 0 && nodo->tipo == 3)
@@ -869,10 +826,8 @@ void Interfaz::RemoveObject(unsigned short object)
             }
 
             pulgarReferencia(nodo,nodo->tipo);
-            eliminarID((nodo->id));
             delete nodo;
-            nodos.erase(nodos.begin()+auxiliar);
-
+            banco[auxiliar] = nullptr;
         }
     }
 }
@@ -945,21 +900,12 @@ void Interfaz::CambiarPosicionTexto(unsigned short nid, float x, float y)
     }
 }
 
-void Interfaz::eliminarID(unsigned short x)
-{
-    if(x >= 0 && x < 65535)
-    {
-        banco_ids[x-1] = false;
-    }
-}
-
 unsigned short Interfaz::generarId()
 {
-    for(unsigned short e = 0;e < 65535;e++)
+    for(unsigned short e = 0;e < maxNodos;e++)
     {
-        if(banco_ids[e] == false)
+        if(banco[e] == nullptr)
         {
-            banco_ids[e]=true;
             return (e+1);
         }
     }

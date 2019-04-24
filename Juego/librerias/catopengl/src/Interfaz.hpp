@@ -14,6 +14,8 @@
 #include "TBillboard.hpp"
 #include "Shader.hpp"
 
+#define maxNodos 65534 //maximo de nodos
+
 class Interfaz
 {
     public:
@@ -144,8 +146,6 @@ class Interfaz
 
     private:
 
-        bool  banco_ids [65535];
-
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
         CatOpengl::Video::Ventana * window;
@@ -188,7 +188,7 @@ class Interfaz
             int idPersonalizado;//sirve para identificar el id por el id
         };
 
-        std::vector<Nodo *> nodos;//almacena los nodos
+        Nodo * banco[maxNodos];//contiene los punteros a los nodos del arbol
 
         std::vector<Nodo *> camaras;//registro de camaras
 
@@ -202,8 +202,6 @@ class Interfaz
 
         CatOpengl::Gestor * gestorDeRecursos;
 
-        Nodo * buscarNodo(unsigned short);
-
         Nodo * buscarNodo2(unsigned short);
 
         Nodo * buscarNodo3(signed int);
@@ -215,8 +213,6 @@ class Interfaz
         void ventanaLimpiar();
 
         float x,y,z;
-
-        void eliminarID(unsigned short x);
 
         unsigned int cualborrar;
 
