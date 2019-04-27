@@ -186,7 +186,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CerrarJuego();
             void LimpiarDevice();//elimina el dispositivo
             void ActivarFuenteDefault(); //define fuente por defecto
-            unsigned short CrearImagen(std::string texto,unsigned int,unsigned int,float);//creas una imagen con el escalado que le proporciones, y en la posicion x e y
+            unsigned short CrearImagen(const char * texto,unsigned int,unsigned int,float);//creas una imagen con el escalado que le proporciones, y en la posicion x e y
 
             void FondoEscena(int a, int r, int g, int b);
             void FondoEscena(float a, float r, float g, float b);

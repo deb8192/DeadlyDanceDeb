@@ -1,4 +1,5 @@
 #include "TPlano.hpp"
+#include "Gestor.hpp"
 
 TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale, Shader * sact, GLuint ww, GLuint wh, const char * rutapulsado , const char * rutaencima )
 {
@@ -38,8 +39,18 @@ TPlano::~TPlano()
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
     glDeleteTextures(1, &textureID);
-    glDeleteTextures(1, &textureIDPulsado);
-    glDeleteTextures(1, &textureIDEncima);
+    
+    if(esPulsable)
+    {
+        glDeleteTextures(1, &textureIDPulsado);
+    }
+
+    if(esEncima)
+    {
+        glDeleteTextures(1, &textureIDEncima);
+    }
+
+    //std::cout << "borrado de tplano " << std::endl;
 }
 
 // sobrecarga metodos TEntidad
@@ -90,7 +101,10 @@ bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
 
     //Cargar y generar textura
     stbi_set_flip_vertically_on_load(true);  // le dices a stb_image.h que gire la textura cargada en el y-axis
-    unsigned char *data = stbi_load(_ruta, &width, &height, &nrComponents, 0);//esto hay que ponerlo en la zona de recursos
+    Gestor * gestor = Gestor::GetInstance(); // recuperamos el gestor
+    unsigned char * data = gestor->CargarImagen(_ruta,&height,&width, &nrComponents);//esto hay que ponerlo en la zona de recursos
+
+
     if (data)
     {
         //Enlazar textura
@@ -121,16 +135,16 @@ bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-
-        stbi_image_free(data);
+        data = nullptr;
     }
     else
     {
-        std::cout << "Fallo al cargar la textura: " << _ruta << std::endl;
-        stbi_image_free(data);
+        data = nullptr;
+        gestor = nullptr;
         return false;
     }
-
+    
+    gestor = nullptr;
     return true;
 }
 

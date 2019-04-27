@@ -1,14 +1,23 @@
-#include "CatOpengl.hpp"
+#include "Gestor.hpp"
+
+//para clases singleton deben tener un indicador de que se ha creado el unico objeto
+Gestor* Gestor::_unica_instancia = 0;
+//fin indicador singleton
 
 Gestor::Gestor()
 {
     archivadores.reserve(300);//se reserva para cuarenta inicialmente (lo que veo mucho)
+    imagenes.reserve(80);//reserva para las imagenes
 }
 
 Gestor::~Gestor()
 {
-    LimpiarRecursos();//borramos todos los recursos a nuestro cargo
-
+    if(_unica_instancia && _unica_instancia != 0)
+    {
+        LimpiarRecursos();//borramos todos los recursos a nuestro cargo
+        LimpiarImagenes();
+        _unica_instancia = 0;//ponemos la variable static en blanco para que luego se pueda reiniciarlizar
+    }
 }
 
 //Uso: se utiliza para buscar el recurso si lo encuentra y no lo tiene ya instanciado se instancia en memoria, devolviendo un id este id le sirve al que tiene la interfaz para crear objetos
@@ -168,18 +177,100 @@ bool Gestor::LimpiarRecursos()
     {
         if(archivadores[i]->_recursos != nullptr)
         {
+            //std::cout << "Se borra recurso " << std::endl;
             delete archivadores[i]->_recursos;
             archivadores[i]->_recursos = nullptr;
         }
 
-/*         if(archivadores[i]->_nombre != nullptr)
-        {
-            delete [] archivadores[i]->_nombre;
-            archivadores[i]->_nombre = nullptr;
-        } */
         delete archivadores[i];
     }
     archivadores.clear();
 
     return true;
+}
+
+bool Gestor::LimpiarImagenes()
+{
+    if(archivadores.size() < 1)
+    {
+        return false;
+    }
+
+    for(long unsigned int i = 0; i < imagenes.size();i++)
+    {
+        //std::cout << "Se borra image " << std::endl;
+        delete imagenes[i];
+    }
+
+    imagenes.clear();
+
+    return true;
+}
+
+unsigned char * Gestor::CargarImagen(const char * _ruta,int * height, int * width, int * nrComponents)
+{
+    //char * nombre = new char [strlen(_ruta)];//creamos la longitud de la ruta
+
+    //strcpy(nombre,_ruta);//copiamos el contenido de la ruta al nombre
+    //std::cout << "direccion memoria -> " << &_ruta << std::endl;
+    int idImagen = buscarImagen(_ruta);//si existe nos devolvera el indice del vector imagenes
+
+    if(idImagen != -1)
+    {
+        //sabiendo el indice le pasamos directamente el dato
+        //std::cout << "Se carga imagen ya existente " << _ruta << std::endl;
+        *height = imagenes[idImagen]->height;
+        *width = imagenes[idImagen]->width;
+        *nrComponents = imagenes[idImagen]->nrComponents;
+        return imagenes[idImagen]->_imagen;
+    }
+    else
+    {
+        //creamos una imagen nueva y la metemos en el vector de imagenes
+        Imagen * imagen = new Imagen();
+        unsigned char * data = stbi_load(_ruta, &imagen->width, &imagen->height, &imagen->nrComponents, 0);
+        
+        if(data)
+        {
+            //std::cout << "Se crea nueva imagen " << _ruta << std::endl;
+            imagen->_imagen = data;
+            //imagen->_nombre = _ruta;
+            imagen->_nombre = _ruta;
+            //imagen->_nombre = _ruta;
+            imagenes.push_back(imagen);
+            *height = imagen->height;
+            *width = imagen->width;
+            *nrComponents = imagen->nrComponents;
+            return imagen->_imagen;
+        }
+        else
+        {
+            //std::cout << "Fallo al cargar la textura: " << _ruta << std::endl;
+            stbi_image_free(data);
+            delete imagen;
+        }
+
+        //unsigned int * data = 
+    }
+    
+    return nullptr;
+}
+
+int Gestor::buscarImagen(const char * ruta)
+{
+    //se realiza una busqueda completa hasta que se encuentra (esto queda para OPTIMIZAR)
+    std::string cadena_recurso = ruta;//pasamos el const char a string 
+
+    for(long unsigned int i = 0; i < imagenes.size();i++)
+    {
+        std::string cadena_actual = imagenes[i]->_nombre;//convertimos el nombre de la imagen a string
+
+        if(cadena_recurso.compare(cadena_actual) == 0)//si es igual a 0, existe el recurso
+        {
+            return i;//devolvemos posicion vector 
+        }
+
+    }
+
+    return -1;   
 }

@@ -3345,10 +3345,14 @@ void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
     #endif
 }
 
-unsigned short MotorGrafico::CrearImagen(std::string texto,unsigned int x,unsigned int y,float scale)
+unsigned short MotorGrafico::CrearImagen(const char * texto,unsigned int x,unsigned int y,float scale)
 {
     #ifdef WEMOTOR
-        return _interfaz->AddImagen(texto.c_str(),x,y,scale);
+        //const char * nuevo = "nada";
+        //nuevo = texto.c_str();
+        unsigned short did = _interfaz->AddImagen(texto,x,y,scale);
+        //nuevo = "nadaadadada";
+        return did;
     #endif
     return 0;
 }

@@ -1,5 +1,3 @@
-#include "CatOpengl.hpp"
-
 #include <vector>
 #include <iostream>
 
@@ -13,6 +11,8 @@
 #include "TTexto.hpp"
 #include "TBillboard.hpp"
 #include "Shader.hpp"
+#include "Ventana.hpp"
+#include "Gestor.hpp"
 
 #define maxNodos 65534 //maximo de nodos
 
@@ -148,7 +148,7 @@ class Interfaz
 
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
-        CatOpengl::Video::Ventana * window;
+        Ventana * window;// instancia que contiene la clase que se encarga de gestionar las ventanas y las teclas / raton
 
         Shader * shaders[6];//cuatro programas de shader(vertex y fragment cada uno)
 
@@ -200,7 +200,7 @@ class Interfaz
 
         std::vector<Nodo *> boards;//registro de billboards en interfaz
 
-        CatOpengl::Gestor * gestorDeRecursos;
+        Gestor * gestorDeRecursos;//clase que gestona los recursos del motor
 
         Nodo * buscarNodo2(unsigned short);
 
