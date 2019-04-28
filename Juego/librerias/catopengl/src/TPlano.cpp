@@ -38,9 +38,9 @@ TPlano::~TPlano()
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-    glDeleteTextures(1, &textureID);
+    //glDeleteTextures(1, &textureID);
     
-    if(esPulsable)
+    /*if(esPulsable)
     {
         glDeleteTextures(1, &textureIDPulsado);
     }
@@ -48,7 +48,7 @@ TPlano::~TPlano()
     if(esEncima)
     {
         glDeleteTextures(1, &textureIDEncima);
-    }
+    }*/
 
     //std::cout << "borrado de tplano " << std::endl;
 }
@@ -82,66 +82,104 @@ void TPlano::beginDraw()
 
 bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
 {
+    Gestor * gestor = Gestor::GetInstance(); // recuperamos el gestor
     //Crear textura
+    
     if(mode == 1)//normal
     {
-        glGenTextures(1, &textureID);
+        if(gestor->TieneTextura(_ruta))
+        {
+            textureID = gestor->GetTexturaId(_ruta);
+        }
+        else
+        {
+            glGenTextures(1, &textureID);
+        }
+
         estado = textureID;
     }
 
     if(mode == 2)//pulsado
     {
-        glGenTextures(1, &textureIDPulsado);
+        if(gestor->TieneTextura(_ruta))
+        {
+            textureIDPulsado = gestor->GetTexturaId(_ruta);
+        }
+        else
+        {
+            glGenTextures(1, &textureIDPulsado);
+        }
+
+        esPulsable = true;
     }
 
     if(mode == 3)//encima
     {
-        glGenTextures(1, &textureIDEncima);
+        if(gestor->TieneTextura(_ruta))
+        {
+            textureIDEncima = gestor->GetTexturaId(_ruta);
+        }
+        else
+        {
+            glGenTextures(1, &textureIDEncima);
+        }
+
+        esEncima = true;
     }
-
-    //Cargar y generar textura
-    stbi_set_flip_vertically_on_load(true);  // le dices a stb_image.h que gire la textura cargada en el y-axis
-    Gestor * gestor = Gestor::GetInstance(); // recuperamos el gestor
-    unsigned char * data = gestor->CargarImagen(_ruta,&height,&width, &nrComponents);//esto hay que ponerlo en la zona de recursos
-
-
-    if (data)
+    
+    if(gestor->TieneTextura(_ruta))
     {
-        //Enlazar textura
-        if(mode == 1)//normal
-        {
-            glBindTexture(GL_TEXTURE_2D, textureID);
-        }
-
-        if(mode == 2)//pulsado
-        {
-            glBindTexture(GL_TEXTURE_2D, textureIDPulsado);
-            esPulsable = true;
-        }
-
-        if(mode == 3)//encima
-        {
-            glBindTexture(GL_TEXTURE_2D, textureIDEncima);
-            esEncima = true;
-        }
-
-        //Parametros de la textura
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);   //glTexParameteri(tipo_de_textura,opcion_y_eje,modo_de_ajuste)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-        //Filtrado y escalado de texturas (GL_NEAREST:mas pixelado, mejor para minimizar/ GL_LINEAR:mas suave y borroso, mejor para aumentar)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);       //Filtrado al minimizar
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);       //Filtrado al aumentar
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-        data = nullptr;
+        gestor->CopiarParametrosImagen(_ruta,&height,&width,&nrComponents);
     }
     else
     {
-        data = nullptr;
-        gestor = nullptr;
-        return false;
+        //no tiene textura en opengl
+
+        //Cargar y generar textura
+        stbi_set_flip_vertically_on_load(true);  // le dices a stb_image.h que gire la textura cargada en el y-axis
+        unsigned char * data = gestor->CargarImagen(_ruta,&height,&width, &nrComponents);//esto hay que ponerlo en la zona de recursos
+
+
+        if (data)
+        {
+            //Enlazar textura
+            if(mode == 1)//normal
+            {
+                glBindTexture(GL_TEXTURE_2D, textureID);
+                gestor->VincularTexturaImagen(_ruta,textureID);
+            }
+
+            if(mode == 2)//pulsado
+            {
+                glBindTexture(GL_TEXTURE_2D, textureIDPulsado);
+                gestor->VincularTexturaImagen(_ruta,textureIDPulsado);
+            }
+
+            if(mode == 3)//encima
+            {
+                glBindTexture(GL_TEXTURE_2D, textureIDEncima);
+                gestor->VincularTexturaImagen(_ruta,textureIDEncima);
+            }
+            
+            //Parametros de la textura
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);   //glTexParameteri(tipo_de_textura,opcion_y_eje,modo_de_ajuste)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+            //Filtrado y escalado de texturas (GL_NEAREST:mas pixelado, mejor para minimizar/ GL_LINEAR:mas suave y borroso, mejor para aumentar)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);       //Filtrado al minimizar
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);       //Filtrado al aumentar
+
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            data = nullptr;
+        }
+        else
+        {
+            data = nullptr;
+            gestor = nullptr;
+            return false;
+        } 
     }
     
     gestor = nullptr;

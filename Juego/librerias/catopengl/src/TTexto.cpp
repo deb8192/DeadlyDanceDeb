@@ -32,7 +32,7 @@ TTexto::~TTexto()
 void TTexto::CargarFuente(std::string font, GLuint fontSize)
 {
     // Primero limpiar los caracteres cargados previamente
-    this->Characters.clear();
+    Characters.clear();
     // Inicializar la libreria freetype
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) //Si ocurre un error (!= 0)

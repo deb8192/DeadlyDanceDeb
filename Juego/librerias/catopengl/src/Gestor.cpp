@@ -191,7 +191,7 @@ bool Gestor::LimpiarRecursos()
 
 bool Gestor::LimpiarImagenes()
 {
-    if(archivadores.size() < 1)
+    if(imagenes.size() < 1)
     {
         return false;
     }
@@ -199,6 +199,7 @@ bool Gestor::LimpiarImagenes()
     for(long unsigned int i = 0; i < imagenes.size();i++)
     {
         //std::cout << "Se borra image " << std::endl;
+        //std::cout << " se destruye imagen " << std::endl;
         delete imagenes[i];
     }
 
@@ -273,4 +274,51 @@ int Gestor::buscarImagen(const char * ruta)
     }
 
     return -1;   
+}
+
+bool Gestor::TieneTextura(const char * _ruta)
+{
+    int idImagen = buscarImagen(_ruta);
+
+    if(idImagen != -1)
+    {
+        return imagenes[idImagen]->texturaEstaEnOpengl;
+    }
+
+    return false;
+}
+
+unsigned int Gestor::GetTexturaId(const char * _ruta)
+{
+    int idImagen = buscarImagen(_ruta);
+
+    if(idImagen != -1)
+    {
+        return imagenes[idImagen]->id_opengl_texture;
+    } 
+    
+    return 0;
+}
+
+void Gestor::VincularTexturaImagen(const char * _ruta,unsigned int idTextura)
+{
+    int idImagen = buscarImagen(_ruta);
+
+    if(idImagen != -1)
+    {
+        imagenes[idImagen]->texturaEstaEnOpengl = true;
+        imagenes[idImagen]->id_opengl_texture = idTextura;
+    } 
+}
+
+void Gestor::CopiarParametrosImagen(const char * _ruta,int * height, int * width, int * nrComponents)
+{
+    int idImagen = buscarImagen(_ruta);//si existe nos devolvera el indice del vector imagenes
+
+    if(idImagen != -1)
+    {
+        *height = imagenes[idImagen]->height;
+        *width = imagenes[idImagen]->width;
+        *nrComponents = imagenes[idImagen]->nrComponents;
+    }
 }

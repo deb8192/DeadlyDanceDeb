@@ -36,6 +36,14 @@ class Gestor
 
         bool LimpiarImagenes();//limpia todas las imagenes en memoria (no en opengl) CUIDADO
 
+        bool TieneTextura(const char *);//si tiene textura en opengl devuelve true si no false
+
+        unsigned int GetTexturaId(const char *);//devuelve el id de la textura en opengl
+
+        void VincularTexturaImagen(const char *,unsigned int);//asigna id de textura de opengl a imagen
+
+        void CopiarParametrosImagen(const char *, int *, int *, int *);//copia altura, anchura y numero de componentes (normalmente 4)
+        
     private:
 
         //clase singleton 
@@ -63,22 +71,34 @@ class Gestor
             {
                 _imagen = nullptr;
                 _nombre = nullptr;
+                id_opengl_texture = 0;
+                texturaEstaEnOpengl = false;
             }
             ~Imagen()
             {
                 if(_imagen != nullptr)
                 {
+                    //std::cout << " se destruye imagen " << std::endl;
                     stbi_image_free(_imagen);
                 }
 
+                if(texturaEstaEnOpengl)
+                {
+                    glDeleteTextures(1,&id_opengl_texture);
+                }
+
+                /*              
                 if(_nombre != nullptr)
                 {
+                    std::cout << " se destruye texto " << std::endl;
                     delete [] _nombre;
-                }
+                } */ //es solo para char *
             }
             unsigned char * _imagen;//datos de la imagen
             //char * _nombre;//nombre del recurso por el que se identifica
             const char * _nombre;//nombre del recurso por el que se identifica 
+            unsigned int id_opengl_texture;//es el id que tiene en opengl
+            bool texturaEstaEnOpengl;//si la textura esta en opengl
             int width, height, nrComponents;//altura, anchura y numero de componentes de la imagen
         };
 
@@ -97,6 +117,4 @@ class Gestor
         int buscarImagen(const char *);//busca la imagen si no existe devuelve -1, si existe devuelve la posicion en el vector de imagenes
 
         Archivador * recuperarRecurso(unsigned short);//sirve para devolver el archivador
-
-
 };
