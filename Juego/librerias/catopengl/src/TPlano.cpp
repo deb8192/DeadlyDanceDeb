@@ -129,6 +129,7 @@ bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
     
     if(gestor->TieneTextura(_ruta))
     {
+        //si tiene textura ya cargada
         gestor->CopiarParametrosImagen(_ruta,&height,&width,&nrComponents);
     }
     else
@@ -172,6 +173,7 @@ bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D);
 
+            gestor->DestruirDatosImagen(_ruta);
             data = nullptr;
         }
         else

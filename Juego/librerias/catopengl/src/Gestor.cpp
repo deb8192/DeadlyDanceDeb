@@ -260,14 +260,15 @@ unsigned char * Gestor::CargarImagen(const char * _ruta,int * height, int * widt
 int Gestor::buscarImagen(const char * ruta)
 {
     //se realiza una busqueda completa hasta que se encuentra (esto queda para OPTIMIZAR)
-    std::string cadena_recurso = ruta;//pasamos el const char a string 
+    //std::string cadena_recurso = ruta;//pasamos el const char a string 
 
     for(long unsigned int i = 0; i < imagenes.size();i++)
     {
-        std::string cadena_actual = imagenes[i]->_nombre;//convertimos el nombre de la imagen a string
-
-        if(cadena_recurso.compare(cadena_actual) == 0)//si es igual a 0, existe el recurso
+        //std::string cadena_actual = imagenes[i]->_nombre;//convertimos el nombre de la imagen a string
+        //if(cadena_recurso.compare(cadena_actual) == 0)//si es igual a 0, existe el recurso
+        if(strcmp(ruta,imagenes[i]->_nombre) == 0)
         {
+            //cout << ruta << " =? " << imagenes[i]->_nombre << "\n";
             return i;//devolvemos posicion vector 
         }
 
@@ -280,7 +281,7 @@ bool Gestor::TieneTextura(const char * _ruta)
 {
     int idImagen = buscarImagen(_ruta);
 
-    if(idImagen != -1)
+    if(idImagen != -1 && strlen(_ruta) > 0)
     {
         return imagenes[idImagen]->texturaEstaEnOpengl;
     }
@@ -320,5 +321,34 @@ void Gestor::CopiarParametrosImagen(const char * _ruta,int * height, int * width
         *height = imagenes[idImagen]->height;
         *width = imagenes[idImagen]->width;
         *nrComponents = imagenes[idImagen]->nrComponents;
+    }
+}
+
+void Gestor::DestruirDatosImagenOpengl(const char * _ruta)
+{
+    int idImagen = buscarImagen(_ruta);//si existe nos devolvera el indice del vector imagenes
+    
+    if(idImagen != -1)
+    {
+        if(imagenes[idImagen]->texturaEstaEnOpengl)
+        {
+            glDeleteTextures(1,&imagenes[idImagen]->id_opengl_texture);
+            imagenes[idImagen]->texturaEstaEnOpengl = false;
+        }
+    }
+
+}
+
+void Gestor::DestruirDatosImagen(const char * _ruta)
+{
+    int idImagen = buscarImagen(_ruta);//si existe nos devolvera el indice del vector imagenes
+    
+    if(idImagen != -1)
+    {
+        if(imagenes[idImagen]->_imagen)
+        {
+            stbi_image_free(imagenes[idImagen]->_imagen);
+            imagenes[idImagen]->_imagen = nullptr;
+        }
     }
 }

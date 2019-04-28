@@ -43,7 +43,11 @@ class Gestor
         void VincularTexturaImagen(const char *,unsigned int);//asigna id de textura de opengl a imagen
 
         void CopiarParametrosImagen(const char *, int *, int *, int *);//copia altura, anchura y numero de componentes (normalmente 4)
-        
+
+        void DestruirDatosImagen(const char *);
+
+        void DestruirDatosImagenOpengl(const char *);
+
     private:
 
         //clase singleton 
