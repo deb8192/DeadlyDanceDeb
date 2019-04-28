@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<objects serializationModel="Studio.02.00.00">
-	<object class="MasterAssetFolder" id="{a3dec2ad-2df2-4dd6-8baa-312f2925055e}" />
+<objects serializationModel="Studio.01.10.00">
+    <object class="MasterAssetFolder" id="{a3dec2ad-2df2-4dd6-8baa-312f2925055e}"/>
 </objects>

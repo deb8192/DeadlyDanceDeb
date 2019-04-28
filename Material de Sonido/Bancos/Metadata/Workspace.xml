@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<objects serializationModel="Studio.02.00.00">
-	<object class="Workspace" id="{d9c1ad05-7473-48e2-983f-9163f66eac62}">
-		<property name="builtBanksOutputDirectory">
-			<value>../../../../fmod-build</value>
-		</property>
-		<relationship name="masterEventFolder">
-			<destination>{3bf0daf4-ef45-47c8-a3c2-e9fde4d3e5a7}</destination>
-		</relationship>
-		<relationship name="masterTagFolder">
-			<destination>{b5a2fa4a-9b4b-4baf-bc09-d2db12cd17e0}</destination>
-		</relationship>
-		<relationship name="masterEffectPresetFolder">
-			<destination>{ef612b6f-147a-40eb-88d5-b333a88107d3}</destination>
-		</relationship>
-		<relationship name="masterParameterPresetFolder">
-			<destination>{d0dbebf1-9c18-4cc9-892e-c9be64c45393}</destination>
-		</relationship>
-		<relationship name="masterBankFolder">
-			<destination>{cffcc502-cdeb-4cfb-942e-51d6fdfaf3b7}</destination>
-		</relationship>
-		<relationship name="masterAssetFolder">
-			<destination>{a3dec2ad-2df2-4dd6-8baa-312f2925055e}</destination>
-		</relationship>
-		<relationship name="mixer">
-			<destination>{9687908c-99e3-4dad-8f17-ce464ba717e6}</destination>
-		</relationship>
-		<relationship name="platforms">
-			<destination>{aacd0d9e-3ed4-4ad1-bc6d-0c87d9e29a01}</destination>
-		</relationship>
-	</object>
+<objects serializationModel="Studio.01.10.00">
+    <object class="Workspace" id="{d9c1ad05-7473-48e2-983f-9163f66eac62}">
+        <property name="builtBanksOutputDirectory">
+            <value>Z:/home/davidrs/Escritorio</value>
+        </property>
+        <relationship name="masterEventFolder">
+            <destination>{3bf0daf4-ef45-47c8-a3c2-e9fde4d3e5a7}</destination>
+        </relationship>
+        <relationship name="masterTagFolder">
+            <destination>{b5a2fa4a-9b4b-4baf-bc09-d2db12cd17e0}</destination>
+        </relationship>
+        <relationship name="masterEffectPresetFolder">
+            <destination>{ef612b6f-147a-40eb-88d5-b333a88107d3}</destination>
+        </relationship>
+        <relationship name="masterParameterPresetFolder">
+            <destination>{d0dbebf1-9c18-4cc9-892e-c9be64c45393}</destination>
+        </relationship>
+        <relationship name="masterBankFolder">
+            <destination>{cffcc502-cdeb-4cfb-942e-51d6fdfaf3b7}</destination>
+        </relationship>
+        <relationship name="masterAssetFolder">
+            <destination>{a3dec2ad-2df2-4dd6-8baa-312f2925055e}</destination>
+        </relationship>
+        <relationship name="mixer">
+            <destination>{9687908c-99e3-4dad-8f17-ce464ba717e6}</destination>
+        </relationship>
+        <relationship name="platforms">
+            <destination>{aacd0d9e-3ed4-4ad1-bc6d-0c87d9e29a01}</destination>
+        </relationship>
+    </object>
 </objects>

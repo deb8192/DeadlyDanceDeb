@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<objects serializationModel="Studio.02.00.00">
-	<object class="Workspace" id="{d9c1ad05-7473-48e2-983f-9163f66eac62}">
-		<relationship name="projectSettings">
-			<destination>{6f751668-a70d-4594-b89b-d2170b89ce29}</destination>
-		</relationship>
-		<relationship name="changelist">
-			<destination>{2e1278d6-4bf5-4b2d-9649-ae2841806479}</destination>
-		</relationship>
-		<relationship name="profilerSessionFolder">
-			<destination>{309da3f9-c255-44dd-acf6-3de46cacecec}</destination>
-		</relationship>
-	</object>
-	<object class="ProjectSettings" id="{6f751668-a70d-4594-b89b-d2170b89ce29}">
-		<relationship name="activePlatform">
-			<destination>{aacd0d9e-3ed4-4ad1-bc6d-0c87d9e29a01}</destination>
-		</relationship>
-	</object>
-	<object class="WorkspaceChangelist" id="{2e1278d6-4bf5-4b2d-9649-ae2841806479}" />
+<objects serializationModel="Studio.01.10.00">
+    <object class="Workspace" id="{d9c1ad05-7473-48e2-983f-9163f66eac62}">
+        <relationship name="projectSettings">
+            <destination>{6f751668-a70d-4594-b89b-d2170b89ce29}</destination>
+        </relationship>
+        <relationship name="changelist">
+            <destination>{2e1278d6-4bf5-4b2d-9649-ae2841806479}</destination>
+        </relationship>
+        <relationship name="profilerSessionFolder">
+            <destination>{309da3f9-c255-44dd-acf6-3de46cacecec}</destination>
+        </relationship>
+    </object>
+    <object class="ProjectSettings" id="{6f751668-a70d-4594-b89b-d2170b89ce29}">
+        <relationship name="activePlatform">
+            <destination>{aacd0d9e-3ed4-4ad1-bc6d-0c87d9e29a01}</destination>
+        </relationship>
+    </object>
+    <object class="WorkspaceChangelist" id="{2e1278d6-4bf5-4b2d-9649-ae2841806479}"/>
 </objects>
