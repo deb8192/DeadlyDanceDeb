@@ -21,6 +21,7 @@ class TTexto : public TEntidad
     private:
 
         //opciones de texto
+        GLuint texture;
         GLuint VAO, VBO;
         std::string texto;
         GLfloat x, y, endx, endy, scale;
@@ -48,6 +49,10 @@ class TTexto : public TEntidad
         //para cambiar de texto
         void CambiarTexto(std::string newtext);
         void CambiarPosicion(GLfloat xx, GLfloat yy);
+
+        //cambio de propiedades de texto
+        void CambiarAnchura(unsigned int);
+        void CambiarColor(float,float,float);
 };
 
 #endif

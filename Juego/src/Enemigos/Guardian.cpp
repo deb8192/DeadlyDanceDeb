@@ -84,7 +84,7 @@ void Guardian::RunIA()
  * Salidas:
 */
 
-void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas)
+void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &_getZonasEscondite)
 {
     Jugador* _jugador = (Jugador*)_jug;
     funciona = true;
@@ -199,9 +199,10 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                     case EN_ATAQUE:
 
                         modo = MODO_ATAQUE;
-                        if(zonaElegida !=nullptr && zonaElegida->getElementosActuales() >= 1)
+                        if(zonaElegida !=nullptr)
                         {
-                            zonaElegida->quitarElemento();
+                            zonaElegida->setProposito(false);
+                            zonaElegida = nullptr;
                         }
                         if(escondido)
                         {
@@ -213,9 +214,10 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                     case EN_OCULTACION:
 
                         modo = MODO_OCULTACION;
-                        if(zonaElegida != nullptr && zonaElegida->getElementosActuales() >= 1)
+                        if(zonaElegida !=nullptr)
                         {
-                            zonaElegida->quitarElemento();
+                            zonaElegida->setProposito(false);
+                            zonaElegida = nullptr;
                         }
                         if(escondido)
                         {
@@ -227,9 +229,10 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                     case EN_NORMAL:
 
                         modo = MODO_DEFAULT;
-                        if(zonaElegida !=nullptr && zonaElegida->getElementosActuales() >= 1)
+                        if(zonaElegida !=nullptr)
                         {
-                            zonaElegida->quitarElemento();
+                            zonaElegida->setProposito(false);
+                            zonaElegida = nullptr;
                         }
                         if(escondido)
                         {
@@ -410,9 +413,8 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                                 if(zonaElegida == nullptr)
                                 {
                                     //TO DO: revisar por constr. copia
-                                    vector<Zona*> zonas = _getZonas;
-                                    zonas.reserve(zonas.size());
-                                    zonaElegida = this->getZonaMasCercana(zonas, zonaElegida);
+                                    
+                                    zonaElegida = this->getZonaEsconditeMasCercana(_getZonasEscondite, zonaElegida);
 
                                 }
 
@@ -422,7 +424,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas
                                 funciona = this->buscar(&coordenadasZonaDestino);
                                 if(funciona)
                                 {
-                                    zonaElegida->annadirElemento();
+                                    zonaElegida->setProposito(true);
                                     escondido = true;
                                     this->setTimeOcultarse(1.5f);
                                     modo = MODO_OCULTACION;

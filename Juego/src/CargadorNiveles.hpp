@@ -7,7 +7,10 @@
 #include <string>
 #include <cstring>
 #include "Jugando/Sala.hpp"
-#include "Jugando/Zona.hpp"
+#include "Jugando/ZonaRespawn.hpp"
+#include "Jugando/ZonaCofre.hpp"
+#include "Jugando/ZonaEscondite.hpp"
+#include "Jugando/ZonaOscura.hpp"
 #include "Objetos/Recolectable.hpp"
 #include "Objetos/Pared.hpp"
 #include "Personajes/Jugador.hpp"
@@ -35,28 +38,42 @@ class CargadorNiveles
         void GuardarNivelBin(int); //esta funcion guarda el nivel en formato bin con el numero que le pases
         void CargarNivelBin(int); //esta funcion carga el nivel desde un archivo binario  
         
-        
+        void SetVectorEnemigos(std::vector<Enemigo*>& _enemigosNuevos);
+
         Jugador* GetJugador();
         std::vector<Enemigo*> GetEnemigos();
+        unsigned int GetEnemigosCapacity();
         std::vector<Enemigo*> GetEneCofres();
-        std::vector<Zona*> GetZonas();
+        std::vector<ZonaOscura*> GetZonasOscuras();
+        unsigned int GetZonasOscurasCapacity();
+        std::vector<ZonaRespawn*> GetZonasRespawn();
+        unsigned int GetZonasRespawnCapacity();
+        std::vector<ZonaCofre*> GetZonasCofre();
+        unsigned int GetZonasCofreCapacity();
+        std::vector<ZonaEscondite*> GetZonasEscondite();
+        unsigned int GetZonasEsconditeCapacity();
         std::vector<Recolectable*> GetRecolectables();
+        unsigned int GetRecolectablesCapacity();
         std::vector<Recolectable*> GetLlaves();
         std::vector<Pared*> GetParedes();
+        unsigned int GetParedesCapacity();
         std::vector<Recolectable*> GetPowerup();
+        unsigned int GetPowerupCapacity();
         Enemigo* GetBoss();
         std::vector<Waypoint*> GetWaypoints();
+        unsigned int GetWaypointsCapacity();
 
         std::vector<Puerta*> GetPuertas();
         std::vector<Palanca*> GetPalancas();
         std::vector<Cofre*> GetCofres();
 
         void ReservarMemoriaVectores(int eneMax, int doorsMax, int leversMax, int chestsMax, int waypointsMax, int zonesMax);
+        void BorrarVectorEnemigosBossActivado();
         Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z);
         void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearBoss(int accion,int enemigo,int x,int y,int z,int ancho, int largo, int alto, Sala* sala);
-        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, const char* tipo, unsigned short totalElem, Sala* sala); //lo usamos para crear zonas
+        void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, int boss, const char* tipo, unsigned short totalElem, Sala* sala); //lo usamos para crear zonas
         void CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z, int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj, const char * anima = nullptr , int frame = 1);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearWaypoint(Sala* sala, int accion, int compartido, int ID,  int x, int y, int z, int ancho, int largo, int alto, int* arrayConexiones, const char& tipoWaypoint, int sizeConexiones); //Lo usamos para crear waypoints
         unsigned short CrearCofreArana(float x, float y, float z,
@@ -85,8 +102,11 @@ class CargadorNiveles
         std::vector<Recolectable*> _reco_armas;
         std::vector<Pared*> _paredes;
         std::vector<Recolectable*> _powerup;
+        std::vector<ZonaCofre*> _zonasCofre; //Array de zonas de cofres
+        std::vector<ZonaRespawn*> _zonasRespawn; //Array de zonas de respawn
+        std::vector<ZonaOscura*> _zonasOscuras; //Array de zonas de oscuras
+        std::vector<ZonaEscondite*> _zonasEscondite; //Array de zonas de escondite
         std::vector<Recolectable*> _llaves;
-        std::vector<Zona*> _zonas; //Array de zonas
         std::vector<Waypoint*> _waypoints; //Vector de waypoints del nivel
 
         MotorGrafico* _motor;

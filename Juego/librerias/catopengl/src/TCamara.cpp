@@ -101,6 +101,19 @@ void TCamara::beginDraw()
         //enviamos view
         shader2->setMat4("view", view);
 
+        shader3->Use();//preparamos el shader
+
+        //posicion de la camara al shader
+        shader3->setVec3("viewPos", posicion);
+        //enviamos projection
+        shader3->setMat4("projection",projection);
+        //enviamos view
+        shader3->setMat4("view", view);
+
+        shader4->Use();//preparamos el shader
+        //enviamos projection
+        shader4->setMat4("projection",projection);
+        shader4->setMat4("view", view);
         //if(_matriz_resultado != nullptr)//si la matriz de resultado es nula es que no hay nada en la cola por lo que no hay nada que enviar al shader
         //{
             //enviar a uniform
@@ -128,6 +141,18 @@ void TCamara::beginDraw()
         //shader2->setMat4("projection",projection);
         //enviamos view
         shader2->setMat4("view", view);
+
+        shader3->Use();//preparamos el shader
+
+        //enviamos projection
+        shader3->setMat4("projection",projection);
+        //enviamos view
+        shader3->setMat4("view", view);
+
+        shader4->Use();//preparamos el shader
+        //enviamos projection
+        shader4->setMat4("projection",projection);
+        shader4->setMat4("view", view);
     }
 
 }

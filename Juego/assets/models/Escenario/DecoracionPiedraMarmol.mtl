@@ -1,0 +1,56 @@
+# Blender MTL File: 'None'
+# Material Count: 5
+
+newmtl Material.001
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.317486 0.317486 0.317486
+Ks 1.000000 1.000000 1.000000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl Material.002
+Ns 94.117644
+Ka 1.000000 1.000000 1.000000
+Kd 0.317486 0.317486 0.317486
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /run/media/usuario/1D28BAD32AB85620/FinalesNivelNuevo/untitled31.png
+
+newmtl Material.004
+Ns 94.117644
+Ka 1.000000 1.000000 1.000000
+Kd 0.381584 0.381584 0.381584
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /run/media/usuario/1D28BAD32AB85620/FinalesNivelNuevo/untitled31.png
+
+newmtl Material.006
+Ns 96.078443
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /run/media/usuario/1D28BAD32AB85620/FinalesNivelNuevo/untitled31.png
+
+newmtl None
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.800000 0.800000 0.800000
+Ke 0.0 0.0 0.0
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /run/media/usuario/1D28BAD32AB85620/FinalesNivelNuevo/untitled31.png

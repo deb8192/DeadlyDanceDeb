@@ -4,9 +4,9 @@ Heavy::Heavy(Sala* sala,unsigned short tipoJug,int nX,int nY,int nZ,int ancho,in
 : Jugador(sala,tipoJug,nX,nY,nZ,ancho,largo,alto,accion,maxVida)
 {
     #ifdef WEMOTOR
-    _modelo = "assets/models/rockero/rockero_rigging_000001.obj";
+        _modelo = "assets/models/rockero/rockero_rigging_000001.obj";
     #else
-    _modelo = "assets/models/rockero.b3d";
+        _modelo = "assets/models/rockero.b3d";
     #endif
 }
 

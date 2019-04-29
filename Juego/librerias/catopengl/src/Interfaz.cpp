@@ -8,18 +8,19 @@ Interfaz::Interfaz()
     imagenes.reserve(20);//20 imagenes de interfaz
     textos.reserve(20);//20 imagenes de textos
     boards.reserve(30); //30 billboards
-    gestorDeRecursos = new CatOpengl::Gestor;
+    particles.reserve(20); //20 sistemas de particulas
+    gestorDeRecursos = Gestor::GetInstance();//obtenemos la instancia de la interfaz
     ventana_inicializada = true;//se pone para que entra a inicializar por defecto
     window = nullptr;//se pone para saber que no esta inicializada
-    nodos.reserve(600);//para almacenar el objeto
     x = 0.0f;
     y = 0.0f;
     z = 0.0f;
     ModoOneCamara = true;
 
-    for(unsigned int e = 0;e < 65535;e++)
+    //inicializamos todos los punteros a nullptr por si acaso
+    for(unsigned int e = 0;e < maxNodos;e++)
     {
-        banco_ids[e] = false;
+        banco[e] = nullptr;
     }
 }
 
@@ -78,6 +79,8 @@ unsigned short Interfaz::AddCamara()
         TCamara * camaraEn = new TCamara(window->getWidth(),window->getHeight());
         camaraEn->SetShader(shaders[4]);
         camaraEn->SetShader2(shaders[3]);
+        camaraEn->SetShader3(shaders[5]);
+        camaraEn->SetShader4(shaders[6]);
         camara->setEntidad(camaraEn);
 
         escalado->addHijo(rotacion);
@@ -94,7 +97,7 @@ unsigned short Interfaz::AddCamara()
             nodo->tipo = 0;
             nodo->activo = true;//activo la camara por defecto cuando se activa
             camaras.push_back(nodo);
-            nodos.push_back(nodo);//se agrega a la lista de nodos general
+            banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
             return idnuevo;
         }
     }
@@ -150,7 +153,7 @@ unsigned short Interfaz::AddLuz(int tipo)
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodo->tipo = 1;
         nodo->activo = true;
-        nodos.push_back(nodo);//se agrega a la lista de nodos general
+        banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
         luces.push_back(nodo);//se agrega la luz a la lista de luces
 
         return idnuevo;
@@ -159,7 +162,7 @@ unsigned short Interfaz::AddLuz(int tipo)
     return 0;//no se hizo la luz
 }
 
-unsigned short Interfaz::AddMalla(const char * archivo, int initf)
+unsigned short Interfaz::AddMalla(const char * archivo, int initf, int shader) //shader sinluz = 1, shader cartoon = other
 {
     //std::cout << "SE CREA MALLA" << std::endl;
     if(ventana_inicializada)
@@ -185,7 +188,16 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
 
     TNodo * malla = new TNodo;
     TMalla * mallaEn = new TMalla(initf);
-    mallaEn->SetShader(shaders[4]);
+    //Depende del shader
+    if(shader == 0)
+    {
+        mallaEn->SetShader(shaders[4]);
+    }
+    else
+    {
+        mallaEn->SetShader(shaders[5]);
+    }
+
     malla->setEntidad(mallaEn);
 
     escalado->addHijo(rotacion);
@@ -208,7 +220,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
             nodo->idRecurso = id_recurso;//se agrega id del recurso (por si se queria cambiar o borrar)
             nodo->tipo = 2;
             nodo->activo = true;
-            nodos.push_back(nodo);//se agrega a la lista de nodos general
+            banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
             return idnuevo;
         }
     }
@@ -216,7 +228,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf)
     return 0;
 }
 
-unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigned int y, float scale)
+unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigned int y, float scale,  const char * rutapulsado , const char * rutaencima )
 {
     //std::cout << "SE CREA IMAGEN" << std::endl;
     if(ventana_inicializada)
@@ -244,7 +256,18 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
     escaladoEnt->NoEjecutar();
 
     TNodo * imagen = new TNodo;
-    TPlano * imagenEn = new TPlano(archivo,x,y,scale,shaders[1],window->getWidth(), window->getHeight());
+
+    TPlano * imagenEn = nullptr;
+
+    if(rutapulsado != nullptr || rutaencima != nullptr)
+    {
+        imagenEn = new TPlano(archivo,x,y,scale,shaders[1],window->getWidth(), window->getHeight(), rutapulsado , rutaencima);
+    }
+    else
+    {
+        imagenEn = new TPlano(archivo,x,y,scale,shaders[1],window->getWidth(), window->getHeight());
+    }
+
     imagen->setEntidad(imagenEn);
 
     escalado->addHijo(rotacion);
@@ -262,7 +285,7 @@ unsigned short Interfaz::AddImagen(const char * archivo, unsigned int x, unsigne
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodo->tipo = 3;
         nodo->activo = true;
-        nodos.push_back(nodo);//se agrega a la lista de nodos general
+        banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
         imagenes.push_back(nodo);//se agrega a la lista de imagenes
         return idnuevo;
     }
@@ -318,7 +341,7 @@ unsigned short Interfaz::AddTexto(std::string font, GLuint fontSize)
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
         nodo->tipo = 4;
         nodo->activo = true;
-        nodos.push_back(nodo);//se agrega a la lista de nodos general
+        banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
         textos.push_back(nodo);//se agrega a la lista de textos
 
         return idnuevo;
@@ -350,6 +373,9 @@ unsigned short Interfaz::AddBoard(float x, float y, float z, float movx, float m
     escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
+    escaladoEnt->EsGui();
+    escaladoEnt->NoEjecutar();
+
     TNodo * board = new TNodo;
     TBillboard * boardEn = new TBillboard(x,y,z,_ruta,shaders[3],movx,movy,priority);
     board->setEntidad(boardEn);
@@ -367,9 +393,9 @@ unsigned short Interfaz::AddBoard(float x, float y, float z, float movx, float m
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
-        nodo->tipo = 4;
+        nodo->tipo = 5;
         nodo->activo = true;
-        nodos.push_back(nodo);//se agrega a la lista de nodos general
+        banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
         boards.push_back(nodo);//se agrega a la lista de billboards
 
         return idnuevo;
@@ -378,6 +404,59 @@ unsigned short Interfaz::AddBoard(float x, float y, float z, float movx, float m
     return 0;
 }
 
+unsigned short Interfaz::AddParticles(float vx,float vy,float vz,unsigned int num,float tam,float life,const char * _sprite)
+{
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
+    TNodo * traslacion = new TNodo;
+    TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
+    traslacion->setEntidad(traslacionEnt);
+
+    TNodo * rotacion = new TNodo;
+    TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0);
+    rotacion->setEntidad(rotacionEnt);
+
+    TNodo * escalado = new TNodo;
+    TTransform * escaladoEnt = new TTransform;
+    escaladoEnt->escalar(1,1,1);
+    escalado->setEntidad(escaladoEnt);
+
+    escaladoEnt->EsGui();
+    escaladoEnt->NoEjecutar();
+
+    TNodo * particle = new TNodo;
+    TParticle * particleEn = new TParticle(vx,vy,vz,num,tam,life,_sprite,shaders[6]);
+    particle->setEntidad(particleEn);
+
+    escalado->addHijo(rotacion);
+    rotacion->addHijo(traslacion);
+    traslacion->addHijo(particle);
+
+    if(_raiz != nullptr)
+    {
+        _raiz->addHijo(escalado);
+
+        unsigned short idnuevo = generarId();
+
+        Nodo * nodo = new Nodo();
+        nodo->id = idnuevo;//se pone el id
+        nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodo->tipo = 5;
+        nodo->activo = true;
+        banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
+        particles.push_back(nodo);//se agrega a la lista de particulas
+
+        return idnuevo;
+    }
+
+    return 0;
+}
 
 void Interfaz::Draw()
 {
@@ -417,6 +496,14 @@ void Interfaz::Draw()
 
             _raiz->draw(0);
 
+            for(unsigned int i = 0; i < particles.size(); i++)
+            {
+                if(particles[i] != nullptr && particles[i]->recurso != nullptr && particles[i]->activo)
+                {
+                    particles[i]->recurso->draw(1);
+                }
+            }
+
             for(unsigned int i = 0; i < boards.size(); i++)
             {
                 if(boards[i] != nullptr && boards[i]->recurso != nullptr && boards[i]->activo)
@@ -446,58 +533,19 @@ void Interfaz::Draw()
     window->UpdateDraw();
 }
 
-Interfaz::Nodo * Interfaz::buscarNodo(unsigned short id)
-{
-    if(id != 0)
-    {
-        unsigned short Iarriba = ((unsigned short)(nodos.size()-1));
-        unsigned short Iabajo = 0;
-        unsigned short Icentro;
-        while (Iabajo <= Iarriba)
-        {
-            Icentro = (Iarriba + Iabajo)/2;
-            if (nodos[Icentro]->id == id)
-            {
-                cualborrar = Icentro;
-                return nodos[Icentro];
-            }
-            else
-            {
-                if (id < nodos[Icentro]->id)
-                {
-                    Iarriba=Icentro-1;
-                }
-                else
-                {
-                    Iabajo=Icentro+1;
-                }
-            }
-        }
-    }
-    return nullptr;
-}
-
 Interfaz::Nodo * Interfaz::buscarNodo2(unsigned short id)
 {
-    for(unsigned int i = 0; i < nodos.size(); i++)
-    {
-        if (nodos[i] != nullptr && nodos[i]->id == id)
-        {
-            cualborrar = i;
-            return nodos[i];
-        }
-    }
-    return nullptr;
+    return banco[id-1];
 }
 
 Interfaz::Nodo * Interfaz::buscarNodo3(signed int idPerson)
 {
-    for(unsigned int i = 0; i < nodos.size(); i++)
+    for(unsigned int i = 0; i < maxNodos; i++)
     {
-        if (nodos[i] != nullptr && nodos[i]->idPersonalizado == idPerson)
+        if (banco[i] != nullptr && banco[i]->idPersonalizado == idPerson)
         {
             cualborrar = i;
-            return nodos[i];
+            return banco[i];
         }
     }
     return nullptr;
@@ -569,6 +617,8 @@ void Interfaz::ventanaInicializar()
     shaders[2] = new Shader("assets/shaders/shadertextvs.glsl","assets/shaders/shadertextfs.glsl");
     shaders[3] = new Shader("assets/shaders/shaderboardsvs.glsl","assets/shaders/shaderboardsfs.glsl");
     shaders[4] = new Shader("assets/shaders/shadertoonvs.glsl","assets/shaders/shadertoonfs.glsl");
+    shaders[5] = new Shader("assets/shaders/shadernolucesvs.glsl","assets/shaders/shadernolucesfs.glsl");
+    shaders[6] = new Shader("assets/shaders/shaderparticlevs.glsl","assets/shaders/shaderparticlefs.glsl");
 }
 
 void Interfaz::ventanaLimpiar()
@@ -599,15 +649,13 @@ void Interfaz::LimpiarEscena()
         _raiz->BorrarEscena();
         luces.resize(0);
         luces.reserve(40);//30 luces como maximo
-        for(std::size_t i=0 ; i < nodos.size() ; i++)
+        for(std::size_t i=0 ; i < maxNodos; i++)
         {
-            if(nodos[i] != nullptr && (nodos[i]->tipo == 2 || nodos[i]->tipo == 1))
+            if(banco[i] != nullptr && (banco[i]->tipo == 2 || banco[i]->tipo == 1))
             {
-                nodos[i]->recurso = nullptr;
-                eliminarID((nodos[i]->id));
-                delete nodos[i];
-                nodos.erase(nodos.begin()+i);
-                i--;
+                banco[i]->recurso = nullptr;
+                delete banco[i];
+                banco[i] = nullptr;
             }
         }
     }
@@ -623,15 +671,13 @@ void Interfaz::LimpiarGui()
         imagenes.reserve(20);
         textos.resize(0);
         textos.reserve(20);
-        for(std::size_t i=0 ; i < nodos.size() ; i++)
+        for(unsigned short i=0 ; i < maxNodos; i++)
         {
-            if(nodos[i] != nullptr && (nodos[i]->tipo == 3 || nodos[i]->tipo == 4))
+            if(banco[i] != nullptr && (banco[i]->tipo == 3 || banco[i]->tipo == 4))
             {
-                nodos[i]->recurso = nullptr;
-                eliminarID((nodos[i]->id));
-                delete nodos[i];
-                nodos.erase(nodos.begin()+i);
-                i--;
+                banco[i]->recurso = nullptr;
+                delete banco[i];
+                banco[i] = nullptr;
             }
         }
     }
@@ -699,6 +745,15 @@ bool Interfaz::IsMouseClick(short boton)
     return false;
 }
 
+bool Interfaz::IsMouseUp(short boton)
+{
+    if(window != nullptr)
+    {
+        return window->MouseEstaLibre(boton);
+    }
+    return false;
+}
+
 void Interfaz::ChangeTargetCamara(unsigned short id, float x, float y, float z)
 {
     Nodo * nodo = buscarNodo2(id);
@@ -720,7 +775,7 @@ void Interfaz::DeclararBoton(unsigned short id, unsigned short newid)
     }
 }
 
-//Detectar pulsaciones de botones
+//Detectar si esta encima del boton
 bool Interfaz::DetectarPulsacion(int did)
 {
     for(unsigned int i = 0; i < imagenes.size(); i++)
@@ -731,8 +786,18 @@ bool Interfaz::DetectarPulsacion(int did)
             if(did == dynamic_cast<TPlano*>(tnodo->GetEntidad())->getID()) //Si es la misma id
             {
                 double * datos = window->RecuperarPosicionesMouse();
-                if(dynamic_cast<TPlano*>(tnodo->GetEntidad())->botonPulsado(datos))//Si pulsas el boton
-                    return true;
+                TPlano * imagen = dynamic_cast<TPlano*>(tnodo->GetEntidad());
+                if(imagen != nullptr)//Si pulsas el boton
+                {
+                    if(imagen->botonPulsado(datos))
+                    {
+                        //imagen->CambiarEstado(2);
+                        return true;
+                    }
+
+                    //imagen->CambiarEstado(1);
+                    return false;
+                }
             }
         }
     }
@@ -809,7 +874,7 @@ void Interfaz::RemoveObject(unsigned short object)
         //borrar objeto que se le pasa
         Nodo * nodo = buscarNodo2(object);
 
-        unsigned short auxiliar = cualborrar;
+        unsigned short auxiliar = object-1;
         if(nodo != nullptr)
         {
             if(nodo->id_texto != 0 && nodo->tipo == 3)
@@ -825,10 +890,8 @@ void Interfaz::RemoveObject(unsigned short object)
             }
 
             pulgarReferencia(nodo,nodo->tipo);
-            eliminarID((nodo->id));
             delete nodo;
-            nodos.erase(nodos.begin()+auxiliar);
-
+            banco[auxiliar] = nullptr;
         }
     }
 }
@@ -901,21 +964,12 @@ void Interfaz::CambiarPosicionTexto(unsigned short nid, float x, float y)
     }
 }
 
-void Interfaz::eliminarID(unsigned short x)
-{
-    if(x >= 0 && x < 65535)
-    {
-        banco_ids[x-1] = false;
-    }
-}
-
 unsigned short Interfaz::generarId()
 {
-    for(unsigned short e = 0;e < 65535;e++)
+    for(unsigned short e = 0;e < maxNodos;e++)
     {
-        if(banco_ids[e] == false)
+        if(banco[e] == nullptr)
         {
-            banco_ids[e]=true;
             return (e+1);
         }
     }
@@ -1040,6 +1094,25 @@ void Interfaz::SetTexture(unsigned short did, const char * _ruta)
     }
 }
 
+void Interfaz::SetTransparencia(unsigned short did, float transp)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->setTransparencia(transp);
+                }
+            }
+        }
+    }
+}
+
 
 void Interfaz::RemoveObjectForID(signed int idPerson)
 {
@@ -1109,6 +1182,18 @@ void Interfaz::pulgarReferencia(Nodo * referencia,unsigned short tipo)
                 }
             }
         }
+
+        if(tipo == 5)
+        {
+            for(unsigned int i = 0; i < boards.size(); i++)
+            {
+                if(boards[i] != nullptr && referencia == boards[i])
+                {
+                    boards.erase(boards.begin()+i);
+                    return;
+                }
+            }
+        }
 }
 
 void Interfaz::DefinirTextoBoton(unsigned short imagen,unsigned short texto)
@@ -1118,6 +1203,44 @@ void Interfaz::DefinirTextoBoton(unsigned short imagen,unsigned short texto)
     if(nodo != nullptr)
     {
         nodo->id_texto = texto;
+    }
+}
+
+void Interfaz::DetenerSistema(unsigned short part)
+{
+    if(part != 0)
+    {
+        Nodo * nodo = buscarNodo2(part);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TParticle*>(tnodo->GetEntidad())->stopParticles();
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::IniciarSistema(unsigned short part)
+{
+    if(part != 0)
+    {
+        Nodo * nodo = buscarNodo2(part);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TParticle*>(tnodo->GetEntidad())->startParticles();
+                }
+            }
+        }
     }
 }
 
@@ -1279,4 +1402,131 @@ bool Interfaz::IsKeyRelease(short tecla)
     }
 
     return false;
+}
+
+void Interfaz::AnchoTexto(unsigned short did,unsigned int anchoNuevo)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    TTexto* _texto = dynamic_cast<TTexto*>(tnodo->GetEntidad());
+                    if(_texto != nullptr)
+                    {
+                        _texto->CambiarAnchura(anchoNuevo);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado)
+{
+    for(unsigned int i = 0; i < imagenes.size(); i++)
+    {
+        TNodo * tnodo = imagenes[i]->recurso->GetNieto(1)->GetHijo(1);
+        if(dynamic_cast<TPlano*>(tnodo->GetEntidad())->Comprobar()) //Si la imagen es un boton
+        {
+            if(event == (unsigned int)dynamic_cast<TPlano*>(tnodo->GetEntidad())->getID()) //Si es la misma id
+            {
+                TPlano * imagen = dynamic_cast<TPlano*>(tnodo->GetEntidad());
+                if(imagen != nullptr)//Si pulsas el boton
+                {
+                    imagen->CambiarEstado(nuevoEstado);
+                }
+            }
+        }
+    }
+}
+
+
+
+void Interfaz::ActivarCapturaTexto()
+{
+    if(window)
+    {
+        window->ActivarRecogida();
+    }
+}
+
+void Interfaz::DesactivarCapturaTexto()
+{
+    if(window)
+    {
+        window->DesactivarRecogida();
+    }
+}
+
+void Interfaz::InicializarCapturaTexto(const char * texto)
+{
+    if(window)
+    {
+        window->InicializarLetra(texto);
+    }
+}
+
+char * Interfaz::DevolverTextoCapturado()
+{
+    if(window)
+    {
+        return window->RecogerLetra();
+    }
+    return nullptr;
+}
+
+void Interfaz::BorrarUltimaLetra()
+{
+    if(window)
+    {
+        window->BorrarUltimaTecla();
+    }
+}
+
+void Interfaz::CambiarColorTexto(unsigned int did,float r, float g, float b)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    TTexto* _texto = dynamic_cast<TTexto*>(tnodo->GetEntidad());
+                    if(_texto != nullptr)
+                    {
+                        _texto->CambiarColor(r,g,b);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::CambiarPosicionImagen(unsigned int event, float x, float y)
+{
+    for(unsigned int i = 0; i < imagenes.size(); i++)
+    {
+        TNodo * tnodo = imagenes[i]->recurso->GetNieto(1)->GetHijo(1);
+        if(dynamic_cast<TPlano*>(tnodo->GetEntidad())->Comprobar()) //Si la imagen es un boton
+        {
+            if(event == (unsigned int)dynamic_cast<TPlano*>(tnodo->GetEntidad())->getID()) //Si es la misma id
+            {
+                TPlano * imagen = dynamic_cast<TPlano*>(tnodo->GetEntidad());
+                if(imagen != nullptr)//Si pulsas el boton
+                {
+                    imagen->setPosition(x,y);
+                }
+            }
+        }
+    }
 }

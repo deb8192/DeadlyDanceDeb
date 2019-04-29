@@ -7,11 +7,68 @@
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
 	<Light Type="Ambiental" Intensity="50" Attenuation="0" Color="Red" RP="0" X="0" Y="10" Z="0"> </Light>
 
+	<!--Posiciones luces antorchas falta poner-->
+	<!--luz X="-71" Z="0" Y="10"-->
+	<!--luz X="-7" Z="19" Y="10"-->
+	<!--luz X="-8" Z="-19" Y="10"-->
+	<!--luz X="49" Z="67" Y="10"-->
+	<!--luz X="49" Z="-67" Y="10"-->
+	<!--luz X="105" Z="19" Y="10"-->
+	<!--luz X="105" Z="-19" Y="10"-->
+	<!--luz X="177" Z="44" Y="10"-->
+	<!--luz X="199" Z="68" Y="10"-->
+	<!--luz X="208" Z="-10" Y="10"-->
+	<!--luz X="249" Z="68" Y="10"-->
+	<!--luz X="250" Z="-10" Y="10"-->
+	<!--luz X="285" Z="20" Y="10"-->
+	<!--luz X="177" Z="152" Y="10"-->
+	<!--luz X="205" Z="164" Y="10"-->
+	<!--luz X="256" Z="164" Y="10"-->
+	<!--luz X="285" Z="145" Y="10"-->
+	<!--luz X="331" Z="82" Y="10"-->
+	<!--luz X="331" Z="148" Y="10"-->
+	<!--luz X="385" Z="132" Y="10"-->
+	<!--luz X="366" Z="200" Y="10"-->
+	<!--luz X="259" Z="311" Y="10"-->
+	<!--luz X="199" Z="344" Y="10"-->
+	<!--luz X="259" Z="398" Y="10"-->
+	<!--luz X="232" Z="405" Y="10"-->
+	<!--luz X="300" Z="336" Y="10"-->
+	<!--luz X="329" Z="297" Y="10"-->
+	<!--luz X="363" Z="336" Y="10"-->
+	<!--luz X="384" Z="322" Y="10"-->
+	<!--luz X="401" Z="336" Y="10"-->
+	<!--luz X="362" Z="380" Y="10"-->
+	<!--luz X="345" Z="380" Y="10"-->
+	<!--luz X="357" Z="432" Y="10"-->
+	<!--luz X="391" Z="480" Y="10"-->
+	<!--luz X="155" Z="350" Y="10"-->
+	<!--luz X="133" Z="376" Y="10"-->
+	<!--luz X="127" Z="322" Y="10"-->
+	<!--luz X="95" Z="357" Y="10"-->
+	<!--luz X="-5" Z="344" Y="10"-->
+	<!--luz X="151" Z="439" Y="10"-->
+	<!--luz X="43" Z="439" Y="10"-->
+	<!--luz X="43" Z="480" Y="10"-->
+	<!--luz X="104" Z="497" Y="10"-->
+	<!--luz X="200" Z="456" Y="10"-->
+	<!--luz X="215" Z="442" Y="10"-->
+	<!--luz X="243" Z="434" Y="10"-->
+	<!--luz X="269" Z="442" Y="10"-->
+	<!--luz X="288" Z="459" Y="10"-->
+	<!--luz X="298" Z="489" Y="10"-->
+	<!--luz X="287" Z="520" Y="10"-->
+	<!--luz X="269" Z="536" Y="10"-->
+	<!--luz X="242" Z="544" Y="10"-->
+	<!--luz X="217" Z="536" Y="10"-->
+	<!--luz X="201" Z="523" Y="10"-->
+	<!--luz X="0" Z="0" Y="10"-->
+
 	<!--Sala-01--><Platform Type="1" accion="0" ancho="72" largo="72" alto="4" RP="0" X="48" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
 	<!--Decoracion-conjunto-Paredes--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/DecoracionParedes.obj"></Object>
 	<!--Decoracion-cueva-roca--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Roca.png" Model="assets/models/Escenario/DecoracionRoca.obj"></Object>
 	<!--Decoracion-antorchas--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/DecoracionNivel.png" Model="assets/models/Escenario/DecoracionItems.obj"></Object>
-	<!--Decoracion-rio-lava--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="-35" X="100" Y="-8" Z="200" despX="0" despZ="0" Texture="assets/texture/lava.png" Model="assets/models/Escenario/RioLava.obj"></Object>
+	<!--Decoracion-rio-lava--><Object tipoObj="18" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="-35" X="100" Y="-8" Z="200" despX="0" despZ="0" Texture="assets/texture/lava.png" Model="assets/models/Escenario/RioLava.obj"></Object>
 	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
 	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="48" Y="0" Z="48" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
 	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="48" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
@@ -28,7 +85,10 @@
 	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="100" Y="0" Z="16"></Zone>
 	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="-4" Y="0" Z="-16"></Zone>
 	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="100" Y="0" Z="-16"></Zone>
-
+	<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="52" Y="0" Z="32"></Zone>
+	<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="52" Y="0" Z="-32"></Zone>
+	<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="100" Y="0" Z="0"></Zone>
+	<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="-4" Y="0" Z="0"></Zone>
 
 		<!--Sala-00--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="-50" Y="0" Z="0" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 		<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="-26" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
@@ -66,7 +126,11 @@
 			<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="202" Y="0" Z="48" Texture="" Model=""></Enemy>
 			<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="252" Y="0" Z="20" Texture="" Model=""></Enemy>
 			<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="-5" Y="0" Z="15"></Zone>
-
+			<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="190" Y="0" Z="32"></Zone>
+			<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="272" Y="0" Z="32"></Zone>
+			<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="231" Y="0" Z="68"></Zone>
+			<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="231" Y="0" Z="-4"></Zone>
+			
 				<!--Sala-04--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="231" Y="0" Z="124" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 				<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="26" alto="24" RP="0" X="198" Y="0" Z="104" despX="0" despZ="0" Texture="assets/texture/Paredes.png"  Model="assets/models/pared_destruible/BreakWallLarge_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 				<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="12" largo="2" alto="24" RP="90" X="184" Y="0" Z="128" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
@@ -76,7 +140,11 @@
 				<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="18" ancho="4" largo="4" alto="2" X="230" Y="0" Z="172" conexiones="9,19"></Waypoint>
 				<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="2" largo="2" alto="10" X="254" Y="0" Z="142" Texture="" Model=""></Enemy>
 				<!--Zona-Oscura--><Zone Type="1" accion="0" tipo="zDark" elementos="4" ancho="20" largo="20" alto="5" X="236" Y="0" Z="128"></Zone>
-
+				<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="190" Y="0" Z="124"></Zone>
+				<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="272" Y="0" Z="124"></Zone>
+				<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="231" Y="0" Z="160"></Zone>
+				<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="231" Y="0" Z="88"></Zone>
+			
 					<!--Sala-05--><Platform Type="1" accion="0" ancho="26" largo="38" alto="4" RP="0" X="318" Y="0" Z="116" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 					<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="292" Y="0" Z="98" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 					<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="292" Y="0" Z="82" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
@@ -139,7 +207,13 @@
 					<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="232" Y="0" Z="330" Texture="" Model=""></Enemy>
 					<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="232" Y="0" Z="308"></Zone>
 					<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="232" Y="0" Z="370"></Zone>
-
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="249" Y="0" Z="392"></Zone>
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="209" Y="0" Z="392"></Zone>
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="249" Y="0" Z="342"></Zone>
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="209" Y="0" Z="342"></Zone>
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="249" Y="0" Z="292"></Zone>
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="209" Y="0" Z="292"></Zone>
+			
 
 						<!--Sala-10--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="182" Y="0" Z="300" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 						<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="26" alto="24" RP="0" X="192" Y="0" Z="300" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallLarge_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
@@ -189,7 +263,9 @@
 								<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="3" X="422" Y="0" Z="366" Texture="" Model=""></Enemy>
 								<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="3" X="404" Y="0" Z="402" Texture="" Model=""></Enemy>
 								<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="428" Y="0" Z="389"></Zone>
-
+								<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="400" Y="0" Z="420"></Zone>
+								<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="400" Y="0" Z="360"></Zone>
+									
 									<!--Sala-15--><Platform Type="1" accion="0" ancho="24" largo="24" alto="4" RP="0" X="366" Y="0" Z="414" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat1.obj" UserStar="False" StarX="0" StarY="0">
 									<!-- AQUI VAN DOS PAREDES ROMPIBLES PEQUEÑAS 1 comentada para poder pasar-->
 									<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="388" Y="0" Z="402" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
@@ -241,7 +317,7 @@
 						<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="37" ancho="4" largo="4" alto="2" X="142" Y="0" Z="398" conexiones="36,38"></Waypoint>
 						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="38" ancho="4" largo="4" alto="2" X="102" Y="0" Z="384" conexiones="37,39"></Waypoint>
 						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="44" ancho="4" largo="4" alto="2" X="102" Y="0" Z="412" conexiones="37,45"></Waypoint>
-
+						
 							<!--Sala-19--><Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="125" Y="0" Z="352" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
 							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="110" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="94" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
@@ -254,7 +330,11 @@
               <!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="142" Y="0" Z="348" Texture="" Model=""></Enemy>
 							<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="136" Y="0" Z="366" Texture="" Model=""></Enemy>
 							<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="115" Y="0" Z="344" Texture="" Model=""></Enemy>
-
+							<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="100" Y="0" Z="332"></Zone>
+							<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="100" Y="0" Z="372"></Zone>
+							<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="150" Y="0" Z="332"></Zone>
+							<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="150" Y="0" Z="372"></Zone>
+					
 								<!--Sala-20--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="64" Y="0" Z="330" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 								<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="88" Y="0" Z="338" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
 								<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="88" Y="0" Z="322" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
@@ -304,6 +384,12 @@
 	 								<!--BossMuerte--><Enemy Type="1" enemigo="5" accion="1" ancho="1" largo="1" alto="10" X="242" Y="0" Z="490" Texture="" Model=""></Enemy>
 									<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="46" ancho="4" largo="4" alto="2" X="158" Y="0" Z="490" conexiones="45,47"></Waypoint>
 									<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="47" ancho="4" largo="4" alto="2" X="217" Y="0" Z="490" conexiones="46"></Waypoint>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="262" Y="0" Z="470"></Zone>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="222" Y="0" Z="470"></Zone>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="262" Y="0" Z="490"></Zone>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="222" Y="0" Z="490"></Zone>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="262" Y="0" Z="510"></Zone>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="222" Y="0" Z="510"></Zone>
 									</Platform>
 
 							</Platform>

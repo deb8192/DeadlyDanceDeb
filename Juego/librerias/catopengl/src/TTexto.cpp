@@ -24,13 +24,15 @@ TTexto::TTexto(GLuint width, GLuint height, Shader * sact)
 
 TTexto::~TTexto()
 {
-
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteTextures(1, &texture);
 }
 
 void TTexto::CargarFuente(std::string font, GLuint fontSize)
 {
     // Primero limpiar los caracteres cargados previamente
-    this->Characters.clear();
+    Characters.clear();
     // Inicializar la libreria freetype
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) //Si ocurre un error (!= 0)
@@ -53,7 +55,6 @@ void TTexto::CargarFuente(std::string font, GLuint fontSize)
             continue;
         }
         // Generar textura
-        GLuint texture;
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
         glTexImage2D(GL_TEXTURE_2D,0,GL_RED,face->glyph->bitmap.width,face->glyph->bitmap.rows,0,GL_RED,GL_UNSIGNED_BYTE,face->glyph->bitmap.buffer);
@@ -162,4 +163,14 @@ void TTexto::beginDraw()
 void TTexto::endDraw()
 {
 
+}
+
+void TTexto::CambiarAnchura(unsigned int anchuraNueva)
+{
+    endx = anchuraNueva+x;
+}
+
+void TTexto::CambiarColor(float r, float g, float b)
+{
+    color = glm::vec3(r, g, b);
 }

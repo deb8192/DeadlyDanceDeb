@@ -4,7 +4,11 @@ Bailaora::Bailaora(Sala* sala,unsigned short tipoJug,int nX,int nY,int nZ,int an
 : Jugador(sala,tipoJug,nX,nY,nZ,ancho,largo,alto,accion,maxVida)
 {
     // TO DO: cambiar por las suyas
-    _modelo = "assets/models/rockero.b3d";
+    #ifdef WEMOTOR
+        _modelo = "assets/models/rockero/rockero_rigging_000001.obj";
+    #else
+        _modelo = "assets/models/rockero.b3d";
+    #endif
 }
 
 Bailaora::~Bailaora()

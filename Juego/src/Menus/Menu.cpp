@@ -61,6 +61,7 @@ void Menu::ManejarEventos()
     if (_motor->OcurreEvento(GUI_ID_EMPEZAR_BUTTON))//cambiamos de estado porque han pulsado boton jugar
     {
         borrarEscenaResetearEvento(GUI_ID_EMPEZAR_BUTTON);// reseteamos el evento
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         jugar();
     }
 
@@ -76,6 +77,13 @@ void Menu::ManejarEventos()
         creditos();
     }
 
+    if (_motor->OcurreEvento(GUI_ID_CONTINUARPARTIDA_BUTTON))
+    {
+        borrarEscenaResetearEvento(GUI_ID_CONTINUARPARTIDA_BUTTON);
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
+        continuarPartida();
+    }
+
     if (_motor->OcurreEvento(GUI_ID_SALIR_BUTTON))
     {
         borrarEscenaResetearEvento(GUI_ID_SALIR_BUTTON);
@@ -88,10 +96,11 @@ void Menu::pintarBotones()
     _motor->CrearImagen("assets/images/logo1.png",230,25,1.0f);
     _motor->CrearImagen("assets/images/logo2.png",700,500,1.0f);
     _motor->CrearImagen("assets/images/logo3.png",20,460,1.0f);
-    _motor->CrearBoton(300,200,500,230, GUI_ID_EMPEZAR_BUTTON, L"Iniciar Juego", L"Empieza a jugar");
-    _motor->CrearBoton(300,240,500,270, GUI_ID_CONFIGURACION_BUTTON, L"Configuracion", L"Configuracion del juego");
-    _motor->CrearBoton(300,280,500,310, GUI_ID_CREDITOS_BUTTON, L"Creditos", L"Creditos del juego");
-    _motor->CrearBoton(300,320,500,350, GUI_ID_SALIR_BUTTON, L"Salir del juego", L"Sale del juego");
+    _motor->CrearBoton(300,200,500,230, GUI_ID_EMPEZAR_BUTTON, L"Iniciar Partida", L"Iniciar Partida");//te da la opcion de empezar una nueva partida
+    _motor->CrearBoton(300,240,500,270, GUI_ID_CONTINUARPARTIDA_BUTTON, L"Continuar Partida", L"Continuar Partida");//te da la opcion de cargar una partida 
+    _motor->CrearBoton(300,280,500,310, GUI_ID_CONFIGURACION_BUTTON, L"Configuracion", L"Configuracion");
+    _motor->CrearBoton(300,320,500,350, GUI_ID_CREDITOS_BUTTON, L"Creditos", L"Creditos");
+    _motor->CrearBoton(300,360,500,390, GUI_ID_SALIR_BUTTON, L"Salir al Escritorio", L"Salir");
 }
 
 void Menu::borrarEscenaResetearEvento(short id)
@@ -104,9 +113,10 @@ void Menu::borrarEscenaResetearEvento(short id)
 
 void Menu::jugar()
 {
+
     _motora->getEvent("Menu")->stop(); //Detener musica Menu
-    Juego::GetInstance()->estado.CambioEstadoJugar();
-    _motor->AsignarCargando(_motor->CrearImagen("assets/images/cargando.png",540,330,1.0f));
+    Juego::GetInstance()->estado.CambioEstadoIniciarPartida();
+    //_motor->AsignarCargando(_motor->CrearImagen("assets/images/cargando.png",540,330,1.0f));
 }
 
 void Menu::configuracion()
@@ -208,4 +218,14 @@ void Menu::calcularColor()
             gm = true;
         }
     }*/
+}
+
+void Menu::continuar()
+{
+
+}
+
+void Menu::continuarPartida()
+{
+    Juego::GetInstance()->estado.CambioEstadoContinuarPartida(); 
 }

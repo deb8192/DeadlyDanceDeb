@@ -1,6 +1,7 @@
 #include "TPlano.hpp"
+#include "Gestor.hpp"
 
-TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale, Shader * sact, GLuint ww, GLuint wh)
+TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale, Shader * sact, GLuint ww, GLuint wh, const char * rutapulsado , const char * rutaencima )
 {
     winwidth = ww;
     winheight = wh;
@@ -13,15 +14,43 @@ TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale
     shader->Use();
     bool recurso = CargarTextura(archivo);
     id = -1;
+    esEncima = false;
+    esPulsable = false;
     if(recurso)
     {
         CargarMalla(pixx,pixy,escaladox,escaladoy);
+    }
+
+    //ahora vamos a cargar las imagenes que seran los recursos de pulsado y encima
+    if(rutapulsado != nullptr)
+    {
+        CargarTextura(rutapulsado,2);
+    }
+
+    if(rutaencima != nullptr)
+    {
+        CargarTextura(rutaencima,3);
     }
 }
 
 TPlano::~TPlano()
 {
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    //glDeleteTextures(1, &textureID);
+    
+    /*if(esPulsable)
+    {
+        glDeleteTextures(1, &textureIDPulsado);
+    }
 
+    if(esEncima)
+    {
+        glDeleteTextures(1, &textureIDEncima);
+    }*/
+
+    //std::cout << "borrado de tplano " << std::endl;
 }
 
 // sobrecarga metodos TEntidad
@@ -39,7 +68,7 @@ void TPlano::beginDraw()
     // Aplicar Textura
     glActiveTexture(GL_TEXTURE0);
     shader->setInt("texture1", 0);
-    glBindTexture(GL_TEXTURE_2D, textureID);
+    glBindTexture(GL_TEXTURE_2D, estado);
 
     // dibujar triangulo
     glBindVertexArray(VAO);
@@ -51,38 +80,111 @@ void TPlano::beginDraw()
     glEnable(GL_CULL_FACE);
 }
 
-bool TPlano::CargarTextura(const char * _ruta)
+bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
 {
+    Gestor * gestor = Gestor::GetInstance(); // recuperamos el gestor
     //Crear textura
-    glGenTextures(1, &textureID);
-
-    //Cargar y generar textura
-    stbi_set_flip_vertically_on_load(true);  // le dices a stb_image.h que gire la textura cargada en el y-axis
-    unsigned char *data = stbi_load(_ruta, &width, &height, &nrComponents, 0);
-    if (data)
+    
+    if(mode == 1)//normal
     {
-        //Enlazar textura
-        glBindTexture(GL_TEXTURE_2D, textureID);
+        if(gestor->TieneTextura(_ruta))
+        {
+            textureID = gestor->GetTexturaId(_ruta);
+        }
+        else
+        {
+            glGenTextures(1, &textureID);
+        }
 
-        //Parametros de la textura
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);   //glTexParameteri(tipo_de_textura,opcion_y_eje,modo_de_ajuste)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        estado = textureID;
+    }
 
-        //Filtrado y escalado de texturas (GL_NEAREST:mas pixelado, mejor para minimizar/ GL_LINEAR:mas suave y borroso, mejor para aumentar)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);       //Filtrado al minimizar
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);       //Filtrado al aumentar
+    if(mode == 2)//pulsado
+    {
+        if(gestor->TieneTextura(_ruta))
+        {
+            textureIDPulsado = gestor->GetTexturaId(_ruta);
+        }
+        else
+        {
+            glGenTextures(1, &textureIDPulsado);
+        }
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
+        esPulsable = true;
+    }
 
-        stbi_image_free(data);
+    if(mode == 3)//encima
+    {
+        if(gestor->TieneTextura(_ruta))
+        {
+            textureIDEncima = gestor->GetTexturaId(_ruta);
+        }
+        else
+        {
+            glGenTextures(1, &textureIDEncima);
+        }
+
+        esEncima = true;
+    }
+    
+    if(gestor->TieneTextura(_ruta))
+    {
+        //si tiene textura ya cargada
+        gestor->CopiarParametrosImagen(_ruta,&height,&width,&nrComponents);
     }
     else
     {
-        std::cout << "Fallo al cargar la textura: " << _ruta << std::endl;
-        stbi_image_free(data);
-        return false;
+        //no tiene textura en opengl
+
+        //Cargar y generar textura
+        stbi_set_flip_vertically_on_load(true);  // le dices a stb_image.h que gire la textura cargada en el y-axis
+        unsigned char * data = gestor->CargarImagen(_ruta,&height,&width, &nrComponents);//esto hay que ponerlo en la zona de recursos
+
+
+        if (data)
+        {
+            //Enlazar textura
+            if(mode == 1)//normal
+            {
+                glBindTexture(GL_TEXTURE_2D, textureID);
+                gestor->VincularTexturaImagen(_ruta,textureID);
+            }
+
+            if(mode == 2)//pulsado
+            {
+                glBindTexture(GL_TEXTURE_2D, textureIDPulsado);
+                gestor->VincularTexturaImagen(_ruta,textureIDPulsado);
+            }
+
+            if(mode == 3)//encima
+            {
+                glBindTexture(GL_TEXTURE_2D, textureIDEncima);
+                gestor->VincularTexturaImagen(_ruta,textureIDEncima);
+            }
+            
+            //Parametros de la textura
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);   //glTexParameteri(tipo_de_textura,opcion_y_eje,modo_de_ajuste)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+            //Filtrado y escalado de texturas (GL_NEAREST:mas pixelado, mejor para minimizar/ GL_LINEAR:mas suave y borroso, mejor para aumentar)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);       //Filtrado al minimizar
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);       //Filtrado al aumentar
+
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            gestor->DestruirDatosImagen(_ruta);
+            data = nullptr;
+        }
+        else
+        {
+            data = nullptr;
+            gestor = nullptr;
+            return false;
+        } 
     }
+    
+    gestor = nullptr;
     return true;
 }
 
@@ -233,8 +335,18 @@ bool TPlano::botonPulsado(double * mouse)
     // cout << pixy << endl;
     // cout << pixy+(height * escalado) << endl;
     //Si el raton esta en rango
-    if(mouse[0] > pixx && mouse[0] < pixx+(width * escaladox) && mouse[1] > pixy && mouse[1] < pixy+(height * escaladoy))
-        return true;
+    float widthmedio = (width * escaladox)/2;
+    float heightmedio = (height * escaladoy)/2;
+    float pixxmedio = pixx+widthmedio;
+    float pixymedio = pixy+heightmedio;
+
+    if((pixxmedio+widthmedio+10 >= mouse[0] && pixx-10 <= mouse[0]) && (pixymedio+heightmedio >= mouse[1] && pixymedio-heightmedio <= mouse[1]))
+    {
+        return true; //desde punto medio
+    }
+
+    //if(mouse[0] > pixx && mouse[0] < pixx+(width * escaladox) && mouse[1] > pixy && mouse[1] < pixy+(height * escaladoy))
+        //return true;
 
     return false;
 }
@@ -242,4 +354,31 @@ bool TPlano::botonPulsado(double * mouse)
 int TPlano::getID()
 {
     return id;
+}
+
+bool TPlano::GetEsPulsable()
+{
+    return esPulsable;
+}
+
+bool TPlano::GetEsEncima()
+{
+    return esEncima;
+}
+
+void TPlano::CambiarEstado(unsigned int newEstado)
+{
+    if(newEstado == 3 && esEncima)
+    {
+        //std::cout << "esta encima" << std::endl;
+        estado = textureIDEncima;
+        return;
+    }
+    if(newEstado == 2 && esPulsable)
+    {
+        estado = textureIDPulsado;
+        return;
+    }
+
+    estado = textureID;//cualquier otro estado
 }

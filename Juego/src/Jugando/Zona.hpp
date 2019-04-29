@@ -21,13 +21,9 @@ class Zona
         Zona(int anc, int lar, int alt, const char* tip);
         ~Zona();
 
-        void annadirElemento(); //Annade un elemento, ya sea un cofre que se pone, un murcielago que entra a una zona oscura...
-        void quitarElemento(); //Elimina un elemento, ya sea un cofre que se pone, un murcielago que entra a una zona oscura...
-        
         //set atributos
         void setPosiciones(float newx,float newy,float newz);
         void setProposito(bool p);
-        void setTotalElementos(unsigned short elementos);
 
         //ID de la zona
         void setID(int newid);
@@ -41,8 +37,6 @@ class Zona
         float getAlto();
         float getLargo();
         bool  getProposito();
-        unsigned short getTotalElementos();
-        unsigned short getElementosActuales();
         short getTipo();
         void Render();
         Sala* GetSala();
@@ -53,7 +47,8 @@ class Zona
         {  
             Z_CHEST = 0,
             Z_DARK,
-            Z_HIDE
+            Z_HIDE,
+            Z_RESPAWN
         };
 
     private:
@@ -64,8 +59,6 @@ class Zona
         PosicionesZonas posicionActual;        //Strunct que contiene la posicion de la zona
         float ancho, largo, alto;   //Dimensione de las zonaa
         int id;                     //ID de la zona
-        unsigned short totalElementos;      //Total de elementos que puede albergar la zona
-        unsigned short elementosActuales;   //Elementos (cofres, murcielagos) que contienen actualmente la zona
         bool proposito = false; //Esto se pone true si la zona ha cumplido su proposito (como zona de cofres con un cofre)
 };
 

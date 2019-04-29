@@ -11,7 +11,7 @@ class Guardian : public Enemigo
         ~Guardian();
         Guardian(float nX, float nY, float nZ, int maxVida, int disfraz);
         void RunIA();
-        void UpdateGuardian(short *i, int* _jug, std::vector<Zona*> &_getZonas);
+        void UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &_getZonasEscondite);
         void SetNuevasOrdenes(short i);
         void SetNuevosObjetivos(short i);
 
@@ -20,7 +20,7 @@ class Guardian : public Enemigo
         short int* _ordenes;
         short int direccion;
         std::stack<VectorEspacial> puertasAtravesadas;
-        Zona* zonaElegida;
+        ZonaEscondite* zonaElegida;
 };
 
 #endif

@@ -1,6 +1,11 @@
 #ifndef Ventana_HPP
 #define Ventana_HPP
 
+#include <iostream>
+#include <glad/glad.h>
+#include <glfw3.h>
+#include <glm.hpp>
+
 class Ventana
 {
     public:
@@ -17,7 +22,8 @@ class Ventana
         void UpdateSize(short unsigned int w, short unsigned int h);//cambia tamayo de la ventana
         bool EstaPulsada(short);//comprueba si la tecla esta pulsada
         bool EstaLiberado(short);//comprueba si la tecla no esta pulsada
-        bool MouseEstaPulsado(short);//comprueba que este pulsado alguna tecla o que se mueve
+        bool MouseEstaPulsado(short);//comprueba que este pulsado alguna tecla del raton o que se mueve
+        bool MouseEstaLibre(short);//comprueba que este pulsado alguna tecla del raton o que se mueve
         //void PortaPapeles();
         //devolver tamanyos de la ventana
         short unsigned int getWidth();

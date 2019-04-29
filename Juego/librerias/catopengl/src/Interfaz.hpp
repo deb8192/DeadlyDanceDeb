@@ -1,5 +1,3 @@
-#include "CatOpengl.hpp"
-
 #include <vector>
 #include <iostream>
 
@@ -12,7 +10,12 @@
 #include "TPlano.hpp"
 #include "TTexto.hpp"
 #include "TBillboard.hpp"
+#include "TParticle.hpp"
 #include "Shader.hpp"
+#include "Ventana.hpp"
+#include "Gestor.hpp"
+
+#define maxNodos 65534 //maximo de nodos
 
 class Interfaz
 {
@@ -28,13 +31,15 @@ class Interfaz
 
         unsigned short AddLuz(int);//creamos una luz
 
-        unsigned short AddMalla(const char *,int initf);//creamos una malla
+        unsigned short AddMalla(const char *,int initf,int shader);//creamos una malla
 
-        unsigned short AddImagen(const char *, unsigned int, unsigned int, float );//creamos una imagen en plano
+        unsigned short AddImagen(const char *, unsigned int, unsigned int, float , const char * rutapulsado = nullptr, const char * rutaencima = nullptr );//creamos una imagen en plano
 
         unsigned short AddTexto(std::string, GLuint); //Crear un texto
 
         unsigned short AddBoard(float ,float ,float ,float, float, const char *,float); //Crear un billboard (world x, world y, world z, local x, local y, ruta imagen/texto, prioridad)
+
+        unsigned short AddParticles(float ,float ,float,unsigned int, float, float, const char *); //Crear sistema de particulas
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
@@ -65,6 +70,8 @@ class Interfaz
         bool IsKeyDown(short);//se le pasa la tecla que quiere comprobar, esto va a la ventana y le pregunta si esta pulsada
 
         bool IsMouseClick(short);// comprobaciones de los botones del raton
+
+        bool IsMouseUp(short);//comprueba si se ha liberado el boton
 
         void ChangeTargetCamara(unsigned short id, float x, float y, float z);//cambia donde apunta la camara
 
@@ -98,11 +105,17 @@ class Interfaz
 
         void SetTexture(unsigned short did, const char * _ruta); //Le asigna una texura a una malla
 
+        void SetTransparencia(unsigned short did, float transp); //Se pone transparente la malla
+
         void RemoveObjectForID(signed int idPerson);//borra por el id personalizado = si el id es -1 no funciona este metodo
 
         void DefinirIdPersonalizado(unsigned short did, signed int idPerson);//le asigna el id personalizado
 
         void DefinirTextoBoton(unsigned short imagen,unsigned short texto);//le asigna a un boton(imagen), el texto
+
+        void DetenerSistema(unsigned short part); //Detener sistema de particulas
+
+        void IniciarSistema(unsigned short part); //Iniciar sistema de particulas
 
         void DistanciaLuz(unsigned short luz, float d); //Aplica una distancia a la luz
 
@@ -111,6 +124,7 @@ class Interfaz
         void ColorDifusa(unsigned short luz, float r,float g,float b);
         void ColorSpecular(unsigned short luz, float r,float g,float b);
 
+        //define el bucle de la animacion
         void setBucle(unsigned short,bool);
 
         //cercania y lejania de la camara
@@ -120,15 +134,30 @@ class Interfaz
         //para saber si esta liberado
         bool IsKeyRelease(short);
 
-    private:
+        //cambia propiedades de los textos
+        void AnchoTexto(unsigned short,unsigned int);//cambia ancho del texto
+        void CambiarColorTexto(unsigned int did,float r, float g, float b);//cambia el color del texto
 
-        bool  banco_ids [65535];
+        //cambiar estado imagen o boton
+        void CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado);//estado sobretodo para botones
+        void CambiarPosicionImagen(unsigned int event, float x, float y);//mueve la imagen a la posicion que le digas
+
+        //para activar y desactivar captura de texto, tambien sirve para saber que ha capturado
+        void ActivarCapturaTexto();// habilita que el texto que se ponga se capture hasta un maximo de 30 digitos
+        void DesactivarCapturaTexto();// deshabilita que el texto se capture
+        void InicializarCapturaTexto(const char * texto);//inicializa el texto del capturador con lo que le pases
+        char * DevolverTextoCapturado();//devuelve el texto que hay en el capturador
+        void BorrarUltimaLetra();//borra la ultima letra del capturador
+
+
+
+    private:
 
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
-        CatOpengl::Video::Ventana * window;
+        Ventana * window;// instancia que contiene la clase que se encarga de gestionar las ventanas y las teclas / raton
 
-        Shader * shaders[5];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[7];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 
@@ -166,7 +195,7 @@ class Interfaz
             int idPersonalizado;//sirve para identificar el id por el id
         };
 
-        std::vector<Nodo *> nodos;//almacena los nodos
+        Nodo * banco[maxNodos];//contiene los punteros a los nodos del arbol
 
         std::vector<Nodo *> camaras;//registro de camaras
 
@@ -178,9 +207,9 @@ class Interfaz
 
         std::vector<Nodo *> boards;//registro de billboards en interfaz
 
-        CatOpengl::Gestor * gestorDeRecursos;
+        std::vector<Nodo *> particles; //registro de sistemas de particulas en interfaz
 
-        Nodo * buscarNodo(unsigned short);
+        Gestor * gestorDeRecursos;//clase que gestona los recursos del motor
 
         Nodo * buscarNodo2(unsigned short);
 
@@ -193,8 +222,6 @@ class Interfaz
         void ventanaLimpiar();
 
         float x,y,z;
-
-        void eliminarID(unsigned short x);
 
         unsigned int cualborrar;
 

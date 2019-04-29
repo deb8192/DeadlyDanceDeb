@@ -2,7 +2,7 @@
 #define Times_HPP
 
 #include <ctime>//nos sirve para saber los tiempos de ejecucion
-//#include <iostream>
+#include <iostream>
 
     class Times
     {
@@ -31,7 +31,7 @@
             float GetUpdateFrame();         //devuelve el tiempo de dibujado del frame
             //float getDrawingTime();   devuelve la cantidad de frames/seg
             void SetFrames(int,int,int);//primer valor frames maximos, segundo  valor ejecucios de la ia por frame maximo numero de frames
-            
+            unsigned int GetFramesPorSegundo();//obtiene el recuento de los frames por segundo
         private:
             //clase singleton 
             Times();
@@ -51,6 +51,7 @@
             bool pasado;
             float tiempo_pasado;//tiempo pasado desde la ultima comprobacion
             unsigned tiempoInicio, tiempoInicio2, tiempoInicio3, tiempoFinal;
+            unsigned int fps_actuales,fps_pasados;//fps segundo
     };
 
 #endif

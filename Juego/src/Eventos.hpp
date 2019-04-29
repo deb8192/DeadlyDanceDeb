@@ -27,6 +27,7 @@ namespace idsEventos
         KEY_H,          // SUBIR VIDA
         KEY_Z,          // --------------- POR AHORA NADA
         KEY_Q,          // ATAQUE ESPECIAL
+        KEY_DEL,        //boton de borrado 
         RMOUSE_DOWN,    // ATAQUE ESPECIAL
         LMOUSE_DOWN,    // ATAQUE NORMAL
         RMOUSE_UP,      //
@@ -36,18 +37,25 @@ namespace idsEventos
         LMOUSE_PRESSED_DOWN,    //
         
 
-        // Botones
+        // Botones Menu
         GUI_ID_EMPEZAR_BUTTON = 101,
         GUI_ID_SALIR_BUTTON,
         GUI_ID_CREDITOS_BUTTON,
         GUI_ID_SUBIR_SONIDO,
         GUI_ID_CONFIGURACION_BUTTON,
+        GUI_ID_CONTINUARPARTIDA_BUTTON,
+        GUI_ID_SLOT1,
+        GUI_ID_SLOT2,
+        GUI_ID_SLOT3,
+        GUI_ID_CAMPONOMBRE,
+        GUI_ID_ATRAS,
         
         GUI_ID_ATRAS_BUTTON,
         GUI_ID_REINICIAR_HANOI,
         GUI_ID_MENU_BUTTON,
         GUI_ID_REINICIAR_BUTTON,
         GUI_ID_CONTINUAR,
+        GUI_ID_SIGUIENTENIVEL_BUTTON,
 
         // IDs para cosas de Puzzles en MotorGrafico
         GUI_ID_ATRAS_PUZ,

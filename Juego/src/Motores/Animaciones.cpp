@@ -20,7 +20,7 @@ Animaciones::Animaciones()
         {
             if( _animaciones[i] != nullptr)
             {
-                delete _animaciones[i];
+                delete[] _animaciones[i];
             }
         }
         delete [] _animaciones;
