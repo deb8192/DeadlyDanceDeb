@@ -28,6 +28,7 @@ class TParticle : public TEntidad
         GLfloat colocarZ = 0;          //pone los sprites delante
         GLfloat output = 0;            //espacio de aparicion de particulas
         GLfloat life_particles = 1.0f; //Tiempo de vida de las particulas
+        bool stop = false;             //parar sistema
 
         //Funciones privadas
         void GeneradordeParticulas(const char * _ruta); //Crea las particulas
@@ -40,6 +41,9 @@ class TParticle : public TEntidad
         // Constructor y destructor
         TParticle(float, float, float, unsigned int, float, float, const char *, Shader *);
         ~TParticle();
+
+        void stopParticles();
+        void startParticles();
 
         //sobrecarga metodos TEntidad
         void beginDraw();

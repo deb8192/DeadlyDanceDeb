@@ -113,6 +113,10 @@ class Interfaz
 
         void DefinirTextoBoton(unsigned short imagen,unsigned short texto);//le asigna a un boton(imagen), el texto
 
+        void DetenerSistema(unsigned short part); //Detener sistema de particulas
+
+        void IniciarSistema(unsigned short part); //Iniciar sistema de particulas
+
         void DistanciaLuz(unsigned short luz, float d); //Aplica una distancia a la luz
 
         //Colores de luz

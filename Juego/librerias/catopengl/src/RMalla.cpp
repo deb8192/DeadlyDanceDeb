@@ -351,7 +351,7 @@ unsigned int RMalla::TextureFromFile(const char * path)
         //generamos un id nuevo
         glGenTextures(1, &textureID);
     }
-    
+
 
 
     int width, height, nrComponents;
@@ -366,8 +366,8 @@ unsigned int RMalla::TextureFromFile(const char * path)
     {
         //std::cout << "No existe la textura -> " << path << "\n";
         //no tiene textura en gestor
-        unsigned char * data = gestor->CargarImagen(path, &width, &height, &nrComponents);
-        
+        unsigned char * data = gestor->CargarImagen(path, &height, &width, &nrComponents);
+
         if (data)
         {
             GLenum format;
@@ -386,7 +386,7 @@ unsigned int RMalla::TextureFromFile(const char * path)
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            
+
             data = nullptr;
 
             //le decimos que el id de la textura en opengl pertenece a esta imagen cargada (path)
@@ -402,7 +402,7 @@ unsigned int RMalla::TextureFromFile(const char * path)
             //stbi_image_free(data);
         }
     }
-    
+
     gestor = nullptr;
 
     return textureID;

@@ -168,7 +168,7 @@ void TParticle::UpdateParticulas(float deltaT, GLuint newParticles)
     for (GLuint i = 0; i < newParticles; ++i)
     {
         int unusedParticle = ParticulaNoUsada();
-        RespawnParticulas(particles[unusedParticle]);
+        if(stop == false)RespawnParticulas(particles[unusedParticle]);
     }
     //Actualizar todas las particulas
     for (GLuint i = 0; i < max_particles; ++i)
@@ -314,4 +314,14 @@ void TParticle::beginDraw()
 void TParticle::endDraw()
 {
 
+}
+
+void TParticle::stopParticles()
+{
+    stop = true;
+}
+
+void TParticle::startParticles()
+{
+    stop = false;
 }

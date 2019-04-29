@@ -1206,6 +1206,44 @@ void Interfaz::DefinirTextoBoton(unsigned short imagen,unsigned short texto)
     }
 }
 
+void Interfaz::DetenerSistema(unsigned short part)
+{
+    if(part != 0)
+    {
+        Nodo * nodo = buscarNodo2(part);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TParticle*>(tnodo->GetEntidad())->stopParticles();
+                }
+            }
+        }
+    }
+}
+
+void Interfaz::IniciarSistema(unsigned short part)
+{
+    if(part != 0)
+    {
+        Nodo * nodo = buscarNodo2(part);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TParticle*>(tnodo->GetEntidad())->startParticles();
+                }
+            }
+        }
+    }
+}
+
 void Interfaz::DistanciaLuz(unsigned short luz, float d)
 {
     if(luz != 0)
