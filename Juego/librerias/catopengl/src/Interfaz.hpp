@@ -12,6 +12,7 @@
 #include "TPlano.hpp"
 #include "TTexto.hpp"
 #include "TBillboard.hpp"
+#include "TParticle.hpp"
 #include "Shader.hpp"
 
 #define maxNodos 65534 //maximo de nodos
@@ -37,6 +38,8 @@ class Interfaz
         unsigned short AddTexto(std::string, GLuint); //Crear un texto
 
         unsigned short AddBoard(float ,float ,float ,float, float, const char *,float); //Crear un billboard (world x, world y, world z, local x, local y, ruta imagen/texto, prioridad)
+
+        unsigned short AddParticles(float ,float ,float,unsigned int, float, float, const char *); //Crear sistema de particulas
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
@@ -150,7 +153,7 @@ class Interfaz
 
         CatOpengl::Video::Ventana * window;
 
-        Shader * shaders[6];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[7];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 
@@ -199,6 +202,8 @@ class Interfaz
         std::vector<Nodo *> textos;//registro de imagenes en interfaz
 
         std::vector<Nodo *> boards;//registro de billboards en interfaz
+
+        std::vector<Nodo *> particles; //registro de sistemas de particulas en interfaz
 
         CatOpengl::Gestor * gestorDeRecursos;
 
