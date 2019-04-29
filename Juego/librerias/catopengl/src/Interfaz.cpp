@@ -8,6 +8,7 @@ Interfaz::Interfaz()
     imagenes.reserve(20);//20 imagenes de interfaz
     textos.reserve(20);//20 imagenes de textos
     boards.reserve(30); //30 billboards
+    particles.reserve(20); //20 sistemas de particulas
     gestorDeRecursos = Gestor::GetInstance();//obtenemos la instancia de la interfaz
     ventana_inicializada = true;//se pone para que entra a inicializar por defecto
     window = nullptr;//se pone para saber que no esta inicializada
@@ -79,6 +80,7 @@ unsigned short Interfaz::AddCamara()
         camaraEn->SetShader(shaders[4]);
         camaraEn->SetShader2(shaders[3]);
         camaraEn->SetShader3(shaders[5]);
+        camaraEn->SetShader4(shaders[6]);
         camara->setEntidad(camaraEn);
 
         escalado->addHijo(rotacion);
@@ -402,6 +404,59 @@ unsigned short Interfaz::AddBoard(float x, float y, float z, float movx, float m
     return 0;
 }
 
+unsigned short Interfaz::AddParticles(float vx,float vy,float vz,unsigned int num,float tam,float life,const char * _sprite)
+{
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
+    TNodo * traslacion = new TNodo;
+    TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
+    traslacion->setEntidad(traslacionEnt);
+
+    TNodo * rotacion = new TNodo;
+    TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0);
+    rotacion->setEntidad(rotacionEnt);
+
+    TNodo * escalado = new TNodo;
+    TTransform * escaladoEnt = new TTransform;
+    escaladoEnt->escalar(1,1,1);
+    escalado->setEntidad(escaladoEnt);
+
+    escaladoEnt->EsGui();
+    escaladoEnt->NoEjecutar();
+
+    TNodo * particle = new TNodo;
+    TParticle * particleEn = new TParticle(vx,vy,vz,num,tam,life,_sprite,shaders[6]);
+    particle->setEntidad(particleEn);
+
+    escalado->addHijo(rotacion);
+    rotacion->addHijo(traslacion);
+    traslacion->addHijo(particle);
+
+    if(_raiz != nullptr)
+    {
+        _raiz->addHijo(escalado);
+
+        unsigned short idnuevo = generarId();
+
+        Nodo * nodo = new Nodo();
+        nodo->id = idnuevo;//se pone el id
+        nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodo->tipo = 5;
+        nodo->activo = true;
+        banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
+        particles.push_back(nodo);//se agrega a la lista de particulas
+
+        return idnuevo;
+    }
+
+    return 0;
+}
 
 void Interfaz::Draw()
 {
@@ -440,6 +495,14 @@ void Interfaz::Draw()
             //esto seria lo ultimo vamos a las model
 
             _raiz->draw(0);
+
+            for(unsigned int i = 0; i < particles.size(); i++)
+            {
+                if(particles[i] != nullptr && particles[i]->recurso != nullptr && particles[i]->activo)
+                {
+                    particles[i]->recurso->draw(1);
+                }
+            }
 
             for(unsigned int i = 0; i < boards.size(); i++)
             {
@@ -555,6 +618,7 @@ void Interfaz::ventanaInicializar()
     shaders[3] = new Shader("assets/shaders/shaderboardsvs.glsl","assets/shaders/shaderboardsfs.glsl");
     shaders[4] = new Shader("assets/shaders/shadertoonvs.glsl","assets/shaders/shadertoonfs.glsl");
     shaders[5] = new Shader("assets/shaders/shadernolucesvs.glsl","assets/shaders/shadernolucesfs.glsl");
+    shaders[6] = new Shader("assets/shaders/shaderparticlevs.glsl","assets/shaders/shaderparticlefs.glsl");
 }
 
 void Interfaz::ventanaLimpiar()

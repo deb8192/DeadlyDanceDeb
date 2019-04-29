@@ -37,12 +37,15 @@ class TEntidad
         void SetShader(Shader *);
         void SetShader2(Shader *);
         void SetShader3(Shader *);
+        void SetShader4(Shader *);
         Shader * GetShader();
         Shader * GetShader2();
         Shader * GetShader3();
+        Shader * GetShader4();
         void RemoveShader();
         void RemoveShader2();
         void RemoveShader3();
+        void RemoveShader4();
         void TimeEngine();
 
         float getTime();
@@ -70,6 +73,7 @@ class TEntidad
         Shader * shader = nullptr;//puntero a shader
         Shader * shader2 = nullptr;//puntero a shader
         Shader * shader3 = nullptr;//puntero a shader
+        Shader * shader4 = nullptr;//puntero a shader
         float deltaTime = 0.0f;	// Tiempo entre el actual frame y el ultimo
         float lastFrame = 0.0f; // Tiempo del ultimo frame
 };
