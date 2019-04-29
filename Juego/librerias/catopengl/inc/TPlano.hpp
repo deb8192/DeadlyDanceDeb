@@ -2,6 +2,7 @@
 #define TPlano_HPP
 
 #include "TEntidad.hpp"
+//#include "Gestor.hpp"
 
 class TPlano : public TEntidad
 {

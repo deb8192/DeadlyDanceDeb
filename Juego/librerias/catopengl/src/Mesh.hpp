@@ -26,7 +26,7 @@ struct Vertex {
 struct Texture {
     unsigned int id;        //ID
     std::string type;       //Tipo (difusa,especular)
-    std::string path;       //Ruta de textura
+    const char * path;       //Ruta de textura
 };
 
 class Mesh

@@ -1,4 +1,4 @@
-#include "CatOpengl.hpp"//cuidado aqui se pone asi para no tener que poner la ruta ya va incluida en el programa de compilacion (make)
+#include "Ventana.hpp"
 
 unsigned int Ventana::numTecla = 0;
 

@@ -28,7 +28,7 @@ TNodo::~TNodo()
             }
         }
 
-        hijos.resize(0);
+        hijos.clear();
     }  
 
     padre = nullptr;
@@ -220,13 +220,22 @@ void TNodo::BorrarGui()
         {
             if(hijos[i] != nullptr)//comprobamos que no sea nulo para borrarlo si lo es se borra su posicion
             {
-                if(hijos[i]->GetEntidad()->GetGui() && (!hijos[i]->GetEntidad()->GetCamara()))
+                if(hijos[i]->GetEntidad())
                 {
-                    //no es gui por lo que borramos
-                    delete hijos[i];
-                    hijos.erase(hijos.begin()+i); 
-                    i--;
+                    if(hijos[i]->GetEntidad()->GetGui() && (!hijos[i]->GetEntidad()->GetCamara()))
+                    {
+                        //es gui por lo que borramos
+                        delete hijos[i];
+                        hijos.erase(hijos.begin()+i); 
+                        i--;
+                    }
                 }
+                else
+                {
+                    hijos.erase(hijos.begin()+i); 
+                    i--;                   
+                }
+                
             }
         }      
     }

@@ -9,7 +9,10 @@ TTransform::TTransform()
 
 TTransform::~TTransform()
 {
-
+    if(matriz)
+    {
+        delete matriz;
+    }
 }
 
 void TTransform::identidad()

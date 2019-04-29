@@ -1,4 +1,5 @@
 #include "RMalla.hpp"
+#include "Gestor.hpp"
 
 RMalla::RMalla(int f)
 {
@@ -55,7 +56,7 @@ bool RMalla::CargarAnimacion(const char * _ruta)
         for(unsigned int i=1; i <= objetos; i++)
         {
             if(i > 1 && text_cargada == false)text_cargada = true;
-            cout << "Objeto " << i << ": " << endl;
+            //cout << "Objeto " << i << ": " << endl;
 
             //Crear el string del numero de frames
             std::stringstream ss;
@@ -107,10 +108,10 @@ bool RMalla::CargarMalla(std::string _ruta)
     // procesar recursivamente los nodos
     processNode(scene->mRootNode, scene);
 
-    for(unsigned int i=0; i < meshes.size(); i++)
+    /*for(unsigned int i=0; i < meshes.size(); i++)
     {
         cout << " |- Malla " << i << ": " << meshes.at(i) << endl;
-    }
+    }*/
 
     mallas = meshes.size();
     frames.push_back(meshes); //Guardar frame de animacion
@@ -194,7 +195,7 @@ Mesh * RMalla::processMesh(aiMesh *mesh, const aiScene *scene)
         bool skip = false;
         for(unsigned int j = 0; j < textures_loaded.size(); j++)
         {
-            if(textures_loaded.at(j).path == "default_texture")
+            if(strcmp(textures_loaded.at(j).path,"default_texture") == 0)
             {
                 textures.push_back(textures_loaded.at(j));
                 skip = true; //Si la texgtura ya ha se ha creado no volverla a crearla
@@ -207,9 +208,12 @@ Mesh * RMalla::processMesh(aiMesh *mesh, const aiScene *scene)
             unsigned char g = 255;
             unsigned char b = 50;
             unsigned char a = 255;
-            std::cout << " texturecolor: (" << (float)r << " , " << (float)g << " , " << (float)b << " , " << (float)a << ")" << std::endl;
+            //std::cout << " texturecolor: (" << (float)r << " , " << (float)g << " , " << (float)b << " , " << (float)a << ")" << std::endl;
             //textura no cargada
             unsigned int textureID;
+
+            //AQUI SE PUEDE CREAR UN MODO EN EL GESTOR PARA GUARDAR UNA TEXTURA DE COLORES SOLIDOS DE MOMENTO NO SE PONE PORQUE LOS DATOS ESTAN EN EL COMPILADO, son parte del programa inicial
+
             glGenTextures(1, &textureID);
 
             int width=1, height=1;
@@ -247,7 +251,7 @@ Mesh * RMalla::processMesh(aiMesh *mesh, const aiScene *scene)
 
 void RMalla::SetColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
-    std::cout << " NUEVA::texturecolor: (" << (float)r << " , " << (float)g << " , " << (float)b << " , " << (float)a << ")" << std::endl;
+    //std::cout << " NUEVA::texturecolor: (" << (float)r << " , " << (float)g << " , " << (float)b << " , " << (float)a << ")" << std::endl;
 
     unsigned int textureID;
     glGenTextures(1, &textureID);
@@ -286,9 +290,9 @@ void RMalla::SetTexture(const char * _ruta)
 {
     if(_ruta != nullptr)
     {
-        std::string filename = std::string(_ruta);
+        //std::string filename = std::string(_ruta);
 
-        if(filename != " ")
+        if(strlen(_ruta) > 0)
         {
             Texture newtexture;
 
@@ -296,11 +300,11 @@ void RMalla::SetTexture(const char * _ruta)
             bool skip = false;
             for(unsigned int j = 0; j < textures_loaded.size(); j++)
             {
-                if(textures_loaded.at(j).path == filename.c_str())
+                if(strcmp(textures_loaded.at(j).path,_ruta) == 0)
                 {
                     newtexture = textures_loaded.at(j);
                     skip = true; //Si la texgtura ya ha se ha creado no volverla a crearla
-                    std::cout << " CARGADA::filename: " << filename << std::endl;
+                    //std::cout << " CARGADA::filename: " << filename << std::endl;
                     break;
                 }
             }
@@ -308,9 +312,9 @@ void RMalla::SetTexture(const char * _ruta)
             {
                 //No existe la textura
                 //Nueva textura
-                newtexture.id = TextureFromFile(filename.c_str());
+                newtexture.id = TextureFromFile(_ruta);
                 newtexture.type = "texture_diffuse";
-                newtexture.path = filename.c_str();
+                newtexture.path = _ruta;
 
                 //Guardar para la proxima carga
                 textures_loaded.push_back(newtexture);
@@ -328,42 +332,78 @@ void RMalla::SetTexture(const char * _ruta)
 }
 
 //Carga el fichero de textura
-unsigned int RMalla::TextureFromFile(const char *path)
+unsigned int RMalla::TextureFromFile(const char * path)
 {
-    std::string filename = std::string(path);
-    std::cout << " NUEVA::filename: " << filename << std::endl;
+    Gestor * gestor = Gestor::GetInstance();//instanciamos el gestor para poder crear la textura
+
+    //std::string filename = std::string(path);
+    //std::cout << " NUEVA::filename: " << filename << std::endl;
 
     unsigned int textureID;
-    glGenTextures(1, &textureID);
 
-    int width, height, nrComponents;
-    unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-    if (data)
+    if(gestor->TieneTextura(path))
     {
-        GLenum format;
-        if (nrComponents == 1)
-            format = GL_RED;
-        else if (nrComponents == 3)
-            format = GL_RGB;
-        else if (nrComponents == 4)
-            format = GL_RGBA;
-
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        stbi_image_free(data);
+        //obtenemos el id de la textura ya cargada en opengl
+        textureID = gestor->GetTexturaId(path);
     }
     else
     {
-        std::cout << "ERROR:: en la ruta de textura: " << path << std::endl;
-        stbi_image_free(data);
+        //generamos un id nuevo
+        glGenTextures(1, &textureID);
     }
+    
+
+
+    int width, height, nrComponents;
+
+    if(gestor->TieneTextura(path))
+    {
+        //std::cout << "Ya existe la textura -> " << path << "\n";
+        //tiene textura ya en memoria
+        gestor->CopiarParametrosImagen(path, &width, &height, &nrComponents);
+    }
+    else
+    {
+        //std::cout << "No existe la textura -> " << path << "\n";
+        //no tiene textura en gestor
+        unsigned char * data = gestor->CargarImagen(path, &width, &height, &nrComponents);
+        
+        if (data)
+        {
+            GLenum format;
+            if (nrComponents == 1)
+                format = GL_RED;
+            else if (nrComponents == 3)
+                format = GL_RGB;
+            else if (nrComponents == 4)
+                format = GL_RGBA;
+
+            glBindTexture(GL_TEXTURE_2D, textureID);
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            
+            data = nullptr;
+
+            //le decimos que el id de la textura en opengl pertenece a esta imagen cargada (path)
+            gestor->VincularTexturaImagen(path,textureID);
+            //liberamos los datos al cargar la imagen, no se liberan los datos de opengl para eso habria que llamar a DestruirDatosImagenOpengl, una vez ya la textura en memoria no sirve de nada tener los datos de la carga
+            gestor->DestruirDatosImagen(path);
+            //stbi_image_free(data);
+        }
+        else
+        {
+            std::cout << "ERROR:: en la ruta de textura: " << path << std::endl;
+            data = nullptr;
+            //stbi_image_free(data);
+        }
+    }
+    
+    gestor = nullptr;
 
     return textureID;
 }

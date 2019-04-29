@@ -9,7 +9,7 @@ Interfaz::Interfaz()
     textos.reserve(20);//20 imagenes de textos
     boards.reserve(30); //30 billboards
     particles.reserve(20); //20 sistemas de particulas
-    gestorDeRecursos = new CatOpengl::Gestor;
+    gestorDeRecursos = Gestor::GetInstance();//obtenemos la instancia de la interfaz
     ventana_inicializada = true;//se pone para que entra a inicializar por defecto
     window = nullptr;//se pone para saber que no esta inicializada
     x = 0.0f;
