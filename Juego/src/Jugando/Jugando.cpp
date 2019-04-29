@@ -359,6 +359,7 @@ void Jugando::ManejarEventos() {
 void Jugando::InteractuarNivel()
 {
     //lo siguiente es para saber que objeto colisiona con jugador
+    // TO DO: optimizar estas comprobaciones
     int rec_llave = _fisicas->collideLlave();
     int rec_col = _fisicas->collideColectableArma();
     short int_puerta = _fisicas->collidePuerta();
@@ -410,7 +411,6 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
-    Constantes constantes;
     bool colisionaWaypoint = false, waypointComun = false;
     _motor->clearDebug();
     short contadorWaypoints = 0, contadorEnemigos = 0, i = 0;
@@ -572,14 +572,6 @@ void Jugando::Update()
         short paredCol = _fisicas->collideAttackWall();
         if (paredCol >= 0)
         {
-            _motora->getEvent("RomperPared")->setPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
-            _motora->getEvent("RomperPared")->start();
-
-            /*//TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
-            //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
-            */
-           _motor->cambiarAnimacion(4,paredCol,1);//se cambia la animacion de la pared
-
             _paredes.at(paredCol)->Borrar(paredCol);
             _paredes.erase(_paredes.begin() + paredCol);
         }
@@ -800,7 +792,6 @@ void Jugando::Update()
 */
 void Jugando::UpdateIA()
 {
-    Constantes constantes;
     /* *********** Teclas para probar cosas *************** */
     // Bajar vida
     if (_motor->EstaPulsado(KEY_J))
@@ -828,7 +819,8 @@ void Jugando::UpdateIA()
     }
 
     //En esta parte muere enemigo
-    if(_enemigos.size() > 0){
+    if(_enemigos.size() > 0)
+    {
         //comprobando los _enemigos para saber si estan muertos
         for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
             if(_enemigos[i] != nullptr)
@@ -839,14 +831,21 @@ void Jugando::UpdateIA()
                     int x = _enemigos[i]->getX();
                     int y = _enemigos[i]->getY();
                     int z = _enemigos[i]->getZ();
+                    unsigned short tipoEnemigo = _enemigos[i]->GetTipoEnemigo();
 
-                    if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A ||
-                        _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
+                    if( tipoEnemigo == constantes.GUARDIAN_A ||
+                        tipoEnemigo == constantes.GUARDIAN_B)
                     {
                         CrearObjeto(x,y,z,2,2,2,constantes.LLAVE,0);
                     }
-                    // TO DO: anyadir cofre aranya
-                    // else if (_enemigos[i]->GetTipoEnemigo() == constantes.ARANA)
+                    else if (tipoEnemigo == constantes.ARANA)
+                    {
+                        AbrirCofre(x,y,z,true);
+                    }
+                    else if (tipoEnemigo == constantes.BOSS)
+                    {
+                        Juego::GetInstance()->estado.CambioEstadoGanar();
+                    }
                     else
                     {
                         unsigned short tipoObj = NumeroAleatorio(constantes.ORO,constantes.ENERGIA);
@@ -882,9 +881,6 @@ void Jugando::UpdateIA()
             }
         }
     }
-
-    // Para cuando se mate al boss
-    //Juego::GetInstance()->estado.CambioEstadoGanar();
 }
 
 void Jugando::Render()
@@ -1126,9 +1122,8 @@ void Jugando::Reanudar()
     {
         if (ganarPuzzle)
         {
-            // TO DO: Crear objeto chulo
             _cofreP->DesactivarCofre();
-            AbrirCofre(_cofreP);
+            AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),true);
             _cofreP = nullptr;
         }
         else
@@ -1626,8 +1621,13 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
         }
         else
         {
+            //Se abre el cofre (Animacion)
+            _cofreP->setNewRotacion(_cofreP->getRX(), _cofreP->getRY(),
+                _cofreP->getRZ() + 80.0);
+            _cofreP->accionar();
+
             _cofreP->DesactivarCofre();
-            AbrirCofre(_cofreP);
+            AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),false);
             _cofreP = nullptr;
         }
     }
@@ -1969,30 +1969,39 @@ void Jugando::AbrirPantallaPuzzle()
     Juego::GetInstance()->estado.CambioEstadoPuzle((int*)cargPuzzles.GetPuzzle(2));
 }
 
-void Jugando::AbrirCofre(Cofre* _inter)
+void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
 {
-    //Se abre el cofre (Animacion)
-    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(),
-    _inter->getRZ() + 80.0);
-    _inter->accionar();
+    unsigned short objeto = 0;
+    unsigned short minArpa = 15;
+    unsigned short minGuitar = 22;
+    unsigned short minFlauta = 13;
 
-    //Crear objeto aleatorio (GUITARRA, ARPA, ORO)
-    float x = _inter->getX() + 5;
-    float y = _inter->getY();
-    float z = _inter->getZ();
+    // El cofre suelta armas normales y oro, la arana suelta armas mas fuertes
+    if (esArana)
+    {
+        objeto = NumeroAleatorio(constantes.ARPA,constantes.ULTIMA_ARMA);
+        minArpa = 22;
+        minGuitar = 31;
+        minFlauta = 25;
+    }
+    else
+    {
+        objeto = NumeroAleatorio(constantes.ARPA,constantes.ORO);
+        x = x + 5;
+    }
 
-    switch (NumeroAleatorio(constantes.ARPA,constantes.ORO))
+    switch (objeto)
     {
         case 7: // ARPA
-            CrearObjeto(x,y,z,2,2,2,constantes.ARPA,NumeroAleatorio(15,25));
+            CrearObjeto(x,y,z,2,2,2,constantes.ARPA,NumeroAleatorio(minArpa,25));
             break;
 
         case 8: // GUITARRA
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(24,34));
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(minGuitar,32));
             break;
 
         case 9: // FLAUTA
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(18,28));
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(minFlauta,23));
             break;
 
         default: // ORO

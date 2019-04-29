@@ -119,6 +119,7 @@ typedef struct
     const unsigned short ARPA = 7;
     const unsigned short GUITARRA = 8;
     const unsigned short FLAUTA = 9;
+    const unsigned short ULTIMA_ARMA = FLAUTA;
 
     const unsigned short ORO = 10;
     const unsigned short VIDA = 11;
