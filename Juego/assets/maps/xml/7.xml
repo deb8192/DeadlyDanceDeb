@@ -65,7 +65,7 @@
 	<!--luz X="0" Z="0" Y="10"-->
 
 	<!--Sala-01--><Platform Type="1" accion="0" ancho="72" largo="72" alto="4" RP="0" X="48" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
-	<!--Decoracion-conjunto-Paredes--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/DecoracionParedes.obj"></Object>
+	<!--Decoracion-conjunto-Paredes--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/DecoracionParedes.obj"></Object>
 	<!--Decoracion-cueva-roca--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Roca.png" Model="assets/models/Escenario/DecoracionRoca.obj"></Object>
 	<!--Decoracion-antorchas--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/DecoracionNivel.png" Model="assets/models/Escenario/DecoracionItems.obj"></Object>
 	<!--Decoracion-rio-lava--><Object tipoObj="18" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="-35" X="100" Y="-8" Z="200" despX="0" despZ="0" Texture="assets/texture/lava.png" Model="assets/models/Escenario/RioLava.obj"></Object>
