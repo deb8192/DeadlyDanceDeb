@@ -342,7 +342,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     }
                     else if(strcmp(finalDecorador, constantes.RANDOM) == 0)
                     {
-                        finBucle.push_back(1);
+                        finBucle.push_back(constantes.UNO);
                         contadorRandom = rand() % 5 + 1;
                     }
                     else
@@ -529,6 +529,16 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 {
                     arrayTareaObjetivo[0] = 16;
                 }
+                else if(strcmp(accion, constantes.ATAQUE_ESPECIAL) == 0)
+                {
+                    arrayTareaObjetivo[0] = 17;
+
+                }
+                else if(strcmp(accion, constantes.MOVERSE) == 0)
+                {
+                    arrayTareaObjetivo[0] = 18;
+                }
+                
 
                 //Objetivo
                 const char* objetivo = hoja->GetObjetivo();
@@ -587,6 +597,22 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 else if(strcmp(objetivo, constantes.NO_ACCIONADO) == 0)
                 {
                     arrayTareaObjetivo[1] = 13;
+                }
+                else if(strcmp(accion, constantes.MAX_VIDA_33) == 0)
+                {
+                    arrayTareaObjetivo[1] = 14;
+                }
+                else if(strcmp(accion, constantes.AT_ESP_UNO) == 0)
+                {
+                    arrayTareaObjetivo[1] = 15;
+                }
+                else if(strcmp(accion, constantes.AT_ESP_DOS) == 0)
+                {
+                    arrayTareaObjetivo[1] = 16;
+                }
+                else if(strcmp(accion, constantes.ATAQUE_ESPECIAL) == 0)
+                {
+                    arrayTareaObjetivo[1] = 17;
                 }
                 else
                 {

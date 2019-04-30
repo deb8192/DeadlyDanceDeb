@@ -64,7 +64,7 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
 {
     Jugador* _jugador = (Jugador*)_jug;
     funciona = true;
-    if(modo == MODO_ATAQUE && _ordenes != nullptr)
+    if(modo == MODO_PELIGRO && _ordenes != nullptr)
     {
         switch (_ordenes[0])
         {
@@ -105,113 +105,99 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
     {
         switch (_ordenes[0])
         {
-            case EN_VER: //El Pollo ve al jugador
+            case EN_COMPROBAR: //Comprueba distintas condiciones del enemigo como su vida
                 {
-                    if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
+                    switch (_ordenes[1])
                     {
-                        this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
-                        if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
+                        case EN_MAX_VIDA_33:
+                            {
+                                int porcentaje_33 = this->getVidaIni() * constantes.CIEN / constantes.MAX_VIDA_BOSS_PELIGRO;
+                                if(this->getVida() <= porcentaje_33)
+                                {
+                                    funciona = true;
+                                }
+                                else {funciona = false;}
+                            }
+                            break;
+                        case EN_NORMAL:
+                            if(this->GetModo() == MODO_DEFAULT)
+                            {
+                                funciona = true;
+                            }
+                            else {funciona = false;}
+                            break;
+                        case EN_PELIGRO:
+                            if(this->GetModo() == MODO_PELIGRO)
+                            {
+                                funciona = true;
+                            }
+                            else {funciona = false;}
+                            break;
+                        case EN_ATAQUE_ESPECIAL:
+                            if(this->getBarraAtEs() == constantes.CIEN)
+                            {
+                                funciona = true;
+                            }
+                            else {funciona = false;}
+                            break;
+                        default:
+                            funciona = false;
+                            break;
+                    }
+                }
+                break;
+            case EN_CAMBIAR:    //Cambia el modo del boss
+                switch (_ordenes[1])
+                {
+                    case EN_PELIGRO:
+                            this->SetModo(MODO_PELIGRO);
+                        break;
+                
+                    default:
+                            this->SetModo(MODO_DEFAULT);
+                        break;
+                }
+            case EN_ATAQUE_ESPECIAL:    //El boss realiza uno de sus ataques especiales
+                switch (_ordenes[1])
+                {
+                    case EN_AT_ESP_2:
+                        setRespawnBoss(true);
+                        /* Llamar animacion pedir ayuda */
+                        break;
+                
+                    default:
+                        /* ataque especial 1 */
+                        break;
+                }
+            case EN_ATACAR: //El boss ataca
+                {
+                    if(!atacado)
+                    {
+                        int danyo;
+                        danyo = this->Atacar(*i);
+
+                        if(danyo > 0)
                         {
+                            _jugador->ModificarVida(-danyo);
                             funciona = true;
+                            atacado = true;
                         }
                         else
                         {
                             funciona = false;
                         }
                     }
-                    else
-                    {
-                        funciona = false;
-                    }
                 }
                 break;
-
-                case EN_PIDE_AYUDA: //El Pollo pide ayuda
+            case EN_MOVERSE: //El boss se mueve tanteando al jugador
                 {
-                    modo = MODO_ATAQUE;
-                    this->setTimeMerodear(constantes.CERO);
-                    //cout<<"Pide ayuda a los aliados"<<endl;
-                    this->PedirAyuda(ayuda);
                     funciona = true;
                 }
                 break;
-
-                case EN_OIR: //El Pollo oye un enemigo pedir ayuda
+            case EN_DEFENDERSE: //El boss se defiende
                 {
-                    if(this->oir(constantes.DOS))
-                    {
-                        funciona = true;
-                    }
-                    else
-                    {
-                        funciona = false;
-                    }
-                }
-                break;
-
-                case EN_ACUDE_AYUDA: //El Pollo oye un enemigo pedir ayuda
-                {
-                    this->ContestarAyuda();
-                }
-                break;
-
-            case EN_MERODEA: //El Pollo merodea
-                {
-                    this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
-                    if(!hecho)
-                    {
-                        //Merodea estableciendo un nuevo angulo de rotacion
-                        this->setRotation(this->randomBinomial() * maxRotacion);
-                        this->Merodear();
-                        this->setTimeMerodear(1.5f);
-                        hecho = true;
-                        //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
-                        {
-                            if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
-                            {
-                                modo = MODO_ATAQUE;
-                                this->setTimeMerodear(constantes.CERO);
-                                //cout<<"Pide ayuda a los aliados"<<endl;
-                                this->PedirAyuda(ayuda);
-                                funciona = true;
-                            }
-                        }
-                        else if(this->oir(constantes.DOS))
-                        {
-                            this->ContestarAyuda();
-                        }
-                    }
-                    else
-                    {
-                        //Merodea poniendo en positivo o negativo el angulo actual de rotacion
-                        int rota = rand() % 3 - 1;
-                        if (rota != 0)
-                        {
-                            rotation *= rota;
-                        }
-                        this->Merodear();
-                        //Comprueba si ve al jugador para atacarle en caso necesario
-                        if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
-                        {
-                            if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
-                            {
-                                modo = MODO_ATAQUE;
-                                this->setTimeMerodear(constantes.CERO);
-                                //cout<<"Pide ayuda a los aliados"<<endl;
-                                this->PedirAyuda(ayuda);
-                                funciona = true;
-                            }
-                        }
-                        else if(this->oir(constantes.DOS))
-                        {
-                            this->ContestarAyuda();
-                        }
-                    }
                     funciona = true;
                 }
-                break;
-
             default:
                 break;
         }

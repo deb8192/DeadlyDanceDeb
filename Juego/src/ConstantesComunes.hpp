@@ -25,6 +25,7 @@ typedef struct
     const short DIECIOCHO = 18;
     const short CIEN = 100;
     const short TIEMPO_RESPAWN = 30;
+    const int MAX_VIDA_BOSS_PELIGRO = 33;
     const float DEG_TO_RAD = 0.0174532925199432957f;
     const float RAD_TO_DEG = 57.295779513082320876f;
 
@@ -48,11 +49,6 @@ typedef struct
     const char* DECORADOR = "Decorator";
     const char* HOJA = "Leaf";
     const char* PIZARRA = "Blackboard";
-    const char* LEE = "lee";
-    const char* ESCRIBE = "escribe";
-    const char* VERDADERO = "true";
-    const char* FALSO = "false";
-    const char* RANDOM = "random";
 
     //Comparadores de la lectura de las acciones de las tareas
     const char* PERSIGUE = "persigue";
@@ -60,6 +56,7 @@ typedef struct
     const char* VER = "ve";
     const char* PIDE_AYUDA = "pide-ayuda";
     const char* MERODEA = "merodea";
+    const char* MOVERSE = "moverse";
     const char* OIR = "oye";
     const char* BUSCAR = "busca";
     const char* CURARSE = "curarse";
@@ -72,6 +69,12 @@ typedef struct
     const char* CAMBIA = "cambia";
     const char* ESTA = "esta";
     const char* DEBE = "debe";
+    const char* LEE = "lee";
+    const char* ESCRIBE = "escribe";
+    const char* VERDADERO = "true";
+    const char* FALSO = "false";
+    const char* RANDOM = "random";
+    const char* ATAQUE_ESPECIAL = "ataque-especial";
 
 
     //Comparadores de la lectura de los objetivos de las tareas
@@ -89,6 +92,9 @@ typedef struct
     const char* ESCONDITE = "escondite";
     const char* ACCIONADO = "accionado";
     const char* NO_ACCIONADO = "no-accionado";
+    const char* MAX_VIDA_33 = "max-vida=33";
+    const char* AT_ESP_UNO = "1";
+    const char* AT_ESP_DOS = "2";
 
     /**************************** String & char cargado mapas ************************/
     // String de los tipos de zonas

@@ -174,7 +174,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             MODO_HUIDA,
             MODO_AUXILIAR_ALIADO,
             MODO_BUSCAR_ESCONDITE,
-            MODO_OCULTACION
+            MODO_OCULTACION,
+            MODO_PELIGRO
         };
 
     protected:
@@ -203,6 +204,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool comprobarDistanciaFlocking();
         //fin comportamientos bases
 
+        void setRespawnBoss(bool creaEnemigos);
         ZonaOscura* getZonaOscuraMasCercana(vector <ZonaOscura*> &zonasOscuras, ZonaOscura*);
         ZonaEscondite* getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zonasEscondite, ZonaEscondite*);
         //Comparadores de la lectura de las acciones y objetivos de las tareas
@@ -224,7 +226,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_CAMBIAR,
             EN_DEBE,
             EN_ESTA,
-            EN_NO_OIR
+            EN_NO_OIR,
+            EN_MOVERSE,
+            EN_ATAQUE_ESPECIAL
         };
 
         enum objetivosEnemigo
@@ -237,14 +241,15 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_ATAQUE,
             EN_OCULTACION,
             EN_ESCONDITE,
-            EN_CAMBIAR_ESTADO,
             EN_PUERTA,
             EN_MECANISMO,
             EN_COFRE,
             EN_ULTIMA_PUERTA,
             EN_ACCIONADO,
             EN_NO_ACCIONADO,
-            EN_PALANCA,
+            EN_AT_ESP_1,
+            EN_AT_ESP_2,
+            EN_MAX_VIDA_33
         };
 
         Sala* _estoy;//sala en la que esta el enemigo
@@ -267,6 +272,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int distanciaMaximaCohesionBandada; //Distancia maxima de las bandadas con su centro con flocking
 
         bool pedirAyuda;
+        bool respawnBoss;
         bool contestar;
         bool defensa; //TO DO EXPANDIRLO AL JUGADOR cuando recibe danyo recibe la mitad si esta a true
         INnpc::VectorEspacial posicionComunBandada; //PUnto de cohesion de las bandadas

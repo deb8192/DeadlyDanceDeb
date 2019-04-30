@@ -1,214 +1,438 @@
 <Level><!--- Esto nos indica que estamos definiendo un nivel -->
 
 	<!-- Para reservar memoria en los vectores --> 	<!-- TO DO: Poner todos los numeros a Walls -->
-	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="5" Levers="6" Chests="16" Waypoints="70" Zones="21"></MaxNumberOf>
+	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="6" Levers="6" Chests="16" Waypoints="70" Zones="21"></MaxNumberOf>
 	<!-- Tenemos 36/50 enemigos -->
 
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
 	<Light Type="Ambiental" Intensity="50" Attenuation="0" Color="Red" RP="0" X="0" Y="10" Z="0"> </Light>
 
+	<!--Sala-01--><Platform Type="1" accion="0" ancho="72" largo="72" alto="4" RP="0" X="48" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
+	<!--Decoracion-conjunto-Paredes--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/DecoracionParedes.obj"></Object>
+	<!--Decoracion-cueva-roca--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Roca.png" Model="assets/models/Escenario/DecoracionRoca.obj"></Object>
+	<!--Decoracion-antorchas--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/DecoracionNivel.png" Model="assets/models/Escenario/DecoracionItems.obj"></Object>
+	<!--Decoracion-rio-lava--><Object tipoObj="18" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="-35" X="100" Y="-8" Z="200" despX="0" despZ="0" Texture="assets/texture/lava.png" Model="assets/models/Escenario/RioLava.obj"></Object>
+	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
+	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="48" Y="0" Z="48" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
+	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="48" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
+	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="48" Y="0" Z="-48" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
+	<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="96" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
+	<!--Palanca--><Object tipoObj="0" Type="1" codigo="8" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="101" Y="0" Z="-11" despX="0" despZ="0" Texture="assets/texture/platform1.png" Model=""></Object>
+	<!--Base--><Object tipoObj="16" Type="1" accion="1" ancho="3" largo="2" alto="5" X="101" Y="0" Z="-11" Texture="assets/texture/platform1.png" Model="assets/models/Base.obj"></Object>
+	<!--Puerta--><Object tipoObj="3" Type="1" codigo="8" accion="3" ancho="1" largo="4" alto="10" RP="90" X="122" Y="0" Z="8" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
+	<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="1" ancho="4" largo="4" alto="2" X="48" Y="0" Z="0" conexiones="2,4"></Waypoint>
+	<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="2" ancho="4" largo="4" alto="2" X="-26" Y="0" Z="0" conexiones="1,3"></Waypoint>
+	<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="4" ancho="4" largo="4" alto="2" X="122" Y="0" Z="12" conexiones="1,5"></Waypoint>
+	<!--Guardian--><Enemy Type="1" enemigo="3" accion="0" ancho="2" largo="2" alto="3" X="15" Y="0" Z="5" Texture="" Model=""></Enemy>
+	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="-4" Y="0" Z="16"></Zone>
+	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="100" Y="0" Z="16"></Zone>
+	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="-4" Y="0" Z="-16"></Zone>
+	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="100" Y="0" Z="-16"></Zone>
+	<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="52" Y="0" Z="32"></Zone>
+	<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="52" Y="0" Z="-32"></Zone>
+	<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="100" Y="0" Z="0"></Zone>
+	<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="-4" Y="0" Z="0"></Zone>
 
-	<!--Sala-01--><Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="0" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
-	<!--Decoracion-cavernas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/RocaCaverna.png" Model="assets/models/Escenario/DecoracionCavernas.obj"></Object>
-	<!--Decoracion-detalles-rocas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/DecoracionDetallesRocas.obj"></Object>
-	<!--Decoracion-laberinto--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/greengrass.png" Model="assets/models/Escenario/DecoracionLaberinto.obj"></Object>
-	<!--Decoracion-Contrucciones-Piedra--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/Escenario/DecoracionPiedraMarmol.obj"></Object>
-	<!--Decoracion-Arboles-Tipo1--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/ArbolBonito.png" Model="assets/models/Escenario/ArbolBonito.obj"></Object>
-	<!--Decoracion-Arboles-Tipo2--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/pino1.png" Model="assets/models/Escenario/ArbolPinoUno.obj"></Object>
-	<!--Decoracion-Arboles-Tipo3--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/pino2.png" Model="assets/models/Escenario/ArbolPinoDos.obj"></Object>
-	<!--Decoracion-Cristal-Luz--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/icetextures.png" Model="assets/models/Escenario/Cristales.obj"></Object>
-	<!--Decoracion-Puente-Colgante--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/cartoonwood.png" Model="assets/models/Escenario/PuenteColganteMadera.obj"></Object>
-	<!--Decoracion-Puente-estacas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Palos.png" Model="assets/models/Escenario/PuenteColganteEstacas.obj"></Object>
-	<!-- SEMI-TRANSPARENCIA --><!--Decoracion-Laguna--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/dcatyft.png" Model="assets/models/Escenario/LagunaSubterranea.obj"></Object>
-	<!-- SEMI-TRANSPARENCIA --><!--Decoracion-Cascada-Animada--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/dcascada.png" Model="assets/models/Escenario/CascadaAnimada.obj"></Object>
-	<!-- TRANSPARENCIA PNG --><!--Decoracion-Vegetacion-Lianas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Lianas.png" Model="assets/models/Escenario/DecoracionLianas.obj"></Object>
-	<!-- TRANSPARENCIA PNG --><!--Decoracion-Pinturas-Rupestres--><Object tipoObj="17" Type="18" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/tribal.png" Model="assets/models/Escenario/DecoracionRupestre.obj"></Object>
-	<!-- TRANSPARENCIA PNG --><!--Decoracion-Alfombra-roja--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/carpet.png" Model="assets/models/Escenario/DecoracionAlfombra.obj"></Object>
-	
+		<!--Sala-00--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="-50" Y="0" Z="0" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+		<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="-26" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+		<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="-50" Y="0" Z="0"></Zone>
+		<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="2" ancho="4" largo="4" alto="2" X="-26" Y="0" Z="0" conexiones="1,3"></Waypoint>
+		<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="3" ancho="4" largo="4" alto="2" X="-50" Y="0" Z="0" conexiones="2"></Waypoint>
+		</Platform>
 
-		<!--Sala-02--><Platform Type="1" accion="0" ancho="59" largo="92" alto="4" RP="0" X="94" Y="0" Z="52" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
-		
-			<!--Sala-03--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="212" Y="0" Z="84" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
-				
-				<!--Sala-04--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="330" Y="0" Z="84" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 
-					<!--Sala-05--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="176" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+		<!--Sala-02--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="146" Y="0" Z="12" Texture="assets/texture/Puente.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+		<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="122" Y="0" Z="4" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+		<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="122" Y="0" Z="20" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+		<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="170" Y="0" Z="4" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+		<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="170" Y="0" Z="20" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+		<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="4" ancho="4" largo="4" alto="2" X="122" Y="0" Z="12" conexiones="1,5"></Waypoint>
+		<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="5" ancho="4" largo="4" alto="2" X="146" Y="0" Z="12" conexiones="4,6"></Waypoint>
+		<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="6" ancho="4" largo="4" alto="2" X="170" Y="0" Z="12" conexiones="5,7"></Waypoint>
+		<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="143" Y="0" Z="15" Texture="" Model=""></Enemy>
 
-						<!--Sala-06--><Platform Type="1" accion="0" ancho="12" largo="52" alto="4" RP="0" X="433" Y="0" Z="234" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
-						<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="433" Y="0" Z="208" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
-	 					<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="433" Y="0" Z="260" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+			<!--Sala-03--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="231" Y="0" Z="32" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+			<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="286" Y="0" Z="76" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+			<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="7" largo="2" alto="24" RP="90" X="175" Y="0" Z="76" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo2.obj"></Object>
+			<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="22" largo="2" alto="24" RP="90" X="205" Y="0" Z="76" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo3.obj"></Object>
+			<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="22" largo="2" alto="24" RP="90" X="259" Y="0" Z="76" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo3.obj"></Object>
+			<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="12" largo="2" alto="24" RP="90" X="278" Y="0" Z="52" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+			<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="264" Y="0" Z="62" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+			<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="277" Y="0" Z="65"></Zone>
+			<!--Llave--><Object tipoObj="1" Type="1" codigo="1" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="269" Y="0" Z="5" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
+			<!--Puerta2--><Object tipoObj="2" Type="1" codigo="1" accion="3" ancho="4" largo="1" alto="10" RP="90" X="228" Y="0" Z="76" despX="2" despZ="0" Texture="assets/texture/Puerta.png" Model=""></Object>
+			<!--Palanca--><Object tipoObj="0" Type="1" codigo="8" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="196" Y="0" Z="-8" despX="0" despZ="0" Texture="assets/texture/platform1.png" Model=""></Object>
+			<!--Base--><Object tipoObj="16" Type="1" accion="1" ancho="3" largo="2" alto="5" X="196" Y="0" Z="-8" Texture="assets/texture/platform1.png" Model="assets/models/Base.obj"></Object>
+			<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="6" ancho="4" largo="4" alto="2" X="170" Y="0" Z="12" conexiones="5,7"></Waypoint>
+			<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="7" ancho="4" largo="4" alto="2" X="231" Y="0" Z="32" conexiones="6,8"></Waypoint>
+			<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="8" ancho="4" largo="4" alto="2" X="232" Y="0" Z="76" conexiones="7,9"></Waypoint>
+			<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="202" Y="0" Z="48" Texture="" Model=""></Enemy>
+			<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="252" Y="0" Z="20" Texture="" Model=""></Enemy>
+			<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="-5" Y="0" Z="15"></Zone>
+			<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="190" Y="0" Z="32"></Zone>
+			<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="272" Y="0" Z="32"></Zone>
+			<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="231" Y="0" Z="68"></Zone>
+			<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="231" Y="0" Z="-4"></Zone>
+			
+				<!--Sala-04--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="231" Y="0" Z="124" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+				<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="26" alto="24" RP="0" X="198" Y="0" Z="104" despX="0" despZ="0" Texture="assets/texture/Paredes.png"  Model="assets/models/pared_destruible/BreakWallLarge_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+				<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="12" largo="2" alto="24" RP="90" X="184" Y="0" Z="128" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+				<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="8" ancho="4" largo="4" alto="2" X="232" Y="0" Z="76" conexiones="7,9"></Waypoint>
+				<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="9" ancho="4" largo="4" alto="2" X="231" Y="0" Z="124" conexiones="8,10,18"></Waypoint>
+				<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="10" ancho="4" largo="4" alto="2" X="292" Y="0" Z="90" conexiones="9,11"></Waypoint>
+				<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="18" ancho="4" largo="4" alto="2" X="230" Y="0" Z="172" conexiones="9,19"></Waypoint>
+				<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="2" largo="2" alto="10" X="254" Y="0" Z="142" Texture="" Model=""></Enemy>
+				<!--Zona-Oscura--><Zone Type="1" accion="0" tipo="zDark" elementos="4" ancho="20" largo="20" alto="5" X="236" Y="0" Z="128"></Zone>
+				<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="190" Y="0" Z="124"></Zone>
+				<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="272" Y="0" Z="124"></Zone>
+				<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="231" Y="0" Z="160"></Zone>
+				<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="231" Y="0" Z="88"></Zone>
+			
+					<!--Sala-05--><Platform Type="1" accion="0" ancho="26" largo="38" alto="4" RP="0" X="318" Y="0" Z="116" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+					<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="292" Y="0" Z="98" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+					<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="292" Y="0" Z="82" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+					<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="316" Y="0" Z="90" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+	 				<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="90" X="330" Y="0" Z="128" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+	 				<!--Puerta--><Object tipoObj="3" Type="1" codigo="0" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="292" Y="0" Z="86" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
+					<!--Llave--><Object tipoObj="1" Type="1" codigo="2" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="330" Y="0" Z="120" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
+					<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="10" ancho="4" largo="4" alto="2" X="292" Y="0" Z="90" conexiones="9,11"></Waypoint>
+					<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="11" ancho="4" largo="4" alto="2" X="318" Y="0" Z="116" conexiones="10,12"></Waypoint>
+					<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="12" ancho="4" largo="4" alto="2" X="344" Y="0" Z="142" conexiones="11,13"></Waypoint>
+					<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="1" largo="1" alto="10" X="330" Y="0" Z="95" Texture="" Model=""></Enemy>
+					<!--Zona-Oscura--><Zone Type="1" accion="0" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="330" Y="0" Z="118"></Zone>
+						<!--Sala-06--><Platform Type="1" accion="0" ancho="24" largo="24" alto="4" RP="0" X="366" Y="0" Z="130" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat1.obj" UserStar="False" StarX="0" StarY="0">
+						<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="344" Y="0" Z="150" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+						<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="16" alto="24" RP="0" X="344" Y="0" Z="122" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
+						<!--Puerta--><Object tipoObj="3" Type="1" codigo="2" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="344" Y="0" Z="138" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
+						<!--Llave--><Object tipoObj="1" Type="1" codigo="3" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="369" Y="0" Z="122" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
+						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="12" ancho="4" largo="4" alto="2" X="344" Y="0" Z="142" conexiones="11,13"></Waypoint>
+						<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="13" ancho="4" largo="4" alto="2" X="366" Y="0" Z="130" conexiones="12,14"></Waypoint>
+						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="14" ancho="4" largo="4" alto="2" X="366" Y="0" Z="156" conexiones="13,15"></Waypoint>
+						<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="356" Y="0" Z="122" Texture="" Model=""></Enemy>
 
-							<!--Sala-07--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="268" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
-								
-								<!--Sala-08--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="244" Y="0" Z="238" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+							<!--Sala-07--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="366" Y="0" Z="180" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+							<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="12" largo="2" alto="24" RP="90" X="366" Y="0" Z="156" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="14" ancho="4" largo="4" alto="2" X="366" Y="0" Z="156" conexiones="13,15"></Waypoint>
+							<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="15" ancho="4" largo="4" alto="2" X="366" Y="0" Z="180" conexiones="14,16"></Waypoint>
+							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="16" ancho="4" largo="4" alto="2" X="380" Y="0" Z="194" conexiones="15,17"></Waypoint>
+
+								<!--Sala-08--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="404" Y="0" Z="194" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+								<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="380" Y="0" Z="194" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+								<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="420" Y="0" Z="194"></Zone>
+								<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="16" ancho="4" largo="4" alto="2" X="380" Y="0" Z="194" conexiones="15,17"></Waypoint>
+								<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="17" ancho="4" largo="4" alto="2" X="404" Y="0" Z="194" conexiones="16"></Waypoint>
+								</Platform>
+
+							</Platform>
+
+						</Platform>
+
+					</Platform>
+
+					<!--Sala-09--><Platform Type="1" accion="0" ancho="35" largo="118" alto="4" RP="90" X="229" Y="0" Z="292" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+					<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="90" X="230" Y="0" Z="196" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+	 				<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="90" X="230" Y="0" Z="248" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+	 				<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="229" Y="0" Z="308" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat4.obj"></Object>
+	 				<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="229" Y="0" Z="376" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat4.obj"></Object>
+	 				<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="238" Y="0" Z="172" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+					<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="222" Y="0" Z="172" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+					<!--Puerta2--><Object tipoObj="2" Type="1" codigo="3" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="226" Y="0" Z="172" despX="2" despZ="0" Texture="assets/texture/Puerta.png" Model=""></Object>
+					<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="18" ancho="4" largo="4" alto="2" X="230" Y="0" Z="172" conexiones="9,19"></Waypoint>
+					<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="19" ancho="4" largo="4" alto="2" X="229" Y="0" Z="292" conexiones="18,20"></Waypoint>
+					<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="20" ancho="4" largo="4" alto="2" X="192" Y="0" Z="300" conexiones="19,21"></Waypoint>
+					<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="22" ancho="4" largo="4" alto="2" X="266" Y="0" Z="292" conexiones="19,23"></Waypoint>
+					<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="36" ancho="4" largo="4" alto="2" X="192" Y="0" Z="398" conexiones="19,37"></Waypoint>
+					<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="211" Y="0" Z="307" Texture="" Model=""></Enemy>
+					<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="250" Y="0" Z="362" Texture="" Model=""></Enemy>
+					<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="232" Y="0" Z="380" Texture="" Model=""></Enemy>
+					<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="1" largo="1" alto="10" X="211" Y="0" Z="358" Texture="" Model=""></Enemy>
+					<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="250" Y="0" Z="311" Texture="" Model=""></Enemy>
+					<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="232" Y="0" Z="330" Texture="" Model=""></Enemy>
+					<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="232" Y="0" Z="308"></Zone>
+					<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="232" Y="0" Z="370"></Zone>
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="249" Y="0" Z="392"></Zone>
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="209" Y="0" Z="392"></Zone>
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="249" Y="0" Z="342"></Zone>
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="209" Y="0" Z="342"></Zone>
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="249" Y="0" Z="292"></Zone>
+					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="209" Y="0" Z="292"></Zone>
+			
+
+						<!--Sala-10--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="182" Y="0" Z="300" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+						<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="26" alto="24" RP="0" X="192" Y="0" Z="300" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallLarge_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+						<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="180" Y="0" Z="290"></Zone>
+						<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="180" Y="0" Z="305"></Zone>
+						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="20" ancho="4" largo="4" alto="2" X="192" Y="0" Z="300" conexiones="19,21"></Waypoint>
+						<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="21" ancho="4" largo="4" alto="2" X="182" Y="0" Z="300" conexiones="20"></Waypoint>
+						</Platform>
+
+						<!--Sala-11--><Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="299" Y="0" Z="308" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
+						<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="7" alto="24" RP="0" X="266" Y="0" Z="281" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo2.obj"></Object>
+						<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="22" alto="24" RP="0" X="266" Y="0" Z="319" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo3.obj"></Object>
+						<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="284" Y="0" Z="322"></Zone>
+						<!--Puerta--><Object tipoObj="3" Type="1" codigo="0" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="266" Y="0" Z="288" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
+						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="22" ancho="4" largo="4" alto="2" X="266" Y="0" Z="292" conexiones="19,23"></Waypoint>
+						<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="23" ancho="4" largo="4" alto="2" X="299" Y="0" Z="308" conexiones="22,24"></Waypoint>
+						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="24" ancho="4" largo="4" alto="2" X="294" Y="0" Z="272" conexiones="23,25"></Waypoint>
+						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="26" ancho="4" largo="4" alto="2" X="336" Y="0" Z="330" conexiones="23,27"></Waypoint>
+
+							<!--Sala-12--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="294" Y="0" Z="262" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+							<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="26" largo="2" alto="24" RP="90" X="294" Y="0" Z="272" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallLarge_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+							<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="294" Y="0" Z="260"></Zone>
+							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="24" ancho="4" largo="4" alto="2" X="294" Y="0" Z="272" conexiones="23,25"></Waypoint>
+							<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="25" ancho="4" largo="4" alto="2" X="294" Y="0" Z="262" conexiones="24"></Waypoint>
+							</Platform>
+
+							<!--Sala-13--><Platform Type="1" accion="0" ancho="52" largo="12" alto="4" RP="0" X="386" Y="0" Z="330" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="336" Y="0" Z="338" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="336" Y="0" Z="322" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+							<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="360" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+	 						<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="412" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+	 						<!--Puerta--><Object tipoObj="3" Type="1" codigo="0" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="336" Y="0" Z="326" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
+							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="26" ancho="4" largo="4" alto="2" X="336" Y="0" Z="330" conexiones="23,27"></Waypoint>
+							<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="27" ancho="4" largo="4" alto="2" X="386" Y="0" Z="330" conexiones="26,28"></Waypoint>
+							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="28" ancho="4" largo="4" alto="2" X="426" Y="0" Z="344" conexiones="27,29"></Waypoint>
+
+								<!--Sala-14--><Platform Type="1" accion="0" ancho="24" largo="48" alto="4" RP="0" X="414" Y="0" Z="390" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+								<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="434" Y="0" Z="344" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+								<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="16" largo="2" alto="24" RP="90" X="406" Y="0" Z="344" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
+								<!--Llave--><Object tipoObj="1" Type="1" codigo="4" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="425" Y="0" Z="422" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
+								<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="414" Y="0" Z="366" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
+	 							<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="414" Y="0" Z="414" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat1.obj"></Object>
+	 							<!--Puerta2--><Object tipoObj="2" Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="422" Y="0" Z="344" despX="2" despZ="0" Texture="assets/texture/Puerta.png" Model=""></Object>
+								<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="28" ancho="4" largo="4" alto="2" X="426" Y="0" Z="344" conexiones="27,29"></Waypoint>
+								<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="29" ancho="4" largo="4" alto="2" X="414" Y="0" Z="390" conexiones="28,30"></Waypoint>
+								<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="30" ancho="4" largo="4" alto="2" X="388" Y="0" Z="414" conexiones="29,31"></Waypoint>
+								<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="3" X="422" Y="0" Z="366" Texture="" Model=""></Enemy>
+								<!--Murcielago--><Enemy Type="1" enemigo="1" accion="1" ancho="2" largo="2" alto="3" X="404" Y="0" Z="402" Texture="" Model=""></Enemy>
+								<!--Zona-Oscura--><Zone Type="1" accion="1" tipo="zDark" elementos="2" ancho="10" largo="10" alto="5" X="428" Y="0" Z="389"></Zone>
+								<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="400" Y="0" Z="420"></Zone>
+								<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="400" Y="0" Z="360"></Zone>
 									
-									<!--Sala-09--><Platform Type="1" accion="0" ancho="34" largo="35" alto="4" RP="90" X="151" Y="0" Z="249" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
-										
-										<!--Sala-10--><Platform Type="1" accion="0" ancho="12" largo="52" alto="4" RP="0" X="141" Y="0" Z="336" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
-										<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="141" Y="0" Z="310" despX="0" despZ="0" Texture="" Model=""></Object>
-	 									<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="141" Y="0" Z="362" despX="0" despZ="0" Texture="" Model=""></Object>
-											
-											<!--Sala-11--><Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="126" Y="0" Z="422" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
-												
-												<!--Sala-12--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="65" Y="0" Z="426" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
-												<!--Sala-12--></Platform>
-													
-												<!--Sala-13--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="220" Y="0" Z="434" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
-													
-													<!--Sala-14--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="211" Y="0" Z="506" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
-													<!--Sala-14--></Platform>
+									<!--Sala-15--><Platform Type="1" accion="0" ancho="24" largo="24" alto="4" RP="0" X="366" Y="0" Z="414" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat1.obj" UserStar="False" StarX="0" StarY="0">
+									<!-- AQUI VAN DOS PAREDES ROMPIBLES PEQUEÑAS 1 comentada para poder pasar-->
+									<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="388" Y="0" Z="402" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+									<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="388" Y="0" Z="426" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+									<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="353" Y="0" Z="412"></Zone>
+									<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="30" ancho="4" largo="4" alto="2" X="388" Y="0" Z="414" conexiones="29,31"></Waypoint>
+									<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="31" ancho="4" largo="4" alto="2" X="366" Y="0" Z="414" conexiones="30,32"></Waypoint>
+									<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="32" ancho="4" largo="4" alto="2" X="378" Y="0" Z="440"  conexiones="31,33"></Waypoint>
+									<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="34" ancho="4" largo="4" alto="2" X="354" Y="0" Z="388"  conexiones="31,35"></Waypoint>
 
-													<!--Sala-15--><Platform Type="1" accion="0" ancho="46" largo="59" alto="4" RP="90" X="325" Y="0" Z="479" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
-														
-														<!--Sala-16--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="397" Y="0" Z="482" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
-																
-															<!--Sala-17--><Platform Type="1" accion="0" ancho="34" largo="35" alto="4" RP="90" X="457" Y="0" Z="483" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
-															<!--Sala final boss -->
-															<!--Modelo-Suelo--><Object tipoObj="15" Type="18" accion="7" ancho="0" largo="0" alto="0" RP="90" X="457" Y="0" Z="483" despX="0" despZ="0" Texture="assets/texture/discofloor.png" Model="assets/models/Escenario/PistaDisco.obj"></Object>
-										
-																<!--Sala-18--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="503" Y="0" Z="482" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
-																<!--Sala oculta -->
-																<!--Sala-18--></Platform>
+										<!--Sala-16--><Platform Type="1" accion="0" ancho="24" largo="24" alto="4" RP="0" X="390" Y="0" Z="462" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat1.obj" UserStar="False" StarX="0" StarY="0">
+										<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="370" Y="0" Z="440" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+										<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="16" largo="2" alto="24" RP="90" X="398" Y="0" Z="440" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
+										<!--Puerta2--><Object tipoObj="2" Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="374" Y="0" Z="440" despX="2" despZ="0" Texture="assets/texture/Puerta.png" Model=""></Object>
+										<!--Palanca--><Object tipoObj="0" Type="1" codigo="5" nombre="palanca" accion="3" ancho="3" largo="1" alto="10" X="392" Y="0" Z="466" despX="0" despZ="0" Texture="assets/texture/platform1.png" Model=""></Object>
+										<!--Base--><Object tipoObj="16" Type="1" accion="1" ancho="3" largo="2" alto="5" X="392" Y="0" Z="466" Texture="assets/texture/platform1.png" Model="assets/models/Base.obj"></Object>
+										<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="32" ancho="4" largo="4" alto="2" X="378" Y="0" Z="440"  conexiones="31,33"></Waypoint>
+										<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="33" ancho="4" largo="4" alto="2" X="390" Y="0" Z="462" conexiones="32"></Waypoint>
+										</Platform>
 
-															<!--Sala-17--></Platform>
+										<!--Sala-17--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="340" Y="0" Z="378" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+										<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="346" Y="0" Z="388" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+										<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="362" Y="0" Z="388" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+										<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="16" largo="2" alto="24" RP="90" X="326" Y="0" Z="388" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
+										<!--Puerta2--><Object tipoObj="2" Type="1" codigo="5" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="350" Y="0" Z="388" despX="2" despZ="0" Texture="assets/texture/Puerta.png" Model=""></Object>
+										<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="337" Y="0" Z="375"></Zone>
+										<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="323" Y="0" Z="375"></Zone>
+										<!--Palanca--><Object tipoObj="0" Type="1" codigo="5" nombre="palanca" accion="3" ancho="3" largo="1" alto="10" X="360" Y="0" Z="370" despX="0" despZ="0" Texture="assets/texture/platform1.png" Model=""></Object>
+										<!--Base--><Object tipoObj="16" Type="1" accion="1" ancho="3" largo="2" alto="5" X="360" Y="0" Z="370" Texture="assets/texture/platform1.png" Model="assets/models/Base.obj"></Object>
+										<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="34" ancho="4" largo="4" alto="2" X="354" Y="0" Z="388"  conexiones="31,35"></Waypoint>
+										<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="35" ancho="4" largo="4" alto="2" X="340" Y="0" Z="378" conexiones="34"></Waypoint>
+										</Platform>
 
-														<!--Sala-16--></Platform>
+									</Platform>
 
-													<!--Sala-15--></Platform>
+								</Platform>
 
-												<!--Sala-13--></Platform>
+							</Platform>
 
-											<!--Sala-11--></Platform>
-											
-										<!--Sala-10--></Platform>
+						</Platform>
 
-									<!--Sala-09--></Platform>
-									
-								<!--Sala-08--></Platform>
+						<!--Sala-18--><Platform Type="1" accion="0" ancho="52" largo="12" alto="4" RP="0" X="142" Y="0" Z="398" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+						<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="192" Y="0" Z="406" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+						<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="192" Y="0" Z="390" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+						<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="168" Y="0" Z="398" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+	 					<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="116" Y="0" Z="398" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+	 					<!--Puerta--><Object tipoObj="3" Type="1" codigo="4" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="192" Y="0" Z="394" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
+						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="36" ancho="4" largo="4" alto="2" X="192" Y="0" Z="398" conexiones="19,37"></Waypoint>
+						<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="37" ancho="4" largo="4" alto="2" X="142" Y="0" Z="398" conexiones="36,38"></Waypoint>
+						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="38" ancho="4" largo="4" alto="2" X="102" Y="0" Z="384" conexiones="37,39"></Waypoint>
+						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="44" ancho="4" largo="4" alto="2" X="102" Y="0" Z="412" conexiones="37,45"></Waypoint>
+						
+							<!--Sala-19--><Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="125" Y="0" Z="352" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
+							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="110" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="94" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="22" largo="2" alto="24" RP="90" X="137" Y="0" Z="384" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo3.obj"></Object>
+							<!--Puerta2--><Object tipoObj="2" Type="1" codigo="0" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="98" Y="0" Z="384" despX="2" despZ="0" Texture="assets/texture/Puerta.png" Model=""></Object>
+							<!--Llave--><Object tipoObj="1" Type="1" codigo="6" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="146" Y="0" Z="339" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
+							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="38" ancho="4" largo="4" alto="2" X="102" Y="0" Z="384" conexiones="37,39"></Waypoint>
+							<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="39" ancho="4" largo="4" alto="2" X="125" Y="0" Z="352" conexiones="38,40"></Waypoint>
+							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="40" ancho="4" largo="4" alto="2" X="88" Y="0" Z="330" conexiones="39,41"></Waypoint>
+              <!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="142" Y="0" Z="348" Texture="" Model=""></Enemy>
+							<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="136" Y="0" Z="366" Texture="" Model=""></Enemy>
+							<!--Pollo--><Enemy Type="1" enemigo="0" accion="1" ancho="2" largo="2" alto="3" X="115" Y="0" Z="344" Texture="" Model=""></Enemy>
+							<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="100" Y="0" Z="332"></Zone>
+							<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="100" Y="0" Z="372"></Zone>
+							<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="150" Y="0" Z="332"></Zone>
+							<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="150" Y="0" Z="372"></Zone>
+					
+								<!--Sala-20--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="64" Y="0" Z="330" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+								<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="88" Y="0" Z="338" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+								<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="88" Y="0" Z="322" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+								<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="40" Y="0" Z="330" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+								<!--Palanca--><Object tipoObj="0" Type="1" codigo="7" nombre="palanca" accion="3" ancho="3" largo="1" alto="10" X="54" Y="0" Z="331" despX="0" despZ="0" Texture="assets/texture/platform1.png" Model=""></Object>
+								<!--Base--><Object tipoObj="16" Type="1" accion="1" ancho="3" largo="2" alto="5" X="54" Y="0" Z="331" Texture="assets/texture/platform1.png" Model="assets/models/Base.obj"></Object>
+								<!--Puerta--><Object tipoObj="3" Type="1" codigo="6" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="88" Y="0" Z="326" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
+								<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="40" ancho="4" largo="4" alto="2" X="88" Y="0" Z="330" conexiones="39,41"></Waypoint>
+								<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="41" ancho="4" largo="4" alto="2" X="64" Y="0" Z="330" conexiones="40,42"></Waypoint>
+								<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="42" ancho="4" largo="4" alto="2" X="40" Y="0" Z="330" conexiones="41,43"></Waypoint>
 
-							<!--Sala-07--></Platform>
+									<!--Sala-21--><Platform Type="1" accion="0" ancho="24" largo="24" alto="4" RP="0" X="14" Y="0" Z="342" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat1.obj" UserStar="False" StarX="0" StarY="0">
+									<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="1" Y="0" Z="333"></Zone>
+									<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="1" Y="0" Z="347"></Zone>
+									<!--Waypoint-acceso--><Waypoint tipoWaypoint="b" Type="1" compartido="1" accion="1" id="42" ancho="4" largo="4" alto="2" X="40" Y="0" Z="330" conexiones="41,43"></Waypoint>
+									<!--Waypoint-central--><Waypoint tipoWaypoint="a" Type="1" compartido="0" accion="1" id="43" ancho="4" largo="4" alto="2" X="14" Y="0" Z="342" conexiones="42"></Waypoint>
+									</Platform>
 
-						<!--Sala-06--></Platform>
+								</Platform>
 
-					<!--Sala-05--></Platform>
+							</Platform>
 
-				<!--Sala-04--></Platform>
+							<!--Sala-22--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="97" Y="0" Z="456" Texture="assets/texture/Suelo.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="4" largo="2" alto="24" RP="90" X="110" Y="0" Z="412" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="22" largo="2" alto="24" RP="90" X="137" Y="0" Z="412" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo3.obj"></Object>
+							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="16" largo="2" alto="24" RP="90" X="82" Y="0" Z="412" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
+							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="16" largo="2" alto="24" RP="90" X="50" Y="0" Z="412" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo4.obj"></Object>
+							<!--Puerta2--><Object tipoObj="2" Type="1" codigo="7" accion="3"  ancho="4" largo="1" alto="10" RP="90" X="98" Y="0" Z="412" despX="2" despZ="0" Texture="assets/texture/Puerta.png" Model=""></Object>
+							<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="85" Y="0" Z="470"></Zone>
+							<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="85" Y="0" Z="455"></Zone>
+							<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="106" Y="0" Z="470"></Zone>
+							<!--Zona-Cofre--><Zone Type="1" accion="1" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="106" Y="0" Z="455"></Zone>
+							<!--Palanca--><Object tipoObj="0" Type="1" codigo="7" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="146" Y="0" Z="423" despX="0" despZ="0" Texture="assets/texture/platform1.png" Model=""></Object>
+							<!--Base--><Object tipoObj="16" Type="1" accion="1" ancho="3" largo="2" alto="5" X="146" Y="0" Z="423" Texture="assets/texture/platform1.png" Model="assets/models/Base.obj"></Object>
+							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="158" Y="0" Z="482" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+							<!--Pared-Obstaculo--><Object tipoObj="13" Type="1" accion="1" ancho="2" largo="4" alto="24" RP="0" X="158" Y="0" Z="498" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/ParedObstaculo1.obj"></Object>
+							<!--Puerta--><Object tipoObj="3" Type="1" codigo="20" accion="3"  ancho="1" largo="4" alto="10" RP="90" X="158" Y="0" Z="486" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
+							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="1" id="44" ancho="4" largo="4" alto="2" X="102" Y="0" Z="412" conexiones="37,45"></Waypoint>
+							<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="1" id="45" ancho="4" largo="4" alto="2" X="97" Y="0" Z="456" conexiones="44,46"></Waypoint>
+							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="1" id="46" ancho="4" largo="4" alto="2" X="158" Y="0" Z="490" conexiones="45,47"></Waypoint>
 
-			<!--Sala-03--></Platform>
-		
-		<!--Sala-02--></Platform>
+									<!--Sala-23--><Platform Type="1" accion="0" ancho="61" largo="34" alto="4" RP="0" X="217" Y="0" Z="490" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+									<!--Sala final boss -->
+									<!--Decoracion-suelo--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/DecoracionSalaBoss.obj"></Object>
+									<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="243" Y="0" Z="490" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat4.obj"></Object>
+	 								<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="10" ancho="0" largo="0" alto="0" RP="0" X="182" Y="0" Z="490" despX="0" despZ="0" Texture="assets/texture/Suelo.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
+	 								<!--BossMuerte--><Enemy Type="1" enemigo="5" accion="1" ancho="1" largo="1" alto="10" X="242" Y="0" Z="490" Texture="" Model=""></Enemy>
+									<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="46" ancho="4" largo="4" alto="2" X="158" Y="0" Z="490" conexiones="45,47"></Waypoint>
+									<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="47" ancho="4" largo="4" alto="2" X="217" Y="0" Z="490" conexiones="46"></Waypoint>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="262" Y="0" Z="470"></Zone>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="222" Y="0" Z="470"></Zone>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="262" Y="0" Z="490"></Zone>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="222" Y="0" Z="490"></Zone>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="262" Y="0" Z="510"></Zone>
+									<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="222" Y="0" Z="510"></Zone>
+									</Platform>
+
+							</Platform>
+
+						</Platform>
+
+					</Platform>
+
+				</Platform>
+
+			</Platform>
+
+		</Platform>
+
 
 	<!--Luego se puede colocar cada una en su plataforma correspondiente, esto es lo que falta por colocar-->
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="34" alto="24" RP="0" X="-37" Y="0" Z="0" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="34" largo="2" alto="24" RP="0" X="-1" Y="0" Z="-36" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="34" largo="2" alto="24" RP="0" X="-1" Y="0" Z="36" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="13" alto="24" RP="0" X="35" Y="0" Z="-21" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="18" largo="18" alto="24" RP="0" X="55" Y="0" Z="-26" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="34" largo="8" alto="24" RP="0" X="71" Y="0" Z="16" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="8" largo="16" alto="24" RP="0" X="97" Y="0" Z="-8" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="8" largo="16" alto="24" RP="0" X="129" Y="0" Z="-8" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="16" largo="8" alto="24" RP="0" X="137" Y="0" Z="16" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="40" largo="2" alto="24" RP="0" X="113" Y="0" Z="-42" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="68" alto="24" RP="0" X="155" Y="0" Z="24" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="10" largo="24" alto="24" RP="0" X="43" Y="0" Z="64" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="8" largo="34" alto="24" RP="0" X="77" Y="0" Z="74" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="34" largo="8" alto="24" RP="0" X="103" Y="0" Z="48" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="26" largo="8" alto="24" RP="0" X="127" Y="0" Z="80" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="48" largo="8" alto="24" RP="0" X="81" Y="0" Z="112" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="12" alto="24" RP="0" X="35" Y="0" Z="96" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="40" largo="2" alto="24" RP="0" X="117" Y="0" Z="146" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="22" alto="24" RP="0" X="155" Y="0" Z="122" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="14" alto="24" RP="0" X="57" Y="0" Z="134" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="70" alto="24" RP="0" X="35" Y="0" Z="78" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="57" largo="2" alto="24" RP="0" X="214" Y="0" Z="132" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="57" largo="2" alto="24" RP="0" X="214" Y="0" Z="36" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="32" alto="24" RP="0" X="269" Y="0" Z="102" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="14" alto="24" RP="0" X="269" Y="0" Z="48" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="14" largo="2" alto="24" RP="0" X="285" Y="0" Z="54" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="14" largo="2" alto="24" RP="0" X="285" Y="0" Z="78" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="301" Y="0" Z="74" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="297" Y="0" Z="50" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="14" largo="2" alto="24" RP="0" X="309" Y="0" Z="46" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="10" largo="2" alto="24" RP="0" X="309" Y="0" Z="70" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="321" Y="0" Z="50" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="317" Y="0" Z="78" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="13" largo="2" alto="24" RP="0" X="332" Y="0" Z="58" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="13" largo="2" alto="24" RP="0" X="328" Y="0" Z="82" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="343" Y="0" Z="66" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="339" Y="0" Z="90" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="13" largo="2" alto="24" RP="0" X="350" Y="0" Z="95" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="13" largo="2" alto="24" RP="0" X="358" Y="0" Z="70" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="369" Y="0" Z="78" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="365" Y="0" Z="100" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="13" largo="2" alto="24" RP="0" X="380" Y="0" Z="84" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="13" alto="24" RP="0" X="385" Y="0" Z="99" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="6" largo="2" alto="24" RP="0" X="361" Y="0" Z="108" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="6" largo="2" alto="24" RP="0" X="381" Y="0" Z="111" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="6" alto="24" RP="0" X="377" Y="0" Z="120" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="10" alto="24" RP="0" X="357" Y="0" Z="116" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="32" largo="2" alto="24" RP="0" X="331" Y="0" Z="128" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="32" largo="2" alto="24" RP="0" X="403" Y="0" Z="128" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="48" alto="24" RP="0" X="301" Y="0" Z="174" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="37" alto="24" RP="0" X="423" Y="0" Z="163" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="63" largo="2" alto="24" RP="0" X="362" Y="0" Z="220" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="12" largo="2" alto="24" RP="0" X="437" Y="0" Z="180" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="12" largo="2" alto="24" RP="0" X="437" Y="0" Z="288" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="52" alto="24" RP="0" X="447" Y="0" Z="234" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="30" alto="24" RP="0" X="423" Y="0" Z="238" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="30" alto="24" RP="0" X="423" Y="0" Z="306" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="63" largo="2" alto="24" RP="0" X="362" Y="0" Z="316" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="4" largo="39" alto="24" RP="0" X="379" Y="0" Z="280" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="4" largo="33" alto="24" RP="0" X="331" Y="0" Z="255" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="4" largo="33" alto="24" RP="0" X="291" Y="0" Z="279" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="17" alto="24" RP="0" X="301" Y="0" Z="301" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="74" largo="2" alto="24" RP="0" X="225" Y="0" Z="286" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="74" largo="2" alto="24" RP="0" X="225" Y="0" Z="194" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="3" largo="13" alto="24" RP="0" X="244" Y="0" Z="209" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="187" Y="0" Z="225" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="187" Y="0" Z="301" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="39" alto="24" RP="0" X="115" Y="0" Z="249" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="39" largo="2" alto="24" RP="0" X="146" Y="0" Z="212" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="39" largo="2" alto="24" RP="0" X="96" Y="0" Z="286" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="52" alto="24" RP="0" X="133" Y="0" Z="336" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="52" alto="24" RP="0" X="149" Y="0" Z="336" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="37" largo="2" alto="24" RP="0" X="98" Y="0" Z="386" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="15" alto="24" RP="0" X="93" Y="0" Z="399" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="37" largo="2" alto="24" RP="0" X="58" Y="0" Z="412" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="15" alto="24" RP="0" X="37" Y="0" Z="427" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="37" largo="2" alto="24" RP="0" X="58" Y="0" Z="439" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="15" alto="24" RP="0" X="93" Y="0" Z="453" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="37" largo="2" alto="24" RP="0" X="124" Y="0" Z="458" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="15" alto="24" RP="0" X="159" Y="0" Z="471" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="41" largo="2" alto="24" RP="0" X="158" Y="0" Z="478" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="30" alto="24" RP="0" X="197" Y="0" Z="506" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="16" largo="2" alto="24" RP="0" X="211" Y="0" Z="534" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="30" alto="24" RP="0" X="225" Y="0" Z="506" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="16" largo="2" alto="24" RP="0" X="239" Y="0" Z="478" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="16" largo="2" alto="24" RP="0" X="267" Y="0" Z="478" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="281" Y="0" Z="509" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="48" largo="2" alto="24" RP="0" X="327" Y="0" Z="540" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="399" Y="0" Z="496" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="421" Y="0" Z="527" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="443" Y="0" Z="520" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="471" Y="0" Z="520" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="4" largo="33" alto="24" RP="0" X="495" Y="0" Z="527" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="515" Y="0" Z="510" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="517" Y="0" Z="485" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="515" Y="0" Z="454" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="4" largo="33" alto="24" RP="0" X="495" Y="0" Z="439" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="471" Y="0" Z="446" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="443" Y="0" Z="446" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="421" Y="0" Z="437" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="399" Y="0" Z="468" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="347" Y="0" Z="422" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="0" X="303" Y="0" Z="422" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="281" Y="0" Z="391" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="66" largo="2" alto="24" RP="0" X="213" Y="0" Z="386" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="373" Y="0" Z="445" despX="0" despZ="0" Texture="" Model=""></Object>
-	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="33" alto="24" RP="0" X="373" Y="0" Z="523" despX="0" despZ="0" Texture="" Model=""></Object>
-	
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="16" alto="24" RP="90" X="-78" Y="0" Z="0" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="-52" Y="0" Z="14" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="-52" Y="0" Z="-14" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="8" alto="24" RP="90" X="-26" Y="0" Z="20" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="8" alto="24" RP="90" X="-26" Y="0" Z="-20" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="0" Y="0" Z="26" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="0" Y="0" Z="-26" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="24" alto="24" RP="90" X="22" Y="0" Z="52" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="24" alto="24" RP="90" X="22" Y="0" Z="-52" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="48" Y="0" Z="74" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="48" Y="0" Z="-74" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="24" alto="24" RP="90" X="74" Y="0" Z="52" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="24" alto="24" RP="90" X="74" Y="0" Z="-52" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="48" largo="2" alto="24" RP="90" X="120" Y="0" Z="26" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="26" largo="2" alto="24" RP="90" X="98" Y="0" Z="-26" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="12" alto="24" RP="90" X="122" Y="0" Z="-12" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="26" largo="2" alto="24" RP="90" X="146" Y="0" Z="-2" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="26" largo="2" alto="24" RP="90" X="146" Y="0" Z="25" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="8" alto="24" RP="90" X="170" Y="0" Z="-12" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="122" largo="2" alto="24" RP="90" X="233" Y="0" Z="-16" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="46" alto="24" RP="90" X="292" Y="0" Z="32" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="318" Y="0" Z="76" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="14" alto="24" RP="90" X="344" Y="0" Z="88" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="366" Y="0" Z="104" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="26" alto="24" RP="90" X="392" Y="0" Z="128" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="8" largo="2" alto="24" RP="90" X="386" Y="0" Z="156" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="12" alto="24" RP="90" X="380" Y="0" Z="170" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="406" Y="0" Z="180" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="16" alto="24" RP="90" X="432" Y="0" Z="194" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="40" largo="2" alto="24" RP="90" X="390" Y="0" Z="208" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="24" alto="24" RP="90" X="352" Y="0" Z="182" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="36" largo="2" alto="24" RP="90" X="336" Y="0" Z="156" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="26" alto="24" RP="90" X="316" Y="0" Z="132" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="14" largo="2" alto="24" RP="90" X="304" Y="0" Z="104" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="32" alto="24" RP="90" X="292" Y="0" Z="138" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="270" Y="0" Z="172" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="50" alto="24" RP="90" X="244" Y="0" Z="220" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="13" largo="2" alto="24" RP="90" X="255" Y="0" Z="272" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="12" alto="24" RP="90" X="266" Y="0" Z="258" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="26" largo="2" alto="24" RP="90" X="294" Y="0" Z="248" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="12" alto="24" RP="90" X="322" Y="0" Z="258" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="9" largo="2" alto="24" RP="90" X="329" Y="0" Z="272" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="20" alto="24" RP="90" X="336" Y="0" Z="294" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="52" largo="2" alto="24" RP="90" X="386" Y="0" Z="316" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="62" alto="24" RP="90" X="440" Y="0" Z="376" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="430" Y="0" Z="440" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="26" alto="24" RP="90" X="416" Y="0" Z="464" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="390" Y="0" Z="488" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="26" alto="24" RP="90" X="364" Y="0" Z="464" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="10" largo="2" alto="24" RP="90" X="352" Y="0" Z="440" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="26" alto="24" RP="90" X="340" Y="0" Z="416" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="12" alto="24" RP="90" X="312" Y="0" Z="374" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="26" largo="2" alto="24" RP="90" X="340" Y="0" Z="364" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="12" alto="24" RP="90" X="368" Y="0" Z="374" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="12" largo="2" alto="24" RP="90" X="378" Y="0" Z="388" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="22" alto="24" RP="90" X="388" Y="0" Z="364" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="49" largo="2" alto="24" RP="90" X="325" Y="0" Z="344" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="34" alto="24" RP="90" X="266" Y="0" Z="380" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="52" largo="2" alto="24" RP="90" X="212" Y="0" Z="412" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="32" alto="24" RP="90" X="158" Y="0" Z="446" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="184" Y="0" Z="476" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="9" alto="24" RP="90" X="206" Y="0" Z="465" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="39" largo="2" alto="24" RP="90" X="243" Y="0" Z="454" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="38" alto="24" RP="90" X="280" Y="0" Z="490" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="39" largo="2" alto="24" RP="90" X="243" Y="0" Z="526" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="9" alto="24" RP="90" X="206" Y="0" Z="515" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="85" largo="2" alto="24" RP="90" X="123" Y="0" Z="504" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="46" alto="24" RP="90" X="36" Y="0" Z="460" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="34" alto="24" RP="90" X="88" Y="0" Z="376" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="62" Y="0" Z="344" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="12" alto="24" RP="90" X="40" Y="0" Z="358" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="24" largo="2" alto="24" RP="90" X="14" Y="0" Z="368" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="28" alto="24" RP="90" X="-12" Y="0" Z="342" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="85" largo="2" alto="24" RP="90" X="75" Y="0" Z="316" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="34" alto="24" RP="90" X="162" Y="0" Z="348" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="17" largo="2" alto="24" RP="90" X="177" Y="0" Z="384" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="28" alto="24" RP="90" X="192" Y="0" Z="354" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="17" largo="2" alto="24" RP="90" X="177" Y="0" Z="328" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="28" alto="24" RP="90" X="168" Y="0" Z="298" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="22" largo="2" alto="24" RP="90" X="192" Y="0" Z="272" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="22" largo="2" alto="24" RP="90" X="192" Y="0" Z="172" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="52" alto="24" RP="90" X="216" Y="0" Z="222" despX="0" despZ="0" Texture="" Model=""></Object>
+	<!--Pared-Invisible--><Object tipoObj="12" Type="1" accion="6" ancho="2" largo="75" alto="24" RP="90" X="170" Y="0" Z="99" despX="0" despZ="0" Texture="" Model=""></Object>
 
-
-	<!--Sala-01--></Platform>
+	</Platform>
 
 </Level> <!-- Fin del nivel -->

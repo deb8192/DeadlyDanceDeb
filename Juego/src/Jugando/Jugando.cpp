@@ -439,6 +439,11 @@ void Jugando::Update()
         this->RespawnEnemigos();
         lastRespawnTime = respawnTime;
     }
+    else if(enSalaBoss)
+    {
+        //if()
+    }
+
     // ********** se actualiza posiciones e interpolado **********
     //animacion
     _motor->cambiarAnimacionJugador(_jugador->getAnimacion());
@@ -2107,5 +2112,5 @@ void Jugando::CargarBossEnMemoria()
     _motora->getEvent(nameid)->setVolume(0.5f);
     _motora->getEvent(nameid)->start();
 
-    _enemigos.push_back(move(_boss));
+    _enemigos.insert(_enemigos.begin(), _boss);
 }

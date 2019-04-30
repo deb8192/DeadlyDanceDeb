@@ -28,6 +28,7 @@ Enemigo::Enemigo()
     modo = MODO_DEFAULT;
     atacktime = 0.0f;
     pedirAyuda = false;
+    respawnBoss = false;
     contestar = false;
     accionRealizada = false;
     controlRotacion = false;
@@ -103,6 +104,7 @@ Enemigo::~Enemigo()
     pos_ataques = 0;
     accionRealizada = false;
     contestar = false;
+    respawnBoss = false;
     accionRealizada = false;
     controlRotacion = false;
     distanciaMinimaEsquivar = 0;
@@ -558,6 +560,16 @@ int Enemigo::Atacar(int i)
         atposZ += atz - posIni.z;
         atposX += atx - posIni.x;
 
+        /*//ATAQUE A DISTANCIA
+        if(tipoEnemigo == constantes.BOSS)
+        {
+            _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/sphere.obj",NULL);
+            //Crear cuerpo de colision de ataque delante del enemigo
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0);
+            _motora->getEvent("GolpeGuitarra")->setVolume(0.5f);
+            _motora->getEvent("GolpeGuitarra")->start();
+        }*/
+
         //Acutualizar posicion del ataque
         _fisicas->updateAtaqueEnemigos(atposX,iniAtposY,atposZ,i);
 
@@ -812,6 +824,11 @@ void Enemigo::setVida(int vid)
 void Enemigo::setTipo(int tip)
 {
 
+}
+
+void Enemigo::setRespawnBoss(bool crearEnemigos)
+{
+    respawnBoss = crearEnemigos;
 }
 
 /*************** Modificar BarraAtEs *****************
