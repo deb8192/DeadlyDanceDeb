@@ -910,7 +910,7 @@ void Jugando::Render()
         _palancas.at(i)->Render(updateTime, resta);
     }
 
-    for(unsigned short i = 0; i < _cofres.size(); i++)
+    for(unsigned int i = 0; i < _cofres.size(); i++)
     {
         _cofres.at(i)->Render(updateTime, resta);
     }
@@ -1122,7 +1122,7 @@ void Jugando::Reanudar()
     {
         if (ganarPuzzle)
         {
-            _cofreP->DesactivarCofre();
+            //_cofreP->DesactivarCofre();
             AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),true);
             _cofreP = nullptr;
         }
@@ -1626,7 +1626,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                 _cofreP->getRZ() + 80.0);
             _cofreP->accionar();
 
-            _cofreP->DesactivarCofre();
+            //_cofreP->DesactivarCofre();
             AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),false);
             _cofreP = nullptr;
         }
@@ -2038,7 +2038,7 @@ void Jugando::CrearEnemigoArana()
 
     // Borrar cofre
     _motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), false);
-    _cofreP->DesactivarCofre();
+    //_cofreP->DesactivarCofre();
 }
 
 void Jugando::CargarBossEnMemoria()

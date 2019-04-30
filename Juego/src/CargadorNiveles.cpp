@@ -974,20 +974,11 @@ void CargadorNiveles::CargarCofres()
                     posCofre[2] = newz;
                 }
 
-                /*#ifdef WEMOTOR //codigo motor catopengl
-                    esArana = true; // Desactivamos las aranyas
-                #endif*/
-
                 Cofre* _cofre = new Cofre(esArana, ++id,
                     newx, newy, newz,
                     constantes.COFRE_OBJ, posArrayArana,
-                    _zonasCofre[zonasDisponibles[numAlt]]->GetSala(),
-                    _cofres.size());
+                    _zonasCofre[zonasDisponibles[numAlt]]->GetSala());
 
-                int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
-                    _cofre->GetModelo(), _cofre->GetTextura());
-
-                _cofre->SetPosicionArrayObjetos(posicionObjeto);
                 _cofres.push_back(move(_cofre));
                 _cofre = nullptr;
 

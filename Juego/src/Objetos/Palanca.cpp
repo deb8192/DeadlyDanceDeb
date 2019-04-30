@@ -16,3 +16,15 @@ Palanca::~Palanca()
     _modelo = nullptr;
     _textura = nullptr;
 }
+
+void Palanca::Render(float updTime, float drawTime)
+{
+    RotarEntidad(1 / updTime);
+    UpdateTimeRotate(drawTime);
+
+    _motor->mostrarObjetos(
+        posActual.x, posActual.y, posActual.z,
+        rotActual.x, rotActual.y, rotActual.z,
+        posicionArrayObjetos
+    );
+}
