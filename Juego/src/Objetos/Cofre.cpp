@@ -4,7 +4,7 @@
 // Constructor para cofres nuevos
 Cofre::Cofre(bool esEne, int id,
     float x, float y, float z, unsigned int tipoObj,
-    unsigned int posA, Sala* sala)
+    unsigned int posA, Sala* sala, unsigned int posMotorG)
 : Interactuable(id, -1, 0, 0, 0, //id,codigo,ancho,largo,alto
     x, y, z, tipoObj, 0, 0, 0) // despX, despZ, accion
 {
@@ -17,8 +17,10 @@ Cofre::Cofre(bool esEne, int id,
 
     ModeloTextura();
     // No utilizar las posiciones devueltas de _motor y _fisicas porque los vectores son dinamicos
-    posicionArrayObjetos = _motor->CargarObjetos(3,0,x,y,z,ancho,largo,alto,//2,2,2
-        _modelo, _textura);
+    /*posicionArrayObjetos = _motor->CargarObjetos(3,0,x,y,z,ancho,largo,alto,//2,2,2
+        _modelo, _textura);*/
+    posicionArrayObjetos = posMotorG;
+    _motor->CargarCofre(-1,0,x,y,z,_modelo, _textura);
 
     // Creamos la fisica aqui por el tema del cofre nuevo o cofre ya existente
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
@@ -41,13 +43,12 @@ Cofre::Cofre(int id, unsigned int pos,
     alto = 4;
 
     ModeloTextura();
-    //_motor->CargarCofre(pos,0,x,y,z,_modelo, _textura);
-    /*_motor->CargarObjetos(3,0,x,y,z,2,2,2,
-                    _modelo, _textura);*/
+    posicionArrayObjetos = pos;
+    _motor->CargarCofre(pos,0,x,y,z,_modelo, _textura);
     
-    /*MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
     _fisicas->CargarCofre(pos,x/2,y/2,z/2,ancho,alto,largo,0,0);
-    _fisicas = nullptr;*/
+    _fisicas = nullptr;
 }
 
 void Cofre::ModeloTextura()
@@ -100,7 +101,7 @@ void Cofre::BorrarCofre(unsigned int pos)
     _fisicas->DesactivarCofre(pos);
     //_fisicas->EraseCofre(pos);
     _fisicas = nullptr;
-    //_motor->EraseCofre(pos);//descomentar luego
+    _motor->EraseCofre(pos);
 }
 
 
@@ -109,7 +110,7 @@ void Cofre::Render(float updTime, float drawTime)
     RotarEntidad(1 / updTime);
     UpdateTimeRotate(drawTime);
 
-    _motor->mostrarObjetos(
+    _motor->mostrarCofres(
         posActual.x, posActual.y, posActual.z,
         rotActual.x, rotActual.y, rotActual.z,
         posicionArrayObjetos

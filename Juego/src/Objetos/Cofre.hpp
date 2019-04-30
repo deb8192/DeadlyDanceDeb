@@ -8,10 +8,9 @@ class Cofre : public Interactuable
 {
     public:
         ~Cofre();
-        Cofre();
         Cofre(bool esEne, int id,
             float x, float y, float z, unsigned int tipoObj,
-            unsigned int posA, Sala* sala);
+            unsigned int posA, Sala* sala, unsigned int posMotorG);
 
         Cofre(int id, unsigned int pos,
             float x, float y, float z, unsigned int tipoObj,

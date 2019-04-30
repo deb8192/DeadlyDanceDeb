@@ -22,6 +22,8 @@ MotorGrafico::MotorGrafico()
         RecoArmasAni_Scena.reserve(50);
         Llaves_Scena.reserve(50);
         LlavesAni_Scena.reserve(50);
+        Cofres_Scena.reserve(50);
+        CofresAni_Scena.reserve(50);
         Objetos_Scena.reserve(100);
         ObjetosAni_Scena.reserve(100);//contiene las logicas de animaciones
         PowerUP_Scena.reserve(50);
@@ -109,6 +111,7 @@ void MotorGrafico::LimpiarElementosJuego()
         Objetos_Scena.clear();
         PowerUP_Scena.clear();
         Paredes_Scena.clear();
+        Cofres_Scena.clear();
         Objetos_Debug.clear();
         Objetos_Debug2.clear();
 
@@ -118,8 +121,8 @@ void MotorGrafico::LimpiarElementosJuego()
             _aniJugEscena = nullptr;
         }
 
-        short tam = RecoArmasAni_Scena.size();
-        for(short i=0; i < tam; i++)
+        int tam = RecoArmasAni_Scena.size();
+        for(int i=0; i < tam; i++)
         {
             if( RecoArmasAni_Scena.at(i) != nullptr)
             {
@@ -128,7 +131,7 @@ void MotorGrafico::LimpiarElementosJuego()
         }
 
         tam = LlavesAni_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             if( LlavesAni_Scena.at(i) != nullptr)
             {
@@ -137,7 +140,7 @@ void MotorGrafico::LimpiarElementosJuego()
         }
 
         tam = ObjetosAni_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             if( ObjetosAni_Scena.at(i) != nullptr)
             {
@@ -146,7 +149,7 @@ void MotorGrafico::LimpiarElementosJuego()
         }
 
         tam = PowerUPAni_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             if( PowerUPAni_Scena.at(i) != nullptr)
             {
@@ -155,11 +158,20 @@ void MotorGrafico::LimpiarElementosJuego()
         }
 
         tam = ParedesAni_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             if( ParedesAni_Scena.at(i) != nullptr)
             {
                 delete ParedesAni_Scena.at(i);
+            }
+        }
+
+        tam = CofresAni_Scena.size();
+        for(int i=0; i < tam; i++)
+        {
+            if( CofresAni_Scena.at(i) != nullptr)
+            {
+                delete CofresAni_Scena.at(i);
             }
         }
 
@@ -168,6 +180,7 @@ void MotorGrafico::LimpiarElementosJuego()
         ObjetosAni_Scena.clear();
         PowerUPAni_Scena.clear();
         ParedesAni_Scena.clear();
+        CofresAni_Scena.clear();
 
         camara = 0;
         _jugEscena = 0;
@@ -229,72 +242,72 @@ void MotorGrafico::LimpiarElementosJuego()
         pathfinding = false;
 
         // Liberar memoria
-        short tam = Enemigos_Scena.size();
-        for(short i=0; i < tam; i++)
+        int tam = Enemigos_Scena.size();
+        for(int i=0; i < tam; i++)
         {
             Enemigos_Scena.at(i) = nullptr;
         }
         Enemigos_Scena.clear();
 
         tam = Objetos_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             Objetos_Scena.at(i) = nullptr;
         }
         Objetos_Scena.clear();
 
         /*tam = Plataformas_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             if (Plataformas_Scena.at(i))
                 delete Plataformas_Scena.at(i);
         }
         Plataformas_Scena.clear();
         tam = RecoArmas_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete RecoArmas_Scena.at(i);
         }
         RecoArmas_Scena.clear();
         tam = Llaves_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete Llaves_Scena.at(i);
         }
         Llaves_Scena.clear();
         tam = PowerUP_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete PowerUP_Scena.at(i);
         }
         PowerUP_Scena.clear();
         tam = Paredes_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete Paredes_Scena.at(i);
         }
         Paredes_Scena.clear();
         tam = Luces_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete Luces_Scena.at(i);
         }
         Luces_Scena.clear();
         tam = Objetos_Debug.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete Objetos_Debug.at(i);
         }
         Objetos_Debug.clear();
         tam = Objetos_Debug2.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete Objetos_Debug2.at(i);
         }
         Objetos_Debug2.clear();*/
 
         /*tam = fichasMesh.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete fichasMesh.at(i);
         }
@@ -302,7 +315,7 @@ void MotorGrafico::LimpiarElementosJuego()
 
         //TO DO: Pendiente de utilizar en puzzles
         /*tam = imagenes.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete imagenes.at(i);
         }
@@ -401,6 +414,16 @@ void MotorGrafico::LimpiarMotorGrafico()
             }
 
             Paredes_Scena.resize(0);
+        }
+
+        if(Cofres_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < Cofres_Scena.size();i++)
+            {
+                Cofres_Scena[i] = nullptr;
+            }
+
+            Cofres_Scena.resize(0);
         }
 
         _armaEnEscena = nullptr;
@@ -1310,7 +1333,8 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     #endif
 }
 
-int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, const char * anima, int frame, bool afectaluz)
+int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto,
+    const char *ruta_objeto, const char *ruta_textura, const char * anima, int frame, bool afectaluz)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
@@ -1337,7 +1361,7 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
                 ObjetosAni_Scena.push_back(logicaAnim);
             }
 
-            if(accion == 9)
+            if(accion == 9) // Lagunas, cristales y cosas transparentes
             {
                 Objetos_Scena.push_back(_objetoEnEscena);
                 ObjetosAni_Scena.push_back(logicaAnim);
@@ -1458,6 +1482,62 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
     #endif
 
     return -1;
+}
+
+void MotorGrafico::CargarCofre(int pos, int rp, int x,int y,int z,
+    const char* ruta_objeto, const char* ruta_textura, const char* anima, int frame, bool afectaluz)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        unsigned short _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,frame,0);
+
+        if(_objetoEnEscena != 0)
+        {
+            _interfaz->SetTexture(_objetoEnEscena,ruta_textura);
+            _interfaz->Trasladar(_objetoEnEscena,(float)x,(float)y,(float)z);
+            _interfaz->Rotar(_objetoEnEscena,0.0f,(float)rp,0.0f);
+
+            Animaciones* logicaAnim = nullptr;
+
+            if(anima != nullptr)
+            {
+                logicaAnim = new Animaciones(anima);
+                logicaAnim->AsignarID(_objetoEnEscena);
+            }
+            
+            // Cofre existente
+            if (pos >= 0)
+            {
+                Cofres_Scena.at(pos) = move(_objetoEnEscena);
+                CofresAni_Scena.at(pos) = move(logicaAnim);
+                _interfaz->HabilitarObjeto(Cofres_Scena[pos]);
+            }
+            else // Cofre nuevo
+            {
+                Cofres_Scena.push_back(move(_objetoEnEscena));
+                CofresAni_Scena.push_back(move(logicaAnim));
+            }
+        }
+    #else
+        //codigo motor irrlicht
+        IAnimatedMesh* objeto = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+        if (objeto)
+        {
+            IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
+            _objetoEnEscena->setPosition(core::vector3df(x,y,z));
+            _objetoEnEscena->setRotation(core::vector3df(0,rp,0));
+            
+            // Cofre existente
+            if (pos >= 0)
+            {
+                Cofres_Scena.at(pos) = move(_objetoEnEscena);
+            }
+            else // Cofre nuevo
+            {
+                Cofres_Scena.push_back(move(_objetoEnEscena));
+            }
+        }
+    #endif
 }
 
 void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
@@ -1715,13 +1795,27 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
             _interfaz->Trasladar(Objetos_Scena[i],x,y,z);
             _interfaz->Rotar(Objetos_Scena[i],rx,ry-180,rz);
         }
-
-
-
     #else
         //codigo motor irrlicht
         Objetos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
         Objetos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
+    #endif
+}
+
+void MotorGrafico::mostrarCofres(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+
+        if(Cofres_Scena.size() > 0 && Cofres_Scena.size() > i && Cofres_Scena[i] != 0)
+        {
+            _interfaz->Trasladar(Cofres_Scena[i],x,y,z);
+            _interfaz->Rotar(Cofres_Scena[i],rx,ry-180,rz);
+        }
+    #else
+        //codigo motor irrlicht
+        Cofres_Scena.at(i)->setPosition(core::vector3df(x,y,z));
+        Cofres_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
     #endif
 }
 
@@ -2264,9 +2358,8 @@ void MotorGrafico::ErasePowerUP(long unsigned int idx)
     #endif
 }
 
-// Para cuando el cofre se convierte en arana
-// TO DO: separar cofres de Objetos_Scena
-void MotorGrafico::DibujarCofre(long unsigned int idx, bool dibujar)
+// Para cuando el jugador rompe la pared
+/*void MotorGrafico::DibujarPared(long unsigned int idx, bool dibujar)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
@@ -2288,30 +2381,16 @@ void MotorGrafico::DibujarCofre(long unsigned int idx, bool dibujar)
             Objetos_Scena[idx]->setVisible(dibujar);
         }
     #endif
-}
+}*/
 
-// Para cuando el jugador rompe la pared
-void MotorGrafico::DibujarPared(long unsigned int idx, bool dibujar)
+void MotorGrafico::EraseCofre(unsigned short idx)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        if(Objetos_Scena[idx] != 0 && idx < Objetos_Scena.size())
-        {
-            if(dibujar)
-            {
-                _interfaz->HabilitarObjeto(Objetos_Scena[idx]);
-            }
-            else
-            {
-                _interfaz->DeshabilitarObjeto(Objetos_Scena[idx]);
-            }
-        }
+        _interfaz->DeshabilitarObjeto(Cofres_Scena[idx]);
     #else
         //codigo motor irrlicht
-        if(Objetos_Scena[idx] && idx < Objetos_Scena.size())
-        {
-            Objetos_Scena[idx]->setVisible(dibujar);
-        }
+        Cofres_Scena[idx]->setVisible(false);
     #endif
 }
 

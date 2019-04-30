@@ -262,7 +262,9 @@ unsigned short MotorFisicas::CrearCuerpoInter(unsigned short tipoObj, float px, 
     }
     else
     {
-        obstaculos.push_back(move(cuerpo));
+        if (tipoObj != constantes.COFRE_OBJ)
+            obstaculos.push_back(move(cuerpo));
+
         //Se le anade una zona de deteccion mediante colision
         rp3d::CollisionBody* deteccion;
         SphereShape* detector = new SphereShape(alto);
@@ -339,7 +341,32 @@ unsigned short MotorFisicas::CrearCuerpoWaypoint(float px, float py, float pz, f
 
     _waypoints.push_back(cuerpo);
     return _waypoints.size()-1;
-} 
+}
+
+void MotorFisicas::CargarCofre(unsigned int pos, float px, float py, float pz, 
+    float ancho, float alto, float largo, float despX, float despZ)
+{
+    rp3d::Vector3 posiciones(px+despX,py,pz+despZ); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
+    rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
+
+    Transform transformacion(posiciones,orientacion);
+
+    rp3d::CollisionBody* cuerpo;
+    cuerpo = space->createCollisionBody(transformacion);
+
+    rp3d::Vector3 medidas(ancho,alto,largo);
+    BoxShape* forma = new BoxShape(medidas);
+    cuerpo->addCollisionShape(forma,transformacion);
+
+
+    //Se le anade una zona de deteccion mediante colision
+    rp3d::CollisionBody* deteccion;
+    SphereShape* detector = new SphereShape(alto);
+    deteccion = space->createCollisionBody(transformacion);
+    deteccion->addCollisionShape(detector,transformacion);
+
+    _cofres.at(pos) = move(deteccion);
+}
 
 void MotorFisicas::EraseObstaculo(int idx)
 {
@@ -348,26 +375,31 @@ void MotorFisicas::EraseObstaculo(int idx)
 
 void MotorFisicas::EraseRecoArma(int idx)
 {
+    recol_armas.at(idx) = nullptr;
     recol_armas.erase(recol_armas.begin() + idx);
 }
 
 void MotorFisicas::EraseLlave(int idx)
 {
+    llaves.at(idx) = nullptr;
     llaves.erase(llaves.begin() + idx);
 }
 
 void MotorFisicas::EraseWaypoint(unsigned short pos)
 {
+    _waypoints.at(pos) = nullptr;
     _waypoints.erase(_waypoints.begin() + pos);
 }
 
 void MotorFisicas::ErasePared(int idx)
 {
+    _paredes.at(idx) = nullptr;
     _paredes.erase(_paredes.begin() + idx);
 }
 
 void MotorFisicas::EraseColectablePowerup(int idx)
 {
+    recolectables_powerup.at(idx) = nullptr;
     recolectables_powerup.erase(recolectables_powerup.begin() + idx);
 }
 
@@ -401,9 +433,15 @@ void MotorFisicas::EraseTodosEnemigos(std::size_t i)
     armaAtEspEne[i]=nullptr;
 }
 
-void MotorFisicas::DesactivarCofre(unsigned short pos)
+void MotorFisicas::DesactivarCofre(unsigned int pos)
 {
     _cofres.at(pos) = nullptr;
+}
+
+void MotorFisicas::EraseCofre(unsigned int pos)
+{
+    _cofres.at(pos) = nullptr;
+    //_cofres.erase(_cofres.begin() + pos);
 }
 
 void MotorFisicas::EraseJugador(){
@@ -472,46 +510,51 @@ int MotorFisicas::collideColectablePowerup()
   return -1;
 }
 
-short MotorFisicas::collidePuerta()
+int MotorFisicas::collidePuerta()
 {
     for (long unsigned int i = 0; i < _puertas.size(); i++)
     {
         if (space->testOverlap(jugador,_puertas[i]))
         {
-            return (int)i;
+            return i;
         }
     }
     return -1;
 }
 
-short MotorFisicas::collidePalanca()
+int MotorFisicas::collidePalanca()
 {
     for (long unsigned int i = 0; i < _palancas.size(); i++)
     {
         if (space->testOverlap(jugador,_palancas[i]))
         {
-            return (int)i;
+            return i;
         }
     }
     return -1;
 }
 
-short MotorFisicas::collideCofre()
+int MotorFisicas::collideAbrirCofre()
 {
-    for (long unsigned int i = 0; i < _cofres.size(); i++)
+    for (unsigned int i = 0; i < _cofres.size(); i++)
     {
         if (_cofres[i])
+        {
+            cout << "ENTROOOOOO"<<endl;
             if (space->testOverlap(jugador,_cofres[i]))
             {
-                return (int)i;
+                cout << "Devuelvo algo: "<<i<<endl;
+                return i;
             }
+        }
     }
+    cout << "Devuelvo -1"<<endl;
     return -1;
 }
 
-short MotorFisicas::collideAttackWall()
+int MotorFisicas::collideAttackWall()
 {
-    for(unsigned short i = 0; i < _paredes.size();i++)
+    for(unsigned int i = 0; i < _paredes.size();i++)
     {
         if (_paredes[i])
             if(space->testOverlap(jugadorAtack,_paredes[i]))
@@ -534,6 +577,23 @@ bool MotorFisicas::collideParedesRompibles()
             {
                 return true;
             }
+        }
+    }
+    return false;
+}
+
+bool MotorFisicas::collideCofres()
+{
+    for(unsigned int i = 0; i < _cofres.size();i++)
+    {
+        if(_cofres[i]) // Cofre cerrado
+        {
+            if(space->testOverlap(jugador,_cofres[i]))
+            {
+                return true;
+            }
+        } else { // Cofre abierto
+            return true;
         }
     }
     return false;

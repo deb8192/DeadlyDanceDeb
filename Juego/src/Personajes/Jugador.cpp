@@ -1295,7 +1295,8 @@ bool Jugador::ColisionEntornoEne()
     //colisiones con todos los objetos y enemigos que no se traspasan
     if(_fisicas->collideObstacle() ||
         !_fisicas->collidePlatform() ||
-        _fisicas->collideParedesRompibles())
+        _fisicas->collideParedesRompibles() ||
+        _fisicas->collideCofres())
     {//colisiona
         setNewPosiciones(posActual.x, posActual.y, posActual.z);
         return true;

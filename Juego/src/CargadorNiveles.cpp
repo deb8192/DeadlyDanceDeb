@@ -882,7 +882,7 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
 unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     float ancho, float alto, float largo, Sala* sala)
 {
-    CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo); // Posiciones, vida
+    CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo, sala); // Posiciones, vida
 
     //_eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
     _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
@@ -977,7 +977,8 @@ void CargadorNiveles::CargarCofres()
                 Cofre* _cofre = new Cofre(esArana, ++id,
                     newx, newy, newz,
                     constantes.COFRE_OBJ, posArrayArana,
-                    _zonasCofre[zonasDisponibles[numAlt]]->GetSala());
+                    _zonasCofre[zonasDisponibles[numAlt]]->GetSala(),
+                    _cofres.size());
 
                 _cofres.push_back(move(_cofre));
                 _cofre = nullptr;
