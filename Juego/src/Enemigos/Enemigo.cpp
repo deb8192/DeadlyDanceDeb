@@ -804,7 +804,7 @@ void Enemigo::ModificarVida(int vid)
                 modo = MODO_ATAQUE;
             }
         }
-        else
+        else if(tipoEnemigo == 5)
         {
             modo = MODO_ATAQUE;
         }
@@ -840,11 +840,11 @@ void Enemigo::setRespawnBoss(bool crearEnemigos)
  */
 void Enemigo::ModificarBarraAtEs(int bar)
 {
-    /*barraAtEs += bar;
+    barraAtEs += bar;
     if(barraAtEs < 0)
         barraAtEs = 0;
     if(barraAtEs > 100)
-        barraAtEs = 100;*/
+        barraAtEs = 100;
 }
 
 void Enemigo::setBarraAtEs(int bar)
@@ -1029,6 +1029,16 @@ void Enemigo::setLastTimeMerodear(float t)
     lastTiempoMerodear = t;
 }
 
+void Enemigo::setTimeMoverse(float t)
+{
+    tiempoMoverse = t;
+}
+
+void Enemigo::setLastTimeMoverse(float t)
+{
+    lastTiempoMoverse = t;
+}
+
 void Enemigo::setAtackTime(float t)
 {
   atacktime = t;
@@ -1069,6 +1079,15 @@ float Enemigo::getLastTimeMerodear()
     return lastTiempoMerodear;
 }
 
+float Enemigo::getTimeMoverse()
+{
+    return tiempoMoverse;
+}
+
+float Enemigo::getLastTimeMoverse()
+{
+    return lastTiempoMoverse;
+}
 float Enemigo::getAtackTime()
 {
   return atacktime;
@@ -1236,7 +1255,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         {
             pesoRotacion = constantes.UN_MEDIO;
             contraRotacion = 1.0 - pesoRotacion;
-            if(this->ver(constantes.TRES, constantes.SEIS * constantes.CINCO))
+            if(this->ver(constantes.TRES, constantes.SEIS * constantes.CINCO) && tipoEnemigo != constantes.BOSS)
             {
                 controlRotacion = true;
             }
@@ -1269,7 +1288,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
         if(huir)
         {
-            rotation *= -1;
+            rotation += constantes.PI_RADIAN;
         }
 
         this->setNewRotacion(rotActual.x, rotation, rotActual.z);
@@ -1846,6 +1865,108 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         posiciones.x = posFutura.x + velocidad.x;
         posiciones.z = posFutura.z + velocidad.z;
 
+        this->setNewPosiciones(posiciones.x, posFutura.y, posiciones.z);
+        this->setPosicionesFisicas(velocidad.x, 0.0f, velocidad.z);
+
+	    return false;
+    }
+    /********************************** Moverse ********************************
+     * Funcion a la que llama el boss para desplazarse por la sala mientras 
+     * pelea contra el jugador.
+     * 
+     *      Entradas:    
+     *                  int nuevaDireccion: direccion que probablemente tomara
+     *                  int direccion: direccion actual del boss
+     *                  int* _jug: entero que contiene el puntero del jugador
+     * 
+     *      Salidas:
+     *                  int direccion: la direccion que al final toma el boss
+    */
+    bool Enemigo::Moverse(int nuevaDireccion, int direccion, int* _jug)
+    {
+        Constantes constantes;
+        Jugador* _jugador = (Jugador*) _jug;
+        struct
+        {
+            float x = 0.0f;
+            float y = 0.0f;
+            float z = 0.0f;
+        }
+        velocidad, posiciones;
+        VectorEspacial target;
+        target.vX = _jugador->getX();
+        target.vY = _jugador->getY();
+        target.vZ = _jugador->getZ();
+
+        if(nuevaDireccion > 0)
+        {
+            if(nuevaDireccion != direccion)
+            {
+                direccion = nuevaDireccion;
+            }
+            else
+            {
+                direccion -= constantes.DOS;
+                if(direccion <= 0)
+                {
+                    direccion += constantes.OCHO;
+                }
+            }
+        }
+
+        switch(direccion)
+        {
+            case 1:
+                rotation = constantes.DOS_PI_RADIAN;
+                break;
+            
+            case 2:
+                rotation = constantes.PI_TRES_MEDIOS_CUARTOS;
+                break;   
+
+            case 3:
+                rotation = constantes.PI_TRES_MEDIOS;
+                break;
+
+            case 4:
+                rotation = constantes.PI_RADIAN_CUARTOS;
+                break;
+            
+            case 5:
+                rotation = constantes.PI_RADIAN;
+                break;
+            
+            case 6:
+                rotation = constantes.PI_MEDIOS_CUARTOS;
+                break;
+
+            case 7:
+                rotation = constantes.PI_MEDIOS;
+                break;
+
+            case 8:
+                rotation = constantes.PI_CUARTOS;
+                break;
+
+            default:
+                rotation = constantes.PI_MEDIOS;
+                break;
+        }
+        
+        this->setNewRotacion(rotActual.x, rotActual.y + rotation, rotActual.z);
+        this->setVectorOrientacion();
+        
+        if(porcentajeVelocidad != constantes.UN_MEDIO)
+        {
+            porcentajeVelocidad = constantes.UN_MEDIO;
+        }
+
+        velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+        posiciones.x = posFutura.x + velocidad.x;
+        posiciones.z = posFutura.z + velocidad.z;
+
+        this->alinearse(&target, false);
         this->setNewPosiciones(posiciones.x, posFutura.y, posiciones.z);
         this->setPosicionesFisicas(velocidad.x, 0.0f, velocidad.z);
 

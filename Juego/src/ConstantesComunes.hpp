@@ -2,12 +2,16 @@
 #define ConstantesComunes_HPP
 
 //esto contiene todas las constantes y variables de texto para comparativas en el programa (es comodo si se quiere utilizar en el algun sitio)
-//using Constantes = struct
-typedef struct
+using Constantes = struct ValoresConstantes
 {
     /** Angulos en grados y radianes y relacion para sus cambios de escala **/
     const float PI = 3.14159265358979323846;
+    const float DOS_PI_RADIAN = 360.0f;
+    const float PI_TRES_MEDIOS_CUARTOS = 315.0f;
+    const float PI_TRES_MEDIOS = 270.0f;
+    const float PI_RADIAN_CUARTOS = 225.0f;
     const float PI_RADIAN = 180.0f;
+    const float PI_MEDIOS_CUARTOS = 135.0f;
     const float PI_MEDIOS = 90.0f;
     const float PI_CUARTOS = 45.0f;
     const float PI_OCTAVOS = 22.5f;
@@ -30,6 +34,7 @@ typedef struct
     const float RAD_TO_DEG = 57.295779513082320876f;
 
     /******************** Porcentajes *******************/
+    const float DIEZ_PORCIENTO = 0.10f;
     const float UN_CUARTO = 0.25f;
     const float UN_MEDIO = 0.5f;
     const float TRES_CUARTOS = 0.75f;
@@ -152,5 +157,5 @@ typedef struct
     // Codigo de la puerta del boss
     const unsigned short PUERTA_BOSS = 20;
 
-} Constantes;
+};
 #endif

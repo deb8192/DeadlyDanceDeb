@@ -668,6 +668,26 @@ void Jugando::Update()
                     }
                     _enemigos[i]->setTimeMerodear(tiempoMerodear);
                 }
+                //Este bloque se da si el Boss esta en el proceso de moverse
+                if(_enemigos[i]->getTimeMoverse() > 0.0f)
+                {
+                    if(_enemigos[i]->getTimeMoverse() == 1.5f)
+                    {
+                        //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                        _enemigos[i]->setLastTimeMoverse(_controladorTiempo->GetTiempo(2));
+                    }
+                    float tiempoActual = 0.0f, tiempoMoverse = 0.0f;
+                    tiempoActual = _controladorTiempo->GetTiempo(2);
+                    tiempoMoverse = _enemigos[i]->getTimeMoverse();
+                    tiempoMoverse -= (tiempoActual - _enemigos[i]->getLastTimeMoverse());
+                    if(tiempoActual > _enemigos[i]->getLastTimeMoverse())
+                    {
+                        //Si no es la primera vez que entra al bucle de moverse, tiempoActual debe ser mayor que lastTimeMoverse
+                        //por lo que guardamos en lastTimeMoverse a tiempoActual
+                        _enemigos[i]->setLastTimeMoverse(tiempoActual);
+                    }
+                    _enemigos[i]->setTimeMoverse(tiempoMoverse);
+                }
                 //Este bloque se da si el enemigo (de momento guardian) esta en modo ocultacion
                 if(_enemigos[i]->getTimeOcultarse() > 0.0f)
                 {

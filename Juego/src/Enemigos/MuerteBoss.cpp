@@ -10,6 +10,7 @@ MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
     _ordenes = new short [constantes.DOS];
     maxRotacion = constantes.PI_CUARTOS;
     rotation = constantes.CERO;
+    direccion = 0;
 
     _modelo = "assets/models/Muerte/Muerte.obj";
     _textura = "assets/texture/Muerte.png";
@@ -33,22 +34,18 @@ MuerteBoss::~MuerteBoss()
 */
 void MuerteBoss::RunIA()
 {
-    if(modo == constantes.UNO)
+    if(this->getTimeMoverse() <= 0)
     {
-        if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR)
+        if(atacado)
         {
-            this->ForzarCambioNodo(&constantes.CINCO);
+            atacado = false;
         }
+        if(hecho)
+        {
+            hecho = false;
+        }
+        _ordenes = this->Enemigo::RunIA(funciona);
     }
-    if(atacado)
-    {
-        atacado = false;
-    }
-    if(hecho)
-    {
-        hecho = false;
-    }
-    _ordenes = this->Enemigo::RunIA(funciona);
 }
 
 /***************** UpdateMuerteBoss *****************
@@ -56,7 +53,7 @@ void MuerteBoss::RunIA()
  * ha quedado la lectura del arbol del MuerteBoss
  *
  * Entradas:
- *      i: (sennala al MuerteBoss del array, NO NECESARIO APARENTEMENTE)
+ *      i: sennala al enemigo del array
  * Salidas:
 */
 
@@ -64,44 +61,7 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
 {
     Jugador* _jugador = (Jugador*)_jug;
     funciona = true;
-    if(modo == MODO_PELIGRO && _ordenes != nullptr)
-    {
-        switch (_ordenes[0])
-        {
-            case EN_PERSIGUE: //El Pollo se mueve
-                funciona = this->perseguir(_jug);
-                break;
-
-            case EN_ATACAR: //El Pollo ataca
-                {
-                    if(!atacado)
-                    {
-                        int danyo;
-                        danyo = this->Atacar(*i);
-
-                        if(danyo > 0)
-                        {
-                            _jugador->ModificarVida(-danyo);
-                            funciona = true;
-                            atacado = true;
-                        }
-                        else
-                        {
-                            funciona = false;
-                        }
-                    }
-                }
-                break;
-        }
-    }
-
-
-    else if(modo == MODO_AUXILIAR_ALIADO)
-    {
-        this->AuxiliarAliado();
-    }
-
-    else if(_ordenes != nullptr)
+    if(_ordenes != nullptr)
     {
         switch (_ordenes[0])
         {
@@ -191,6 +151,29 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                 break;
             case EN_MOVERSE: //El boss se mueve tanteando al jugador
                 {
+                    int nuevaDireccion = 0;
+                    if(!hecho)
+                    {
+                        //Moverse estableciendo una direccion de movimiento 
+                        nuevaDireccion = rand() % 8 + 1;       
+                        direccion = this->Moverse(nuevaDireccion, direccion, _jug);
+                        this->setTimeMoverse(1.5f);
+                        hecho = true;
+                    }
+                    else
+                    { 
+                        //Merodea poniendo en positivo o negativo el angulo actual de rotacion
+                        if(this->getTimeMoverse() > 0)
+                        {
+                            float resto = (float) ((int) (this->getTimeMoverse() * constantes.CIEN) % (int) (constantes.UN_CUARTO * constantes.CIEN)) / constantes.CIEN;
+                            if(resto <= constantes.DIEZ_PORCIENTO)
+                            {
+                                nuevaDireccion = rand() % 8 + 1;    
+                                this->setTimeMoverse(this->getTimeMoverse() - resto);
+                            }
+                        }
+                        direccion = this->Moverse(nuevaDireccion, direccion, _jug);
+                    }
                     funciona = true;
                 }
                 break;

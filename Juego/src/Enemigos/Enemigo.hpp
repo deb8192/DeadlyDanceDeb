@@ -81,6 +81,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setLastTimeOcultarse(float t);
         void setTimeMerodear(float t);
         void setLastTimeMerodear(float t);
+        void setTimeMoverse(float t);
+        void setLastTimeMoverse(float t);
         void setAtackTime(float t);
         void setTimeAt(float time);
         void setLastTimeAt(float time);
@@ -108,6 +110,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getLastTimeOcultarse();
         float getTimeMerodear();
         float getLastTimeMerodear();
+        float getTimeMoverse();
+        float getLastTimeMoverse();
         float getAtackTime();
         float getTimeAt();
         float getLastTimeAt();
@@ -199,6 +203,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
         void AuxiliarAliado();//se mueve hacia el proximo waypoint del camino a seguir
         bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
+        bool Moverse(int nuevaDireccion, int direccion, int* _jug);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         INnpc::VectorEspacial normalizarVector(int*);//Convierte el vector que se pasa en un vector con la misma direccion y sentido pero con modulo 1
         void modificarTrayectoria(INnpc::VectorEspacial* vector, int* destino);
         bool comprobarDistanciaFlocking();
@@ -255,7 +260,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Sala* _estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc,iniAtposX, iniAtposY, iniAtposZ, atposX, atposY, atposZ, atespposX, atespposY, atespposZ;
         float atacktime;
-        float tiempoMerodear, lastTiempoMerodear, tiempoOcultarse, lastTiempoOcultarse;
+        float tiempoMerodear, lastTiempoMerodear, tiempoMoverse, lastTiempoMoverse, tiempoOcultarse, lastTiempoOcultarse;
         Arma* _armaEspecial;
         const char* _rutaArmaEspecial = "assets/models/objeto.obj";
         int tipoEnemigo;//Tipo del enemigo: pollo, murcielago, guardian, boss

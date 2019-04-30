@@ -8,6 +8,7 @@ using namespace std;
 class INnpc {
 
 public:
+    //Vector de coordenadas X, Y, Z y su módulo para facilitar desplazamientos direccionales
     using VectorEspacial = struct Vector
     {
         float vX = 0.0f;
