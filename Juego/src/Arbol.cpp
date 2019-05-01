@@ -598,19 +598,19 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 {
                     arrayTareaObjetivo[1] = 13;
                 }
-                else if(strcmp(accion, constantes.MAX_VIDA_33) == 0)
+                else if(strcmp(objetivo, constantes.MAX_VIDA_33) == 0)
                 {
                     arrayTareaObjetivo[1] = 14;
                 }
-                else if(strcmp(accion, constantes.AT_ESP_UNO) == 0)
+                else if(strcmp(objetivo, constantes.AT_ESP_UNO) == 0)
                 {
                     arrayTareaObjetivo[1] = 15;
                 }
-                else if(strcmp(accion, constantes.AT_ESP_DOS) == 0)
+                else if(strcmp(objetivo, constantes.AT_ESP_DOS) == 0)
                 {
                     arrayTareaObjetivo[1] = 16;
                 }
-                else if(strcmp(accion, constantes.ATAQUE_ESPECIAL) == 0)
+                else if(strcmp(objetivo, constantes.ATAQUE_ESPECIAL) == 0)
                 {
                     arrayTareaObjetivo[1] = 17;
                 }

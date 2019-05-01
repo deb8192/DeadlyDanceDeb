@@ -18,8 +18,10 @@ Enemigo::Enemigo()
     _eventos = SenseEventos::getInstance();
 
     tiempoMerodear = 0.0f;
+    tiempoMoverse = 0.0f;
     tiempoOcultarse = 0.0f;
     lastTiempoMerodear = 0.0f;
+    lastTiempoMoverse = 0.0f;
     lastTiempoOcultarse = 0.0f;
     vectorOrientacion.vX = 0.0f;
     vectorOrientacion.vY = 0.0f;
@@ -139,7 +141,9 @@ Enemigo::~Enemigo()
     lastAtackTime = 0;
     lastAtackEspTime = 0;
     tiempoMerodear = 0;
+    tiempoMoverse = 0;
     tiempoOcultarse = 0;
+    lastTiempoMerodear = 0;
     lastTiempoMerodear = 0;
     lastTiempoOcultarse = 0;
     animacionMuerteTiem = 0;
@@ -469,10 +473,6 @@ void Enemigo::UpdateIA()
                 break;
 
             default:
-            {
-                MuerteBoss* _boss = (MuerteBoss*) this;
-                _boss->RunIA();
-            }
                 break;
         }
     }
@@ -524,6 +524,7 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
             default:
             {
                 MuerteBoss* _boss = (MuerteBoss*) this;
+                _boss->RunIA();
                 _boss->UpdateMuerteBoss(i, _jugador, ayuda);
             }
                 break;

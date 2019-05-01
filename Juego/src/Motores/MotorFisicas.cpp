@@ -1034,11 +1034,15 @@ void MotorFisicas::updateAtaqueEspecial(float x, float y, float z, float rx, flo
 
 bool MotorFisicas::IfCollision(CollisionBody * body1, CollisionBody * body2)
 {
-  if(space->testOverlap(body1,body2))
-  {
-    return true;
-  }
-  return false;
+    if(body1 && body2)
+    {
+        if(space->testOverlap(body1,body2))
+        {
+            return true;
+        }
+        return false;
+    }
+    return false;
 }
 
 CollisionBody* MotorFisicas::getJugador()

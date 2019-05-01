@@ -252,9 +252,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_ULTIMA_PUERTA,
             EN_ACCIONADO,
             EN_NO_ACCIONADO,
+            EN_MAX_VIDA_33,
             EN_AT_ESP_1,
-            EN_AT_ESP_2,
-            EN_MAX_VIDA_33
+            EN_AT_ESP_2
         };
 
         Sala* _estoy;//sala en la que esta el enemigo

@@ -16,34 +16,34 @@
                         <Leaf id="13" type="tarea" action="ataque-especial" target="1"></Leaf>
 	            </Composicion>
                     <Composition id="14" type="secuencia">
-                        <Leaf id="16" type="tarea" action="ataca" target=""></Leaf>
-                        <Leaf id="17" type="tarea" action="defensa" target=""></Leaf>
-                        <Leaf id="18" type="tarea" action="ataca" target=""></Leaf>
-                	<Leaf id="19" type="tarea" action="moverse" target=""></Leaf>
-                        <Leaf id="20" type="tarea" action="ataca" target=""></Leaf>
+                        <Leaf id="15" type="tarea" action="ataca" target=""></Leaf>
+                        <Leaf id="16" type="tarea" action="defensa" target=""></Leaf>
+                        <Leaf id="17" type="tarea" action="ataca" target=""></Leaf>
+                	<Leaf id="18" type="tarea" action="moverse" target=""></Leaf>
+                        <Leaf id="19" type="tarea" action="ataca" target=""></Leaf>
                     </Composition>
                 </Composition>
-                <Leaf id="21" type="tarea" action="moverse" target=""></Leaf>
-                <Leaf id="22" type="tarea" action="defensa" target=""></Leaf>
-                <Leaf id="23" type="tarea" action="moverse" target=""></Leaf>
+                <Leaf id="20" type="tarea" action="moverse" target=""></Leaf>
+                <Leaf id="21" type="tarea" action="defensa" target=""></Leaf>
+                <Leaf id="22" type="tarea" action="moverse" target=""></Leaf>
             </Decorator>
         </Composition>
-        <Composition id="24" type="secuencia">
-            <Decorator id="25" type="iterador" end="random">
-                <Composition id="26" type="selector">
-	            <Composition id="27" type="secuencia">
- 		        <Leaf id="28" type="tarea" action="comprueba" target="ataque-especial"></Leaf>
-                        <Leaf id="29" type="tarea" action="ataque-especial" target="1"></Leaf>
+        <Composition id="23" type="secuencia">
+            <Decorator id="24" type="iterador" end="random">
+                <Composition id="25" type="selector">
+	            <Composition id="26" type="secuencia">
+ 		        <Leaf id="27" type="tarea" action="comprueba" target="ataque-especial"></Leaf>
+                        <Leaf id="28" type="tarea" action="ataque-especial" target="1"></Leaf>
 	            </Composicion>
-                    <Composition id="30" type="secuencia">
-                        <Leaf id="31" type="tarea" action="ataca" target=""></Leaf>
-                        <Leaf id="32" type="tarea" action="defensa" target=""></Leaf>
-                        <Leaf id="33" type="tarea" action="ataca" target=""></Leaf>
+                    <Composition id="29" type="secuencia">
+                        <Leaf id="30" type="tarea" action="ataca" target=""></Leaf>
+                        <Leaf id="31" type="tarea" action="defensa" target=""></Leaf>
+                        <Leaf id="32" type="tarea" action="ataca" target=""></Leaf>
                     </Composition>
                 </Composition>
-                <Leaf id="34" type="tarea" action="moverse" target=""></Leaf>
-                <Leaf id="35" type="tarea" action="defensa" target=""></Leaf>
-                <Leaf id="36" type="tarea" action="moverse" target=""></Leaf>
+                <Leaf id="33" type="tarea" action="moverse" target=""></Leaf>
+                <Leaf id="34" type="tarea" action="defensa" target=""></Leaf>
+                <Leaf id="35" type="tarea" action="moverse" target=""></Leaf>
             </Decorator>
         </Composition>
     </Root>
