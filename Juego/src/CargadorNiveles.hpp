@@ -36,8 +36,8 @@ class CargadorNiveles
         void CargarNivelXml(int level, int tipoJug); //esta funcion carga el nivel desde xml
         void GuardarNivelXml(int); //esta funcion guarda el nivel en xml
         void GuardarNivelBin(int); //esta funcion guarda el nivel en formato bin con el numero que le pases
-        void CargarNivelBin(int); //esta funcion carga el nivel desde un archivo binario  
-        
+        void CargarNivelBin(int); //esta funcion carga el nivel desde un archivo binario
+
         void SetVectorEnemigos(std::vector<Enemigo*>& _enemigosNuevos);
 
         Jugador* GetJugador();
@@ -70,7 +70,9 @@ class CargadorNiveles
         void ReservarMemoriaVectores(int eneMax, int doorsMax, int leversMax, int chestsMax, int waypointsMax, int zonesMax);
         void BorrarVectorEnemigosBossActivado();
         Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void CrearLuz(int x,int y,int z);
+        void CrearLuz(int x,int y,int z,int tipo,float dist);
+        void CrearSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
+        void CrearLuzEnSala(int sala,int x,int y,int z);
         void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearBoss(int accion,int enemigo,int x,int y,int z,int ancho, int largo, int alto, Sala* sala);
         void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, int boss, const char* tipo, unsigned short totalElem, Sala* sala); //lo usamos para crear zonas

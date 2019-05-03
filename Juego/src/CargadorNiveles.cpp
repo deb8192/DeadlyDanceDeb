@@ -167,9 +167,30 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     for (pugi::xml_node hijo = doc.child("Level").child("Light"); hijo; hijo = hijo.next_sibling("Light"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         int x = hijo.attribute("X").as_int();//nos devuelve un int
-        int z = hijo.attribute("Y").as_int();//nos devuelve un int
-        int y = hijo.attribute("Z").as_int();//nos devuelve un int
-        CrearLuz(x,y,z); //cargamos el objeto
+        int y = hijo.attribute("Y").as_int();//nos devuelve un int
+        int z = hijo.attribute("Z").as_int();//nos devuelve un int
+        int tipo = hijo.attribute("Tipo").as_int();
+        float intensidad = (float)hijo.attribute("Intensity").as_int();
+        CrearLuz(x,y,z,tipo,intensidad); //cargamos el objeto
+    }
+
+    for (pugi::xml_node hijo = doc.child("Level").child("LightSala"); hijo; hijo = hijo.next_sibling("LightSala"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        int minz = hijo.attribute("minZ").as_int();//nos devuelve un int
+        int maxz = hijo.attribute("maxZ").as_int();//nos devuelve un int
+        int minx = hijo.attribute("minX").as_int();//nos devuelve un int
+        int maxx = hijo.attribute("maxX").as_int();//nos devuelve un int
+        int sala = hijo.attribute("sala").as_int();
+        CrearSalaLuz(sala,minz,maxz,minx,maxx);
+    }
+
+    for (pugi::xml_node hijo = doc.child("Level").child("LightPos"); hijo; hijo = hijo.next_sibling("LightPos"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        int x = hijo.attribute("X").as_int();//nos devuelve un int
+        int y = hijo.attribute("Y").as_int();//nos devuelve un int
+        int z = hijo.attribute("Z").as_int();//nos devuelve un int
+        int sala = hijo.attribute("sala").as_int();
+        CrearLuzEnSala(sala,x,y,z);
     }
 
     //Se crea el arbol de salas del mapa del nivel
@@ -579,9 +600,19 @@ Sala* CargadorNiveles::CrearPlataforma(int accion, int rp, int x,int y,int z, in
     return _sala;
 }
 
-void CargadorNiveles::CrearLuz(int x,int y,int z)
+void CargadorNiveles::CrearLuz(int x,int y,int z,int tipo,float dist)
 {
-    //_motor->CargarLuces(x,y,z);
+    _motor->CargarLuces(x,y,z,tipo,dist);
+}
+
+void CargadorNiveles::CrearSalaLuz(int sala,int minz,int maxz,int minx,int maxx)
+{
+    _motor->CargarSalaLuz(sala,minz,maxz,minx,maxx);
+}
+
+void CargadorNiveles::CrearLuzEnSala(int sala,int x,int y,int z)
+{
+    _motor->CargarLuzEnSala(sala,x,y,z);
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
