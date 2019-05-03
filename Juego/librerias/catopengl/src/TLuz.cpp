@@ -12,7 +12,7 @@ TLuz::TLuz(int t)
         // setAmbient(0.35f, 0.2f, 0.2f);
         // setDiffuse(0.33f, 0.23f, 0.23f);
         // setSpecular(0.35f, 0.25f, 0.25f);
-        // setDirection(0.0f, -1.0f, -0.5f);
+        setDirection(0.0f, -1.0f, -0.5f);
         setBrillos(8.0f);
     }
     else if(t == 1)

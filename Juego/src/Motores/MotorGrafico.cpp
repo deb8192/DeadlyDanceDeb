@@ -1695,7 +1695,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
             _interfaz->Trasladar(_jugEscena,x,y,z);
             _interfaz->Rotar(_jugEscena,rx,ry-180,rx);
-            std::cout << x << " " << y << " " << z << std::endl;
+            // std::cout << x << " " << y << " " << z << std::endl;
 
             UpdateLights(x,y,z);
 
