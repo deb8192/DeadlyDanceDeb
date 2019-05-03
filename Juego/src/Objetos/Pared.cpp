@@ -20,6 +20,14 @@ Pared::~Pared()
 
 void Pared::Borrar(unsigned short pos)
 {
+    _motora->getEvent("RomperPared")->setPosition(posActual.x,posActual.y,posActual.z);
+    _motora->getEvent("RomperPared")->start();
+
+    /*//TO DO: anyadirle tiempo de espera para la anim
+    //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
+    */
+    _motor->cambiarAnimacion(4,pos,1);//se cambia la animacion de la pared
+            
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     _fisicas->ErasePared(pos);
     _fisicas = nullptr;

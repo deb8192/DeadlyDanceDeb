@@ -1,8 +1,8 @@
 <Level><!--- Esto nos indica que estamos definiendo un nivel -->
 
 	<!-- Para reservar memoria en los vectores --> 	<!-- TO DO: Poner todos los numeros a Walls -->
-	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="6" Levers="6" Chests="16" Waypoints="70" Zones="21"></MaxNumberOf>
-	<!-- Tenemos 36/50 enemigos -->
+	<MaxNumberOf Enemies="35" Walls="100" Doors="15" Keys="6" Levers="6" Chests="16" Waypoints="70" Zones="21"></MaxNumberOf>
+	<!-- Tenemos 19/35 enemigos -->
 
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
 	<Light Type="Ambiental" Tipo="0" Intensity="50" X="0" Y="10" Z="0"> </Light>
@@ -87,7 +87,7 @@
 
 
 	<!--Sala-01--><Platform Type="1" accion="0" ancho="72" largo="72" alto="4" RP="0" X="48" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
-	<!--Decoracion-conjunto-Paredes--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/DecoracionParedes.obj"></Object>
+	<!--Decoracion-conjunto-Paredes--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="0" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Paredes.png" Model="assets/models/Escenario/DecoracionParedes.obj"></Object>
 	<!--Decoracion-cueva-roca--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Roca.png" Model="assets/models/Escenario/DecoracionRoca.obj"></Object>
 	<!--Decoracion-antorchas--><Object tipoObj="17" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/DecoracionNivel.png" Model="assets/models/Escenario/DecoracionItems.obj"></Object>
 	<!--Decoracion-rio-lava--><Object tipoObj="18" Type="0" accion="10" ancho="0" largo="0" alto="24" RP="-35" X="100" Y="-8" Z="200" despX="0" despZ="0" Texture="assets/texture/lava.png" Model="assets/models/Escenario/RioLava.obj"></Object>

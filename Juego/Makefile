@@ -7,8 +7,8 @@ CABECERAS =-I"librerias/irrlicht/inc/" -I"librerias/fmod/lowlevel/inc/" -I"libre
 CABECERASWEB =-I"librerias/curl/inc/" -I"librerias/json/inc/"
 LIBRERIAS =-L"librerias/irrlicht/lib/" -L"librerias/reactphysics3d/lib/" -L"librerimmas/fmod/lowlevel/lib/x86_64/" -L"librerias/fmod/studio/lib/x86_64/" -L"librerias/glew/lib/" -L"librerias/glad/lib/" -L"librerias/glfw/lib/" -L"librerias/assimp/lib/" -L"librerias/freetype/lib/" -L"librerias/catopengl/lib/" -L"librerias/curl/lib/" -L"librerias/json/lib/" #nos dice donde estan las librerias
 LIBRERIAS_CARPETAS = "librerias/fmod/lowlevel/lib/x86_64/:librerias/fmod/studio/lib/x86_64/:librerias/irrlicht/lib/:librerias/reactphysics3d/lib:librerias/glew/lib:librerias/glad/lib:librerias/glfw/lib:librerias/assimp/lib:librerias/freetype/lib:librerias/catopengl/lib:librerias/curl/lib:librerias/json/lib"
-LIBRERIAS_ESPECIFICAS = librerias/fmod/studio/lib/x86_64/libfmodstudio.so librerias/fmod/lowlevel/lib/x86_64/libfmod.so librerias/reactphysics3d/lib/libreactphysics3d.a librerias/glew/lib/libGLEW.a librerias/glad/lib/libglad.a librerias/glfw/lib/libglfw3.a librerias/assimp/lib/libIrrXML.a librerias/freetype/lib/libfreetype.a librerias/catopengl/lib/libcatopengl.a librerias/irrlicht/lib/libIrrlicht.so.1.8.4 librerias/curl/lib/libcurl.so librerias/json/lib/libjsoncpp.a #librerias necesarias
-irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor -lGL -lassimp -lfreetype
+LIBRERIAS_ESPECIFICAS = librerias/fmod/studio/lib/x86_64/libfmodstudio.so librerias/fmod/lowlevel/lib/x86_64/libfmod.so librerias/reactphysics3d/lib/libreactphysics3d.a librerias/glew/lib/libGLEW.a librerias/glad/lib/libglad.a librerias/glfw/lib/libglfw3.a librerias/assimp/lib/libIrrXML.a librerias/freetype/lib/libfreetype.a librerias/catopengl/lib/libcatopengl.a librerias/irrlicht/lib/libIrrlicht.so.1.8.4 librerias/curl/lib/libcurl.a librerias/json/lib/libjsoncpp.a #librerias necesarias
+irrlichtN =  -lrt -lm -ldl -lX11 -lpthread -lXrandr -lXinerama -lXxf86vm -lXcursor -lGL -lassimp -lfreetype -lcurl -lnghttp2 -lidn2 -lrtmp -lpsl -lbrotlidec -lz -ljsoncpp
 flagsW = -lcurl -lnghttp2 -lidn2 -lssh2 -lssh2 -lpsl -lssl -lcrypto -lssl -lcrypto -lgssapi_krb5 -lkrb5 -lk5crypto -lcom_err -lz -ljsoncpp 
 #porque nombre llamarla
 libSeguimiento = $(shell ls librerias/catopengl/obj/*.o)
@@ -144,6 +144,7 @@ $(RECUR):
 
 # si los cpp cambian los .o tambien cambiara (basicamente dice eso), luego si cambian los vuelve a crear
 src/puntuaciones.o: src/puntuaciones.cpp src/puntuaciones.hpp
+	@echo -e '\e[44m COMPILANDO CLASE ENCARGADA API WEB \e[0m';
 	$(CXX) -c $(CXXFLAGS) $(DIRECTIVA) $< -o $@ $(CABECERASWEB)
 
 %.o: %.cpp %.hpp #para las clases normales
