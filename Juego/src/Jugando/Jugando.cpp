@@ -328,7 +328,7 @@ void Jugando::ManejarEventos() {
 
     if(_motor->EstaPulsado(KEY_B))
     {
-        unsigned short desplaza = 10;
+        unsigned short desplaza = 170;
         _jugador->setPosiciones(242+desplaza, 0, 490);
         _jugador->setNewPosiciones(242+desplaza, 0, 490);
         _jugador->initPosicionesFisicas((242+desplaza)/2, 0/2, 490/2);

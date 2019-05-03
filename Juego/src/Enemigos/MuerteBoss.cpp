@@ -162,7 +162,7 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                     }
                     else
                     { 
-                        //Merodea poniendo en positivo o negativo el angulo actual de rotacion
+                        //Se desplaza y cambia la direccion cada medio segundo de tiempo
                         if(this->getTimeMoverse() > 0)
                         {
                             float resto = (float) ((int) (this->getTimeMoverse() * constantes.CIEN) % (int) (constantes.UN_MEDIO * constantes.CIEN)) / constantes.CIEN;

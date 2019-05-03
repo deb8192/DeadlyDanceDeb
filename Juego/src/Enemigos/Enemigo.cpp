@@ -1968,6 +1968,8 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         posiciones.z = posFutura.z + velocidad.z;
 
         this->alinearse(&target, false);
+        this->setRotacion(rotActual.x, rotation, rotActual.z);
+        this->setLastRotacion(rotActual.x, rotation, rotActual.z);
         this->setNewPosiciones(posiciones.x, posFutura.y, posiciones.z);
         this->setPosicionesFisicas(velocidad.x, 0.0f, velocidad.z);
 
