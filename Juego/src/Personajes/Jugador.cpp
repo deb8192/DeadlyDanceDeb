@@ -30,7 +30,7 @@ Jugador::Jugador(Sala* sala, unsigned short tipoJug, int nX,int nY,int nZ, int a
     int largo, int alto, int accion, int maxVida)
 : Jugador()
 {
-    _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,3,2,2,2,1,0,0);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
+    _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,3,2,2,2,1,0,0,false);//creamos el cuerpo y su espacio de colisiones en el mundo de las fisicas
 
     this->tipoJug = tipoJug;
     this->ancho = ancho;
@@ -344,7 +344,7 @@ int Jugador::Atacar(int i)
         if(this->getArma() == nullptr)
         {
             setAnimacion(2);
-            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,3,3,3,4,0,0);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,3,3,3,4,0,0,false);
             _motora->getEvent("SinArma")->setVolume(0.4f);
             _motora->getEvent("SinArma")->start();
         }
@@ -352,7 +352,7 @@ int Jugador::Atacar(int i)
         else if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)
         {
             //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4,0,0);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4,0,0,false);
             _motora->getEvent("GolpeGuitarra")->setVolume(0.5f);
             _motora->getEvent("GolpeGuitarra")->start();
         }
@@ -361,7 +361,7 @@ int Jugador::Atacar(int i)
         {
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj",NULL);
             //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
             _motora->getEvent("Arpa")->setVolume(0.5f);
             _motora->getEvent("Arpa")->start();
         }
@@ -373,7 +373,7 @@ int Jugador::Atacar(int i)
             atposY = ((getY()+4)/2);
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Onda.obj",NULL);
             //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0,false);
             _motora->getEvent("Flauta")->setVolume(0.3f);
             _motora->getEvent("Flauta")->start();
         }
@@ -445,7 +445,7 @@ int Jugador::AtacarEspecial()
                 //Crear cuerpo de colision de ataque delante del jugador
                 _fisicas->crearCuerpo(0,
                     _armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),
-                    2,8,1,8,5,0,0);
+                    2,8,1,8,5,0,0,false);
                 _motora->getEvent("GuitarraEspecial")->setVolume(0.5f);
                 _motora->getEvent("GuitarraEspecial")->start();
             }
@@ -455,7 +455,7 @@ int Jugador::AtacarEspecial()
                 //Crear cuerpo de colision de ataque delante del jugador
                 _fisicas->crearCuerpo(0,
                     _armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),
-                    2,8,8,8,5,0,0);
+                    2,8,8,8,5,0,0,false);
                 _motora->getEvent("Arpa")->start(); // TO DO: Evento de sonido temporal
             }
         }
@@ -542,7 +542,7 @@ void Jugador::CrearCuerpoAtaque()
                 atposZ += velocidadflecha* (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
                 atposX += velocidadflecha* (distance * sin(constantes.PI * atgy / constantes.PI_RADIAN));
                 //Solo sustitulle una variable no crea cuerpos constante
-                _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0);
+                _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0,false);
             }
             var1 = 1, var2 = 1, var3 = 2, var4 = 3;
         }
@@ -1162,7 +1162,7 @@ void Jugador::setArma(Recolectable* _armaRec)
         _fisicas->crearCuerpo(0,posActual.x/2,posActual.y/2,posActual.z/2,
             2,
             _armaEquipada->getAncho(),_armaEquipada->getLargo(),_armaEquipada->getAlto(),
-            9,0,0);
+            9,0,0,false);
 
         if(_armaEquipada->GetTipoObjeto() == constantes.GUITARRA)//entonces es la guitarra cuerpo a cuerpo
         {

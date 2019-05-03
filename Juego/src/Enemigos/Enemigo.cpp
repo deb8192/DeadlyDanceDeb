@@ -70,9 +70,9 @@ Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida/*,
     largo = largoN;
     alto = altoN;
 
-    _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,2,ancho,alto,largo,2);
-    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,7); //Para ataques
-    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,8); //Para ataques especiales*/
+    _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,2,ancho,alto,largo,2,false);
+    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,7,false); //Para ataques
+    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,8,false); //Para ataques especiales*/
 }
 
 Enemigo::~Enemigo()
@@ -566,7 +566,7 @@ int Enemigo::Atacar(int i)
         {
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/sphere.obj",NULL);
             //Crear cuerpo de colision de ataque delante del enemigo
-            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0);
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
             _motora->getEvent("GolpeGuitarra")->setVolume(0.5f);
             _motora->getEvent("GolpeGuitarra")->start();
         }*/
@@ -1883,7 +1883,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
      *      Salidas:
      *                  int direccion: la direccion que al final toma el boss
     */
-    bool Enemigo::Moverse(int nuevaDireccion, int direccion, int* _jug)
+    int Enemigo::Moverse(int nuevaDireccion, int direccion, int* _jug)
     {
         Constantes constantes;
         Jugador* _jugador = (Jugador*) _jug;
@@ -1954,7 +1954,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 break;
         }
         
-        this->setNewRotacion(rotActual.x, rotActual.y + rotation, rotActual.z);
+        this->setNewRotacion(rotActual.x, rotation, rotActual.z);
         this->setVectorOrientacion();
         
         if(porcentajeVelocidad != constantes.UN_MEDIO)
@@ -1971,7 +1971,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         this->setNewPosiciones(posiciones.x, posFutura.y, posiciones.z);
         this->setPosicionesFisicas(velocidad.x, 0.0f, velocidad.z);
 
-	    return false;
+	    return direccion;
     }
     INnpc::VectorEspacial Enemigo::normalizarVector(int* destino)
     {

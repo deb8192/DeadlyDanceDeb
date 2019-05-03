@@ -71,7 +71,7 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                     {
                         case EN_MAX_VIDA_33:
                             {
-                                int porcentaje_33 = this->getVidaIni() * constantes.CIEN / constantes.MAX_VIDA_BOSS_PELIGRO;
+                                int porcentaje_33 = this->getVidaIni() * constantes.MAX_VIDA_BOSS_PELIGRO / constantes.CIEN;
                                 if(this->getVida() <= porcentaje_33)
                                 {
                                     funciona = true;
@@ -165,7 +165,7 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                         //Merodea poniendo en positivo o negativo el angulo actual de rotacion
                         if(this->getTimeMoverse() > 0)
                         {
-                            float resto = (float) ((int) (this->getTimeMoverse() * constantes.CIEN) % (int) (constantes.UN_CUARTO * constantes.CIEN)) / constantes.CIEN;
+                            float resto = (float) ((int) (this->getTimeMoverse() * constantes.CIEN) % (int) (constantes.UN_MEDIO * constantes.CIEN)) / constantes.CIEN;
                             if(resto <= constantes.DIEZ_PORCIENTO)
                             {
                                 nuevaDireccion = rand() % 8 + 1;    

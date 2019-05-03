@@ -1225,7 +1225,7 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
     #endif
 }
 
-void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura)
+void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss)
 {
     #ifdef WEMOTOR
 
@@ -1237,7 +1237,15 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
         if(enemigo != 0)
         {
             _interfaz->Trasladar(enemigo,(float)x,(float)y,(float)z);
-            Enemigos_Scena.push_back(enemigo);
+            if(boss)
+            {
+                Enemigos_Scena.insert(Enemigos_Scena.begin(), enemigo);
+            }
+            else
+            {
+                Enemigos_Scena.push_back(enemigo);
+            }
+            
         }
 
     #else

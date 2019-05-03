@@ -6,6 +6,7 @@ Arbol::Arbol(Nodo *root, const char* name)
     nodoEnEjecucionDirecta = nullptr;
     arrayTareaObjetivo = new short int [2];
     ID = 0;
+    contadorRandom = 0;
     bucleDecorador = false;
 }
 
@@ -282,6 +283,10 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     //De haber un hijo cuyo ID es superior al registrado, ese es el nuevo nodo
                     if(i < comp->getHijos().size())
                     {
+                        if(!exito)
+                        {
+                            exito = true;
+                        }
                         nodoEnEjecucionDirecta = comp->getHijos().at(i);
                         if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0)
                         {
@@ -291,7 +296,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                         {
                             deco = (Decorador*) nodoEnEjecucionDirecta;
                         }
-                        ID++;
+                        ID = nodoEnEjecucionDirecta->getID();
                     }
                     //En caso contrario, se asciende por el arbol para cambiar de rama hasta que no se pueda
                     else if(nodoEnEjecucionDirecta->getPadre() != nullptr)
@@ -352,12 +357,17 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     bucleDecorador = true;
                 }
 
-                //Si algun hijo falla en su tarea, el booleano es falso por lo tanto se igual el contador ID
-                //al del decorador para volver a entrar al bucle
-                else if(!exito)
+                //Se comprueba el ID del ultimo hijo del decorador para saber si sale
+                else if(deco->getHijos().back()->getID() < ID || !exito)
                 {
-                    ID = nodoEnEjecucionDirecta->getID();
-                    exito = true;
+                    if(!exito)
+                    {
+                        if(finBucle.back() == 1 && contadorRandom > 0)
+                        {
+                            exito = true;
+                            ID = nodoEnEjecucionDirecta->getID();
+                        }
+                    }
                     if(bucleDecorador && finBucle.back() > 0)
                     {
                         contadorRandom--;
@@ -365,18 +375,9 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                         {
                             this->finBucleDecorador();
                         }
-                    }
-                }
-
-                //Se comprueba el ID del ultimo hijo del decorador para saber si sale
-                else if(deco->getHijos().back()->getID() < ID && exito)
-                {
-                    if(bucleDecorador && finBucle.back() > 0)
-                    {
-                        contadorRandom--;
-                        if(contadorRandom == 0)
+                        else
                         {
-                            this->finBucleDecorador();
+                            ID = nodoEnEjecucionDirecta->getID();
                         }
                     }
                     else if (bucleDecorador && finBucle.back() == 0)
@@ -394,6 +395,10 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 //De haber un hijo cuyo ID es superior al registrado, ese es el nuevo nodo
                 if(i < deco->getHijos().size())
                 {
+                    if(!exito)
+                    {
+                        exito = true;
+                    }
                     nodoEnEjecucionDirecta = deco->getHijos().at(i);
                     if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0)
                     {
@@ -403,7 +408,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     {
                         deco = (Decorador*) nodoEnEjecucionDirecta;
                     }
-                    ID++;
+                    ID = nodoEnEjecucionDirecta->getID();
                 }
                 //En caso contrario, se asciende por el arbol para cambiar de rama
                 else if(nodoEnEjecucionDirecta->getPadre() != nullptr)

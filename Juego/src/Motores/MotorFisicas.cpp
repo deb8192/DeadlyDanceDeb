@@ -120,7 +120,7 @@ MotorFisicas::~MotorFisicas()
 }
 
 void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int type,
-    float ancho, float alto, float largo, int typeCreator, float despX, float despZ)
+    float ancho, float alto, float largo, int typeCreator, float despX, float despZ, bool boss)
 {
     rp3d::Vector3 posiciones(px+despX,py,pz+despZ); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
     rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
@@ -171,7 +171,14 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
             break;
         case 2: //enemigos
         {
-            enemigos.push_back(move(cuerpo));
+            if(boss)
+            {
+                enemigos.insert(enemigos.begin(), cuerpo);
+            }
+            else
+            {
+                enemigos.push_back(move(cuerpo));
+            }
         }
             break;
         case 3: //objetos
@@ -215,12 +222,26 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
             break;
         case 7: //ataque enemigos
         {
-            enemigosAtack.push_back(move(cuerpo));
+            if(boss)
+            {
+                enemigosAtack.insert(enemigosAtack.begin(), cuerpo);
+            }
+            else
+            {
+                enemigosAtack.push_back(move(cuerpo));
+            }
         }
             break;
         case 8:
         {
-            armaAtEspEne.push_back(move(cuerpo));
+            if(boss)
+            {
+                armaAtEspEne.insert(armaAtEspEne.begin(), cuerpo);
+            }
+            else
+            {
+                armaAtEspEne.push_back(move(cuerpo));
+            }
         }
             break;
         case 9:
@@ -1047,27 +1068,27 @@ bool MotorFisicas::IfCollision(CollisionBody * body1, CollisionBody * body2)
 
 CollisionBody* MotorFisicas::getJugador()
 {
-  return jugador;
+    return jugador;
 }
 
 CollisionBody* MotorFisicas::getJugadorAtack()
 {
- return jugadorAtack;
+    return jugadorAtack;
 }
 
 CollisionBody* MotorFisicas::getEnemies(int n)
 {
- return enemigos[n];
+    return enemigos[n];
 }
 
 CollisionBody* MotorFisicas::getEnemiesAtack(int n)
 {
- return enemigosAtack[n];
+    return enemigosAtack[n];
 }
 
 CollisionBody* MotorFisicas::getEnemiesAtEsp(int n)
 {
- return armaAtEspEne[n];
+    return armaAtEspEne[n];
 }
 
 void MotorFisicas::limpiarFisicas()

@@ -203,7 +203,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
         void AuxiliarAliado();//se mueve hacia el proximo waypoint del camino a seguir
         bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
-        bool Moverse(int nuevaDireccion, int direccion, int* _jug);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
+        int Moverse(int nuevaDireccion, int direccion, int* _jug);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         INnpc::VectorEspacial normalizarVector(int*);//Convierte el vector que se pasa en un vector con la misma direccion y sentido pero con modulo 1
         void modificarTrayectoria(INnpc::VectorEspacial* vector, int* destino);
         bool comprobarDistanciaFlocking();
@@ -232,8 +232,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             EN_DEBE,
             EN_ESTA,
             EN_NO_OIR,
-            EN_MOVERSE,
-            EN_ATAQUE_ESPECIAL
+            EN_ATAQUE_ESPECIAL,
+            EN_MOVERSE
         };
 
         enum objetivosEnemigo

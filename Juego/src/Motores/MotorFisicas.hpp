@@ -21,7 +21,7 @@ using namespace reactphysics3d;
             }
             //fin singleton public
 
-            void crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator, float despX, float despZ);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
+            void crearCuerpo(int accion, float px, float py, float pz, int type, float ancho, float alto, float largo, int typeCreator, float despX, float despZ, bool boss);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             unsigned short CrearCuerpoInter(unsigned short tipoObj, float px, float py, float pz, 
                 float ancho, float alto, float largo, float despX, float despZ);
             unsigned short CrearCuerpoRec(int accion, float px, float py, float pz,
