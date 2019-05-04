@@ -7,10 +7,14 @@ MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
 {
     funciona = true;
     atacado = false;
+    seAcerca = false;
     _ordenes = new short [constantes.DOS];
     maxRotacion = constantes.PI_CUARTOS;
     rotation = constantes.CERO;
     direccion = 0;
+    maxDistanciaJugador = 30;
+    minDistanciaJugador = 15;
+
 
     _modelo = "assets/models/Muerte/Muerte.obj";
     _textura = "assets/texture/Muerte.png";
@@ -18,8 +22,16 @@ MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
 
 MuerteBoss::~MuerteBoss()
 {
+    funciona = false;
+    atacado = false;
+    seAcerca = false;
     delete[] _ordenes;
     _ordenes = nullptr;
+    maxRotacion = 0;
+    rotation = 0;
+    direccion = 0;
+    maxDistanciaJugador = 0;
+    minDistanciaJugador = 0;
     _modelo = nullptr;
     _textura = nullptr;
 }
@@ -43,6 +55,10 @@ void MuerteBoss::RunIA()
         if(hecho)
         {
             hecho = false;
+        }
+        if(seAcerca)
+        {
+            seAcerca = false;
         }
         _ordenes = this->Enemigo::RunIA(funciona);
     }
@@ -121,12 +137,12 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                 switch (_ordenes[1])
                 {
                     case EN_AT_ESP_2:
-                        setRespawnBoss(true);
-                        /* Llamar animacion pedir ayuda */
+                        /* ataque especial 1 */
                         break;
                 
                     default:
-                        /* ataque especial 1 */
+                        SetRespawnBoss(true);
+                        /* Llamar animacion pedir ayuda */
                         break;
                 }
             case EN_ATACAR: //El boss ataca
@@ -156,7 +172,8 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                     {
                         //Moverse estableciendo una direccion de movimiento 
                         nuevaDireccion = rand() % 8 + 1;       
-                        direccion = this->Moverse(nuevaDireccion, direccion, _jug);
+                        direccion = this->Moverse(nuevaDireccion, direccion, _jug, minDistanciaJugador, maxDistanciaJugador, &seAcerca);
+                        nuevaDireccion = 0;
                         this->setTimeMoverse(1.5f);
                         hecho = true;
                     }
@@ -172,7 +189,8 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                                 this->setTimeMoverse(this->getTimeMoverse() - resto);
                             }
                         }
-                        direccion = this->Moverse(nuevaDireccion, direccion, _jug);
+                        direccion = this->Moverse(nuevaDireccion, direccion, _jug, minDistanciaJugador, maxDistanciaJugador, &seAcerca);
+                        nuevaDireccion = 0;
                     }
                     funciona = true;
                 }

@@ -35,6 +35,7 @@ Enemigo::Enemigo()
     accionRealizada = false;
     controlRotacion = false;
     distanciaMinimaEsquivar = 3;
+    multiplicadorAtaqueEspecial = 1;
 
     posicionComunBandada.vX = INT_MAX;
     posicionComunBandada.vY = INT_MAX;
@@ -110,6 +111,7 @@ Enemigo::~Enemigo()
     accionRealizada = false;
     controlRotacion = false;
     distanciaMinimaEsquivar = 0;
+    multiplicadorAtaqueEspecial = 0;
 
     distanciaMaximaCohesionBandada = 0;
 
@@ -807,7 +809,7 @@ void Enemigo::ModificarVida(int vid)
         }
         else if(tipoEnemigo == 5)
         {
-            modo = MODO_ATAQUE;
+            ModificarBarraAtEs(abs(vid));
         }
 
     }
@@ -827,7 +829,7 @@ void Enemigo::setTipo(int tip)
 
 }
 
-void Enemigo::setRespawnBoss(bool crearEnemigos)
+void Enemigo::SetRespawnBoss(bool crearEnemigos)
 {
     respawnBoss = crearEnemigos;
 }
@@ -841,7 +843,7 @@ void Enemigo::setRespawnBoss(bool crearEnemigos)
  */
 void Enemigo::ModificarBarraAtEs(int bar)
 {
-    barraAtEs += bar;
+    barraAtEs += bar * multiplicadorAtaqueEspecial;
     if(barraAtEs < 0)
         barraAtEs = 0;
     if(barraAtEs > 100)
@@ -1060,6 +1062,11 @@ void Enemigo::SetPosicionComunBandada(INnpc::VectorEspacial posicion)
     posicionComunBandada = posicion;
 }
 
+void Enemigo::SetMultiplicadorAtEsp(int multiplicador)
+{
+    multiplicadorAtaqueEspecial = multiplicador;
+}
+
 float Enemigo::getTimeOcultarse()
 {
     return tiempoOcultarse;
@@ -1122,6 +1129,11 @@ int Enemigo::GetEnemigo()
 int Enemigo::GetModo()
 {
     return modo;
+}
+
+bool Enemigo::GetRespawnBoss()
+{
+    return respawnBoss;
 }
 
 ZonaOscura* Enemigo::getZonaOscuraMasCercana(vector <ZonaOscura*>& zonasOscuras, ZonaOscura* _zonaUsada)
@@ -1879,99 +1891,113 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
      *                  int nuevaDireccion: direccion que probablemente tomara
      *                  int direccion: direccion actual del boss
      *                  int* _jug: entero que contiene el puntero del jugador
+     *                  int maxDistBossJugador: distancia maxima con el jugador
      * 
      *      Salidas:
      *                  int direccion: la direccion que al final toma el boss
     */
-    int Enemigo::Moverse(int nuevaDireccion, int direccion, int* _jug)
+    int Enemigo::Moverse(int nuevaDireccion, int direccion, int* _jug, int minDistBossJugador, int maxDistBossJugador, bool* seAcerca)
     {
         Constantes constantes;
         Jugador* _jugador = (Jugador*) _jug;
-        struct
-        {
-            float x = 0.0f;
-            float y = 0.0f;
-            float z = 0.0f;
-        }
-        velocidad, posiciones;
-        VectorEspacial target;
+        VectorEspacial velocidad, posiciones, target;
         target.vX = _jugador->getX();
         target.vY = _jugador->getY();
         target.vZ = _jugador->getZ();
+        target.modulo = sqrt(pow(posActual.x - target.vX, constantes.DOS) + pow(posActual.y - target.vY, constantes.DOS) + pow(posActual.z - target.vZ, constantes.DOS));
 
-        if(nuevaDireccion > 0)
+        if(abs(target.modulo) < minDistBossJugador && *seAcerca)
         {
-            if(nuevaDireccion != direccion)
-            {
-                direccion = nuevaDireccion;
-            }
-            else
-            {
-                direccion -= constantes.DOS;
-                if(direccion <= 0)
-                {
-                    direccion += constantes.OCHO;
-                }
-            }
-        }
-
-        switch(direccion)
-        {
-            case 1:
-                rotation = constantes.DOS_PI_RADIAN;
-                break;
-            
-            case 2:
-                rotation = constantes.PI_TRES_MEDIOS_CUARTOS;
-                break;   
-
-            case 3:
-                rotation = constantes.PI_TRES_MEDIOS;
-                break;
-
-            case 4:
-                rotation = constantes.PI_RADIAN_CUARTOS;
-                break;
-            
-            case 5:
-                rotation = constantes.PI_RADIAN;
-                break;
-            
-            case 6:
-                rotation = constantes.PI_MEDIOS_CUARTOS;
-                break;
-
-            case 7:
-                rotation = constantes.PI_MEDIOS;
-                break;
-
-            case 8:
-                rotation = constantes.PI_CUARTOS;
-                break;
-
-            default:
-                rotation = constantes.PI_MEDIOS;
-                break;
+            *seAcerca = false;
         }
         
-        this->setNewRotacion(rotActual.x, rotation, rotActual.z);
-        this->setVectorOrientacion();
+        if(abs(target.modulo) < maxDistBossJugador && !*seAcerca)
+        {
+            if(nuevaDireccion > 0)
+            {
+                if(nuevaDireccion != direccion)
+                {
+                    direccion = nuevaDireccion;
+                }
+                else
+                {
+                    direccion -= constantes.DOS;
+                    if(direccion <= 0)
+                    {
+                        direccion += constantes.OCHO;
+                    }
+                }
+            }
+
+            switch(direccion)
+            {
+                case 1:
+                    rotation = constantes.DOS_PI_RADIAN;
+                    break;
+                
+                case 2:
+                    rotation = constantes.PI_TRES_MEDIOS_CUARTOS;
+                    break;   
+
+                case 3:
+                    rotation = constantes.PI_TRES_MEDIOS;
+                    break;
+
+                case 4:
+                    rotation = constantes.PI_RADIAN_CUARTOS;
+                    break;
+                
+                case 5:
+                    rotation = constantes.PI_RADIAN;
+                    break;
+                
+                case 6:
+                    rotation = constantes.PI_MEDIOS_CUARTOS;
+                    break;
+
+                case 7:
+                    rotation = constantes.PI_MEDIOS;
+                    break;
+
+                case 8:
+                    rotation = constantes.PI_CUARTOS;
+                    break;
+
+                default:
+                    rotation = constantes.PI_MEDIOS;
+                    break;
+            }
+        }
+        else
+        {
+            *seAcerca = true;
+            this->alinearse(&target, false);
+        }
+
+        if(!*seAcerca)
+        {        
+            this->setNewRotacion(rotActual.x, rotation, rotActual.z);
+            this->setVectorOrientacion();
+        }
         
         if(porcentajeVelocidad != constantes.UN_MEDIO)
         {
             porcentajeVelocidad = constantes.UN_MEDIO;
         }
 
-        velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
-        velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
-        posiciones.x = posFutura.x + velocidad.x;
-        posiciones.z = posFutura.z + velocidad.z;
+        velocidad.vX = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        velocidad.vZ = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+        posiciones.vX = posFutura.x + velocidad.vX;
+        posiciones.vZ = posFutura.z + velocidad.vZ;
 
-        this->alinearse(&target, false);
-        this->setRotacion(rotActual.x, rotation, rotActual.z);
+        if(!*seAcerca)
+        {
+            this->alinearse(&target, false);
+            this->setRotacion(rotActual.x, rotation, rotActual.z);
+        }
         this->setLastRotacion(rotActual.x, rotation, rotActual.z);
-        this->setNewPosiciones(posiciones.x, posFutura.y, posiciones.z);
-        this->setPosicionesFisicas(velocidad.x, 0.0f, velocidad.z);
+        this->setNewPosiciones(posiciones.vX, posFutura.y, posiciones.vZ);
+        this->setPosicionesFisicas(velocidad.vX, 0.0f, velocidad.vZ);
 
 	    return direccion;
     }

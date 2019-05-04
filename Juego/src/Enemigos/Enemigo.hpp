@@ -93,6 +93,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void SetEnemigo(int);
         void SetModo(int);
         void SetPosicionComunBandada(INnpc::VectorEspacial direccion);
+        void SetRespawnBoss(bool creaEnemigos);
+        void SetMultiplicadorAtEsp(int multiplicador);
 
         int getID();
         int getVidaIni();
@@ -144,6 +146,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getVelocidadMaxima(); //se obtiene la VelocidadMaxima de desplazamiento
         int GetEnemigo();
         int GetModo();
+        bool GetRespawnBoss();
         const char* GetModelo(); // Malla 3D
         const char* GetTextura(); //textura
         bool GetPedirAyuda();
@@ -203,13 +206,11 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
         void AuxiliarAliado();//se mueve hacia el proximo waypoint del camino a seguir
         bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
-        int Moverse(int nuevaDireccion, int direccion, int* _jug);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
+        int Moverse(int nuevaDireccion, int direccion, int* _jug, int minDistBossJugador, int maxDistBossJugador, bool* seAcerca);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         INnpc::VectorEspacial normalizarVector(int*);//Convierte el vector que se pasa en un vector con la misma direccion y sentido pero con modulo 1
         void modificarTrayectoria(INnpc::VectorEspacial* vector, int* destino);
         bool comprobarDistanciaFlocking();
         //fin comportamientos bases
-
-        void setRespawnBoss(bool creaEnemigos);
         ZonaOscura* getZonaOscuraMasCercana(vector <ZonaOscura*> &zonasOscuras, ZonaOscura*);
         ZonaEscondite* getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zonasEscondite, ZonaEscondite*);
         //Comparadores de la lectura de las acciones y objetivos de las tareas
@@ -264,6 +265,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Arma* _armaEspecial;
         const char* _rutaArmaEspecial = "assets/models/objeto.obj";
         int tipoEnemigo;//Tipo del enemigo: pollo, murcielago, guardian, boss
+        int multiplicadorAtaqueEspecial; //Para los bosses, multiplicador del danyo recibido para aumentar el ataque especial
         Arbol* arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
         bool accionRealizada, controlRotacion; //

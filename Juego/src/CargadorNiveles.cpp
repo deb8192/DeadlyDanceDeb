@@ -726,6 +726,7 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
     _boss->setVectorOrientacion();
     _boss->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     _boss->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+    _boss->SetMultiplicadorAtEsp(2);
 }
 
 //lo utilizamos para crear zonas
