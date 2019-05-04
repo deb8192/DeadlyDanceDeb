@@ -32,6 +32,7 @@ MotorGrafico::MotorGrafico()
         Objetos_Debug.reserve(500);
         Objetos_Debug2.reserve(500);
         BoardsArmas_Scena.reserve(500);
+        Particulas_Scena.reserve(100);
 
         camara = 0;
         _jugEscena = 0;
@@ -114,6 +115,7 @@ void MotorGrafico::LimpiarElementosJuego()
         Paredes_Scena.clear();
         Objetos_Debug.clear();
         Objetos_Debug2.clear();
+        Particulas_Scena.clear();
 
         if(_aniJugEscena != nullptr)
         {
@@ -414,6 +416,16 @@ void MotorGrafico::LimpiarMotorGrafico()
             }
 
             Paredes_Scena.resize(0);
+        }
+
+        if(Particulas_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < Particulas_Scena.size();i++)
+            {
+                Particulas_Scena[i] = nullptr;
+            }
+
+            Particulas_Scena.resize(0);
         }
 
         _armaEnEscena = nullptr;
@@ -1207,7 +1219,7 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
     #endif
 }
 
-void MotorGrafico::CargarLuces(int x,int y,int z,int tipo,float dist)
+void MotorGrafico::CargarLuces(int x,int y,int z,int r,int g,int b,int tipo,float dist)
 {
     #ifdef WEMOTOR
 
@@ -1228,6 +1240,10 @@ void MotorGrafico::CargarLuces(int x,int y,int z,int tipo,float dist)
         {
             _luzFoco = luz;
         }
+
+        _interfaz->ColorAmbiental(luz,(float)r,(float)g,(float)b);
+        _interfaz->ColorDifusa(luz,(float)r,(float)g,(float)b);
+        _interfaz->ColorSpecular(luz,(float)r,(float)g,(float)b);
 
     #else
         //codigo motor irrlicht
@@ -1253,6 +1269,16 @@ void MotorGrafico::CargarLuces(int x,int y,int z,int tipo,float dist)
         bill->setMaterialType(video::EMT_TRANSPARENT_ADD_COLOR);
         bill->setMaterialTexture(0, _driver->getTexture("assets/models/particlegreen.jpg"));
     #endif
+}
+
+void MotorGrafico::CargarParticulas(int x, int y, int z, int velocidadx, int velocidady, int velocidadz, float escala, unsigned int nparticulas, float localz, float tvida, const char* ruta_textura)
+{
+    //Crea el sistema de particulas
+    unsigned short particulas = _interfaz->AddParticles((float)velocidadx,(float)velocidady,(float)velocidadz,nparticulas,localz,tvida,"assets/images/fireparticle.png");
+    _interfaz->Escalar(particulas,escala,escala,escala);
+    _interfaz->Trasladar(particulas,(float)x,(float)y,(float)z);
+    _interfaz->DeshabilitarObjeto(particulas);
+    Particulas_Scena.push_back(particulas);
 }
 
 void MotorGrafico::CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx)
@@ -1320,7 +1346,6 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         _jugEscena = _interfaz->AddMalla(ruta_objeto,128,0);
         //_interfaz->SetColor(_jugEscena,250,50,50,255); //color RGBA
 
-        CargarLuces(0,0,0);
         if(_jugEscena != 0)
         {
             _interfaz->SetTexture(_jugEscena,"assets/models/rockero/HeavyTex.png");
@@ -1863,13 +1888,21 @@ void MotorGrafico::UpdateLights(float x,float y,float z)
                 //Habilitar y trasladar luces necesarios
                 for(unsigned int j=0; j<Luces_Scena.size(); j++)
                 {
-                    if(j <= Salas_luz[i].luz.size())
+                    if(j < Salas_luz[i].luz.size())
                     {
                         _interfaz->HabilitarObjeto(Luces_Scena[j]);
                         _interfaz->Trasladar(Luces_Scena[j],Salas_luz[i].luz[j].x,Salas_luz[i].luz[j].y,Salas_luz[i].luz[j].z);
+                        //Particulas
+                        if(j < Particulas_Scena.size())
+                        {
+                            _interfaz->HabilitarObjeto(Particulas_Scena[j]);
+                            _interfaz->Trasladar(Particulas_Scena[j],Salas_luz[i].luz[j].x,Salas_luz[i].luz[j].y,Salas_luz[i].luz[j].z);
+                        }
                     }
-                    else{
+                    else
+                    {
                         _interfaz->DeshabilitarObjeto(Luces_Scena[j]);
+                        if(j < Particulas_Scena.size())_interfaz->DeshabilitarObjeto(Particulas_Scena[j]);
                     }
                 }
                 _salaActual = Salas_luz[i].sala;

@@ -174,8 +174,8 @@ void TParticle::UpdateParticulas(float deltaT, GLuint newParticles)
     for (GLuint i = 0; i < max_particles; ++i)
     {
         Particle &p = particles[i];
-        p.Life -= deltaT;  //reducir vida de particula
-        if (p.Life > 0.0f && p.Color.a > 0.1f) //actualizar si la particula esta viva
+        p.Life -= deltaT;                       //reducir vida de particula
+        if (p.Life > 0.0f && p.Color.a > 0.1f)  //actualizar si la particula esta viva
         {
             //std::cout << "particula " << i << ": " << p.Color.a << std::endl;
             p.Position.x = p.Position.x + p.Velocity.x * deltaT;
