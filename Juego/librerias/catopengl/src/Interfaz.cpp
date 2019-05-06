@@ -434,7 +434,6 @@ unsigned short Interfaz::AddParticles(float vx,float vy,float vz,unsigned int nu
     escaladoEnt->escalar(1,1,1);
     escalado->setEntidad(escaladoEnt);
 
-    escaladoEnt->EsGui();
     escaladoEnt->NoEjecutar();
 
     TNodo * particle = new TNodo;
@@ -454,7 +453,7 @@ unsigned short Interfaz::AddParticles(float vx,float vy,float vz,unsigned int nu
         Nodo * nodo = new Nodo();
         nodo->id = idnuevo;//se pone el id
         nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
-        nodo->tipo = 5;
+        nodo->tipo = 6;
         nodo->activo = true;
         banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
         particles.push_back(nodo);//se agrega a la lista de particulas
@@ -656,9 +655,12 @@ void Interfaz::LimpiarEscena()
         _raiz->BorrarEscena();
         luces.resize(0);
         luces.reserve(40);//30 luces como maximo
+        particles.resize(0);
+        particles.reserve(20);
+        cout << "AQUI ERROR" << endl;
         for(std::size_t i=0 ; i < maxNodos; i++)
         {
-            if(banco[i] != nullptr && (banco[i]->tipo == 2 || banco[i]->tipo == 1))
+            if(banco[i] != nullptr && (banco[i]->tipo == 2 || banco[i]->tipo == 1 || banco[i]->tipo == 6))
             {
                 banco[i]->recurso = nullptr;
                 delete banco[i];
@@ -1197,6 +1199,18 @@ void Interfaz::pulgarReferencia(Nodo * referencia,unsigned short tipo)
                 if(boards[i] != nullptr && referencia == boards[i])
                 {
                     boards.erase(boards.begin()+i);
+                    return;
+                }
+            }
+        }
+
+        if(tipo == 6)
+        {
+            for(unsigned int i = 0; i < particles.size(); i++)
+            {
+                if(particles[i] != nullptr && referencia == particles[i])
+                {
+                    particles.erase(particles.begin()+i);
                     return;
                 }
             }
