@@ -41,6 +41,7 @@ void GestorEstados::CambioEstadoMenu()
 // Deja el Menu y carga el juego
 void GestorEstados::CambioEstadoJugar(unsigned int nivel,unsigned int tipoJugador,unsigned int dinero, unsigned int slot)
 {
+    _estados.pop(); // Sacamos el estado de Nueva partida o Continuar partida
     anyadir(new Jugando(nivel,tipoJugador,dinero,slot), false);
 }
 
