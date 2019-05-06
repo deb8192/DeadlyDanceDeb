@@ -385,7 +385,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                         {
                             this->finBucleDecorador();
                         }
-                        eelse
+                        else
                         {
                             ID = nodoEnEjecucionDirecta->getID();
                         }
