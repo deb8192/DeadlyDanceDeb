@@ -31,92 +31,92 @@ Jugando::~Jugando()
     _motor = nullptr;
     _interfaz = nullptr;
 
-    short tam = _enemigos.size();
-    for(short i=0; i < tam; i++)
+    int tam = _enemigos.size();
+    for(int i=0; i < tam; i++)
     {
         _enemigos.at(i) = nullptr;
     }
     _enemigos.clear();
 
     tam = _eneCofres.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _eneCofres.at(i) = nullptr;
     }
     _eneCofres.clear();
 
     tam = _zonasRespawn.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         delete _zonasRespawn.at(i);
     }
     _zonasRespawn.clear();
 
     tam = _zonasCofre.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         delete _zonasCofre.at(i);
     }
     _zonasCofre.clear();
 
     tam = _zonasEscondite.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         delete _zonasEscondite.at(i);
     }
     _zonasEscondite.clear();
 
     tam = _zonasOscuras.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         delete _zonasOscuras.at(i);
     }
     _zonasOscuras.clear();
 
     tam = _reco_armas.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _reco_armas.at(i) = nullptr;
     }
     _reco_armas.clear();
 
     tam = _llaves.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _llaves.at(i) = nullptr;
     }
     _llaves.clear();
 
     tam = _powerup.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _powerup.at(i) = nullptr;
     }
     _powerup.clear();
 
     tam = _waypoints.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _waypoints.at(i) = nullptr;
     }
     _waypoints.clear();
 
     tam = _palancas.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _palancas.at(i) = nullptr;
     }
     _palancas.clear();
 
     tam = _puertas.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _puertas.at(i) = nullptr;
     }
     _puertas.clear();
 
     tam = _cofres.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _cofres.at(i) = nullptr;
     }
@@ -124,7 +124,7 @@ Jugando::~Jugando()
 
     // Liberar memoria
     tam = _auxiliadores.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         delete _auxiliadores.at(i);
     }
