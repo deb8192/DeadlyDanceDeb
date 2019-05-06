@@ -224,7 +224,6 @@
 													<!--Sala-14--><Platform Type="1" accion="0" ancho="46" largo="59" alto="4" RP="90" X="325" Y="0" Z="479" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 													<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="315" Y="0" Z="460" Texture="" Model=""></Enemy>
 													<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="333" Y="0" Z="505" Texture="" Model=""></Enemy>
-													<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="26" alto="24" RP="0" X="281" Y="0" Z="450" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png"  Model="assets/models/pared_destruible/BreakWallLarge_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 													<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="326" Y="0" Z="432"></Zone>
 													<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="326" Y="0" Z="514"></Zone>
 													<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="26" ancho="4" largo="4" alto="2" X="283" Y="0" Z="452" conexiones="21,27"></Waypoint>
