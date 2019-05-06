@@ -73,7 +73,7 @@ class CargadorNiveles
         void CrearLuz(int x,int y,int z,int tipo,float dist,int r, int g, int b);
         void CrearSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
         void CrearLuzEnSala(int sala,int x,int y,int z);
-        void CrearSistemaDeParticulas(int x,int y,int z,int vx,int vy,int vz,int npart,float localz,float vida, const char* textura);
+        void CrearSistemaDeParticulas(int x,int y,int z,int vx,int vy,int vz,int npart,float localz,float vida,float size, const char* textura);
         void CrearEnemigo(int accion, int enemigo, int x,int y,int z, int ancho, int largo, int alto, Sala* sala);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearBoss(int accion,int enemigo,int x,int y,int z,int ancho, int largo, int alto, Sala* sala);
         void CrearZona(int accion,int x,int y,int z,int ancho,int largo,int alto, int boss, const char* tipo, unsigned short totalElem, Sala* sala); //lo usamos para crear zonas

@@ -1274,7 +1274,7 @@ void MotorGrafico::CargarLuces(int x,int y,int z,int r,int g,int b,int tipo,floa
 void MotorGrafico::CargarParticulas(int x, int y, int z, int velocidadx, int velocidady, int velocidadz, float escala, unsigned int nparticulas, float localz, float tvida, const char* ruta_textura)
 {
     //Crea el sistema de particulas
-    unsigned short particulas = _interfaz->AddParticles((float)velocidadx,(float)velocidady,(float)velocidadz,nparticulas,localz,tvida,"assets/images/fireparticle.png");
+    unsigned short particulas = _interfaz->AddParticles((float)velocidadx,(float)velocidady,(float)velocidadz,nparticulas,localz,tvida,ruta_textura);
     _interfaz->Escalar(particulas,escala,escala,escala);
     _interfaz->Trasladar(particulas,(float)x,(float)y,(float)z);
     _interfaz->DeshabilitarObjeto(particulas);

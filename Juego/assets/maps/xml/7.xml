@@ -15,20 +15,20 @@
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31"> </Light>
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31"> </Light>
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31"> </Light>
-	<Particles X="-71" Y="10" Z="0" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" Texture="assets/images/fireparticle.png"> </Particles>
-	<Particles X="-7" Y="10" Z="19" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" Texture="assets/images/fireparticle.png"> </Particles>
-	<Particles X="-8" Y="10" Z="-19" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" Texture="assets/images/fireparticle.png"> </Particles>
-	<Particles X="50" Y="10" Z="67" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" Texture="assets/images/fireparticle.png"> </Particles>
-	<Particles X="50" Y="10" Z="-67" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" Texture="assets/images/fireparticle.png"> </Particles>
-	<Particles X="106" Y="10" Z="19" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" Texture="assets/images/fireparticle.png"> </Particles>
-	<Particles X="106" Y="10" Z="-19" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" Texture="assets/images/fireparticle.png"> </Particles>
-	<Particles X="177" Y="10" Z="44" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" Texture="assets/images/fireparticle.png"> </Particles>
+	<Particles X="-71" Y="10" Z="0" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" size="7" Texture="assets/images/fireparticle.png"> </Particles>
+	<Particles X="-7" Y="10" Z="19" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" size="7" Texture="assets/images/fireparticle.png"> </Particles>
+	<Particles X="-8" Y="10" Z="-19" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" size="7" Texture="assets/images/fireparticle.png"> </Particles>
+	<Particles X="50" Y="10" Z="67" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" size="7" Texture="assets/images/fireparticle.png"> </Particles>
+	<Particles X="50" Y="10" Z="-67" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" size="7" Texture="assets/images/fireparticle.png"> </Particles>
+	<Particles X="106" Y="10" Z="19" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" size="7" Texture="assets/images/fireparticle.png"> </Particles>
+	<Particles X="106" Y="10" Z="-19" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" size="7" Texture="assets/images/fireparticle.png"> </Particles>
+	<Particles X="177" Y="10" Z="44" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" size="7" Texture="assets/images/fireparticle.png"> </Particles>
 
 	<!--Posiciones luces antorchas falta poner-->
 	<!--Sala 1-->
 	<LightSala sala="1" minZ="-100" maxZ="100" minX="-100" maxX="145"></LightSala>
 		<LightPos X="-71" Y="10" Z="0" sala="1"> </LightPos>
-		<LightPos X="-8" Y="10" Z="19" sala="1"> </LightPos>
+		<LightPos X="-7" Y="10" Z="19" sala="1"> </LightPos>
 		<LightPos X="-8" Y="10" Z="-19" sala="1"> </LightPos>
 		<LightPos X="50" Y="10" Z="67" sala="1"> </LightPos>
 		<LightPos X="50" Y="10" Z="-67" sala="1"> </LightPos>
@@ -45,13 +45,13 @@
 
 	<LightSala sala="3" minZ="85" maxZ="230" minX="145" maxX="445"></LightSala>
 		<LightPos X="177" Y="10" Z="152" sala="3"> </LightPos>
-		<LightPos X="205" Y="10" Z="164" sala="3"> </LightPos>
-		<LightPos X="256" Y="10" Z="164" sala="3"> </LightPos>
+		<LightPos X="206" Y="10" Z="164" sala="3"> </LightPos>
+		<LightPos X="257" Y="10" Z="164" sala="3"> </LightPos>
 		<LightPos X="285" Y="10" Z="145" sala="3"> </LightPos>
 		<LightPos X="331" Y="10" Z="82" sala="3"> </LightPos>
 		<LightPos X="331" Y="10" Z="148" sala="3"> </LightPos>
 		<LightPos X="385" Y="10" Z="132" sala="3"> </LightPos>
-		<LightPos X="366" Y="10" Z="200" sala="3"> </LightPos>
+		<LightPos X="367" Y="10" Z="200" sala="3"> </LightPos>
 
 	<LightSala sala="4" minZ="231" maxZ="414" minX="166" maxX="265"></LightSala>
 		<LightPos X="259" Y="10" Z="311" sala="4"> </LightPos>
@@ -87,7 +87,7 @@
 		<LightPos X="200" Y="10" Z="456" sala="8"> </LightPos>
 
 	<LightSala sala="9" minZ="444" maxZ="536" minX="162" maxX="287"></LightSala>
-		<LightPos X="215" Y="10" Z="442" sala="9"> </LightPos>
+		<LightPos X="216" Y="10" Z="442" sala="9"> </LightPos>
 		<LightPos X="269" Y="10" Z="442" sala="9"> </LightPos>
 		<LightPos X="298" Y="10" Z="489" sala="9"> </LightPos>
 		<LightPos X="269" Y="10" Z="536" sala="9"> </LightPos>

@@ -205,10 +205,11 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
         int vy = hijo.attribute("VY").as_int();//nos devuelve un int
         int vz = hijo.attribute("VZ").as_int();//nos devuelve un int
         int npart = hijo.attribute("nPart").as_int();
+        float size = (float)hijo.attribute("size").as_int()/10.0f;
         float localz = (float)hijo.attribute("LZ").as_int();
         float vida = (float)hijo.attribute("vida").as_int();
         const char* textura = hijo.attribute("Texture").value(); //nos da un char[] = string
-        CrearSistemaDeParticulas(x,y,z,vx,vy,vz,npart,localz,vida,textura);
+        CrearSistemaDeParticulas(x,y,z,vx,vy,vz,npart,localz,vida,size,textura);
     }
 
     //Se crea el arbol de salas del mapa del nivel
@@ -633,9 +634,9 @@ void CargadorNiveles::CrearLuzEnSala(int sala,int x,int y,int z)
     _motor->CargarLuzEnSala(sala,x,y,z);
 }
 
-void CargadorNiveles::CrearSistemaDeParticulas(int x,int y,int z,int vx,int vy,int vz,int npart,float localz,float vida, const char* textura)
+void CargadorNiveles::CrearSistemaDeParticulas(int x,int y,int z,int vx,int vy,int vz,int npart,float localz,float vida,float size, const char* textura)
 {
-    _motor->CargarParticulas(x,y,z,vx,vy,vz,0.7,npart,localz,vida,textura);
+    _motor->CargarParticulas(x,y,z,vx,vy,vz,size,npart,localz,vida,textura);
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
