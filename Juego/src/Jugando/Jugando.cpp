@@ -283,7 +283,9 @@ void Jugando::ManejarEventos() {
     if (_motor->EstaPulsado(KEY_K))
     {
         _motor->ResetKey(KEY_K);
-        _jugador->setVida(0);
+        //_jugador->setVida(0);
+        Juego::GetInstance()->estado.CambioEstadoGanar();
+        
     }
 
     //para modo debug

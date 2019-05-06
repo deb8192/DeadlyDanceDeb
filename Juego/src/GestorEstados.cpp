@@ -75,6 +75,13 @@ void GestorEstados::CambioDeJuegoAMenu()
     _estados.top()->Reanudar(); //Menu
 }
 
+// Se llama desde EstadoGanar
+void GestorEstados::CambioDeGanarAMenu()
+{
+    _estados.pop(); // EstadoGanar
+    _estados.top()->Reanudar(); //Menu
+}
+
 void GestorEstados::CambioEstadoPuzle(int* puzzle)
 {
     //anyadir(new EstadoPuzle(puzzle), false);
@@ -105,7 +112,10 @@ void GestorEstados::CambioEstadoMuerte()
 
 void GestorEstados::CambioEstadoGanar()
 {
-    anyadir(new EstadoGanar(), false);
+    _estados.pop(); // Juego
+    _estados.push(new EstadoGanar());
+    _estados.top()->Iniciar();
+    //anyadir(new EstadoGanar(), true);
 }
 
 void GestorEstados::anyadir(Estado* _nuevoEstado, bool reemplazar)

@@ -36,12 +36,14 @@ void EstadoMuerte::ManejarEventos()
 {
     if (_motor->OcurreEvento(GUI_ID_SALIR_BUTTON))
     {
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         borrarEscenaResetearEvento(GUI_ID_SALIR_BUTTON);
         salir();
     }
 
     if (_motor->OcurreEvento(GUI_ID_REINICIAR_BUTTON))
     {
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         borrarGUIResetearEvento(GUI_ID_REINICIAR_BUTTON);
         reiniciarPartida();
     }
@@ -49,6 +51,7 @@ void EstadoMuerte::ManejarEventos()
     if (_motor->OcurreEvento(GUI_ID_MENU_BUTTON) || 
         _motor->EstaPulsado(KEY_ESC))
     {
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         borrarEscenaResetearEvento(GUI_ID_MENU_BUTTON);
         _motor->ResetKey(KEY_ESC);
         menuPrincipal();
