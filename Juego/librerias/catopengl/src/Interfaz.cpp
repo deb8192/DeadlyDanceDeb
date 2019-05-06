@@ -657,7 +657,6 @@ void Interfaz::LimpiarEscena()
         luces.reserve(40);//30 luces como maximo
         particles.resize(0);
         particles.reserve(20);
-        cout << "AQUI ERROR" << endl;
         for(std::size_t i=0 ; i < maxNodos; i++)
         {
             if(banco[i] != nullptr && (banco[i]->tipo == 2 || banco[i]->tipo == 1 || banco[i]->tipo == 6))
