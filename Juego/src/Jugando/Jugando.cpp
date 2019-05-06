@@ -428,6 +428,7 @@ void Jugando::Update()
     if (_jugador != nullptr && _jugador->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
         _jugador->MuereJugador(); // Animacion de muerte
+        ComprobarBorrarProyectil();
         DesactivarDebug();
         _motor->cambiarAnimacionJugador(5);//la muerte del jugador tiene este id
         Juego::GetInstance()->estado.CambioEstadoMuerte();
@@ -1544,6 +1545,8 @@ void Jugando::RecogerArma(int rec_col)
     }
     else if(_jugador->getArma() != nullptr)//si tiene arma equipada
     {
+        ComprobarBorrarProyectil();
+
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
         Recolectable* nuRec = new Recolectable(-1,
             _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),
@@ -1582,17 +1585,7 @@ void Jugando::DejarObjeto()
             _jugador->getArma()->GetTipoObjeto(),0,0);
         nuRec->setAtaque(_jugador->getArma()->getAtaque());
 
-        if ((_jugador->getArma()->GetTipoObjeto() == constantes.ARPA) ||
-            (_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA))
-        {
-            if(proyectilFuera == false)
-            {
-                _motor->EraseProyectil();
-                proyectilFuera = true;
-                _motora->getEvent("Flauta")->stop();
-                _motora->getEvent("Arpa")->stop();
-            }
-        }
+        ComprobarBorrarProyectil();
         _jugador->setArma(nullptr);
 
         //por ultimo creamos una nueva y actualizamos informacion en motor grafico
@@ -1603,6 +1596,22 @@ void Jugando::DejarObjeto()
         _reco_armas.push_back(nuRec);
         nuRec = nullptr;
     }
+}
+
+// Se llama al dejar el objeto, intercambiarlo por otro y cuando muere el jugador
+void Jugando::ComprobarBorrarProyectil()
+{
+    if ((_jugador->getArma()->GetTipoObjeto() == constantes.ARPA) ||
+            (_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA))
+        {
+            if(proyectilFuera == false)
+            {
+                _motor->EraseProyectil();
+                proyectilFuera = true;
+                _motora->getEvent("Flauta")->stop();
+                _motora->getEvent("Arpa")->stop();
+            }
+        }
 }
 
 /*********** AccionarMecanismo ***********
