@@ -9,13 +9,15 @@ class CofreArana : public Enemigo
     public:
         ~CofreArana();
         CofreArana(float nX, float nY, float nZ, int maxVida,
-            float anchoN, float altoN, float largoN);
+            float anchoN, float altoN, float largoN, Sala* salaC);
         void RunIA();
         void UpdateCofreArana(short *i, int* _jug, bool ayuda);
         void SetNuevasOrdenes(short i);
         float GetAncho();
         float GetAlto();
         float GetLargo();
+        int GetIdCofre();
+        void SetIdCofre(int idC);
 
     private:
         bool funciona, atacado, hecho;
@@ -23,6 +25,8 @@ class CofreArana : public Enemigo
         short int maxRotacion;
         short int direccion;
         float ancho, alto, largo;
+        int idCofre;
+        Sala* sala;
 };
 
 #endif

@@ -126,6 +126,7 @@ void EstadoPuzle::ManejarEventos()
 
     if (_motor->OcurreEvento(GUI_ID_ATRAS_PUZ))
     {
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         _motor->ResetEvento(GUI_ID_ATRAS_PUZ);
         atras();
     }
@@ -175,7 +176,8 @@ void EstadoPuzle::comprobarEventosOpciones()
 
 void EstadoPuzle::corregirSolucion(unsigned short opcion)
 {
-     _motor->BorrarGuiPuzzle(tipo, opciones);
+    _motor->ResetKey(LMOUSE_PRESSED_DOWN);
+    _motor->BorrarGuiPuzzle(tipo, opciones);
 
     if (opcion == solucion) {
         Juego::GetInstance()->estado.ReanudarDesdePuzzle(true);

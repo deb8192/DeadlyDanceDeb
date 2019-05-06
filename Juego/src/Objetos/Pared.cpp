@@ -33,3 +33,15 @@ void Pared::Borrar(unsigned short pos)
     _fisicas = nullptr;
     _motor->ErasePared(pos);
 }
+
+void Pared::Render(float updTime, float drawTime)
+{
+    RotarEntidad(1 / updTime);
+    UpdateTimeRotate(drawTime);
+
+    _motor->mostrarObjetos(
+        posActual.x, posActual.y, posActual.z,
+        rotActual.x, rotActual.y, rotActual.z,
+        posicionArrayObjetos
+    );
+}

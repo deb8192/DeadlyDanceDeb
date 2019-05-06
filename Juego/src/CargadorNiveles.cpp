@@ -937,7 +937,7 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
 unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     float ancho, float alto, float largo, Sala* sala)
 {
-    CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo); // Posiciones, vida
+    CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo, sala); // Posiciones, vida
 
     //_eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
     _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
@@ -1029,20 +1029,12 @@ void CargadorNiveles::CargarCofres()
                     posCofre[2] = newz;
                 }
 
-                /*#ifdef WEMOTOR //codigo motor catopengl
-                    esArana = true; // Desactivamos las aranyas
-                #endif*/
-
                 Cofre* _cofre = new Cofre(esArana, ++id,
                     newx, newy, newz,
                     constantes.COFRE_OBJ, posArrayArana,
                     _zonasCofre[zonasDisponibles[numAlt]]->GetSala(),
                     _cofres.size());
 
-                int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
-                    _cofre->GetModelo(), _cofre->GetTextura());
-
-                _cofre->SetPosicionArrayObjetos(posicionObjeto);
                 _cofres.push_back(move(_cofre));
                 _cofre = nullptr;
 

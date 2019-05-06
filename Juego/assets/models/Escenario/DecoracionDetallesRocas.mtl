@@ -1,8 +1,8 @@
-# Blender MTL File: 'NIVELNUEVODISPOSICIONCOSAS.blend'
+# Blender MTL File: 'None'
 # Material Count: 2
 
-newmtl Material.001
-Ns 94.117647
+newmtl Material.003
+Ns 92.156863
 Ka 1.000000 1.000000 1.000000
 Kd 0.317486 0.317486 0.317486
 Ks 0.500000 0.500000 0.500000
@@ -12,8 +12,8 @@ d 1.000000
 illum 2
 map_Kd C:\Users\usuario\Pictures\Mondmodma\ulrick-wery-tileableset2-soil2.jpg
 
-newmtl Material_NONE
-Ns 94.117647
+newmtl Material_NONE.002
+Ns 92.156863
 Ka 1.000000 1.000000 1.000000
 Kd 0.386448 0.252241 0.182341
 Ks 0.500000 0.500000 0.500000

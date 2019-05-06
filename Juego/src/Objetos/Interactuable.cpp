@@ -1,5 +1,4 @@
 #include "Interactuable.hpp"
-#include "../ConstantesComunes.hpp"
 #include "../Motores/MotorFisicas.hpp"
 
 Interactuable::Interactuable(int id, int codigo,
@@ -58,9 +57,9 @@ Interactuable::Interactuable(int id, int codigo,
 
     //INobjetos
     codigoObjeto = codigo;
-    ancho = anc;
+    /*ancho = anc;
     largo = lar;
-    alto = alt;
+    alto = alt;*/
     tipoObjeto = tipoObj;
 
     _desplazamientos[0] = despX;
@@ -72,7 +71,12 @@ Interactuable::Interactuable(int id, int codigo,
         setRotation(0,90,0);
         setNewRotation(0,90,0);
     }*/
-    posObstaculos = _fisicas->CrearCuerpoInter(tipoObj,x/2,y/2,z/2,ancho,alto,largo,despX,despZ);
+    if (tipoObj != constantes.COFRE_OBJ)  {
+        ancho = anc;
+        largo = lar;
+        alto = alt;
+        posObstaculos = _fisicas->CrearCuerpoInter(tipoObj,x/2,y/2,z/2,ancho,alto,largo,despX,despZ);
+    }
     _fisicas = nullptr;
 }
 
@@ -407,29 +411,6 @@ int Interactuable::GetPosicionObjetos()
 bool Interactuable::getAccionado()
 {
   return accionado;
-}
-
-void Interactuable::Render(float updTime, float drawTime)
-{
-    RotarEntidad(1 / updTime);
-    UpdateTimeRotate(drawTime);
-
-    Constantes constantes;
-    // TO DO: Para evitar esto, cambiar las puertas2 del XML con el ancho y alto de la puerta como si fuera vertical
-    if (tipoObjeto == constantes.PUERTA2) // Para las puertas horizontales
-        _motor->mostrarObjetos(
-            posActual.x, posActual.y, posActual.z,
-            rotActual.x, rotActual.y+90, rotActual.z,
-            posicionArrayObjetos
-        );
-    else
-    {
-        _motor->mostrarObjetos(
-            posActual.x, posActual.y, posActual.z,
-            rotActual.x, rotActual.y, rotActual.z,
-            posicionArrayObjetos
-        );
-    }
 }
 
 const char* Interactuable::GetModelo()

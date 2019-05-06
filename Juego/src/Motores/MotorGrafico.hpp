@@ -242,6 +242,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
+            void CargarCofre(int pos, int rp, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
             void CargarArmaJugador(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
@@ -252,6 +253,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz, float newy, float newz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
+            void mostrarCofres(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
             void mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoequipada, int tiposuelo, unsigned int i);
             void borrarArmaEspecial();
@@ -286,8 +288,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void EraseLlave(long unsigned int idx);
             void ErasePared(long unsigned int idx);
             void ErasePowerUP(long unsigned int idx);
-            void DibujarCofre(long unsigned int idx, bool dibujar);
-            void DibujarPared(long unsigned int idx, bool dibujar);
+            void EraseCofre(unsigned short idx);
+            //void DibujarPared(long unsigned int idx, bool dibujar);
             void EraseEnemigo(std::size_t i);
             void EraseTodosEnemigos(std::size_t i);
             void EraseJugador();
@@ -397,12 +399,14 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Llaves_Scena;
                 std::vector<unsigned short> PowerUP_Scena;//contiene los power ups reservados (ids)
                 std::vector<unsigned short> Paredes_Scena;//paredes rompibles
+                std::vector<unsigned short> Cofres_Scena;//cofres
 
                 std::vector<Animaciones *> ObjetosAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> RecoArmasAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> LlavesAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> PowerUPAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> ParedesAni_Scena;
+                std::vector<Animaciones *> CofresAni_Scena;
 
                 std::vector<unsigned short> Objetos_Debug;//contiene los elementos que se ven en modo debug
                 std::vector<unsigned short> Objetos_Debug2;//para objetos con tiempo para desaparecer
@@ -479,6 +483,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<IAnimatedMeshSceneNode*> Llaves_Scena;//Objetos en scena
                 std::vector<IAnimatedMeshSceneNode*> PowerUP_Scena;//Objetos en scena
                 std::vector<IAnimatedMeshSceneNode*> Paredes_Scena;
+                std::vector<IAnimatedMeshSceneNode*> Cofres_Scena;
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Debug;//Objetos en modo debug
                 std::vector<IAnimatedMeshSceneNode*> Objetos_Debug2;//Objetos en modo debug
                 IAnimatedMeshSceneNode* _jugEscena;//Jugador en scena
