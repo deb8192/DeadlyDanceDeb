@@ -66,6 +66,7 @@ class Jugando: public Estado {
         void RecogerLlave(int rec_llave);
         void RecogerArma(int rec_col);
         void DejarObjeto();
+        void ComprobarBorrarProyectil();
         void AccionarMecanismo(int,const unsigned short);    //Activa mecanismos y o puertas
         void activarPowerUp();
 

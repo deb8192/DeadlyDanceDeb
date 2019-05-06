@@ -540,15 +540,15 @@ int MotorFisicas::collideAbrirCofre()
     {
         if (_cofres[i])
         {
-            cout << "ENTROOOOOO"<<endl;
+            //cout << "ENTROOOOOO"<<endl;
             if (space->testOverlap(jugador,_cofres[i]))
             {
-                cout << "Devuelvo algo: "<<i<<endl;
+                //cout << "Devuelvo algo: "<<i<<endl;
                 return i;
             }
         }
     }
-    cout << "Devuelvo -1"<<endl;
+    //cout << "Devuelvo -1"<<endl;
     return -1;
 }
 
