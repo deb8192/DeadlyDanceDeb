@@ -1601,7 +1601,8 @@ void Jugando::DejarObjeto()
 // Se llama al dejar el objeto, intercambiarlo por otro y cuando muere el jugador
 void Jugando::ComprobarBorrarProyectil()
 {
-    if ((_jugador->getArma()->GetTipoObjeto() == constantes.ARPA) ||
+    if (_jugador->getArma() != nullptr)
+        if ((_jugador->getArma()->GetTipoObjeto() == constantes.ARPA) ||
             (_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA))
         {
             if(proyectilFuera == false)
