@@ -262,8 +262,8 @@ unsigned short MotorFisicas::CrearCuerpoInter(unsigned short tipoObj, float px, 
     }
     else
     {
-        if (tipoObj != constantes.COFRE_OBJ)
-            obstaculos.push_back(move(cuerpo));
+        //if (tipoObj != constantes.COFRE_OBJ)
+        obstaculos.push_back(move(cuerpo));
 
         //Se le anade una zona de deteccion mediante colision
         rp3d::CollisionBody* deteccion;
@@ -584,7 +584,7 @@ bool MotorFisicas::collideParedesRompibles()
 
 bool MotorFisicas::collideCofres()
 {
-    for(unsigned int i = 0; i < _cofres.size();i++)
+    /*for(unsigned int i = 0; i < _cofres.size();i++)
     {
         if(_cofres[i]) // Cofre cerrado
         {
@@ -595,7 +595,7 @@ bool MotorFisicas::collideCofres()
         } else { // Cofre abierto
             return true;
         }
-    }
+    }*/
     return false;
 }
 

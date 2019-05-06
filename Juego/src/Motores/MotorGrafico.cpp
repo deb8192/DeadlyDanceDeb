@@ -115,47 +115,23 @@ void MotorGrafico::LimpiarElementosJuego()
         Objetos_Debug.clear();
         Objetos_Debug2.clear();
 
-        if(_aniJugEscena != nullptr)
+        // TO DO: revisar error munmap_chunk(): invalid pointer
+        /*if(_aniJugEscena != nullptr)
         {
             delete _aniJugEscena;
             _aniJugEscena = nullptr;
-        }
+        }*/
 
-        int tam = RecoArmasAni_Scena.size();
-        for(int i=0; i < tam; i++)
-        {
-            if( RecoArmasAni_Scena.at(i) != nullptr)
-            {
-                delete RecoArmasAni_Scena.at(i);
-            }
-        }
-
-        tam = LlavesAni_Scena.size();
-        for(int i=0; i < tam; i++)
-        {
-            if( LlavesAni_Scena.at(i) != nullptr)
-            {
-                delete LlavesAni_Scena.at(i);
-            }
-        }
-
-        tam = ObjetosAni_Scena.size();
-        for(int i=0; i < tam; i++)
+        // TO DO: revisar error de punteros
+        int tam = ObjetosAni_Scena.size();
+        /*for(int i=0; i < tam; i++)
         {
             if( ObjetosAni_Scena.at(i) != nullptr)
             {
                 delete ObjetosAni_Scena.at(i);
             }
         }
-
-        tam = PowerUPAni_Scena.size();
-        for(int i=0; i < tam; i++)
-        {
-            if( PowerUPAni_Scena.at(i) != nullptr)
-            {
-                delete PowerUPAni_Scena.at(i);
-            }
-        }
+        ObjetosAni_Scena.clear();
 
         tam = ParedesAni_Scena.size();
         for(int i=0; i < tam; i++)
@@ -165,6 +141,37 @@ void MotorGrafico::LimpiarElementosJuego()
                 delete ParedesAni_Scena.at(i);
             }
         }
+        ParedesAni_Scena.clear();*/
+
+        tam = RecoArmasAni_Scena.size();
+        for(int i=0; i < tam; i++)
+        {
+            if( RecoArmasAni_Scena.at(i) != nullptr)
+            {
+                delete RecoArmasAni_Scena.at(i);
+            }
+        }
+        RecoArmasAni_Scena.clear();
+
+        tam = LlavesAni_Scena.size();
+        for(int i=0; i < tam; i++)
+        {
+            if( LlavesAni_Scena.at(i) != nullptr)
+            {
+                delete LlavesAni_Scena.at(i);
+            }
+        }
+        LlavesAni_Scena.clear();
+
+        tam = PowerUPAni_Scena.size();
+        for(int i=0; i < tam; i++)
+        {
+            if( PowerUPAni_Scena.at(i) != nullptr)
+            {
+                delete PowerUPAni_Scena.at(i);
+            }
+        }
+        PowerUPAni_Scena.clear();
 
         tam = CofresAni_Scena.size();
         for(int i=0; i < tam; i++)
@@ -174,12 +181,6 @@ void MotorGrafico::LimpiarElementosJuego()
                 delete CofresAni_Scena.at(i);
             }
         }
-
-        RecoArmasAni_Scena.clear();
-        LlavesAni_Scena.clear();
-        ObjetosAni_Scena.clear();
-        PowerUPAni_Scena.clear();
-        ParedesAni_Scena.clear();
         CofresAni_Scena.clear();
 
         camara = 0;
@@ -323,6 +324,7 @@ void MotorGrafico::LimpiarElementosJuego()
     #endif
 }
 
+// TO DO: mirar de quitar porque no se usa
 void MotorGrafico::LimpiarMotorGrafico()
 {
     #ifdef WEMOTOR
