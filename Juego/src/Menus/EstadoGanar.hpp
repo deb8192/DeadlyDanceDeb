@@ -2,6 +2,7 @@
 #define EstadoGanar_HPP
 
 #include "../Estado.hpp"
+#include "../Motores/MotorAudio.hpp"
 
 class EstadoGanar: public Estado {
     public:
@@ -22,5 +23,7 @@ class EstadoGanar: public Estado {
         void menuPrincipal();
         void siguienteNivel();
         void salir();
+
+        MotorAudioSystem* _motora;//instancia de la fachada audio
 };
 #endif /* EstadoGanar_HPP */

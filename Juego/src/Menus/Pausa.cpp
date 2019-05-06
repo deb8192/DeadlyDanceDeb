@@ -98,6 +98,7 @@ void Pausa::borrarGUIResetearEvento(short id)
 // Vuelve al menu principal
 void Pausa::menuPrincipal()
 {
+    _motora->getEvent("AmbienteLava")->stop(); //Detener ambiente
     _motora->getEvent("AmbienteGritos")->stop(); //Detener musica ambiente
     _motora->getEvent("Nivel1")->stop(); //Detener musica Juego
     _motora->getEvent("Nivel2")->stop(); //Detener musica Juego

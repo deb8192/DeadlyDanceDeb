@@ -262,7 +262,6 @@ unsigned short MotorFisicas::CrearCuerpoInter(unsigned short tipoObj, float px, 
     }
     else
     {
-        //if (tipoObj != constantes.COFRE_OBJ)
         obstaculos.push_back(move(cuerpo));
 
         //Se le anade una zona de deteccion mediante colision
@@ -343,7 +342,7 @@ unsigned short MotorFisicas::CrearCuerpoWaypoint(float px, float py, float pz, f
     return _waypoints.size()-1;
 }
 
-void MotorFisicas::CargarCofre(unsigned int pos, float px, float py, float pz, 
+void MotorFisicas::CargarCofre(unsigned int posAct, unsigned int posObs, float px, float py, float pz, 
     float ancho, float alto, float largo, float despX, float despZ)
 {
     rp3d::Vector3 posiciones(px+despX,py,pz+despZ); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
@@ -358,6 +357,7 @@ void MotorFisicas::CargarCofre(unsigned int pos, float px, float py, float pz,
     BoxShape* forma = new BoxShape(medidas);
     cuerpo->addCollisionShape(forma,transformacion);
 
+    obstaculos.at(posObs) = move(cuerpo);
 
     //Se le anade una zona de deteccion mediante colision
     rp3d::CollisionBody* deteccion;
@@ -365,7 +365,7 @@ void MotorFisicas::CargarCofre(unsigned int pos, float px, float py, float pz,
     deteccion = space->createCollisionBody(transformacion);
     deteccion->addCollisionShape(detector,transformacion);
 
-    _cofres.at(pos) = move(deteccion);
+    _cofres.at(posAct) = move(deteccion);
 }
 
 void MotorFisicas::EraseObstaculo(int idx)
@@ -438,10 +438,10 @@ void MotorFisicas::DesactivarCofre(unsigned int pos)
     _cofres.at(pos) = nullptr;
 }
 
-void MotorFisicas::EraseCofre(unsigned int pos)
+void MotorFisicas::EraseCofre(unsigned int posAct, unsigned int posObs)
 {
-    _cofres.at(pos) = nullptr;
-    //_cofres.erase(_cofres.begin() + pos);
+    _cofres.at(posAct) = nullptr;
+    obstaculos.at(posObs) = nullptr;
 }
 
 void MotorFisicas::EraseJugador(){
@@ -540,15 +540,12 @@ int MotorFisicas::collideAbrirCofre()
     {
         if (_cofres[i])
         {
-            //cout << "ENTROOOOOO"<<endl;
             if (space->testOverlap(jugador,_cofres[i]))
             {
-                //cout << "Devuelvo algo: "<<i<<endl;
                 return i;
             }
         }
     }
-    //cout << "Devuelvo -1"<<endl;
     return -1;
 }
 
@@ -579,23 +576,6 @@ bool MotorFisicas::collideParedesRompibles()
             }
         }
     }
-    return false;
-}
-
-bool MotorFisicas::collideCofres()
-{
-    /*for(unsigned int i = 0; i < _cofres.size();i++)
-    {
-        if(_cofres[i]) // Cofre cerrado
-        {
-            if(space->testOverlap(jugador,_cofres[i]))
-            {
-                return true;
-            }
-        } else { // Cofre abierto
-            return true;
-        }
-    }*/
     return false;
 }
 
