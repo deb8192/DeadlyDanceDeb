@@ -20,7 +20,7 @@ class EstadoGanar: public Estado {
         // Para Atras y Reiniciar partida, borra solo GUI
         void borrarGUIResetearEvento(short id);
         void menuPrincipal();
-        void reiniciarPartida();
+        void siguienteNivel();
         void salir();
 };
 #endif /* EstadoGanar_HPP */

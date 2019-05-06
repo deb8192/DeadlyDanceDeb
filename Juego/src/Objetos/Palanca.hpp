@@ -10,6 +10,7 @@ class Palanca : public Interactuable
         Palanca(int id, int codigo, int anc, int lar, int alt,
             float x, float y, float z, unsigned short tipoObj,
             float despX, float despZ, int accion);
+        void Render(float updTime, float drawTime);
         
     private:
 };

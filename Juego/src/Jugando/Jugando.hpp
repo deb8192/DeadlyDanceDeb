@@ -83,6 +83,8 @@ class Jugando: public Estado {
         void AbrirCofre(float x, float y, float z, bool esArana);
         void CrearEnemigoArana();
         void CargarBossEnMemoria();
+        void CambiarAranyaPorCofre(int idC, float x,float y, float z, 
+            unsigned int posArrayArana, Sala* sala);
 
     private:
 

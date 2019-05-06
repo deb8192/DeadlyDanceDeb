@@ -3,7 +3,7 @@
 #include "cmath"
 
 CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
-    float anchoN, float altoN, float largoN)
+    float anchoN, float altoN, float largoN, Sala* salaC)
 : Enemigo(nX,nY,nZ,maxVida)
 {
     funciona = true;
@@ -18,6 +18,9 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
     ancho = anchoN;
     largo = largoN;
     alto = altoN;
+
+    idCofre = -1;
+    sala = salaC;
 }
 
 CofreArana::~CofreArana()
@@ -26,6 +29,7 @@ CofreArana::~CofreArana()
     _ordenes = nullptr;
     _modelo = nullptr;
     _textura = nullptr;
+    idCofre=0;
 }
 
 /***************** RunIA *****************
@@ -252,4 +256,14 @@ float CofreArana::GetAlto()
 float CofreArana::GetLargo()
 {
     return largo;
+}
+
+int CofreArana::GetIdCofre()
+{
+    return idCofre;
+}
+
+void CofreArana::SetIdCofre(int idC)
+{
+    idCofre = idC;
 }
