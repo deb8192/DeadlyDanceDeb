@@ -235,7 +235,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             //cargadores de objetos
             int CargarPlataformas(int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);//carga el objeto en scena lo mete en el array
-            void CargarLuces(int x,int y,int z);
+            void CargarLuces(int x,int y,int z,int r,int g,int b,int tipo = 0,float dist = 50.0f);
+            void CargarParticulas(int x, int y, int z, int velocidadx, int velocidady, int velocidadz, float escala, unsigned int nparticulas, float localz, float tvida, const char* ruta_textura);
+            void CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
+            void CargarLuzEnSala(int sala,int x,int y,int z);
             void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
@@ -357,7 +360,17 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CambiarColorTexto(unsigned int, float r, float g, float b);//cambia el color del texto
             void CambiarPosicionImagen(signed int event, float x, float y);//cambiar posicion de un evento (imagen)
 
+            void UpdateLights(float x,float y,float z);
+
         private: //clases solo accesibles por MotorGrafico
+
+            struct SalasLuz
+            {
+                unsigned short sala;
+                int minz, maxz;
+                int minx, maxx;
+                std::vector<glm::vec3> luz;
+            };
 
             //clase singleton
             MotorGrafico();
@@ -375,9 +388,11 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
                 std::vector<unsigned short> Plataformas_Scena;//contiene las mmallas del suelo del juego
                 std::vector<unsigned short> Luces_Scena;//contiene las luces de la escena
+                std::vector<SalasLuz> Salas_luz; //contiene las salas con luz
                 std::vector<unsigned short> Enemigos_Scena;//contiene los enemigos reservados (ids)
                 std::vector<unsigned short> Textos_Scena;//contiene los enemigos reservados (ids)
                 std::vector<unsigned short> BoardsArmas_Scena;//contiene los billboards de armas reservados (ids)
+                std::vector<unsigned short> Particulas_Scena; //contiene los sistemas de particulas de la escena
 
                 std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
                 std::vector<unsigned short> RecoArmas_Scena;//contiene los recolectables reservados (ids)
@@ -396,6 +411,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Objetos_Debug;//contiene los elementos que se ven en modo debug
                 std::vector<unsigned short> Objetos_Debug2;//para objetos con tiempo para desaparecer
 
+                unsigned short _luzDireccional;
+                unsigned short _luzFoco;
+                unsigned short _salaActual;
                 unsigned short _jugEscena;//id jugador
                 bool debugGrafico;//nos sirve para ver las zonas de colision
                 unsigned short _armaEspJugador;//id del arma del jugador

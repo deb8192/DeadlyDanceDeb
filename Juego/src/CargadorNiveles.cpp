@@ -167,9 +167,48 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     for (pugi::xml_node hijo = doc.child("Level").child("Light"); hijo; hijo = hijo.next_sibling("Light"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         int x = hijo.attribute("X").as_int();//nos devuelve un int
-        int z = hijo.attribute("Y").as_int();//nos devuelve un int
-        int y = hijo.attribute("Z").as_int();//nos devuelve un int
-        CrearLuz(x,y,z); //cargamos el objeto
+        int y = hijo.attribute("Y").as_int();//nos devuelve un int
+        int z = hijo.attribute("Z").as_int();//nos devuelve un int
+        int r = hijo.attribute("colorR").as_int();//nos devuelve un int
+        int g = hijo.attribute("colorG").as_int();//nos devuelve un int
+        int b = hijo.attribute("colorB").as_int();//nos devuelve un int
+        int tipo = hijo.attribute("Tipo").as_int();
+        float intensidad = (float)hijo.attribute("Intensity").as_int();
+        CrearLuz(x,y,z,tipo,intensidad,r,g,b); //cargamos el objeto
+    }
+
+    for (pugi::xml_node hijo = doc.child("Level").child("LightSala"); hijo; hijo = hijo.next_sibling("LightSala"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        int minz = hijo.attribute("minZ").as_int();//nos devuelve un int
+        int maxz = hijo.attribute("maxZ").as_int();//nos devuelve un int
+        int minx = hijo.attribute("minX").as_int();//nos devuelve un int
+        int maxx = hijo.attribute("maxX").as_int();//nos devuelve un int
+        int sala = hijo.attribute("sala").as_int();
+        CrearSalaLuz(sala,minz,maxz,minx,maxx);
+    }
+
+    for (pugi::xml_node hijo = doc.child("Level").child("LightPos"); hijo; hijo = hijo.next_sibling("LightPos"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        int x = hijo.attribute("X").as_int();//nos devuelve un int
+        int y = hijo.attribute("Y").as_int();//nos devuelve un int
+        int z = hijo.attribute("Z").as_int();//nos devuelve un int
+        int sala = hijo.attribute("sala").as_int();
+        CrearLuzEnSala(sala,x,y,z);
+    }
+
+    for (pugi::xml_node hijo = doc.child("Level").child("Particles"); hijo; hijo = hijo.next_sibling("Particles"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        int x = hijo.attribute("X").as_int();//nos devuelve un int
+        int y = hijo.attribute("Y").as_int();//nos devuelve un int
+        int z = hijo.attribute("Z").as_int();//nos devuelve un int
+        int vx = hijo.attribute("VX").as_int();//nos devuelve un int
+        int vy = hijo.attribute("VY").as_int();//nos devuelve un int
+        int vz = hijo.attribute("VZ").as_int();//nos devuelve un int
+        int npart = hijo.attribute("nPart").as_int();
+        float localz = (float)hijo.attribute("LZ").as_int();
+        float vida = (float)hijo.attribute("vida").as_int();
+        const char* textura = hijo.attribute("Texture").value(); //nos da un char[] = string
+        CrearSistemaDeParticulas(x,y,z,vx,vy,vz,npart,localz,vida,textura);
     }
 
     //Se crea el arbol de salas del mapa del nivel
@@ -579,9 +618,24 @@ Sala* CargadorNiveles::CrearPlataforma(int accion, int rp, int x,int y,int z, in
     return _sala;
 }
 
-void CargadorNiveles::CrearLuz(int x,int y,int z)
+void CargadorNiveles::CrearLuz(int x,int y,int z,int tipo,float dist, int r, int g, int b)
 {
-    //_motor->CargarLuces(x,y,z);
+    _motor->CargarLuces(x,y,z,r,g,b,tipo,dist);
+}
+
+void CargadorNiveles::CrearSalaLuz(int sala,int minz,int maxz,int minx,int maxx)
+{
+    _motor->CargarSalaLuz(sala,minz,maxz,minx,maxx);
+}
+
+void CargadorNiveles::CrearLuzEnSala(int sala,int x,int y,int z)
+{
+    _motor->CargarLuzEnSala(sala,x,y,z);
+}
+
+void CargadorNiveles::CrearSistemaDeParticulas(int x,int y,int z,int vx,int vy,int vz,int npart,float localz,float vida, const char* textura)
+{
+    _motor->CargarParticulas(x,y,z,vx,vy,vz,0.7,npart,localz,vida,textura);
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto

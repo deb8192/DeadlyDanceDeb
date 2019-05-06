@@ -15,7 +15,8 @@ MotorGrafico::MotorGrafico()
 
         _interfaz = nullptr;
         Plataformas_Scena.reserve(200);//salas reservadas
-        Luces_Scena.reserve(40);//luces reservadas
+        Luces_Scena.reserve(60);//luces reservadas
+        Salas_luz.reserve(20);
         Enemigos_Scena.reserve(50);//enemigos reservados
         Textos_Scena.reserve(18);//textos estaticos en la escena o gui
         RecoArmas_Scena.reserve(50);
@@ -33,6 +34,7 @@ MotorGrafico::MotorGrafico()
         Objetos_Debug.reserve(500);
         Objetos_Debug2.reserve(500);
         BoardsArmas_Scena.reserve(500);
+        Particulas_Scena.reserve(100);
 
         camara = 0;
         _jugEscena = 0;
@@ -46,6 +48,7 @@ MotorGrafico::MotorGrafico()
         altura = 0;
         camara1 = true;
         existearmaexp = false;
+        _salaActual = 0;
 
         idCargando = 0;
 
@@ -103,6 +106,7 @@ void MotorGrafico::LimpiarElementosJuego()
         _interfaz->LimpiarEscena();
         _interfaz->LimpiarGui();
         Plataformas_Scena.clear();
+        Salas_luz.clear();
         Luces_Scena.clear();
         Enemigos_Scena.clear();
         Textos_Scena.clear();
@@ -114,6 +118,7 @@ void MotorGrafico::LimpiarElementosJuego()
         Cofres_Scena.clear();
         Objetos_Debug.clear();
         Objetos_Debug2.clear();
+        Particulas_Scena.clear();
 
         // TO DO: revisar error munmap_chunk(): invalid pointer
         /*if(_aniJugEscena != nullptr)
@@ -358,6 +363,16 @@ void MotorGrafico::LimpiarMotorGrafico()
             Plataformas_Scena.resize(0);
         }
 
+        if(Salas_luz.size() > 0)
+        {
+            for(std::size_t i=0;i < Salas_luz.size();i++)
+            {
+                Salas_luz[i] = nullptr;
+            }
+
+            Salas_luz.resize(0);
+        }
+
         if(Luces_Scena.size() > 0)
         {
             for(std::size_t i=0;i < Luces_Scena.size();i++)
@@ -426,6 +441,16 @@ void MotorGrafico::LimpiarMotorGrafico()
             }
 
             Cofres_Scena.resize(0);
+        {
+
+        if(Particulas_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < Particulas_Scena.size();i++)
+            {
+                Particulas_Scena[i] = nullptr;
+            }
+
+            Particulas_Scena.resize(0);
         }
 
         _armaEnEscena = nullptr;
@@ -643,7 +668,7 @@ void MotorGrafico::RenderEscena()
             }
             Times * tiempo = Times::GetInstance();
             unsigned int fps = tiempo->GetFramesPorSegundo();
-            
+
             //if(debugGrafico)
             //{
                 _interfaz->DefinirVentana(800,600,std::to_string(fps).c_str());
@@ -1219,17 +1244,31 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
     #endif
 }
 
-void MotorGrafico::CargarLuces(int x,int y,int z)
+void MotorGrafico::CargarLuces(int x,int y,int z,int r,int g,int b,int tipo,float dist)
 {
     #ifdef WEMOTOR
 
         //codigo motor catopengl
-        unsigned short luz = _interfaz->AddLuz(0);//instanciamos el objeto y lo agregamos a la escena
-        if(luz != 0)
+        unsigned short luz = _interfaz->AddLuz(tipo);//instanciamos el objeto y lo agregamos a la escena
+        if(luz != 0 && tipo == 1)
         {
             _interfaz->Trasladar(luz,(float)x,(float)y,(float)z);//movemos el objeto
+            _interfaz->DistanciaLuz(luz,dist);
+            _interfaz->DeshabilitarObjeto(luz);
             Luces_Scena.push_back(luz);//agregamos la luz
         }
+        else if(luz != 0 && tipo == 0)
+        {
+            _luzDireccional = luz;
+        }
+        else if(luz != 0 && tipo == 2)
+        {
+            _luzFoco = luz;
+        }
+
+        _interfaz->ColorAmbiental(luz,(float)r,(float)g,(float)b);
+        _interfaz->ColorDifusa(luz,(float)r,(float)g,(float)b);
+        _interfaz->ColorSpecular(luz,(float)r,(float)g,(float)b);
 
     #else
         //codigo motor irrlicht
@@ -1256,6 +1295,34 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
         bill->setMaterialTexture(0, _driver->getTexture("assets/models/particlegreen.jpg"));
     #endif
 }
+
+void MotorGrafico::CargarParticulas(int x, int y, int z, int velocidadx, int velocidady, int velocidadz, float escala, unsigned int nparticulas, float localz, float tvida, const char* ruta_textura)
+{
+    //Crea el sistema de particulas
+    unsigned short particulas = _interfaz->AddParticles((float)velocidadx,(float)velocidady,(float)velocidadz,nparticulas,localz,tvida,"assets/images/fireparticle.png");
+    _interfaz->Escalar(particulas,escala,escala,escala);
+    _interfaz->Trasladar(particulas,(float)x,(float)y,(float)z);
+    _interfaz->DeshabilitarObjeto(particulas);
+    Particulas_Scena.push_back(particulas);
+}
+
+void MotorGrafico::CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx)
+{
+    SalasLuz luzsala;
+    luzsala.sala = sala;
+    luzsala.minz = minz;
+    luzsala.maxz = maxz;
+    luzsala.minx = minx;
+    luzsala.maxx = maxx;
+    Salas_luz.push_back(luzsala);
+}
+
+void MotorGrafico::CargarLuzEnSala(int sala,int x,int y,int z)
+{
+    glm::vec3 posluz = glm::vec3(x,y,z);
+    Salas_luz[sala - 1].luz.push_back(posluz);
+}
+
 
 void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura)
 {
@@ -1304,7 +1371,6 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         _jugEscena = _interfaz->AddMalla(ruta_objeto,128,0);
         //_interfaz->SetColor(_jugEscena,250,50,50,255); //color RGBA
 
-        CargarLuces(0,0,0);
         if(_jugEscena != 0)
         {
             _interfaz->SetTexture(_jugEscena,"assets/models/rockero/HeavyTex.png");
@@ -1736,6 +1802,9 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
             _interfaz->Trasladar(_jugEscena,x,y,z);
             _interfaz->Rotar(_jugEscena,rx,ry-180,rx);
+            // std::cout << x << " " << y << " " << z << std::endl;
+
+            UpdateLights(x,y,z);
 
             delete nodeCamPosition;
 
@@ -1900,6 +1969,42 @@ void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoe
             _interfaz->HabilitarObjeto(BoardsArmas_Scena[pos+5]);
         }
     #endif
+}
+
+void MotorGrafico::UpdateLights(float x,float y,float z)
+{
+    for(unsigned int i=0; i<Salas_luz.size(); i++)
+    {
+        //es la SAla actual
+        if(_salaActual != Salas_luz[i].sala)
+        {
+            //En rango de otra sala
+            if(z > Salas_luz[i].minz && z < Salas_luz[i].maxz && x > Salas_luz[i].minx && x < Salas_luz[i].maxx)
+            {
+                //Habilitar y trasladar luces necesarios
+                for(unsigned int j=0; j<Luces_Scena.size(); j++)
+                {
+                    if(j < Salas_luz[i].luz.size())
+                    {
+                        _interfaz->HabilitarObjeto(Luces_Scena[j]);
+                        _interfaz->Trasladar(Luces_Scena[j],Salas_luz[i].luz[j].x,Salas_luz[i].luz[j].y,Salas_luz[i].luz[j].z);
+                        //Particulas
+                        if(j < Particulas_Scena.size())
+                        {
+                            _interfaz->HabilitarObjeto(Particulas_Scena[j]);
+                            _interfaz->Trasladar(Particulas_Scena[j],Salas_luz[i].luz[j].x,Salas_luz[i].luz[j].y,Salas_luz[i].luz[j].z);
+                        }
+                    }
+                    else
+                    {
+                        _interfaz->DeshabilitarObjeto(Luces_Scena[j]);
+                        if(j < Particulas_Scena.size())_interfaz->DeshabilitarObjeto(Particulas_Scena[j]);
+                    }
+                }
+                _salaActual = Salas_luz[i].sala;
+            }
+        }
+    }
 }
 
 void MotorGrafico::borrarArmaEspecial()

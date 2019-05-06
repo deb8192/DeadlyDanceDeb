@@ -209,6 +209,8 @@ class Interfaz
 
         std::vector<Nodo *> particles; //registro de sistemas de particulas en interfaz
 
+        std::vector<Nodo *> mallas; //registro de mallas
+
         Gestor * gestorDeRecursos;//clase que gestona los recursos del motor
 
         Nodo * buscarNodo2(unsigned short);
@@ -224,6 +226,8 @@ class Interfaz
         float x,y,z;
 
         unsigned int cualborrar;
+
+        unsigned int countlights; //cuenta las luces puntuales
 
         void pulgarReferencia(Nodo * referencia,unsigned short tipo);//limpia la referencia del tipo de objeto que le pases
 

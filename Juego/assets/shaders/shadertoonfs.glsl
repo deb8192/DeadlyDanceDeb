@@ -46,7 +46,7 @@ struct SpotLight {
     vec3 specular;      //Influencia de la luz especular en los objetos
 };
 
-#define NR_POINT_LIGHTS 10    //X puntos de luz maximo
+#define NR_POINT_LIGHTS 8    //X puntos de luz maximo
 
 in vec3 Normal;            //Recibimos las normales del vertex
 in vec3 FragPos;           //Recibimos la posicion del fragment actual
@@ -87,10 +87,14 @@ void main()
     //Fase 2: Puntos de Luz (Multiluces)
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
     {
-        if(pointLights[i].constant > 0)
+        float distance = length(pointLights[i].position - FragPos);
+        if(distance < 100)
         {
-            vec3 pointres = CalcPointLight(pointLights[i], norm, FragPos, viewDir);
-            result += pointres;
+            if(pointLights[i].constant > 0)
+            {
+                vec3 pointres = CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+                result += pointres;
+            }
         }
     }
 

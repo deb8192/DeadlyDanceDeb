@@ -9,6 +9,7 @@ Interfaz::Interfaz()
     textos.reserve(20);//20 imagenes de textos
     boards.reserve(30); //30 billboards
     particles.reserve(20); //20 sistemas de particulas
+    mallas.reserve(500); //500 mallas
     gestorDeRecursos = Gestor::GetInstance();//obtenemos la instancia de la interfaz
     ventana_inicializada = true;//se pone para que entra a inicializar por defecto
     window = nullptr;//se pone para saber que no esta inicializada
@@ -16,6 +17,7 @@ Interfaz::Interfaz()
     y = 0.0f;
     z = 0.0f;
     ModoOneCamara = true;
+    countlights = 0;
 
     //inicializamos todos los punteros a nullptr por si acaso
     for(unsigned int e = 0;e < maxNodos;e++)
@@ -134,7 +136,11 @@ unsigned short Interfaz::AddLuz(int tipo)
     TNodo * luz = new TNodo;
     TLuz * luzEn = new TLuz(tipo);
     luzEn->SetShader(shaders[4]);
-    luzEn->setNumberoflight(luces.size());
+    if(tipo == 1)//luz puntual
+    {
+        luzEn->setNumberoflight(countlights);
+        countlights++;
+    }
     luz->setEntidad(luzEn);
 
     escalado->addHijo(rotacion);
@@ -221,6 +227,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf, int shader) /
             nodo->tipo = 2;
             nodo->activo = true;
             banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
+            mallas.push_back(nodo);
             return idnuevo;
         }
     }
