@@ -237,6 +237,7 @@ void Jugando::ValoresPorDefectoBoss()
 }
 
 // TO DO: Revisar si el cuerpo fisico tambn se tiene q cambiar
+// TO DO: copiar el array de cargador de nivel
 void Jugando::PosicionesIniEnemigos()
 {
     short tam = _enemigos.size();
@@ -1344,7 +1345,7 @@ void Jugando::RespawnEnemigosBoss()
             short enemigo = this->NumeroAleatorio(0,1);
             //Se selecciona una zona de respawn que no haya generado ningun enemigo en el ultimo bucle
             zonaElegida = this->NumeroAleatorio(_zonasRespawn.size() - constantes.SEIS, _zonasRespawn.size() - constantes.UNO);
-            while(_zonasRespawn[zonaElegida] && (_zonasRespawn[zonaElegida]->getProposito() || _zonasRespawn[zonaElegida]->GetRespawnBoss()))
+            while(_zonasRespawn[zonaElegida] && (_zonasRespawn[zonaElegida]->getProposito() || !_zonasRespawn[zonaElegida]->GetRespawnBoss()))
             {
                 zonaElegida++;
                 if((unsigned) zonaElegida >= _zonasRespawn.size() || !_zonasRespawn[zonaElegida]->GetRespawnBoss())
@@ -1372,7 +1373,7 @@ void Jugando::RespawnEnemigosBoss()
                     //cargadorIA.cargarBehaviorTreeXml("PolloBT");
                     _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
                     _ene->setVelocidadMaxima(1.0f);
-                    _ene->setID(_enemigos.back()->getID() + 1);//le damos el id unico en esta partida al enemigo
+                    _ene->setID(_enemigos[_enemigos.size() - constantes.UNO]->getID() + 1);//le damos el id unico en esta partida al enemigo
                     _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
                     _ene = nullptr;
 
@@ -1393,7 +1394,7 @@ void Jugando::RespawnEnemigosBoss()
                     _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
                     _ene->setVelocidadMaxima(1.0f);
                     _ene->setID(_enemigos.back()->getID() + 1);//le damos el id unico en esta partida al enemigo
-                    _enemigos.push_back(_ene);//guardamos el enemigo en el vector
+                    _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
 
                     //Cargar sonido evento en una instancia con la id del enemigo como nombre
                     std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
@@ -2237,14 +2238,14 @@ void Jugando::CargarBossEnMemoria()
     float z = _boss->getZ();
 
     short tam = _enemigos.size();
-    cargador.SetVectorEnemigos(_enemigos);
+    //cargador.SetVectorEnemigos(_enemigos);
     for(short i=0; i < tam; i++)
     {
-        _enemigos.at(i) = nullptr;
-        _motor->EraseTodosEnemigos(i);
+        EraseEnemigo(0);
+        _motor->EraseEnemigo(i);
         _fisicas->EraseTodosEnemigos(i);
     }
-    cargador.BorrarVectorEnemigosBossActivado();
+    //cargador.BorrarVectorEnemigosBossActivado();
     if(_jugador->GetSala() != _boss->GetSala())
     {
         _jugador->SetSala(_boss->GetSala());

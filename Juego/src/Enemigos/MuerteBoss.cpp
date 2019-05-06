@@ -137,11 +137,13 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                 switch (_ordenes[1])
                 {
                     case EN_AT_ESP_2:
+                        this->setBarraAtEs(constantes.CERO);
                         /* ataque especial 1 */
                         break;
                 
                     default:
                         SetRespawnBoss(true);
+                        this->setBarraAtEs(constantes.CERO);
                         /* Llamar animacion pedir ayuda */
                         break;
                 }

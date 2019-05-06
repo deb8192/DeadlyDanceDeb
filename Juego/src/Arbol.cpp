@@ -365,7 +365,6 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                         if(finBucle.back() == 1 && contadorRandom > 0)
                         {
                             exito = true;
-                            ID = nodoEnEjecucionDirecta->getID();
                         }
                     }
                     if(bucleDecorador && finBucle.back() > 0)
@@ -382,7 +381,15 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     }
                     else if (bucleDecorador && finBucle.back() == 0)
                     {
-                        this->finBucleDecorador();
+                        if(exito)
+                        {
+                            this->finBucleDecorador();
+                        }
+                        eelse
+                        {
+                            ID = nodoEnEjecucionDirecta->getID();
+                        }
+                        
                     }
                 }
 

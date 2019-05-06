@@ -410,16 +410,19 @@ void MotorFisicas::EraseEnemigo(std::size_t i)
 void MotorFisicas::EraseTodosEnemigos(std::size_t i)
 {
     Constantes constantes;
-    unsigned int valor = i;
+    unsigned int valor = 0;
 
     space->destroyCollisionBody(enemigos[valor]);//nos cargamos el contenido
-    enemigos[i]=nullptr;
+    enemigos[valor]=nullptr;
+    enemigos.erase(enemigos.begin());
 
     space->destroyCollisionBody(enemigosAtack[valor]);//nos cargamos el contenido
-    enemigosAtack[i]=nullptr;
+    enemigosAtack[valor]=nullptr;
+    enemigosAtack.erase(enemigosAtack.begin());
 
     space->destroyCollisionBody(armaAtEspEne[valor]);//nos cargamos el contenido
-    armaAtEspEne[i]=nullptr;
+    armaAtEspEne[valor]=nullptr;
+    armaAtEspEne.erase(armaAtEspEne.begin());
 }
 
 void MotorFisicas::DesactivarCofre(unsigned short pos)
