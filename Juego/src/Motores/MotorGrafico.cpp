@@ -106,8 +106,6 @@ void MotorGrafico::LimpiarElementosJuego()
         _interfaz->LimpiarEscena();
         _interfaz->LimpiarGui();
         Plataformas_Scena.clear();
-        Salas_luz.clear();
-        Luces_Scena.clear();
         Enemigos_Scena.clear();
         Textos_Scena.clear();
         RecoArmas_Scena.clear();
@@ -119,6 +117,8 @@ void MotorGrafico::LimpiarElementosJuego()
         Objetos_Debug.clear();
         Objetos_Debug2.clear();
         Particulas_Scena.clear();
+        Luces_Scena.clear();
+        Salas_luz.clear();
 
         // TO DO: revisar error munmap_chunk(): invalid pointer
         /*if(_aniJugEscena != nullptr)
@@ -363,26 +363,6 @@ void MotorGrafico::LimpiarMotorGrafico()
             Plataformas_Scena.resize(0);
         }
 
-        if(Salas_luz.size() > 0)
-        {
-            for(std::size_t i=0;i < Salas_luz.size();i++)
-            {
-                Salas_luz[i] = nullptr;
-            }
-
-            Salas_luz.resize(0);
-        }
-
-        if(Luces_Scena.size() > 0)
-        {
-            for(std::size_t i=0;i < Luces_Scena.size();i++)
-            {
-                Luces_Scena[i] = nullptr;
-            }
-
-            Luces_Scena.resize(0);
-        }
-
         if(Objetos_Scena.size() > 0)
         {
             for(std::size_t i=0;i < Objetos_Scena.size();i++)
@@ -451,6 +431,26 @@ void MotorGrafico::LimpiarMotorGrafico()
             }
 
             Particulas_Scena.resize(0);
+        }
+
+        if(Luces_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < Luces_Scena.size();i++)
+            {
+                Luces_Scena[i] = nullptr;
+            }
+
+            Luces_Scena.resize(0);
+        }
+
+        if(Salas_luz.size() > 0)
+        {
+            for(std::size_t i=0;i < Salas_luz.size();i++)
+            {
+                Salas_luz[i] = nullptr;
+            }
+
+            Salas_luz.resize(0);
         }
 
         _armaEnEscena = nullptr;
@@ -1299,7 +1299,7 @@ void MotorGrafico::CargarLuces(int x,int y,int z,int r,int g,int b,int tipo,floa
 void MotorGrafico::CargarParticulas(int x, int y, int z, int velocidadx, int velocidady, int velocidadz, float escala, unsigned int nparticulas, float localz, float tvida, const char* ruta_textura)
 {
     //Crea el sistema de particulas
-    unsigned short particulas = _interfaz->AddParticles((float)velocidadx,(float)velocidady,(float)velocidadz,nparticulas,localz,tvida,"assets/images/fireparticle.png");
+    unsigned short particulas = _interfaz->AddParticles((float)velocidadx,(float)velocidady,(float)velocidadz,nparticulas,localz,tvida,ruta_textura);
     _interfaz->Escalar(particulas,escala,escala,escala);
     _interfaz->Trasladar(particulas,(float)x,(float)y,(float)z);
     _interfaz->DeshabilitarObjeto(particulas);
@@ -1572,7 +1572,7 @@ void MotorGrafico::CargarCofre(int pos, int rp, int x,int y,int z,
                 logicaAnim = new Animaciones(anima);
                 logicaAnim->AsignarID(_objetoEnEscena);
             }
-            
+
             // Cofre existente
             if (pos >= 0)
             {
@@ -1594,7 +1594,7 @@ void MotorGrafico::CargarCofre(int pos, int rp, int x,int y,int z,
             IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
             _objetoEnEscena->setPosition(core::vector3df(x,y,z));
             _objetoEnEscena->setRotation(core::vector3df(0,rp,0));
-            
+
             // Cofre existente
             if (pos >= 0)
             {
@@ -1973,35 +1973,47 @@ void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoe
 
 void MotorGrafico::UpdateLights(float x,float y,float z)
 {
-    for(unsigned int i=0; i<Salas_luz.size(); i++)
+    if(Salas_luz.size()>0)
     {
-        //es la SAla actual
-        if(_salaActual != Salas_luz[i].sala)
+        for(unsigned int i=0; i<Salas_luz.size(); i++)
         {
-            //En rango de otra sala
-            if(z > Salas_luz[i].minz && z < Salas_luz[i].maxz && x > Salas_luz[i].minx && x < Salas_luz[i].maxx)
+            //es la SAla actual
+            if(_salaActual != Salas_luz[i].sala)
             {
-                //Habilitar y trasladar luces necesarios
-                for(unsigned int j=0; j<Luces_Scena.size(); j++)
+                //En rango de otra sala
+                if(z > Salas_luz[i].minz && z < Salas_luz[i].maxz && x > Salas_luz[i].minx && x < Salas_luz[i].maxx)
                 {
-                    if(j < Salas_luz[i].luz.size())
+                    if(Luces_Scena.size()>0)
                     {
-                        _interfaz->HabilitarObjeto(Luces_Scena[j]);
-                        _interfaz->Trasladar(Luces_Scena[j],Salas_luz[i].luz[j].x,Salas_luz[i].luz[j].y,Salas_luz[i].luz[j].z);
-                        //Particulas
-                        if(j < Particulas_Scena.size())
+                        //Habilitar y trasladar luces necesarios
+                        for(unsigned int j=0; j<Luces_Scena.size(); j++)
                         {
-                            _interfaz->HabilitarObjeto(Particulas_Scena[j]);
-                            _interfaz->Trasladar(Particulas_Scena[j],Salas_luz[i].luz[j].x,Salas_luz[i].luz[j].y,Salas_luz[i].luz[j].z);
+                            if(j < Salas_luz[i].luz.size())
+                            {
+                                _interfaz->HabilitarObjeto(Luces_Scena[j]);
+                                _interfaz->Trasladar(Luces_Scena[j],Salas_luz[i].luz[j].x,Salas_luz[i].luz[j].y,Salas_luz[i].luz[j].z);
+                                //Particulas
+                                if(Particulas_Scena.size()>0)
+                                {
+                                    if(j < Particulas_Scena.size())
+                                    {
+                                        _interfaz->HabilitarObjeto(Particulas_Scena[j]);
+                                        _interfaz->Trasladar(Particulas_Scena[j],Salas_luz[i].luz[j].x,Salas_luz[i].luz[j].y,Salas_luz[i].luz[j].z);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                _interfaz->DeshabilitarObjeto(Luces_Scena[j]);
+                                if(Particulas_Scena.size()>0)
+                                {
+                                    if(j < Particulas_Scena.size())_interfaz->DeshabilitarObjeto(Particulas_Scena[j]);
+                                }
+                            }
                         }
-                    }
-                    else
-                    {
-                        _interfaz->DeshabilitarObjeto(Luces_Scena[j]);
-                        if(j < Particulas_Scena.size())_interfaz->DeshabilitarObjeto(Particulas_Scena[j]);
+                        _salaActual = Salas_luz[i].sala;
                     }
                 }
-                _salaActual = Salas_luz[i].sala;
             }
         }
     }

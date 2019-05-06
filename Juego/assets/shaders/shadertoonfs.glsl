@@ -88,7 +88,7 @@ void main()
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
     {
         float distance = length(pointLights[i].position - FragPos);
-        if(distance < 100)
+        if(distance < 40)
         {
             if(pointLights[i].constant > 0)
             {
