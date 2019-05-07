@@ -1375,10 +1375,11 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
             Enemigos_Scena.push_back(enemigo);
 
             //Crear billboard
-            // _interfaz->Trasladar(_boarde,(float)x+4.0f,(float)y+10.0f,(float)z);
-            // _interfaz->Escalar(_boarde,2.0f,0.15f,1.75f);
-            // //_interfaz->DeshabilitarObjeto(_boarde);
-            // BoardsEnem_Scena.push_back(_boarde);
+            unsigned short _board = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/4.png", 0.01f);
+            _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+10.0f,(float)z);
+            _interfaz->Escalar(_board,2.0f,0.15f,1.75f);
+            _interfaz->DeshabilitarObjeto(_board);
+            BoardsEnem_Scena.push_back(_board);
         }
 
     #else
@@ -1846,6 +1847,10 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
             _interfaz->Rotar(_jugEscena,rx,ry-180,rx);
             // std::cout << x << " " << y << " " << z << std::endl;
 
+            center_x = x;
+            center_y = y;
+            center_z = z;
+
             UpdateLights(x,y,z);
 
             delete nodeCamPosition;
@@ -1888,10 +1893,24 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
             _interfaz->Rotar(Enemigos_Scena[i],rx,ry-180,rz);
         }
 
-        // if(BoardsEnem_Scena.size() > 0 && BoardsEnem_Scena.size() > i && BoardsEnem_Scena[i] != 0)
-        // {
-        //     _interfaz->Trasladar(BoardsEnem_Scena[i],x+2.0f,y+10.0f,z);
-        // }
+        if(BoardsEnem_Scena.size() > 0 && BoardsEnem_Scena.size() > i && BoardsEnem_Scena[i] != 0)
+        {
+            _interfaz->Trasladar(BoardsEnem_Scena[i],x+2.0f,y+10.0f,z);
+
+            //Habilitar si esta cerca del pesonaje
+            float distx = center_x - x;
+            float disty = center_y - y;
+            float distz = center_z - z;
+            if(distx > -40.0f && distx < 40.0f && disty > -40.0f && disty < 40.0f && distz > -40.0f && distz < 40.0f)
+            {
+                _interfaz->HabilitarObjeto(BoardsEnem_Scena[i]);
+            }else{
+                _interfaz->DeshabilitarObjeto(BoardsEnem_Scena[i]);
+            }
+
+            //Actualizar board dependiendo de la vida
+
+        }
 
     #else
         //codigo motor irrlicht
@@ -2063,6 +2082,35 @@ void MotorGrafico::UpdateLights(float x,float y,float z)
                 }
             }
         }
+    }
+}
+
+void MotorGrafico::UpdateBoards(std::vector<unsigned short> boardvect, float x, float y, float z, float d)
+{
+    //Comprueba que el billboard esta dentro del rango del personaje
+    if(boardvect.size()>0)
+    {
+        for(unsigned int i=0; i<boardvect.size(); i++)
+        {
+            float distx = center_x - x;
+            float disty = center_y - y;
+            float distz = center_z - z;
+            if(distx > -d && distx < d && disty > -d && disty < d && distz > -d && distz < d)
+            {
+                _interfaz->HabilitarObjeto(boardvect[i]);
+            }else{
+                _interfaz->DeshabilitarObjeto(boardvect[i]);
+            }
+        }
+    }
+}
+
+void MotorGrafico::UpdateBoardsVidaEne(int enem, int vida, int vidamax)
+{
+    if(BoardsEnem_Scena[enem])
+    {
+        float v = ((float)vida * 2.0f)/vidamax;
+        _interfaz->Escalar(BoardsEnem_Scena[enem],v,0.15f,1.75f);
     }
 }
 
@@ -2574,11 +2622,11 @@ void MotorGrafico::EraseEnemigo(std::size_t i)
             Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
         }
 
-        // if(valor >= 0 && valor < BoardsEnem_Scena.size())
-        // {
-        //     _interfaz->RemoveObject(BoardsEnem_Scena[i]);
-        //     BoardsEnem_Scena.erase(BoardsEnem_Scena.begin() + i);
-        // }
+        if(valor >= 0 && valor < BoardsEnem_Scena.size())
+        {
+            _interfaz->RemoveObject(BoardsEnem_Scena[i]);
+            BoardsEnem_Scena.erase(BoardsEnem_Scena.begin() + i);
+        }
     #else
         //codigo motor irrlicht
         long unsigned int valor = i;
@@ -2604,10 +2652,10 @@ void MotorGrafico::EraseTodosEnemigos(std::size_t i)
             _interfaz->RemoveObject(Enemigos_Scena[valor]);
         }
 
-        // if(valor >= 0 && valor < BoardsEnem_Scena.size())
-        // {
-        //     _interfaz->RemoveObject(BoardsEnem_Scena[valor]);
-        // }
+        if(valor >= 0 && valor < BoardsEnem_Scena.size())
+        {
+            _interfaz->RemoveObject(BoardsEnem_Scena[valor]);
+        }
 
     #else
         //codigo motor irrlicht

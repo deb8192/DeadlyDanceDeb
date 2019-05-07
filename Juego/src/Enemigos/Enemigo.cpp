@@ -1946,6 +1946,8 @@ void Enemigo::Render(short posArray,
         posArray
     );
 
+    _motor->UpdateBoardsVidaEne(posArray,vida,vidaIni);
+
     _motor->dibujarObjetoTemporal(
         posActual.x, posActual.y, posActual.z,
         rotActual.x, rotActual.y, rotActual.z,

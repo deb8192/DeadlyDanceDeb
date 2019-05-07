@@ -361,6 +361,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CambiarPosicionImagen(signed int event, float x, float y);//cambiar posicion de un evento (imagen)
 
             void UpdateLights(float x,float y,float z);
+            void UpdateBoards(std::vector<unsigned short> boardvect, float x, float y, float z, float d);
+            void UpdateBoardsVidaEne(int enem, int vida, int vidamax);
 
         private: //clases solo accesibles por MotorGrafico
 
@@ -423,6 +425,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short _armaEsp;//id del arma especial cargado en memoria
                 bool pathfinding;//sirve para sacar mensaje por pantalla de si esta activado o no
                 bool existearmaexp;
+                float center_x, center_y, center_z;
 
                 // Ventana
                 short WIDTH_AUX, WIDTH, HEIGHT;
