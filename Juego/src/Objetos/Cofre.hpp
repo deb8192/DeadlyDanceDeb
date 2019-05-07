@@ -19,15 +19,17 @@ class Cofre : public Interactuable
         void ModeloTextura();
         bool GetEsArana();
         Sala* GetSala();
-        unsigned short GetPosArray();
-        void DesactivarCofre(unsigned int pos);
-        void BorrarCofre(unsigned int pos);
+        unsigned int GetPosArray();
+        void DesactivarCofre();
+        void BorrarCofre();
         void Render(float updTime, float drawTime);
+        void SetPosActiva(unsigned int pos);
 
     private:
         bool esArana;
         Sala* _estoy;//sala en la que esta el cofre
-        unsigned short posArrayArana; // Posicion en el vector de aranas
+        unsigned int posArrayArana; // Posicion en el vector de aranas
+        unsigned int posActiva;
 };
 
 #endif

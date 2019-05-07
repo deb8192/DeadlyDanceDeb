@@ -41,6 +41,7 @@ Cofre::Cofre(int id, unsigned int pos,
     ancho = 2;
     largo = 4;
     alto = 4;
+    posActiva=0;
 
     ModeloTextura();
     posicionArrayObjetos = pos;
@@ -64,6 +65,7 @@ Cofre::~Cofre()
     _estoy = nullptr;
     esArana=false;
     posArrayArana=0;
+    posActiva=0;
 }
 
 bool Cofre::GetEsArana()
@@ -76,32 +78,31 @@ Sala* Cofre::GetSala()
     return _estoy;
 }
 
-unsigned short Cofre::GetPosArray()
+unsigned int Cofre::GetPosArray()
 {
     return posArrayArana;
 }
 
-void Cofre::DesactivarCofre(unsigned int pos)
+void Cofre::DesactivarCofre()
 {
     // TO DO: Animacion abrir cofre
-    setNewRotacion(getRX(), getRY(), getRZ() + 80.0);
+    setNewRotacion(getRX(), getRY(), getRZ() - 80.0);
         
     accionado = !accionado;
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    _fisicas->DesactivarCofre(pos);
+    _fisicas->DesactivarCofre(posActiva);
     _fisicas = nullptr;
 }
 
-void Cofre::BorrarCofre(unsigned int pos)
+void Cofre::BorrarCofre()
 {
     // TO DO: Animacion sale arana
 
     accionado = !accionado;
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
-    _fisicas->DesactivarCofre(pos);
-    //_fisicas->EraseCofre(pos);
+    _fisicas->EraseCofre(posActiva, posObstaculos);
     _fisicas = nullptr;
-    _motor->EraseCofre(pos);
+    _motor->EraseCofre(posActiva);
 }
 
 
@@ -115,4 +116,9 @@ void Cofre::Render(float updTime, float drawTime)
         rotActual.x, rotActual.y, rotActual.z,
         posicionArrayObjetos
     );
+}
+
+void Cofre::SetPosActiva(unsigned int pos)
+{
+    posActiva = pos;
 }

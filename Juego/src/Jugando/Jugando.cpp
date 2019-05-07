@@ -320,8 +320,7 @@ void Jugando::ManejarEventos() {
     if(_motor->EstaPulsado(KEY_Z))
     {
         /*_motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), true);
-        _cofreP->CrearFisica();
-        _cofreP->accionar();*/
+        _cofreP->CrearFisica();*/
         //_cofreP=nullptr;
         _motor->ResetKey(KEY_Z);
     }
@@ -361,48 +360,49 @@ void Jugando::ManejarEventos() {
 void Jugando::InteractuarNivel()
 {
     //lo siguiente es para saber que objeto colisiona con jugador
-    // TO DO: optimizar estas comprobaciones
-    int rec_llave = _fisicas->collideLlave();
-    int rec_col = _fisicas->collideColectableArma();
     int int_puerta = _fisicas->collidePuerta();
-    int int_palanca = _fisicas->collidePalanca();
-    int int_cofre = _fisicas->collideAbrirCofre();
-
-    // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
-    /*if(cambia <= 0)
-    {*/
-        if (int_puerta >= 0)
-        {
-            AccionarMecanismo(int_puerta, constantes.PUERTA_OBJ);
-            //cambia++;
-        }
-        else if (int_palanca >= 0)
+    if (int_puerta >= 0)
+    {
+        AccionarMecanismo(int_puerta, constantes.PUERTA_OBJ);
+    }
+    else
+    {
+        int int_palanca = _fisicas->collidePalanca();
+        if (int_palanca >= 0)
         {
             AccionarMecanismo(int_palanca, constantes.PALANCA);
-            //cambia++;
-        }
-        else if (int_cofre >= 0)
-        {
-            AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
-            //cambia++;
-        }
-        else if (rec_llave >= 0)
-        {
-            _jugador->setAnimacion(4);
-            RecogerLlave(rec_llave);
-        }
-        else if (rec_col >= 0)
-        {
-            _jugador->setAnimacion(4);
-            RecogerArma(rec_col);
-            //cambia++;
         }
         else
         {
-            DejarObjeto();
-            //cambia++;
+            int int_cofre = _fisicas->collideAbrirCofre();
+            if (int_cofre >= 0)
+            {
+                AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
+            }
+            else
+            {
+                int rec_llave = _fisicas->collideLlave();
+                if (rec_llave >= 0)
+                {
+                    _jugador->setAnimacion(4);
+                    RecogerLlave(rec_llave);
+                }
+                else
+                {
+                    int rec_col = _fisicas->collideColectableArma();
+                    if (rec_col >= 0)
+                    {
+                        _jugador->setAnimacion(4);
+                        RecogerArma(rec_col);
+                    }
+                    else
+                    {
+                        DejarObjeto();
+                    }
+                }
+            }
         }
-   // }
+    }
 }
 
 /************** Update *************
@@ -1125,13 +1125,12 @@ void Jugando::Reanudar()
     {
         if (ganarPuzzle)
         {
-            //_cofreP->DesactivarCofre();
+            _cofreP->DesactivarCofre();
             AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),true);
             _cofreP = nullptr;
         }
         else
         {
-            _cofreP->accionar();
             CrearEnemigoArana();
         }
         ganarPuzzle = false;
@@ -1627,14 +1626,15 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
     if (tipoObj == constantes.COFRE_OBJ) // TO DO: repasar todo lo de los cofres al terminar la IA
     {
         _cofreP = _cofres.at(pos);
+        _cofreP->SetPosActiva(pos);
+
         if (_cofreP->GetEsArana())
         {
             AbrirPantallaPuzzle();
-            // TO DO: guardar pos
         }
         else
         {
-            _cofreP->DesactivarCofre(pos);
+            _cofreP->DesactivarCofre();
             AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),false);
             _cofreP = nullptr;
         }
@@ -1983,6 +1983,7 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     unsigned short minArpa = 15;
     unsigned short minGuitar = 22;
     unsigned short minFlauta = 13;
+    x = x + 5;
 
     // El cofre suelta armas normales y oro, la arana suelta armas mas fuertes
     if (esArana)
@@ -1995,7 +1996,6 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     else
     {
         objeto = NumeroAleatorio(constantes.ARPA,constantes.ORO);
-        x = x + 5;
     }
 
     switch (objeto)
@@ -2048,8 +2048,8 @@ void Jugando::CrearEnemigoArana()
 
     // Borrar cofre
     //_motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), false);
-    // TO DO: pasar pos correcta
-    _cofreP->BorrarCofre(0);
+    
+    _cofreP->BorrarCofre();
 }
 
 void Jugando::CargarBossEnMemoria()

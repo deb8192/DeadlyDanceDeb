@@ -438,10 +438,10 @@ void MotorFisicas::DesactivarCofre(unsigned int pos)
     _cofres.at(pos) = nullptr;
 }
 
-void MotorFisicas::EraseCofre(unsigned int pos)
+void MotorFisicas::EraseCofre(unsigned int posAct, unsigned int posObs)
 {
-    _cofres.at(pos) = nullptr;
-    //_cofres.erase(_cofres.begin() + pos);
+    _cofres.at(posAct) = nullptr;
+    obstaculos.at(posObs) = nullptr;
 }
 
 void MotorFisicas::EraseJugador(){
@@ -540,15 +540,14 @@ int MotorFisicas::collideAbrirCofre()
     {
         if (_cofres[i])
         {
-            //cout << "ENTROOOOOO"<<endl;
             if (space->testOverlap(jugador,_cofres[i]))
             {
-                //cout << "Devuelvo algo: "<<i<<endl;
+                cout << "Devuelvo algo: "<<i<<endl;
                 return i;
             }
         }
     }
-    //cout << "Devuelvo -1"<<endl;
+    cout << "Devuelvo -1"<<endl;
     return -1;
 }
 
@@ -579,23 +578,6 @@ bool MotorFisicas::collideParedesRompibles()
             }
         }
     }
-    return false;
-}
-
-bool MotorFisicas::collideCofres()
-{
-    /*for(unsigned int i = 0; i < _cofres.size();i++)
-    {
-        if(_cofres[i]) // Cofre cerrado
-        {
-            if(space->testOverlap(jugador,_cofres[i]))
-            {
-                return true;
-            }
-        } else { // Cofre abierto
-            return true;
-        }
-    }*/
     return false;
 }
 
