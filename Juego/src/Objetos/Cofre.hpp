@@ -12,7 +12,7 @@ class Cofre : public Interactuable
             float x, float y, float z, unsigned int tipoObj,
             unsigned int posA, Sala* sala, unsigned int posMotorG);
 
-        Cofre(int id, unsigned int pos,
+        Cofre(int id, unsigned int posAct, unsigned int posObs,
             float x, float y, float z, unsigned int tipoObj,
             unsigned int posA, Sala* sala);
 
@@ -20,6 +20,7 @@ class Cofre : public Interactuable
         bool GetEsArana();
         Sala* GetSala();
         unsigned int GetPosArray();
+        unsigned int GetPosActiva();
         void DesactivarCofre();
         void BorrarCofre();
         void Render(float updTime, float drawTime);

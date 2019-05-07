@@ -2025,6 +2025,7 @@ void Jugando::CrearEnemigoArana()
         _cofreP->GetPosArray());
 
     _eneA->SetIdCofre(_cofreP->getID());
+    _eneA->SetPosActiva(_cofreP->GetPosActiva()); // Pos en _cofres
 
     float x = _eneA->getX();
     float y = _eneA->getY();
@@ -2046,10 +2047,8 @@ void Jugando::CrearEnemigoArana()
     _enemigos.push_back(move(_eneA));
     _eneA = nullptr;
 
-    // Borrar cofre
-    //_motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), false);
-    
     _cofreP->BorrarCofre();
+    _cofreP = nullptr;
 }
 
 void Jugando::CargarBossEnMemoria()
@@ -2082,28 +2081,15 @@ void Jugando::CargarBossEnMemoria()
     _enemigos.push_back(move(_boss));
 }
 
+// TO DO: en proceso
 void Jugando::CambiarAranyaPorCofre(int idC, float x,float y, float z, 
-    unsigned int posArrayArana, Sala* sala)
+    unsigned int posArrayArana, unsigned int posAct, unsigned int posObs, Sala* sala)
 {
-    unsigned int pos = 0;
-    bool posNula = false;
-    while (!posNula)
-    {
-        if (_cofres.at(pos) != nullptr)
-        {
-            pos++;
-        }
-        else
-        {
-            posNula = true;
-        }
-    }
-
-    Cofre* _cofre = new Cofre(idC, pos,
+    Cofre* _cofre = new Cofre(idC, posAct, posObs,
         x, y, z,
         constantes.COFRE_OBJ, posArrayArana,
         sala);
 
-    _cofres.at(pos) = move(_cofre);
+    _cofres.at(posAct) = move(_cofre);
     _cofre = nullptr;
 }

@@ -18,6 +18,8 @@ class CofreArana : public Enemigo
         float GetLargo();
         int GetIdCofre();
         void SetIdCofre(int idC);
+        unsigned int GetPosActiva();
+        void SetPosActiva(unsigned int pos);
 
     private:
         bool funciona, atacado, hecho;
@@ -25,8 +27,10 @@ class CofreArana : public Enemigo
         short int maxRotacion;
         short int direccion;
         float ancho, alto, largo;
+
         int idCofre;
         Sala* sala;
+        unsigned int posActiva;
 };
 
 #endif

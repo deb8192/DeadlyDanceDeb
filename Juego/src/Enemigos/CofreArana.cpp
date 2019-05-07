@@ -21,15 +21,30 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
 
     idCofre = -1;
     sala = salaC;
+    posActiva=0;
 }
 
 CofreArana::~CofreArana()
 {
+    funciona = false;
+    atacado = false;
+
     delete[] _ordenes;
     _ordenes = nullptr;
+
+    maxRotacion = 0;
+    rotation = 0;
+
     _modelo = nullptr;
     _textura = nullptr;
+
+    ancho = 0;
+    largo = 0;
+    alto = 0;
+
     idCofre=0;
+    sala = nullptr;
+    posActiva=0;
 }
 
 /***************** RunIA *****************
@@ -266,4 +281,14 @@ int CofreArana::GetIdCofre()
 void CofreArana::SetIdCofre(int idC)
 {
     idCofre = idC;
+}
+
+unsigned int CofreArana::GetPosActiva()
+{
+    return posActiva;
+}
+
+void CofreArana::SetPosActiva(unsigned int pos)
+{
+    posActiva = pos;
 }

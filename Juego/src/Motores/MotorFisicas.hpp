@@ -27,7 +27,7 @@ using namespace reactphysics3d;
             unsigned short CrearCuerpoRec(int accion, float px, float py, float pz,
                 float ancho, float alto, float largo, float despX, float despZ);
             unsigned short CrearCuerpoWaypoint(float px, float py, float pz, float alto);
-            void CargarCofre(unsigned int pos, float px, float py, float pz, 
+            void CargarCofre(unsigned int posAct, unsigned int posObs, float px, float py, float pz, 
                 float ancho, float alto, float largo, float despX, float despZ);
             //int crearCuerpo(float px, float py, float pz, int type, float ancho, float largo, float alto);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
             //void actualizarPosicionCuerpo(float px, float py, float pz,int posicion);//se le pasa las nuevas posiciones del cuerpo del array de cuerpos de la posicion
