@@ -34,6 +34,7 @@ MotorGrafico::MotorGrafico()
         Objetos_Debug.reserve(500);
         Objetos_Debug2.reserve(500);
         BoardsArmas_Scena.reserve(500);
+        BoardsEnem_Scena.reserve(50);
         Particulas_Scena.reserve(100);
 
         camara = 0;
@@ -119,6 +120,8 @@ void MotorGrafico::LimpiarElementosJuego()
         Particulas_Scena.clear();
         Luces_Scena.clear();
         Salas_luz.clear();
+        BoardsArmas_Scena.clear();
+        BoardsEnem_Scena.clear();
 
         // TO DO: revisar error munmap_chunk(): invalid pointer
         /*if(_aniJugEscena != nullptr)
@@ -199,6 +202,9 @@ void MotorGrafico::LimpiarElementosJuego()
         altura = 0;
         camara1 = true;
         existearmaexp = false;
+        _salaActual = 0;
+        _luzDireccional = 0;
+        _luzFoco = 0;
 
         idCargando = 0;
 
@@ -433,6 +439,26 @@ void MotorGrafico::LimpiarMotorGrafico()
             Particulas_Scena.resize(0);
         }
 
+        if(Salas_luz.size() > 0)
+        {
+            for(std::size_t i=0;i < Salas_luz.size();i++)
+            {
+                if(Salas_luz[i].luz.size() > 0)
+                {
+                    for(std::size_t j=0;j < Salas_luz[i].luz.size();j++)
+                    {
+                        Salas_luz[i].luz[j] = nullptr;
+                    }
+
+                    Salas_luz[i].luz.resize(0);
+                }
+
+                Salas_luz[i] = nullptr;
+            }
+
+            Salas_luz.resize(0);
+        }
+
         if(Luces_Scena.size() > 0)
         {
             for(std::size_t i=0;i < Luces_Scena.size();i++)
@@ -443,14 +469,24 @@ void MotorGrafico::LimpiarMotorGrafico()
             Luces_Scena.resize(0);
         }
 
-        if(Salas_luz.size() > 0)
+        if(BoardsArmas_Scena.size() > 0)
         {
-            for(std::size_t i=0;i < Salas_luz.size();i++)
+            for(std::size_t i=0;i < BoardsArmas_Scena.size();i++)
             {
-                Salas_luz[i] = nullptr;
+                BoardsArmas_Scena[i] = nullptr;
             }
 
-            Salas_luz.resize(0);
+            BoardsArmas_Scena.resize(0);
+        }
+
+        if(BoardsEnem_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < BoardsEnem_Scena.size();i++)
+            {
+                BoardsEnem_Scena[i] = nullptr;
+            }
+
+            BoardsEnem_Scena.resize(0);
         }
 
         _armaEnEscena = nullptr;
@@ -1337,6 +1373,12 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
         {
             _interfaz->Trasladar(enemigo,(float)x,(float)y,(float)z);
             Enemigos_Scena.push_back(enemigo);
+
+            //Crear billboard
+            // _interfaz->Trasladar(_boarde,(float)x+4.0f,(float)y+10.0f,(float)z);
+            // _interfaz->Escalar(_boarde,2.0f,0.15f,1.75f);
+            // //_interfaz->DeshabilitarObjeto(_boarde);
+            // BoardsEnem_Scena.push_back(_boarde);
         }
 
     #else
@@ -1845,6 +1887,11 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
             _interfaz->Trasladar(Enemigos_Scena[i],x,y,z);
             _interfaz->Rotar(Enemigos_Scena[i],rx,ry-180,rz);
         }
+
+        // if(BoardsEnem_Scena.size() > 0 && BoardsEnem_Scena.size() > i && BoardsEnem_Scena[i] != 0)
+        // {
+        //     _interfaz->Trasladar(BoardsEnem_Scena[i],x+2.0f,y+10.0f,z);
+        // }
 
     #else
         //codigo motor irrlicht
@@ -2520,12 +2567,18 @@ void MotorGrafico::EraseEnemigo(std::size_t i)
         //codigo motor catopengl
 
         long unsigned int valor = i;
+
         if(valor >= 0 && valor < Enemigos_Scena.size())
         {
             _interfaz->RemoveObject(Enemigos_Scena[i]);
             Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
         }
 
+        // if(valor >= 0 && valor < BoardsEnem_Scena.size())
+        // {
+        //     _interfaz->RemoveObject(BoardsEnem_Scena[i]);
+        //     BoardsEnem_Scena.erase(BoardsEnem_Scena.begin() + i);
+        // }
     #else
         //codigo motor irrlicht
         long unsigned int valor = i;
@@ -2550,6 +2603,11 @@ void MotorGrafico::EraseTodosEnemigos(std::size_t i)
         {
             _interfaz->RemoveObject(Enemigos_Scena[valor]);
         }
+
+        // if(valor >= 0 && valor < BoardsEnem_Scena.size())
+        // {
+        //     _interfaz->RemoveObject(BoardsEnem_Scena[valor]);
+        // }
 
     #else
         //codigo motor irrlicht
