@@ -17,9 +17,13 @@ class CofreArana : public Enemigo
         float GetAlto();
         float GetLargo();
         int GetIdCofre();
+        unsigned int GetPosMotorCofre();
+        unsigned int GetPosObsCofre();
+        unsigned int GetPosArana();
         void SetIdCofre(int idC);
-        unsigned int GetPosActiva();
-        void SetPosActiva(unsigned int pos);
+        void SetPosMotorCofre(unsigned int pos);
+        void SetPosObsCofre(unsigned int pos);
+        void SetPosArana(unsigned int pos);
 
     private:
         bool funciona, atacado, hecho;
@@ -30,7 +34,9 @@ class CofreArana : public Enemigo
 
         int idCofre;
         Sala* sala;
-        unsigned int posActiva;
+        unsigned int posMotorCofre;
+        unsigned int posObsCofre;
+        unsigned int posArana;
 };
 
 #endif

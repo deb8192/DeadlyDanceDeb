@@ -1626,7 +1626,6 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
     if (tipoObj == constantes.COFRE_OBJ) // TO DO: repasar todo lo de los cofres al terminar la IA
     {
         _cofreP = _cofres.at(pos);
-        _cofreP->SetPosActiva(pos);
 
         if (_cofreP->GetEsArana())
         {
@@ -2022,10 +2021,10 @@ void Jugando::CrearEnemigoArana()
 {
     // Crear Arana
     CofreArana* _eneA = (CofreArana*)_eneCofres.at(
-        _cofreP->GetPosArray());
+        _cofreP->GetPosArrayArana());
 
     _eneA->SetIdCofre(_cofreP->getID());
-    _eneA->SetPosActiva(_cofreP->GetPosActiva()); // Pos en _cofres
+    _eneA->SetPosObsCofre(_cofreP->GetPosObs());
 
     float x = _eneA->getX();
     float y = _eneA->getY();
@@ -2081,15 +2080,21 @@ void Jugando::CargarBossEnMemoria()
     _enemigos.push_back(move(_boss));
 }
 
-// TO DO: en proceso
-void Jugando::CambiarAranyaPorCofre(int idC, float x,float y, float z, 
-    unsigned int posArrayArana, unsigned int posAct, unsigned int posObs, Sala* sala)
-{
-    Cofre* _cofre = new Cofre(idC, posAct, posObs,
-        x, y, z,
-        constantes.COFRE_OBJ, posArrayArana,
-        sala);
+// Crear Arana
+    /*CofreArana* _eneA = (CofreArana*)_eneCofres.at(
+        _cofreP->GetPosArrayArana());
 
-    _cofres.at(posAct) = move(_cofre);
+    _eneA->GetIdCofre(), _eneA->GetPosMotorCofre(), _eneA->GetPosObsCofre(),
+        _eneA->getX(), _eneA->getY(), _eneA->getZ(), 
+        _eneA->getPosArana(), _eneA->GetSala()*/
+
+// TO DO: en proceso
+void Jugando::CambiarAranyaPorCofre(int idC, unsigned int posMotorG, unsigned int posObs,
+    float x, float y, float z, unsigned int posArana, Sala* sala)
+{
+    Cofre* _cofre = new Cofre(idC, posMotorG, posObs,
+        x, y, z, constantes.COFRE_OBJ, posArana, sala);
+
+    _cofres.at(posMotorG) = move(_cofre);
     _cofre = nullptr;
 }
