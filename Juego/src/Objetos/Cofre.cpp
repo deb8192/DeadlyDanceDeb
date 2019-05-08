@@ -88,7 +88,7 @@ unsigned int Cofre::GetPosObs()
 
 void Cofre::DesactivarCofre()
 {
-    // TO DO: Animacion abrir cofre
+    // TO DO: Animacion abrir cofre y sonido de abrirse
     setNewRotacion(getRX(), getRY(), getRZ() - 80.0);
         
     accionado = !accionado;
@@ -99,7 +99,7 @@ void Cofre::DesactivarCofre()
 
 void Cofre::BorrarCofre()
 {
-    // TO DO: Animacion sale arana
+    // TO DO: Animacion sale arana y sonido de abrirse
 
     accionado = !accionado;
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
