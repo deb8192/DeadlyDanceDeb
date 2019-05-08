@@ -1,6 +1,6 @@
 #include "TLuz.hpp"
 
-TLuz::TLuz(int t)
+TLuz::TLuz(int t,int anim)
 {
     didentidad = 'L'; //para sabe que funcion hace
     tipo_luz = t; //tipo de luz
@@ -14,14 +14,12 @@ TLuz::TLuz(int t)
     }
     else if(t == 1)
     {
-        // setAmbient(0.7f, 0.7f, 0.7f);
-        // setDiffuse(0.9f, 0.9f, 0.9f);
-        // setSpecular(1.0f, 1.0f, 1.0f);
         setAmbient(178.5f, 178.5f, 178.5f);
         setDiffuse(229.5f, 229.5f, 229.5f);
         setSpecular(255.0f, 255.0f, 255.0f);
         setLightRange(150.0f);
         setBrillos(32.0f);
+        tipo_anim = anim;
     }
     else if(t == 2)
     {
@@ -102,6 +100,29 @@ void TLuz::beginDraw()
         }
         else if(tipo_luz == 1)
         {
+            //Animacion 1
+            if(tipo_anim == 1)
+            {
+                posicion.x = posicion.x + (((rand() % 50) + (-50)) / 100.0f);
+                posicion.y = posicion.y + (((rand() % 50) + (-50)) / 100.0f);
+                posicion.z = posicion.z + (((rand() % 50) + (-50)) / 100.0f);
+            }
+            //Animacion 2
+            else if(tipo_anim == 2)
+            {
+                if(animaescala == 100)cambiaranima = true;
+                if(animaescala == 0)cambiaranima = false;
+                if(cambiaranima)
+                {
+                    animaescala=animaescala-2;
+                }else{
+                    animaescala=animaescala+2;
+                }
+                setAmbient(ambient.x+animaescala,ambient.y+animaescala,ambient.z+animaescala);
+                setDiffuse(diffuse.x+animaescala,diffuse.y+animaescala,diffuse.z+animaescala);
+                setSpecular(specular.x+animaescala,specular.y+animaescala,specular.z+animaescala);
+            }
+
             std::string n = std::to_string(numberoflight);
             shader->setVec3("pointLights[" + n + "].ambient", ambient);
             shader->setVec3("pointLights[" + n + "].diffuse", diffuse);

@@ -107,7 +107,7 @@ unsigned short Interfaz::AddCamara()
     return 0;
 }
 
-unsigned short Interfaz::AddLuz(int tipo)
+unsigned short Interfaz::AddLuz(int tipo,int anim)
 {
     //std::cout << "SE CREA LUZ" << std::endl;
     if(ventana_inicializada)
@@ -134,7 +134,7 @@ unsigned short Interfaz::AddLuz(int tipo)
     escaladoEnt->NoEjecutar();
 
     TNodo * luz = new TNodo;
-    TLuz * luzEn = new TLuz(tipo);
+    TLuz * luzEn = new TLuz(tipo,anim);
     luzEn->SetShader(shaders[4]);
     if(tipo == 1)//luz puntual
     {

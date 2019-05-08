@@ -174,7 +174,8 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
         int b = hijo.attribute("colorB").as_int();//nos devuelve un int
         int tipo = hijo.attribute("Tipo").as_int();
         float intensidad = (float)hijo.attribute("Intensity").as_int();
-        CrearLuz(x,y,z,tipo,intensidad,r,g,b); //cargamos el objeto
+        int anim = hijo.attribute("Animacion").as_int();
+        CrearLuz(x,y,z,tipo,intensidad,r,g,b,anim); //cargamos el objeto
     }
 
     for (pugi::xml_node hijo = doc.child("Level").child("LightSala"); hijo; hijo = hijo.next_sibling("LightSala"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -619,9 +620,9 @@ Sala* CargadorNiveles::CrearPlataforma(int accion, int rp, int x,int y,int z, in
     return _sala;
 }
 
-void CargadorNiveles::CrearLuz(int x,int y,int z,int tipo,float dist, int r, int g, int b)
+void CargadorNiveles::CrearLuz(int x,int y,int z,int tipo,float dist, int r, int g, int b, int anim)
 {
-    _motor->CargarLuces(x,y,z,r,g,b,tipo,dist);
+    _motor->CargarLuces(x,y,z,r,g,b,tipo,dist,anim);
 }
 
 void CargadorNiveles::CrearSalaLuz(int sala,int minz,int maxz,int minx,int maxx)

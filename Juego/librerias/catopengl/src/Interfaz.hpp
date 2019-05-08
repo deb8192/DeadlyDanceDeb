@@ -29,7 +29,7 @@ class Interfaz
 
         unsigned short AddCamara();//creamos una camara
 
-        unsigned short AddLuz(int);//creamos una luz
+        unsigned short AddLuz(int,int);//creamos una luz
 
         unsigned short AddMalla(const char *,int initf,int shader);//creamos una malla
 

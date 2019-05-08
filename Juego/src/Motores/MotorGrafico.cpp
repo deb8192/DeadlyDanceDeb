@@ -1281,12 +1281,12 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
     #endif
 }
 
-void MotorGrafico::CargarLuces(int x,int y,int z,int r,int g,int b,int tipo,float dist)
+void MotorGrafico::CargarLuces(int x,int y,int z,int r,int g,int b,int tipo,float dist,int anim)
 {
     #ifdef WEMOTOR
 
         //codigo motor catopengl
-        unsigned short luz = _interfaz->AddLuz(tipo);//instanciamos el objeto y lo agregamos a la escena
+        unsigned short luz = _interfaz->AddLuz(tipo,anim);//instanciamos el objeto y lo agregamos a la escena
         if(luz != 0 && tipo == 1)
         {
             _interfaz->Trasladar(luz,(float)x,(float)y,(float)z);//movemos el objeto
