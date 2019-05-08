@@ -565,49 +565,6 @@ void Jugando::Update()
                 _enemigos.at(i)->getFisZ(),
                 i
             );
-
-            // Si hay una arana activada y tiene que esconderse
-            if (esconderArana)
-            {
-                if (_enemigos.at(i)->GetTipoEnemigo() == constantes.ARANA)
-                {
-                    CofreArana* _eneA = (CofreArana*)_enemigos.at(i);
-
-                    if (_eneA->GetActivada())
-                    {
-                        _eneA->SetActivada(false);
-
-                        if (_enemigos.at(i)->GetPedirAyuda())
-                            enemDejarDePedirAyuda();
-
-                        // TO DO: hacer que se esconda en la zona de cofres
-                        CambiarAranyaPorCofre(_eneA->GetIdCofre(), _eneA->GetPosMotorCofre(),
-                            _eneA->GetPosObsCofre(),
-                            _eneA->getX(), _eneA->getY(), _eneA->getZ(), 
-                            _eneA->GetPosArana(), _eneA->GetSala());
-                        
-                        //Eliminar sonido
-                        std::string nameid = std::to_string(_eneA->getID()); //pasar id a string
-                        _motora->getEvent(nameid)->stop();
-
-                        // Borrar grafico y fisicas de la arana
-                        _motor->EraseEnemigo(i);
-                        _fisicas->EraseEnemigo(i);
-
-                        CofreArana* _eneNew = new CofreArana(*_eneA);
-
-                        // La arana vuelve al array de cofres aranas
-                        _eneCofres.at(_eneNew->GetPosArana()) = _eneNew;
-                        _eneA = nullptr;
-
-                        //cout << "Puntero apunta bien: "<<_eneCofres.at(_eneNew->GetPosArana())->getID()<<endl;
-
-                        _enemigos.erase(_enemigos.begin() + i);//begin le suma las posiciones
-
-                        esconderArana = false;
-                    }
-                }
-            }
         }
     }
 
@@ -918,6 +875,11 @@ void Jugando::UpdateIA()
                     }
                     else if (tipoEnemigo == constantes.ARANA)
                     {
+                        CofreArana* _cofA = (CofreArana*)_enemigos[i];
+
+                        delete _cofres.at(_cofA->GetPosMotorCofre());
+                        _cofres.at(_cofA->GetPosMotorCofre())=nullptr;
+
                         AbrirCofre(x,y,z,true);
                     }
                     else if (tipoEnemigo == constantes.BOSS)
@@ -971,6 +933,49 @@ void Jugando::UpdateIA()
                         }
                     }
                 }
+
+                // Si hay una arana activada y tiene que esconderse
+                if (esconderArana)
+                {
+                    if (_enemigos.at(i)->GetTipoEnemigo() == constantes.ARANA)
+                    {
+                        CofreArana* _eneA = (CofreArana*)_enemigos.at(i);
+
+                        if (_eneA->GetActivada())
+                        {
+                            _eneA->SetActivada(false);
+
+                            if (_eneA->GetPedirAyuda())
+                                enemDejarDePedirAyuda();
+
+                            // TO DO: hacer que se esconda en la zona de cofres
+                            float x = _eneA->getX();
+                            float y = _eneA->getY();
+                            float z = _eneA->getZ();
+
+                            Cofre* _cof = _cofres.at(_eneA->GetPosMotorCofre());
+                            _cof->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+                            _cof->setNewPosiciones(x,y,z);
+                            _cof->setLastPosiciones(x,y,z);
+                            _cof->ActivarCofre();
+                            _cof = nullptr;
+
+                            //Eliminar sonido
+                            std::string nameid = std::to_string(_eneA->getID()); //pasar id a string
+                            _motora->getEvent(nameid)->stop();
+
+                            // Borrar grafico y fisicas de la arana
+                            _motor->EraseEnemigo(i);
+                            _fisicas->EraseEnemigo(i);
+
+                            // La arana vuelve al array de cofres aranas
+                            _eneA = nullptr;
+                            _enemigos.erase(_enemigos.begin() + i);//begin le suma las posiciones
+
+                            esconderArana = false;
+                        }
+                    }
+                }
             }
         }
     }
@@ -1005,7 +1010,8 @@ void Jugando::Render()
 
     for(unsigned int i = 0; i < _cofres.size(); i++)
     {
-        _cofres.at(i)->Render(updateTime, resta);
+        if (_cofres.at(i) != nullptr)
+            _cofres.at(i)->Render(updateTime, resta);
     }
     //*******************************************************************
     //BILLBOARD RECOGER ARMAS
@@ -2280,8 +2286,6 @@ void Jugando::CrearEnemigoArana()
     CofreArana* _eneA = (CofreArana*)_eneCofres.at(
         _cofreP->GetPosArrayArana());
 
-    //cout << "ID: "<<_eneA->getID()<<endl;
-
     _eneA->SetIdCofre(_cofreP->getID());
     _eneA->SetPosObsCofre(_cofreP->GetPosObs());
     _eneA->SetPosArana(_cofreP->GetPosArrayArana());
@@ -2298,20 +2302,16 @@ void Jugando::CrearEnemigoArana()
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,false); //Para ataques
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0,false); //Para ataques especiales
 
+    cout << "XYZ: "<<x<<", "<<y<<", "<<z<<endl;
+
    //Cargar sonido evento en una instancia con la id del enemigo como nombre
     std::string nameid = std::to_string(_eneA->getID()); //pasar id a string
-
-    /*if (!_eneA->GetPrimeraVezActivada())
-    {*/
-        _eneA->SetPrimeraVezActivada(true);
-        _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
-    //}
-
+    _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
     _motora->getEvent(nameid)->setPosition(x,y,z);
     _motora->getEvent(nameid)->setVolume(0.5f);
     _motora->getEvent(nameid)->start();
 
-    _enemigos.push_back(move(_eneA));
+    _enemigos.push_back(_eneA);
     _eneA = nullptr;
 
     _cofreP->BorrarCofre();
@@ -2351,15 +2351,4 @@ void Jugando::CargarBossEnMemoria()
     _motora->getEvent(nameid)->start();
 
     _enemigos.insert(_enemigos.begin(), _boss);
-}
-
-// TO DO: en proceso
-void Jugando::CambiarAranyaPorCofre(int idC, unsigned int posMotorG, unsigned int posObs,
-    float x, float y, float z, unsigned int posArana, Sala* sala)
-{
-    Cofre* _cofre = new Cofre(idC, posMotorG, posObs,
-        x, y, z, constantes.COFRE_OBJ, posArana, sala);
-
-    _cofres.at(posMotorG) = move(_cofre);
-    _cofre = nullptr;
 }
