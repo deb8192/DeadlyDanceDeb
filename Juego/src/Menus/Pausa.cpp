@@ -37,12 +37,14 @@ void Pausa::ManejarEventos()
     if (_motor->OcurreEvento(GUI_ID_SALIR_BUTTON))
     {
         borrarEscenaResetearEvento(GUI_ID_SALIR_BUTTON);
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         salir();
     }
     
     if (_motor->OcurreEvento(GUI_ID_REINICIAR_BUTTON))
     {
         borrarGUIResetearEvento(GUI_ID_REINICIAR_BUTTON);
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         reiniciarPartida();
     }
 
@@ -54,12 +56,14 @@ void Pausa::ManejarEventos()
         borrarGUIResetearEvento(GUI_ID_ATRAS_BUTTON);
         _motor->ResetKey(KEY_ESC);
         _motor->ResetKey(KEY_P);
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         atras();
     }
 
     if (_motor->OcurreEvento(GUI_ID_MENU_BUTTON))
     {
         borrarEscenaResetearEvento(GUI_ID_MENU_BUTTON);
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         menuPrincipal();
     }
 }
@@ -94,6 +98,7 @@ void Pausa::borrarGUIResetearEvento(short id)
 // Vuelve al menu principal
 void Pausa::menuPrincipal()
 {
+    _motora->getEvent("AmbienteLava")->stop(); //Detener ambiente
     _motora->getEvent("AmbienteGritos")->stop(); //Detener musica ambiente
     _motora->getEvent("Nivel1")->stop(); //Detener musica Juego
     _motora->getEvent("Nivel2")->stop(); //Detener musica Juego

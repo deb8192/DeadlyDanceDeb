@@ -15,13 +15,16 @@ MotorGrafico::MotorGrafico()
 
         _interfaz = nullptr;
         Plataformas_Scena.reserve(200);//salas reservadas
-        Luces_Scena.reserve(40);//luces reservadas
+        Luces_Scena.reserve(60);//luces reservadas
+        Salas_luz.reserve(20);
         Enemigos_Scena.reserve(50);//enemigos reservados
         Textos_Scena.reserve(18);//textos estaticos en la escena o gui
         RecoArmas_Scena.reserve(50);
         RecoArmasAni_Scena.reserve(50);
         Llaves_Scena.reserve(50);
         LlavesAni_Scena.reserve(50);
+        Cofres_Scena.reserve(50);
+        CofresAni_Scena.reserve(50);
         Objetos_Scena.reserve(100);
         ObjetosAni_Scena.reserve(100);//contiene las logicas de animaciones
         PowerUP_Scena.reserve(50);
@@ -31,6 +34,8 @@ MotorGrafico::MotorGrafico()
         Objetos_Debug.reserve(500);
         Objetos_Debug2.reserve(500);
         BoardsArmas_Scena.reserve(500);
+        BoardsEnem_Scena.reserve(50);
+        Particulas_Scena.reserve(100);
 
         camara = 0;
         _jugEscena = 0;
@@ -44,6 +49,7 @@ MotorGrafico::MotorGrafico()
         altura = 0;
         camara1 = true;
         existearmaexp = false;
+        _salaActual = 0;
 
         idCargando = 0;
 
@@ -101,7 +107,6 @@ void MotorGrafico::LimpiarElementosJuego()
         _interfaz->LimpiarEscena();
         _interfaz->LimpiarGui();
         Plataformas_Scena.clear();
-        Luces_Scena.clear();
         Enemigos_Scena.clear();
         Textos_Scena.clear();
         RecoArmas_Scena.clear();
@@ -109,65 +114,82 @@ void MotorGrafico::LimpiarElementosJuego()
         Objetos_Scena.clear();
         PowerUP_Scena.clear();
         Paredes_Scena.clear();
+        Cofres_Scena.clear();
         Objetos_Debug.clear();
         Objetos_Debug2.clear();
+        Particulas_Scena.clear();
+        Luces_Scena.clear();
+        Salas_luz.clear();
+        BoardsArmas_Scena.clear();
+        BoardsEnem_Scena.clear();
 
-        if(_aniJugEscena != nullptr)
+        // TO DO: revisar error munmap_chunk(): invalid pointer
+        /*if(_aniJugEscena != nullptr)
         {
             delete _aniJugEscena;
             _aniJugEscena = nullptr;
-        }
+        }*/
 
-        short tam = RecoArmasAni_Scena.size();
-        for(short i=0; i < tam; i++)
-        {
-            if( RecoArmasAni_Scena.at(i) != nullptr)
-            {
-                delete RecoArmasAni_Scena.at(i);
-            }
-        }
-
-        tam = LlavesAni_Scena.size();
-        for(short i=0; i < tam; i++)
-        {
-            if( LlavesAni_Scena.at(i) != nullptr)
-            {
-                delete LlavesAni_Scena.at(i);
-            }
-        }
-
-        tam = ObjetosAni_Scena.size();
-        for(short i=0; i < tam; i++)
+        // TO DO: revisar error de punteros
+        int tam = ObjetosAni_Scena.size();
+        /*for(int i=0; i < tam; i++)
         {
             if( ObjetosAni_Scena.at(i) != nullptr)
             {
                 delete ObjetosAni_Scena.at(i);
             }
         }
-
-        tam = PowerUPAni_Scena.size();
-        for(short i=0; i < tam; i++)
-        {
-            if( PowerUPAni_Scena.at(i) != nullptr)
-            {
-                delete PowerUPAni_Scena.at(i);
-            }
-        }
+        ObjetosAni_Scena.clear();
 
         tam = ParedesAni_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             if( ParedesAni_Scena.at(i) != nullptr)
             {
                 delete ParedesAni_Scena.at(i);
             }
         }
+        ParedesAni_Scena.clear();*/
 
+        tam = RecoArmasAni_Scena.size();
+        for(int i=0; i < tam; i++)
+        {
+            if( RecoArmasAni_Scena.at(i) != nullptr)
+            {
+                delete RecoArmasAni_Scena.at(i);
+            }
+        }
         RecoArmasAni_Scena.clear();
+
+        tam = LlavesAni_Scena.size();
+        for(int i=0; i < tam; i++)
+        {
+            if( LlavesAni_Scena.at(i) != nullptr)
+            {
+                delete LlavesAni_Scena.at(i);
+            }
+        }
         LlavesAni_Scena.clear();
-        ObjetosAni_Scena.clear();
+
+        tam = PowerUPAni_Scena.size();
+        for(int i=0; i < tam; i++)
+        {
+            if( PowerUPAni_Scena.at(i) != nullptr)
+            {
+                delete PowerUPAni_Scena.at(i);
+            }
+        }
         PowerUPAni_Scena.clear();
-        ParedesAni_Scena.clear();
+
+        tam = CofresAni_Scena.size();
+        for(int i=0; i < tam; i++)
+        {
+            if( CofresAni_Scena.at(i) != nullptr)
+            {
+                delete CofresAni_Scena.at(i);
+            }
+        }
+        CofresAni_Scena.clear();
 
         camara = 0;
         _jugEscena = 0;
@@ -180,6 +202,9 @@ void MotorGrafico::LimpiarElementosJuego()
         altura = 0;
         camara1 = true;
         existearmaexp = false;
+        _salaActual = 0;
+        _luzDireccional = 0;
+        _luzFoco = 0;
 
         idCargando = 0;
 
@@ -229,72 +254,72 @@ void MotorGrafico::LimpiarElementosJuego()
         pathfinding = false;
 
         // Liberar memoria
-        short tam = Enemigos_Scena.size();
-        for(short i=0; i < tam; i++)
+        int tam = Enemigos_Scena.size();
+        for(int i=0; i < tam; i++)
         {
             Enemigos_Scena.at(i) = nullptr;
         }
         Enemigos_Scena.clear();
 
         tam = Objetos_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             Objetos_Scena.at(i) = nullptr;
         }
         Objetos_Scena.clear();
 
         /*tam = Plataformas_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             if (Plataformas_Scena.at(i))
                 delete Plataformas_Scena.at(i);
         }
         Plataformas_Scena.clear();
         tam = RecoArmas_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete RecoArmas_Scena.at(i);
         }
         RecoArmas_Scena.clear();
         tam = Llaves_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete Llaves_Scena.at(i);
         }
         Llaves_Scena.clear();
         tam = PowerUP_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete PowerUP_Scena.at(i);
         }
         PowerUP_Scena.clear();
         tam = Paredes_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete Paredes_Scena.at(i);
         }
         Paredes_Scena.clear();
         tam = Luces_Scena.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete Luces_Scena.at(i);
         }
         Luces_Scena.clear();
         tam = Objetos_Debug.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete Objetos_Debug.at(i);
         }
         Objetos_Debug.clear();
         tam = Objetos_Debug2.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete Objetos_Debug2.at(i);
         }
         Objetos_Debug2.clear();*/
 
         /*tam = fichasMesh.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete fichasMesh.at(i);
         }
@@ -302,7 +327,7 @@ void MotorGrafico::LimpiarElementosJuego()
 
         //TO DO: Pendiente de utilizar en puzzles
         /*tam = imagenes.size();
-        for(short i=0; i < tam; i++)
+        for(int i=0; i < tam; i++)
         {
             delete imagenes.at(i);
         }
@@ -310,6 +335,7 @@ void MotorGrafico::LimpiarElementosJuego()
     #endif
 }
 
+// TO DO: mirar de quitar porque no se usa
 void MotorGrafico::LimpiarMotorGrafico()
 {
     #ifdef WEMOTOR
@@ -341,16 +367,6 @@ void MotorGrafico::LimpiarMotorGrafico()
             }
 
             Plataformas_Scena.resize(0);
-        }
-
-        if(Luces_Scena.size() > 0)
-        {
-            for(std::size_t i=0;i < Luces_Scena.size();i++)
-            {
-                Luces_Scena[i] = nullptr;
-            }
-
-            Luces_Scena.resize(0);
         }
 
         if(Objetos_Scena.size() > 0)
@@ -401,6 +417,76 @@ void MotorGrafico::LimpiarMotorGrafico()
             }
 
             Paredes_Scena.resize(0);
+        }
+
+        if(Cofres_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < Cofres_Scena.size();i++)
+            {
+                Cofres_Scena[i] = nullptr;
+            }
+
+            Cofres_Scena.resize(0);
+        {
+
+        if(Particulas_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < Particulas_Scena.size();i++)
+            {
+                Particulas_Scena[i] = nullptr;
+            }
+
+            Particulas_Scena.resize(0);
+        }
+
+        if(Salas_luz.size() > 0)
+        {
+            for(std::size_t i=0;i < Salas_luz.size();i++)
+            {
+                if(Salas_luz[i].luz.size() > 0)
+                {
+                    for(std::size_t j=0;j < Salas_luz[i].luz.size();j++)
+                    {
+                        Salas_luz[i].luz[j] = nullptr;
+                    }
+
+                    Salas_luz[i].luz.resize(0);
+                }
+
+                Salas_luz[i] = nullptr;
+            }
+
+            Salas_luz.resize(0);
+        }
+
+        if(Luces_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < Luces_Scena.size();i++)
+            {
+                Luces_Scena[i] = nullptr;
+            }
+
+            Luces_Scena.resize(0);
+        }
+
+        if(BoardsArmas_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < BoardsArmas_Scena.size();i++)
+            {
+                BoardsArmas_Scena[i] = nullptr;
+            }
+
+            BoardsArmas_Scena.resize(0);
+        }
+
+        if(BoardsEnem_Scena.size() > 0)
+        {
+            for(std::size_t i=0;i < BoardsEnem_Scena.size();i++)
+            {
+                BoardsEnem_Scena[i] = nullptr;
+            }
+
+            BoardsEnem_Scena.resize(0);
         }
 
         _armaEnEscena = nullptr;
@@ -616,6 +702,13 @@ void MotorGrafico::RenderEscena()
                     ActualizarAnimacionMotor(ObjetosAni_Scena[i]);
                 }
             }
+            Times * tiempo = Times::GetInstance();
+            unsigned int fps = tiempo->GetFramesPorSegundo();
+
+            //if(debugGrafico)
+            //{
+                _interfaz->DefinirVentana(800,600,std::to_string(fps).c_str());
+            //}
 
         }
     #else
@@ -1187,17 +1280,31 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
     #endif
 }
 
-void MotorGrafico::CargarLuces(int x,int y,int z)
+void MotorGrafico::CargarLuces(int x,int y,int z,int r,int g,int b,int tipo,float dist)
 {
     #ifdef WEMOTOR
 
         //codigo motor catopengl
-        unsigned short luz = _interfaz->AddLuz(0);//instanciamos el objeto y lo agregamos a la escena
-        if(luz != 0)
+        unsigned short luz = _interfaz->AddLuz(tipo);//instanciamos el objeto y lo agregamos a la escena
+        if(luz != 0 && tipo == 1)
         {
             _interfaz->Trasladar(luz,(float)x,(float)y,(float)z);//movemos el objeto
+            _interfaz->DistanciaLuz(luz,dist);
+            _interfaz->DeshabilitarObjeto(luz);
             Luces_Scena.push_back(luz);//agregamos la luz
         }
+        else if(luz != 0 && tipo == 0)
+        {
+            _luzDireccional = luz;
+        }
+        else if(luz != 0 && tipo == 2)
+        {
+            _luzFoco = luz;
+        }
+
+        _interfaz->ColorAmbiental(luz,(float)r,(float)g,(float)b);
+        _interfaz->ColorDifusa(luz,(float)r,(float)g,(float)b);
+        _interfaz->ColorSpecular(luz,(float)r,(float)g,(float)b);
 
     #else
         //codigo motor irrlicht
@@ -1225,6 +1332,34 @@ void MotorGrafico::CargarLuces(int x,int y,int z)
     #endif
 }
 
+void MotorGrafico::CargarParticulas(int x, int y, int z, int velocidadx, int velocidady, int velocidadz, float escala, unsigned int nparticulas, float localz, float tvida, const char* ruta_textura)
+{
+    //Crea el sistema de particulas
+    unsigned short particulas = _interfaz->AddParticles((float)velocidadx,(float)velocidady,(float)velocidadz,nparticulas,localz,tvida,ruta_textura);
+    _interfaz->Escalar(particulas,escala,escala,escala);
+    _interfaz->Trasladar(particulas,(float)x,(float)y,(float)z);
+    _interfaz->DeshabilitarObjeto(particulas);
+    Particulas_Scena.push_back(particulas);
+}
+
+void MotorGrafico::CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx)
+{
+    SalasLuz luzsala;
+    luzsala.sala = sala;
+    luzsala.minz = minz;
+    luzsala.maxz = maxz;
+    luzsala.minx = minx;
+    luzsala.maxx = maxx;
+    Salas_luz.push_back(luzsala);
+}
+
+void MotorGrafico::CargarLuzEnSala(int sala,int x,int y,int z)
+{
+    glm::vec3 posluz = glm::vec3(x,y,z);
+    Salas_luz[sala - 1].luz.push_back(posluz);
+}
+
+
 void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss)
 {
     #ifdef WEMOTOR
@@ -1245,7 +1380,14 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
             {
                 Enemigos_Scena.push_back(enemigo);
             }
-            
+
+            //Crear billboard
+            //TO DO esteo hay que mirar que va bien para el BOSS que se posiciona el primero en el array de enemigos
+            unsigned short _board = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/4.png", 0.01f);
+            _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+10.0f,(float)z);
+            _interfaz->Escalar(_board,2.0f,0.15f,1.75f);
+            _interfaz->DeshabilitarObjeto(_board);
+            BoardsEnem_Scena.push_back(_board);
         }
 
     #else
@@ -1280,7 +1422,6 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
         _jugEscena = _interfaz->AddMalla(ruta_objeto,128,0);
         //_interfaz->SetColor(_jugEscena,250,50,50,255); //color RGBA
 
-        CargarLuces(0,0,0);
         if(_jugEscena != 0)
         {
             _interfaz->SetTexture(_jugEscena,"assets/models/rockero/HeavyTex.png");
@@ -1311,7 +1452,8 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
     #endif
 }
 
-int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char *ruta_objeto, const char *ruta_textura, const char * anima, int frame, bool afectaluz)
+int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto,
+    const char *ruta_objeto, const char *ruta_textura, const char * anima, int frame, bool afectaluz)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
@@ -1336,6 +1478,14 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
                 logicaAnim = new Animaciones(anima);
                 logicaAnim->AsignarID(_objetoEnEscena);
                 ObjetosAni_Scena.push_back(logicaAnim);
+            }
+
+            if(accion == 9) // Lagunas, cristales y cosas transparentes
+            {
+                Objetos_Scena.push_back(_objetoEnEscena);
+                ObjetosAni_Scena.push_back(logicaAnim);
+                mallaTransparente(_objetoEnEscena, 0.4);
+                return Objetos_Scena.size() - 1;
             }
 
             if(accion == 8)
@@ -1451,6 +1601,62 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
     #endif
 
     return -1;
+}
+
+void MotorGrafico::CargarCofre(int pos, int rp, int x,int y,int z,
+    const char* ruta_objeto, const char* ruta_textura, const char* anima, int frame, bool afectaluz)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        unsigned short _objetoEnEscena = _interfaz->AddMalla(ruta_objeto,frame,0);
+
+        if(_objetoEnEscena != 0)
+        {
+            _interfaz->SetTexture(_objetoEnEscena,ruta_textura);
+            _interfaz->Trasladar(_objetoEnEscena,(float)x,(float)y,(float)z);
+            _interfaz->Rotar(_objetoEnEscena,0.0f,(float)rp,0.0f);
+
+            Animaciones* logicaAnim = nullptr;
+
+            if(anima != nullptr)
+            {
+                logicaAnim = new Animaciones(anima);
+                logicaAnim->AsignarID(_objetoEnEscena);
+            }
+
+            // Cofre existente
+            if (pos >= 0)
+            {
+                Cofres_Scena.at(pos) = move(_objetoEnEscena);
+                CofresAni_Scena.at(pos) = move(logicaAnim);
+                _interfaz->HabilitarObjeto(Cofres_Scena[pos]);
+            }
+            else // Cofre nuevo
+            {
+                Cofres_Scena.push_back(move(_objetoEnEscena));
+                CofresAni_Scena.push_back(move(logicaAnim));
+            }
+        }
+    #else
+        //codigo motor irrlicht
+        IAnimatedMesh* objeto = _smgr->getMesh(ruta_objeto); //creamos el objeto en memoria
+        if (objeto)
+        {
+            IAnimatedMeshSceneNode* _objetoEnEscena = _smgr->addAnimatedMeshSceneNode(objeto); //metemos el objeto en el escenario para eso lo pasamos al escenario
+            _objetoEnEscena->setPosition(core::vector3df(x,y,z));
+            _objetoEnEscena->setRotation(core::vector3df(0,rp,0));
+
+            // Cofre existente
+            if (pos >= 0)
+            {
+                Cofres_Scena.at(pos) = move(_objetoEnEscena);
+            }
+            else // Cofre nuevo
+            {
+                Cofres_Scena.push_back(move(_objetoEnEscena));
+            }
+        }
+    #endif
 }
 
 void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
@@ -1647,6 +1853,13 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
 
             _interfaz->Trasladar(_jugEscena,x,y,z);
             _interfaz->Rotar(_jugEscena,rx,ry-180,rx);
+            // std::cout << x << " " << y << " " << z << std::endl;
+
+            center_x = x;
+            center_y = y;
+            center_z = z;
+
+            UpdateLights(x,y,z);
 
             delete nodeCamPosition;
 
@@ -1688,6 +1901,25 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
             _interfaz->Rotar(Enemigos_Scena[i],rx,ry-180,rz);
         }
 
+        if(BoardsEnem_Scena.size() > 0 && BoardsEnem_Scena.size() > i && BoardsEnem_Scena[i] != 0)
+        {
+            _interfaz->Trasladar(BoardsEnem_Scena[i],x+2.0f,y+10.0f,z);
+
+            //Habilitar si esta cerca del pesonaje
+            float distx = center_x - x;
+            float disty = center_y - y;
+            float distz = center_z - z;
+            if(distx > -40.0f && distx < 40.0f && disty > -40.0f && disty < 40.0f && distz > -40.0f && distz < 40.0f)
+            {
+                _interfaz->HabilitarObjeto(BoardsEnem_Scena[i]);
+            }else{
+                _interfaz->DeshabilitarObjeto(BoardsEnem_Scena[i]);
+            }
+
+            //Actualizar board dependiendo de la vida
+
+        }
+
     #else
         //codigo motor irrlicht
         if(Enemigos_Scena.size()>0 && Enemigos_Scena.size()>i && Enemigos_Scena[i] != nullptr)
@@ -1708,11 +1940,27 @@ void MotorGrafico::mostrarObjetos(float x, float y, float z, float rx, float ry,
             _interfaz->Trasladar(Objetos_Scena[i],x,y,z);
             _interfaz->Rotar(Objetos_Scena[i],rx,ry-180,rz);
         }
-
     #else
         //codigo motor irrlicht
         Objetos_Scena.at(i)->setPosition(core::vector3df(x,y,z));
         Objetos_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
+    #endif
+}
+
+void MotorGrafico::mostrarCofres(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+
+        if(Cofres_Scena.size() > 0 && Cofres_Scena.size() > i && Cofres_Scena[i] != 0)
+        {
+            _interfaz->Trasladar(Cofres_Scena[i],x,y,z);
+            _interfaz->Rotar(Cofres_Scena[i],rx,ry-180,rz);
+        }
+    #else
+        //codigo motor irrlicht
+        Cofres_Scena.at(i)->setPosition(core::vector3df(x,y,z));
+        Cofres_Scena.at(i)->setRotation(core::vector3df(rx,ry,rz));
     #endif
 }
 
@@ -1797,6 +2045,82 @@ void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoe
     #endif
 }
 
+void MotorGrafico::UpdateLights(float x,float y,float z)
+{
+    if(Salas_luz.size()>0)
+    {
+        for(unsigned int i=0; i<Salas_luz.size(); i++)
+        {
+            //es la SAla actual
+            if(_salaActual != Salas_luz[i].sala)
+            {
+                //En rango de otra sala
+                if(z > Salas_luz[i].minz && z < Salas_luz[i].maxz && x > Salas_luz[i].minx && x < Salas_luz[i].maxx)
+                {
+                    if(Luces_Scena.size()>0)
+                    {
+                        //Habilitar y trasladar luces necesarios
+                        for(unsigned int j=0; j<Luces_Scena.size(); j++)
+                        {
+                            if(j < Salas_luz[i].luz.size())
+                            {
+                                _interfaz->HabilitarObjeto(Luces_Scena[j]);
+                                _interfaz->Trasladar(Luces_Scena[j],Salas_luz[i].luz[j].x,Salas_luz[i].luz[j].y,Salas_luz[i].luz[j].z);
+                                //Particulas
+                                if(Particulas_Scena.size()>0)
+                                {
+                                    if(j < Particulas_Scena.size())
+                                    {
+                                        _interfaz->HabilitarObjeto(Particulas_Scena[j]);
+                                        _interfaz->Trasladar(Particulas_Scena[j],Salas_luz[i].luz[j].x,Salas_luz[i].luz[j].y,Salas_luz[i].luz[j].z);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                _interfaz->DeshabilitarObjeto(Luces_Scena[j]);
+                                if(Particulas_Scena.size()>0)
+                                {
+                                    if(j < Particulas_Scena.size())_interfaz->DeshabilitarObjeto(Particulas_Scena[j]);
+                                }
+                            }
+                        }
+                        _salaActual = Salas_luz[i].sala;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void MotorGrafico::UpdateBoards(std::vector<unsigned short> boardvect, float x, float y, float z, float d)
+{
+    //Comprueba que el billboard esta dentro del rango del personaje
+    if(boardvect.size()>0)
+    {
+        for(unsigned int i=0; i<boardvect.size(); i++)
+        {
+            float distx = center_x - x;
+            float disty = center_y - y;
+            float distz = center_z - z;
+            if(distx > -d && distx < d && disty > -d && disty < d && distz > -d && distz < d)
+            {
+                _interfaz->HabilitarObjeto(boardvect[i]);
+            }else{
+                _interfaz->DeshabilitarObjeto(boardvect[i]);
+            }
+        }
+    }
+}
+
+void MotorGrafico::UpdateBoardsVidaEne(int enem, int vida, int vidamax)
+{
+    if(BoardsEnem_Scena[enem])
+    {
+        float v = ((float)vida * 2.0f)/vidamax;
+        _interfaz->Escalar(BoardsEnem_Scena[enem],v,0.15f,1.75f);
+    }
+}
 
 void MotorGrafico::borrarArmaEspecial()
 {
@@ -1812,6 +2136,13 @@ void MotorGrafico::borrarArmaEspecial()
         //codigo motor irrlicht
         _armaEspJugador->remove();
         _armaEspJugador = nullptr;
+    #endif
+}
+
+void MotorGrafico::mallaTransparente(unsigned int id, float t)
+{
+    #ifdef WEMOTOR
+        _interfaz->SetTransparencia(id,t);
     #endif
 }
 
@@ -2249,9 +2580,8 @@ void MotorGrafico::ErasePowerUP(long unsigned int idx)
     #endif
 }
 
-// Para cuando el cofre se convierte en arana
-// TO DO: separar cofres de Objetos_Scena
-void MotorGrafico::DibujarCofre(long unsigned int idx, bool dibujar)
+// Para cuando el jugador rompe la pared
+/*void MotorGrafico::DibujarPared(long unsigned int idx, bool dibujar)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
@@ -2273,30 +2603,16 @@ void MotorGrafico::DibujarCofre(long unsigned int idx, bool dibujar)
             Objetos_Scena[idx]->setVisible(dibujar);
         }
     #endif
-}
+}*/
 
-// Para cuando el jugador rompe la pared
-void MotorGrafico::DibujarPared(long unsigned int idx, bool dibujar)
+void MotorGrafico::EraseCofre(unsigned short idx)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        if(Objetos_Scena[idx] != 0 && idx < Objetos_Scena.size())
-        {
-            if(dibujar)
-            {
-                _interfaz->HabilitarObjeto(Objetos_Scena[idx]);
-            }
-            else
-            {
-                _interfaz->DeshabilitarObjeto(Objetos_Scena[idx]);
-            }
-        }
+        _interfaz->DeshabilitarObjeto(Cofres_Scena[idx]);
     #else
         //codigo motor irrlicht
-        if(Objetos_Scena[idx] && idx < Objetos_Scena.size())
-        {
-            Objetos_Scena[idx]->setVisible(dibujar);
-        }
+        Cofres_Scena[idx]->setVisible(false);
     #endif
 }
 
@@ -2307,12 +2623,18 @@ void MotorGrafico::EraseEnemigo(std::size_t i)
         //codigo motor catopengl
 
         long unsigned int valor = i;
+
         if(valor >= 0 && valor < Enemigos_Scena.size())
         {
             _interfaz->RemoveObject(Enemigos_Scena[i]);
             Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
         }
 
+        if(valor >= 0 && valor < BoardsEnem_Scena.size())
+        {
+            _interfaz->RemoveObject(BoardsEnem_Scena[i]);
+            BoardsEnem_Scena.erase(BoardsEnem_Scena.begin() + i);
+        }
     #else
         //codigo motor irrlicht
         long unsigned int valor = i;
@@ -2337,6 +2659,11 @@ void MotorGrafico::EraseTodosEnemigos()
         {
             _interfaz->RemoveObject(Enemigos_Scena[valor]);
             Enemigos_Scena.erase(Enemigos_Scena.begin());
+        }
+
+        if(valor >= 0 && valor < BoardsEnem_Scena.size())
+        {
+            _interfaz->RemoveObject(BoardsEnem_Scena[valor]);
         }
 
     #else
@@ -3332,10 +3659,14 @@ void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
     #endif
 }
 
-unsigned short MotorGrafico::CrearImagen(std::string texto,unsigned int x,unsigned int y,float scale)
+unsigned short MotorGrafico::CrearImagen(const char * texto,unsigned int x,unsigned int y,float scale)
 {
     #ifdef WEMOTOR
-        return _interfaz->AddImagen(texto.c_str(),x,y,scale);
+        //const char * nuevo = "nada";
+        //nuevo = texto.c_str();
+        unsigned short did = _interfaz->AddImagen(texto,x,y,scale);
+        //nuevo = "nadaadadada";
+        return did;
     #endif
     return 0;
 }
@@ -3640,5 +3971,5 @@ void MotorGrafico::CambiarPosicionImagen(signed int event, float x, float y)
         {
             _interfaz->CambiarPosicionImagen(event,x,y);
         }
-    #endif   
+    #endif
 }

@@ -167,9 +167,49 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     for (pugi::xml_node hijo = doc.child("Level").child("Light"); hijo; hijo = hijo.next_sibling("Light"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
         int x = hijo.attribute("X").as_int();//nos devuelve un int
-        int z = hijo.attribute("Y").as_int();//nos devuelve un int
-        int y = hijo.attribute("Z").as_int();//nos devuelve un int
-        CrearLuz(x,y,z); //cargamos el objeto
+        int y = hijo.attribute("Y").as_int();//nos devuelve un int
+        int z = hijo.attribute("Z").as_int();//nos devuelve un int
+        int r = hijo.attribute("colorR").as_int();//nos devuelve un int
+        int g = hijo.attribute("colorG").as_int();//nos devuelve un int
+        int b = hijo.attribute("colorB").as_int();//nos devuelve un int
+        int tipo = hijo.attribute("Tipo").as_int();
+        float intensidad = (float)hijo.attribute("Intensity").as_int();
+        CrearLuz(x,y,z,tipo,intensidad,r,g,b); //cargamos el objeto
+    }
+
+    for (pugi::xml_node hijo = doc.child("Level").child("LightSala"); hijo; hijo = hijo.next_sibling("LightSala"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        int minz = hijo.attribute("minZ").as_int();//nos devuelve un int
+        int maxz = hijo.attribute("maxZ").as_int();//nos devuelve un int
+        int minx = hijo.attribute("minX").as_int();//nos devuelve un int
+        int maxx = hijo.attribute("maxX").as_int();//nos devuelve un int
+        int sala = hijo.attribute("sala").as_int();
+        CrearSalaLuz(sala,minz,maxz,minx,maxx);
+    }
+
+    for (pugi::xml_node hijo = doc.child("Level").child("LightPos"); hijo; hijo = hijo.next_sibling("LightPos"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        int x = hijo.attribute("X").as_int();//nos devuelve un int
+        int y = hijo.attribute("Y").as_int();//nos devuelve un int
+        int z = hijo.attribute("Z").as_int();//nos devuelve un int
+        int sala = hijo.attribute("sala").as_int();
+        CrearLuzEnSala(sala,x,y,z);
+    }
+
+    for (pugi::xml_node hijo = doc.child("Level").child("Particles"); hijo; hijo = hijo.next_sibling("Particles"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        int x = hijo.attribute("X").as_int();//nos devuelve un int
+        int y = hijo.attribute("Y").as_int();//nos devuelve un int
+        int z = hijo.attribute("Z").as_int();//nos devuelve un int
+        int vx = hijo.attribute("VX").as_int();//nos devuelve un int
+        int vy = hijo.attribute("VY").as_int();//nos devuelve un int
+        int vz = hijo.attribute("VZ").as_int();//nos devuelve un int
+        int npart = hijo.attribute("nPart").as_int();
+        float size = (float)hijo.attribute("size").as_int()/10.0f;
+        float localz = (float)hijo.attribute("LZ").as_int();
+        float vida = (float)hijo.attribute("vida").as_int();
+        const char* textura = hijo.attribute("Texture").value(); //nos da un char[] = string
+        CrearSistemaDeParticulas(x,y,z,vx,vy,vz,npart,localz,vida,size,textura);
     }
 
     //Se crea el arbol de salas del mapa del nivel
@@ -579,9 +619,24 @@ Sala* CargadorNiveles::CrearPlataforma(int accion, int rp, int x,int y,int z, in
     return _sala;
 }
 
-void CargadorNiveles::CrearLuz(int x,int y,int z)
+void CargadorNiveles::CrearLuz(int x,int y,int z,int tipo,float dist, int r, int g, int b)
 {
-    //_motor->CargarLuces(x,y,z);
+    _motor->CargarLuces(x,y,z,r,g,b,tipo,dist);
+}
+
+void CargadorNiveles::CrearSalaLuz(int sala,int minz,int maxz,int minx,int maxx)
+{
+    _motor->CargarSalaLuz(sala,minz,maxz,minx,maxx);
+}
+
+void CargadorNiveles::CrearLuzEnSala(int sala,int x,int y,int z)
+{
+    _motor->CargarLuzEnSala(sala,x,y,z);
+}
+
+void CargadorNiveles::CrearSistemaDeParticulas(int x,int y,int z,int vx,int vy,int vz,int npart,float localz,float vida,float size, const char* textura)
+{
+    _motor->CargarParticulas(x,y,z,vx,vy,vz,size,npart,localz,vida,textura);
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -595,7 +650,6 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         {
             Pollo* _ene = new Pollo(x,y,z, 50); // Posiciones, vida
             //ia
-            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
             _ene->setVelocidadMaxima(1.0f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
@@ -632,7 +686,6 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         {
             Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
-            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
             _ene->setVelocidadMaxima(1.5f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
@@ -652,7 +705,6 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         {
             Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
-            //cargadorIA.cargarBehaviorTreeXml("PolloBT");
             _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
             _ene->setVelocidadMaxima(1.5f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
@@ -886,9 +938,10 @@ void CargadorNiveles::CrearWaypoint(Sala* sala, int accion, int compartido, int 
 unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     float ancho, float alto, float largo, Sala* sala)
 {
-    CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo); // Posiciones, vida
+    CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo, sala); // Posiciones, vida
 
-    _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
+    //_eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
+    _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
     _eneA->setID(++id);//le damos el id unico en esta partida al enemigo
     _eneA->SetEnemigo(constantes.ARANA);
 
@@ -977,20 +1030,12 @@ void CargadorNiveles::CargarCofres()
                     posCofre[2] = newz;
                 }
 
-                /*#ifdef WEMOTOR //codigo motor catopengl
-                    esArana = true; // Desactivamos las aranyas
-                #endif*/
-
                 Cofre* _cofre = new Cofre(esArana, ++id,
                     newx, newy, newz,
                     constantes.COFRE_OBJ, posArrayArana,
                     _zonasCofre[zonasDisponibles[numAlt]]->GetSala(),
                     _cofres.size());
 
-                int posicionObjeto = _motor->CargarObjetos(3,0,newx,newy,newz,2,2,2,
-                    _cofre->GetModelo(), _cofre->GetTextura());
-
-                _cofre->SetPosicionArrayObjetos(posicionObjeto);
                 _cofres.push_back(move(_cofre));
                 _cofre = nullptr;
 

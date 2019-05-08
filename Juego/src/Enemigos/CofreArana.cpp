@@ -3,7 +3,7 @@
 #include "cmath"
 
 CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
-    float anchoN, float altoN, float largoN)
+    float anchoN, float altoN, float largoN, Sala* salaC)
 : Enemigo(nX,nY,nZ,maxVida)
 {
     funciona = true;
@@ -18,14 +18,33 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
     ancho = anchoN;
     largo = largoN;
     alto = altoN;
+
+    idCofre = -1;
+    sala = salaC;
+    posActiva=0;
 }
 
 CofreArana::~CofreArana()
 {
+    funciona = false;
+    atacado = false;
+
     delete[] _ordenes;
     _ordenes = nullptr;
+
+    maxRotacion = 0;
+    rotation = 0;
+
     _modelo = nullptr;
     _textura = nullptr;
+
+    ancho = 0;
+    largo = 0;
+    alto = 0;
+
+    idCofre=0;
+    sala = nullptr;
+    posActiva=0;
 }
 
 /***************** RunIA *****************
@@ -44,7 +63,7 @@ void CofreArana::RunIA()
         {
             if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR)
             {
-                this->ForzarCambioNodo(&constantes.DIEZ);
+                this->ForzarCambioNodo(&constantes.CUATRO);
             }
         }
         if(atacado)
@@ -68,7 +87,7 @@ void CofreArana::RunIA()
  * Salidas:
 */
 
-void CofreArana::UpdateCofreArana(short *i, int* _jug)
+void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
 {
     Jugador* _jugador = (Jugador*)_jug;
     funciona = true;
@@ -76,11 +95,11 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug)
     {
         switch (_ordenes[0])
         {
-            case EN_PERSIGUE: //El CofreArana se mueve
+            case EN_PERSIGUE: //El Pollo se mueve
                 funciona = this->perseguir(_jug);
                 break;
 
-            case EN_ATACAR: //El CofreArana ataca
+            case EN_ATACAR: //El Pollo ataca
                 {
                     if(!atacado)
                     {
@@ -102,13 +121,51 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug)
                 break;
         }
     }
+
+
+    else if(modo == MODO_AUXILIAR_ALIADO)
+    {
+        this->AuxiliarAliado();
+    }
+
     else if(_ordenes != nullptr)
     {
         switch (_ordenes[0])
         {
-            case EN_VER: //El CofreArana ve al jugador
+            case EN_VER: //El Pollo ve al jugador
                 {
                     if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
+                    {
+                        this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
+                        if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
+                        {
+                            funciona = true;
+                        }
+                        else
+                        {
+                            funciona = false;
+                        }
+                    }
+                    else
+                    {
+                        funciona = false;
+                    }
+                }
+                break;
+
+                case EN_PIDE_AYUDA: //El Pollo pide ayuda
+                {
+                    modo = MODO_ATAQUE;
+                    this->setTimeMerodear(constantes.CERO);
+                    //cout<<"Pide ayuda a los aliados"<<endl;
+                    this->PedirAyuda(ayuda);
+                    funciona = true;
+                }
+                break;
+
+                case EN_OIR: //El Pollo oye un enemigo pedir ayuda
+                {
+                    if(this->oir(constantes.DOS))
                     {
                         funciona = true;
                     }
@@ -117,6 +174,80 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug)
                         funciona = false;
                     }
                 }
+                break;
+
+                case EN_ACUDE_AYUDA: //El Pollo oye un enemigo pedir ayuda
+                {
+                    this->ContestarAyuda();
+                }
+                break;
+
+            case EN_MERODEA: //El Pollo merodea
+                {
+                    //this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);
+                    if(!hecho)
+                    {
+                        //Merodea estableciendo un nuevo angulo de rotacion
+                        if(!controlRotacion)
+                        {
+                            this->setRotation(this->randomBinomial() * maxRotacion);
+                        }
+                        this->Merodear();
+                        this->setTimeMerodear(1.5f);
+                        hecho = true;
+                        //Comprueba si ve al jugador para atacarle en caso necesario
+                        if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
+                        {
+                            if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
+                            {
+                                modo = MODO_ATAQUE;
+                                porcentajeVelocidad = constantes.UNO;
+                                this->setTimeMerodear(constantes.CERO);
+                                //cout<<"Pide ayuda a los aliados"<<endl;
+                                this->PedirAyuda(ayuda);
+                                funciona = true;
+                            }
+                        }
+                        else if(this->oir(constantes.DOS))
+                        {
+                            this->ContestarAyuda();
+                        }
+                    }
+                    else
+                    {
+                        //Merodea poniendo en positivo o negativo el angulo actual de rotacion
+                        if(!controlRotacion)
+                        {
+                            int rota = rand() % 3 - 1;
+                            if (rota != 0)
+                            {
+                                rotation *= rota;
+                            }
+                        }
+                        this->Merodear();
+                        //Comprueba si ve al jugador para atacarle en caso necesario
+                        if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
+                        {
+                            if(distanciaEnemigoJugador.modulo < distanciaEnemigoObstaculo.modulo)
+                            {
+                                modo = MODO_ATAQUE;
+                                porcentajeVelocidad = constantes.UNO;
+                                this->setTimeMerodear(constantes.CERO);
+                                //cout<<"Pide ayuda a los aliados"<<endl;
+                                this->PedirAyuda(ayuda);
+                                funciona = true;
+                            }
+                        }
+                        else if(this->oir(constantes.DOS))
+                        {
+                            this->ContestarAyuda();
+                        }
+                    }
+                    funciona = true;
+                }
+                break;
+
+            default:
                 break;
         }
     }
@@ -140,4 +271,24 @@ float CofreArana::GetAlto()
 float CofreArana::GetLargo()
 {
     return largo;
+}
+
+int CofreArana::GetIdCofre()
+{
+    return idCofre;
+}
+
+void CofreArana::SetIdCofre(int idC)
+{
+    idCofre = idC;
+}
+
+unsigned int CofreArana::GetPosActiva()
+{
+    return posActiva;
+}
+
+void CofreArana::SetPosActiva(unsigned int pos)
+{
+    posActiva = pos;
 }

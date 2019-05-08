@@ -27,8 +27,10 @@ using namespace reactphysics3d;
             unsigned short CrearCuerpoRec(int accion, float px, float py, float pz,
                 float ancho, float alto, float largo, float despX, float despZ);
             unsigned short CrearCuerpoWaypoint(float px, float py, float pz, float alto);
+            void CargarCofre(unsigned int posAct, unsigned int posObs, float px, float py, float pz, 
+                float ancho, float alto, float largo, float despX, float despZ);
             //int crearCuerpo(float px, float py, float pz, int type, float ancho, float largo, float alto);// creamos un cuerpo con posiciones x,y,z , a continuacion a ese cuerpo se le agrega una forma de colision que es el type y las medidas
-            void actualizarPosicionCuerpo(float px, float py, float pz,int posicion);//se le pasa las nuevas posiciones del cuerpo del array de cuerpos de la posicion
+            //void actualizarPosicionCuerpo(float px, float py, float pz,int posicion);//se le pasa las nuevas posiciones del cuerpo del array de cuerpos de la posicion
             Ray* crearRayo(float x, float y, float z, float rotation, float longitud);//crea un rayo en esas posiciones con la longitud
             int* colisionRayoUnCuerpo(float x,float y,float z,float rotation, float longitud,int modo = 1);//colisiona con multiples objetos (modo 1 detecta colision con jugador solo, 2 detecta con objetos solo, 3 detecta con enemigos solo)
 
@@ -43,7 +45,8 @@ using namespace reactphysics3d;
             void EraseColectablePowerup(int idx);
             void EraseEnemigo(std::size_t i);
             void EraseTodosEnemigos();
-            void DesactivarCofre(unsigned short pos);
+            void DesactivarCofre(unsigned int pos);
+            void EraseCofre(unsigned int posAct, unsigned int posObs);
             void EraseJugador();
             void EraseArma();
             bool collideParedesRompibles();
@@ -61,10 +64,10 @@ using namespace reactphysics3d;
             int collideLlave();
             int collideColectablePowerup();
             
-            short collidePuerta();
-            short collidePalanca();
-            short collideCofre();
-            short collideAttackWall();
+            int collidePuerta();
+            int collidePalanca();
+            int collideAbrirCofre();
+            int collideAttackWall();
 
             void colisionChecker(bool a, bool s, bool d, bool w, float x, float y, float z);
             void llevarBox(float x, float y, float z, float anc, float lar, float alt);

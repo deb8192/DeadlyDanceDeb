@@ -31,92 +31,92 @@ Jugando::~Jugando()
     _motor = nullptr;
     _interfaz = nullptr;
 
-    short tam = _enemigos.size();
-    for(short i=0; i < tam; i++)
+    int tam = _enemigos.size();
+    for(int i=0; i < tam; i++)
     {
         _enemigos.at(i) = nullptr;
     }
     _enemigos.clear();
 
     tam = _eneCofres.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _eneCofres.at(i) = nullptr;
     }
     _eneCofres.clear();
 
     tam = _zonasRespawn.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         delete _zonasRespawn.at(i);
     }
     _zonasRespawn.clear();
 
     tam = _zonasCofre.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         delete _zonasCofre.at(i);
     }
     _zonasCofre.clear();
 
     tam = _zonasEscondite.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         delete _zonasEscondite.at(i);
     }
     _zonasEscondite.clear();
 
     tam = _zonasOscuras.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         delete _zonasOscuras.at(i);
     }
     _zonasOscuras.clear();
 
     tam = _reco_armas.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _reco_armas.at(i) = nullptr;
     }
     _reco_armas.clear();
 
     tam = _llaves.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _llaves.at(i) = nullptr;
     }
     _llaves.clear();
 
     tam = _powerup.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _powerup.at(i) = nullptr;
     }
     _powerup.clear();
 
     tam = _waypoints.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _waypoints.at(i) = nullptr;
     }
     _waypoints.clear();
 
     tam = _palancas.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _palancas.at(i) = nullptr;
     }
     _palancas.clear();
 
     tam = _puertas.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _puertas.at(i) = nullptr;
     }
     _puertas.clear();
 
     tam = _cofres.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         _cofres.at(i) = nullptr;
     }
@@ -124,7 +124,7 @@ Jugando::~Jugando()
 
     // Liberar memoria
     tam = _auxiliadores.size();
-    for(short i=0; i < tam; i++)
+    for(int i=0; i < tam; i++)
     {
         delete _auxiliadores.at(i);
     }
@@ -237,7 +237,6 @@ void Jugando::ValoresPorDefectoBoss()
 }
 
 // TO DO: Revisar si el cuerpo fisico tambn se tiene q cambiar
-// TO DO: copiar el array de cargador de nivel
 void Jugando::PosicionesIniEnemigos()
 {
     short tam = _enemigos.size();
@@ -286,7 +285,9 @@ void Jugando::ManejarEventos() {
     if (_motor->EstaPulsado(KEY_K))
     {
         _motor->ResetKey(KEY_K);
-        _jugador->setVida(0);
+        //_jugador->setVida(0);
+        Juego::GetInstance()->estado.CambioEstadoGanar();
+        
     }
 
     //para modo debug
@@ -321,8 +322,7 @@ void Jugando::ManejarEventos() {
     if(_motor->EstaPulsado(KEY_Z))
     {
         /*_motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), true);
-        _cofreP->CrearFisica();
-        _cofreP->accionar();*/
+        _cofreP->CrearFisica();*/
         //_cofreP=nullptr;
         _motor->ResetKey(KEY_Z);
     }
@@ -362,47 +362,49 @@ void Jugando::ManejarEventos() {
 void Jugando::InteractuarNivel()
 {
     //lo siguiente es para saber que objeto colisiona con jugador
-    int rec_llave = _fisicas->collideLlave();
-    int rec_col = _fisicas->collideColectableArma();
-    short int_puerta = _fisicas->collidePuerta();
-    short int_palanca = _fisicas->collidePalanca();
-    short int_cofre = _fisicas->collideCofre();
-
-    // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
-    /*if(cambia <= 0)
-    {*/
-        if (int_puerta >= 0)
-        {
-            AccionarMecanismo(int_puerta, constantes.PUERTA_OBJ);
-            //cambia++;
-        }
-        else if (int_palanca >= 0)
+    int int_puerta = _fisicas->collidePuerta();
+    if (int_puerta >= 0)
+    {
+        AccionarMecanismo(int_puerta, constantes.PUERTA_OBJ);
+    }
+    else
+    {
+        int int_palanca = _fisicas->collidePalanca();
+        if (int_palanca >= 0)
         {
             AccionarMecanismo(int_palanca, constantes.PALANCA);
-            //cambia++;
-        }
-        else if (int_cofre >= 0)
-        {
-            AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
-            //cambia++;
-        }
-        else if (rec_llave >= 0)
-        {
-            _jugador->setAnimacion(4);
-            RecogerLlave(rec_llave);
-        }
-        else if (rec_col >= 0)
-        {
-            _jugador->setAnimacion(4);
-            RecogerArma(rec_col);
-            //cambia++;
         }
         else
         {
-            DejarObjeto();
-            //cambia++;
+            int int_cofre = _fisicas->collideAbrirCofre();
+            if (int_cofre >= 0)
+            {
+                AccionarMecanismo(int_cofre, constantes.COFRE_OBJ);
+            }
+            else
+            {
+                int rec_llave = _fisicas->collideLlave();
+                if (rec_llave >= 0)
+                {
+                    _jugador->setAnimacion(4);
+                    RecogerLlave(rec_llave);
+                }
+                else
+                {
+                    int rec_col = _fisicas->collideColectableArma();
+                    if (rec_col >= 0)
+                    {
+                        _jugador->setAnimacion(4);
+                        RecogerArma(rec_col);
+                    }
+                    else
+                    {
+                        DejarObjeto();
+                    }
+                }
+            }
         }
-   // }
+    }
 }
 
 /************** Update *************
@@ -413,7 +415,6 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
-    Constantes constantes;
     bool colisionaWaypoint = false, waypointComun = false, cercaJugador = false;
     _motor->clearDebug();
     short contadorWaypoints = 0, contadorEnemigos = 0, i = 0;
@@ -429,6 +430,7 @@ void Jugando::Update()
     if (_jugador != nullptr && _jugador->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
         _jugador->MuereJugador(); // Animacion de muerte
+        ComprobarBorrarProyectil();
         DesactivarDebug();
         _motor->cambiarAnimacionJugador(5);//la muerte del jugador tiene este id
         Juego::GetInstance()->estado.CambioEstadoMuerte();
@@ -580,14 +582,6 @@ void Jugando::Update()
         short paredCol = _fisicas->collideAttackWall();
         if (paredCol >= 0)
         {
-            _motora->getEvent("RomperPared")->setPosition(_jugador->getX(),_jugador->getY(),_jugador->getZ());
-            _motora->getEvent("RomperPared")->start();
-
-            /*//TO DO: anyadirle tiempo de espera para la anim y luego hacerla invisible
-            //_motor->DibujarPared(_paredes[indiceObjetosColisionados[i]]->GetPosicionArrayObjetos(), false);
-            */
-           _motor->cambiarAnimacion(4,paredCol,1);//se cambia la animacion de la pared
-
             _paredes.at(paredCol)->Borrar(paredCol);
             _paredes.erase(_paredes.begin() + paredCol);
         }
@@ -860,7 +854,8 @@ void Jugando::UpdateIA()
     }
 
     //En esta parte muere enemigo
-    if(_enemigos.size() > 0){
+    if(_enemigos.size() > 0)
+    {
         //comprobando los _enemigos para saber si estan muertos
         for(short i=0;(unsigned)i<_enemigos.size();i++){// el std::size_t es como un int encubierto, es mejor
             cercaJugador = false;
@@ -872,14 +867,21 @@ void Jugando::UpdateIA()
                     int x = _enemigos[i]->getX();
                     int y = _enemigos[i]->getY();
                     int z = _enemigos[i]->getZ();
+                    unsigned short tipoEnemigo = _enemigos[i]->GetTipoEnemigo();
 
-                    if(_enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_A ||
-                        _enemigos[i]->GetTipoEnemigo() == constantes.GUARDIAN_B)
+                    if( tipoEnemigo == constantes.GUARDIAN_A ||
+                        tipoEnemigo == constantes.GUARDIAN_B)
                     {
                         CrearObjeto(x,y,z,2,2,2,constantes.LLAVE,0);
                     }
-                    // TO DO: anyadir cofre aranya
-                    // else if (_enemigos[i]->GetTipoEnemigo() == constantes.ARANA)
+                    else if (tipoEnemigo == constantes.ARANA)
+                    {
+                        AbrirCofre(x,y,z,true);
+                    }
+                    else if (tipoEnemigo == constantes.BOSS)
+                    {
+                        Juego::GetInstance()->estado.CambioEstadoGanar();
+                    }
                     else
                     {
                         unsigned short tipoObj = NumeroAleatorio(constantes.ORO,constantes.ENERGIA);
@@ -930,9 +932,6 @@ void Jugando::UpdateIA()
             }
         }
     }
-
-    // Para cuando se mate al boss
-    //Juego::GetInstance()->estado.CambioEstadoGanar();
 }
 
 void Jugando::Render()
@@ -962,7 +961,7 @@ void Jugando::Render()
         _palancas.at(i)->Render(updateTime, resta);
     }
 
-    for(unsigned short i = 0; i < _cofres.size(); i++)
+    for(unsigned int i = 0; i < _cofres.size(); i++)
     {
         _cofres.at(i)->Render(updateTime, resta);
     }
@@ -1174,14 +1173,12 @@ void Jugando::Reanudar()
     {
         if (ganarPuzzle)
         {
-            // TO DO: Crear objeto chulo
             _cofreP->DesactivarCofre();
-            AbrirCofre(_cofreP);
+            AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),true);
             _cofreP = nullptr;
         }
         else
         {
-            _cofreP->accionar();
             CrearEnemigoArana();
         }
         ganarPuzzle = false;
@@ -1754,6 +1751,8 @@ void Jugando::RecogerArma(int rec_col)
     }
     else if(_jugador->getArma() != nullptr)//si tiene arma equipada
     {
+        ComprobarBorrarProyectil();
+
         //si ya llevaba un arma equipada, intercambiamos arma por el recolectable
         Recolectable* nuRec = new Recolectable(-1,
             _jugador->getArma()->getAncho(), _jugador->getArma()->getLargo(),
@@ -1792,6 +1791,23 @@ void Jugando::DejarObjeto()
             _jugador->getArma()->GetTipoObjeto(),0,0);
         nuRec->setAtaque(_jugador->getArma()->getAtaque());
 
+        ComprobarBorrarProyectil();
+        _jugador->setArma(nullptr);
+
+        //por ultimo creamos una nueva y actualizamos informacion en motor grafico
+        int posicionObjeto = _motor->CargarObjetos(2,0,nuRec->getX(), nuRec->getY(),nuRec->getZ(),
+            nuRec->getAncho(),nuRec->getLargo(),nuRec->getAlto(),
+            nuRec->GetModelo(),nuRec->GetTextura());
+        nuRec->SetPosicionArrayObjetos(posicionObjeto);
+        _reco_armas.push_back(nuRec);
+        nuRec = nullptr;
+    }
+}
+
+// Se llama al dejar el objeto, intercambiarlo por otro y cuando muere el jugador
+void Jugando::ComprobarBorrarProyectil()
+{
+    if (_jugador->getArma() != nullptr)
         if ((_jugador->getArma()->GetTipoObjeto() == constantes.ARPA) ||
             (_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA))
         {
@@ -1803,16 +1819,6 @@ void Jugando::DejarObjeto()
                 _motora->getEvent("Arpa")->stop();
             }
         }
-        _jugador->setArma(nullptr);
-
-        //por ultimo creamos una nueva y actualizamos informacion en motor grafico
-        int posicionObjeto = _motor->CargarObjetos(2,0,nuRec->getX(), nuRec->getY(),nuRec->getZ(),
-            nuRec->getAncho(),nuRec->getLargo(),nuRec->getAlto(),
-            nuRec->GetModelo(),nuRec->GetTextura());
-        nuRec->SetPosicionArrayObjetos(posicionObjeto);
-        _reco_armas.push_back(nuRec);
-        nuRec = nullptr;
-    }
 }
 
 /*********** AccionarMecanismo ***********
@@ -1827,6 +1833,8 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
     if (tipoObj == constantes.COFRE_OBJ) // TO DO: repasar todo lo de los cofres al terminar la IA
     {
         _cofreP = _cofres.at(pos);
+        _cofreP->SetPosActiva(pos);
+
         if (_cofreP->GetEsArana())
         {
             AbrirPantallaPuzzle();
@@ -1834,7 +1842,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
         else
         {
             _cofreP->DesactivarCofre();
-            AbrirCofre(_cofreP);
+            AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),false);
             _cofreP = nullptr;
         }
     }
@@ -2176,30 +2184,39 @@ void Jugando::AbrirPantallaPuzzle()
     Juego::GetInstance()->estado.CambioEstadoPuzle((int*)cargPuzzles.GetPuzzle(2));
 }
 
-void Jugando::AbrirCofre(Cofre* _inter)
+void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
 {
-    //Se abre el cofre (Animacion)
-    _inter->setNewRotacion(_inter->getRX(), _inter->getRY(),
-    _inter->getRZ() + 80.0);
-    _inter->accionar();
+    unsigned short objeto = 0;
+    unsigned short minArpa = 15;
+    unsigned short minGuitar = 22;
+    unsigned short minFlauta = 13;
+    x = x + 5;
 
-    //Crear objeto aleatorio (GUITARRA, ARPA, ORO)
-    float x = _inter->getX() + 5;
-    float y = _inter->getY();
-    float z = _inter->getZ();
+    // El cofre suelta armas normales y oro, la arana suelta armas mas fuertes
+    if (esArana)
+    {
+        objeto = NumeroAleatorio(constantes.ARPA,constantes.ULTIMA_ARMA);
+        minArpa = 22;
+        minGuitar = 31;
+        minFlauta = 25;
+    }
+    else
+    {
+        objeto = NumeroAleatorio(constantes.ARPA,constantes.ORO);
+    }
 
-    switch (NumeroAleatorio(constantes.ARPA,constantes.ORO))
+    switch (objeto)
     {
         case 7: // ARPA
-            CrearObjeto(x,y,z,2,2,2,constantes.ARPA,NumeroAleatorio(15,25));
+            CrearObjeto(x,y,z,2,2,2,constantes.ARPA,NumeroAleatorio(minArpa,25));
             break;
 
         case 8: // GUITARRA
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(24,34));
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(minGuitar,32));
             break;
 
         case 9: // FLAUTA
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(18,28));
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(minFlauta,23));
             break;
 
         default: // ORO
@@ -2213,6 +2230,9 @@ void Jugando::CrearEnemigoArana()
     // Crear Arana
     CofreArana* _eneA = (CofreArana*)_eneCofres.at(
         _cofreP->GetPosArray());
+
+    _eneA->SetIdCofre(_cofreP->getID());
+    _eneA->SetPosActiva(_cofreP->GetPosActiva()); // Pos en _cofres
 
     float x = _eneA->getX();
     float y = _eneA->getY();
@@ -2234,9 +2254,8 @@ void Jugando::CrearEnemigoArana()
     _enemigos.push_back(move(_eneA));
     _eneA = nullptr;
 
-    // Borrar cofre
-    _motor->DibujarCofre(_cofreP->GetPosicionArrayObjetos(), false);
-    _cofreP->DesactivarCofre();
+    _cofreP->BorrarCofre();
+    _cofreP = nullptr;
 }
 
 void Jugando::CargarBossEnMemoria()
@@ -2272,4 +2291,17 @@ void Jugando::CargarBossEnMemoria()
     _motora->getEvent(nameid)->start();
 
     _enemigos.insert(_enemigos.begin(), _boss);
+}
+
+// TO DO: en proceso
+void Jugando::CambiarAranyaPorCofre(int idC, float x,float y, float z, 
+    unsigned int posArrayArana, unsigned int posAct, unsigned int posObs, Sala* sala)
+{
+    Cofre* _cofre = new Cofre(idC, posAct, posObs,
+        x, y, z,
+        constantes.COFRE_OBJ, posArrayArana,
+        sala);
+
+    _cofres.at(posAct) = move(_cofre);
+    _cofre = nullptr;
 }

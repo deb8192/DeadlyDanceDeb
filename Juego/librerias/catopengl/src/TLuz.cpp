@@ -6,28 +6,28 @@ TLuz::TLuz(int t)
     tipo_luz = t; //tipo de luz
     if(t == 0)
     {
-        setAmbient(0.45f, 0.45f, 0.45f);
-        setDiffuse(0.7f, 0.7f, 0.7f);
-        setSpecular(0.8f, 0.8f, 0.8f);
-        // setAmbient(0.05f, 0.05f, 0.05f);
-        // setDiffuse(0.08f, 0.08f, 0.08f);
-        // setSpecular(0.1f, 0.1f, 0.1f);
-        setDirection(-0.2f, -1.0f, -0.3f);
+        setAmbient(140.25f, 140.25f, 140.25f);
+        setDiffuse(178.5f, 178.5f, 178.5f);
+        setSpecular(204.0f, 204.0f, 204.0f);
+        setDirection(0.0f, -1.0f, -0.5f);
         setBrillos(8.0f);
     }
     else if(t == 1)
     {
-        setAmbient(0.7f, 0.7f, 0.7f);
-        setDiffuse(0.9f, 0.9f, 0.9f);
-        setSpecular(1.0f, 1.0f, 1.0f);
+        // setAmbient(0.7f, 0.7f, 0.7f);
+        // setDiffuse(0.9f, 0.9f, 0.9f);
+        // setSpecular(1.0f, 1.0f, 1.0f);
+        setAmbient(178.5f, 178.5f, 178.5f);
+        setDiffuse(229.5f, 229.5f, 229.5f);
+        setSpecular(255.0f, 255.0f, 255.0f);
         setLightRange(150.0f);
         setBrillos(32.0f);
     }
     else if(t == 2)
     {
-        setAmbient(1.0f, 1.0f, 1.0f);
-        setDiffuse(1.0f, 1.0f, 1.0f);
-        setSpecular(1.0f, 1.0f, 1.0f);
+        setAmbient(255.0f, 255.0f, 255.0f);
+        setDiffuse(255.0f, 255.0f, 255.0f);
+        setSpecular(255.0f, 255.0f, 255.0f);
         setDirection(0.0f, -1.0f, 0.0f);
         setLightRange(150.0f);
         setBrillos(32.0f);
@@ -173,19 +173,28 @@ void TLuz::beginDraw()
 //Color luz ambiental
 void TLuz::setAmbient(float r,float g,float b)
 {
-    ambient = glm::vec3(r,g,b);
+    float rf = transformToRGB(r);
+    float gf = transformToRGB(g);
+    float bf = transformToRGB(b);
+    ambient = glm::vec3(rf,gf,bf);
 }
 
 //Color luz difusa
 void TLuz::setDiffuse(float r,float g,float b)
 {
-    diffuse = glm::vec3(r,g,b);
+    float rf = transformToRGB(r+50);
+    float gf = transformToRGB(g+50);
+    float bf = transformToRGB(b+50);
+    diffuse = glm::vec3(rf,gf,bf);
 }
 
 //Color luz especular
 void TLuz::setSpecular(float r,float g,float b)
 {
-    specular = glm::vec3(r,g,b);
+    float rf = transformToRGB(r+75);
+    float gf = transformToRGB(g+75);
+    float bf = transformToRGB(b+75);
+    specular = glm::vec3(rf,gf,bf);
 }
 
 //numero de luz
@@ -213,6 +222,13 @@ void TLuz::setBrillos(float b)
     brillos_shader = b;
 }
 
+float TLuz::transformToRGB(float c)
+{
+    if(c > 255.0f)c = 255.0f;
+    if(c < 0.0f)c = 0.0f;
+    float t = (1.0f/255.0f) * c;
+    return t;
+}
 
 void TLuz::endDraw()
 {

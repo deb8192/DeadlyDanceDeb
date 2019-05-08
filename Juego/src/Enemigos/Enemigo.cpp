@@ -504,7 +504,7 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
             case 2:
             {
                 CofreArana* cofreArana = (CofreArana*) this;
-                cofreArana->UpdateCofreArana(i, _jugador);
+                cofreArana->UpdateCofreArana(i, _jugador, ayuda);
             }
                 break;
 
@@ -706,6 +706,7 @@ void Enemigo::MuereEnemigo(int enemi){
         }
     }
     //Sonido de muerte
+    // TO DO: utilizar constantes de enemigos
     if(tipoEnemigo == 0)
     {
         _motora->getEvent("Chicken2")->setPosition(this->getX(),this->getY(),this->getZ());
@@ -2111,6 +2112,8 @@ void Enemigo::Render(short posArray,
         rotActual.x, rotActual.y, rotActual.z,
         posArray
     );
+
+    _motor->UpdateBoardsVidaEne(posArray,vida,vidaIni);
 
     _motor->dibujarObjetoTemporal(
         posActual.x, posActual.y, posActual.z,

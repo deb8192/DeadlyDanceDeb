@@ -179,6 +179,7 @@ void EstadoIniciar::ManejarEventos()
     if(slotSeleccionado == 0 && _motor->OcurreEvento(GUI_ID_SLOT1))
     {
         slotSeleccionado = 1;
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         _motor->ResetEvento(GUI_ID_SLOT1);
         fase = 1;
     }
@@ -186,6 +187,7 @@ void EstadoIniciar::ManejarEventos()
     if(slotSeleccionado == 0 && _motor->OcurreEvento(GUI_ID_SLOT2))
     {
         slotSeleccionado = 2;
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         _motor->ResetEvento(GUI_ID_SLOT2);
         fase = 1;
     }
@@ -193,6 +195,7 @@ void EstadoIniciar::ManejarEventos()
     if(slotSeleccionado == 0 && _motor->OcurreEvento(GUI_ID_SLOT3))
     {
         slotSeleccionado = 3;
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         _motor->ResetEvento(GUI_ID_SLOT3);
         fase = 1;
     }

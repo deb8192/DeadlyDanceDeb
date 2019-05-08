@@ -7,9 +7,15 @@ Puerta::Puerta(int id, int codigo,
     float despX, float despZ, int accion)
 : Interactuable(id, codigo, anc, lar, alt,
     x, y, z, tipoObj, despX, despZ, accion)
-{
+{    
     _modelo = "assets/models/Puertas/Puerta.obj";
     _textura = "assets/texture/Puerta.png";
+
+    if(accion == 10)
+    {
+        _modelo = "assets/models/Puertas/PuertaPiedra.obj";
+        _textura = "assets/texture/rocasuelo.png";
+    }
 }
 
 Puerta::~Puerta()
@@ -70,4 +76,26 @@ void Puerta::GirarPuerta(float rotacion, bool desdePalanca)
         rotActual.x, rotActual.y + rotacion, rotActual.z,
         _desplazamientos[0], _desplazamientos[1], posObstaculos);
     _fisicas = nullptr;
+}
+
+void Puerta::Render(float updTime, float drawTime)
+{
+    RotarEntidad(1 / updTime);
+    UpdateTimeRotate(drawTime);
+
+    // TO DO: Para evitar esto, cambiar las puertas2 del XML con el ancho y alto de la puerta como si fuera vertical
+    if (tipoObjeto == constantes.PUERTA2) // Para las puertas horizontales
+        _motor->mostrarObjetos(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y+90, rotActual.z,
+            posicionArrayObjetos
+        );
+    else
+    {
+        _motor->mostrarObjetos(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y, rotActual.z,
+            posicionArrayObjetos
+        );
+    }
 }

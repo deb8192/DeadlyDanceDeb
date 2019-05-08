@@ -12,7 +12,8 @@ class Puerta : public Interactuable
             float despX, float despZ, int accion);
 
         void GirarPuerta(float rotacion, bool desdePalanca);
-
+        void Render(float updTime, float drawTime);
+        
     private:
 };
 

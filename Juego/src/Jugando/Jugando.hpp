@@ -68,6 +68,7 @@ class Jugando: public Estado {
         void RecogerLlave(int rec_llave);
         void RecogerArma(int rec_col);
         void DejarObjeto();
+        void ComprobarBorrarProyectil();
         void AccionarMecanismo(int,const unsigned short);    //Activa mecanismos y o puertas
         void activarPowerUp();
 
@@ -82,9 +83,11 @@ class Jugando: public Estado {
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
         
         void AbrirPantallaPuzzle();
-        void AbrirCofre(Cofre* _inter);
+        void AbrirCofre(float x, float y, float z, bool esArana);
         void CrearEnemigoArana();
         void CargarBossEnMemoria();
+        void CambiarAranyaPorCofre(int idC, float x,float y, float z, 
+            unsigned int posArrayArana, unsigned int posAct, unsigned int posObs, Sala* sala);
 
     private:
 

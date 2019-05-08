@@ -12,6 +12,7 @@ class Pared : public Interactuable
             float despX, float despZ, int accion);
 
         void Borrar(unsigned short pos);
+        void Render(float updTime, float drawTime);
         
     private:
 };

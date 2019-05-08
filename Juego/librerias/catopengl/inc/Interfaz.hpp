@@ -1,5 +1,3 @@
-#include "CatOpengl.hpp"
-
 #include <vector>
 #include <iostream>
 
@@ -13,6 +11,10 @@
 #include "TTexto.hpp"
 #include "TBillboard.hpp"
 #include "Shader.hpp"
+#include "Ventana.hpp"
+#include "Gestor.hpp"
+
+#define maxNodos 65534 //maximo de nodos
 
 class Interfaz
 {
@@ -100,6 +102,8 @@ class Interfaz
 
         void SetTexture(unsigned short did, const char * _ruta); //Le asigna una texura a una malla
 
+        void SetTransparencia(unsigned short did, float transp); //Se pone transparente la malla
+
         void RemoveObjectForID(signed int idPerson);//borra por el id personalizado = si el id es -1 no funciona este metodo
 
         void DefinirIdPersonalizado(unsigned short did, signed int idPerson);//le asigna el id personalizado
@@ -130,7 +134,7 @@ class Interfaz
         //cambiar estado imagen o boton
         void CambiarEstadoImagen(unsigned int event,unsigned int nuevoEstado);//estado sobretodo para botones
         void CambiarPosicionImagen(unsigned int event, float x, float y);//mueve la imagen a la posicion que le digas
-        
+
         //para activar y desactivar captura de texto, tambien sirve para saber que ha capturado
         void ActivarCapturaTexto();// habilita que el texto que se ponga se capture hasta un maximo de 30 digitos
         void DesactivarCapturaTexto();// deshabilita que el texto se capture
@@ -138,15 +142,11 @@ class Interfaz
         char * DevolverTextoCapturado();//devuelve el texto que hay en el capturador
         void BorrarUltimaLetra();//borra la ultima letra del capturador
 
-
-
     private:
-
-        bool  banco_ids [65535];
 
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
-        CatOpengl::Video::Ventana * window;
+        Ventana * window;// instancia que contiene la clase que se encarga de gestionar las ventanas y las teclas / raton
 
         Shader * shaders[6];//cuatro programas de shader(vertex y fragment cada uno)
 
@@ -186,7 +186,7 @@ class Interfaz
             int idPersonalizado;//sirve para identificar el id por el id
         };
 
-        std::vector<Nodo *> nodos;//almacena los nodos
+        Nodo * banco[maxNodos];//contiene los punteros a los nodos del arbol
 
         std::vector<Nodo *> camaras;//registro de camaras
 
@@ -198,9 +198,7 @@ class Interfaz
 
         std::vector<Nodo *> boards;//registro de billboards en interfaz
 
-        CatOpengl::Gestor * gestorDeRecursos;
-
-        Nodo * buscarNodo(unsigned short);
+        Gestor * gestorDeRecursos;//clase que gestona los recursos del motor
 
         Nodo * buscarNodo2(unsigned short);
 
@@ -213,8 +211,6 @@ class Interfaz
         void ventanaLimpiar();
 
         float x,y,z;
-
-        void eliminarID(unsigned short x);
 
         unsigned int cualborrar;
 

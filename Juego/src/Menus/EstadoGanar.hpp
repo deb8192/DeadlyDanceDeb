@@ -2,6 +2,7 @@
 #define EstadoGanar_HPP
 
 #include "../Estado.hpp"
+#include "../Motores/MotorAudio.hpp"
 
 class EstadoGanar: public Estado {
     public:
@@ -20,7 +21,9 @@ class EstadoGanar: public Estado {
         // Para Atras y Reiniciar partida, borra solo GUI
         void borrarGUIResetearEvento(short id);
         void menuPrincipal();
-        void reiniciarPartida();
+        void siguienteNivel();
         void salir();
+
+        MotorAudioSystem* _motora;//instancia de la fachada audio
 };
 #endif /* EstadoGanar_HPP */

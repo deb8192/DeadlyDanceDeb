@@ -46,7 +46,7 @@ struct SpotLight {
     vec3 specular;      //Influencia de la luz especular en los objetos
 };
 
-#define NR_POINT_LIGHTS 10    //X puntos de luz maximo
+#define NR_POINT_LIGHTS 8    //X puntos de luz maximo
 
 in vec3 Normal;            //Recibimos las normales del vertex
 in vec3 FragPos;           //Recibimos la posicion del fragment actual
@@ -61,6 +61,8 @@ uniform Material material;    //materiales
 uniform sampler2D Texturediffuse;  //Textura difusa
 uniform sampler2D Texturespecular; //Textura especular
 
+uniform float trasparencia = 1.0;
+
 //Funciones de calculo de luces
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
@@ -68,6 +70,10 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main()
 {
+    if (texture(Texturediffuse, TexCoords).a == 0.0) {
+        discard;
+    }
+
     //Propiedades
     vec3 norm = normalize(Normal);                          //Normalizar las normales
     vec3 viewDir = normalize(viewPos - FragPos);            //Calculo de direccion de camara
@@ -81,10 +87,14 @@ void main()
     //Fase 2: Puntos de Luz (Multiluces)
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
     {
-        if(pointLights[i].constant > 0)
+        float distance = length(pointLights[i].position - FragPos);
+        if(distance < 40)
         {
-            vec3 pointres = CalcPointLight(pointLights[i], norm, FragPos, viewDir);
-            result += pointres;
+            if(pointLights[i].constant > 0)
+            {
+                vec3 pointres = CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+                result += pointres;
+            }
         }
     }
 
@@ -99,8 +109,8 @@ void main()
     silang /= 0.5;
     if(silang > 1.0)silang = 1.0;
 
-    FragColor = vec4(result, 1.0) * silang + black_silhouette * (1 - silang);
-    //FragColor = vec4(result, 1.0);
+    FragColor = vec4(result, trasparencia) * silang + black_silhouette * (1 - silang);
+
 }
 
 //Calcular Luz Direccional

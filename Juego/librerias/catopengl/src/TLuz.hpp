@@ -33,6 +33,7 @@ class TLuz : public TEntidad
         void setDirection(float,float,float);
         void setLightRange(float);
         void setBrillos(float b);
+        float transformToRGB(float c);
 
         //sobrecarga Tentidad
         void beginDraw();

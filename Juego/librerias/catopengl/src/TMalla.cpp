@@ -4,6 +4,7 @@
 TMalla::TMalla(int ft)
 {
     didentidad = 'M'; //para sabe que funcion hace es informativo
+    transparente = 1.0f;
     frames_totales = ft;
     mallas_totales = 0;
     frame_inicial = 0;
@@ -32,6 +33,7 @@ void TMalla::cargarMalla(unsigned short,unsigned short)
 void TMalla::beginDraw()
 {
     shader->Use();
+    shader->setFloat("trasparencia", transparente);
     TimeEngine(); //Tiempo del motor
     //calcular el frame
     actual_time = actual_time + getTime();
@@ -45,7 +47,7 @@ void TMalla::beginDraw()
         }
         actual_time = 0;
     }
-    
+
     //bucle de la animacion
     if(frame_actual >= frame_final && bucle)
     {
@@ -187,4 +189,14 @@ void TMalla::setTexture(const char * _ruta)
 void TMalla::EstaEnBucleAnimacion(bool bu)
 {
     bucle = bu;
+}
+
+void TMalla::setTransparencia(float t)
+{
+    if(t != transparente)
+    {
+        if(t > 1.0f)t = 1.0f;
+        if(t < 0.0f)t = 0.0f;
+        transparente = t;
+    }
 }
