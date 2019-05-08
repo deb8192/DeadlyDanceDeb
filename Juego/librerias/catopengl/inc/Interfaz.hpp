@@ -142,8 +142,6 @@ class Interfaz
         char * DevolverTextoCapturado();//devuelve el texto que hay en el capturador
         void BorrarUltimaLetra();//borra la ultima letra del capturador
 
-
-
     private:
 
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)

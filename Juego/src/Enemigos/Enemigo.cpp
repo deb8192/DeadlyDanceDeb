@@ -18,8 +18,10 @@ Enemigo::Enemigo()
     _eventos = SenseEventos::getInstance();
 
     tiempoMerodear = 0.0f;
+    tiempoMoverse = 0.0f;
     tiempoOcultarse = 0.0f;
     lastTiempoMerodear = 0.0f;
+    lastTiempoMoverse = 0.0f;
     lastTiempoOcultarse = 0.0f;
     vectorOrientacion.vX = 0.0f;
     vectorOrientacion.vY = 0.0f;
@@ -28,10 +30,12 @@ Enemigo::Enemigo()
     modo = MODO_DEFAULT;
     atacktime = 0.0f;
     pedirAyuda = false;
+    respawnBoss = false;
     contestar = false;
     accionRealizada = false;
     controlRotacion = false;
     distanciaMinimaEsquivar = 3;
+    multiplicadorAtaqueEspecial = 1;
 
     posicionComunBandada.vX = INT_MAX;
     posicionComunBandada.vY = INT_MAX;
@@ -67,9 +71,9 @@ Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida/*,
     largo = largoN;
     alto = altoN;
 
-    _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,2,ancho,alto,largo,2);
-    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,7); //Para ataques
-    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,8); //Para ataques especiales*/
+    _fisicas->crearCuerpo(accion,nX/2,nY/2,nZ/2,2,ancho,alto,largo,2,false);
+    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,7,false); //Para ataques
+    _fisicas->crearCuerpo(0,     nX/2,nY/2,nZ/2,2,5,5,5,8,false); //Para ataques especiales*/
 }
 
 Enemigo::~Enemigo()
@@ -103,9 +107,11 @@ Enemigo::~Enemigo()
     pos_ataques = 0;
     accionRealizada = false;
     contestar = false;
+    respawnBoss = false;
     accionRealizada = false;
     controlRotacion = false;
     distanciaMinimaEsquivar = 0;
+    multiplicadorAtaqueEspecial = 0;
 
     distanciaMaximaCohesionBandada = 0;
 
@@ -137,7 +143,9 @@ Enemigo::~Enemigo()
     lastAtackTime = 0;
     lastAtackEspTime = 0;
     tiempoMerodear = 0;
+    tiempoMoverse = 0;
     tiempoOcultarse = 0;
+    lastTiempoMerodear = 0;
     lastTiempoMerodear = 0;
     lastTiempoOcultarse = 0;
     animacionMuerteTiem = 0;
@@ -467,10 +475,6 @@ void Enemigo::UpdateIA()
                 break;
 
             default:
-            {
-                MuerteBoss* _boss = (MuerteBoss*) this;
-                _boss->RunIA();
-            }
                 break;
         }
     }
@@ -522,6 +526,7 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
             default:
             {
                 MuerteBoss* _boss = (MuerteBoss*) this;
+                _boss->RunIA();
                 _boss->UpdateMuerteBoss(i, _jugador, ayuda);
             }
                 break;
@@ -557,6 +562,16 @@ int Enemigo::Atacar(int i)
         atposX = iniAtposX;
         atposZ += atz - posIni.z;
         atposX += atx - posIni.x;
+
+        /*//ATAQUE A DISTANCIA
+        if(tipoEnemigo == constantes.BOSS)
+        {
+            _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/sphere.obj",NULL);
+            //Crear cuerpo de colision de ataque delante del enemigo
+            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
+            _motora->getEvent("GolpeGuitarra")->setVolume(0.5f);
+            _motora->getEvent("GolpeGuitarra")->start();
+        }*/
 
         //Acutualizar posicion del ataque
         _fisicas->updateAtaqueEnemigos(atposX,iniAtposY,atposZ,i);
@@ -793,9 +808,9 @@ void Enemigo::ModificarVida(int vid)
                 modo = MODO_ATAQUE;
             }
         }
-        else
+        else if(tipoEnemigo == 5)
         {
-            modo = MODO_ATAQUE;
+            ModificarBarraAtEs(abs(vid));
         }
 
     }
@@ -815,6 +830,11 @@ void Enemigo::setTipo(int tip)
 
 }
 
+void Enemigo::SetRespawnBoss(bool crearEnemigos)
+{
+    respawnBoss = crearEnemigos;
+}
+
 /*************** Modificar BarraAtEs *****************
  *  Funcion que actualiza la barra del ataque especial
  *  Entradas:
@@ -824,11 +844,11 @@ void Enemigo::setTipo(int tip)
  */
 void Enemigo::ModificarBarraAtEs(int bar)
 {
-    /*barraAtEs += bar;
+    barraAtEs += bar * multiplicadorAtaqueEspecial;
     if(barraAtEs < 0)
         barraAtEs = 0;
     if(barraAtEs > 100)
-        barraAtEs = 100;*/
+        barraAtEs = 100;
 }
 
 void Enemigo::setBarraAtEs(int bar)
@@ -1013,6 +1033,16 @@ void Enemigo::setLastTimeMerodear(float t)
     lastTiempoMerodear = t;
 }
 
+void Enemigo::setTimeMoverse(float t)
+{
+    tiempoMoverse = t;
+}
+
+void Enemigo::setLastTimeMoverse(float t)
+{
+    lastTiempoMoverse = t;
+}
+
 void Enemigo::setAtackTime(float t)
 {
   atacktime = t;
@@ -1031,6 +1061,11 @@ void Enemigo::SetModo(int newModo)
 void Enemigo::SetPosicionComunBandada(INnpc::VectorEspacial posicion)
 {
     posicionComunBandada = posicion;
+}
+
+void Enemigo::SetMultiplicadorAtEsp(int multiplicador)
+{
+    multiplicadorAtaqueEspecial = multiplicador;
 }
 
 float Enemigo::getTimeOcultarse()
@@ -1053,6 +1088,15 @@ float Enemigo::getLastTimeMerodear()
     return lastTiempoMerodear;
 }
 
+float Enemigo::getTimeMoverse()
+{
+    return tiempoMoverse;
+}
+
+float Enemigo::getLastTimeMoverse()
+{
+    return lastTiempoMoverse;
+}
 float Enemigo::getAtackTime()
 {
   return atacktime;
@@ -1086,6 +1130,11 @@ int Enemigo::GetEnemigo()
 int Enemigo::GetModo()
 {
     return modo;
+}
+
+bool Enemigo::GetRespawnBoss()
+{
+    return respawnBoss;
 }
 
 ZonaOscura* Enemigo::getZonaOscuraMasCercana(vector <ZonaOscura*>& zonasOscuras, ZonaOscura* _zonaUsada)
@@ -1220,7 +1269,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         {
             pesoRotacion = constantes.UN_MEDIO;
             contraRotacion = 1.0 - pesoRotacion;
-            if(this->ver(constantes.TRES, constantes.SEIS * constantes.CINCO))
+            if(this->ver(constantes.TRES, constantes.SEIS * constantes.CINCO) && tipoEnemigo != constantes.BOSS)
             {
                 controlRotacion = true;
             }
@@ -1253,7 +1302,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
         if(huir)
         {
-            rotation *= -1;
+            rotation += constantes.PI_RADIAN;
         }
 
         this->setNewRotacion(rotActual.x, rotation, rotActual.z);
@@ -1835,6 +1884,124 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
 	    return false;
     }
+    /********************************** Moverse ********************************
+     * Funcion a la que llama el boss para desplazarse por la sala mientras 
+     * pelea contra el jugador.
+     * 
+     *      Entradas:    
+     *                  int nuevaDireccion: direccion que probablemente tomara
+     *                  int direccion: direccion actual del boss
+     *                  int* _jug: entero que contiene el puntero del jugador
+     *                  int maxDistBossJugador: distancia maxima con el jugador
+     * 
+     *      Salidas:
+     *                  int direccion: la direccion que al final toma el boss
+    */
+    int Enemigo::Moverse(int nuevaDireccion, int direccion, int* _jug, int minDistBossJugador, int maxDistBossJugador, bool* seAcerca)
+    {
+        Constantes constantes;
+        Jugador* _jugador = (Jugador*) _jug;
+        VectorEspacial velocidad, posiciones, target;
+        target.vX = _jugador->getX();
+        target.vY = _jugador->getY();
+        target.vZ = _jugador->getZ();
+        target.modulo = sqrt(pow(posActual.x - target.vX, constantes.DOS) + pow(posActual.y - target.vY, constantes.DOS) + pow(posActual.z - target.vZ, constantes.DOS));
+
+        if(abs(target.modulo) < minDistBossJugador && *seAcerca)
+        {
+            *seAcerca = false;
+        }
+        
+        if(abs(target.modulo) < maxDistBossJugador && !*seAcerca)
+        {
+            if(nuevaDireccion > 0)
+            {
+                if(nuevaDireccion != direccion)
+                {
+                    direccion = nuevaDireccion;
+                }
+                else
+                {
+                    direccion -= constantes.DOS;
+                    if(direccion <= 0)
+                    {
+                        direccion += constantes.OCHO;
+                    }
+                }
+            }
+
+            switch(direccion)
+            {
+                case 1:
+                    rotation = constantes.DOS_PI_RADIAN;
+                    break;
+                
+                case 2:
+                    rotation = constantes.PI_TRES_MEDIOS_CUARTOS;
+                    break;   
+
+                case 3:
+                    rotation = constantes.PI_TRES_MEDIOS;
+                    break;
+
+                case 4:
+                    rotation = constantes.PI_RADIAN_CUARTOS;
+                    break;
+                
+                case 5:
+                    rotation = constantes.PI_RADIAN;
+                    break;
+                
+                case 6:
+                    rotation = constantes.PI_MEDIOS_CUARTOS;
+                    break;
+
+                case 7:
+                    rotation = constantes.PI_MEDIOS;
+                    break;
+
+                case 8:
+                    rotation = constantes.PI_CUARTOS;
+                    break;
+
+                default:
+                    rotation = constantes.PI_MEDIOS;
+                    break;
+            }
+        }
+        else
+        {
+            *seAcerca = true;
+            this->alinearse(&target, false);
+        }
+
+        if(!*seAcerca)
+        {        
+            this->setNewRotacion(rotActual.x, rotation, rotActual.z);
+            this->setVectorOrientacion();
+        }
+        
+        if(porcentajeVelocidad != constantes.UN_MEDIO)
+        {
+            porcentajeVelocidad = constantes.UN_MEDIO;
+        }
+
+        velocidad.vX = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        velocidad.vZ = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+        posiciones.vX = posFutura.x + velocidad.vX;
+        posiciones.vZ = posFutura.z + velocidad.vZ;
+
+        if(!*seAcerca)
+        {
+            this->alinearse(&target, false);
+            this->setRotacion(rotActual.x, rotation, rotActual.z);
+        }
+        this->setLastRotacion(rotActual.x, rotation, rotActual.z);
+        this->setNewPosiciones(posiciones.vX, posFutura.y, posiciones.vZ);
+        this->setPosicionesFisicas(velocidad.vX, 0.0f, velocidad.vZ);
+
+	    return direccion;
+    }
     INnpc::VectorEspacial Enemigo::normalizarVector(int* destino)
     {
         //Se obtiene el vector director del movimiento del enemigo y su modulo
@@ -1945,6 +2112,8 @@ void Enemigo::Render(short posArray,
         rotActual.x, rotActual.y, rotActual.z,
         posArray
     );
+
+    _motor->UpdateBoardsVidaEne(posArray,vida,vidaIni);
 
     _motor->dibujarObjetoTemporal(
         posActual.x, posActual.y, posActual.z,

@@ -679,9 +679,11 @@ void Interfaz::LimpiarGui()
         imagenes.reserve(20);
         textos.resize(0);
         textos.reserve(20);
+        boards.resize(0);
+        boards.reserve(30);
         for(unsigned short i=0 ; i < maxNodos; i++)
         {
-            if(banco[i] != nullptr && (banco[i]->tipo == 3 || banco[i]->tipo == 4))
+            if(banco[i] != nullptr && (banco[i]->tipo == 3 || banco[i]->tipo == 4 || banco[i]->tipo == 5))
             {
                 banco[i]->recurso = nullptr;
                 delete banco[i];
