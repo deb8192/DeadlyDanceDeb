@@ -57,10 +57,12 @@ class Jugando: public Estado {
             unsigned short cantidad);
         void CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
             unsigned short tipoObjeto, unsigned short ataque);//lo utilizamos para crear su modelo en motorgrafico y su objeto
+        void RespawnEnemigosBoss();
         void RespawnEnemigos();
         void ConectarWaypoints();
         void CambiarSalaJugador(unsigned short i);
         void CambiarSalaEnemigo(unsigned short n, unsigned short m);
+        bool ComprobarEnemigoSalaContiguaJugador(unsigned int n);
 
         //Funciones de interacciones
         void RecogerLlave(int rec_llave);
@@ -145,6 +147,7 @@ class Jugando: public Estado {
         //int cambia;
         int danyo, danyo2;
         int contadorEnem;
+        short contadorWaypointsJugador;
 
         //Comprobacion de powerup
         //int powerupYES = -1; //no se utiliza

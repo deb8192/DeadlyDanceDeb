@@ -2,12 +2,16 @@
 #define ConstantesComunes_HPP
 
 //esto contiene todas las constantes y variables de texto para comparativas en el programa (es comodo si se quiere utilizar en el algun sitio)
-//using Constantes = struct
-typedef struct
+using Constantes = struct ValoresConstantes
 {
     /** Angulos en grados y radianes y relacion para sus cambios de escala **/
     const float PI = 3.14159265358979323846;
+    const float DOS_PI_RADIAN = 360.0f;
+    const float PI_TRES_MEDIOS_CUARTOS = 315.0f;
+    const float PI_TRES_MEDIOS = 270.0f;
+    const float PI_RADIAN_CUARTOS = 225.0f;
     const float PI_RADIAN = 180.0f;
+    const float PI_MEDIOS_CUARTOS = 135.0f;
     const float PI_MEDIOS = 90.0f;
     const float PI_CUARTOS = 45.0f;
     const float PI_OCTAVOS = 22.5f;
@@ -25,10 +29,12 @@ typedef struct
     const short DIECIOCHO = 18;
     const short CIEN = 100;
     const short TIEMPO_RESPAWN = 30;
+    const int MAX_VIDA_BOSS_PELIGRO = 33;
     const float DEG_TO_RAD = 0.0174532925199432957f;
     const float RAD_TO_DEG = 57.295779513082320876f;
 
     /******************** Porcentajes *******************/
+    const float DIEZ_PORCIENTO = 0.10f;
     const float UN_CUARTO = 0.25f;
     const float UN_MEDIO = 0.5f;
     const float TRES_CUARTOS = 0.75f;
@@ -48,11 +54,6 @@ typedef struct
     const char* DECORADOR = "Decorator";
     const char* HOJA = "Leaf";
     const char* PIZARRA = "Blackboard";
-    const char* LEE = "lee";
-    const char* ESCRIBE = "escribe";
-    const char* VERDADERO = "true";
-    const char* FALSO = "false";
-    const char* RANDOM = "random";
 
     //Comparadores de la lectura de las acciones de las tareas
     const char* PERSIGUE = "persigue";
@@ -60,6 +61,7 @@ typedef struct
     const char* VER = "ve";
     const char* PIDE_AYUDA = "pide-ayuda";
     const char* MERODEA = "merodea";
+    const char* MOVERSE = "moverse";
     const char* OIR = "oye";
     const char* BUSCAR = "busca";
     const char* CURARSE = "curarse";
@@ -72,6 +74,12 @@ typedef struct
     const char* CAMBIA = "cambia";
     const char* ESTA = "esta";
     const char* DEBE = "debe";
+    const char* LEE = "lee";
+    const char* ESCRIBE = "escribe";
+    const char* VERDADERO = "true";
+    const char* FALSO = "false";
+    const char* RANDOM = "random";
+    const char* ATAQUE_ESPECIAL = "ataque-especial";
 
 
     //Comparadores de la lectura de los objetivos de las tareas
@@ -89,6 +97,9 @@ typedef struct
     const char* ESCONDITE = "escondite";
     const char* ACCIONADO = "accionado";
     const char* NO_ACCIONADO = "no-accionado";
+    const char* MAX_VIDA_33 = "max-vida=33";
+    const char* AT_ESP_UNO = "1";
+    const char* AT_ESP_DOS = "2";
 
     /**************************** String & char cargado mapas ************************/
     // String de los tipos de zonas
@@ -147,5 +158,5 @@ typedef struct
     // Codigo de la puerta del boss
     const unsigned short PUERTA_BOSS = 20;
 
-} Constantes;
+};
 #endif

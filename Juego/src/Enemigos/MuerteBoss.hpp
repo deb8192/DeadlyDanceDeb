@@ -14,9 +14,10 @@ class MuerteBoss : public Enemigo
         void SetNuevasOrdenes(short newOrden);
 
     private:
-        bool funciona, atacado, hecho;
+        bool funciona, atacado, hecho, seAcerca;
         short int* _ordenes;
         short int direccion;
+        int minDistanciaJugador, maxDistanciaJugador;
 };
 
 #endif

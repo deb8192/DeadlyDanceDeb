@@ -6,6 +6,7 @@ Arbol::Arbol(Nodo *root, const char* name)
     nodoEnEjecucionDirecta = nullptr;
     arrayTareaObjetivo = new short int [2];
     ID = 0;
+    contadorRandom = 0;
     bucleDecorador = false;
 }
 
@@ -282,6 +283,10 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     //De haber un hijo cuyo ID es superior al registrado, ese es el nuevo nodo
                     if(i < comp->getHijos().size())
                     {
+                        if(!exito)
+                        {
+                            exito = true;
+                        }
                         nodoEnEjecucionDirecta = comp->getHijos().at(i);
                         if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0)
                         {
@@ -291,7 +296,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                         {
                             deco = (Decorador*) nodoEnEjecucionDirecta;
                         }
-                        ID++;
+                        ID = nodoEnEjecucionDirecta->getID();
                     }
                     //En caso contrario, se asciende por el arbol para cambiar de rama hasta que no se pueda
                     else if(nodoEnEjecucionDirecta->getPadre() != nullptr)
@@ -342,7 +347,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     }
                     else if(strcmp(finalDecorador, constantes.RANDOM) == 0)
                     {
-                        finBucle.push_back(1);
+                        finBucle.push_back(constantes.UNO);
                         contadorRandom = rand() % 5 + 1;
                     }
                     else
@@ -352,12 +357,16 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     bucleDecorador = true;
                 }
 
-                //Si algun hijo falla en su tarea, el booleano es falso por lo tanto se igual el contador ID
-                //al del decorador para volver a entrar al bucle
-                else if(!exito)
+                //Se comprueba el ID del ultimo hijo del decorador para saber si sale
+                else if(deco->getHijos().back()->getID() < ID || !exito)
                 {
-                    ID = nodoEnEjecucionDirecta->getID();
-                    exito = true;
+                    if(!exito)
+                    {
+                        if(finBucle.back() == 1 && contadorRandom > 0)
+                        {
+                            exito = true;
+                        }
+                    }
                     if(bucleDecorador && finBucle.back() > 0)
                     {
                         contadorRandom--;
@@ -365,23 +374,22 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                         {
                             this->finBucleDecorador();
                         }
-                    }
-                }
-
-                //Se comprueba el ID del ultimo hijo del decorador para saber si sale
-                else if(deco->getHijos().back()->getID() < ID && exito)
-                {
-                    if(bucleDecorador && finBucle.back() > 0)
-                    {
-                        contadorRandom--;
-                        if(contadorRandom == 0)
+                        else
                         {
-                            this->finBucleDecorador();
+                            ID = nodoEnEjecucionDirecta->getID();
                         }
                     }
                     else if (bucleDecorador && finBucle.back() == 0)
                     {
-                        this->finBucleDecorador();
+                        if(exito)
+                        {
+                            this->finBucleDecorador();
+                        }
+                        else
+                        {
+                            ID = nodoEnEjecucionDirecta->getID();
+                        }
+                        
                     }
                 }
 
@@ -394,6 +402,10 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 //De haber un hijo cuyo ID es superior al registrado, ese es el nuevo nodo
                 if(i < deco->getHijos().size())
                 {
+                    if(!exito)
+                    {
+                        exito = true;
+                    }
                     nodoEnEjecucionDirecta = deco->getHijos().at(i);
                     if(std::strcmp(nodoEnEjecucionDirecta->getNombre(), constantes.COMPOSICION) == 0)
                     {
@@ -403,7 +415,7 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                     {
                         deco = (Decorador*) nodoEnEjecucionDirecta;
                     }
-                    ID++;
+                    ID = nodoEnEjecucionDirecta->getID();
                 }
                 //En caso contrario, se asciende por el arbol para cambiar de rama
                 else if(nodoEnEjecucionDirecta->getPadre() != nullptr)
@@ -529,6 +541,16 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 {
                     arrayTareaObjetivo[0] = 16;
                 }
+                else if(strcmp(accion, constantes.ATAQUE_ESPECIAL) == 0)
+                {
+                    arrayTareaObjetivo[0] = 17;
+
+                }
+                else if(strcmp(accion, constantes.MOVERSE) == 0)
+                {
+                    arrayTareaObjetivo[0] = 18;
+                }
+                
 
                 //Objetivo
                 const char* objetivo = hoja->GetObjetivo();
@@ -587,6 +609,22 @@ short int* Arbol::ContinuarSiguienteNodo(bool exito)
                 else if(strcmp(objetivo, constantes.NO_ACCIONADO) == 0)
                 {
                     arrayTareaObjetivo[1] = 13;
+                }
+                else if(strcmp(objetivo, constantes.MAX_VIDA_33) == 0)
+                {
+                    arrayTareaObjetivo[1] = 14;
+                }
+                else if(strcmp(objetivo, constantes.AT_ESP_UNO) == 0)
+                {
+                    arrayTareaObjetivo[1] = 15;
+                }
+                else if(strcmp(objetivo, constantes.AT_ESP_DOS) == 0)
+                {
+                    arrayTareaObjetivo[1] = 16;
+                }
+                else if(strcmp(objetivo, constantes.ATAQUE_ESPECIAL) == 0)
+                {
+                    arrayTareaObjetivo[1] = 17;
                 }
                 else
                 {

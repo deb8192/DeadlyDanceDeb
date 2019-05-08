@@ -239,7 +239,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarParticulas(int x, int y, int z, int velocidadx, int velocidady, int velocidadz, float escala, unsigned int nparticulas, float localz, float tvida, const char* ruta_textura);
             void CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
             void CargarLuzEnSala(int sala,int x,int y,int z);
-            void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
+            void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
             void CargarCofre(int pos, int rp, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
@@ -291,7 +291,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void EraseCofre(unsigned short idx);
             //void DibujarPared(long unsigned int idx, bool dibujar);
             void EraseEnemigo(std::size_t i);
-            void EraseTodosEnemigos(std::size_t i);
+            void EraseTodosEnemigos();
             void EraseJugador();
             void EraseArma();
             void EraseProyectil();
