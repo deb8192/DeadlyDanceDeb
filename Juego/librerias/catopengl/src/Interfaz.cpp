@@ -1247,7 +1247,7 @@ void Interfaz::DetenerSistema(unsigned short part)
     }
 }
 
-void Interfaz::IniciarSistema(unsigned short part)
+void Interfaz::IniciarSistema(unsigned short part, float time)
 {
     if(part != 0)
     {
@@ -1259,7 +1259,7 @@ void Interfaz::IniciarSistema(unsigned short part)
                 TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
                 if(tnodo != nullptr)
                 {
-                    dynamic_cast<TParticle*>(tnodo->GetEntidad())->startParticles();
+                    dynamic_cast<TParticle*>(tnodo->GetEntidad())->startParticles(time);
                 }
             }
         }

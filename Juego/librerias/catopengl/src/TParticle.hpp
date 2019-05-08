@@ -29,6 +29,7 @@ class TParticle : public TEntidad
         GLfloat output = 0;            //espacio de aparicion de particulas
         GLfloat life_particles = 1.0f; //Tiempo de vida de las particulas
         bool stop = false;             //parar sistema
+        float time_part = -1.0f;       //tiempo de sistema, si es -1, es infinito
 
         //Funciones privadas
         void GeneradordeParticulas(const char * _ruta); //Crea las particulas
@@ -43,7 +44,7 @@ class TParticle : public TEntidad
         ~TParticle();
 
         void stopParticles();
-        void startParticles();
+        void startParticles(float time);
 
         //sobrecarga metodos TEntidad
         void beginDraw();

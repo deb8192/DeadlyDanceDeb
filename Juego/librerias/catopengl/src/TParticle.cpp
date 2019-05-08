@@ -189,6 +189,8 @@ void TParticle::UpdateParticulas(float deltaT, GLuint newParticles)
 //sobrecarga metodos TEntidad
 void TParticle::beginDraw()
 {
+    if(glfwGetTime() >= time_part && time_part != -1.0f)stopParticles();
+
     shader->Use();
     glm::vec2 newscale = glm::vec2(1.0,1.0);
     if(matriz_compartida == nullptr)
@@ -321,7 +323,8 @@ void TParticle::stopParticles()
     stop = true;
 }
 
-void TParticle::startParticles()
+void TParticle::startParticles(float time)
 {
+    time_part = glfwGetTime() + time;
     stop = false;
 }

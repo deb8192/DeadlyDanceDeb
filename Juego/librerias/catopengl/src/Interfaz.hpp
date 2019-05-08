@@ -115,7 +115,7 @@ class Interfaz
 
         void DetenerSistema(unsigned short part); //Detener sistema de particulas
 
-        void IniciarSistema(unsigned short part); //Iniciar sistema de particulas
+        void IniciarSistema(unsigned short part, float time); //Iniciar sistema de particulas
 
         void DistanciaLuz(unsigned short luz, float d); //Aplica una distancia a la luz
 

@@ -1311,6 +1311,11 @@ void Jugando::CrearJugador()
     _motor->CargarArmaEspecial(_jugador->getX(),_jugador->getY(),
         _jugador->getZ(), _jugador->getRutaArmaEsp(),_jugador->getRutaTexturaArmaEsp());
 
+    //Cargar sistema de particulas para el jugador
+    _motor->CargarParticulasAccion(_jugador->getX(),_jugador->getY(),_jugador->getZ(),0,10,0, 1.0f, 30, 5.0f, 1.0f, "assets/images/CuraVidaParticle.png");
+    _motor->CargarParticulasAccion(_jugador->getX(),_jugador->getY(),_jugador->getZ(),0,10,0, 1.0f, 30, 5.0f, 1.0f, "assets/images/CuraEnergParticle.png");
+    _motor->CargarParticulasAccion(_jugador->getX(),_jugador->getY(),_jugador->getZ(),0,10,0, 1.0f, 30, 5.0f, 1.0f, "assets/images/DineroParticle.png");
+
 }
 
 unsigned short Jugando::NumeroAleatorio(unsigned short limite_inf, unsigned short limite_sup)
@@ -2012,18 +2017,21 @@ void Jugando::activarPowerUp()
         {
             //cout << "PowerUP Vida! TOTAL:" << _jugador->getVida() << endl;
             _jugador->ModificarVida(_powerup.at(int_cpw)->getCantidad());
+            _motor->IniciarParticulasAccion(0,_jugador->getX()+1.0f,_jugador->getY()+2.0f,_jugador->getZ(),0.5f);
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ENERGIA /*&& _jugador->getBarraAtEs() < 100*/)
         {
             //cout << "PowerUP Energia! TOTAL:" << _jugador->getBarraAtEs() << endl;
            _jugador->ModificarBarraAtEs(_powerup.at(int_cpw)->getCantidad());
+           _motor->IniciarParticulasAccion(1,_jugador->getX()+1.0f,_jugador->getY()+2.0f,_jugador->getZ(),0.5f);
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ORO)
         {
             //cout << "Recoges " << _powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
             _jugador->ModificarDinero(_powerup.at(int_cpw)->getCantidad());
+            _motor->IniciarParticulasAccion(2,_jugador->getX()+1.0f,_jugador->getY()+2.0f,_jugador->getZ(),0.5f);
             locoges = true;
         }
 
