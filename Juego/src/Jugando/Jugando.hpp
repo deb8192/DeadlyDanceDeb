@@ -86,8 +86,8 @@ class Jugando: public Estado {
         void AbrirCofre(float x, float y, float z, bool esArana);
         void CrearEnemigoArana();
         void CargarBossEnMemoria();
-        void CambiarAranyaPorCofre(int idC, float x,float y, float z, 
-            unsigned int posArrayArana, unsigned int posAct, unsigned int posObs, Sala* sala);
+        void CambiarAranyaPorCofre(int idC, unsigned int posMotorG, unsigned int posObs,
+            float x, float y, float z, unsigned int posArana, Sala* sala);
 
     private:
 
@@ -144,7 +144,6 @@ class Jugando: public Estado {
         float proyectilFuera;
 
         // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
-        //int cambia;
         int danyo, danyo2;
         int contadorEnem;
         short contadorWaypointsJugador;
@@ -158,8 +157,6 @@ class Jugando: public Estado {
         float frameTime; // frameTime: tiempo por fotograma
         float acumulator;
         float lastAtackEsptime = 0.0f; //registro antiguo del tiempo de ataque especial para su animacion
-        bool cogerObjeto = false;
-        int objetoCogido = -1;
         */
 
        //valores pasados por los estados del menu iniciar o continuar
@@ -167,6 +164,9 @@ class Jugando: public Estado {
        unsigned int tipoJugadorJ;
        unsigned int dineroJ;
        unsigned int slotJ;
+
+       // Debug del cofre arana
+       bool esconderArana;
        
 };
 #endif /* JUGANDO_HPP */
