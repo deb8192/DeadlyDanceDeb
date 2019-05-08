@@ -1395,6 +1395,7 @@ void Jugando::RespawnEnemigosBoss()
                     _ene->setVelocidadMaxima(1.0f);
                     _ene->setID(_enemigos.back()->getID() + 1);//le damos el id unico en esta partida al enemigo
                     _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
+                    _ene = nullptr;
 
                     //Cargar sonido evento en una instancia con la id del enemigo como nombre
                     std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
@@ -1424,6 +1425,7 @@ void Jugando::RespawnEnemigosBoss()
             _enemigos.back()->setVectorOrientacion();
             _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
             _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
+            _enemigos.back()->SetModo(Enemigo::modosEnemigo::MODO_ATAQUE);
 
             _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false);//creamos la figura
 
@@ -1437,8 +1439,13 @@ void Jugando::RespawnEnemigosBoss()
             _zonasRespawn[zonasSeleccionadas[i]]->setProposito(false);
         }
         delete[] zonasSeleccionadas;
+        zonasSeleccionadas = nullptr;
+        _enemigos.front()->SetRespawnBoss(false);
     }
-    _enemigos.front()->SetRespawnBoss(false);
+    else
+    {
+        _enemigos.front()->SetRespawnBoss(false);
+    }
 }
 
 /************* RespawnEnemigos **************
@@ -1568,6 +1575,7 @@ void Jugando::RespawnEnemigos()
             _zonasRespawn[zonasSeleccionadas[i]]->setProposito(false);
         }
         delete[] zonasSeleccionadas;
+        zonasSeleccionadas = nullptr;
     }
 }
 
@@ -2242,9 +2250,10 @@ void Jugando::CargarBossEnMemoria()
     for(short i=0; i < tam; i++)
     {
         EraseEnemigo(0);
-        _motor->EraseEnemigo(i);
-        _fisicas->EraseTodosEnemigos(i);
+        _motor->EraseTodosEnemigos();
+        _fisicas->EraseTodosEnemigos();
     }
+
     //cargador.BorrarVectorEnemigosBossActivado();
     if(_jugador->GetSala() != _boss->GetSala())
     {

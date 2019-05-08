@@ -407,7 +407,7 @@ void MotorFisicas::EraseEnemigo(std::size_t i)
     armaAtEspEne.erase(armaAtEspEne.begin() + i);
 }
 
-void MotorFisicas::EraseTodosEnemigos(std::size_t i)
+void MotorFisicas::EraseTodosEnemigos()
 {
     Constantes constantes;
     unsigned int valor = 0;
