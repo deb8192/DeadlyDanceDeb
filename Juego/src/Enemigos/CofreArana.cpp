@@ -22,7 +22,6 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
     idCofre = -1;
     sala = salaC;
     activada = false;
-    primeraVezActivada = false;
 }
 
 CofreArana::~CofreArana()
@@ -46,67 +45,6 @@ CofreArana::~CofreArana()
     idCofre=0;
     sala = nullptr;
     activada = false;
-    primeraVezActivada = false;
-}
-
-CofreArana::CofreArana (const CofreArana& copia)
-{
-    funciona = copia.funciona;
-    atacado = copia.atacado;
-    hecho = copia.hecho;
-    _ordenes = new short [constantes.DOS];
-
-    maxRotacion = copia.maxRotacion;
-    rotation = copia.rotation;
-    direccion = copia.direccion;
-
-    _modelo = "assets/models/Cofre/cofreArana.obj";
-    _textura = "assets/texture/cofreArana.png";
-
-    ancho = copia.ancho;
-    largo = copia.largo;
-    alto = copia.alto;
-
-    idCofre = copia.idCofre;
-    sala = copia.sala;
-
-    posMotorCofre = copia.posMotorCofre;
-    posObsCofre = copia.posObsCofre;
-    posArana = copia.posArana;
-
-    activada = copia.activada;
-    primeraVezActivada = copia.primeraVezActivada;
-
-    vida = copia.vida;
-    id = copia.id;
-    arbol = copia.arbol;
-    tipoEnemigo = copia.tipoEnemigo;
-
-    velocidadMaxima = copia.velocidadMaxima;
-    barraAtEs = copia.barraAtEs;
-    ataque = copia.ataque;
-    _armaEspecial = nullptr;
-    atackEspTime = 0.0f;
-    danyoCritico = copia.danyoCritico;
-    proAtaCritico = copia.proAtaCritico;
-    setRotacion(0.0f,0.0f,0.0f);
-    setVectorOrientacion();
-    setNewRotacion(0.0f,0.0f,0.0f);
-    setLastRotacion(0.0f,0.0f,0.0f);
-
-    float x = copia.posActual.x;
-    float y = copia.posActual.y;
-    float z = copia.posActual.z;
-
-    setPosiciones(x,y,z);
-    setPosicionesAtaque(x,y,z);
-    setNewPosiciones(x,y,z);
-    setLastPosiciones(x,y,z);
-    initPosicionesFisicas(x/2,y/2,z/2);
-    initPosicionesFisicasAtaque(x/2,y/2,z/2);
-    definirSala(copia.sala);
-
-    cout << "Entro a hacer copia" <<endl;
 }
 
 /***************** RunIA *****************
@@ -360,11 +298,6 @@ bool CofreArana::GetActivada()
     return activada;
 }
 
-bool CofreArana::GetPrimeraVezActivada()
-{
-    return primeraVezActivada;
-}
-
 void CofreArana::SetIdCofre(int idC)
 {
     idCofre = idC;
@@ -388,9 +321,4 @@ void CofreArana::SetPosArana(unsigned int pos)
 void CofreArana::SetActivada(bool estado)
 {
     activada = estado;
-}
-
-void CofreArana::SetPrimeraVezActivada(bool estado)
-{
-    primeraVezActivada = estado;
 }
