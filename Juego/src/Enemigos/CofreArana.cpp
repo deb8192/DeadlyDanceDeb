@@ -77,8 +77,36 @@ CofreArana::CofreArana (const CofreArana& copia)
     activada = copia.activada;
     primeraVezActivada = copia.primeraVezActivada;
 
+    vida = copia.vida;
     id = copia.id;
-    //cout << "Entro a hacer copia" <<endl;
+    arbol = copia.arbol;
+    tipoEnemigo = copia.tipoEnemigo;
+
+    velocidadMaxima = copia.velocidadMaxima;
+    barraAtEs = copia.barraAtEs;
+    ataque = copia.ataque;
+    _armaEspecial = nullptr;
+    atackEspTime = 0.0f;
+    danyoCritico = copia.danyoCritico;
+    proAtaCritico = copia.proAtaCritico;
+    setRotacion(0.0f,0.0f,0.0f);
+    setVectorOrientacion();
+    setNewRotacion(0.0f,0.0f,0.0f);
+    setLastRotacion(0.0f,0.0f,0.0f);
+
+    float x = copia.posActual.x;
+    float y = copia.posActual.y;
+    float z = copia.posActual.z;
+
+    setPosiciones(x,y,z);
+    setPosicionesAtaque(x,y,z);
+    setNewPosiciones(x,y,z);
+    setLastPosiciones(x,y,z);
+    initPosicionesFisicas(x/2,y/2,z/2);
+    initPosicionesFisicasAtaque(x/2,y/2,z/2);
+    definirSala(copia.sala);
+
+    cout << "Entro a hacer copia" <<endl;
 }
 
 /***************** RunIA *****************

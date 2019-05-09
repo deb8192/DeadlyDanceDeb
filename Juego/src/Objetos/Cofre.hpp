@@ -23,6 +23,7 @@ class Cofre : public Interactuable
         unsigned int GetPosObs();
         void DesactivarCofre();
         void BorrarCofre();
+        void ActivarCofre();
         void Render(float updTime, float drawTime);
 
     private:

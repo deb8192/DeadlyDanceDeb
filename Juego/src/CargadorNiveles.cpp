@@ -948,7 +948,7 @@ unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     _eneA->setVelocidadMaxima(1.5f);
     _eneA->setBarraAtEs(0);
     _eneA->setAtaque(10);
-    _eneA->setArmaEspecial(100);
+    _eneA->setArmaEspecial(0);
     _eneA->setTimeAtEsp(0.0f);
     _eneA->setDanyoCritico(50);
     _eneA->setProAtaCritico(10);
@@ -964,7 +964,7 @@ unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     _eneA->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _eneA->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _eneA->definirSala(sala);//le pasamos la sala en donde esta
-
+    
     //_motor->CargarEnemigos(0,0,0,_eneA->GetModelo());//creamos la figura
     _eneCofres.push_back(move(_eneA));//guardamos el enemigo en el vector
     _eneA = nullptr;
