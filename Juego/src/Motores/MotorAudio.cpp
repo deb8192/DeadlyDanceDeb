@@ -36,6 +36,17 @@ MotorAudioSystem::MotorAudioSystem()
 
   LoadEvent("event:/SFX/SFX-Personaje Arpa golpea","Arpa");
   LoadEvent("event:/SFX/SFX-Arma flauta","Flauta");
+  LoadEvent("event:/SFX/SFX-ruido coger objeto","Recoger");
+  LoadEvent("event:/SFX/SFX-ruido dejar objeto","Soltar");
+   LoadEvent("event:/SFX/SFX-Victoria en el puzzle","VictoriaPuzzle");
+   LoadEvent("event:/SFX/SFX-Aparece puzzle en pantalla","AparecePuzzle");//error al cambiar estado
+   LoadEvent("event:/SFX/SFX-Derrota en el puzzle","DerrotaPuzzle");
+   LoadEvent("event:/SFX/SFX-Movimiento de piezas puzzle","MoverPieza");
+   LoadEvent("event:/SFX/SFX-Boss derrotado","BossDerrota");
+   LoadEvent("event:/SFX/SFX-Jugador derrotado","JugadorDerrota");//error al cambiar estado
+   LoadEvent("event:/SFX/SFX-Dialogo tipo1","Dialogo1");//error al cambiar estado
+   LoadEvent("event:/SFX/SFX-Dialogo tipo2","Dialogo2");
+   LoadEvent("event:/SFX/SFX-Guardian sorpresa al encontrarlo","GuardianVisto");
   LoadEvent("event:/SFX/SFX-Personaje cabezazo del heavy","SinArma");
   LoadEvent("event:/SFX/SFX-Personaje Guitarra golpea","GolpeGuitarra");
   LoadEvent("event:/SFX/SFX-Personaje Guitarra Especial","GuitarraEspecial");

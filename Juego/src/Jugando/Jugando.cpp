@@ -1830,6 +1830,7 @@ void Jugando::RecogerArma(int rec_col)
         nuRec = nullptr;
     }
     atacktime = 0.0f; //Reiniciar tiempo de ataques
+    _motora->getEvent("Recoger")->start();
 }
 
 void Jugando::DejarObjeto()
@@ -1854,6 +1855,7 @@ void Jugando::DejarObjeto()
         nuRec->SetPosicionArrayObjetos(posicionObjeto);
         _reco_armas.push_back(nuRec);
         nuRec = nullptr;
+        _motora->getEvent("Soltar")->start();
     }
 }
 
