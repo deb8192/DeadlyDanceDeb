@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="AudioFile" id="{4bfbefd0-eb4d-4d35-904b-b33b2d166a8d}">
         <property name="assetPath">
-            <value>chicken2.wav</value>
+            <value>SFX/chicken2.wav</value>
         </property>
         <property name="frequencyInKHz">
             <value>44.0999985</value>
