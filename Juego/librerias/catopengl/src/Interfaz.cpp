@@ -473,7 +473,10 @@ void Interfaz::Draw()
     {
         ventanaInicializar();
         ventana_inicializada = false;
+    }
 
+    if(configure_depthmap)
+    {
         // configure depth map FBO
         // -----------------------
         const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
@@ -484,8 +487,8 @@ void Interfaz::Draw()
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
         // attach depth texture as FBO's depth buffer
@@ -494,9 +497,9 @@ void Interfaz::Draw()
         glDrawBuffer(GL_NONE);
         glReadBuffer(GL_NONE);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
         shaders[4]->Use();
-        shaders[4]->setInt("shadowMap", 0);
+        shaders[4]->setInt("shadowMap", depthMap);
+        configure_depthmap = false;
     }
 
     window->UpdateLimpiar();
@@ -519,13 +522,30 @@ void Interfaz::Draw()
                 if(luces[i] != nullptr && luces[i]->recurso != nullptr && luces[i]->activo)
                 {
                     luces[i]->recurso->draw(1);
+                    if(i == 0)
+                    {
+                        // 1. render depth of scene to texture (from light's perspective)
+                        // --------------------------------------------------------------
+                        float near_plane = 1.0f, far_plane = 400.0f;
+                        //lightProjection = glm::perspective(glm::radians(45.0f), (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT, near_plane, far_plane); // note that if you use a perspective projection matrix you'll have to change the light position as the current light position isn't enough to reflect the whole scene
+                        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+                        lightView = glm::lookAt(glm::vec3(-100.0f, -50.0f, -20.0f), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+                        lightSpaceMatrix = lightProjection * lightView;
+                        // render scene from light's point of view
+                        shaders[7]->Use();
+                        shaders[7]->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+                    }
                 }
             }
 
             //Draw de profundidad de sombras
             DrawProfundidad();
 
-            glActiveTexture(GL_TEXTURE2);
+            glViewport(0, 0,window->getWidth(),window->getHeight());
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            shaders[4]->Use();
+            shaders[4]->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+            glActiveTexture(GL_TEXTURE1);
             glBindTexture(GL_TEXTURE_2D, depthMap);
             //Render
             _raiz->draw(0);
@@ -569,7 +589,7 @@ void Interfaz::Draw()
 
 void Interfaz::DrawProfundidad()
 {
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0,window->getWidth(),window->getHeight());
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glClear(GL_DEPTH_BUFFER_BIT);
     for(unsigned int i = 0; i < mallas.size(); i++)
@@ -586,7 +606,7 @@ void Interfaz::DrawProfundidad()
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     // reset viewport
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0,window->getWidth(),window->getHeight());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 

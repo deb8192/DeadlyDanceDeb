@@ -154,8 +154,13 @@ class Interfaz
 
 
     private:
+        //Sombras
         unsigned int depthMapFBO;
         unsigned int depthMap;
+        glm::mat4 lightProjection, lightView;
+        glm::mat4 lightSpaceMatrix;
+        bool configure_depthmap = true;
+
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
         Ventana * window;// instancia que contiene la clase que se encarga de gestionar las ventanas y las teclas / raton
