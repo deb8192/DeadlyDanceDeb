@@ -28,7 +28,9 @@ MotorAudioSystem::MotorAudioSystem()
   if(pBank)banks["SFX"] = pBank; //Insertar en el mapa de Bancos
   ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/Ambient.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
   if(pBank)banks["Ambient"] = pBank; //Insertar en el mapa de Bancos
-
+  ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/Dialogos.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
+  if(pBank)banks["Dialogos"] = pBank; //Insertar en el mapa de Bancos
+  
   //Cargar eventos
   LoadEvent("event:/Musica/Musica-situacion estandar n1","Nivel1");
   LoadEvent("event:/Musica/Musica-situacion estandar n2","Nivel2");
@@ -59,6 +61,17 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/SFX/SFX-Objetos Abrir cerradura con llave","AbrirCerradura");
   LoadEvent("event:/Ambientes/Ambiente-Gritos de lamentos","AmbienteGritos");
   LoadEvent("event:/Ambientes/Ambiente-rio de lava","AmbienteLava");
+  
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador debil","MuerteEstasDebil");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador muere","MuerteMueres");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador pasea","MuertePaseas");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Penultima sala","MuertePenultima");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 1","MuerteBienvenida1");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 2","MuerteBienvenida2");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean enemigos","MuerteRespawn1");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean murcis","MuerteRespawn2");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente te persigue arana y murci","MuertePerseguido1");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente te persigue pollo","MuertePerseguido2");
   //LoadEvent("event:/Chicken1","Chicken1");
 
  //***********EJEMPLO DE EJECUCION MUSICA*****************

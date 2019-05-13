@@ -147,6 +147,7 @@ void Jugando::Iniciar()
     cargPuzzles.CargarPuzzlesXml();
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
+    nivelJ = 8;
     #ifdef WEMOTOR
         CargarNivel(nivelJ,tipoJugadorJ);
     #else
@@ -158,12 +159,18 @@ void Jugando::Iniciar()
 
     reiniciando = false;
     puzzleResuelto = false;
+    estarDebil = false;
 
     ValoresPorDefecto();
 
     _motor->CrearCamara();
     _motor->FondoEscena(255,0,0,0);
     _motor->BorrarCargando();
+
+    //si esta puesto el nivel 1 suena la bienvenida del nivel 1, sino del 2
+    nivelJ == 8 ? 
+        _motora->getEvent("MuerteBienvenida1")->start():    
+        _motora->getEvent("MuerteBienvenida2")->start();
 }
 
 void Jugando::ValoresPorDefecto()
@@ -414,6 +421,8 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
+
+  
     bool colisionaWaypoint = false, waypointComun = false, cercaJugador = false;
     _motor->clearDebug();
     short contadorWaypoints = 0, contadorEnemigos = 0, i = 0;
@@ -824,6 +833,21 @@ void Jugando::Update()
 */
 void Jugando::UpdateIA()
 {
+    if(_jugador->getVida() <= 30)
+    {   
+        if(!estarDebil) 
+        {
+            _motora->getEvent("MuerteEstasDebil")->start();   
+        }
+        
+        estarDebil = true;
+        cout << "estar debil: " << estarDebil << endl;
+    }
+    else
+    {
+        estarDebil = false;
+        _motora->getEvent("MuerteEstasDebil")->stop();
+    }
     Constantes constantes;
     bool cercaJugador = false;
     /* *********** Teclas para probar cosas *************** */
@@ -2055,7 +2079,7 @@ void Jugando::activarPowerUp()
 }
 
 void Jugando::updateAt(int* danyo)
-{
+{    
     float tiempoActual = 0.0f;
     float tiempoAtaque = 0.0f;
 
