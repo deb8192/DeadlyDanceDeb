@@ -2,13 +2,13 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{4ab251ec-faed-441a-82d9-6e81752328bc}">
         <property name="name">
-            <value>SFX-Muerte Omnipresente respawnean murcis</value>
+            <value>Dialogo-Muerte Omnipresente respawnean murcis</value>
         </property>
         <property name="outputFormat">
             <value>1</value>
         </property>
         <relationship name="folder">
-            <destination>{87d4b344-63e5-4ff9-adc5-15dcb714f265}</destination>
+            <destination>{8e219d15-bdb4-4d2f-a9b7-c35bf77e006e}</destination>
         </relationship>
         <relationship name="mixer">
             <destination>{9235d0da-da58-40fd-83df-0c7229ebf0c9}</destination>
@@ -32,7 +32,7 @@
             <destination>{1ce92146-3023-44d7-8838-1023dd359a0e}</destination>
         </relationship>
         <relationship name="banks">
-            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
+            <destination>{79972f92-780a-4f22-92dc-e5a251eb28a4}</destination>
         </relationship>
     </object>
     <object class="EventMixer" id="{9235d0da-da58-40fd-83df-0c7229ebf0c9}">

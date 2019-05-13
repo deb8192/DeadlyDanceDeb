@@ -2,13 +2,13 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{cf854347-1fc0-48f1-847b-b475bec8594e}">
         <property name="name">
-            <value>SFX-Boss Travornio ataque especial2</value>
+            <value>Dialogo-Boss Travornio ataque especial2</value>
         </property>
         <property name="outputFormat">
             <value>2</value>
         </property>
         <relationship name="folder">
-            <destination>{87d4b344-63e5-4ff9-adc5-15dcb714f265}</destination>
+            <destination>{8e219d15-bdb4-4d2f-a9b7-c35bf77e006e}</destination>
         </relationship>
         <relationship name="mixer">
             <destination>{a0d3d31b-3ea2-4a2e-b5c0-825ab6a2e6e5}</destination>
@@ -32,7 +32,7 @@
             <destination>{9733b41f-3066-42a2-9779-1c23bfab9c57}</destination>
         </relationship>
         <relationship name="banks">
-            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
+            <destination>{79972f92-780a-4f22-92dc-e5a251eb28a4}</destination>
         </relationship>
     </object>
     <object class="EventMixer" id="{a0d3d31b-3ea2-4a2e-b5c0-825ab6a2e6e5}">

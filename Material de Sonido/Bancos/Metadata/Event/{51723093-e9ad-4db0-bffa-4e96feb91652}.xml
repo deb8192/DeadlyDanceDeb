@@ -2,13 +2,13 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{51723093-e9ad-4db0-bffa-4e96feb91652}">
         <property name="name">
-            <value>SFX-Boss Travornio tiene vida vs bailarina</value>
+            <value>Dialogo-Boss Travornio tiene vida vs bailarina</value>
         </property>
         <property name="outputFormat">
             <value>2</value>
         </property>
         <relationship name="folder">
-            <destination>{87d4b344-63e5-4ff9-adc5-15dcb714f265}</destination>
+            <destination>{8e219d15-bdb4-4d2f-a9b7-c35bf77e006e}</destination>
         </relationship>
         <relationship name="mixer">
             <destination>{5430c356-a68f-422d-9f84-6e3a5297da5b}</destination>
@@ -32,7 +32,7 @@
             <destination>{98e33dde-8fe5-4fd3-9a63-54cbd8573b0b}</destination>
         </relationship>
         <relationship name="banks">
-            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
+            <destination>{79972f92-780a-4f22-92dc-e5a251eb28a4}</destination>
         </relationship>
     </object>
     <object class="EventMixer" id="{5430c356-a68f-422d-9f84-6e3a5297da5b}">

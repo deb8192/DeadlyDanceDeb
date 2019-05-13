@@ -2,13 +2,13 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{a7191a4e-8612-496f-9b30-16525235c551}">
         <property name="name">
-            <value>SFX-Boss Travornio invoca</value>
+            <value>Dialogo-Boss Travornio invoca</value>
         </property>
         <property name="outputFormat">
             <value>2</value>
         </property>
         <relationship name="folder">
-            <destination>{87d4b344-63e5-4ff9-adc5-15dcb714f265}</destination>
+            <destination>{8e219d15-bdb4-4d2f-a9b7-c35bf77e006e}</destination>
         </relationship>
         <relationship name="mixer">
             <destination>{2fe9f2e2-9b32-4d16-9e53-9f1b48b71d52}</destination>
@@ -32,7 +32,7 @@
             <destination>{85050bc9-361f-485c-bc76-1ec9467b98b3}</destination>
         </relationship>
         <relationship name="banks">
-            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
+            <destination>{79972f92-780a-4f22-92dc-e5a251eb28a4}</destination>
         </relationship>
     </object>
     <object class="EventMixer" id="{2fe9f2e2-9b32-4d16-9e53-9f1b48b71d52}">

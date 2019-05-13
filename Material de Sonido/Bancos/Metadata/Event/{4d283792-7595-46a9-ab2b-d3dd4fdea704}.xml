@@ -2,13 +2,13 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{4d283792-7595-46a9-ab2b-d3dd4fdea704}">
         <property name="name">
-            <value>SFX-Muerte Omnipresente te persigue arana y murci</value>
+            <value>Dialogo-Muerte Omnipresente te persigue arana y murci</value>
         </property>
         <property name="outputFormat">
             <value>1</value>
         </property>
         <relationship name="folder">
-            <destination>{87d4b344-63e5-4ff9-adc5-15dcb714f265}</destination>
+            <destination>{8e219d15-bdb4-4d2f-a9b7-c35bf77e006e}</destination>
         </relationship>
         <relationship name="mixer">
             <destination>{73035700-7940-4519-91b3-53d2b68559bd}</destination>
@@ -32,7 +32,7 @@
             <destination>{248a50d0-7aaa-4aef-ab7f-63cc1f377310}</destination>
         </relationship>
         <relationship name="banks">
-            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
+            <destination>{79972f92-780a-4f22-92dc-e5a251eb28a4}</destination>
         </relationship>
     </object>
     <object class="EventMixer" id="{73035700-7940-4519-91b3-53d2b68559bd}">

@@ -2,13 +2,13 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{6c6fa511-72e5-45de-8aec-6f790a498e51}">
         <property name="name">
-            <value>SFX-Boss Muerte ataca</value>
+            <value>Dialogo-Boss Muerte ataca</value>
         </property>
         <property name="outputFormat">
             <value>2</value>
         </property>
         <relationship name="folder">
-            <destination>{87d4b344-63e5-4ff9-adc5-15dcb714f265}</destination>
+            <destination>{8e219d15-bdb4-4d2f-a9b7-c35bf77e006e}</destination>
         </relationship>
         <relationship name="mixer">
             <destination>{00a5ae86-3468-4884-8bbb-2e3a4abab51b}</destination>
@@ -32,7 +32,7 @@
             <destination>{4184b259-fbb2-4fe0-ab92-38e21f075947}</destination>
         </relationship>
         <relationship name="banks">
-            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
+            <destination>{79972f92-780a-4f22-92dc-e5a251eb28a4}</destination>
         </relationship>
     </object>
     <object class="EventMixer" id="{00a5ae86-3468-4884-8bbb-2e3a4abab51b}">
@@ -192,10 +192,28 @@
     <object class="MixerBusEffectChain" id="{fb86ac5a-02f4-4c4d-a435-a760a25f76c7}">
         <relationship name="effects">
             <destination>{b1e12adf-4af8-45a2-8b90-cf902ed1e29b}</destination>
+            <destination>{3aff393e-e8da-47c1-9e19-134d120f9218}</destination>
         </relationship>
     </object>
     <object class="MixerBusPanner" id="{f587cd84-ce7c-4485-be2c-7d2f9493b919}"/>
     <object class="MixerBusFader" id="{81f6c007-c2a4-44cd-a36d-e9aed3a356bf}"/>
     <object class="SpatialiserEffect" id="{74e7c81f-0859-48f7-87ea-ec448991f84d}"/>
     <object class="MixerBusFader" id="{b1e12adf-4af8-45a2-8b90-cf902ed1e29b}"/>
+    <object class="SFXReverbEffect" id="{3aff393e-e8da-47c1-9e19-134d120f9218}">
+        <property name="decayTime">
+            <value>1600</value>
+        </property>
+        <property name="lateDelay">
+            <value>74</value>
+        </property>
+        <property name="HFDecayRatio">
+            <value>75</value>
+        </property>
+        <property name="lowShelfGain">
+            <value>0.5</value>
+        </property>
+        <property name="wetLevel">
+            <value>-18.5</value>
+        </property>
+    </object>
 </objects>

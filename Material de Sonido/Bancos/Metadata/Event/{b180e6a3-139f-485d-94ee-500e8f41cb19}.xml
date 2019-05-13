@@ -2,13 +2,13 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{b180e6a3-139f-485d-94ee-500e8f41cb19}">
         <property name="name">
-            <value>SFX-Boss Muerte tiene vida</value>
+            <value>Dialogo-Boss Muerte tiene vida</value>
         </property>
         <property name="outputFormat">
             <value>2</value>
         </property>
         <relationship name="folder">
-            <destination>{87d4b344-63e5-4ff9-adc5-15dcb714f265}</destination>
+            <destination>{8e219d15-bdb4-4d2f-a9b7-c35bf77e006e}</destination>
         </relationship>
         <relationship name="mixer">
             <destination>{a0f2324f-5d14-437d-9acc-3bf524ec4038}</destination>
@@ -32,7 +32,7 @@
             <destination>{bfa28537-7ab5-47bc-a271-30a6d93a113a}</destination>
         </relationship>
         <relationship name="banks">
-            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
+            <destination>{79972f92-780a-4f22-92dc-e5a251eb28a4}</destination>
         </relationship>
     </object>
     <object class="EventMixer" id="{a0f2324f-5d14-437d-9acc-3bf524ec4038}">
