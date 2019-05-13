@@ -98,6 +98,7 @@ $(BEGIN2):
 	$(MAKE) $(BEGIN)
 # Aqui es donde se hace la magia y se unifican las clases en una sola, basicamente se le pasa las clases de objeto (.o) para unificarlas
 $(BEGIN):
+	@if [ ! -f librerias/ffmpeg/lib/libavcodec.a ] ; then cd librerias/ffmpeg/lib/ ; ./DescomprimirLibrerias.sh ; fi
 	@echo -e '\e[45m Paso 1 Revision Libreria Grafica \e[0m';
 	$(MAKE) $(LG)
 	@echo -e '\e[45m Paso 2 Precauciones \e[0m';
