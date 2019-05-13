@@ -15,6 +15,7 @@ class TMalla : public TEntidad
         float actual_time;
         bool bucle;//si esta activo esta en bucle si esta desactivado no esta en bucle, por defecto es true
         float transparente;
+        bool render = true; //Dibujado de render o de profundidad
     public:
         // Constructor y destructor
         TMalla(int ft);
@@ -39,6 +40,7 @@ class TMalla : public TEntidad
         void setColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
         void setTexture(const char * _ruta);
         void setTransparencia(float t); //Aplicar transparencia
+        void setRender(bool r);
 };
 
 #endif

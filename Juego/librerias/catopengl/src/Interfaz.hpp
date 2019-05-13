@@ -43,6 +43,8 @@ class Interfaz
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
+        void DrawProfundidad(); //pintamos las mallas con profundidad
+
         void RemoveObject(unsigned short);//remueve objeto de la escena
 
         void Trasladar(unsigned short,float,float,float);//trasladar
@@ -152,12 +154,13 @@ class Interfaz
 
 
     private:
-
+        unsigned int depthMapFBO;
+        unsigned int depthMap;
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
         Ventana * window;// instancia que contiene la clase que se encarga de gestionar las ventanas y las teclas / raton
 
-        Shader * shaders[7];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[8];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 

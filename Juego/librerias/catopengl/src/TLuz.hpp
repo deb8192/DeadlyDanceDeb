@@ -19,6 +19,7 @@ class TLuz : public TEntidad
         int tipo_anim = 0;
         int animaescala = 0;
         bool cambiaranima = false;
+        glm::vec3 posicion;
 
     public:
 

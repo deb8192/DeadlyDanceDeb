@@ -49,10 +49,27 @@ float TLuz::getIntensidad()
 
 void TLuz::beginDraw()
 {
+    if(tipo_luz == 0)
+    {
+        // 1. render depth of scene to texture (from light's perspective)
+        // --------------------------------------------------------------
+        glm::mat4 lightProjection, lightView;
+        glm::mat4 lightSpaceMatrix;
+        float near_plane = 1.0f, far_plane = 500.0f;
+        //lightProjection = glm::perspective(glm::radians(45.0f), (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT, near_plane, far_plane); // note that if you use a perspective projection matrix you'll have to change the light position as the current light position isn't enough to reflect the whole scene
+        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+        lightView = glm::lookAt(glm::vec3(-2.0f, 4.0f, -1.0f), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+        lightSpaceMatrix = lightProjection * lightView;
+        // render scene from light's point of view
+        shader2->Use();
+        shader2->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+
+        shader->Use();
+        shader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+    }
     //comprobamos que la cola o pila no haya tenido cambios, si los tiene se vuelve a calcular
     if(matriz_compartida == nullptr)
     {
-        glm::vec3 posicion;
         glm::mat4 rotacion;
         glm::mat4 * _matriz_resultado = nullptr;
         std::queue<glm::mat4 *> * cola_compartidaAuxiliar = new std::queue<glm::mat4 *>; //creamos una cola nueva para ir encolando  los elementos que desencolamos de la cola compartida(se aplicaria parecido con una pila)
