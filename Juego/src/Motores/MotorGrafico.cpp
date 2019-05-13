@@ -1360,7 +1360,7 @@ void MotorGrafico::CargarLuzEnSala(int sala,int x,int y,int z)
 }
 
 
-void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura)
+void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss)
 {
     #ifdef WEMOTOR
 
@@ -1372,9 +1372,17 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
         if(enemigo != 0)
         {
             _interfaz->Trasladar(enemigo,(float)x,(float)y,(float)z);
-            Enemigos_Scena.push_back(enemigo);
+            if(boss)
+            {
+                Enemigos_Scena.insert(Enemigos_Scena.begin(), enemigo);
+            }
+            else
+            {
+                Enemigos_Scena.push_back(enemigo);
+            }
 
             //Crear billboard
+            //TO DO esteo hay que mirar que va bien para el BOSS que se posiciona el primero en el array de enemigos
             unsigned short _board = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/4.png", 0.01f);
             _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+10.0f,(float)z);
             _interfaz->Escalar(_board,2.0f,0.15f,1.75f);
@@ -2640,16 +2648,17 @@ void MotorGrafico::EraseEnemigo(std::size_t i)
 }
 
 //Cuando se activa el boss se vacia el vector de enemigos del motor grafico
-void MotorGrafico::EraseTodosEnemigos(std::size_t i)
+void MotorGrafico::EraseTodosEnemigos()
 {
     Constantes constantes;
-    unsigned int valor = i;
+    unsigned int valor = 0;
     #ifdef WEMOTOR
         //codigo motor catopengl
 
         if(valor >= 0 && valor < Enemigos_Scena.size())
         {
             _interfaz->RemoveObject(Enemigos_Scena[valor]);
+            Enemigos_Scena.erase(Enemigos_Scena.begin());
         }
 
         if(valor >= 0 && valor < BoardsEnem_Scena.size())
@@ -2663,6 +2672,7 @@ void MotorGrafico::EraseTodosEnemigos(std::size_t i)
         {
             Enemigos_Scena[valor]->setVisible(false);
             Enemigos_Scena[valor]->remove();
+            Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
         }
     #endif
 }
@@ -3960,6 +3970,39 @@ void MotorGrafico::CambiarPosicionImagen(signed int event, float x, float y)
         if( _interfaz)
         {
             _interfaz->CambiarPosicionImagen(event,x,y);
+        }
+    #endif
+}
+
+
+unsigned int MotorGrafico::CrearVideo(const char * _ruta, float x, float y, unsigned int width, unsigned int height)
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+          return _interfaz->CrearVideo(x,y,_ruta,width,height);
+        }
+    #endif
+
+    return 0;
+}
+
+void MotorGrafico::PausarVideo(unsigned int id)
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            
+        }
+    #endif
+}
+
+void MotorGrafico::PlayVideo(unsigned int id)
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            
         }
     #endif
 }

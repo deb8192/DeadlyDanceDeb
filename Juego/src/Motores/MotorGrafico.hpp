@@ -239,7 +239,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarParticulas(int x, int y, int z, int velocidadx, int velocidady, int velocidadz, float escala, unsigned int nparticulas, float localz, float tvida, const char* ruta_textura);
             void CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
             void CargarLuzEnSala(int sala,int x,int y,int z);
-            void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
+            void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
             void CargarCofre(int pos, int rp, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
@@ -291,7 +291,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void EraseCofre(unsigned short idx);
             //void DibujarPared(long unsigned int idx, bool dibujar);
             void EraseEnemigo(std::size_t i);
-            void EraseTodosEnemigos(std::size_t i);
+            void EraseTodosEnemigos();
             void EraseJugador();
             void EraseArma();
             void EraseProyectil();
@@ -364,6 +364,20 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void UpdateBoards(std::vector<unsigned short> boardvect, float x, float y, float z, float d);
             void UpdateBoardsVidaEne(int enem, int vida, int vidamax);
 
+            //funciones para videos
+            /**
+            *@param _ruta es la ruta desde el ejecutable al video 
+            *@param x posicion en anchura  
+            *@param y posicion en altura  
+            *@param width anchura del video
+            *@param height altura del video
+            *@return retorna el id del video creado si no se ha podido crear es 0
+            */
+            unsigned int CrearVideo(const char * _ruta, float x, float y, unsigned int width, unsigned int height);
+            //@param id es el id del video que se quiere pausar
+            void PausarVideo(unsigned int id);
+            //@param id es el id del video que se quiere reproducir
+            void PlayVideo(unsigned int id);
         private: //clases solo accesibles por MotorGrafico
 
             struct SalasLuz

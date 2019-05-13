@@ -21,7 +21,8 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
 
     idCofre = -1;
     sala = salaC;
-    posActiva=0;
+    activada = false;
+    primeraVezActivada = false;
 }
 
 CofreArana::~CofreArana()
@@ -44,7 +45,40 @@ CofreArana::~CofreArana()
 
     idCofre=0;
     sala = nullptr;
-    posActiva=0;
+    activada = false;
+    primeraVezActivada = false;
+}
+
+CofreArana::CofreArana (const CofreArana& copia)
+{
+    funciona = copia.funciona;
+    atacado = copia.atacado;
+    hecho = copia.hecho;
+    _ordenes = new short [constantes.DOS];
+
+    maxRotacion = copia.maxRotacion;
+    rotation = copia.rotation;
+    direccion = copia.direccion;
+
+    _modelo = "assets/models/Cofre/cofreArana.obj";
+    _textura = "assets/texture/cofreArana.png";
+
+    ancho = copia.ancho;
+    largo = copia.largo;
+    alto = copia.alto;
+
+    idCofre = copia.idCofre;
+    sala = copia.sala;
+
+    posMotorCofre = copia.posMotorCofre;
+    posObsCofre = copia.posObsCofre;
+    posArana = copia.posArana;
+
+    activada = copia.activada;
+    primeraVezActivada = copia.primeraVezActivada;
+
+    id = copia.id;
+    //cout << "Entro a hacer copia" <<endl;
 }
 
 /***************** RunIA *****************
@@ -278,17 +312,57 @@ int CofreArana::GetIdCofre()
     return idCofre;
 }
 
+unsigned int CofreArana::GetPosMotorCofre()
+{
+    return posMotorCofre;
+}
+
+unsigned int CofreArana::GetPosObsCofre()
+{
+    return posObsCofre;
+}
+
+unsigned int CofreArana::GetPosArana()
+{
+    return posArana;
+}
+
+bool CofreArana::GetActivada()
+{
+    return activada;
+}
+
+bool CofreArana::GetPrimeraVezActivada()
+{
+    return primeraVezActivada;
+}
+
 void CofreArana::SetIdCofre(int idC)
 {
     idCofre = idC;
 }
 
-unsigned int CofreArana::GetPosActiva()
+void CofreArana::SetPosMotorCofre(unsigned int pos)
 {
-    return posActiva;
+    posMotorCofre = pos;
 }
 
-void CofreArana::SetPosActiva(unsigned int pos)
+void CofreArana::SetPosObsCofre(unsigned int pos)
 {
-    posActiva = pos;
+    posObsCofre = pos;
+}
+
+void CofreArana::SetPosArana(unsigned int pos)
+{
+    posArana = pos;
+}
+
+void CofreArana::SetActivada(bool estado)
+{
+    activada = estado;
+}
+
+void CofreArana::SetPrimeraVezActivada(bool estado)
+{
+    primeraVezActivada = estado;
 }

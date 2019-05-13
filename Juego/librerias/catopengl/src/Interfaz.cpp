@@ -1552,3 +1552,75 @@ void Interfaz::CambiarPosicionImagen(unsigned int event, float x, float y)
         }
     }
 }
+
+//crea un video en la posicion (x,y) de la pantalla, con el width y height que se le pase
+unsigned int Interfaz::CrearVideo(float x, float y, const char * ruta, int width, int height)
+{
+    //std::cout << "SE CREA IMAGEN" << std::endl;
+    if(ventana_inicializada)
+    {
+        ventanaInicializar();
+        ventana_inicializada = false;
+    }
+
+    TNodo * traslacion = new TNodo;
+    TTransform * traslacionEnt = new TTransform;
+    traslacionEnt->trasladar(0,0,0);
+    traslacion->setEntidad(traslacionEnt);
+
+    TNodo * rotacion = new TNodo;
+    TTransform * rotacionEnt = new TTransform;
+    rotacionEnt->rotar(0,0,0);
+    rotacion->setEntidad(rotacionEnt);
+
+    TNodo * escalado = new TNodo;
+    TTransform * escaladoEnt = new TTransform;
+    escaladoEnt->escalar(1,1,1);
+    escalado->setEntidad(escaladoEnt);
+
+    escaladoEnt->EsGui();
+    escaladoEnt->NoEjecutar();
+
+    TNodo * imagen = new TNodo;
+
+    TPlano * imagenEn = nullptr;
+
+    imagenEn = new TPlano(ruta,x,y,shaders[1],window->getWidth(), window->getHeight(),width,height);
+
+    imagen->setEntidad(imagenEn);
+
+    escalado->addHijo(rotacion);
+    rotacion->addHijo(traslacion);
+    traslacion->addHijo(imagen);
+
+    if(_raiz != nullptr)
+    {
+        _raiz->addHijo(escalado);
+
+        unsigned short idnuevo = generarId();
+
+        Nodo * nodo = new Nodo();
+        nodo->id = idnuevo;//se pone el id
+        nodo->recurso = escalado;//se agrega el nodo raiz de este recurso
+        nodo->tipo = 3;
+        nodo->activo = true;
+        banco[idnuevo-1] = nodo;//se agrega a la lista de nodos general
+        imagenes.push_back(nodo);//se agrega a la lista de imagenes
+        return idnuevo;
+    }
+
+    return 0;//fallo no se pudo crear
+}
+
+//Pausa el video del id que le pases
+void Interfaz::PausarVideo(unsigned int id)
+{
+    
+}
+
+//Empieza la reproduccion del id que le pases, o reanuda
+void Interfaz::PlayVideo(unsigned int id)
+{
+
+}
+
