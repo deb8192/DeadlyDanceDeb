@@ -147,6 +147,7 @@ void Jugando::Iniciar()
     cargPuzzles.CargarPuzzlesXml();
 
     //Esto luego se cambia para que se pueda cargar el nivel que se escoja o el de la partida.
+    nivelJ = 8;
     #ifdef WEMOTOR
         CargarNivel(nivelJ,tipoJugadorJ);
     #else
@@ -158,12 +159,18 @@ void Jugando::Iniciar()
 
     reiniciando = false;
     puzzleResuelto = false;
+    estarDebil = false;
 
     ValoresPorDefecto();
 
     _motor->CrearCamara();
     _motor->FondoEscena(255,0,0,0);
     _motor->BorrarCargando();
+
+    //si esta puesto el nivel 1 suena la bienvenida del nivel 1, sino del 2
+    nivelJ == 8 ? 
+        _motora->getEvent("MuerteBienvenida1")->start():    
+        _motora->getEvent("MuerteBienvenida2")->start();
 }
 
 void Jugando::ValoresPorDefecto()
@@ -414,6 +421,8 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
+
+  
     bool colisionaWaypoint = false, waypointComun = false, cercaJugador = false;
     _motor->clearDebug();
     short contadorWaypoints = 0, contadorEnemigos = 0, i = 0;
@@ -867,6 +876,21 @@ void Jugando::Update()
 */
 void Jugando::UpdateIA()
 {
+    if(_jugador->getVida() <= 30)
+    {   
+        if(!estarDebil) 
+        {
+            _motora->getEvent("MuerteEstasDebil")->start();   
+        }
+        
+        estarDebil = true;
+        cout << "estar debil: " << estarDebil << endl;
+    }
+    else
+    {
+        estarDebil = false;
+        _motora->getEvent("MuerteEstasDebil")->stop();
+    }
     Constantes constantes;
     bool cercaJugador = false;
     /* *********** Teclas para probar cosas *************** */
@@ -918,6 +942,11 @@ void Jugando::UpdateIA()
                     }
                     else if (tipoEnemigo == constantes.ARANA)
                     {
+                        CofreArana* _cofA = (CofreArana*)_enemigos[i];
+
+                        delete _cofres.at(_cofA->GetPosMotorCofre());
+                        _cofres.at(_cofA->GetPosMotorCofre())=nullptr;
+
                         AbrirCofre(x,y,z,true);
                     }
                     else if (tipoEnemigo == constantes.BOSS)
@@ -971,6 +1000,49 @@ void Jugando::UpdateIA()
                         }
                     }
                 }
+
+                // Si hay una arana activada y tiene que esconderse
+                if (esconderArana)
+                {
+                    if (_enemigos.at(i)->GetTipoEnemigo() == constantes.ARANA)
+                    {
+                        CofreArana* _eneA = (CofreArana*)_enemigos.at(i);
+
+                        if (_eneA->GetActivada())
+                        {
+                            _eneA->SetActivada(false);
+
+                            if (_eneA->GetPedirAyuda())
+                                enemDejarDePedirAyuda();
+
+                            // TO DO: hacer que se esconda en la zona de cofres
+                            float x = _eneA->getX();
+                            float y = _eneA->getY();
+                            float z = _eneA->getZ();
+
+                            Cofre* _cof = _cofres.at(_eneA->GetPosMotorCofre());
+                            _cof->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
+                            _cof->setNewPosiciones(x,y,z);
+                            _cof->setLastPosiciones(x,y,z);
+                            _cof->ActivarCofre();
+                            _cof = nullptr;
+
+                            //Eliminar sonido
+                            std::string nameid = std::to_string(_eneA->getID()); //pasar id a string
+                            _motora->getEvent(nameid)->stop();
+
+                            // Borrar grafico y fisicas de la arana
+                            _motor->EraseEnemigo(i);
+                            _fisicas->EraseEnemigo(i);
+
+                            // La arana vuelve al array de cofres aranas
+                            _eneA = nullptr;
+                            _enemigos.erase(_enemigos.begin() + i);//begin le suma las posiciones
+
+                            esconderArana = false;
+                        }
+                    }
+                }
             }
         }
     }
@@ -1005,7 +1077,8 @@ void Jugando::Render()
 
     for(unsigned int i = 0; i < _cofres.size(); i++)
     {
-        _cofres.at(i)->Render(updateTime, resta);
+        if (_cofres.at(i) != nullptr)
+            _cofres.at(i)->Render(updateTime, resta);
     }
     //*******************************************************************
     //BILLBOARD RECOGER ARMAS
@@ -1310,6 +1383,11 @@ void Jugando::CrearJugador()
 
     _motor->CargarArmaEspecial(_jugador->getX(),_jugador->getY(),
         _jugador->getZ(), _jugador->getRutaArmaEsp(),_jugador->getRutaTexturaArmaEsp());
+
+    //Cargar sistema de particulas para el jugador
+    _motor->CargarParticulasAccion(_jugador->getX(),_jugador->getY(),_jugador->getZ(),0,10,0, 1.0f, 30, 5.0f, 1.0f, "assets/images/CuraVidaParticle.png");
+    _motor->CargarParticulasAccion(_jugador->getX(),_jugador->getY(),_jugador->getZ(),0,10,0, 1.0f, 30, 5.0f, 1.0f, "assets/images/CuraEnergParticle.png");
+    _motor->CargarParticulasAccion(_jugador->getX(),_jugador->getY(),_jugador->getZ(),0,10,0, 1.0f, 30, 5.0f, 1.0f, "assets/images/DineroParticle.png");
 
 }
 
@@ -1819,6 +1897,7 @@ void Jugando::RecogerArma(int rec_col)
         nuRec = nullptr;
     }
     atacktime = 0.0f; //Reiniciar tiempo de ataques
+    _motora->getEvent("Recoger")->start();
 }
 
 void Jugando::DejarObjeto()
@@ -1843,6 +1922,7 @@ void Jugando::DejarObjeto()
         nuRec->SetPosicionArrayObjetos(posicionObjeto);
         _reco_armas.push_back(nuRec);
         nuRec = nullptr;
+        _motora->getEvent("Soltar")->start();
     }
 }
 
@@ -2012,18 +2092,21 @@ void Jugando::activarPowerUp()
         {
             //cout << "PowerUP Vida! TOTAL:" << _jugador->getVida() << endl;
             _jugador->ModificarVida(_powerup.at(int_cpw)->getCantidad());
+            _motor->IniciarParticulasAccion(0,_jugador->getX()+1.0f,_jugador->getY()+2.0f,_jugador->getZ(),0.5f);
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ENERGIA /*&& _jugador->getBarraAtEs() < 100*/)
         {
             //cout << "PowerUP Energia! TOTAL:" << _jugador->getBarraAtEs() << endl;
            _jugador->ModificarBarraAtEs(_powerup.at(int_cpw)->getCantidad());
+           _motor->IniciarParticulasAccion(1,_jugador->getX()+1.0f,_jugador->getY()+2.0f,_jugador->getZ(),0.5f);
             locoges = true;
         }
         else if(_powerup.at(int_cpw)->GetTipoObjeto() == constantes.ORO)
         {
             //cout << "Recoges " << _powerup.at(int_cpw)->getCantidad() << " de oro" << endl;
             _jugador->ModificarDinero(_powerup.at(int_cpw)->getCantidad());
+            _motor->IniciarParticulasAccion(2,_jugador->getX()+1.0f,_jugador->getY()+2.0f,_jugador->getZ(),0.5f);
             locoges = true;
         }
 
@@ -2039,7 +2122,7 @@ void Jugando::activarPowerUp()
 }
 
 void Jugando::updateAt(int* danyo)
-{
+{    
     float tiempoActual = 0.0f;
     float tiempoAtaque = 0.0f;
 
@@ -2303,7 +2386,7 @@ void Jugando::CrearEnemigoArana()
     _motora->getEvent(nameid)->setVolume(0.5f);
     _motora->getEvent(nameid)->start();
 
-    _enemigos.push_back(move(_eneA));
+    _enemigos.push_back(_eneA);
     _eneA = nullptr;
 
     _cofreP->BorrarCofre();

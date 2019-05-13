@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="AudioFile" id="{2919ad13-c689-476c-8a9b-84a6ad65fcaa}">
         <property name="assetPath">
-            <value>GuitarraGolpe.mp3</value>
+            <value>SFX/GuitarraGolpe.mp3</value>
         </property>
         <property name="frequencyInKHz">
             <value>44.0999985</value>

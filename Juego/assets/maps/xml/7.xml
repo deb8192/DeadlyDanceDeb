@@ -5,16 +5,16 @@
 	<!-- Tenemos 19/35 enemigos -->
 
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
-	<Light Type="Ambiental" Tipo="0" Intensity="50" X="0" Y="10" Z="0" colorR="128" colorG="44" colorB="32"> </Light>
+	<Light Type="Ambiental" Tipo="0" Intensity="50" X="0" Y="10" Z="0" colorR="128" colorG="44" colorB="32" Animacion="0"> </Light>
 	<!--8 luces puntuales-->
-	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31"> </Light>
-	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31"> </Light>
-	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31"> </Light>
-	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31"> </Light>
-	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31"> </Light>
-	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31"> </Light>
-	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31"> </Light>
-	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31"> </Light>
+	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31" Animacion="1"> </Light>
+	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31" Animacion="1"> </Light>
+	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31" Animacion="1"> </Light>
+	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31" Animacion="1"> </Light>
+	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31" Animacion="1"> </Light>
+	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31" Animacion="1"> </Light>
+	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31" Animacion="1"> </Light>
+	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="255" colorG="147" colorB="31" Animacion="1"> </Light>
 	<Particles X="-71" Y="10" Z="0" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" size="7" Texture="assets/images/fireparticle.png"> </Particles>
 	<Particles X="-7" Y="10" Z="19" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" size="7" Texture="assets/images/fireparticle.png"> </Particles>
 	<Particles X="-8" Y="10" Z="-19" VX="0" VY="10" VZ="0" nPart="50" LZ="1" vida="1" size="7" Texture="assets/images/fireparticle.png"> </Particles>

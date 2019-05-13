@@ -28,7 +28,9 @@ MotorAudioSystem::MotorAudioSystem()
   if(pBank)banks["SFX"] = pBank; //Insertar en el mapa de Bancos
   ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/Ambient.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
   if(pBank)banks["Ambient"] = pBank; //Insertar en el mapa de Bancos
-
+  ERRCHECK(pstudioSystem->loadBankFile("assets/sounds/Dialogos.bank", FMOD_STUDIO_LOAD_BANK_NORMAL, &pBank));
+  if(pBank)banks["Dialogos"] = pBank; //Insertar en el mapa de Bancos
+  
   //Cargar eventos
   LoadEvent("event:/Musica/Musica-situacion estandar n1","Nivel1");
   LoadEvent("event:/Musica/Musica-situacion estandar n2","Nivel2");
@@ -36,6 +38,17 @@ MotorAudioSystem::MotorAudioSystem()
 
   LoadEvent("event:/SFX/SFX-Personaje Arpa golpea","Arpa");
   LoadEvent("event:/SFX/SFX-Arma flauta","Flauta");
+  LoadEvent("event:/SFX/SFX-ruido coger objeto","Recoger");
+  LoadEvent("event:/SFX/SFX-ruido dejar objeto","Soltar");
+   LoadEvent("event:/SFX/SFX-Victoria en el puzzle","VictoriaPuzzle");
+   LoadEvent("event:/SFX/SFX-Aparece puzzle en pantalla","AparecePuzzle");//error al cambiar estado
+   LoadEvent("event:/SFX/SFX-Derrota en el puzzle","DerrotaPuzzle");
+   LoadEvent("event:/SFX/SFX-Movimiento de piezas puzzle","MoverPieza");
+   LoadEvent("event:/SFX/SFX-Boss derrotado","BossDerrota");
+   LoadEvent("event:/SFX/SFX-Jugador derrotado","JugadorDerrota");//error al cambiar estado
+   LoadEvent("event:/SFX/SFX-Dialogo tipo1","Dialogo1");//error al cambiar estado
+   LoadEvent("event:/SFX/SFX-Dialogo tipo2","Dialogo2");
+   LoadEvent("event:/SFX/SFX-Guardian sorpresa al encontrarlo","GuardianVisto");
   LoadEvent("event:/SFX/SFX-Personaje cabezazo del heavy","SinArma");
   LoadEvent("event:/SFX/SFX-Personaje Guitarra golpea","GolpeGuitarra");
   LoadEvent("event:/SFX/SFX-Personaje Guitarra Especial","GuitarraEspecial");
@@ -48,6 +61,17 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/SFX/SFX-Objetos Abrir cerradura con llave","AbrirCerradura");
   LoadEvent("event:/Ambientes/Ambiente-Gritos de lamentos","AmbienteGritos");
   LoadEvent("event:/Ambientes/Ambiente-rio de lava","AmbienteLava");
+  
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador debil","MuerteEstasDebil");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador muere","MuerteMueres");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador pasea","MuertePaseas");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Penultima sala","MuertePenultima");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 1","MuerteBienvenida1");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 2","MuerteBienvenida2");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean enemigos","MuerteRespawn1");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean murcis","MuerteRespawn2");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente te persigue arana y murci","MuertePerseguido1");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente te persigue pollo","MuertePerseguido2");
   //LoadEvent("event:/Chicken1","Chicken1");
 
  //***********EJEMPLO DE EJECUCION MUSICA*****************

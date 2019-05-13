@@ -29,7 +29,7 @@ class Interfaz
 
         unsigned short AddCamara();//creamos una camara
 
-        unsigned short AddLuz(int);//creamos una luz
+        unsigned short AddLuz(int,int);//creamos una luz
 
         unsigned short AddMalla(const char *,int initf,int shader);//creamos una malla
 
@@ -115,7 +115,7 @@ class Interfaz
 
         void DetenerSistema(unsigned short part); //Detener sistema de particulas
 
-        void IniciarSistema(unsigned short part); //Iniciar sistema de particulas
+        void IniciarSistema(unsigned short part, float time); //Iniciar sistema de particulas
 
         void DistanciaLuz(unsigned short luz, float d); //Aplica una distancia a la luz
 

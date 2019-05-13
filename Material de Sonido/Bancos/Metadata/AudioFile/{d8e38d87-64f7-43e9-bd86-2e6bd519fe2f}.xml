@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{d8e38d87-64f7-43e9-bd86-2e6bd519fe2f}">
+        <property name="assetPath">
+            <value>Dialogo/Travornio/9.1 no siento las piernas variante.wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>2.708344671201814</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{a3dec2ad-2df2-4dd6-8baa-312f2925055e}</destination>
+        </relationship>
+    </object>
+</objects>

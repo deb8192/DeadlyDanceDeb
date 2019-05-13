@@ -38,6 +38,7 @@ Cofre::Cofre(int id, unsigned int posMotorG, unsigned int posObs,
     esArana = true;
     _estoy = sala;
     posArrayArana = posArana;
+    posObstaculos = posObs;
     ancho = 2;
     largo = 4;
     alto = 4;
@@ -106,6 +107,25 @@ void Cofre::BorrarCofre()
     _fisicas->EraseCofre(posicionArrayObjetos, posObstaculos);
     _fisicas = nullptr;
     _motor->EraseCofre(posicionArrayObjetos);
+}
+
+void Cofre::ActivarCofre()
+{
+    // TO DO: Animacion de cofre cerrandose y sonido de cerrarse
+
+    accionado = !accionado;
+    _motor->CargarCofre(posicionArrayObjetos,0,
+        posActual.x,posActual.y,posActual.z,
+        _modelo, _textura);
+    
+    MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _fisicas->EraseCofre(posicionArrayObjetos, posObstaculos);
+    _fisicas = nullptr;
+    _motor->EraseCofre(posicionArrayObjetos);
+    _fisicas->CargarCofre(posicionArrayObjetos,posObstaculos,
+        posActual.x/2,posActual.y/2,posActual.z/2,
+        ancho,alto,largo,0,0);
+    _fisicas = nullptr;
 }
 
 

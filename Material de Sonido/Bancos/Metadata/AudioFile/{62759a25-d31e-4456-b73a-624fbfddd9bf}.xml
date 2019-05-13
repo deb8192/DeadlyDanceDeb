@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{62759a25-d31e-4456-b73a-624fbfddd9bf}">
+        <property name="assetPath">
+            <value>SFX/MurcielagoEnfadado1.ogg</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>1</value>
+        </property>
+        <property name="length">
+            <value>0.54891156462585033</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{a3dec2ad-2df2-4dd6-8baa-312f2925055e}</destination>
+        </relationship>
+    </object>
+</objects>

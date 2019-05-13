@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{2b3200cb-b8eb-4c2a-a7f4-d45eab5e6f8e}">
+        <property name="assetPath">
+            <value>Dialogo/La Muerte/2.4 esto es la caña.wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>1.5815873015873017</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{a3dec2ad-2df2-4dd6-8baa-312f2925055e}</destination>
+        </relationship>
+    </object>
+</objects>

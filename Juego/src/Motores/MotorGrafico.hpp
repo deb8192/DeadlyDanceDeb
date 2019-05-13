@@ -235,8 +235,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             //cargadores de objetos
             int CargarPlataformas(int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura);//carga el objeto en scena lo mete en el array
-            void CargarLuces(int x,int y,int z,int r,int g,int b,int tipo = 0,float dist = 50.0f);
+            void CargarLuces(int x,int y,int z,int r,int g,int b,int tipo = 0,float dist = 50.0f,int anim = 0);
             void CargarParticulas(int x, int y, int z, int velocidadx, int velocidady, int velocidadz, float escala, unsigned int nparticulas, float localz, float tvida, const char* ruta_textura);
+            void CargarParticulasAccion(int x, int y, int z, int velocidadx, int velocidady, int velocidadz, float escala, unsigned int nparticulas, float localz, float tvida, const char* ruta_textura);
+            void IniciarParticulasAccion(unsigned short i, float x, float y, float z, float time);
             void CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
             void CargarLuzEnSala(int sala,int x,int y,int z);
             void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss);
@@ -410,7 +412,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> BoardsArmas_Scena;//contiene los billboards de armas reservados (ids)
                 std::vector<unsigned short> BoardsEnem_Scena;//contiene los billboards de enemigos reservados
                 std::vector<unsigned short> Particulas_Scena; //contiene los sistemas de particulas de la escena
-
+                std::vector<unsigned short> Particulas_Accion; //consitne los sistemas de particulas de acciones especificas
                 std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
                 std::vector<unsigned short> RecoArmas_Scena;//contiene los recolectables reservados (ids)
                 std::vector<unsigned short> Llaves_Scena;

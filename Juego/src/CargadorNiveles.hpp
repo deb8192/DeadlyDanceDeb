@@ -70,7 +70,7 @@ class CargadorNiveles
         void ReservarMemoriaVectores(int eneMax, int doorsMax, int leversMax, int chestsMax, int waypointsMax, int zonesMax);
         void BorrarVectorEnemigosBossActivado();
         Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
-        void CrearLuz(int x,int y,int z,int tipo,float dist,int r, int g, int b);
+        void CrearLuz(int x,int y,int z,int tipo,float dist,int r, int g, int b, int anim);
         void CrearSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
         void CrearLuzEnSala(int sala,int x,int y,int z);
         void CrearSistemaDeParticulas(int x,int y,int z,int vx,int vy,int vz,int npart,float localz,float vida,float size, const char* textura);

@@ -174,7 +174,8 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
         int b = hijo.attribute("colorB").as_int();//nos devuelve un int
         int tipo = hijo.attribute("Tipo").as_int();
         float intensidad = (float)hijo.attribute("Intensity").as_int();
-        CrearLuz(x,y,z,tipo,intensidad,r,g,b); //cargamos el objeto
+        int anim = hijo.attribute("Animacion").as_int();
+        CrearLuz(x,y,z,tipo,intensidad,r,g,b,anim); //cargamos el objeto
     }
 
     for (pugi::xml_node hijo = doc.child("Level").child("LightSala"); hijo; hijo = hijo.next_sibling("LightSala"))//esto nos devuelve todos los hijos que esten al nivel del anterior
@@ -619,9 +620,9 @@ Sala* CargadorNiveles::CrearPlataforma(int accion, int rp, int x,int y,int z, in
     return _sala;
 }
 
-void CargadorNiveles::CrearLuz(int x,int y,int z,int tipo,float dist, int r, int g, int b)
+void CargadorNiveles::CrearLuz(int x,int y,int z,int tipo,float dist, int r, int g, int b, int anim)
 {
-    _motor->CargarLuces(x,y,z,r,g,b,tipo,dist);
+    _motor->CargarLuces(x,y,z,r,g,b,tipo,dist,anim);
 }
 
 void CargadorNiveles::CrearSalaLuz(int sala,int minz,int maxz,int minx,int maxx)
@@ -948,7 +949,7 @@ unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     _eneA->setVelocidadMaxima(1.5f);
     _eneA->setBarraAtEs(0);
     _eneA->setAtaque(10);
-    _eneA->setArmaEspecial(100);
+    _eneA->setArmaEspecial(0);
     _eneA->setTimeAtEsp(0.0f);
     _eneA->setDanyoCritico(50);
     _eneA->setProAtaCritico(10);
@@ -964,7 +965,7 @@ unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     _eneA->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _eneA->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _eneA->definirSala(sala);//le pasamos la sala en donde esta
-
+    
     //_motor->CargarEnemigos(0,0,0,_eneA->GetModelo());//creamos la figura
     _eneCofres.push_back(move(_eneA));//guardamos el enemigo en el vector
     _eneA = nullptr;

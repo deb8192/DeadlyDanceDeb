@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{3e78d864-66c4-4232-b98f-f851aff8e7f0}">
+        <property name="assetPath">
+            <value>Dialogo/La Muerte/1.3 ya te sabes el resto.wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>2.8880272108843537</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{a3dec2ad-2df2-4dd6-8baa-312f2925055e}</destination>
+        </relationship>
+    </object>
+</objects>

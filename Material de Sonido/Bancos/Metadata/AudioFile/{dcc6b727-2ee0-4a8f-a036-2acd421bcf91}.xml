@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{dcc6b727-2ee0-4a8f-a036-2acd421bcf91}">
+        <property name="assetPath">
+            <value>SFX/SFX-Araña grito enemigo-sonido de araña - Trimmed (2).wav</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>16</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>1.1999375000000001</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{a3dec2ad-2df2-4dd6-8baa-312f2925055e}</destination>
+        </relationship>
+    </object>
+</objects>

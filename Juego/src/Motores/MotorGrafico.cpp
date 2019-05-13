@@ -118,6 +118,7 @@ void MotorGrafico::LimpiarElementosJuego()
         Objetos_Debug.clear();
         Objetos_Debug2.clear();
         Particulas_Scena.clear();
+        Particulas_Accion.clear();
         Luces_Scena.clear();
         Salas_luz.clear();
         BoardsArmas_Scena.clear();
@@ -1280,12 +1281,12 @@ int MotorGrafico::CargarPlataformas(int rp, int x,int y,int z, int ancho, int la
     #endif
 }
 
-void MotorGrafico::CargarLuces(int x,int y,int z,int r,int g,int b,int tipo,float dist)
+void MotorGrafico::CargarLuces(int x,int y,int z,int r,int g,int b,int tipo,float dist,int anim)
 {
     #ifdef WEMOTOR
 
         //codigo motor catopengl
-        unsigned short luz = _interfaz->AddLuz(tipo);//instanciamos el objeto y lo agregamos a la escena
+        unsigned short luz = _interfaz->AddLuz(tipo,anim);//instanciamos el objeto y lo agregamos a la escena
         if(luz != 0 && tipo == 1)
         {
             _interfaz->Trasladar(luz,(float)x,(float)y,(float)z);//movemos el objeto
@@ -1340,6 +1341,22 @@ void MotorGrafico::CargarParticulas(int x, int y, int z, int velocidadx, int vel
     _interfaz->Trasladar(particulas,(float)x,(float)y,(float)z);
     _interfaz->DeshabilitarObjeto(particulas);
     Particulas_Scena.push_back(particulas);
+}
+
+void MotorGrafico::CargarParticulasAccion(int x, int y, int z, int velocidadx, int velocidady, int velocidadz, float escala, unsigned int nparticulas, float localz, float tvida, const char* ruta_textura)
+{
+    //Crea el sistema de particulas
+    unsigned short particulas = _interfaz->AddParticles((float)velocidadx,(float)velocidady,(float)velocidadz,nparticulas,localz,tvida,ruta_textura);
+    _interfaz->Escalar(particulas,escala,escala,escala);
+    _interfaz->Trasladar(particulas,(float)x,(float)y,(float)z);
+    _interfaz->DetenerSistema(particulas);
+    Particulas_Accion.push_back(particulas);
+}
+
+void MotorGrafico::IniciarParticulasAccion(unsigned short i, float x, float y, float z, float time)
+{
+    _interfaz->Trasladar(Particulas_Accion[i],x,y+5.0f,z);
+    _interfaz->IniciarSistema(Particulas_Accion[i],time);
 }
 
 void MotorGrafico::CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx)
@@ -2115,10 +2132,13 @@ void MotorGrafico::UpdateBoards(std::vector<unsigned short> boardvect, float x, 
 
 void MotorGrafico::UpdateBoardsVidaEne(int enem, int vida, int vidamax)
 {
-    if(BoardsEnem_Scena[enem])
+    if(BoardsEnem_Scena.size()>0)
     {
-        float v = ((float)vida * 2.0f)/vidamax;
-        _interfaz->Escalar(BoardsEnem_Scena[enem],v,0.15f,1.75f);
+        if(BoardsEnem_Scena[enem])
+        {
+            float v = ((float)vida * 2.0f)/vidamax;
+            _interfaz->Escalar(BoardsEnem_Scena[enem],v,0.15f,1.75f);
+        }
     }
 }
 

@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{54a2508a-709f-41f4-86d9-6081c5324bc9}">
         <property name="name">
-            <value>SFX-Objeto Movimiento Monedas Cofre</value>
+            <value>SFX-Objeto Movimiento Araña Cofre</value>
         </property>
         <property name="outputFormat">
             <value>2</value>
@@ -67,6 +67,9 @@
         <relationship name="modules">
             <destination>{0e193306-5dde-46d6-adca-5497fb01bfe3}</destination>
         </relationship>
+        <relationship name="markers">
+            <destination>{1272bcdc-5325-4d4b-bfb2-fc0ac27299d9}</destination>
+        </relationship>
     </object>
     <object class="EventMixerMaster" id="{253cdf0c-6bab-4dc6-96c9-3466ea8f9516}">
         <relationship name="effectChain">
@@ -87,15 +90,17 @@
     <object class="MixerBusPanner" id="{006d88f7-9e36-4a17-9ab0-3c6c7de2def0}"/>
     <object class="MultiSound" id="{0e193306-5dde-46d6-adca-5497fb01bfe3}">
         <property name="length">
-            <value>1.799546485260771</value>
+            <value>1.3500000000000001</value>
         </property>
         <relationship name="sounds">
             <destination>{f35e9525-c856-46d8-ae04-6f83cfea31af}</destination>
             <destination>{9b6c2bae-e5b0-48a7-9586-57b47567dc01}</destination>
-            <destination>{717993fe-beb8-4105-9260-33d2ed126106}</destination>
         </relationship>
     </object>
     <object class="EventMixerGroup" id="{25a7b202-ec95-455a-8d07-0c70bfdf896c}">
+        <property name="volume">
+            <value>-13.5</value>
+        </property>
         <property name="name">
             <value>Audio 1</value>
         </property>
@@ -107,6 +112,20 @@
         </relationship>
         <relationship name="output">
             <destination>{253cdf0c-6bab-4dc6-96c9-3466ea8f9516}</destination>
+        </relationship>
+    </object>
+    <object class="LoopRegion" id="{1272bcdc-5325-4d4b-bfb2-fc0ac27299d9}">
+        <property name="position">
+            <value>0</value>
+        </property>
+        <property name="length">
+            <value>1.3500000000000001</value>
+        </property>
+        <relationship name="timeline">
+            <destination>{4dab3705-8ed6-4692-b02c-668f9a08f0dd}</destination>
+        </relationship>
+        <relationship name="markerTrack">
+            <destination>{b879d73a-08bd-48a4-80a4-1b7df275f542}</destination>
         </relationship>
     </object>
     <object class="MixerBusEffectChain" id="{189c3475-37ec-4bcb-babd-ba3bcd07a05e}">
@@ -125,11 +144,6 @@
     <object class="SingleSound" id="{9b6c2bae-e5b0-48a7-9586-57b47567dc01}">
         <relationship name="audioFile">
             <destination>{de17d91b-38bd-4782-ac1b-de5f74b02f91}</destination>
-        </relationship>
-    </object>
-    <object class="SingleSound" id="{717993fe-beb8-4105-9260-33d2ed126106}">
-        <relationship name="audioFile">
-            <destination>{32cebc9c-63fb-4eef-89f1-7f3f754ab3a3}</destination>
         </relationship>
     </object>
     <object class="MixerBusEffectChain" id="{0e57393f-32bb-4488-a6b8-68b077b319de}">
