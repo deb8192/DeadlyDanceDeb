@@ -3,6 +3,7 @@
 
 TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale, Shader * sact, GLuint ww, GLuint wh, const char * rutapulsado , const char * rutaencima )
 {
+    esVideo = false;
     winwidth = ww;
     winheight = wh;
     didentidad = 'I';
@@ -33,29 +34,66 @@ TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale
     }
 }
 
+TPlano::TPlano(const char * ruta, unsigned int x, unsigned int y, Shader * program, GLuint screenWidth, GLuint screenHeight,unsigned int videoWidth,unsigned int videoHeight)
+{
+    esVideo = true;
+    winwidth = screenWidth;
+    winheight = screenHeight;
+    didentidad = 'I';
+    pixx = x;
+    pixy = y;
+    escaladox = 1;
+    escaladoy = 1;
+    this->SetShader(program);
+    shader->Use();
+    id = -1;
+    esEncima = false;
+    esPulsable = false;
+
+    bool recurso = CargarVideo(ruta,videoWidth,videoHeight);
+
+    if(recurso)
+    {
+        _Archivo = ruta;
+        CargarMalla(pixx,pixy,escaladox,escaladoy);
+    }
+}
+
 TPlano::~TPlano()
 {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-    //glDeleteTextures(1, &textureID);
-    
-    /*if(esPulsable)
-    {
-        glDeleteTextures(1, &textureIDPulsado);
-    }
-
-    if(esEncima)
-    {
-        glDeleteTextures(1, &textureIDEncima);
-    }*/
-
-    //std::cout << "borrado de tplano " << std::endl;
 }
 
 // sobrecarga metodos TEntidad
 void TPlano::beginDraw()
 {
+    if(esVideo)
+    {
+        Gestor * gestor = Gestor::GetInstance(); // recuperamos el gestor
+
+        unsigned char * data = gestor->UpdateVideo(_Archivo);
+
+        if(data)
+        {
+            glBindTexture(GL_TEXTURE_2D, textureID);//le decimos que es una textura 2d
+            
+            //Parametros de la textura
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);   //glTexParameteri(tipo_de_textura,opcion_y_eje,modo_de_ajuste)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+            //Filtrado y escalado de texturas (GL_NEAREST:mas pixelado, mejor para minimizar/ GL_LINEAR:mas suave y borroso, mejor para aumentar)
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);       //Filtrado al minimizar
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);       //Filtrado al aumentar
+            //std::cout << " w -> " << width << " h -> " << height << "\n";
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+          
+            data = nullptr;
+            gestor = nullptr;
+        }
+    }
+
     shader->Use();
 
     //Actualizar datos si es necesario
@@ -138,7 +176,7 @@ bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
 
         //Cargar y generar textura
         stbi_set_flip_vertically_on_load(true);  // le dices a stb_image.h que gire la textura cargada en el y-axis
-        unsigned char * data = gestor->CargarImagen(_ruta,&height,&width, &nrComponents);//esto hay que ponerlo en la zona de recursos
+        unsigned char * data = gestor->CargarImagen(_ruta,&height,&width, &nrComponents);
 
 
         if (data)
@@ -188,6 +226,53 @@ bool TPlano::CargarTextura(const char * _ruta,unsigned int mode)
     return true;
 }
 
+bool TPlano::CargarVideo(const char * archivo,unsigned int anchuraVideo, unsigned int alturaVideo)
+{
+    //std::cout << "o w -> " << anchuraVideo << " h -> " << alturaVideo << "\n";
+    Gestor * gestor = Gestor::GetInstance(); // recuperamos el gestor
+    //Crear textura
+    unsigned int anchura = winwidth;//por defecto se coge la anchura total de la ventana 
+    unsigned int altura = winheight;//por defecto se coge la altura total de la ventana
+    if(anchura >= anchuraVideo)
+    {
+        //se cambia la anchura porque es menor
+        anchura = anchuraVideo;
+    }
+    if(altura >= alturaVideo)
+    {
+        //se cambia la altura porque es menor que la ventana
+        altura = alturaVideo;
+    }
+    
+    unsigned char * data = gestor->CargarVideo(archivo,&width,&height,&nrComponents,anchura,altura);
+
+    if(data)
+    {
+
+        glGenTextures(1, &textureID);//generamos id para la textura
+        glBindTexture(GL_TEXTURE_2D, textureID);//le decimos que es una textura 2d
+        gestor->VincularTexturaVideo(archivo,textureID);//lo vinculamos en el gestor para que el se ocupe de borrar la textura cuando haga falta
+        estado = textureID;//le decimos que este en este estado o imagen en opengl
+
+        //Parametros de la textura
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);   //glTexParameteri(tipo_de_textura,opcion_y_eje,modo_de_ajuste)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        //Filtrado y escalado de texturas (GL_NEAREST:mas pixelado, mejor para minimizar/ GL_LINEAR:mas suave y borroso, mejor para aumentar)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);       //Filtrado al minimizar
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);       //Filtrado al aumentar
+
+        //std::cout << " w -> " << width << " h -> " << height << "\n";
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        //data = nullptr;
+        gestor = nullptr;
+        return true;
+    }
+
+    gestor = nullptr;
+    return false;
+}
+
 void TPlano::CargarMalla(unsigned int xx, unsigned int yy, float sx, float sy)
 {
     float posx = xx;
@@ -213,13 +298,27 @@ void TPlano::CargarMalla(unsigned int xx, unsigned int yy, float sx, float sy)
     // cout << "y: "<< y << endl;
 
     // Vertices de un RECTANGULO
-    float vertices[] = {
+
+    
+    //vertical flip
+    float vertices1 []= 
+    {
+        //positions           //colors          //Coordenadas de la textura (ejes s,t)
+        x,    posy, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f, // top right
+        x,       y, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f, // bottom right
+        posx,    y, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f, // bottom left
+        posx, posy, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f  // top left
+    };  
+
+    //normal flip
+    float vertices2 [] = 
+    {
         //positions           //colors          //Coordenadas de la textura (ejes s,t)
         x,    posy, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f, // top right
         x,       y, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f, // bottom right
         posx,    y, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f, // bottom left
         posx, posy, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f  // top left
-    };
+    }; 
     unsigned int indices[] = {
         0, 1, 3, // primer triangulo
         1, 2, 3  // segundo triangulo
@@ -235,7 +334,15 @@ void TPlano::CargarMalla(unsigned int xx, unsigned int yy, float sx, float sy)
 
     // Cargar datos en los buffers
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    if(esVideo)
+    {
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
+    }
+    else
+    {
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+    }
+    
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);

@@ -22,6 +22,7 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
     idCofre = -1;
     sala = salaC;
     activada = false;
+    primeraVezActivada = false;
 }
 
 CofreArana::~CofreArana()
@@ -45,6 +46,39 @@ CofreArana::~CofreArana()
     idCofre=0;
     sala = nullptr;
     activada = false;
+    primeraVezActivada = false;
+}
+
+CofreArana::CofreArana (const CofreArana& copia)
+{
+    funciona = copia.funciona;
+    atacado = copia.atacado;
+    hecho = copia.hecho;
+    _ordenes = new short [constantes.DOS];
+
+    maxRotacion = copia.maxRotacion;
+    rotation = copia.rotation;
+    direccion = copia.direccion;
+
+    _modelo = "assets/models/Cofre/cofreArana.obj";
+    _textura = "assets/texture/cofreArana.png";
+
+    ancho = copia.ancho;
+    largo = copia.largo;
+    alto = copia.alto;
+
+    idCofre = copia.idCofre;
+    sala = copia.sala;
+
+    posMotorCofre = copia.posMotorCofre;
+    posObsCofre = copia.posObsCofre;
+    posArana = copia.posArana;
+
+    activada = copia.activada;
+    primeraVezActivada = copia.primeraVezActivada;
+
+    id = copia.id;
+    //cout << "Entro a hacer copia" <<endl;
 }
 
 /***************** RunIA *****************
@@ -298,6 +332,11 @@ bool CofreArana::GetActivada()
     return activada;
 }
 
+bool CofreArana::GetPrimeraVezActivada()
+{
+    return primeraVezActivada;
+}
+
 void CofreArana::SetIdCofre(int idC)
 {
     idCofre = idC;
@@ -321,4 +360,9 @@ void CofreArana::SetPosArana(unsigned int pos)
 void CofreArana::SetActivada(bool estado)
 {
     activada = estado;
+}
+
+void CofreArana::SetPrimeraVezActivada(bool estado)
+{
+    primeraVezActivada = estado;
 }

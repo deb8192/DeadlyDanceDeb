@@ -119,6 +119,9 @@ void Cofre::ActivarCofre()
         _modelo, _textura);
     
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
+    _fisicas->EraseCofre(posicionArrayObjetos, posObstaculos);
+    _fisicas = nullptr;
+    _motor->EraseCofre(posicionArrayObjetos);
     _fisicas->CargarCofre(posicionArrayObjetos,posObstaculos,
         posActual.x/2,posActual.y/2,posActual.z/2,
         ancho,alto,largo,0,0);

@@ -277,12 +277,13 @@ Arbol CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
     // Cargar el documento
     pugi::xml_document doc;
     //if (!doc.load_file(ruta_completa)) { // <- caca de linux q no lo acepta
-    if (!doc.load_file(cadena)) {
-    	cout<<"No existe el documento"<<"\n"<<endl;
+    if (!doc.load_file(cadena)) 
+    {
+    	cout<<"No existe el documento "<< cadena << "\n"<<endl;
 	}
     else
     {
-        cout<<"Hay documento"<<"\n"<<endl;
+        //cout<<"Hay documento"<<"\n"<<endl;
     }
     
     //Se pasa a la lectura del archivo .xml

@@ -87,6 +87,8 @@ class Jugando: public Estado {
         void CrearEnemigoArana();
         void CargarBossEnMemoria();
         void StopSonidos();
+        void CambiarAranyaPorCofre(int idC, unsigned int posMotorG, unsigned int posObs,
+            float x, float y, float z, unsigned int posArana, Sala* sala);
 
     private:
 

@@ -366,6 +366,20 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void UpdateBoards(std::vector<unsigned short> boardvect, float x, float y, float z, float d);
             void UpdateBoardsVidaEne(int enem, int vida, int vidamax);
 
+            //funciones para videos
+            /**
+            *@param _ruta es la ruta desde el ejecutable al video 
+            *@param x posicion en anchura  
+            *@param y posicion en altura  
+            *@param width anchura del video
+            *@param height altura del video
+            *@return retorna el id del video creado si no se ha podido crear es 0
+            */
+            unsigned int CrearVideo(const char * _ruta, float x, float y, unsigned int width, unsigned int height);
+            //@param id es el id del video que se quiere pausar
+            void PausarVideo(unsigned int id);
+            //@param id es el id del video que se quiere reproducir
+            void PlayVideo(unsigned int id);
         private: //clases solo accesibles por MotorGrafico
 
             struct SalasLuz

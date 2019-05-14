@@ -8,6 +8,7 @@ Gestor::Gestor()
 {
     archivadores.reserve(300);//se reserva para cuarenta inicialmente (lo que veo mucho)
     imagenes.reserve(80);//reserva para las imagenes
+    videos.reserve(10);//reserva para videos
 }
 
 Gestor::~Gestor()
@@ -277,6 +278,26 @@ int Gestor::buscarImagen(const char * ruta)
     return -1;   
 }
 
+int Gestor::buscarVideo(const char * ruta)
+{
+    //se realiza una busqueda completa hasta que se encuentra (esto queda para OPTIMIZAR)
+    //std::string cadena_recurso = ruta;//pasamos el const char a string 
+
+    for(long unsigned int i = 0; i < videos.size();i++)
+    {
+        //std::string cadena_actual = imagenes[i]->_nombre;//convertimos el nombre de la imagen a string
+        //if(cadena_recurso.compare(cadena_actual) == 0)//si es igual a 0, existe el recurso
+        if(strcmp(ruta,videos[i]->_nombre) == 0)
+        {
+            //cout << ruta << " =? " << imagenes[i]->_nombre << "\n";
+            return i;//devolvemos posicion vector 
+        }
+
+    }
+
+    return -1;   
+}
+
 bool Gestor::TieneTextura(const char * _ruta)
 {
     int idImagen = buscarImagen(_ruta);
@@ -352,3 +373,92 @@ void Gestor::DestruirDatosImagen(const char * _ruta)
         }
     }
 }
+
+unsigned char * Gestor::CargarVideo(const char * _nombre,int * width, int * height, int * componentes,unsigned int anchoVideo, unsigned int altoVideo)
+{
+    //comprobamos si existe el video
+    //devuelve primer frame del video
+    CargadorVideo * carga = new CargadorVideo(_nombre);
+    carga->DefinirSizeSalida(anchoVideo,altoVideo);
+
+    if(carga->EstaListo())
+    {
+        Video * video = new Video();
+        video->video = carga;
+        video->fps = carga->GetFps();
+        video->tiempo_frame = 1000.0f/(float)video->fps;
+        //std::cout << " TIEMPO FRAME " << video->tiempo_frame << "\n";
+        video->_nombre = _nombre;
+        video->height = altoVideo;
+        video->width = anchoVideo;
+        *width = video->width;
+        *height = video->height;
+        *componentes = video->nrComponents;
+        video->tiempo_ultimoFrame = (float)(clock()/((float)CLOCKS_PER_SEC/1000.0f));
+        videos.push_back(video);
+        return carga->CargarFrame(); 
+    }
+
+    return nullptr; //no se encontro video o no se puede abrir
+}
+
+void Gestor::VincularTexturaVideo(const char * _nombreVideo,unsigned int idOpengl)
+{
+    int idVideo = buscarImagen(_nombreVideo);
+
+    if(idVideo != -1)
+    {
+        imagenes[idVideo]->texturaEstaEnOpengl = true;
+        imagenes[idVideo]->id_opengl_texture = idOpengl;
+    }   
+}
+
+unsigned char * Gestor::UpdateVideo(const char * _nombreVideo)
+{
+
+    //cuando el video llega al final se queda en el ultimo frame 
+    //si no se puede cargar devuelve nullptr
+    //automaticamente detecta cuanto tarda en cargar los frames y se salta tantos frames como su atraso o repite frame si va mas rapido
+    
+    int idVideo = buscarVideo(_nombreVideo);
+    
+    if(idVideo >= 0)
+    {
+        if(videos[idVideo]->video->EstaListo())
+        {
+            if(videos[idVideo]->tiempo_ultimoFrame+videos[idVideo]->tiempo_frame <= (clock()/((float)CLOCKS_PER_SEC/1000.0f)))
+            {
+                float tiempoactual = (clock()/((float)CLOCKS_PER_SEC/1000.0f));
+                float tiempoframeanterior = videos[idVideo]->tiempo_ultimoFrame+videos[idVideo]->tiempo_frame;
+                float salto = (tiempoactual/tiempoframeanterior)/videos[idVideo]->tiempo_frame;
+                std::cout << "Salto : " << salto << "\n";
+                videos[idVideo]->tiempo_ultimoFrame =(float)(clock()/((float)CLOCKS_PER_SEC/1000.0f));
+                if(salto <= 1.0f)
+                {
+                    return videos[idVideo]->video->CargarFrame();
+                }
+                else
+                {
+                    return videos[idVideo]->video->CargarFrame(ceil(salto));
+                }
+                
+                
+                
+            }
+            else
+            {
+                return nullptr;
+            }
+            
+           // float mile = 1000.0f;
+           // float ratio = 30.0f;
+           // float tiempo_frame = mile/ratio;
+           // int salto = ceil(tiempoUltimoFrame/tiempo_frame);
+            
+
+        }
+    }
+
+    return nullptr;
+}
+

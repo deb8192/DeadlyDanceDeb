@@ -3993,3 +3993,36 @@ void MotorGrafico::CambiarPosicionImagen(signed int event, float x, float y)
         }
     #endif
 }
+
+
+unsigned int MotorGrafico::CrearVideo(const char * _ruta, float x, float y, unsigned int width, unsigned int height)
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+          return _interfaz->CrearVideo(x,y,_ruta,width,height);
+        }
+    #endif
+
+    return 0;
+}
+
+void MotorGrafico::PausarVideo(unsigned int id)
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            
+        }
+    #endif
+}
+
+void MotorGrafico::PlayVideo(unsigned int id)
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            
+        }
+    #endif
+}
