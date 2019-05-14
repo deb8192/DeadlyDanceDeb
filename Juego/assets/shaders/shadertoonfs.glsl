@@ -195,7 +195,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 fragPos)
     //return (ambient + diffuse + specular);
 
     // calculate shadow
-    lightDir = normalize(vec3(-25.0, 25.0, -25.0) - fragPos);
+    lightDir = normalize(vec3(-20.0, 30.0, -20.0) - fragPos);
     float shadow = ShadowCalculation(FragPosLightSpace,lightDir);
     vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular));
 

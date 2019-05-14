@@ -468,7 +468,7 @@ unsigned short Interfaz::AddParticles(float vx,float vy,float vz,unsigned int nu
 
 void Interfaz::Draw()
 {
-    float near_plane = 1.0f, far_plane = 7.5f;
+    float near_plane = 1.0f, far_plane = 100.0f;
     //std::cout << "TAMANO NODOS " << nodos.size() << std::endl;
     if(ventana_inicializada)
     {
@@ -488,8 +488,8 @@ void Interfaz::Draw()
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
         // attach depth texture as FBO's depth buffer
@@ -531,17 +531,17 @@ void Interfaz::Draw()
                         // 1. render depth of scene to texture (from light's perspective)
                         // --------------------------------------------------------------
                         //lightProjection = glm::perspective(glm::radians(45.0f), (GLfloat)1024 / (GLfloat)1024, near_plane, far_plane); // note that if you use a perspective projection matrix you'll have to change the light position as the current light position isn't enough to reflect the whole scene
-                        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-                        lightView = glm::lookAt(glm::vec3(-25.0f, 25.0f, -25.0f), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+                        lightProjection = glm::ortho(-40.0f, 40.0f, -40.0f, 40.0f, near_plane, far_plane);
+                        //lightProjection = glm::ortho(0.0f, (float)window->getWidth(), (float)window->getHeight(), 0.0f, near_plane, far_plane);
+                        lightView = glm::lookAt(glm::vec3(-20.0f, 30.0f, -20.0f), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
                         lightSpaceMatrix = lightProjection * lightView;
                         // render scene from light's point of view
                         shaders[7]->Use();
                         shaders[7]->setMat4("lightSpaceMatrix", lightSpaceMatrix);
-                        shaders[4]->Use();
-                        shaders[4]->setMat4("lightSpaceMatrix", lightSpaceMatrix);
                     }
                 }
             }
+
 
             //Draw de profundidad de sombras
             DrawProfundidad();
@@ -549,6 +549,10 @@ void Interfaz::Draw()
             glViewport(0, 0,window->getWidth(),window->getHeight());
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            glViewport(0, 0,window->getWidth(),window->getHeight());
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            shaders[4]->Use();
+            shaders[4]->setMat4("lightSpaceMatrix", lightSpaceMatrix);
             glActiveTexture(GL_TEXTURE2);
             glBindTexture(GL_TEXTURE_2D, depthMap);
             //Render
