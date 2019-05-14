@@ -160,6 +160,7 @@ void Jugando::Iniciar()
     reiniciando = false;
     puzzleResuelto = false;
     estarDebil = false;
+    salaPenultima = false;
     enSalaSegunda = false;
     ValoresPorDefecto();
 
@@ -494,6 +495,7 @@ void Jugando::Update()
         _motor->EstaPulsado(KEY_D),
         _motor->EstaPulsado(KEY_W)
     );
+    
 
     _fisicas->updateJugador(_jugador->getX(),
         _jugador->getY(),
@@ -895,7 +897,9 @@ void Jugando::UpdateIA()
     }
     else
     {
-        if(enSalaSegunda)
+        if(_jugador->GetSala()->getPosicionEnGrafica() != 0 && 
+           _jugador->GetSala()->getPosicionEnGrafica() != 14 &&
+           _jugador->GetSala()->getPosicionEnGrafica() != 22)
         {
             if(!estarFuerte) 
             {           
@@ -903,12 +907,24 @@ void Jugando::UpdateIA()
             }
             estarFuerte = true;        
         }
-        cout << "sala segundo: " << enSalaSegunda << endl;
        
         estarDebil = false;        
         _motora->getEvent("MuerteEstasDebil")->stop();
  
     }   
+
+    
+    if((nivelJ == 8 && _jugador->GetSala()->getPosicionEnGrafica() == 13) || 
+       (nivelJ == 7 && _jugador->GetSala()->getPosicionEnGrafica() == 21))
+    {
+        if(!salaPenultima)
+        { 
+            _motora->getEvent("MuerteEstasDebil")->stop();
+            _motora->getEvent("MuertePaseas")->stop();  
+            _motora->getEvent("MuertePenultima")->start();           
+        }
+        salaPenultima = true;
+    }
 
     Constantes constantes;
     bool cercaJugador = false;
@@ -2020,8 +2036,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
             }
 
             if(activar)
-            {
-                enSalaSegunda = true;
+            {                
                 //Se abre/acciona la puerta / el mecanismo
                 #ifdef WEMOTOR
                     _palanca->setNewRotacion(_palanca->getRX(), _palanca->getRY(), _palanca->getRZ()-50);

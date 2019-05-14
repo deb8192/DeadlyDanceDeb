@@ -109,6 +109,7 @@ class Jugando: public Estado {
         bool lvDificil;         //Nivel de dificultad del juego. Se modifica cada minuto
         bool estarDebil;
         bool estarFuerte;
+        bool salaPenultima;
         
         Enemigo* _boss;
         std::vector<Enemigo*> _enemigos;//Enemigos en scena

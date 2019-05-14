@@ -65,7 +65,7 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador debil","MuerteEstasDebil");
   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador muere","MuerteMueres"); //error con estados
   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador pasea","MuertePaseas");
-   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Penultima sala","MuertePenultima");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Penultima sala","MuertePenultima");
   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 1","MuerteBienvenida1");
   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 2","MuerteBienvenida2");
    LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean enemigos","MuerteRespawn1");
