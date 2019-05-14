@@ -86,6 +86,7 @@ class Jugando: public Estado {
         void AbrirCofre(float x, float y, float z, bool esArana);
         void CrearEnemigoArana();
         void CargarBossEnMemoria();
+        void StopSonidos();
 
     private:
 
@@ -102,8 +103,11 @@ class Jugando: public Estado {
         Puzzle* _puzzle;
 
         bool enSalaBoss;
+        bool enSalaSegunda;
         bool lvDificil;         //Nivel de dificultad del juego. Se modifica cada minuto
         bool estarDebil;
+        bool estarFuerte;
+        
         Enemigo* _boss;
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         std::vector<Enemigo*> _eneCofres;//Cofres arana desactivados

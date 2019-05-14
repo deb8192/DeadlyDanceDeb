@@ -15,6 +15,9 @@ EstadoMuerte::~EstadoMuerte()
 
 void EstadoMuerte::Iniciar()
 {
+        _motora->getEvent("MuerteEstasDebil")->stop();   
+        _motora->getEvent("MuerteMueres")->start();    
+
     _motor->FondoEscena(255,0,0,0);
     _motor->ActivarFuenteDefault();
     pintarBotones();
@@ -29,7 +32,7 @@ void EstadoMuerte::Render()
 
 void EstadoMuerte::Update()
 {
-    
+     
 }
 
 void EstadoMuerte::ManejarEventos()
@@ -86,6 +89,8 @@ void EstadoMuerte::borrarGUIResetearEvento(short id)
 
 void EstadoMuerte::menuPrincipal()
 {
+    _motora->getEvent("MuerteEstasDebil")->stop();
+    _motora->getEvent("MuertePaseas")->stop();  
     _motora->getEvent("AmbienteLava")->stop(); //Detener ambiente
     _motora->getEvent("AmbienteGritos")->stop(); //Detener musica ambiente
     _motora->getEvent("Nivel1")->stop(); //Detener musica Juego
@@ -97,6 +102,8 @@ void EstadoMuerte::menuPrincipal()
 
 void EstadoMuerte::reiniciarPartida()
 {
+    _motora->getEvent("MuerteEstasDebil")->stop();
+    _motora->getEvent("MuertePaseas")->stop();  
     Juego::GetInstance()->estado.ReiniciarPartida();
 }
 

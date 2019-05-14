@@ -160,7 +160,7 @@ void Jugando::Iniciar()
     reiniciando = false;
     puzzleResuelto = false;
     estarDebil = false;
-
+    enSalaSegunda = false;
     ValoresPorDefecto();
 
     _motor->CrearCamara();
@@ -191,6 +191,7 @@ void Jugando::ValoresPorDefecto()
     contadorEnem = 0;
     int_cpw_aux = 0;
     enSalaBoss = false;
+    enSalaSegunda = false;
     //Valores para el centro de las bandadas en el flocking
     posicionMediaEnemigos.vX = INT_MAX;
     posicionMediaEnemigos.vY = INT_MAX;
@@ -435,13 +436,18 @@ void Jugando::Update()
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
 
+    
     if (_jugador != nullptr && _jugador->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
+        
         _jugador->MuereJugador(); // Animacion de muerte
         ComprobarBorrarProyectil();
         DesactivarDebug();
         _motor->cambiarAnimacionJugador(5);//la muerte del jugador tiene este id
+
+        StopSonidos();
         Juego::GetInstance()->estado.CambioEstadoMuerte();
+
     }
 
     // **********  Se actualiza el respawn si procede  **********
@@ -832,7 +838,7 @@ void Jugando::Update()
  *      Salidas:
 */
 void Jugando::UpdateIA()
-{
+{    
     if(_jugador->getVida() <= 30)
     {   
         if(!estarDebil) 
@@ -841,13 +847,26 @@ void Jugando::UpdateIA()
         }
         
         estarDebil = true;
-        cout << "estar debil: " << estarDebil << endl;
+        estarFuerte = false;
+        _motora->getEvent("MuertePaseas")->stop();  
     }
     else
     {
-        estarDebil = false;
+        if(enSalaSegunda)
+        {
+            if(!estarFuerte) 
+            {           
+                _motora->getEvent("MuertePaseas")->start();  
+            }
+            estarFuerte = true;        
+        }
+        cout << "sala segundo: " << enSalaSegunda << endl;
+       
+        estarDebil = false;        
         _motora->getEvent("MuerteEstasDebil")->stop();
-    }
+ 
+    }   
+
     Constantes constantes;
     bool cercaJugador = false;
     /* *********** Teclas para probar cosas *************** */
@@ -908,6 +927,7 @@ void Jugando::UpdateIA()
                     }
                     else if (tipoEnemigo == constantes.BOSS)
                     {
+                        StopSonidos();
                         Juego::GetInstance()->estado.CambioEstadoGanar();
                     }
                     else
@@ -1958,6 +1978,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
 
             if(activar)
             {
+                enSalaSegunda = true;
                 //Se abre/acciona la puerta / el mecanismo
                 #ifdef WEMOTOR
                     _palanca->setNewRotacion(_palanca->getRX(), _palanca->getRY(), _palanca->getRZ()-50);
@@ -2015,6 +2036,9 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                 bool abrir = _puerta->accionar();
                 if(abrir)
                 {
+                    //indicar si has abierto alguna puerta (pasado segunda sala)
+                    enSalaSegunda = true;
+                    
                     if(_puerta->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
                     {
                         _motora->getEvent("Nivel1")->stop();
@@ -2377,4 +2401,10 @@ void Jugando::CargarBossEnMemoria()
     _motora->getEvent(nameid)->start();
 
     _enemigos.insert(_enemigos.begin(), _boss);
+}
+
+void Jugando::StopSonidos()
+{
+    _motora->getEvent("MuerteEstasDebil")->stop();
+    _motora->getEvent("MuertePaseas")->stop();  
 }
