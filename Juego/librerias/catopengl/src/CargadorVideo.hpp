@@ -28,6 +28,7 @@ class CargadorVideo
                 unsigned int components,fps,height,width;
                 bool AllOk;//si esta a true es que se puede leer video si no es que no se puede
                 unsigned char * devolverFrame(AVFrame *);//devuelve el frame en formato para opengl
+                unsigned char * procesarPaquete();//procesa el paquete de video que se ha encontrado previamente en el stream o canal 
                 AVPacket * encontrarFrame();
                 void flipFrame(AVFrame *);
                 void unflipFrame(AVFrame *);

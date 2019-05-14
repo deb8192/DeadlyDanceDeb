@@ -6,6 +6,7 @@
 #include "TEntidad.hpp"
 #include "TNodo.hpp"
 #include "CargadorVideo.hpp"
+#include <ctime>
 
 //PARA INFORMACION MAS DETALLADA SOBRE LAS FUNCIONES MIRAR EN EL CPP
 class Gestor
@@ -129,11 +130,21 @@ class Gestor
                 {
                     delete video;
                 }
+
+                if(texturaEstaEnOpengl)
+                {
+                    glDeleteTextures(1,&id_opengl_texture);
+                }
+
+
             }
             const char * _nombre;//nombre del recurso por el que se identifica 
             unsigned int id_opengl_texture;//es el id que tiene en opengl
             bool texturaEstaEnOpengl;//si la textura esta en opengl
             int width, height, nrComponents;//altura, anchura y numero de componentes del video (3 normalmente) 
+            unsigned int fps;//frame por segundo que se deben de mostrar
+            float tiempo_frame;//tiempo que debe estar el frame en pantalla
+            float tiempo_ultimoFrame;
             CargadorVideo * video;//contiene el video y sus funciones
         };
 

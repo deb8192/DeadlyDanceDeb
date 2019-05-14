@@ -97,6 +97,9 @@ bool CargadorVideo::PrepararVideo(const char * _rutaVideo)
 
         // Obtiene un puntero del codec del video
         pCodecParam=pFormatCtx->streams[videoStream]->codecpar;
+        fps = av_q2d(pFormatCtx->streams[videoStream]->r_frame_rate);
+
+        //std::cout << " FRAMERATE: " << fps << "\n";
 
         // Encuentra el decoder para desencriptar el video
         pCodec=avcodec_find_decoder(pCodecParam->codec_id);
@@ -157,28 +160,10 @@ unsigned char * CargadorVideo::CargarFrame(unsigned int SaltoFrames)
 
                         if(encontrarFrame() != nullptr)
                         {
-                                //se trabaja con el frame
-                                int used;
-                                // Decode video frame
-                                used = avcodec_send_packet(pCodecCtx, &packet);
-                                // Did we get a video frame?
-                                if(used >= 0) 
+                                if(procesarPaquete() != nullptr)
                                 {
-                                        packet.size = 0;
-                                        used = avcodec_receive_frame(pCodecCtx, pFrame);
-                                        if(used >= 0)
-                                        {
-                                                //flipFrame(pFrame);
-                                                sws_scale(sws_ctx, (uint8_t const * const *)pFrame->data,pFrame->linesize,0, pCodecCtx->height,pFrameRGB->data,pFrameRGB->linesize);
-
-                                                //Procesamos el frame
-                                                av_packet_unref(&packet);
-                                                return devolverFrame(pFrameRGB);
-                                        }
+                                        return devolverFrame(pFrameRGB); 
                                 }
-                                
-                                //se libera el espacio del paquete
-                                av_packet_unref(&packet);
                         }
                         else
                         {
@@ -190,12 +175,36 @@ unsigned char * CargadorVideo::CargarFrame(unsigned int SaltoFrames)
                 {
                         //saltamos los frames
                         unsigned int framesSaltados = 0;
-
+                        bool hayframe = false;
                         while(SaltoFrames != framesSaltados) 
                         {
-                                encontrarFrame();
+                                if(encontrarFrame() != nullptr)
+                                {
+                                        hayframe = true;
+                                }
+                                else
+                                {
+                                        hayframe = false;     
+                                }
+                                
                                 framesSaltados++;       
+                                if(SaltoFrames == framesSaltados)
+                                {
+                                        if(hayframe)
+                                        {
+                                                if(procesarPaquete() != nullptr)
+                                                {
+                                                        return devolverFrame(pFrameRGB); 
+                                                }  
+                                        }
+                                        else
+                                        {
+                                                return devolverFrame(pFrameRGB);     
+                                        }
+                                }
                         }
+
+                        
                         //falta procesarlo
                 }
         }
@@ -274,3 +283,27 @@ void CargadorVideo::unflipFrame(AVFrame* pFrame)
         }
 }
 
+unsigned char * CargadorVideo::procesarPaquete()
+{
+        //se trabaja con el frame
+        int used;
+        // Decode video frame
+        used = avcodec_send_packet(pCodecCtx, &packet);
+        // Did we get a video frame?
+        if(used >= 0) 
+        {
+                packet.size = 0;
+                used = avcodec_receive_frame(pCodecCtx, pFrame);
+                if(used >= 0)
+                {
+                        //flipFrame(pFrame);
+                        sws_scale(sws_ctx, (uint8_t const * const *)pFrame->data,pFrame->linesize,0, pCodecCtx->height,pFrameRGB->data,pFrameRGB->linesize);
+
+                        //Procesamos el frame
+                        av_packet_unref(&packet);
+                        return devolverFrame(pFrameRGB);
+                }
+        }
+
+        return nullptr;
+}

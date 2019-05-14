@@ -385,12 +385,16 @@ unsigned char * Gestor::CargarVideo(const char * _nombre,int * width, int * heig
     {
         Video * video = new Video();
         video->video = carga;
+        video->fps = carga->GetFps();
+        video->tiempo_frame = 1000.0f/(float)video->fps;
+        //std::cout << " TIEMPO FRAME " << video->tiempo_frame << "\n";
         video->_nombre = _nombre;
         video->height = altoVideo;
         video->width = anchoVideo;
         *width = video->width;
         *height = video->height;
         *componentes = video->nrComponents;
+        video->tiempo_ultimoFrame = (float)(clock()/((float)CLOCKS_PER_SEC/1000.0f));
         videos.push_back(video);
         return carga->CargarFrame(); 
     }
@@ -422,7 +426,36 @@ unsigned char * Gestor::UpdateVideo(const char * _nombreVideo)
     {
         if(videos[idVideo]->video->EstaListo())
         {
-            return videos[idVideo]->video->CargarFrame();
+            if(videos[idVideo]->tiempo_ultimoFrame+videos[idVideo]->tiempo_frame <= (clock()/((float)CLOCKS_PER_SEC/1000.0f)))
+            {
+                float tiempoactual = (clock()/((float)CLOCKS_PER_SEC/1000.0f));
+                float tiempoframeanterior = videos[idVideo]->tiempo_ultimoFrame+videos[idVideo]->tiempo_frame;
+                float salto = (tiempoactual/tiempoframeanterior)/videos[idVideo]->tiempo_frame;
+                std::cout << "Salto : " << salto << "\n";
+                videos[idVideo]->tiempo_ultimoFrame =(float)(clock()/((float)CLOCKS_PER_SEC/1000.0f));
+                if(salto <= 1.0f)
+                {
+                    return videos[idVideo]->video->CargarFrame();
+                }
+                else
+                {
+                    return videos[idVideo]->video->CargarFrame(ceil(salto));
+                }
+                
+                
+                
+            }
+            else
+            {
+                return nullptr;
+            }
+            
+           // float mile = 1000.0f;
+           // float ratio = 30.0f;
+           // float tiempo_frame = mile/ratio;
+           // int salto = ceil(tiempoUltimoFrame/tiempo_frame);
+            
+
         }
     }
 

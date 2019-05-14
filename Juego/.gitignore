@@ -2,3 +2,6 @@
 .vscode/
 *.o
 Ejecutable
+*.a
+librerias/catopengl/inc/*
+saves/*
