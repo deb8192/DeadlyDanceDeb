@@ -66,7 +66,7 @@ uniform sampler2D shadowMap;
 uniform float trasparencia = 1.0;
 
 //Funciones de calculo de luces
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 fragPos);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
@@ -84,7 +84,7 @@ void main()
 	float silang = max(dot(norm, viewDir),0.0);             //Angulo de la silueta
 
     //Fase 1: Luz direccional
-    vec3 result = CalcDirLight(dirLight, norm, viewDir);
+    vec3 result = CalcDirLight(dirLight, norm, viewDir, FragPos);
 
     // //Fase 2: Puntos de Luz (Multiluces)
     // for(int i = 0; i < NR_POINT_LIGHTS; i++)
@@ -151,7 +151,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 lightDir)
 }
 
 //Calcular Luz Direccional
-vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 fragPos)
 {
     vec3 lightDir = normalize(-light.direction);                //La direccion de la luz en la luz direccional
 
@@ -195,6 +195,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     //return (ambient + diffuse + specular);
 
     // calculate shadow
+    lightDir = normalize(vec3(-25.0, 25.0, -25.0) - fragPos);
     float shadow = ShadowCalculation(FragPosLightSpace,lightDir);
     vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular));
 

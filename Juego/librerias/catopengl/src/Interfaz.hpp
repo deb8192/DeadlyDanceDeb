@@ -151,7 +151,7 @@ class Interfaz
         char * DevolverTextoCapturado();//devuelve el texto que hay en el capturador
         void BorrarUltimaLetra();//borra la ultima letra del capturador
 
-
+        void renderQuad();
 
     private:
         //Sombras
@@ -165,7 +165,7 @@ class Interfaz
 
         Ventana * window;// instancia que contiene la clase que se encarga de gestionar las ventanas y las teclas / raton
 
-        Shader * shaders[8];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[9];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 

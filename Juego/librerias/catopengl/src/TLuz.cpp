@@ -47,6 +47,11 @@ float TLuz::getIntensidad()
     return 0.0f;
 }
 
+glm::vec3 TLuz::getPosicion()
+{
+    return posicion;
+}
+
 void TLuz::beginDraw()
 {
     //comprobamos que la cola o pila no haya tenido cambios, si los tiene se vuelve a calcular
