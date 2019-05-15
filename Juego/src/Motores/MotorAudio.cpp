@@ -68,8 +68,8 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Penultima sala","MuertePenultima");
   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 1","MuerteBienvenida1");
   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 2","MuerteBienvenida2");
-   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean enemigos","MuerteRespawn1");
-   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean murcis","MuerteRespawn2");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean enemigos","MuerteRespawn1");
+  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean murcis","MuerteRespawn2");
    LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente te persigue arana y murci","MuertePerseguido1");
    LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente te persigue pollo","MuertePerseguido2");
   //LoadEvent("event:/Chicken1","Chicken1");
