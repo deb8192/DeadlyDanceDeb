@@ -16,11 +16,14 @@ class TLuz : public TEntidad
         glm::vec3 direction;
         float linear, quadratic;
         float brillos_shader;
+        int tipo_anim = 0;
+        int animaescala = 0;
+        bool cambiaranima = false;
 
     public:
 
         //constructor y destructor
-        TLuz(int);
+        TLuz(int,int);
         ~TLuz();
 
         //gestion atributos
@@ -33,6 +36,7 @@ class TLuz : public TEntidad
         void setDirection(float,float,float);
         void setLightRange(float);
         void setBrillos(float b);
+        float transformToRGB(float c);
 
         //sobrecarga Tentidad
         void beginDraw();

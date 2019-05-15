@@ -161,7 +161,7 @@ void Jugando::Iniciar()
     puzzleResuelto = false;
     estarDebil = false;
     salaPenultima = false;
-    enSalaSegunda = false;
+    meAtacan = false;
     ValoresPorDefecto();
 
     _motor->CrearCamara();
@@ -170,7 +170,7 @@ void Jugando::Iniciar()
 
     //si esta puesto el nivel 1 suena la bienvenida del nivel 1, sino del 2
     nivelJ == 8 ? 
-        _motora->getEvent("MuerteBienvenida1")->start():    
+        _motora->getEvent("MuertePerseguido1")->start():    
         _motora->getEvent("MuerteBienvenida2")->start();
 }
 
@@ -192,7 +192,6 @@ void Jugando::ValoresPorDefecto()
     contadorEnem = 0;
     int_cpw_aux = 0;
     enSalaBoss = false;
-    enSalaSegunda = false;
     //Valores para el centro de las bandadas en el flocking
     posicionMediaEnemigos.vX = INT_MAX;
     posicionMediaEnemigos.vY = INT_MAX;
@@ -681,7 +680,7 @@ void Jugando::Update()
                     if (_enemigos[i]->GetContestar())
                         updateRecorridoPathfinding(_enemigos[i]);
                 }
-                // TO DO: optimizar
+                // TO DO: optimizar beha
                 if(_enemigos[i]->GetSala() == _jugador->GetSala())
                 {
                     if (_enemPideAyuda) {
@@ -689,6 +688,37 @@ void Jugando::Update()
                     } else {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                     }
+
+                    if(estarAtacado >= 2)
+                    {
+                        meAtacan = true;
+                    }
+
+                    if(_enemigos[i]->GetModo() == Enemigo::modosEnemigo::MODO_ATAQUE)
+                    {
+                        estarAtacado++;   
+                        if(!meAtacan)
+                        {
+                            if(_enemigos[i]->GetTipoEnemigo() == 0)
+                            {  
+                                _motora->getEvent("MuertePaseas")->stop(); 
+                                _motora->getEvent("MuerteEstasDebil")->stop();                                
+                                _motora->getEvent("MuerteRespawn1")->stop();                                                              
+                                _motora->getEvent("MuerteRespawn2")->stop();                              
+                                _motora->getEvent("MuertePerseguido2")->start();    
+                            }
+                            else
+                            {
+                                _motora->getEvent("MuertePaseas")->stop(); 
+                                _motora->getEvent("MuerteEstasDebil")->stop();                                
+                                _motora->getEvent("MuerteRespawn1")->stop();                                                              
+                                _motora->getEvent("MuerteRespawn2")->stop();
+                                _motora->getEvent("MuertePerseguido1")->start();
+                            }
+                        }
+                        meAtacan = true;
+                    }
+                    
                 }
                 else
                 {
@@ -1654,10 +1684,14 @@ void Jugando::RespawnEnemigos()
             y = _zonasRespawn[zonaElegida]->getY();
             z = _zonasRespawn[zonaElegida]->getZ(); 
             _zonasRespawn[zonaElegida]->setProposito(true);
+
+            int tipoEne = 0;
+
             switch(enemigo)
             {
                 case 0:
                 {
+                    tipoEne = 1;
                     ancho = largo = 2;
                     alto = 3;
                     Pollo* _ene = new Pollo(x,y,z, 50); // Posiciones, vida
@@ -1679,6 +1713,7 @@ void Jugando::RespawnEnemigos()
                     break;
                 case 1:
                 {
+                    tipoEne = 2;
                     ancho = largo = 2;
                     alto = 3;
                     Murcielago* _ene = new Murcielago(x,y,z, 75); // Posiciones, vida
@@ -1696,6 +1731,25 @@ void Jugando::RespawnEnemigos()
                     _motora->getEvent(nameid)->start();
                 }
                 break;
+            }
+
+            if(tipoEne == 2)
+            {   
+                if(_zonasRespawn[zonaElegida]->GetSala()->getPosicionEnGrafica() == _jugador->GetSala()->getPosicionEnGrafica())          
+                {
+                    _motora->getEvent("MuerteEstasDebil")->stop();
+                    _motora->getEvent("MuertePaseas")->stop();
+                    _motora->getEvent("MuerteRespawn2")->start();
+                }
+            }
+            else if(tipoEne != 0)
+            {
+                if(_zonasRespawn[zonaElegida]->GetSala()->getPosicionEnGrafica() == _jugador->GetSala()->getPosicionEnGrafica())          
+                {
+                    _motora->getEvent("MuerteEstasDebil")->stop();
+                    _motora->getEvent("MuertePaseas")->stop();
+                    _motora->getEvent("MuerteRespawn1")->start();
+                }
             }
             _enemigos.back()->SetEnemigo(enemigo);
             _enemigos.back()->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
@@ -1768,6 +1822,10 @@ void Jugando::CambiarSalaJugador(unsigned short i)
             {
                 _jugador->SetSala(_jugador->GetSala()->getSalidas()[j]);
                 cambioRealizado = true;
+                meAtacan = false;
+                estarAtacado = 0;
+                estarDebil = false;
+                estarFuerte = false;
             }
             else if(!cambioRealizado)
             {
@@ -1790,6 +1848,10 @@ void Jugando::CambiarSalaJugador(unsigned short i)
             {
                 _jugador->SetSala(_jugador->GetSala()->getEntradas()[j]);
                 cambioRealizado = true;
+                meAtacan = false;
+                estarAtacado = 0;
+                estarDebil = false;
+                estarFuerte = false;
             }
             else if(!cambioRealizado)
             {
@@ -2094,10 +2156,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                 //Se acciona o desacciona el mecanismo segun su estado actual
                 bool abrir = _puerta->accionar();
                 if(abrir)
-                {
-                    //indicar si has abierto alguna puerta (pasado segunda sala)
-                    enSalaSegunda = true;
-                    
+                {                    
                     if(_puerta->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
                     {
                         _motora->getEvent("Nivel1")->stop();

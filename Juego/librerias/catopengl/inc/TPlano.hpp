@@ -10,6 +10,7 @@ class TPlano : public TEntidad
 
         bool CargarTextura(const char * _ruta,unsigned int = 1);
         void CargarMalla(unsigned int, unsigned int, float, float);
+        bool CargarVideo(const char *,unsigned int, unsigned int);
         void UdateMesh();
 
         GLuint winwidth, winheight;
@@ -28,10 +29,13 @@ class TPlano : public TEntidad
         unsigned int estado;//nos determina que imagen estamos cargando por defecto es estado = textureID
         unsigned int VAO, VBO, EBO; //Datos de render
         int id;//id del boton
-
+        bool esVideo;//determina si se esta cargando un video con imagenes cambiantes.
+        const char * _Archivo;//guardamos la ruta del video o la imagen
     public:
         // Constructor y destructor
         TPlano(const char *, unsigned int, unsigned int, float, Shader *, GLuint, GLuint,const char * rutapulsado = nullptr,const char * rutaencima = nullptr);
+        //para videos
+        TPlano(const char * ruta, unsigned int x, unsigned int y, Shader * program, GLuint screenWidth, GLuint screenHeight,unsigned int videoWidth,unsigned int videoHeight);
         ~TPlano();
 
         void setSize(float,float); //ancho largo

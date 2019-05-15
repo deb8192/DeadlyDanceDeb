@@ -1405,7 +1405,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
             }
             else
             {
-                Enemigos_Scena.push_back(enemigo);
+                Enemigos_Scena.push_back(move(enemigo));
             }
 
             if(anima && anima != nullptr)
@@ -1422,12 +1422,18 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
             }
 
             //Crear billboard
-            //TO DO esteo hay que mirar que va bien para el BOSS que se posiciona el primero en el array de enemigos
             unsigned short _board = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/4.png", 0.01f);
             _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+10.0f,(float)z);
             _interfaz->Escalar(_board,2.0f,0.15f,1.75f);
             _interfaz->DeshabilitarObjeto(_board);
-            BoardsEnem_Scena.push_back(_board);
+            if(boss)
+            {
+                BoardsEnem_Scena.insert(BoardsEnem_Scena.begin(), _board);
+            }
+            else
+            {
+                BoardsEnem_Scena.push_back(move(_board));
+            }
         }
 
     #else
@@ -2717,6 +2723,7 @@ void MotorGrafico::EraseTodosEnemigos()
         if(valor >= 0 && valor < BoardsEnem_Scena.size())
         {
             _interfaz->RemoveObject(BoardsEnem_Scena[valor]);
+            BoardsEnem_Scena.erase(BoardsEnem_Scena.begin());
         }
 
     #else
