@@ -1404,7 +1404,14 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
             _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+10.0f,(float)z);
             _interfaz->Escalar(_board,2.0f,0.15f,1.75f);
             _interfaz->DeshabilitarObjeto(_board);
-            BoardsEnem_Scena.push_back(_board);
+            if(boss)
+            {
+                BoardsEnem_Scena.insert(BoardsEnem_Scena.begin(), _board);
+            }
+            else
+            {
+                BoardsEnem_Scena.push_back(_board);
+            }
         }
 
     #else

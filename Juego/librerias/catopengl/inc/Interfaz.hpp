@@ -10,6 +10,7 @@
 #include "TPlano.hpp"
 #include "TTexto.hpp"
 #include "TBillboard.hpp"
+#include "TParticle.hpp"
 #include "Shader.hpp"
 #include "Ventana.hpp"
 #include "Gestor.hpp"
@@ -28,7 +29,7 @@ class Interfaz
 
         unsigned short AddCamara();//creamos una camara
 
-        unsigned short AddLuz(int);//creamos una luz
+        unsigned short AddLuz(int,int);//creamos una luz
 
         unsigned short AddMalla(const char *,int initf,int shader);//creamos una malla
 
@@ -37,6 +38,8 @@ class Interfaz
         unsigned short AddTexto(std::string, GLuint); //Crear un texto
 
         unsigned short AddBoard(float ,float ,float ,float, float, const char *,float); //Crear un billboard (world x, world y, world z, local x, local y, ruta imagen/texto, prioridad)
+
+        unsigned short AddParticles(float ,float ,float,unsigned int, float, float, const char *); //Crear sistema de particulas
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
@@ -110,6 +113,10 @@ class Interfaz
 
         void DefinirTextoBoton(unsigned short imagen,unsigned short texto);//le asigna a un boton(imagen), el texto
 
+        void DetenerSistema(unsigned short part); //Detener sistema de particulas
+
+        void IniciarSistema(unsigned short part, float time); //Iniciar sistema de particulas
+
         void DistanciaLuz(unsigned short luz, float d); //Aplica una distancia a la luz
 
         //Colores de luz
@@ -142,13 +149,21 @@ class Interfaz
         char * DevolverTextoCapturado();//devuelve el texto que hay en el capturador
         void BorrarUltimaLetra();//borra la ultima letra del capturador
 
+        //crea un video en la posicion (x,y) de la pantalla, con el width y height que se le pase
+        unsigned int CrearVideo(float x, float y, const char * ruta, int width, int height);
+        //Pausa el video con el id que le pases
+        void PausarVideo(unsigned int id);
+        //Empieza la reproduccion con el id que le pases
+        void PlayVideo(unsigned int id);
+
+
     private:
 
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
         Ventana * window;// instancia que contiene la clase que se encarga de gestionar las ventanas y las teclas / raton
 
-        Shader * shaders[6];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[7];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 
@@ -198,6 +213,10 @@ class Interfaz
 
         std::vector<Nodo *> boards;//registro de billboards en interfaz
 
+        std::vector<Nodo *> particles; //registro de sistemas de particulas en interfaz
+
+        std::vector<Nodo *> mallas; //registro de mallas
+
         Gestor * gestorDeRecursos;//clase que gestona los recursos del motor
 
         Nodo * buscarNodo2(unsigned short);
@@ -213,6 +232,8 @@ class Interfaz
         float x,y,z;
 
         unsigned int cualborrar;
+
+        unsigned int countlights; //cuenta las luces puntuales
 
         void pulgarReferencia(Nodo * referencia,unsigned short tipo);//limpia la referencia del tipo de objeto que le pases
 

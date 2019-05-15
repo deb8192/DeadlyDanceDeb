@@ -263,8 +263,14 @@
 														<!--Sala final boss -->
 														<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="397" Y="0" Z="482" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 														<!--Modelo-Suelo--><Object tipoObj="18" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="457" Y="0" Z="483" despX="0" despZ="0" Texture="assets/texture/discofloor.png" Model="assets/models/Escenario/PistaDisco.obj"></Object>
-														<!--Puerta--><Object tipoObj="3" Type="1" codigo="0" accion="3" ancho="1" largo="4" alto="10" RP="90" X="373" Y="0" Z="478" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
+														<!--Puerta--><Object tipoObj="3" Type="1" codigo="20" accion="3" ancho="1" largo="4" alto="10" RP="90" X="373" Y="0" Z="478" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
 														<!--BossMuerte--><Enemy Type="1" enemigo="5" accion="1" ancho="1" largo="1" alto="10" X="453" Y="0" Z="468" Texture="" Model=""></Enemy>
+														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="442" Y="0" Z="498"></Zone>
+														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="442" Y="0" Z="483"></Zone>
+														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="442" Y="0" Z="468"></Zone>
+														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="462" Y="0" Z="498"></Zone>
+														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="462" Y="0" Z="483"></Zone>
+														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="462" Y="0" Z="468"></Zone>
 														<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="28" ancho="4" largo="4" alto="2" X="373" Y="0" Z="482" conexiones="27,29"></Waypoint>
 														<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="29" ancho="4" largo="4" alto="2" X="431" Y="0" Z="483" conexiones="28,30"></Waypoint>
 														<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="30" ancho="4" largo="4" alto="2" X="491" Y="0" Z="482" conexiones="29,31"></Waypoint>

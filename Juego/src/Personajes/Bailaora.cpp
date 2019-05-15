@@ -32,14 +32,14 @@ void Bailaora::armaAtacarEspecialUpd()
     //Aumento de la rotacion hacia la izquierda.
     atgy += 30;
 
-    if(atgy >= 360.0)
+    /*if(atgy >= 360.0)
     {
         atgy -= 360.0;
     }
     else if(atgy < 0.0)
     {
         atgy += 360;
-    }
+    }*/
 
     _armaEspecial->setNewPosiciones(atespx, this->getY(), atespz);
     _armaEspecial->setNewRotacion(getRX(), atgy, getRZ());
