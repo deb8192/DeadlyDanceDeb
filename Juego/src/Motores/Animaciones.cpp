@@ -20,7 +20,7 @@ Animaciones::Animaciones()
         {
             if( _animaciones[i] != nullptr)
             {
-                delete[] _animaciones[i];
+                delete _animaciones[i];
             }
         }
         delete [] _animaciones;
@@ -29,8 +29,9 @@ Animaciones::Animaciones()
 
 Animaciones::Animaciones(const char * ruta)
 {
-    pugi::xml_document doc;//instanciamos el objeto de la libreria xml
-    pugi::xml_parse_result result =  doc.load_file(ruta);//cargamos el archivo
+    std::ifstream stream(ruta);
+    pugi::xml_document doc;
+    pugi::xml_parse_result result =  doc.load(stream);//cargamos el archivo
     
     if(result)
     {

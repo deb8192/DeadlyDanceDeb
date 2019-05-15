@@ -241,7 +241,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void IniciarParticulasAccion(unsigned short i, float x, float y, float z, float time);
             void CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
             void CargarLuzEnSala(int sala,int x,int y,int z);
-            void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss);
+            void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima = nullptr, unsigned int fps = 1);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
             void CargarCofre(int pos, int rp, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
@@ -426,6 +426,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<Animaciones *> PowerUPAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> ParedesAni_Scena;
                 std::vector<Animaciones *> CofresAni_Scena;
+                std::vector<Animaciones *> EnemigosAni_Scena;//logico de las animaciones para los enemigos
 
                 std::vector<unsigned short> Objetos_Debug;//contiene los elementos que se ven en modo debug
                 std::vector<unsigned short> Objetos_Debug2;//para objetos con tiempo para desaparecer

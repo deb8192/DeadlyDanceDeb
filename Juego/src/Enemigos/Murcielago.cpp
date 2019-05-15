@@ -13,8 +13,11 @@ Murcielago::Murcielago(float nX, float nY, float nZ, int maxVida)
     rotation = constantes.CERO;
     zonaElegida = nullptr;
 
-    _modelo = "assets/models/Murcielago.obj";
+    estadoMuerte = 8;
+    _modelo = "assets/models/Murcielago/murcielago_000001.obj";
     _textura = "assets/texture/texturas_murci.png";
+    fps = 60;
+    _animacion = "assets/animaciones/Murcielago.xml";
 }
 
 Murcielago::~Murcielago()
@@ -23,6 +26,8 @@ Murcielago::~Murcielago()
     _ordenes = nullptr;
     _modelo = nullptr;
     _textura = nullptr;
+    _animacion = nullptr;
+    fps = 0;
 }
 
 /***************** RunIA *****************
@@ -70,6 +75,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<ZonaOscura*> 
 {
     Jugador* _jugador = (Jugador*)_jug;
     funciona = true;
+    MotorGrafico * _motor = MotorGrafico::GetInstance();
     if(modo == MODO_ATAQUE && _ordenes != nullptr)
     {
         //Sale de la zona oscura
@@ -78,6 +84,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<ZonaOscura*> 
             enZonaOscura = false;
             if(zonaElegida !=nullptr)
             {
+                _motor->cambiarAnimacion(5,*i,7);
                 zonaElegida->quitarElemento();
                 zonaElegida = nullptr;
             }
@@ -87,13 +94,17 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<ZonaOscura*> 
             case EN_PERSIGUE: //El Murcielago se mueve
                 {
                     funciona = this->perseguir(_jug);
+                    
+                    _motor->cambiarAnimacion(5,(int)*i,2);
                 }
                 break;
 
             case EN_ATACAR: //El Murcielago ataca
                 {
+                    _motor->cambiarAnimacion(5,(int)*i,2);
                     if(!atacado)
                     {
+                        _motor->cambiarAnimacion(5,(int)*i,3);
                         int danyo;
                         danyo = this->Atacar(*i);
                         if(danyo > 0)
@@ -160,7 +171,8 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<ZonaOscura*> 
             }
             break;
             case EN_BUSCA:  //El murcielago busca una zona oscura
-
+                
+                _motor->cambiarAnimacion(5,(int)*i,1);//estado andar(despacio)
 
                 if(!enZonaOscura)
                 {
@@ -179,6 +191,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<ZonaOscura*> 
                     funciona = this->buscar(&coordenadasZonaDestino);
                     if(funciona)
                     {
+                        _motor->cambiarAnimacion(5,(int)*i,5);
                         zonaElegida->annadirElemento();
                         enZonaOscura = true;
                     }

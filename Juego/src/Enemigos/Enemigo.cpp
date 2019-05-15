@@ -17,6 +17,10 @@ Enemigo::Enemigo()
     _fisicas = MotorFisicas::getInstance();
     _eventos = SenseEventos::getInstance();
 
+    _animacion = nullptr;
+    estadoMuerte = 0;//por defecto zero
+    fps = 0;
+
     tiempoMerodear = 0.0f;
     tiempoMoverse = 0.0f;
     tiempoOcultarse = 0.0f;
@@ -66,6 +70,10 @@ Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida/*,
     posIni.x = nX;
     posIni.y = nY;
     posIni.z = nZ;
+
+    _animacion = nullptr;
+    estadoMuerte = 0;//por defecto zero
+    fps = 0;
 
     /*ancho = anchoN;
     largo = largoN;
@@ -2074,6 +2082,16 @@ const char* Enemigo::GetTextura()
     return _textura;
 }
 
+unsigned int Enemigo::GetFps()
+{
+    return fps;
+}
+
+const char* Enemigo::GetAnimacion()
+{
+    return _animacion;
+}
+
 bool Enemigo::GetPedirAyuda()
 {
     return pedirAyuda;
@@ -2134,4 +2152,9 @@ void Enemigo::BorrarEnemigos(unsigned short n)
 {
     _motor->EraseEnemigo(n);
     _fisicas->EraseEnemigo(n);
+}
+
+unsigned int Enemigo::GetEstadoMuerte()
+{
+    return estadoMuerte;
 }

@@ -1014,6 +1014,7 @@ void Jugando::UpdateIA()
                 }else{
                     if(_enemigos[i]->estasMuerto()){
                         _enemigos[i]->MuereEnemigo(i);
+                        _motor->cambiarAnimacion(5,i,_enemigos[i]->GetEstadoMuerte());
                     }
                     //si no esta muerto ni piensa morirse XD ejecutamos ia
                     else

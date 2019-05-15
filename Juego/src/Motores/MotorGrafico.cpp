@@ -55,6 +55,9 @@ MotorGrafico::MotorGrafico()
 
         tiempo = 0;//tiempo de actualizacion botones
 
+        //para las animaciones
+        EnemigosAni_Scena.reserve(50);
+
     #else
         //codigo motor irrlicht
         input.setDevice(_device);//lo  utilizamos para que los eventos puedan llamar a funciones de
@@ -701,6 +704,13 @@ void MotorGrafico::RenderEscena()
                 if(ObjetosAni_Scena[i] != nullptr)//solo esta objetos luego seran todos los objetos
                 {
                     ActualizarAnimacionMotor(ObjetosAni_Scena[i]);
+                }
+            }
+            for(unsigned int i = 0; i < EnemigosAni_Scena.size();i++)
+            {
+                if(EnemigosAni_Scena[i] != nullptr)//solo esta objetos luego seran todos los objetos
+                {
+                    ActualizarAnimacionMotor(EnemigosAni_Scena[i]);
                 }
             }
             Times * tiempo = Times::GetInstance();
@@ -1377,13 +1387,13 @@ void MotorGrafico::CargarLuzEnSala(int sala,int x,int y,int z)
 }
 
 
-void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss)
+void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima, unsigned int fps)
 {
     #ifdef WEMOTOR
 
         //codigo motor catopengl
 
-        unsigned short enemigo = _interfaz->AddMalla(ruta_objeto,1,0);
+        unsigned short enemigo = _interfaz->AddMalla(ruta_objeto,fps,0);
         _interfaz->SetTexture(enemigo,ruta_textura);
 
         if(enemigo != 0)
@@ -1396,6 +1406,19 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
             else
             {
                 Enemigos_Scena.push_back(enemigo);
+            }
+
+            if(anima && anima != nullptr)
+            {
+                
+                Animaciones * _ani = new Animaciones(anima);//cargamos las animaciones
+                _ani->AsignarID(enemigo);
+                EnemigosAni_Scena.push_back(_ani);
+                //std::cout << ruta_objeto << " "  << fps << " " << anima << " " << EnemigosAni_Scena.size()-1 << "\n";
+            }
+            else
+            {
+                EnemigosAni_Scena.push_back(nullptr);
             }
 
             //Crear billboard
@@ -2648,7 +2671,17 @@ void MotorGrafico::EraseEnemigo(std::size_t i)
         {
             _interfaz->RemoveObject(Enemigos_Scena[i]);
             Enemigos_Scena.erase(Enemigos_Scena.begin() + i);
+            if(valor < EnemigosAni_Scena.size())
+            {
+                if(EnemigosAni_Scena[i])
+                {
+                     delete EnemigosAni_Scena[i];
+                }
+                EnemigosAni_Scena.erase(EnemigosAni_Scena.begin() + i);
+            }
         }
+
+
 
         if(valor >= 0 && valor < BoardsEnem_Scena.size())
         {
@@ -3753,6 +3786,11 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
         else if(tipo == 4) //animaciones paredes
         {
             anim = ParedesAni_Scena[did];
+        }
+        else if(tipo == 5)
+        {
+            //std::cout << did << " " << estado << "\n";
+            anim = EnemigosAni_Scena[did];
         }
 
         //aqui mas

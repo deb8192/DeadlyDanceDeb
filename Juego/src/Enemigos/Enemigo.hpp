@@ -149,6 +149,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool GetRespawnBoss();
         const char* GetModelo(); // Malla 3D
         const char* GetTextura(); //textura
+        unsigned int GetFps();
+        const char* GetAnimacion();
         bool GetPedirAyuda();
         void SetPedirAyuda(bool);
         bool GetContestar();
@@ -184,6 +186,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             MODO_OCULTACION,
             MODO_PELIGRO
         };
+
+        unsigned int GetEstadoMuerte();
 
     protected:
         Times* _tiempo;
@@ -283,6 +287,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool contestar;
         bool defensa; //TO DO EXPANDIRLO AL JUGADOR cuando recibe danyo recibe la mitad si esta a true
         INnpc::VectorEspacial posicionComunBandada; //PUnto de cohesion de las bandadas
+        int estadoMuerte;//tiene el numero de estado que pertenece a estar muerto o muriendo [Por defecto 0]
+        int estadoIncial;//tiene el numero de estado con el que empieza el jugador [Por defecto 0]
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include "Animacion.hpp"
 #include "../pugixml.hpp"
 #include <iostream>
+#include <fstream> 
 
 class Animaciones
 {
@@ -31,6 +32,7 @@ class Animaciones
         unsigned int numEstados;//numero de estados totales
         bool cambio;//sirve para saber si se ha cambiado el estado
         int buscarNumeroEstado(Animacion * e);//devuelve el numero al que pertenece ese estado
+
 
 };
 
