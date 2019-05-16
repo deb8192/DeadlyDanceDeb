@@ -86,26 +86,26 @@ void main()
     //Fase 1: Luz direccional
     vec3 result = CalcDirLight(dirLight, norm, viewDir, FragPos);
 
-    // //Fase 2: Puntos de Luz (Multiluces)
-    // for(int i = 0; i < NR_POINT_LIGHTS; i++)
-    // {
-    //     float distance = length(pointLights[i].position - FragPos);
-    //     if(distance < 40)
-    //     {
-    //         if(pointLights[i].constant > 0)
-    //         {
-    //             vec3 pointres = CalcPointLight(pointLights[i], norm, FragPos, viewDir);
-    //             result += pointres;
-    //         }
-    //     }
-    // }
-    //
-    // //Foco de luz
-    // vec3 spotres = CalcSpotLight(spotLight, norm, FragPos, viewDir);
-    // if(spotres.x > 0 && spotres.y > 0 && spotres.z > 0)
-    // {
-    //     result += spotres;
-    // }
+    //Fase 2: Puntos de Luz (Multiluces)
+    for(int i = 0; i < NR_POINT_LIGHTS; i++)
+    {
+        float distance = length(pointLights[i].position - FragPos);
+        if(distance < 40)
+        {
+            if(pointLights[i].constant > 0)
+            {
+                vec3 pointres = CalcPointLight(pointLights[i], norm, FragPos, viewDir);
+                result += pointres;
+            }
+        }
+    }
+    
+    //Foco de luz
+    vec3 spotres = CalcSpotLight(spotLight, norm, FragPos, viewDir);
+    if(spotres.x > 0 && spotres.y > 0 && spotres.z > 0)
+    {
+        result += spotres;
+    }
 
     //Ajuste de silueta
     silang /= 0.5;
@@ -192,14 +192,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 fragPos)
     vec3 ambient  = light.ambient  * 0.05 * vec3(texture(Texturediffuse, TexCoords));
     vec3 diffuse  = light.diffuse  * diff * vec3(texture(Texturediffuse, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(Texturespecular, TexCoords));
-    //return (ambient + diffuse + specular);
-
-    // calculate shadow
-    lightDir = normalize(vec3(-20.0, 30.0, -20.0) - fragPos);
-    float shadow = ShadowCalculation(FragPosLightSpace,lightDir);
-    vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular));
-
-    return lighting;
+    return (ambient + diffuse + specular);
 }
 
 //Calcular Punto de Luz
@@ -255,7 +248,13 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     ambient  *= attenuation;
     diffuse  *= attenuation;
     specular *= attenuation;
-    return (ambient + diffuse + specular);
+    //return (ambient + diffuse + specular);
+
+    // calculate shadow
+    float shadow = ShadowCalculation(FragPosLightSpace,lightDir);
+    vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular));
+
+    return lighting;
 }
 
 //Calcular Foco de luz

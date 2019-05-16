@@ -152,7 +152,12 @@ void TMalla::beginDraw()
             }
         }
     }
-    if(render == false)render = true; //para que en el siguiente draw sea render
+    if(render == false)
+    {
+        render = true; //para que en el siguiente draw sea render
+    }else if(render){
+        render = false;
+    }
 }
 
 void TMalla::endDraw()

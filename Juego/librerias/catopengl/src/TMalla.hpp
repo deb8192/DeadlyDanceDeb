@@ -15,7 +15,7 @@ class TMalla : public TEntidad
         float actual_time;
         bool bucle;//si esta activo esta en bucle si esta desactivado no esta en bucle, por defecto es true
         float transparente;
-        bool render = true; //Dibujado de render o de profundidad
+        bool render = false; //Dibujado de render o de profundidad
     public:
         // Constructor y destructor
         TMalla(int ft);

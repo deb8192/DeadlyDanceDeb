@@ -5,7 +5,7 @@
 	<!-- Tenemos 36/50 enemigos -->
 
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
-	<Light Type="Ambiental" Tipo="0" Intensity="50" X="0" Y="10" Z="0" colorR="130" colorG="130" colorB="130" Animacion="0"> </Light>
+	<Light Type="Ambiental" Tipo="0" Intensity="50" X="0" Y="10" Z="0" colorR="100" colorG="100" colorB="100" Animacion="0"> </Light>
 	<!--8 luces puntuales-->
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>
@@ -15,14 +15,14 @@
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>
-	<Particles X="-36" Y="3" Z="-31" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="-36" Y="3" Z="31" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="26" Y="3" Z="-33" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="25" Y="3" Z="33" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="38" Y="3" Z="33" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="151" Y="3" Z="-30" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="150" Y="3" Z="70" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="157" Y="3" Z="70" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="-36" Y="3" Z="-31" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="-36" Y="3" Z="31" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="26" Y="3" Z="-33" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="25" Y="3" Z="33" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="38" Y="3" Z="33" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="151" Y="3" Z="-30" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="150" Y="3" Z="70" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="157" Y="3" Z="70" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
 
 	<LightSala sala="1" minZ="-61" maxZ="155" minX="-60" maxX="153"></LightSala>
 		<LightPos X="-34" Y="4" Z="-31" sala="1"> </LightPos>
