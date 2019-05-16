@@ -5,6 +5,14 @@ MotorAudioSystem* MotorAudioSystem::maudio_instancia = 0;
 //Constructor
 MotorAudioSystem::MotorAudioSystem()
 {
+    configuracion.CargarConfiguracion("config.global");
+    if(!configuracion.GetMuteAll())
+    {
+        generalVolumeMusica = (float)configuracion.GetVolAmbiente()/100;
+        generalVolumeSFX = (float)configuracion.GetVolEfectos()/100;
+        generalVolumeVoces = (float)configuracion.GetVolVoces()/100;
+    }
+
   //Creamos el sistema
   ERRCHECK(FMOD::Studio::System::create(&pstudioSystem));
 

@@ -7,6 +7,8 @@
 #include <math.h>
 #include <iostream>
 
+#include "../Jugando/Configuration.hpp"
+
 using namespace std;
 
 #ifndef _MOTOR_AUDIO_HPP
@@ -54,10 +56,11 @@ struct MotorAudioSystem
     MotorAudioSystem();                           //Singleton
     static MotorAudioSystem* maudio_instancia;
 
-    float generalVolumeMusica = 0.5f;
-    float generalVolumeSFX = 0.5f;
-    float generalVolumeVoces = 0.5f;
+    float generalVolumeMusica = 0.0f;
+    float generalVolumeSFX = 0.0f;
+    float generalVolumeVoces = 0.0f;
 
+    Configuration configuracion;
     FMOD::Studio::System* pstudioSystem;                    //Puntero de instancia a FMOD
     FMOD::System *plowSystem;                               //Puntero de instancia low level
     FMOD::Studio::Bank* masterBank;                         //Puntero de Banko maestro
