@@ -151,7 +151,7 @@ class Interfaz
         char * DevolverTextoCapturado();//devuelve el texto que hay en el capturador
         void BorrarUltimaLetra();//borra la ultima letra del capturador
 
-<<<<<<< HEAD
+
         //crea un video en la posicion (x,y) de la pantalla, con el width y height que se le pase
         unsigned int CrearVideo(float x, float y, const char * ruta, int width, int height);
         //Pausa el video con el id que le pases
@@ -159,9 +159,6 @@ class Interfaz
         //Empieza la reproduccion con el id que le pases
         void PlayVideo(unsigned int id);
 
-
-=======
->>>>>>> sombras
     private:
         //Luces y sombras
         unsigned int depthMapFBO;
