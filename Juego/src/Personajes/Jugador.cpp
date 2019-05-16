@@ -345,7 +345,6 @@ int Jugador::Atacar(int i)
         {
             setAnimacion(2);
             _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,3,3,3,4,0,0,false);
-            _motora->getEvent("SinArma")->setVolume(0.4f);
             _motora->getEvent("SinArma")->start();
         }
         //ATAQUE CUERPO A CUERPO
@@ -353,7 +352,6 @@ int Jugador::Atacar(int i)
         {
             //Crear cuerpo de colision de ataque delante del jugador
             _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4,0,0,false);
-            _motora->getEvent("GolpeGuitarra")->setVolume(0.5f);
             _motora->getEvent("GolpeGuitarra")->start();
         }
         //ATAQUE A DISTANCIA
@@ -362,7 +360,6 @@ int Jugador::Atacar(int i)
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj",NULL);
             //Crear cuerpo de colision de ataque delante del jugador
             _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
-            _motora->getEvent("Arpa")->setVolume(0.5f);
             _motora->getEvent("Arpa")->start();
         }
         //ATAQUE A MEDIA DISTANCIA
@@ -374,7 +371,6 @@ int Jugador::Atacar(int i)
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Onda.obj",NULL);
             //Crear cuerpo de colision de ataque delante del jugador
             _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0,false);
-            _motora->getEvent("Flauta")->setVolume(0.3f);
             _motora->getEvent("Flauta")->start();
         }
 
@@ -446,7 +442,6 @@ int Jugador::AtacarEspecial()
                 _fisicas->crearCuerpo(0,
                     _armaEspecial->getFisX(),_armaEspecial->getFisY(),_armaEspecial->getFisZ(),
                     2,8,1,8,5,0,0,false);
-                _motora->getEvent("GuitarraEspecial")->setVolume(0.5f);
                 _motora->getEvent("GuitarraEspecial")->start();
             }
             //ATAQUE ESPECIAL DE LA BAILAORA (castanyuelas)
@@ -506,9 +501,9 @@ void Jugador::CrearCuerpoAtaque()
             //Si ha chocado con un obstaculo no avanza
             if(_fisicas->collideAtackObstacle() == false)
             {
-                atz += velocidadflecha*(distance * 
+                atz += velocidadflecha*(distance *
                     cos(constantes.PI * atgy / constantes.PI_RADIAN));
-                atx += velocidadflecha*(distance * 
+                atx += velocidadflecha*(distance *
                     sin(constantes.PI * atgy / constantes.PI_RADIAN));
                 atposZ += velocidadflecha*(distance *
                     cos(constantes.PI * atgy / constantes.PI_RADIAN));
@@ -536,7 +531,7 @@ void Jugador::CrearCuerpoAtaque()
                 cos(constantes.PI * atgy / constantes.PI_RADIAN));
             atx += velocidadflecha*(distance *
                 sin(constantes.PI * atgy / constantes.PI_RADIAN));
-            
+
             if(_fisicas->collideAtackObstacle() == false)
             {
                 atposZ += velocidadflecha* (distance * cos(constantes.PI * atgy / constantes.PI_RADIAN));
@@ -551,7 +546,7 @@ void Jugador::CrearCuerpoAtaque()
     _fisicas->updateAtaque(atposX,atposY,atposZ,atgx,atgy,atgz);
     _motor->dibujarObjetoTemporal(atx,aty,atz,atgx,atgy,atgz,
         var1,var2,var3,var4);
-        
+
     if (this->getArma() != nullptr)
         if ((this->getArma()->GetTipoObjeto() == constantes.ARPA) ||
             (this->getArma()->GetTipoObjeto() == constantes.FLAUTA))
@@ -1157,7 +1152,7 @@ void Jugador::setArma(Recolectable* _armaRec)
         //lo cargamos por primera vez en el motor de graficos
         _motor->CargarArmaJugador(posActual.x, posActual.y, posActual.z,
             _armaEquipada->GetModelo(),_armaEquipada->GetTextura());
-        
+
         //lo cargamos por primera vez en el motor de fisicas
         _fisicas->crearCuerpo(0,posActual.x/2,posActual.y/2,posActual.z/2,
             2,

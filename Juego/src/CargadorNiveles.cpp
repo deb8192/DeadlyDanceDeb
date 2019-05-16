@@ -659,9 +659,8 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
             std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+            _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid, 1);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(0.4f);
             _motora->getEvent(nameid)->start();
         }
             break;
@@ -676,9 +675,8 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
             std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid);
+            _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid, 1);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(1.0f);
             _motora->getEvent(nameid)->start();
         }
             break;
@@ -695,9 +693,8 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
             std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
+            _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid, 1);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(0.5f);
             _motora->getEvent(nameid)->start();
         }
         break;
@@ -714,9 +711,8 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
             std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
+            _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid, 1);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(0.5f);
             _motora->getEvent(nameid)->start();
         }
         break;
@@ -965,7 +961,7 @@ unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     _eneA->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _eneA->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _eneA->definirSala(sala);//le pasamos la sala en donde esta
-    
+
     //_motor->CargarEnemigos(0,0,0,_eneA->GetModelo());//creamos la figura
     _eneCofres.push_back(move(_eneA));//guardamos el enemigo en el vector
     _eneA = nullptr;

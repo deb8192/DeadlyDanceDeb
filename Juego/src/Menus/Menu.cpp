@@ -97,7 +97,7 @@ void Menu::pintarBotones()
     _motor->CrearImagen("assets/images/logo2.png",700,500,1.0f);
     _motor->CrearImagen("assets/images/logo3.png",20,460,1.0f);
     _motor->CrearBoton(300,200,500,230, GUI_ID_EMPEZAR_BUTTON, L"Iniciar Partida", L"Iniciar Partida");//te da la opcion de empezar una nueva partida
-    _motor->CrearBoton(300,240,500,270, GUI_ID_CONTINUARPARTIDA_BUTTON, L"Continuar Partida", L"Continuar Partida");//te da la opcion de cargar una partida 
+    _motor->CrearBoton(300,240,500,270, GUI_ID_CONTINUARPARTIDA_BUTTON, L"Continuar Partida", L"Continuar Partida");//te da la opcion de cargar una partida
     _motor->CrearBoton(300,280,500,310, GUI_ID_CONFIGURACION_BUTTON, L"Configuracion", L"Configuracion");
     _motor->CrearBoton(300,320,500,350, GUI_ID_CREDITOS_BUTTON, L"Creditos", L"Creditos");
     _motor->CrearBoton(300,360,500,390, GUI_ID_SALIR_BUTTON, L"Salir al Escritorio", L"Salir");
@@ -140,7 +140,6 @@ void Menu::Pausar()
 
 void Menu::Reanudar()
 {
-    _motora->getEvent("Menu")->setVolume(0.4);
     _motora->getEvent("Menu")->start(); //Reproducir musica Menu
     //_motor->CrearTexto("Deadly Dance", 0, 0, 80, 20); // Parametros: texto, x1, y1, x2, y2
     pintarBotones();
@@ -150,7 +149,7 @@ void Menu::calcularColor()
 {
     unsigned short estavez = 1;
     //std::cout << " color " << estavez << std::endl;
-    
+
     if(estavez == 1)
     {
         if(rm)
@@ -227,5 +226,5 @@ void Menu::continuar()
 
 void Menu::continuarPartida()
 {
-    Juego::GetInstance()->estado.CambioEstadoContinuarPartida(); 
+    Juego::GetInstance()->estado.CambioEstadoContinuarPartida();
 }

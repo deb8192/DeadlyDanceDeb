@@ -33,10 +33,12 @@ struct MotorAudioSystem
         return maudio_instancia;
     }
 
-    MotorAudioEvent* getEvent(std::string name);                   //Devuelve el evento con un nombre
-    void setListenerPosition(float posx, float posy, float posz);  //posicion del punto de escucha
-    void LoadEvent(const char *path, std::string name);            //cargar evento
-    void update(bool paused);                                      //Actualizar motor
+    MotorAudioEvent* getEvent(std::string name);                //Devuelve el evento con un nombre
+    void setListenerPosition(float posx, float posy, float posz);                   //posicion del punto de escucha
+    void LoadEvent(const char *path, std::string name, unsigned short tipo);        //cargar evento
+    void update(bool paused);                                                       //Actualizar motor
+    void setVolumeAll(unsigned short tipo, float vol);
+    void stopAll();                                                                  //Detiene todos los sonidos
 
     //Comprobar errores en FMOD
     void ERRCHECK(FMOD_RESULT result)
@@ -52,13 +54,19 @@ struct MotorAudioSystem
     MotorAudioSystem();                           //Singleton
     static MotorAudioSystem* maudio_instancia;
 
+    float generalVolumeMusica = 0.5f;
+    float generalVolumeSFX = 0.5f;
+    float generalVolumeVoces = 0.5f;
+
     FMOD::Studio::System* pstudioSystem;                    //Puntero de instancia a FMOD
     FMOD::System *plowSystem;                               //Puntero de instancia low level
     FMOD::Studio::Bank* masterBank;                         //Puntero de Banko maestro
   	FMOD::Studio::Bank* stringsBank;                        //Puntero de Banko maestro string
     std::map<std::string, FMOD::Studio::Bank*> banks;       //Mapa de bancos
     std::map<std::string, FMOD::Studio::EventDescription*> eventDescriptions;  //Mapa de descripcion de eventos
-    std::map<std::string, MotorAudioEvent*> MotorAudioEvents;                  //Mapa con MotorAudioEvents
+    std::map<std::string, MotorAudioEvent*> MusicaEvents;                 //Mapa con musica eventos
+    std::map<std::string, MotorAudioEvent*> SFXEvents;                    //Mapa SFX eventos
+    std::map<std::string, MotorAudioEvent*> VocesEvents;                  //Mapa Voces eventos
 };
 
 //Motor de audio de eventos
@@ -78,10 +86,10 @@ class MotorAudioEvent
     //Comprobar errores en FMOD
     void ERRCHECK(FMOD_RESULT result)
     {
-      if (result != FMOD_OK){
+        if (result != FMOD_OK){
          printf("FMOD error! (%d) %s\n", result, FMOD_ErrorString(result));
          exit(-1);
-      }
+        }
     }
 
   private:
