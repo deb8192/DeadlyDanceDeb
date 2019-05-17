@@ -477,10 +477,9 @@ void Interfaz::Draw()
 
     if(configure_depthmap)
     {
-        // configure depth map FBO
-        // -----------------------
+        //Configurar mapa de profundidad FBO
         glGenFramebuffers(1, &depthMapFBO);
-        // create depth texture
+        //Crear textura de profundidad
         glGenTextures(1, &depthMap);
         glBindTexture(GL_TEXTURE_2D, depthMap);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, window->getWidth(), window->getHeight(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
@@ -490,7 +489,6 @@ void Interfaz::Draw()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
         float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-        // attach depth texture as FBO's depth buffer
         glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
         glDrawBuffer(GL_NONE);
@@ -498,6 +496,7 @@ void Interfaz::Draw()
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+        //Enviar al shader la textura
         shaders[4]->Use();
         shaders[4]->setInt("shadowMap", 2);
         configure_depthmap = false;
@@ -527,8 +526,17 @@ void Interfaz::Draw()
                     //Dibujar luz
                     luces[i]->recurso->draw(1);
 
-                    if(i > 0)
+                    unsigned int tipo_luz_sombra = 0;
+                    TNodo * tnodo = luces[i]->recurso->GetNieto(1)->GetHijo(1);
+                    if(tnodo != nullptr)
                     {
+                        tipo_luz_sombra = dynamic_cast<TLuz*>(tnodo->GetEntidad())->getTipoLuz();
+                    }
+
+                    if(tipo_luz_sombra != 0 && sombras_en_tipo == 1) //no es la luz direccional
+                    {
+                        near_plane = 1.0f;
+                        far_plane = 50.0f;
                         //Obtener posicion de luz
                         glm::vec3 poslight = glm::vec3(0.0f);
                         glm::vec3 distance = glm::vec3(0.0f);
@@ -548,7 +556,7 @@ void Interfaz::Draw()
                         if(distance.z <= 0)distance.z = poslight.z - centerscene[2];
                         if((distance.x + distance.y + distance.z) < minlightdistance)
                         {
-                            if(distance.x < 40.0f && distance.y < 40.0f && distance.z < 40.0f)
+                            if(distance.x < 50.0f && distance.y < 50.0f && distance.z < 50.0f)
                             {
                                 lightProjection = glm::perspective(glm::radians(90.0f), (float)window->getWidth() / (float)window->getHeight(), near_plane, far_plane);
                                 lightView = glm::lookAt(glm::vec3(poslight.x, 15.5f, poslight.z), poslight + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
@@ -562,6 +570,23 @@ void Interfaz::Draw()
                                 // std::cout << "luz " << i << ": " << minlightdistance << std::endl;
                             }
                         }
+                    }
+                    else if(tipo_luz_sombra == 0 && sombras_en_tipo == 0)
+                    {
+                        near_plane = 1.0f;
+                        far_plane = 150.0f;
+                        float * centerscene = GetTarget(camaras[0]->id);
+                        glm::vec3 poslight = glm::vec3(centerscene[0]-30.0f,centerscene[1]+75.0f,centerscene[2]-30.0f);
+                        //lightProjection = glm::perspective(glm::radians(90.0f), (float)window->getWidth() / (float)window->getHeight(), near_plane, far_plane);
+                        lightProjection = glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, near_plane, far_plane);
+                        lightView = glm::lookAt(glm::vec3(poslight.x,poslight.y,poslight.z), glm::vec3(centerscene[0],centerscene[1],centerscene[2]), glm::vec3(0.0, 1.0, 0.0));
+                        lightSpaceMatrix = lightProjection * lightView;
+                        //Renderizar escena desde el punto de vista de la luz
+                        shaders[7]->Use();
+                        shaders[7]->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+                        shaders[4]->Use();
+                        shaders[4]->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+                        shaders[4]->setVec3("directPost", poslight);
                     }
                 }
             }
@@ -619,12 +644,13 @@ void Interfaz::Draw()
 
 void Interfaz::DrawProfundidad()
 {
+    //Reiniciar vista
     glViewport(0, 0,window->getWidth(),window->getHeight());
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glClear(GL_DEPTH_BUFFER_BIT);
     _raiz->draw(0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    // reset viewport
+    //Reiniciar vista
     glViewport(0, 0,window->getWidth(),window->getHeight());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -1214,6 +1240,25 @@ void Interfaz::SetTransparencia(unsigned short did, float transp)
     }
 }
 
+//Animacion de textura
+void Interfaz::SetAnimationTexture(unsigned short did, std::string ruta_textura1, std::string ruta_textura2, std::string ruta_textura3, float velocidad)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->Setanimationtexture(ruta_textura1,ruta_textura2,ruta_textura3,velocidad);
+                }
+            }
+        }
+    }
+}
 
 void Interfaz::RemoveObjectForID(signed int idPerson)
 {
@@ -1431,6 +1476,11 @@ void Interfaz::ColorSpecular(unsigned short luz, float r,float g,float b)
             }
         }
     }
+}
+
+void Interfaz::TipoDeSombras(unsigned int tipo)
+{
+    sombras_en_tipo = tipo;
 }
 
 void Interfaz::setBucle(unsigned short idMalla, bool estaEnBucle)
@@ -1706,7 +1756,7 @@ unsigned int Interfaz::CrearVideo(float x, float y, const char * ruta, int width
 //Pausa el video del id que le pases
 void Interfaz::PausarVideo(unsigned int id)
 {
-    
+
 }
 
 //Empieza la reproduccion del id que le pases, o reanuda
@@ -1714,4 +1764,3 @@ void Interfaz::PlayVideo(unsigned int id)
 {
 
 }
-

@@ -251,7 +251,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
             void dispararProyectil(float x, float y, float z, float rx, float ry, float rz, float es);
-
+            void cambiarTextura(unsigned int objeto, const char *ruta_textura);
+            void animacionTextura(unsigned int objeto, float velocidad, std::string ruta_textura1, std::string ruta_textura2 = nullptr, std::string ruta_textura3 = nullptr);
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz, float newy, float newz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
@@ -279,6 +280,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void colorearJugador(int a, int r, int g, int b);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
             //void colorearObjeto(int a, int r, int g, int b, int obj);
+
+            void SombrasDelNivel(unsigned int tipo);
 
             #ifdef WEMOTOR
                 bool getArmaEspecial();

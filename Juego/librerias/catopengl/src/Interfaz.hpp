@@ -109,6 +109,8 @@ class Interfaz
 
         void SetTransparencia(unsigned short did, float transp); //Se pone transparente la malla
 
+        void SetAnimationTexture(unsigned short did, std::string ruta_textura1, std::string ruta_textura2, std::string ruta_textura3, float velocidad);//Animacion de textura
+
         void RemoveObjectForID(signed int idPerson);//borra por el id personalizado = si el id es -1 no funciona este metodo
 
         void DefinirIdPersonalizado(unsigned short did, signed int idPerson);//le asigna el id personalizado
@@ -125,6 +127,8 @@ class Interfaz
         void ColorAmbiental(unsigned short luz, float r,float g,float b);
         void ColorDifusa(unsigned short luz, float r,float g,float b);
         void ColorSpecular(unsigned short luz, float r,float g,float b);
+
+        void TipoDeSombras(unsigned int tipo); //Asigna un tipo de sombras activa
 
         //define el bucle de la animacion
         void setBucle(unsigned short,bool);
@@ -151,7 +155,6 @@ class Interfaz
         char * DevolverTextoCapturado();//devuelve el texto que hay en el capturador
         void BorrarUltimaLetra();//borra la ultima letra del capturador
 
-
         //crea un video en la posicion (x,y) de la pantalla, con el width y height que se le pase
         unsigned int CrearVideo(float x, float y, const char * ruta, int width, int height);
         //Pausa el video con el id que le pases
@@ -168,6 +171,7 @@ class Interfaz
         float near_plane = 1.0f, far_plane = 35.0f;
         bool configure_depthmap = true;
         float minlightdistance = 1000.0f;
+        unsigned int sombras_en_tipo = 1; //Que luz tendra la sombra en el nivel
 
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
