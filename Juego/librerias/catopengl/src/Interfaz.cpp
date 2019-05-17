@@ -477,10 +477,9 @@ void Interfaz::Draw()
 
     if(configure_depthmap)
     {
-        // configure depth map FBO
-        // -----------------------
+        //Configurar mapa de profundidad FBO
         glGenFramebuffers(1, &depthMapFBO);
-        // create depth texture
+        //Crear textura de profundidad
         glGenTextures(1, &depthMap);
         glBindTexture(GL_TEXTURE_2D, depthMap);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, window->getWidth(), window->getHeight(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
@@ -490,7 +489,6 @@ void Interfaz::Draw()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
         float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
         glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-        // attach depth texture as FBO's depth buffer
         glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
         glDrawBuffer(GL_NONE);
@@ -498,6 +496,7 @@ void Interfaz::Draw()
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+        //Enviar al shader la textura
         shaders[4]->Use();
         shaders[4]->setInt("shadowMap", 2);
         configure_depthmap = false;
@@ -527,7 +526,14 @@ void Interfaz::Draw()
                     //Dibujar luz
                     luces[i]->recurso->draw(1);
 
-                    if(i > 0)
+                    unsigned int tipo_luz_sombra = 0;
+                    TNodo * tnodo = luces[i]->recurso->GetNieto(1)->GetHijo(1);
+                    if(tnodo != nullptr)
+                    {
+                        tipo_luz_sombra = dynamic_cast<TLuz*>(tnodo->GetEntidad())->getTipoLuz();
+                    }
+
+                    if(tipo_luz_sombra != 0) //no es la luz direccional
                     {
                         //Obtener posicion de luz
                         glm::vec3 poslight = glm::vec3(0.0f);
@@ -551,7 +557,7 @@ void Interfaz::Draw()
                             if(distance.x < 40.0f && distance.y < 40.0f && distance.z < 40.0f)
                             {
                                 lightProjection = glm::perspective(glm::radians(90.0f), (float)window->getWidth() / (float)window->getHeight(), near_plane, far_plane);
-                                lightView = glm::lookAt(glm::vec3(poslight.x, 15.5f, poslight.z), poslight + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+                                lightView = glm::lookAt(glm::vec3(poslight.x, 13.0f, poslight.z), poslight + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
                                 lightSpaceMatrix = lightProjection * lightView;
                                 //Renderizar escena desde el punto de vista de la luz
                                 shaders[7]->Use();
@@ -619,12 +625,13 @@ void Interfaz::Draw()
 
 void Interfaz::DrawProfundidad()
 {
+    //Reiniciar vista
     glViewport(0, 0,window->getWidth(),window->getHeight());
     glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
     glClear(GL_DEPTH_BUFFER_BIT);
     _raiz->draw(0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    // reset viewport
+    //Reiniciar vista
     glViewport(0, 0,window->getWidth(),window->getHeight());
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

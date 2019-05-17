@@ -388,7 +388,8 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         {
             const char* textura2 = obj.attribute("Texture2").value();
             const char* textura3 = obj.attribute("Texture3").value();
-            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,NULL, tipoObj,nullptr,1,textura2,textura3);//no tiene logica de animacion porque es un objeto con un unico estado y frame
+            unsigned int timeAnima = obj.attribute("TimeTA").as_int();
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,NULL, tipoObj,nullptr,1,textura2,textura3,timeAnima);//no tiene logica de animacion porque es un objeto con un unico estado y frame
         }
 
         if(obj.attribute("Frames") && obj.attribute("Animation"))
@@ -837,7 +838,7 @@ void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
-    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj, const char * anima , int frame, const char* ruta_textura2, const char* ruta_textura3)
+    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj, const char * anima , int frame, const char* ruta_textura2, const char* ruta_textura3, unsigned int timeA)
 {
     int posicionObjeto;
     switch (tipoObj)
@@ -905,7 +906,8 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
                 std::string text = std::string(ruta_textura);
                 std::string text2 = std::string(ruta_textura2);
                 std::string text3 = std::string(ruta_textura3);
-                _motor->animacionTextura(posicionObjeto,3.0f,text,text2,text3);
+                float time_animation = (float)timeA;
+                _motor->animacionTextura(posicionObjeto,time_animation,text,text2,text3);
             }
         }
         break;
@@ -920,7 +922,8 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
                 std::string text = std::string(ruta_textura);
                 std::string text2 = std::string(ruta_textura2);
                 std::string text3 = std::string(ruta_textura3);
-                _motor->animacionTextura(posicionObjeto,6.0f,text,text2,text3);
+                float time_animation = (float)timeA;
+                _motor->animacionTextura(posicionObjeto,time_animation,text,text2,text3);
             }
         }
         break;
