@@ -109,6 +109,8 @@ class Interfaz
 
         void SetTransparencia(unsigned short did, float transp); //Se pone transparente la malla
 
+        void SetAnimationTexture(unsigned short did, std::string ruta_textura1, std::string ruta_textura2, std::string ruta_textura3, float velocidad);//Animacion de textura
+
         void RemoveObjectForID(signed int idPerson);//borra por el id personalizado = si el id es -1 no funciona este metodo
 
         void DefinirIdPersonalizado(unsigned short did, signed int idPerson);//le asigna el id personalizado

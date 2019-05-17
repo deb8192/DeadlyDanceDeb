@@ -1214,6 +1214,25 @@ void Interfaz::SetTransparencia(unsigned short did, float transp)
     }
 }
 
+//Animacion de textura
+void Interfaz::SetAnimationTexture(unsigned short did, std::string ruta_textura1, std::string ruta_textura2, std::string ruta_textura3, float velocidad)
+{
+    if(did != 0)
+    {
+        Nodo * nodo = buscarNodo2(did);
+        if(nodo != nullptr)
+        {
+            if(nodo->recurso != nullptr)
+            {
+                TNodo * tnodo = nodo->recurso->GetNieto(1)->GetHijo(1);
+                if(tnodo != nullptr)
+                {
+                    dynamic_cast<TMalla*>(tnodo->GetEntidad())->Setanimationtexture(ruta_textura1,ruta_textura2,ruta_textura3,velocidad);
+                }
+            }
+        }
+    }
+}
 
 void Interfaz::RemoveObjectForID(signed int idPerson)
 {
@@ -1706,7 +1725,7 @@ unsigned int Interfaz::CrearVideo(float x, float y, const char * ruta, int width
 //Pausa el video del id que le pases
 void Interfaz::PausarVideo(unsigned int id)
 {
-    
+
 }
 
 //Empieza la reproduccion del id que le pases, o reanuda
@@ -1714,4 +1733,3 @@ void Interfaz::PlayVideo(unsigned int id)
 {
 
 }
-

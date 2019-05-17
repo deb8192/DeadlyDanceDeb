@@ -2042,6 +2042,16 @@ void MotorGrafico::mostrarArmaEspecial(float x, float y, float z, float rx, floa
     #endif
 }
 
+void MotorGrafico::animacionTextura(unsigned int objeto,float velocidad, std::string ruta_textura1, std::string ruta_textura2, std::string ruta_textura3)
+{
+    _interfaz->SetAnimationTexture(Objetos_Scena[objeto],ruta_textura1,ruta_textura2,ruta_textura3,velocidad);
+}
+
+void MotorGrafico::cambiarTextura(unsigned int objeto, const char *ruta_textura)
+{
+    _interfaz->SetTexture(objeto,ruta_textura);
+}
+
 void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoequipada, int tiposuelo, unsigned int i)
 {
     #ifdef WEMOTOR

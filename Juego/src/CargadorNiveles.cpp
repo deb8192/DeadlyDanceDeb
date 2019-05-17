@@ -384,14 +384,20 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int numFrames = obj.attribute("Frames").as_int();//numero de frames de la animacion
         const char* logicaAnimacion = obj.attribute("Animation").value();//contiene la ruta a la logica de la animacion
 
+        if(obj.attribute("Texture2") && obj.attribute("Texture3"))
+        {
+            const char* textura2 = obj.attribute("Texture2").value();
+            const char* textura3 = obj.attribute("Texture3").value();
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,NULL, tipoObj,nullptr,1,textura2,textura3);//no tiene logica de animacion porque es un objeto con un unico estado y frame
+        }
 
         if(obj.attribute("Frames") && obj.attribute("Animation"))
         {
-            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj, logicaAnimacion, numFrames); //cargamos el enemigo
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,NULL, tipoObj, logicaAnimacion, numFrames); //cargamos el enemigo
         }
         else
         {
-            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj);//no tiene logica de animacion porque es un objeto con un unico estado y frame
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,NULL, tipoObj);//no tiene logica de animacion porque es un objeto con un unico estado y frame
         }
 
     }
@@ -831,7 +837,7 @@ void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
-    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj, const char * anima , int frame)
+    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj, const char * anima , int frame, const char* ruta_textura2, const char* ruta_textura3)
 {
     int posicionObjeto;
     switch (tipoObj)
@@ -893,6 +899,14 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         {
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura,nullptr,1,false);
             _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ,false);
+            //Animacion de textura si hay mas de una textura
+            if(ruta_textura2 != nullptr && ruta_textura3 != nullptr)
+            {
+                std::string text = std::string(ruta_textura);
+                std::string text2 = std::string(ruta_textura2);
+                std::string text3 = std::string(ruta_textura3);
+                _motor->animacionTextura(posicionObjeto,3.0f,text,text2,text3);
+            }
         }
         break;
 
@@ -900,6 +914,14 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         {
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
             _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ,false);
+            //Animacion de textura si hay mas de una textura
+            if(ruta_textura2 != nullptr && ruta_textura3 != nullptr)
+            {
+                std::string text = std::string(ruta_textura);
+                std::string text2 = std::string(ruta_textura2);
+                std::string text3 = std::string(ruta_textura3);
+                _motor->animacionTextura(posicionObjeto,6.0f,text,text2,text3);
+            }
         }
         break;
     }

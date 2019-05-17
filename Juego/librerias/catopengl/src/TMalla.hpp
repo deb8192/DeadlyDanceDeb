@@ -16,6 +16,11 @@ class TMalla : public TEntidad
         bool bucle;//si esta activo esta en bucle si esta desactivado no esta en bucle, por defecto es true
         float transparente;
         bool render = false; //Dibujado de render o de profundidad
+        std::vector<std::string> textures_animation;
+        unsigned short actual_texture = 0;
+        float actual_time_texture;
+        float velocidad_animacion_texture;
+
     public:
         // Constructor y destructor
         TMalla(int ft);
@@ -41,6 +46,7 @@ class TMalla : public TEntidad
         void setTexture(const char * _ruta);
         void setTransparencia(float t); //Aplicar transparencia
         void setRender(bool r);
+        void Setanimationtexture(std::string ruta_textura1, std::string ruta_textura2, std::string ruta_textura3, float velocidad);
 };
 
 #endif
