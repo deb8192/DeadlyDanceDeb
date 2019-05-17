@@ -1,0 +1,9 @@
+<!--<Animacion nombre="" inicio="" final="" bucle="" salto="" dondesaltar="" terminar="" velocidad=""/>-->
+<Animaciones numeroAnimaciones="6">
+    <Animacion nombre="Correr" inicio="1" final="20" bucle="true" salto="false" dondesaltar="0" terminar="false" velocidad="16"/><!-- estado 0 -->
+    <Animacion nombre="Andar" inicio="1" final="20" bucle="true" salto="false" dondesaltar="0" terminar="false" velocidad="8"/><!-- estado 1 -->
+    <Animacion nombre="Quieto" inicio="20" final="34" bucle="true" salto="false" dondesaltar="0" terminar="false" velocidad="10"/><!-- estado 2 -->
+    <Animacion nombre="Atacar" inicio="34" final="54" bucle="false" salto="true" dondesaltar="1" terminar="true" velocidad="14"/><!-- estado 3 -->
+    <Animacion nombre="Muere" inicio="54" final="68" bucle="false" salto="true" dondesaltar="5" terminar="true" velocidad="12"/><!-- estado 4 -->
+    <Animacion nombre="Muerto" inicio="68" final="68" bucle="true" salto="false" dondesaltar="0" terminar="false" velocidad="1"/><!-- estado 5 -->
+</Animaciones>

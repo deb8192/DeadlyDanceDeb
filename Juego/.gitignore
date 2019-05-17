@@ -5,3 +5,4 @@ Ejecutable
 *.a
 librerias/catopengl/inc/*
 saves/*
+config.global
