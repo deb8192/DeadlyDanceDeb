@@ -114,7 +114,7 @@ void TLuz::beginDraw()
             //Animacion 2
             else if(tipo_anim == 2)
             {
-                if(animaescala == 100)cambiaranima = true;
+                if(animaescala == 50)cambiaranima = true;
                 if(animaescala == 0)cambiaranima = false;
                 if(cambiaranima)
                 {
@@ -253,6 +253,11 @@ float TLuz::transformToRGB(float c)
     if(c < 0.0f)c = 0.0f;
     float t = (1.0f/255.0f) * c;
     return t;
+}
+
+unsigned int TLuz::getTipoLuz()
+{
+    return tipo_luz;
 }
 
 void TLuz::endDraw()

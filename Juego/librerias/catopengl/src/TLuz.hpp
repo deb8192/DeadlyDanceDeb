@@ -39,6 +39,7 @@ class TLuz : public TEntidad
         void setBrillos(float b);
         float transformToRGB(float c);
         glm::vec3 getPosicion();
+        unsigned int getTipoLuz();
 
         //sobrecarga Tentidad
         void beginDraw();
