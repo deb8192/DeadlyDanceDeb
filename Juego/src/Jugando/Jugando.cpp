@@ -162,6 +162,8 @@ void Jugando::Iniciar()
     estarDebil = false;
     salaPenultima = false;
     meAtacan = false;
+    poderEmpezar = false;
+    oirMuerteOmni = 0.0f;
     ValoresPorDefecto();
 
     _motor->CrearCamara();
@@ -170,8 +172,10 @@ void Jugando::Iniciar()
 
     //si esta puesto el nivel 1 suena la bienvenida del nivel 1, sino del 2
     nivelJ == 8 ?
-        _motora->getEvent("MuertePerseguido1")->start():
+        _motora->getEvent("MuerteBienvenida1")->start():
         _motora->getEvent("MuerteBienvenida2")->start();
+
+      startPlayTime = _controladorTiempo->GetTiempo(1);
 }
 
 void Jugando::ValoresPorDefecto()
@@ -422,7 +426,26 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
-
+    //esto es para que espere 5 segundos antes de reanudar/cortar sonidos al cambiar de sala
+   if(oirMuerteOmni!= 0.0f && _controladorTiempo->CalcularTiempoPasado(oirMuerteOmni)/1000 > 5.0f)
+   {
+       cout << _controladorTiempo->CalcularTiempoPasado(oirMuerteOmni)/1000 << endl;
+        meAtacan = false;
+        estarAtacado = 0;
+        estarDebil = false;
+        estarFuerte = false;
+        oirMuerteOmni = 0.0f;
+   }
+   if(_controladorTiempo->CalcularTiempoPasado(startPlayTime)/1000 > 20.0f && nivelJ == 8)
+   {
+       //para que pueda moverse al decir el mensaje de bienvenida del nivel nuevo
+        poderEmpezar = true;
+   }
+   else if(nivelJ == 7)
+   {
+       //para que pueda moverse en el nivel antiguo
+        poderEmpezar = true;
+   }
 
     bool colisionaWaypoint = false, waypointComun = false, cercaJugador = false;
     _motor->clearDebug();
@@ -444,7 +467,7 @@ void Jugando::Update()
         DesactivarDebug();
         _motor->cambiarAnimacionJugador(5);//la muerte del jugador tiene este id
 
-        StopSonidos();
+        
         Juego::GetInstance()->estado.CambioEstadoMuerte();
 
     }
@@ -487,12 +510,16 @@ void Jugando::Update()
     }
 
     // Actualizar movimiento del jugador
-    _jugador->movimiento(jugadorInmovil,
+    if(poderEmpezar)
+    {
+        _jugador->movimiento(jugadorInmovil,
         _motor->EstaPulsado(KEY_A),
         _motor->EstaPulsado(KEY_S),
         _motor->EstaPulsado(KEY_D),
         _motor->EstaPulsado(KEY_W)
-    );
+        );
+    }
+    
 
 
     _fisicas->updateJugador(_jugador->getX(),
@@ -947,10 +974,14 @@ void Jugando::UpdateIA()
        (nivelJ == 7 && _jugador->GetSala()->getPosicionEnGrafica() == 21))
     {
         if(!salaPenultima)
-        {
+        {     
+            //frases muerte omnipresente antes de la batalla final      
+            _motora->getEvent("MuertePenultima")->start();
+            //para que no se escuchen el resto de frases, fari
+            estarDebil = true;
+            estarFuerte = true;
             _motora->getEvent("MuerteEstasDebil")->stop();
             _motora->getEvent("MuertePaseas")->stop();
-            _motora->getEvent("MuertePenultima")->start();
         }
         salaPenultima = true;
     }
@@ -1015,7 +1046,7 @@ void Jugando::UpdateIA()
                     }
                     else if (tipoEnemigo == constantes.BOSS)
                     {
-                        StopSonidos();
+                       
                         Juego::GetInstance()->estado.CambioEstadoGanar();
                     }
                     else
@@ -1814,10 +1845,9 @@ void Jugando::CambiarSalaJugador(unsigned short i)
             {
                 _jugador->SetSala(_jugador->GetSala()->getSalidas()[j]);
                 cambioRealizado = true;
-                meAtacan = false;
-                estarAtacado = 0;
-                estarDebil = false;
-                estarFuerte = false;
+                //tiempo de espera para que no se corten frases de la muerte al cambiar sala            
+                oirMuerteOmni = _controladorTiempo->GetTiempo(1);
+                
             }
             else if(!cambioRealizado)
             {
@@ -1840,10 +1870,8 @@ void Jugando::CambiarSalaJugador(unsigned short i)
             {
                 _jugador->SetSala(_jugador->GetSala()->getEntradas()[j]);
                 cambioRealizado = true;
-                meAtacan = false;
-                estarAtacado = 0;
-                estarDebil = false;
-                estarFuerte = false;
+               //tiempo de espera para que no se corten frases de la muerte al cambiar sala  
+                oirMuerteOmni = _controladorTiempo->GetTiempo(1);
             }
             else if(!cambioRealizado)
             {
@@ -2216,7 +2244,7 @@ void Jugando::updateAt(int* danyo)
     float tiempoActual = 0.0f;
     float tiempoAtaque = 0.0f;
 
-    if((_motor->EstaPulsado(LMOUSE_PRESSED_DOWN) || _motor->EstaPulsado(KEY_ESPACIO)) && _jugador->getTimeAt() <= 0.0f)
+    if((_motor->EstaPulsado(LMOUSE_PRESSED_DOWN) || _motor->EstaPulsado(KEY_ESPACIO)) && _jugador->getTimeAt() <= 0.0f && poderEmpezar)
     {
         *danyo = _jugador->Atacar(0);
         _motor->ResetKey(KEY_ESPACIO);
@@ -2247,7 +2275,7 @@ void Jugando::updateAtEsp()
     float tiempoActual = 0.0f;
     float tiempoAtaqueEsp = 0.0f;
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
-    if((_motor->EstaPulsado(RMOUSE_PRESSED_DOWN) || _motor->EstaPulsado(KEY_Q)) && _jugador->getTimeAtEsp() <= 0.0)
+    if((_motor->EstaPulsado(RMOUSE_PRESSED_DOWN) || _motor->EstaPulsado(KEY_Q)) && _jugador->getTimeAtEsp() <= 0.0 && poderEmpezar)
     {
         danyo = _jugador->AtacarEspecial();
         _motor->ResetKey(KEY_Q);
@@ -2516,11 +2544,6 @@ void Jugando::CargarBossEnMemoria()
     _enemigos.insert(_enemigos.begin(), _boss);
 }
 
-void Jugando::StopSonidos()
-{
-    _motora->getEvent("MuerteEstasDebil")->stop();
-    _motora->getEvent("MuertePaseas")->stop();
-}
 
 // TO DO: en proceso
 void Jugando::CambiarAranyaPorCofre(int idC, unsigned int posMotorG, unsigned int posObs,
