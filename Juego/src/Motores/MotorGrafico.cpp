@@ -2511,6 +2511,11 @@ void MotorGrafico::colorearEnemigo(int a, int r, int g, int b, int enem)
     #endif
 }
 
+void MotorGrafico::SombrasDelNivel(unsigned int tipo)
+{
+    _interfaz->TipoDeSombras(tipo);
+}
+
 /*void MotorGrafico::colorearObjeto(int a, int r, int g, int b, int obj)
 {
   SColor COLOR  = SColor(a, r, g, b);

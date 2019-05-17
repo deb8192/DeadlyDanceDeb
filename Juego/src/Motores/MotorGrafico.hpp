@@ -281,6 +281,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void colorearEnemigo(int a, int r, int g, int b, int enem);
             //void colorearObjeto(int a, int r, int g, int b, int obj);
 
+            void SombrasDelNivel(unsigned int tipo);
+
             #ifdef WEMOTOR
                 bool getArmaEspecial();
             #else

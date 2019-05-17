@@ -6,6 +6,7 @@
 
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
 	<Light Type="Ambiental" Tipo="0" Intensity="50" X="0" Y="10" Z="0" colorR="100" colorG="100" colorB="100" Animacion="0"> </Light>
+	<TypeShadows tipoS="0"></TypeShadows>
 	<!--8 luces puntuales-->
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>

@@ -65,6 +65,8 @@ uniform sampler2D shadowMap;
 
 uniform float trasparencia = 1.0;
 
+uniform vec3 directPost = vec3(0.0,0.0,0.0);
+
 //Funciones de calculo de luces
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 fragPos);
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
@@ -90,7 +92,7 @@ void main()
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
     {
         float distance = length(pointLights[i].position - FragPos);
-        if(distance < 40)
+        if(distance < 50)
         {
             if(pointLights[i].constant > 0)
             {
@@ -99,7 +101,7 @@ void main()
             }
         }
     }
-    
+
     //Foco de luz
     vec3 spotres = CalcSpotLight(spotLight, norm, FragPos, viewDir);
     if(spotres.x > 0 && spotres.y > 0 && spotres.z > 0)
@@ -192,6 +194,17 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 fragPos)
     vec3 ambient  = light.ambient  * 0.05 * vec3(texture(Texturediffuse, TexCoords));
     vec3 diffuse  = light.diffuse  * diff * vec3(texture(Texturediffuse, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(Texturespecular, TexCoords));
+    //return (ambient + diffuse + specular);
+
+    // calculate shadow
+    if(directPost.x != 0 && directPost.y != 0 && directPost.z != 0)
+    {
+        vec3 lightdistance = normalize(directPost - fragPos);
+        float shadow = ShadowCalculation(FragPosLightSpace,lightdistance);
+        vec3 lighting = (ambient + (1.0 - (shadow*0.3)) * (diffuse + specular));
+        return lighting;
+    }
+
     return (ambient + diffuse + specular);
 }
 
@@ -251,10 +264,14 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     //return (ambient + diffuse + specular);
 
     // calculate shadow
-    float shadow = ShadowCalculation(FragPosLightSpace,lightDir);
-    vec3 lighting = (ambient + (1.0 - shadow) * (diffuse + specular));
+    if(directPost.x == 0 && directPost.y == 0 && directPost.z == 0)
+    {
+        float shadow = ShadowCalculation(FragPosLightSpace,lightDir);
+        vec3 lighting = (ambient + (1.0 - (shadow*0.6)) * (diffuse + specular));
+        return lighting;
+    }
 
-    return lighting;
+    return (ambient + diffuse + specular);
 }
 
 //Calcular Foco de luz

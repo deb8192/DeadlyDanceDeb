@@ -213,6 +213,12 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
         CrearSistemaDeParticulas(x,y,z,vx,vy,vz,npart,localz,vida,size,textura);
     }
 
+    for (pugi::xml_node hijo = doc.child("Level").child("TypeShadows"); hijo; hijo = hijo.next_sibling("TypeShadows"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        unsigned int level_shadows = hijo.attribute("tipoS").as_int();//nos devuelve un int
+        _motor->SombrasDelNivel(level_shadows);
+    }
+
     //Se crea el arbol de salas del mapa del nivel
     for (pugi::xml_node plat = anterior.back().child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {

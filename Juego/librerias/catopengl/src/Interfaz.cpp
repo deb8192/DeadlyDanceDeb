@@ -533,8 +533,10 @@ void Interfaz::Draw()
                         tipo_luz_sombra = dynamic_cast<TLuz*>(tnodo->GetEntidad())->getTipoLuz();
                     }
 
-                    if(tipo_luz_sombra != 0) //no es la luz direccional
+                    if(tipo_luz_sombra != 0 && sombras_en_tipo == 1) //no es la luz direccional
                     {
+                        near_plane = 1.0f;
+                        far_plane = 50.0f;
                         //Obtener posicion de luz
                         glm::vec3 poslight = glm::vec3(0.0f);
                         glm::vec3 distance = glm::vec3(0.0f);
@@ -554,10 +556,10 @@ void Interfaz::Draw()
                         if(distance.z <= 0)distance.z = poslight.z - centerscene[2];
                         if((distance.x + distance.y + distance.z) < minlightdistance)
                         {
-                            if(distance.x < 40.0f && distance.y < 40.0f && distance.z < 40.0f)
+                            if(distance.x < 50.0f && distance.y < 50.0f && distance.z < 50.0f)
                             {
                                 lightProjection = glm::perspective(glm::radians(90.0f), (float)window->getWidth() / (float)window->getHeight(), near_plane, far_plane);
-                                lightView = glm::lookAt(glm::vec3(poslight.x, 13.0f, poslight.z), poslight + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+                                lightView = glm::lookAt(glm::vec3(poslight.x, 15.5f, poslight.z), poslight + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
                                 lightSpaceMatrix = lightProjection * lightView;
                                 //Renderizar escena desde el punto de vista de la luz
                                 shaders[7]->Use();
@@ -568,6 +570,23 @@ void Interfaz::Draw()
                                 // std::cout << "luz " << i << ": " << minlightdistance << std::endl;
                             }
                         }
+                    }
+                    else if(tipo_luz_sombra == 0 && sombras_en_tipo == 0)
+                    {
+                        near_plane = 1.0f;
+                        far_plane = 150.0f;
+                        float * centerscene = GetTarget(camaras[0]->id);
+                        glm::vec3 poslight = glm::vec3(centerscene[0]-30.0f,centerscene[1]+75.0f,centerscene[2]-30.0f);
+                        //lightProjection = glm::perspective(glm::radians(90.0f), (float)window->getWidth() / (float)window->getHeight(), near_plane, far_plane);
+                        lightProjection = glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, near_plane, far_plane);
+                        lightView = glm::lookAt(glm::vec3(poslight.x,poslight.y,poslight.z), glm::vec3(centerscene[0],centerscene[1],centerscene[2]), glm::vec3(0.0, 1.0, 0.0));
+                        lightSpaceMatrix = lightProjection * lightView;
+                        //Renderizar escena desde el punto de vista de la luz
+                        shaders[7]->Use();
+                        shaders[7]->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+                        shaders[4]->Use();
+                        shaders[4]->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+                        shaders[4]->setVec3("directPost", poslight);
                     }
                 }
             }
@@ -1457,6 +1476,11 @@ void Interfaz::ColorSpecular(unsigned short luz, float r,float g,float b)
             }
         }
     }
+}
+
+void Interfaz::TipoDeSombras(unsigned int tipo)
+{
+    sombras_en_tipo = tipo;
 }
 
 void Interfaz::setBucle(unsigned short idMalla, bool estaEnBucle)
