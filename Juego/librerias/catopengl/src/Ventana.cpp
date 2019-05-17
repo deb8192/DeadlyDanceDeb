@@ -26,6 +26,7 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     // Inicializar GLFW
     // glfwWindowHint para configurar GLFW, mirar en la documentacion los distintos hint
     glfwInit();
+    inicializarScreenParameter();//obtenemos informacion del monitor o pantalla
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  //glfwWindowHint(opcion_hint,valor_hint);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -355,4 +356,57 @@ bool Ventana::MouseEstaLibre(short boton)
     }
 
     return false;
+}
+
+int * Ventana::GetSizeScreen()
+{
+    if(monitorPrimario != NULL)
+    {
+        int * data = new int [2];
+        data[0] = screenWidth;
+        data[1] = screenHeight;
+        return data;
+    }
+
+    return nullptr;
+}
+
+int Ventana::GetRelationAspectScreen()
+{
+    return aspectRatio;
+}
+
+int Ventana::GetFrameRate()
+{
+    return frameRate;
+}
+
+void Ventana::inicializarScreenParameter()
+{
+    monitorPrimario = glfwGetPrimaryMonitor();
+    
+    if(monitorPrimario != NULL)
+    {
+        mode = glfwGetVideoMode(monitorPrimario);
+        //glfwGetMonitorWorkarea(monitorPrimario,posx,posy,screenWorkWidth,screenWorkHeight);
+    }
+
+    if(mode != NULL)
+    {
+        screenWidth = mode->width;
+        screenHeight = mode->height;
+        frameRate = mode->refreshRate;
+        if(screenWidth/screenHeight == (((int)16)/((int)9)))
+        {
+            //es panoramica(16/9)
+            aspectRatio = 1;
+        }
+        else
+        {
+            //es normal (4:3)
+            aspectRatio = 0;
+        } 
+        std::cout << "\n\e[1;33mCrawEngine v0.1 \e[0m \n\n";
+        std::cout << "\e[33mMonitor Information -> Ancho Pantalla: " << screenWidth << ", Alto Pantalla: " << screenHeight << ", Aspect Ratio(1 = 16/9, 0 = 4/3): " << aspectRatio << ", Fps monitor: " << frameRate << "\e[0m \n\n";
+    }
 }
