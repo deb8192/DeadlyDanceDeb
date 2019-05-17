@@ -577,7 +577,6 @@ int Enemigo::Atacar(int i)
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/sphere.obj",NULL);
             //Crear cuerpo de colision de ataque delante del enemigo
             _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
-            _motora->getEvent("GolpeGuitarra")->setVolume(0.5f);
             _motora->getEvent("GolpeGuitarra")->start();
         }*/
 
@@ -651,7 +650,7 @@ int Enemigo::AtacarEspecial()
             _fisicas->updateAtaquEspecEnemigos(atespposX,atespposY,atespposZ,getPosAtaques());
 
             //Crear cuerpo de colision de ataque delante del jugador
-            /*_motora->getEvent("Arpa")->setVolume(0.8f);
+            /*
             _motora->getEvent("Arpa")->start();*/
             _motor->dibujarObjetoTemporal(atespx, atespy, atespz, atgx, atgy, atgz, 4, 4, 4, 2);
         }
@@ -1370,7 +1369,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     distanciaEnemigoObstaculo.vZ = loqueve[3] - posActual.z;
                     distanciaEnemigoObstaculo.modulo = sqrt(pow(distanciaEnemigoObstaculo.vX, constantes.DOS) + pow(distanciaEnemigoObstaculo.vY, constantes.DOS) + pow(distanciaEnemigoObstaculo.vZ, constantes.DOS));
 
-                    //Si entra aquí es que el visor central 
+                    //Si entra aquí es que el visor central
                     //y el enemigo en cuestion esta muy cerca del obstaculo que debe esquivar
                     if(distanciaEnemigoObstaculo.modulo <= distanciaMinimaEsquivar)
                     {
@@ -1382,7 +1381,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                         destino[4] = loqueve[5];
                         destino[5] = loqueve[6];
 
-                        
+
                         porcentajeVelocidad = (float) constantes.UNO;
                         //cout<<"QUE SE SALE"<<endl;
                     }
@@ -1469,7 +1468,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     destino[4] = loqueve[19];
                     destino[5] = loqueve[20];
 
-                    
+
                     //cout<<"COLISIONA POR LA DERECHA"<<endl;
                 }
                 if(colisiona)
@@ -1482,7 +1481,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     //Creamos un vector con una nueva direccion normalizando el vector director anterior
                     VectorEspacial vectorDirector;// = this->normalizarVector(destino);
                     //Se suma la normal del obstaculo aplicando pesos a la normal y al vector director
-                    this->modificarTrayectoria(&vectorDirector, destino); 
+                    this->modificarTrayectoria(&vectorDirector, destino);
                     //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
                     vectorDirector.vZ < 0 ?
                         rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ)) :
@@ -1497,7 +1496,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                         porcentajeVelocidad = 0.2;
                     }
                 }
-                
+
                 else if(!ve)
                 {
 
@@ -1630,7 +1629,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 //Creamos un vector con una nueva direccion normalizando el vector director anterior
                 VectorEspacial vectorDirector;// = this->normalizarVector(destino);
                 //Se suma la normal del obstaculo aplicando pesos a la normal y al vector director
-                this->modificarTrayectoria(&vectorDirector, destino); 
+                this->modificarTrayectoria(&vectorDirector, destino);
                 //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
                 vectorDirector.vZ < 0 ?
                     rotation = (constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ))):
@@ -1660,15 +1659,15 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
         return false;
     }
-    
+
     /******************** perseguir **********************
      * Funcion que acerca los enemigos al jugador para
      * atacarlo posteriormente teniendo en cuenta la
      * orientacion del mismo
-     * 
+     *
      *      Entradas:
      *                  int* _jug: entero que es la direccion que apunta a donde se guarda el jugador
-     *      Salidas:    
+     *      Salidas:
      *                  bool funciona: booleano que indica si el comportamiento ha funcionado
     */
     bool Enemigo::perseguir(int* _jug)
@@ -1723,7 +1722,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 datosDesplazamiento.vX = orientacion.x * velocidadMaxima * porcentajeVelocidad;
                 datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima * porcentajeVelocidad ;
             }
-            
+
         }
         else
         {
@@ -1738,8 +1737,8 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima * porcentajeVelocidad;
             }
         }
-        
-        
+
+
         if((abs(objetivo.vX - this->getX())) > abs(distanciaMinimaEsquivar) || (abs(objetivo.vZ - this->getZ()) > abs(distanciaMinimaEsquivar)))
         {
             this->setNewPosiciones(posFutura.x + datosDesplazamiento.vX, posFutura.y, posFutura.z + datosDesplazamiento.vZ);
@@ -1893,15 +1892,15 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 	    return false;
     }
     /********************************** Moverse ********************************
-     * Funcion a la que llama el boss para desplazarse por la sala mientras 
+     * Funcion a la que llama el boss para desplazarse por la sala mientras
      * pelea contra el jugador.
-     * 
-     *      Entradas:    
+     *
+     *      Entradas:
      *                  int nuevaDireccion: direccion que probablemente tomara
      *                  int direccion: direccion actual del boss
      *                  int* _jug: entero que contiene el puntero del jugador
      *                  int maxDistBossJugador: distancia maxima con el jugador
-     * 
+     *
      *      Salidas:
      *                  int direccion: la direccion que al final toma el boss
     */
@@ -1919,7 +1918,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         {
             *seAcerca = false;
         }
-        
+
         if(abs(target.modulo) < maxDistBossJugador && !*seAcerca)
         {
             if(nuevaDireccion > 0)
@@ -1943,10 +1942,10 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 case 1:
                     rotation = constantes.DOS_PI_RADIAN;
                     break;
-                
+
                 case 2:
                     rotation = constantes.PI_TRES_MEDIOS_CUARTOS;
-                    break;   
+                    break;
 
                 case 3:
                     rotation = constantes.PI_TRES_MEDIOS;
@@ -1955,11 +1954,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 case 4:
                     rotation = constantes.PI_RADIAN_CUARTOS;
                     break;
-                
+
                 case 5:
                     rotation = constantes.PI_RADIAN;
                     break;
-                
+
                 case 6:
                     rotation = constantes.PI_MEDIOS_CUARTOS;
                     break;
@@ -1984,11 +1983,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
 
         if(!*seAcerca)
-        {        
+        {
             this->setNewRotacion(rotActual.x, rotation, rotActual.z);
             this->setVectorOrientacion();
         }
-        
+
         if(porcentajeVelocidad != constantes.UN_MEDIO)
         {
             porcentajeVelocidad = constantes.UN_MEDIO;

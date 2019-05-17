@@ -241,7 +241,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void IniciarParticulasAccion(unsigned short i, float x, float y, float z, float time);
             void CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
             void CargarLuzEnSala(int sala,int x,int y,int z);
-            void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima = nullptr, unsigned int fps = 1);
+            void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima = nullptr, unsigned int fps = 1, float distanciaboard = 0.0f);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
             void CargarCofre(int pos, int rp, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
@@ -368,9 +368,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             //funciones para videos
             /**
-            *@param _ruta es la ruta desde el ejecutable al video 
-            *@param x posicion en anchura  
-            *@param y posicion en altura  
+            *@param _ruta es la ruta desde el ejecutable al video
+            *@param x posicion en anchura
+            *@param y posicion en altura
             *@param width anchura del video
             *@param height altura del video
             *@return retorna el id del video creado si no se ha podido crear es 0

@@ -1387,7 +1387,7 @@ void MotorGrafico::CargarLuzEnSala(int sala,int x,int y,int z)
 }
 
 
-void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima, unsigned int fps)
+void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima, unsigned int fps,float distanciaboard)
 {
     #ifdef WEMOTOR
 
@@ -1410,7 +1410,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
 
             if(anima && anima != nullptr)
             {
-                
+
                 Animaciones * _ani = new Animaciones(anima);//cargamos las animaciones
                 _ani->AsignarID(enemigo);
                 EnemigosAni_Scena.push_back(_ani);
@@ -1423,7 +1423,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
 
             //Crear billboard
             unsigned short _board = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/4.png", 0.01f);
-            _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+10.0f,(float)z);
+            _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+10.0f+distanciaboard,(float)z);
             _interfaz->Escalar(_board,2.0f,0.15f,1.75f);
             _interfaz->DeshabilitarObjeto(_board);
             if(boss)
@@ -4057,7 +4057,7 @@ void MotorGrafico::PausarVideo(unsigned int id)
     #ifdef WEMOTOR
         if( _interfaz)
         {
-            
+
         }
     #endif
 }
@@ -4067,7 +4067,7 @@ void MotorGrafico::PlayVideo(unsigned int id)
     #ifdef WEMOTOR
         if( _interfaz)
         {
-            
+
         }
     #endif
 }

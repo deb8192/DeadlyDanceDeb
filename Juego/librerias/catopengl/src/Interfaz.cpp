@@ -136,6 +136,7 @@ unsigned short Interfaz::AddLuz(int tipo,int anim)
     TNodo * luz = new TNodo;
     TLuz * luzEn = new TLuz(tipo,anim);
     luzEn->SetShader(shaders[4]);
+    luzEn->SetShader2(shaders[7]);
     if(tipo == 1)//luz puntual
     {
         luzEn->setNumberoflight(countlights);
@@ -203,6 +204,7 @@ unsigned short Interfaz::AddMalla(const char * archivo, int initf, int shader) /
     {
         mallaEn->SetShader(shaders[5]);
     }
+    mallaEn->SetShader2(shaders[7]);
 
     malla->setEntidad(mallaEn);
 
@@ -473,6 +475,34 @@ void Interfaz::Draw()
         ventana_inicializada = false;
     }
 
+    if(configure_depthmap)
+    {
+        // configure depth map FBO
+        // -----------------------
+        glGenFramebuffers(1, &depthMapFBO);
+        // create depth texture
+        glGenTextures(1, &depthMap);
+        glBindTexture(GL_TEXTURE_2D, depthMap);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, window->getWidth(), window->getHeight(), 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+        float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+        glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+        // attach depth texture as FBO's depth buffer
+        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+        glDrawBuffer(GL_NONE);
+        glReadBuffer(GL_NONE);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        shaders[4]->Use();
+        shaders[4]->setInt("shadowMap", 2);
+        configure_depthmap = false;
+    }
+
     window->UpdateLimpiar();
 
     if(_raiz != nullptr)
@@ -488,18 +518,66 @@ void Interfaz::Draw()
                 }
             }
 
+            minlightdistance = 1000.0f; //reiniciar distancia de sombras
+
             for(unsigned int i = 0; i < luces.size(); i++)
             {
                 if(luces[i] != nullptr && luces[i]->recurso != nullptr && luces[i]->activo)
                 {
+                    //Dibujar luz
                     luces[i]->recurso->draw(1);
+
+                    if(i > 0)
+                    {
+                        //Obtener posicion de luz
+                        glm::vec3 poslight = glm::vec3(0.0f);
+                        glm::vec3 distance = glm::vec3(0.0f);
+                        TNodo * tnodo = luces[i]->recurso->GetNieto(1)->GetHijo(1);
+                        if(tnodo != nullptr)
+                        {
+                            poslight = dynamic_cast<TLuz*>(tnodo->GetEntidad())->getPosicion();
+                        }
+
+                        //Buscar luz mas cercana para aplicar sombra
+                        float * centerscene = GetTarget(camaras[0]->id);
+                        distance.x = centerscene[0] - poslight.x;
+                        distance.y = centerscene[1] - poslight.y;
+                        distance.z = centerscene[2] - poslight.z;
+                        if(distance.x <= 0)distance.x = poslight.x - centerscene[0];
+                        if(distance.y <= 0)distance.y = poslight.y - centerscene[1];
+                        if(distance.z <= 0)distance.z = poslight.z - centerscene[2];
+                        if((distance.x + distance.y + distance.z) < minlightdistance)
+                        {
+                            if(distance.x < 40.0f && distance.y < 40.0f && distance.z < 40.0f)
+                            {
+                                lightProjection = glm::perspective(glm::radians(90.0f), (float)window->getWidth() / (float)window->getHeight(), near_plane, far_plane);
+                                lightView = glm::lookAt(glm::vec3(poslight.x, 15.5f, poslight.z), poslight + glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+                                lightSpaceMatrix = lightProjection * lightView;
+                                //Renderizar escena desde el punto de vista de la luz
+                                shaders[7]->Use();
+                                shaders[7]->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+                                shaders[4]->Use();
+                                shaders[4]->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+                                minlightdistance = (distance.x + distance.y + distance.z);
+                                // std::cout << "luz " << i << ": " << minlightdistance << std::endl;
+                            }
+                        }
+                    }
                 }
             }
 
-            //primero calculamos las matrices de view y projection
-            //¿¿¿¿¿¿????????
-            //esto seria lo ultimo vamos a las model
+            //Draw de profundidad de sombras
+            DrawProfundidad();
 
+            //Reiniciar vista
+            glViewport(0, 0,window->getWidth(),window->getHeight());
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            //Activar textura de profundidad
+            glActiveTexture(GL_TEXTURE2);
+            glBindTexture(GL_TEXTURE_2D, depthMap);
+
+            //Render normal
             _raiz->draw(0);
 
             for(unsigned int i = 0; i < particles.size(); i++)
@@ -537,6 +615,18 @@ void Interfaz::Draw()
     }
 
     window->UpdateDraw();
+}
+
+void Interfaz::DrawProfundidad()
+{
+    glViewport(0, 0,window->getWidth(),window->getHeight());
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    _raiz->draw(0);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // reset viewport
+    glViewport(0, 0,window->getWidth(),window->getHeight());
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 Interfaz::Nodo * Interfaz::buscarNodo2(unsigned short id)
@@ -625,6 +715,7 @@ void Interfaz::ventanaInicializar()
     shaders[4] = new Shader("assets/shaders/shadertoonvs.glsl","assets/shaders/shadertoonfs.glsl");
     shaders[5] = new Shader("assets/shaders/shadernolucesvs.glsl","assets/shaders/shadernolucesfs.glsl");
     shaders[6] = new Shader("assets/shaders/shaderparticlevs.glsl","assets/shaders/shaderparticlefs.glsl");
+    shaders[7] = new Shader("assets/shaders/shadershadowdepthvs.glsl","assets/shaders/shadershadowdepthfs.glsl");
 }
 
 void Interfaz::ventanaLimpiar()

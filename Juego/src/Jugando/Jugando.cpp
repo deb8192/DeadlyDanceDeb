@@ -169,8 +169,8 @@ void Jugando::Iniciar()
     _motor->BorrarCargando();
 
     //si esta puesto el nivel 1 suena la bienvenida del nivel 1, sino del 2
-    nivelJ == 8 ? 
-        _motora->getEvent("MuertePerseguido1")->start():    
+    nivelJ == 8 ?
+        _motora->getEvent("MuertePerseguido1")->start():
         _motora->getEvent("MuerteBienvenida2")->start();
 }
 
@@ -295,7 +295,7 @@ void Jugando::ManejarEventos() {
         _motor->ResetKey(KEY_K);
         //_jugador->setVida(0);
         Juego::GetInstance()->estado.CambioEstadoGanar();
-        
+
     }
 
     //para modo debug
@@ -423,7 +423,7 @@ void Jugando::InteractuarNivel()
 void Jugando::Update()
 {
 
-  
+
     bool colisionaWaypoint = false, waypointComun = false, cercaJugador = false;
     _motor->clearDebug();
     short contadorWaypoints = 0, contadorEnemigos = 0, i = 0;
@@ -436,10 +436,9 @@ void Jugando::Update()
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
 
-    
     if (_jugador != nullptr && _jugador->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
-        
+
         _jugador->MuereJugador(); // Animacion de muerte
         ComprobarBorrarProyectil();
         DesactivarDebug();
@@ -494,7 +493,7 @@ void Jugando::Update()
         _motor->EstaPulsado(KEY_D),
         _motor->EstaPulsado(KEY_W)
     );
-    
+
 
     _fisicas->updateJugador(_jugador->getX(),
         _jugador->getY(),
@@ -599,9 +598,9 @@ void Jugando::Update()
                         // TO DO: hacer que se esconda en la zona de cofres
                         CambiarAranyaPorCofre(_eneA->GetIdCofre(), _eneA->GetPosMotorCofre(),
                             _eneA->GetPosObsCofre(),
-                            _eneA->getX(), _eneA->getY(), _eneA->getZ(), 
+                            _eneA->getX(), _eneA->getY(), _eneA->getZ(),
                             _eneA->GetPosArana(), _eneA->GetSala());
-                        
+
                         //Eliminar sonido
                         std::string nameid = std::to_string(_eneA->getID()); //pasar id a string
                         _motora->getEvent(nameid)->stop();
@@ -696,29 +695,29 @@ void Jugando::Update()
 
                     if(_enemigos[i]->GetModo() == Enemigo::modosEnemigo::MODO_ATAQUE)
                     {
-                        estarAtacado++;   
+                        estarAtacado++;
                         if(!meAtacan)
                         {
                             if(_enemigos[i]->GetTipoEnemigo() == 0)
-                            {  
-                                _motora->getEvent("MuertePaseas")->stop(); 
-                                _motora->getEvent("MuerteEstasDebil")->stop();                                
-                                _motora->getEvent("MuerteRespawn1")->stop();                                                              
-                                _motora->getEvent("MuerteRespawn2")->stop();                              
-                                _motora->getEvent("MuertePerseguido2")->start();    
+                            {
+                                _motora->getEvent("MuertePaseas")->stop();
+                                _motora->getEvent("MuerteEstasDebil")->stop();
+                                _motora->getEvent("MuerteRespawn1")->stop();
+                                _motora->getEvent("MuerteRespawn2")->stop();
+                                _motora->getEvent("MuertePerseguido2")->start();
                             }
                             else
                             {
-                                _motora->getEvent("MuertePaseas")->stop(); 
-                                _motora->getEvent("MuerteEstasDebil")->stop();                                
-                                _motora->getEvent("MuerteRespawn1")->stop();                                                              
+                                _motora->getEvent("MuertePaseas")->stop();
+                                _motora->getEvent("MuerteEstasDebil")->stop();
+                                _motora->getEvent("MuerteRespawn1")->stop();
                                 _motora->getEvent("MuerteRespawn2")->stop();
                                 _motora->getEvent("MuertePerseguido1")->start();
                             }
                         }
                         meAtacan = true;
                     }
-                    
+
                 }
                 else
                 {
@@ -913,45 +912,45 @@ void Jugando::Update()
  *      Salidas:
 */
 void Jugando::UpdateIA()
-{    
+{
     if(_jugador->getVida() <= 30)
-    {   
-        if(!estarDebil) 
+    {
+        if(!estarDebil)
         {
-            _motora->getEvent("MuerteEstasDebil")->start();   
+            _motora->getEvent("MuerteEstasDebil")->start();
         }
-        
+
         estarDebil = true;
         estarFuerte = false;
-        _motora->getEvent("MuertePaseas")->stop();  
+        _motora->getEvent("MuertePaseas")->stop();
     }
     else
     {
-        if(_jugador->GetSala()->getPosicionEnGrafica() != 0 && 
+        if(_jugador->GetSala()->getPosicionEnGrafica() != 0 &&
            _jugador->GetSala()->getPosicionEnGrafica() != 14 &&
            _jugador->GetSala()->getPosicionEnGrafica() != 22)
         {
-            if(!estarFuerte) 
-            {           
-                _motora->getEvent("MuertePaseas")->start();  
+            if(!estarFuerte)
+            {
+                _motora->getEvent("MuertePaseas")->start();
             }
-            estarFuerte = true;        
+            estarFuerte = true;
         }
-       
-        estarDebil = false;        
-        _motora->getEvent("MuerteEstasDebil")->stop();
- 
-    }   
 
-    
-    if((nivelJ == 8 && _jugador->GetSala()->getPosicionEnGrafica() == 13) || 
+        estarDebil = false;
+        _motora->getEvent("MuerteEstasDebil")->stop();
+
+    }
+
+
+    if((nivelJ == 8 && _jugador->GetSala()->getPosicionEnGrafica() == 13) ||
        (nivelJ == 7 && _jugador->GetSala()->getPosicionEnGrafica() == 21))
     {
         if(!salaPenultima)
-        { 
+        {
             _motora->getEvent("MuerteEstasDebil")->stop();
-            _motora->getEvent("MuertePaseas")->stop();  
-            _motora->getEvent("MuertePenultima")->start();           
+            _motora->getEvent("MuertePaseas")->stop();
+            _motora->getEvent("MuertePenultima")->start();
         }
         salaPenultima = true;
     }
@@ -1426,12 +1425,9 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _llaves = cargador.GetLlaves();
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    _motora->getEvent("Nivel1")->setVolume(0.1);
     _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
-    _motora->getEvent("AmbienteGritos")->setVolume(0.5);
     _motora->getEvent("AmbienteGritos")->start(); //Reproducir ambiente
     _motora->getEvent("AmbienteLava")->setPosition(145.0f,0.0f,18.0f);
-    _motora->getEvent("AmbienteLava")->setVolume(1.0);
     _motora->getEvent("AmbienteLava")->start(); //Reproducir ambiente
 
     //esta ya todo ejecutamos ia y interpolado
@@ -1504,14 +1500,14 @@ void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
  * Funcion que hace aparecer enemigos en las
  * zonas de respawn de la sala del boss cuando
  * este invoca a los enemigos.
- *                    
+ *
 */
 void Jugando::RespawnEnemigosBoss()
 {
     Constantes constantes;
     int x = 0.0f;
     int y = 0.0f;
-    int z = 0.0f; 
+    int z = 0.0f;
     int ancho, alto, largo;
     int enemigosRestantes = this->NumeroAleatorio(constantes.TRES, constantes.SEIS);
     int numeroEnemigos = enemigosRestantes;
@@ -1540,11 +1536,11 @@ void Jugando::RespawnEnemigosBoss()
             zonasSeleccionadas[i] = zonaElegida;
             i++;
             //}
-            
+
             //Se pone el proposito de la zona como cumplido y se crea el nuevo enemigo
             x = _zonasRespawn[zonaElegida]->getX();
             y = _zonasRespawn[zonaElegida]->getY();
-            z = _zonasRespawn[zonaElegida]->getZ(); 
+            z = _zonasRespawn[zonaElegida]->getZ();
             _zonasRespawn[zonaElegida]->setProposito(true);
             switch(enemigo)
             {
@@ -1563,9 +1559,8 @@ void Jugando::RespawnEnemigosBoss()
 
                     //Cargar sonido evento en una instancia con la id del enemigo como nombre
                     std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
-                    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+                    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid, 1);
                     _motora->getEvent(nameid)->setPosition(x,y,z);
-                    _motora->getEvent(nameid)->setVolume(0.4f);
                     _motora->getEvent(nameid)->start();
                 }
                     break;
@@ -1583,9 +1578,8 @@ void Jugando::RespawnEnemigosBoss()
 
                     //Cargar sonido evento en una instancia con la id del enemigo como nombre
                     std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
-                    _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid);
+                    _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid, 1);
                     _motora->getEvent(nameid)->setPosition(x,y,z);
-                    _motora->getEvent(nameid)->setVolume(1.0f);
                     _motora->getEvent(nameid)->start();
                 }
                 break;
@@ -1635,16 +1629,16 @@ void Jugando::RespawnEnemigosBoss()
 /************* RespawnEnemigos **************
  * Funcion que hace aparecer enemigos en las
  * zonas de respawn aleatoriamente o en una
- * sala concreta en funcion del nivel de 
+ * sala concreta en funcion del nivel de
  * dificultad actual del juego
- *                    
+ *
 */
 void Jugando::RespawnEnemigos()
 {
     Constantes constantes;
     int x = 0.0f;
     int y = 0.0f;
-    int z = 0.0f; 
+    int z = 0.0f;
     int* zonasSeleccionadas = new int[4];
     int ancho, alto, largo;
     short enemigosRestantes = _enemigos.capacity() - _enemigos.size();
@@ -1678,11 +1672,11 @@ void Jugando::RespawnEnemigos()
             zonasSeleccionadas[i] = zonaElegida;
             i++;
             //}
-            
+
             //Se pone el proposito de la zona como cumplido y se crea el nuevo enemigo
             x = _zonasRespawn[zonaElegida]->getX();
             y = _zonasRespawn[zonaElegida]->getY();
-            z = _zonasRespawn[zonaElegida]->getZ(); 
+            z = _zonasRespawn[zonaElegida]->getZ();
             _zonasRespawn[zonaElegida]->setProposito(true);
 
             int tipoEne = 0;
@@ -1705,9 +1699,8 @@ void Jugando::RespawnEnemigos()
 
                     //Cargar sonido evento en una instancia con la id del enemigo como nombre
                     std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
-                    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+                    _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid, 1);
                     _motora->getEvent(nameid)->setPosition(x,y,z);
-                    _motora->getEvent(nameid)->setVolume(0.4f);
                     _motora->getEvent(nameid)->start();
                 }
                     break;
@@ -1725,17 +1718,16 @@ void Jugando::RespawnEnemigos()
 
                     //Cargar sonido evento en una instancia con la id del enemigo como nombre
                     std::string nameid = std::to_string(_enemigos.back()->getID()); //pasar id a string
-                    _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid);
+                    _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid, 1);
                     _motora->getEvent(nameid)->setPosition(x,y,z);
-                    _motora->getEvent(nameid)->setVolume(1.0f);
                     _motora->getEvent(nameid)->start();
                 }
                 break;
             }
 
             if(tipoEne == 2)
-            {   
-                if(_zonasRespawn[zonaElegida]->GetSala()->getPosicionEnGrafica() == _jugador->GetSala()->getPosicionEnGrafica())          
+            {
+                if(_zonasRespawn[zonaElegida]->GetSala()->getPosicionEnGrafica() == _jugador->GetSala()->getPosicionEnGrafica())
                 {
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
@@ -1744,7 +1736,7 @@ void Jugando::RespawnEnemigos()
             }
             else if(tipoEne != 0)
             {
-                if(_zonasRespawn[zonaElegida]->GetSala()->getPosicionEnGrafica() == _jugador->GetSala()->getPosicionEnGrafica())          
+                if(_zonasRespawn[zonaElegida]->GetSala()->getPosicionEnGrafica() == _jugador->GetSala()->getPosicionEnGrafica())
                 {
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
@@ -2099,7 +2091,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
             }
 
             if(activar)
-            {                
+            {
                 //Se abre/acciona la puerta / el mecanismo
                 #ifdef WEMOTOR
                     _palanca->setNewRotacion(_palanca->getRX(), _palanca->getRY(), _palanca->getRZ()-50);
@@ -2156,11 +2148,10 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                 //Se acciona o desacciona el mecanismo segun su estado actual
                 bool abrir = _puerta->accionar();
                 if(abrir)
-                {                    
+                {
                     if(_puerta->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
                     {
                         _motora->getEvent("Nivel1")->stop();
-                        _motora->getEvent("Nivel2")->setVolume(0.4);
                         _motora->getEvent("Nivel2")->start(); //Reproducir musica juego
                         enSalaBoss = true;
                         this->CargarBossEnMemoria();
@@ -2221,7 +2212,7 @@ void Jugando::activarPowerUp()
 }
 
 void Jugando::updateAt(int* danyo)
-{    
+{
     float tiempoActual = 0.0f;
     float tiempoAtaque = 0.0f;
 
@@ -2478,11 +2469,10 @@ void Jugando::CrearEnemigoArana()
     /*if (!_eneA->GetPrimeraVezActivada())
     {*/
         _eneA->SetPrimeraVezActivada(true);
-        _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
+        _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid, 1);
     //}
 
     _motora->getEvent(nameid)->setPosition(x,y,z);
-    _motora->getEvent(nameid)->setVolume(0.5f);
     _motora->getEvent(nameid)->start();
 
     _enemigos.push_back(_eneA);
@@ -2519,9 +2509,8 @@ void Jugando::CargarBossEnMemoria()
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0,true); //Para ataques especiales
 
     std::string nameid = std::to_string(_boss->getID()); //pasar id a string
-    _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
+    _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid, 1);
     _motora->getEvent(nameid)->setPosition(x,y,z);
-    _motora->getEvent(nameid)->setVolume(0.5f);
     _motora->getEvent(nameid)->start();
 
     _enemigos.insert(_enemigos.begin(), _boss);
@@ -2530,7 +2519,7 @@ void Jugando::CargarBossEnMemoria()
 void Jugando::StopSonidos()
 {
     _motora->getEvent("MuerteEstasDebil")->stop();
-    _motora->getEvent("MuertePaseas")->stop();  
+    _motora->getEvent("MuertePaseas")->stop();
 }
 
 // TO DO: en proceso

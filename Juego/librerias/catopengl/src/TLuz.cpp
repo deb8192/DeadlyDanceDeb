@@ -47,12 +47,16 @@ float TLuz::getIntensidad()
     return 0.0f;
 }
 
+glm::vec3 TLuz::getPosicion()
+{
+    return posicion;
+}
+
 void TLuz::beginDraw()
 {
     //comprobamos que la cola o pila no haya tenido cambios, si los tiene se vuelve a calcular
     if(matriz_compartida == nullptr)
     {
-        glm::vec3 posicion;
         glm::mat4 rotacion;
         glm::mat4 * _matriz_resultado = nullptr;
         std::queue<glm::mat4 *> * cola_compartidaAuxiliar = new std::queue<glm::mat4 *>; //creamos una cola nueva para ir encolando  los elementos que desencolamos de la cola compartida(se aplicaria parecido con una pila)

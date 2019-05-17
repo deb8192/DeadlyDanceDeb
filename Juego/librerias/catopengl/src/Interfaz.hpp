@@ -43,6 +43,8 @@ class Interfaz
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
+        void DrawProfundidad(); //pintamos las mallas con profundidad
+
         void RemoveObject(unsigned short);//remueve objeto de la escena
 
         void Trasladar(unsigned short,float,float,float);//trasladar
@@ -149,6 +151,7 @@ class Interfaz
         char * DevolverTextoCapturado();//devuelve el texto que hay en el capturador
         void BorrarUltimaLetra();//borra la ultima letra del capturador
 
+
         //crea un video en la posicion (x,y) de la pantalla, con el width y height que se le pase
         unsigned int CrearVideo(float x, float y, const char * ruta, int width, int height);
         //Pausa el video con el id que le pases
@@ -156,14 +159,21 @@ class Interfaz
         //Empieza la reproduccion con el id que le pases
         void PlayVideo(unsigned int id);
 
-
     private:
+        //Luces y sombras
+        unsigned int depthMapFBO;
+        unsigned int depthMap;
+        glm::mat4 lightProjection, lightView;
+        glm::mat4 lightSpaceMatrix;
+        float near_plane = 1.0f, far_plane = 35.0f;
+        bool configure_depthmap = true;
+        float minlightdistance = 1000.0f;
 
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
         Ventana * window;// instancia que contiene la clase que se encarga de gestionar las ventanas y las teclas / raton
 
-        Shader * shaders[7];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[8];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 

@@ -7,7 +7,7 @@ Puerta::Puerta(int id, int codigo,
     float despX, float despZ, int accion)
 : Interactuable(id, codigo, anc, lar, alt,
     x, y, z, tipoObj, despX, despZ, accion)
-{    
+{
     _modelo = "assets/models/Puertas/Puerta.obj";
     _textura = "assets/texture/Puerta.png";
 
@@ -30,7 +30,6 @@ void Puerta::GirarPuerta(float rotacion, bool desdePalanca)
     {
         if (codigoObjeto == 0) // Puertas sin llave o palanca
         {
-            //_motora->getEvent("AbrirPuerta")->setVolume(0.8f);
             _motora->getEvent("AbrirPuerta")->setPosition(posActual.x, posActual.y, posActual.z);
             _motora->getEvent("AbrirPuerta")->start();
         }
@@ -40,13 +39,11 @@ void Puerta::GirarPuerta(float rotacion, bool desdePalanca)
             {
                 // TO DO: cambiar AbrirPuerta por sonido de engranaje
                 _motora->getEvent("AbrirPuerta")->setPosition(posActual.x, posActual.y, posActual.z);
-                _motora->getEvent("AbrirPuerta")->setVolume(0.5);
                 _motora->getEvent("AbrirPuerta")->start();
             }
             else // Puertas con llave
             {
                 _motora->getEvent("AbrirCerradura")->setPosition(posActual.x, posActual.y, posActual.z);
-                _motora->getEvent("AbrirCerradura")->setVolume(0.5);
                 _motora->getEvent("AbrirCerradura")->start();
             }
         }
@@ -69,7 +66,7 @@ void Puerta::GirarPuerta(float rotacion, bool desdePalanca)
         _motora->getEvent("CerrarPuerta")->setPosition(posActual.x, posActual.y, posActual.z);
         _motora->getEvent("CerrarPuerta")->start();
     }
-    
+
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     setNewRotacion(rotActual.x, rotActual.y + rotacion, rotActual.z);
     _fisicas->updatePuerta(posActual.x, posActual.y, posActual.z,

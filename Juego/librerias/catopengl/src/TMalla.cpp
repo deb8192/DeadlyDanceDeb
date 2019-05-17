@@ -32,8 +32,15 @@ void TMalla::cargarMalla(unsigned short,unsigned short)
 // sobrecarga metodos TEntidad
 void TMalla::beginDraw()
 {
-    shader->Use();
-    shader->setFloat("trasparencia", transparente);
+    if(render == true)
+    {
+        shader->Use();
+        shader->setFloat("trasparencia", transparente);
+    }
+    else
+    {
+        shader2->Use();
+    }
     TimeEngine(); //Tiempo del motor
     //calcular el frame
     actual_time = actual_time + getTime();
@@ -105,8 +112,16 @@ void TMalla::beginDraw()
         {
             if(frame_actual <= frame_final)//pasa por los frames de la animacion
             {
-                shader->setMat4("model", (*_matriz_resultado));
-                objetos->Draw(shader,frame_actual);
+                if(render == true)
+                {
+                    shader->setMat4("model", (*_matriz_resultado));
+                    objetos->Draw(shader,frame_actual);
+                }
+                else
+                {
+                    shader2->setMat4("model", (*_matriz_resultado));
+                    objetos->Draw(shader2,frame_actual);
+                }
             }
         }
 
@@ -124,12 +139,25 @@ void TMalla::beginDraw()
         {
             if(frame_actual < frame_final)//pasa por los frames de la animacion
             {
-                shader->setMat4("model", (*matriz_compartida));
-                objetos->Draw(shader,frame_actual);
+                if(render == true)
+                {
+                    shader->setMat4("model", (*matriz_compartida));
+                    objetos->Draw(shader,frame_actual);
+                }
+                else
+                {
+                    shader2->setMat4("model", (*matriz_compartida));
+                    objetos->Draw(shader2,frame_actual);
+                }
             }
         }
     }
-
+    if(render == false)
+    {
+        render = true; //para que en el siguiente draw sea render
+    }else if(render){
+        render = false;
+    }
 }
 
 void TMalla::endDraw()
@@ -199,4 +227,9 @@ void TMalla::setTransparencia(float t)
         if(t < 0.0f)t = 0.0f;
         transparente = t;
     }
+}
+
+void TMalla::setRender(bool r)
+{
+    render = r;
 }

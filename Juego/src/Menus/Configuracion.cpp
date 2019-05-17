@@ -4,6 +4,7 @@
 Configuracion::Configuracion()
 {
     _motor = MotorGrafico::GetInstance();
+    _motora = MotorAudioSystem::getInstance();
     configuracion.CargarConfiguracion("config.global");
     volAmbiente = configuracion.GetVolAmbiente();
     volEfectos = configuracion.GetVolEfectos();
@@ -27,7 +28,7 @@ void Configuracion::Iniciar()
     _motor->CrearTexto("Configuracion", 340, 20, 300, 20); // Parametros: texto, x1, y1, x2, y2
     //_motor->CrearImagen("assets/images/pr2.png",150,100,10.0f);
     _motor->CrearTexto("Resolucion:", 30, 70, 100, 20); // Parametros: texto, x1, y1, x2, y2
-    
+
     if(heightScreen == 800)
     {
         idsElementos[6] = _motor->CrearTexto("800x600 60Fps", 385, 80, 100, 20); // Parametros: texto, x1, y1, x2, y2
@@ -36,7 +37,7 @@ void Configuracion::Iniciar()
     {
         idsElementos[6] = _motor->CrearTexto("1280x720 60Fps", 385, 80, 100, 20);
     }
-    else if (heightScreen == 1920) 
+    else if (heightScreen == 1920)
     {
         idsElementos[6] = _motor->CrearTexto("1920x1080 60Fps", 385, 80, 100, 20);
     }
@@ -44,7 +45,7 @@ void Configuracion::Iniciar()
     {
         idsElementos[6] = _motor->CrearTexto("ErrorResolution", 385, 80, 100, 20);
     }
-    
+
     _motor->CrearBoton2(348,65,2.0f,170,40,300,990,L"Slot 1",L"assets/images/camposeleccionn.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
     _motor->CrearTexto("Sonido Ambiente:", 30, 135, 100, 20); // Parametros: texto, x1, y1, x2, y2
     _motor->CrearImagen("assets/images/barradeslizante.png",350,120,2.0f);
@@ -85,7 +86,7 @@ void Configuracion::Iniciar()
     _motor->CrearBoton(300,520,0,0,997,L" Guardar Cambios",L"");
 
     _motor->ResetKey(LMOUSE_PRESSED_DOWN);
-    
+
 }
 
 // Actualiza lo que se ve por pantalla
@@ -97,7 +98,17 @@ void Configuracion::Render()
 
 void Configuracion::Update()
 {
-    
+    //Configuracion de sonido
+    if(!muteAll)
+    {
+        _motora->setVolumeAll(0,(float)volAmbiente/100);
+        _motora->setVolumeAll(1,(float)volEfectos/100);
+        _motora->setVolumeAll(2,(float)volVoces/100);
+    }else{
+        _motora->setVolumeAll(0,0.0f);
+        _motora->setVolumeAll(1,0.0f);
+        _motora->setVolumeAll(2,0.0f);
+    }
 }
 
 void Configuracion::ManejarEventos()
@@ -132,7 +143,7 @@ void Configuracion::ManejarEventos()
         }
 
     #endif
-    
+
     if(_motor->OcurreEvento(994))
     {
         if(muteAll)
@@ -190,12 +201,12 @@ void Configuracion::ManejarEventos()
     {
         if(resolucion[0] == 0)
         {
-            resolucion[0] = _motor->CrearTexto("800x600 60Fps", 385, 120, 100, 20); 
+            resolucion[0] = _motor->CrearTexto("800x600 60Fps", 385, 120, 100, 20);
             resolucion[1] = _motor->CrearBoton2(348,105,2.0f,170,40,300,884,L"Slot 1",L"assets/images/camposelecciono.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
-            resolucion[2] = _motor->CrearTexto("1280x720 60Fps", 385, 160, 100, 20); 
-            resolucion[3] = _motor->CrearBoton2(348,145,2.0f,170,40,300,885,L"Slot 1",L"assets/images/camposelecciono.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");     
-            resolucion[4] = _motor->CrearTexto("1920x1080 60Fps", 385, 200, 100, 20); 
-            resolucion[5] = _motor->CrearBoton2(348,185,2.0f,170,40,300,886,L"Slot 1",L"assets/images/camposelecciono.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");   
+            resolucion[2] = _motor->CrearTexto("1280x720 60Fps", 385, 160, 100, 20);
+            resolucion[3] = _motor->CrearBoton2(348,145,2.0f,170,40,300,885,L"Slot 1",L"assets/images/camposelecciono.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
+            resolucion[4] = _motor->CrearTexto("1920x1080 60Fps", 385, 200, 100, 20);
+            resolucion[5] = _motor->CrearBoton2(348,185,2.0f,170,40,300,886,L"Slot 1",L"assets/images/camposelecciono.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
         }
         else
         {
@@ -203,7 +214,7 @@ void Configuracion::ManejarEventos()
         }
 
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
-        
+
     }
 
     if(resolucion[0] != 0)
@@ -218,7 +229,7 @@ void Configuracion::ManejarEventos()
         if(_motor->OcurreEvento(885))
         {
             heightScreen = 1280;
-            widthScreen = 720;  
+            widthScreen = 720;
             _motor->CambiarTexto(idsElementos[6],"1280x720 60Fps");
             borrarResoluciones();
 
@@ -226,7 +237,7 @@ void Configuracion::ManejarEventos()
         if(_motor->OcurreEvento(886))
         {
             heightScreen = 1920;
-            widthScreen = 1080; 
+            widthScreen = 1080;
             _motor->CambiarTexto(idsElementos[6],"1920x1080 60Fps");
             borrarResoluciones();
         }
@@ -238,7 +249,7 @@ void Configuracion::ManejarEventos()
         configuracion.GuardarConfiguracion("config.global");
     }
 
-    if (_motor->EstaPulsado(KEY_ESC)) 
+    if (_motor->EstaPulsado(KEY_ESC))
     {
         _motor->ResetKey(KEY_ESC);
         atras();
