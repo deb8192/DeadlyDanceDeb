@@ -1,12 +1,13 @@
-#include "MuerteBoss.hpp"
+#include "TravornioBoss.hpp"
 #include "../Personajes/Jugador.hpp"
 #include "cmath"
 
-MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
+TravornioBoss::TravornioBoss(float nX, float nY, float nZ, int maxVida)
 : Enemigo(nX,nY,nZ,maxVida)
 {
     funciona = true;
     atacado = false;
+    ataqueEspecial = false;
     seAcerca = false;
     _ordenes = new short [constantes.DOS];
     maxRotacion = constantes.PI_CUARTOS;
@@ -16,14 +17,15 @@ MuerteBoss::MuerteBoss(float nX, float nY, float nZ, int maxVida)
     minDistanciaJugador = 15;
 
 
-    _modelo = "assets/models/Muerte/Muerte.obj";
-    _textura = "assets/texture/Muerte.png";
+    _modelo = "assets/models/Travornio/Travornio.obj";
+    _textura = "";
 }
 
-MuerteBoss::~MuerteBoss()
+TravornioBoss::~TravornioBoss()
 {
     funciona = false;
     atacado = false;
+    ataqueEspecial = false;
     seAcerca = false;
     delete[] _ordenes;
     _ordenes = nullptr;
@@ -38,16 +40,21 @@ MuerteBoss::~MuerteBoss()
 
 /***************** RunIA *****************
  * Funcion que llama a recorrer el arbol
- * de MuerteBoss comportamiento en Enemigo
+ * de TravornioBoss comportamiento en Enemigo
  *
  * Entradas:
  *
  * Salidas:
 */
-void MuerteBoss::RunIA()
+void TravornioBoss::RunIA()
 {
-    if(this->getTimeMoverse() <= 0)
+    Constantes constantes;
+    if(this->getTimeMoverse() <= 0 && this->getTimeAt() <= 0 && this->getTimeDefenderse() <= 0 && this->getTimeAtEsp() <= 0)
     {
+        if(this->getDefenderse())
+        {
+            this->setDefenderse(false);
+        }
         if(atacado)
         {
             atacado = false;
@@ -60,20 +67,25 @@ void MuerteBoss::RunIA()
         {
             seAcerca = false;
         }
+        if(ataqueEspecial)
+        {
+            ataqueEspecial = false;
+            this->setBarraAtEs(constantes.CERO);
+        }
         _ordenes = this->Enemigo::RunIA(funciona);
     }
 }
 
-/***************** UpdateMuerteBoss *****************
+/***************** UpdateTravornioBoss *****************
  * Funcion que llama a la funcion actual donde se
- * ha quedado la lectura del arbol del MuerteBoss
+ * ha quedado la lectura del arbol del TravornioBoss
  *
  * Entradas:
  *      i: sennala al enemigo del array
  * Salidas:
 */
 
-void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
+void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
 {
     Jugador* _jugador = (Jugador*)_jug;
     funciona = true;
@@ -137,8 +149,29 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                 switch (_ordenes[1])
                 {
                     case EN_AT_ESP_2:
-                        this->setBarraAtEs(constantes.CERO);
+                    {
+                        bool nuevaDireccion = false;
+                        if(this->getTimeAtEsp() <= 0 && !ataqueEspecial)
+                        {
+                            this->setTimeAtEsp(constantes.TIEMPO_ATESP_TRAVORNIO);
+                            ataqueEspecial = true;
+                            nuevaDireccion = true;
+                        }
+                        this->ataqueRebote(nuevaDireccion, _jug);   //TO DO: tener en cuenta las colisiones con la pared
+                        float resto = (float) ((int) (this->getTimeAt() * constantes.CIEN) % (int) (constantes.UN_CUARTO * constantes.CIEN)) / constantes.CIEN;
+                        if(resto <= constantes.DIEZ_PORCIENTO)
+                        {
+                            int danyo = this->AtacarEspecial();
+
+                            if(danyo > 0)
+                            {
+                                _jugador->ModificarVida(-danyo);
+                            }
+                            this->setTimeAt(this->getTimeAt() - resto);
+                        }
+                        //funciona = true;
                         /* ataque especial 1 */
+                    }
                         break;
                 
                     default:
@@ -150,22 +183,26 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                 break;
             case EN_ATACAR: //El boss ataca
                 {
-                    if(!atacado)
+                    bool nuevaDireccion = false;
+                    if(this->getTimeAt() <= 0 && !atacado)
                     {
-                        int danyo;
-                        danyo = this->Atacar(*i);
+                        this->setTimeAt(constantes.DOS);
+                        atacado = true;
+                        nuevaDireccion = true;
+                    }
+                    this->embestir(nuevaDireccion, _jug);   //TO DO: tener en cuenta las colisiones con la pared
+                    float resto = (float) ((int) (this->getTimeAt() * constantes.CIEN) % (int) (constantes.UN_CUARTO * constantes.CIEN)) / constantes.CIEN;
+                    if(resto <= constantes.DIEZ_PORCIENTO)
+                    {
+                        int danyo = this->Atacar(*i);
 
                         if(danyo > 0)
                         {
                             _jugador->ModificarVida(-danyo);
-                            funciona = true;
-                            atacado = true;
                         }
-                        else
-                        {
-                            funciona = false;
-                        }
+                        this->setTimeAt(this->getTimeAt() - resto);
                     }
+                    funciona = true;
                 }
                 break;
             case EN_MOVERSE: //El boss se mueve tanteando al jugador
@@ -200,6 +237,16 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                 break;
             case EN_DEFENDERSE: //El boss se defiende
                 {
+                    VectorEspacial posJugador;
+                    posJugador.vX = _jugador->getX();
+                    posJugador.vY = _jugador->getY();
+                    posJugador.vZ = _jugador->getZ();
+                    if(this->getTimeDefenderse() <= 0)
+                    {
+                        this->setTimeDefenderse(constantes.TIEMPO_DEFENSA);
+                        this->setDefenderse(true);
+                    }
+                    this->alinearse(&posJugador, false);
                     funciona = true;
                 }
             default:
@@ -208,7 +255,7 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
     }
 }
 
-void MuerteBoss::SetNuevasOrdenes(short newOrden)
+void TravornioBoss::SetNuevasOrdenes(short newOrden)
 {
     _ordenes[0] = newOrden;
 }

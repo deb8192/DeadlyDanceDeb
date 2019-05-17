@@ -30,6 +30,12 @@ using Constantes = struct ValoresConstantes
     const short CIEN = 100;
     const short TIEMPO_RESPAWN = 30;
     const int MAX_VIDA_BOSS_PELIGRO = 33;
+    const float TIEMPO_DEFENSA = 1.5;
+    const float TIEMPO_MERODEAR = 1.5;
+    const float TIEMPO_EMBESTIR = 2.0;
+    const float TIEMPO_ATESP_TRAVORNIO = 7.5;
+    const float PORC_VELOCIDAD_EMBESTIR = 1.5;
+    const float PORC_VELOCIDAD_ATREBOTE = 2.0;
     const float DEG_TO_RAD = 0.0174532925199432957f;
     const float RAD_TO_DEG = 57.295779513082320876f;
 
@@ -127,6 +133,8 @@ using Constantes = struct ValoresConstantes
     const unsigned short POWERUP = 6;
 
     // Meter las armas seguidas:
+    // TO DO: contemplar que hay 3 armas por cada 
+    // tipo de arma (3 guitarras, 3 flautas y 3 arpas)
     const unsigned short ARPA = 7;
     const unsigned short GUITARRA = 8;
     const unsigned short FLAUTA = 9;
@@ -154,6 +162,7 @@ using Constantes = struct ValoresConstantes
     const unsigned short GUARDIAN_A = 3;
     const unsigned short GUARDIAN_B = 4;
     const unsigned short BOSS = 5;
+    const unsigned short TRAVORNIO = 6;
 
     // Codigo de la puerta del boss
     const unsigned short PUERTA_BOSS = 20;

@@ -83,7 +83,7 @@
 		<LightPos X="263" Z="385" Y="3" sala="8"> </LightPos>
 		<LightPos X="208" Z="387" Y="3" sala="8"> </LightPos>
 
-	<!--Sala-01--><Platform Type="1" accion="0" ancho="35" largo="34" alto="4" RP="0" X="0" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
+	<!--Sala-01--><Platform Type="1" tipoSala="0" accion="0" ancho="35" largo="34" alto="4" RP="0" X="0" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
 	<!--Decoracion-cavernas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/RocaCaverna.png" Model="assets/models/Escenario/DecoracionCavernas.obj"></Object>
 	<!--Decoracion-detalles-rocas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/DecoracionDetallesRocas.obj"></Object>
 	<!--Decoracion-laberinto--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/greengrass.png" Model="assets/models/Escenario/DecoracionLaberinto.obj"></Object>
@@ -107,10 +107,10 @@
 	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="24" Y="0" Z="16"></Zone>
 	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="-4" Y="0" Z="-16"></Zone>
 	<!--Zona-Escondite--><Zone Type="1" accion="0" tipo="zHide" elementos="1" ancho="4" largo="4" alto="1" X="24" Y="0" Z="-16"></Zone>
-	<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="1" ancho="4" largo="4" alto="2" X="0" Y="0" Z="0" conexiones="2"></Waypoint>
-	<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="2" ancho="4" largo="4" alto="2" X="35" Y="0" Z="0" conexiones="1,3"></Waypoint>
+	<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="1" ancho="4" largo="4" alto="4" X="0" Y="0" Z="0" conexiones="2"></Waypoint>
+	<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="2" ancho="4" largo="4" alto="4" X="35" Y="0" Z="0" conexiones="1,3"></Waypoint>
 
-		<!--Sala-02--><Platform Type="1" accion="0" ancho="59" largo="92" alto="4" RP="0" X="94" Y="0" Z="52" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+		<!--Sala-02--><Platform Type="1" tipoSala="1" accion="0" ancho="59" largo="92" alto="4" RP="0" X="94" Y="0" Z="52" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 		<!--Llave--><Object tipoObj="1" Type="1" codigo="2" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="45" Y="0" Z="92" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
 		<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="2" largo="2" alto="10" X="112" Y="0" Z="3" Texture="" Model=""></Enemy>
 		<!--Zona-Oscura--><Zone Type="1" accion="0" tipo="zDark" elementos="4" ancho="20" largo="20" alto="5" X="62" Y="0" Z="93"></Zone>
@@ -122,11 +122,11 @@
 		<!--Base--><Object tipoObj="16" Type="1" accion="1" ancho="3" largo="2" alto="5" X="78" Y="0" Z="-34" Texture="assets/texture/platform1.png" Model="assets/models/Base.obj"></Object>
 		<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="12" largo="2" alto="24" RP="90" X="142" Y="0" Z="106" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 		<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="127" Y="0" Z="132" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
-		<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="2" ancho="4" largo="4" alto="2" X="35" Y="0" Z="0" conexiones="1,3"></Waypoint>
-		<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="3" ancho="4" largo="4" alto="2" X="94" Y="0" Z="34" conexiones="2,4"></Waypoint>
-		<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="4" ancho="4" largo="4" alto="2" X="155" Y="0" Z="96" conexiones="3,5"></Waypoint>
+		<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="2" ancho="4" largo="4" alto="4" X="35" Y="0" Z="0" conexiones="1,3"></Waypoint>
+		<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="3" ancho="4" largo="4" alto="4" X="94" Y="0" Z="34" conexiones="2,4"></Waypoint>
+		<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="4" ancho="4" largo="4" alto="4" X="155" Y="0" Z="96" conexiones="3,5"></Waypoint>
 
-			<!--Sala-03--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="212" Y="0" Z="84" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+			<!--Sala-03--><Platform Type="1" tipoSala="0" accion="0" ancho="59" largo="46" alto="4" RP="0" X="212" Y="0" Z="84" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 			<!--Puerta--><Object tipoObj="3" Type="1" codigo="2" accion="3" ancho="1" largo="4" alto="10" RP="90" X="155" Y="0" Z="92" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
 			<!--Puerta--><Object tipoObj="3" Type="1" codigo="4" accion="3" ancho="1" largo="4" alto="10" RP="90" X="269" Y="0" Z="62" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
 			<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="174" Y="0" Z="54" Texture="" Model=""></Enemy>
@@ -140,20 +140,20 @@
 			<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="223" Y="0" Z="82" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 			<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="171" Y="0" Z="72"></Zone>
 			<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="255" Y="0" Z="98"></Zone>
-			<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="4" ancho="4" largo="4" alto="2" X="155" Y="0" Z="96" conexiones="3,5"></Waypoint>
-			<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="5" ancho="4" largo="4" alto="2" X="212" Y="0" Z="84" conexiones="4,6"></Waypoint>
-			<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="6" ancho="4" largo="4" alto="2" X="269" Y="0" Z="66" conexiones="5,7"></Waypoint>
+			<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="4" ancho="4" largo="4" alto="4" X="155" Y="0" Z="96" conexiones="3,5"></Waypoint>
+			<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="5" ancho="4" largo="4" alto="4" X="212" Y="0" Z="84" conexiones="4,6"></Waypoint>
+			<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="6" ancho="4" largo="4" alto="4" X="269" Y="0" Z="66" conexiones="5,7"></Waypoint>
 
-				<!--Sala-04--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="330" Y="0" Z="84" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+				<!--Sala-04--><Platform Type="1" tipoSala="0" accion="0" ancho="59" largo="46" alto="4" RP="0" X="330" Y="0" Z="84" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 				<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="2" largo="2" alto="10" X="304" Y="0" Z="62" Texture="" Model=""></Enemy>
 				<!--Zona-Oscura--><Zone Type="1" accion="0" tipo="zDark" elementos="4" ancho="20" largo="20" alto="5" X="306" Y="0" Z="59"></Zone>
 				<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="2" largo="2" alto="10" X="373" Y="0" Z="102" Texture="" Model=""></Enemy>
 				<!--Zona-Oscura--><Zone Type="1" accion="0" tipo="zDark" elementos="4" ancho="20" largo="20" alto="5" X="373" Y="0" Z="93"></Zone>
-				<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="6" ancho="4" largo="4" alto="2" X="269" Y="0" Z="66" conexiones="5,7"></Waypoint>
-				<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="7" ancho="4" largo="4" alto="2" X="330" Y="0" Z="68" conexiones="6,8"></Waypoint>
-				<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="8" ancho="4" largo="4" alto="2" X="367" Y="0" Z="128" conexiones="7,9"></Waypoint>
+				<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="6" ancho="4" largo="4" alto="4" X="269" Y="0" Z="66" conexiones="5,7"></Waypoint>
+				<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="7" ancho="4" largo="4" alto="4" X="330" Y="0" Z="68" conexiones="6,8"></Waypoint>
+				<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="8" ancho="4" largo="4" alto="4" X="367" Y="0" Z="128" conexiones="7,9"></Waypoint>
 
-					<!--Sala-05--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="176" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+					<!--Sala-05--><Platform Type="1" tipoSala="0" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="176" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 					<!--Puerta--><Object tipoObj="2" Type="1" codigo="0" accion="3" ancho="1" largo="4" alto="10" RP="0" X="363" Y="0" Z="128" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
 					<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="365" Y="0" Z="171"></Zone>
 					<!--Palanca--><Object tipoObj="0" Type="1" codigo="5" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="322" Y="0" Z="203" despX="0" despZ="0" Texture="assets/texture/platform1.png" Model=""></Object>
@@ -168,31 +168,31 @@
 					<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="377" Y="0" Z="170" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="318" Y="0" Z="154"></Zone>
 					<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="403" Y="0" Z="154"></Zone>
-					<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="8" ancho="4" largo="4" alto="2" X="367" Y="0" Z="128" conexiones="7,9"></Waypoint>
-					<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="9" ancho="4" largo="4" alto="2" X="362" Y="0" Z="176" conexiones="8,10"></Waypoint>
-					<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="10" ancho="4" largo="4" alto="2" X="423" Y="0" Z="204" conexiones="9,11"></Waypoint>
+					<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="8" ancho="4" largo="4" alto="4" X="367" Y="0" Z="128" conexiones="7,9"></Waypoint>
+					<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="9" ancho="4" largo="4" alto="4" X="362" Y="0" Z="176" conexiones="8,10"></Waypoint>
+					<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="10" ancho="4" largo="4" alto="4" X="423" Y="0" Z="204" conexiones="9,11"></Waypoint>
 
-						<!--Sala-06--><Platform Type="1" accion="0" ancho="12" largo="52" alto="4" RP="0" X="433" Y="0" Z="234" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+						<!--Sala-06--><Platform Type="1" tipoSala="0" accion="0" ancho="12" largo="52" alto="4" RP="0" X="433" Y="0" Z="234" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 						<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="433" Y="0" Z="208" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 	 					<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="433" Y="0" Z="260" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 						<!--Puerta--><Object tipoObj="3" Type="1" codigo="5" accion="3" ancho="1" largo="4" alto="10" RP="90" X="423" Y="0" Z="200" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
 						<!--Puerta--><Object tipoObj="3" Type="1" codigo="0" accion="3" ancho="1" largo="4" alto="10" RP="90" X="423" Y="0" Z="268" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
-						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="10" ancho="4" largo="4" alto="2" X="423" Y="0" Z="204" conexiones="9,11"></Waypoint>
-						<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="11" ancho="4" largo="4" alto="2" X="433" Y="0" Z="234" conexiones="10,12"></Waypoint>
-						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="12" ancho="4" largo="4" alto="2" X="423" Y="0" Z="272" conexiones="11,13"></Waypoint>
+						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="10" ancho="4" largo="4" alto="4" X="423" Y="0" Z="204" conexiones="9,11"></Waypoint>
+						<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="11" ancho="4" largo="4" alto="4" X="433" Y="0" Z="234" conexiones="10,12"></Waypoint>
+						<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="12" ancho="4" largo="4" alto="4" X="423" Y="0" Z="272" conexiones="11,13"></Waypoint>
 
-							<!--Sala-07--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="268" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+							<!--Sala-07--><Platform Type="1" tipoSala="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="268" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 							<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="2" largo="2" alto="10" X="400" Y="0" Z="244" Texture="" Model=""></Enemy>
 							<!--Zona-Oscura--><Zone Type="1" accion="0" tipo="zDark" elementos="4" ancho="20" largo="20" alto="5" X="400" Y="0" Z="234"></Zone>
 							<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="2" largo="2" alto="10" X="352" Y="0" Z="246" Texture="" Model=""></Enemy>
 							<!--Zona-Oscura--><Zone Type="1" accion="0" tipo="zDark" elementos="4" ancho="20" largo="20" alto="5" X="352" Y="0" Z="256"></Zone>
 							<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="2" largo="2" alto="10" X="312" Y="0" Z="250" Texture="" Model=""></Enemy>
 							<!--Zona-Oscura--><Zone Type="1" accion="0" tipo="zDark" elementos="4" ancho="20" largo="20" alto="5" X="312" Y="0" Z="240"></Zone>
-							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="12" ancho="4" largo="4" alto="2" X="423" Y="0" Z="272" conexiones="11,13"></Waypoint>
-							<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="13" ancho="4" largo="4" alto="2" X="362" Y="0" Z="268" conexiones="12,14"></Waypoint>
-							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="14" ancho="4" largo="4" alto="2" X="303" Y="0" Z="232" conexiones="13,15"></Waypoint>
+							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="12" ancho="4" largo="4" alto="4" X="423" Y="0" Z="272" conexiones="11,13"></Waypoint>
+							<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="13" ancho="4" largo="4" alto="4" X="362" Y="0" Z="268" conexiones="12,14"></Waypoint>
+							<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="14" ancho="4" largo="4" alto="4" X="303" Y="0" Z="232" conexiones="13,15"></Waypoint>
 
-								<!--Sala-08--><Platform Type="1" accion="0" ancho="59" largo="46" alto="4" RP="0" X="244" Y="0" Z="238" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
+								<!--Sala-08--><Platform Type="1" tipoSala="0" accion="0" ancho="59" largo="46" alto="4" RP="0" X="244" Y="0" Z="238" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 								<!--Puerta--><Object tipoObj="3" Type="1" codigo="6" accion="3" ancho="1" largo="4" alto="10" RP="90" X="187" Y="0" Z="258" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
 								<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="273" Y="0" Z="206"></Zone>
 								<!--Llave--><Object tipoObj="1" Type="1" codigo="6" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="218" Y="0" Z="203" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
@@ -201,24 +201,24 @@
 								<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="26" largo="2" alto="24" RP="90" X="273" Y="0" Z="216" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png"  Model="assets/models/pared_destruible/BreakWallLarge_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 								<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="26" largo="2" alto="24" RP="90" X="215" Y="0" Z="216" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png"  Model="assets/models/pared_destruible/BreakWallLarge_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 								<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="248" Y="0" Z="260"></Zone>
-								<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="14" ancho="4" largo="4" alto="2" X="303" Y="0" Z="232" conexiones="13,15"></Waypoint>
-								<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="15" ancho="4" largo="4" alto="2" X="244" Y="0" Z="238" conexiones="14,16"></Waypoint>
-								<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="16" ancho="4" largo="4" alto="2" X="187" Y="0" Z="262" conexiones="15,17"></Waypoint>
+								<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="14" ancho="4" largo="4" alto="4" X="303" Y="0" Z="232" conexiones="13,15"></Waypoint>
+								<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="15" ancho="4" largo="4" alto="4" X="244" Y="0" Z="238" conexiones="14,16"></Waypoint>
+								<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="16" ancho="4" largo="4" alto="4" X="187" Y="0" Z="262" conexiones="15,17"></Waypoint>
 
-									<!--Sala-09--><Platform Type="1" accion="0" ancho="34" largo="35" alto="4" RP="90" X="151" Y="0" Z="249" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
+									<!--Sala-09--><Platform Type="1" tipoSala="0" accion="0" ancho="34" largo="35" alto="4" RP="90" X="151" Y="0" Z="249" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat4.obj" UserStar="False" StarX="0" StarY="0">
 									<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="146" Y="0" Z="242" Texture="" Model=""></Enemy>
-									<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="16" ancho="4" largo="4" alto="2" X="187" Y="0" Z="262" conexiones="15,17"></Waypoint>
-									<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="17" ancho="4" largo="4" alto="2" X="151" Y="0" Z="249" conexiones="16,18"></Waypoint>
-									<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="18" ancho="4" largo="4" alto="2" X="141" Y="0" Z="286" conexiones="17,19"></Waypoint>
+									<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="16" ancho="4" largo="4" alto="4" X="187" Y="0" Z="262" conexiones="15,17"></Waypoint>
+									<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="17" ancho="4" largo="4" alto="4" X="151" Y="0" Z="249" conexiones="16,18"></Waypoint>
+									<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="18" ancho="4" largo="4" alto="4" X="141" Y="0" Z="286" conexiones="17,19"></Waypoint>
 
-										<!--Sala-10--><Platform Type="1" accion="0" ancho="12" largo="52" alto="4" RP="0" X="141" Y="0" Z="336" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+										<!--Sala-10--><Platform Type="1" tipoSala="0" accion="0" ancho="12" largo="52" alto="4" RP="0" X="141" Y="0" Z="336" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 										<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="141" Y="0" Z="310" despX="0" despZ="0" Texture="" Model=""></Object>
 	 									<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="141" Y="0" Z="362" despX="0" despZ="0" Texture="" Model=""></Object>
-										<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="18" ancho="4" largo="4" alto="2" X="141" Y="0" Z="286" conexiones="17,19"></Waypoint>
-										<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="19" ancho="4" largo="4" alto="2" X="141" Y="0" Z="336" conexiones="18,20"></Waypoint>
-										<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="20" ancho="4" largo="4" alto="2" X="141" Y="0" Z="388" conexiones="19,21"></Waypoint>
+										<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="18" ancho="4" largo="4" alto="4" X="141" Y="0" Z="286" conexiones="17,19"></Waypoint>
+										<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="19" ancho="4" largo="4" alto="4" X="141" Y="0" Z="336" conexiones="18,20"></Waypoint>
+										<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="20" ancho="4" largo="4" alto="4" X="141" Y="0" Z="388" conexiones="19,21"></Waypoint>
 
-											<!--Sala-11--><Platform Type="1" accion="0" ancho="90" largo="46" alto="4" RP="0" X="185" Y="0" Z="434" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
+											<!--Sala-11--><Platform Type="1" tipoSala="0" accion="0" ancho="90" largo="46" alto="4" RP="0" X="185" Y="0" Z="434" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 											<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="126" Y="0" Z="422" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/Plataformat4.obj"></Object>
 											<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="220" Y="0" Z="434" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/Plataformat3.obj"></Object>
 											<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="2" largo="2" alto="10" X="110" Y="0" Z="424" Texture="" Model=""></Enemy>
@@ -229,58 +229,58 @@
 											<!--Zona-Oscura--><Zone Type="1" accion="0" tipo="zDark" elementos="4" ancho="20" largo="20" alto="5" X="251" Y="0" Z="448"></Zone>
 											<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="151" Y="0" Z="432"></Zone>
 											<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="236" Y="0" Z="432"></Zone>
-											<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="20" ancho="4" largo="4" alto="2" X="141" Y="0" Z="388" conexiones="19,21"></Waypoint>
-											<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="21" ancho="4" largo="4" alto="2" X="141" Y="0" Z="336" conexiones="20,22,23"></Waypoint>
-											<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="22" ancho="4" largo="4" alto="2" X="90" Y="0" Z="426" conexiones="21,24"></Waypoint>
-											<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="23" ancho="4" largo="4" alto="2" X="211" Y="0" Z="480" conexiones="21,25"></Waypoint>
-											<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="26" ancho="4" largo="4" alto="2" X="283" Y="0" Z="452" conexiones="21,27"></Waypoint>
+											<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="20" ancho="4" largo="4" alto="4" X="141" Y="0" Z="388" conexiones="19,21"></Waypoint>
+											<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="21" ancho="4" largo="4" alto="4" X="141" Y="0" Z="336" conexiones="20,22,23"></Waypoint>
+											<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="22" ancho="4" largo="4" alto="4" X="90" Y="0" Z="426" conexiones="21,24"></Waypoint>
+											<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="23" ancho="4" largo="4" alto="4" X="211" Y="0" Z="480" conexiones="21,25"></Waypoint>
+											<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="26" ancho="4" largo="4" alto="4" X="283" Y="0" Z="452" conexiones="21,27"></Waypoint>
 
 												<!--Sala-12--><Platform Type="1" accion="0" ancho="26" largo="12" alto="4" RP="0" X="65" Y="0" Z="426" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 												<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="66" Y="0" Z="424"></Zone>
 												<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="89" Y="0" Z="425" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
-												<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="22" ancho="4" largo="4" alto="2" X="90" Y="0" Z="426" conexiones="21,24"></Waypoint>
-												<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="24" ancho="4" largo="4" alto="2" X="65" Y="0" Z="426" conexiones="22"></Waypoint>
+												<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="22" ancho="4" largo="4" alto="4" X="90" Y="0" Z="426" conexiones="21,24"></Waypoint>
+												<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="24" ancho="4" largo="4" alto="4" X="65" Y="0" Z="426" conexiones="22"></Waypoint>
 												<!--Sala-12--></Platform>
 
 
-													<!--Sala-13--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="211" Y="0" Z="506" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
-													<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="213" Y="0" Z="512"></Zone>
-													<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="12" largo="2" alto="24" RP="90" X="209" Y="0" Z="490" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
-													<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="23" ancho="4" largo="4" alto="2" X="211" Y="0" Z="480" conexiones="21,25"></Waypoint>
-													<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="25" ancho="4" largo="4" alto="2" X="211" Y="0" Z="506" conexiones="23"></Waypoint>
-													<!--Sala-13--></Platform>
+												<!--Sala-13--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="211" Y="0" Z="506" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
+												<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="213" Y="0" Z="512"></Zone>
+												<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="12" largo="2" alto="24" RP="90" X="209" Y="0" Z="490" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
+												<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="23" ancho="4" largo="4" alto="4" X="211" Y="0" Z="480" conexiones="21,25"></Waypoint>
+												<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="25" ancho="4" largo="4" alto="4" X="211" Y="0" Z="506" conexiones="23"></Waypoint>
+												<!--Sala-13--></Platform>
 
 													<!--Sala-14--><Platform Type="1" accion="0" ancho="46" largo="59" alto="4" RP="90" X="325" Y="0" Z="479" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
 													<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="315" Y="0" Z="460" Texture="" Model=""></Enemy>
 													<!--Pollo--><Enemy Type="1" enemigo="0" accion="0" ancho="2" largo="2" alto="3" X="333" Y="0" Z="505" Texture="" Model=""></Enemy>
 													<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="326" Y="0" Z="432"></Zone>
 													<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="0" ancho="4" largo="4" alto="1" X="326" Y="0" Z="514"></Zone>
-													<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="26" ancho="4" largo="4" alto="2" X="283" Y="0" Z="452" conexiones="21,27"></Waypoint>
-													<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="27" ancho="4" largo="4" alto="2" X="325" Y="0" Z="479" conexiones="26,28"></Waypoint>
-													<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="28" ancho="4" largo="4" alto="2" X="373" Y="0" Z="482" conexiones="27,29"></Waypoint>
+													<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="26" ancho="4" largo="4" alto="4" X="283" Y="0" Z="452" conexiones="21,27"></Waypoint>
+													<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="27" ancho="4" largo="4" alto="4" X="325" Y="0" Z="479" conexiones="26,28"></Waypoint>
+													<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="28" ancho="4" largo="4" alto="4" X="373" Y="0" Z="482" conexiones="27,29"></Waypoint>
 
 														<!--Sala-15--><Platform Type="1" accion="0" ancho="60" largo="35" alto="4" RP="0" X="431" Y="0" Z="483" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 														<!--Sala final boss -->
 														<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="397" Y="0" Z="482" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
 														<!--Modelo-Suelo--><Object tipoObj="18" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="457" Y="0" Z="483" despX="0" despZ="0" Texture="assets/texture/discofloor.png" Model="assets/models/Escenario/PistaDisco.obj"></Object>
 														<!--Puerta--><Object tipoObj="3" Type="1" codigo="20" accion="3" ancho="1" largo="4" alto="10" RP="90" X="373" Y="0" Z="478" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
-														<!--BossMuerte--><Enemy Type="1" enemigo="5" accion="1" ancho="1" largo="1" alto="10" X="453" Y="0" Z="468" Texture="" Model=""></Enemy>
+														<!--BossUnicornio--><Enemy Type="1" enemigo="6" accion="1" ancho="1" largo="1" alto="10" X="453" Y="0" Z="468" Texture="" Model=""></Enemy>
 														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="442" Y="0" Z="498"></Zone>
 														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="442" Y="0" Z="483"></Zone>
 														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="442" Y="0" Z="468"></Zone>
 														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="462" Y="0" Z="498"></Zone>
 														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="462" Y="0" Z="483"></Zone>
 														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="462" Y="0" Z="468"></Zone>
-														<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="28" ancho="4" largo="4" alto="2" X="373" Y="0" Z="482" conexiones="27,29"></Waypoint>
-														<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="29" ancho="4" largo="4" alto="2" X="431" Y="0" Z="483" conexiones="28,30"></Waypoint>
-														<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="30" ancho="4" largo="4" alto="2" X="491" Y="0" Z="482" conexiones="29,31"></Waypoint>
+														<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="28" ancho="4" largo="4" alto="4" X="373" Y="0" Z="482" conexiones="27,29"></Waypoint>
+														<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="29" ancho="4" largo="4" alto="4" X="431" Y="0" Z="483" conexiones="28,30"></Waypoint>
+														<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="30" ancho="4" largo="4" alto="4" X="491" Y="0" Z="482" conexiones="29,31"></Waypoint>
 
 																<!--Sala-16--><Platform Type="1" accion="0" ancho="12" largo="26" alto="4" RP="90" X="503" Y="0" Z="482" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat2.obj" UserStar="False" StarX="0" StarY="0">
 																<!--Sala oculta final-->
 																<!--Pared-Rompible--><Object tipoObj="14" Type="1" accion="5" ancho="2" largo="12" alto="24" RP="0" X="493" Y="0" Z="482" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/pared_destruible/BreakWallSmall_000001.obj" Animation="assets/animaciones/pared_destruible.xml" Frames="25"></Object>
 																<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="506" Y="0" Z="484"></Zone>
-																<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="30" ancho="4" largo="4" alto="2" X="491" Y="0" Z="482" conexiones="29,31"></Waypoint>
-																<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="31" ancho="4" largo="4" alto="2" X="503" Y="0" Z="482" conexiones="30"></Waypoint>
+																<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="30" ancho="4" largo="4" alto="4" X="491" Y="0" Z="482" conexiones="29,31"></Waypoint>
+																<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="31" ancho="4" largo="4" alto="4" X="503" Y="0" Z="482" conexiones="30"></Waypoint>
 																<!--Sala-16--></Platform>
 
 														<!--Sala-15--></Platform>

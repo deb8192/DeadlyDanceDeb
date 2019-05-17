@@ -83,9 +83,10 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setLastTimeMerodear(float t);
         void setTimeMoverse(float t);
         void setLastTimeMoverse(float t);
-        void setAtackTime(float t);
         void setTimeAt(float time);
         void setLastTimeAt(float time);
+        void setTimeDefenderse(float time);
+        void setLastTimeDefenderse(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
         void setPosAtaques(int p);
@@ -114,9 +115,10 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getLastTimeMerodear();
         float getTimeMoverse();
         float getLastTimeMoverse();
-        float getAtackTime();
         float getTimeAt();
         float getLastTimeAt();
+        float getTimeDefenderse();
+        float getLastTimeDefenderse();
         float getTimeAtEsp();
         float getLastTimeAtEsp();
         float getX();
@@ -200,6 +202,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
         bool buscar();//por defecto devuelve true
         bool perseguir(int* _jug);//por defecto devuelve true TO IMPROVE
+        void embestir(bool modificarDireccion, int* _jug);//Ataque por defecto de Travornio
+        void ataqueRebote(bool modificarDireccion, int* _jug);//Ataque especial 2 por defecto de Travornio
         bool buscar(VectorEspacial*);//busca un objetivo
         bool Acciones(int);//esto es para recorrer el arbol
         bool PedirAyuda(bool);//pide ayuda
@@ -211,6 +215,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void modificarTrayectoria(INnpc::VectorEspacial* vector, int* destino);
         bool comprobarDistanciaFlocking();
         //fin comportamientos bases
+        void setDefenderse(bool activarDefensa);
+        bool getDefenderse();
         ZonaOscura* getZonaOscuraMasCercana(vector <ZonaOscura*> &zonasOscuras, ZonaOscura*);
         ZonaEscondite* getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zonasEscondite, ZonaEscondite*);
         //Comparadores de la lectura de las acciones y objetivos de las tareas
@@ -260,8 +266,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         Sala* _estoy;//sala en la que esta el enemigo
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc,iniAtposX, iniAtposY, iniAtposZ, atposX, atposY, atposZ, atespposX, atespposY, atespposZ;
-        float atacktime;
-        float tiempoMerodear, lastTiempoMerodear, tiempoMoverse, lastTiempoMoverse, tiempoOcultarse, lastTiempoOcultarse;
+        float tiempoDefenderse, lastTiempoDefenderse, tiempoMerodear, lastTiempoMerodear, tiempoMoverse, lastTiempoMoverse, tiempoOcultarse, lastTiempoOcultarse;
         Arma* _armaEspecial;
         const char* _rutaArmaEspecial = "assets/models/objeto.obj";
         int tipoEnemigo;//Tipo del enemigo: pollo, murcielago, guardian, boss

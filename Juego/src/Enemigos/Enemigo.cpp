@@ -1,6 +1,7 @@
 #include "Enemigo.hpp"
 #include "Pollo.hpp"
 #include "Murcielago.hpp"
+#include "TravornioBoss.hpp"
 #include "MuerteBoss.hpp"
 #include "Guardian.hpp"
 #include "CofreArana.hpp"
@@ -20,6 +21,10 @@ Enemigo::Enemigo()
     tiempoMerodear = 0.0f;
     tiempoMoverse = 0.0f;
     tiempoOcultarse = 0.0f;
+    atackTime = 0.0f;
+    atackEspTime = 0.0f;
+    lastAtackTime = 0.0f;
+    lastAtackEspTime = 0.0f;
     lastTiempoMerodear = 0.0f;
     lastTiempoMoverse = 0.0f;
     lastTiempoOcultarse = 0.0f;
@@ -28,10 +33,10 @@ Enemigo::Enemigo()
     vectorOrientacion.vZ = 0.0f;
     vectorOrientacion.modulo = 0.0f;
     modo = MODO_DEFAULT;
-    atacktime = 0.0f;
     pedirAyuda = false;
     respawnBoss = false;
     contestar = false;
+    defensa = false;
     accionRealizada = false;
     controlRotacion = false;
     distanciaMinimaEsquivar = 3;
@@ -99,7 +104,6 @@ Enemigo::~Enemigo()
     atespposY = 0;
     atespposZ = 0;
     incrAtDisCirc = 0;
-    atacktime = 0;
     velocidadMaxima = 0;
     porcentajeVelocidad = 0;
     pesoRotacion = 0;
@@ -107,6 +111,7 @@ Enemigo::~Enemigo()
     pos_ataques = 0;
     accionRealizada = false;
     contestar = false;
+    defensa = false;
     respawnBoss = false;
     accionRealizada = false;
     controlRotacion = false;
@@ -522,12 +527,18 @@ void Enemigo::UpdateBehavior(short *i, int* _jugador,
                 guardian->UpdateGuardian(i, _jugador, _getZonasEscondite);
             }
                 break;
-
-            default:
+            case 5:
             {
                 MuerteBoss* _boss = (MuerteBoss*) this;
                 _boss->RunIA();
                 _boss->UpdateMuerteBoss(i, _jugador, ayuda);
+            }
+                break;
+            default:
+            {
+                TravornioBoss* _boss = (TravornioBoss*) this;
+                _boss->RunIA();
+                _boss->UpdateTravornioBoss(i, _jugador, ayuda);
             }
                 break;
         }
@@ -539,7 +550,7 @@ int Enemigo::Atacar(int i)
     float danyoF = 0.f, critico = 1.f;
     int danyo = 0, por10 = 10, por100 = 100;
     bool atacado = false;
-    if(vida > 0 && atacktime == 0)
+    if(vida > 0)
     {
         int distance = 0;
         //Temporal
@@ -571,7 +582,8 @@ int Enemigo::Atacar(int i)
             _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
             _motora->getEvent("GolpeGuitarra")->setVolume(0.5f);
             _motora->getEvent("GolpeGuitarra")->start();
-        }*/
+        }
+        */
 
         //Acutualizar posicion del ataque
         _fisicas->updateAtaqueEnemigos(atposX,iniAtposY,atposZ,i);
@@ -668,12 +680,7 @@ int Enemigo::AtacarEspecial()
             //cout << "Jugador Atacado por ataque especial" << endl;
             danyo = roundf(danyoF * por10) / por10;
         }
-        barraAtEs = 0;
         return danyo;
-    }
-    else
-    {
-        barraAtEs += 1;
     }
     return danyo;
 }
@@ -793,7 +800,14 @@ void Enemigo::UpdateTimeRotate(float updTime)
  */
 void Enemigo::ModificarVida(int vid)
 {
-    vida += vid;
+    if(defensa && vid < 0)
+    {
+        vida += vid/constantes.DOS;
+    }
+    else
+        {
+            vida += vid;
+        }
     float ultimoEstertor = vidaIni * constantes.UN_CUARTO;
     if(vid < 0)
     {
@@ -808,7 +822,7 @@ void Enemigo::ModificarVida(int vid)
                 modo = MODO_ATAQUE;
             }
         }
-        else if(tipoEnemigo == 5)
+        else if(tipoEnemigo == constantes.BOSS || tipoEnemigo == constantes.TRAVORNIO)
         {
             ModificarBarraAtEs(abs(vid));
         }
@@ -899,6 +913,16 @@ void Enemigo::setTimeAt(float time)
 void Enemigo::setLastTimeAt(float time)
 {
     lastAtackTime = time;
+}
+
+void Enemigo::setTimeDefenderse(float time)
+{
+    tiempoDefenderse = time;
+}
+
+void Enemigo::setLastTimeDefenderse(float time)
+{
+    lastTiempoDefenderse = time;
 }
 
 void Enemigo::setTimeAtEsp(float time)
@@ -1043,11 +1067,6 @@ void Enemigo::setLastTimeMoverse(float t)
     lastTiempoMoverse = t;
 }
 
-void Enemigo::setAtackTime(float t)
-{
-  atacktime = t;
-}
-
 void Enemigo::SetEnemigo(int enemigo)
 {
     tipoEnemigo = enemigo;
@@ -1066,6 +1085,11 @@ void Enemigo::SetPosicionComunBandada(INnpc::VectorEspacial posicion)
 void Enemigo::SetMultiplicadorAtEsp(int multiplicador)
 {
     multiplicadorAtaqueEspecial = multiplicador;
+}
+
+void Enemigo::setDefenderse(bool activarDefensa)
+{
+    defensa = activarDefensa;
 }
 
 float Enemigo::getTimeOcultarse()
@@ -1097,10 +1121,6 @@ float Enemigo::getLastTimeMoverse()
 {
     return lastTiempoMoverse;
 }
-float Enemigo::getAtackTime()
-{
-  return atacktime;
-}
 
 float Enemigo::getTimeAt()
 {
@@ -1110,6 +1130,16 @@ float Enemigo::getTimeAt()
 float Enemigo::getLastTimeAt()
 {
     return lastAtackTime;
+}
+
+float Enemigo::getTimeDefenderse()
+{
+    return tiempoDefenderse;
+}
+
+float Enemigo::getLastTimeDefenderse()
+{
+    return lastTiempoDefenderse;
 }
 
 float Enemigo::getTimeAtEsp()
@@ -1135,6 +1165,11 @@ int Enemigo::GetModo()
 bool Enemigo::GetRespawnBoss()
 {
     return respawnBoss;
+}
+
+bool Enemigo::getDefenderse()
+{
+    return defensa;
 }
 
 ZonaOscura* Enemigo::getZonaOscuraMasCercana(vector <ZonaOscura*>& zonasOscuras, ZonaOscura* _zonaUsada)
@@ -1757,6 +1792,85 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         return funciona;
     }
 
+    void Enemigo::embestir(bool modificarDireccion, int* _jug)
+    {
+        Constantes constantes;
+        Jugador* _jugador = (Jugador*) _jug;
+        VectorEspacial velocidad, posiciones, target, datosDesplazamiento;
+        if(modificarDireccion)
+        {
+            target.vX = _jugador->getX();
+            target.vY = _jugador->getY();
+            target.vZ = _jugador->getZ();
+            target.modulo = sqrt(pow(posActual.x - target.vX, constantes.DOS) + pow(posActual.y - target.vY, constantes.DOS) + pow(posActual.z - target.vZ, constantes.DOS));
+
+            this->alinearse(&target, false);
+        }
+        if(porcentajeVelocidad != constantes.PORC_VELOCIDAD_EMBESTIR)
+        {
+            porcentajeVelocidad = constantes.PORC_VELOCIDAD_EMBESTIR;
+        }
+        datosDesplazamiento.vX = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        datosDesplazamiento.vZ = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+
+        if(_fisicas->enemyCollideObstacle(constantes.CERO))
+        {
+            this->setTimeAt(0);
+            this->setLastTimeAt(0);
+            this->setNewPosiciones(posFutura.x - (datosDesplazamiento.vX * constantes.DOS), posFutura.y, posFutura.z - (datosDesplazamiento.vZ * constantes.DOS));
+            this->setPosicionesFisicas(-(datosDesplazamiento.vX * constantes.DOS), constantes.CERO, -(datosDesplazamiento.vZ * constantes.DOS));
+        }
+        else
+        {
+            this->setNewPosiciones(posFutura.x + datosDesplazamiento.vX, posFutura.y, posFutura.z + datosDesplazamiento.vZ);
+            this->setPosicionesFisicas(datosDesplazamiento.vX, constantes.CERO, datosDesplazamiento.vZ);
+        }
+    }
+
+    void Enemigo::ataqueRebote(bool modificarDireccion, int* _jug)
+    {
+        Constantes constantes;
+        Jugador* _jugador = (Jugador*) _jug;
+        VectorEspacial velocidad, posiciones, target, datosDesplazamiento;
+        int* destino = new int [7];
+        if(modificarDireccion)
+        {
+            target.vX = _jugador->getX();
+            target.vY = _jugador->getY();
+            target.vZ = _jugador->getZ();
+            target.modulo = sqrt(pow(posActual.x - target.vX, constantes.DOS) + pow(posActual.y - target.vY, constantes.DOS) + pow(posActual.z - target.vZ, constantes.DOS));
+
+            this->alinearse(&target, false);
+        }
+        else if(_fisicas->enemyCollideObstacle(constantes.CERO))
+        {
+            int* destino = _fisicas->ObtenerNormalColision(posActual.x, posActual.y, posActual.z, rotActual.y);
+            //Creamos un vector con una nueva direccion normalizando el vector director anterior
+            VectorEspacial vectorDirector;// = this->normalizarVector(destino);
+            //Se suma la normal del obstaculo aplicando pesos a la normal y al vector director
+            this->modificarTrayectoria(&vectorDirector, destino); 
+            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
+            vectorDirector.vZ < 0 ?
+                rotation = (constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ))):
+                rotation = (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ));
+
+            this->setNewRotacion(rotActual.x, rotation, rotActual.z);
+            this->setVectorOrientacion();
+
+        }
+        if(porcentajeVelocidad != constantes.PORC_VELOCIDAD_ATREBOTE)
+        {
+            porcentajeVelocidad = constantes.PORC_VELOCIDAD_ATREBOTE;
+        }
+        datosDesplazamiento.vX = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        datosDesplazamiento.vZ = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+
+        this->setNewPosiciones(posFutura.x + datosDesplazamiento.vX, posFutura.y, posFutura.z + datosDesplazamiento.vZ);
+        this->setPosicionesFisicas(datosDesplazamiento.vX, constantes.CERO, datosDesplazamiento.vZ);
+        delete destino;
+        destino = nullptr;
+    }
+
     bool Enemigo::buscar(VectorEspacial* objetivo)
     {
         bool funciona = true;
@@ -1988,8 +2102,19 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
         velocidad.vX = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
         velocidad.vZ = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
-        posiciones.vX = posFutura.x + velocidad.vX;
-        posiciones.vZ = posFutura.z + velocidad.vZ;
+        
+        if(_fisicas->enemyCollideObstacle(constantes.CERO))
+        {
+            posiciones.vX = posFutura.x - velocidad.vX;
+            posiciones.vZ = posFutura.z - velocidad.vZ;
+            this->setPosicionesFisicas(-velocidad.vX, 0.0f, -velocidad.vZ);
+        }
+        else
+        {
+            posiciones.vX = posFutura.x + velocidad.vX;
+            posiciones.vZ = posFutura.z + velocidad.vZ;
+            this->setPosicionesFisicas(velocidad.vX, 0.0f, velocidad.vZ);
+        }
 
         if(!*seAcerca)
         {
@@ -1998,8 +2123,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
         this->setLastRotacion(rotActual.x, rotation, rotActual.z);
         this->setNewPosiciones(posiciones.vX, posFutura.y, posiciones.vZ);
-        this->setPosicionesFisicas(velocidad.vX, 0.0f, velocidad.vZ);
-
+        
 	    return direccion;
     }
     INnpc::VectorEspacial Enemigo::normalizarVector(int* destino)

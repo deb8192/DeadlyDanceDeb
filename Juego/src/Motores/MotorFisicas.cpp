@@ -186,7 +186,7 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
             //_paredes invisibles
             if(accion == 6)
             {
-                obstaculos.push_back(cuerpo);
+                obstaculos.push_back(move(cuerpo));
                 //Para la camara
                 rp3d::Vector3 posiciones(px+despX,py,pz+despZ+2.5f); //el desplazamiento es necesario para colocar el eje de giro en las fisicas de la puertas
                 rp3d::Quaternion orientacion = rp3d::Quaternion::identity();
@@ -694,7 +694,7 @@ bool MotorFisicas::collideAtackObstacle()
     return false;
 }
 
-bool MotorFisicas::enemyCollideObstacle(unsigned int enemigo)
+bool MotorFisicas::enemyCollideObstacleAndEnemies(unsigned int enemigo)
 {
     //abra que indicar tipo de objeto de alguna manera (que sean obstaculos)
     for(long unsigned int i = 0; i < obstaculos.size();i++)
@@ -721,6 +721,55 @@ bool MotorFisicas::enemyCollideObstacle(unsigned int enemigo)
     }
 
     return false;
+}
+
+bool MotorFisicas::enemyCollideObstacle(unsigned int enemigo)
+{
+    //abra que indicar tipo de objeto de alguna manera (que sean obstaculos)
+    for(long unsigned int i = 0; i < obstaculos.size();i++)
+    {
+        if(obstaculos[i])
+        {
+            if(space->testOverlap(enemigos[enemigo],obstaculos[i]))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+int* MotorFisicas::ObtenerNormalColision(float x,float y,float z,float rotation)
+{
+    Constantes constantes;
+    Ray * rayo = crearRayo(x,y,z,(-1*(rotation-180)),constantes.CINCO);
+    RaycastInfo intersection;
+    int* obj = new int[7];
+
+    bool colision = false;
+    if(obstaculos.size() > 0)//posiciones interpolacion
+    {
+        unsigned int i = 0;
+        while(i<obstaculos.size() && !colision)
+        {
+            if(obstaculos[i])
+                colision = obstaculos[i]->raycast(*rayo,intersection);
+
+            if(colision)
+            {
+                //cout << "colisiona" << endl;
+                obj[0] = 1;
+                obj[1] = intersection.worldPoint.x;
+                obj[2] = intersection.worldPoint.y;
+                obj[3] = intersection.worldPoint.z;
+                obj[4] = intersection.worldNormal.x;
+                obj[5] = intersection.worldNormal.y;
+                obj[6] = intersection.worldNormal.z;
+            }
+            else i++;
+        }
+    }
+    return obj;
 }
 
 bool MotorFisicas::collidePlatform()
