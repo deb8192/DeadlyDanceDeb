@@ -406,7 +406,7 @@ void Ventana::inicializarScreenParameter()
             //es normal (4:3)
             aspectRatio = 0;
         } 
-        std::cout << "\n\e[1;33mCrawEngine v0.1 \e[0m \n\n";
-        std::cout << "\e[33mMonitor Information -> Ancho Pantalla: " << screenWidth << ", Alto Pantalla: " << screenHeight << ", Aspect Ratio(1 = 16/9, 0 = 4/3): " << aspectRatio << ", Fps monitor: " << frameRate << "\e[0m \n\n";
+        std::cout << "\n\e[1;33mClawEngine v0.1 \e[0m \n\n";
+        std::cout << "\e[33mMonitor Information -> Ancho Pantalla: " << screenWidth << ", Alto Pantalla: " << screenHeight << ", Aspect Ratio(1 = 16/9, 0 = 4/3): " << aspectRatio << ", Fps monitor: " << frameRate << "Hz" << "\e[0m \n\n";
     }
 }
