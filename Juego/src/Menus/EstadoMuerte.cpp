@@ -15,7 +15,13 @@ EstadoMuerte::~EstadoMuerte()
 
 void EstadoMuerte::Iniciar()
 {
-        _motora->getEvent("MuerteEstasDebil")->stop();   
+        _motora->getEvent("MuerteEstasDebil")->stop(); 
+        _motora->getEvent("MuertePaseas")->stop();
+        _motora->getEvent("MuertePenultima")->stop();
+        _motora->getEvent("MuerteRespawn1")->stop();
+        _motora->getEvent("MuerteRespawn2")->stop();
+        _motora->getEvent("MuertePerseguido1")->stop();
+        _motora->getEvent("MuertePerseguido2")->stop();  
         _motora->getEvent("MuerteMueres")->start();    
 
     _motor->FondoEscena(255,0,0,0);
