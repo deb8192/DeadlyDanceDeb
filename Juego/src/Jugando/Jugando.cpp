@@ -2500,7 +2500,7 @@ void Jugando::CrearEnemigoArana()
     float y = _cofreP->getY();
     float z = _cofreP->getZ();
 
-    _motor->CargarEnemigos(x,y,z,_eneA->GetModelo(),_eneA->GetTextura(), false);//creamos la figura
+    _motor->CargarEnemigos(x,y,z,_eneA->GetModelo(),_eneA->GetTextura(), false ,_eneA->GetAnimacion(), _eneA->GetFps());//creamos la figura
     _fisicas->crearCuerpo(1,x/2,y/2,z/2,2,_eneA->GetAncho(),
         _eneA->GetAlto(),_eneA->GetLargo(),2,0,0,false);
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,false); //Para ataques
