@@ -150,6 +150,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                 {
                     case EN_AT_ESP_2:
                     {
+                        cout<<"Debe rebotar\r\n";
                         bool nuevaDireccion = false;
                         if(this->getTimeAtEsp() <= 0 && !ataqueEspecial)
                         {
@@ -167,7 +168,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                             {
                                 _jugador->ModificarVida(-danyo);
                             }
-                            this->setTimeAt(this->getTimeAt() - resto);
+                            this->setTimeAtEsp(this->getTimeAtEsp() - resto);
                         }
                         //funciona = true;
                         /* ataque especial 1 */
@@ -176,7 +177,10 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                 
                     default:
                         SetRespawnBoss(true);
-                        this->setBarraAtEs(constantes.CERO);
+                        if(modo != MODO_PELIGRO)
+                        {
+                            this->setBarraAtEs(constantes.CERO);
+                        }
                         /* Llamar animacion pedir ayuda */
                         break;
                 }

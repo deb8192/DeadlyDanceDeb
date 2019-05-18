@@ -2021,22 +2021,37 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         target.vZ = _jugador->getZ();
         target.modulo = sqrt(pow(posActual.x - target.vX, constantes.DOS) + pow(posActual.y - target.vY, constantes.DOS) + pow(posActual.z - target.vZ, constantes.DOS));
 
+        //Si el enemigo se estaba acercando y ahora no esta muy alejado del jugador, deja de acercarse
         if(abs(target.modulo) < minDistBossJugador && *seAcerca)
         {
             *seAcerca = false;
         }
-        
+        //Tras calcular la distancia con el jugador, determinamos si el enemigo esta muy lejos para acercarlo o no
+        //En este caso no esta lo sufciciente lejos para obligarlo a acercarse al jugador
         if(abs(target.modulo) < maxDistBossJugador && !*seAcerca)
         {
-            if(nuevaDireccion > 0)
+            //Si colisiona con la pared el BOSS se mueve en el sentido contrario
+            if(_fisicas->enemyCollideObstacle(constantes.CERO))
             {
+                direccion -= constantes.DOS;
+                if(direccion <= 0)
+                {
+                    direccion += constantes.OCHO;
+                }
+            }
+            //Si hay nueva direccion 
+            else if(nuevaDireccion > 0)
+            {
+                //Si la nueva direccion es distinta de la ya establecida, esta se sustituye con la nueva
                 if(nuevaDireccion != direccion)
                 {
                     direccion = nuevaDireccion;
                 }
+                //Si no es distinta, la establecida se modifica en +90º
                 else
                 {
                     direccion -= constantes.DOS;
+                    //Si el marcador de la direccio es menor que 1 se le suma 8
                     if(direccion <= 0)
                     {
                         direccion += constantes.OCHO;
@@ -2044,6 +2059,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 }
             }
 
+            //Se obtiene la nueva rotation en funcion de la direccion establecida
             switch(direccion)
             {
                 case 1:
@@ -2083,18 +2099,23 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     break;
             }
         }
+        //En este caso si esta lo sufciciente lejos para obligarlo a acercarse al jugador por lo que
+        //ponemos a TRUE que se acerca y alineamos el movimiento del BOSS para que se acerque al jugador
         else
         {
             *seAcerca = true;
             this->alinearse(&target, false);
         }
 
+        //Si no se acerca, se establece la rotacion determinada por la nueva direccion del movimiento para
+        //desplazar al BOSS
         if(!*seAcerca)
         {        
             this->setNewRotacion(rotActual.x, rotation, rotActual.z);
             this->setVectorOrientacion();
         }
         
+        //Se establece que el BOSS se mueva con la mitad de su velocidad maxima
         if(porcentajeVelocidad != constantes.UN_MEDIO)
         {
             porcentajeVelocidad = constantes.UN_MEDIO;
@@ -2103,19 +2124,10 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         velocidad.vX = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
         velocidad.vZ = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
         
-        if(_fisicas->enemyCollideObstacle(constantes.CERO))
-        {
-            posiciones.vX = posFutura.x - velocidad.vX;
-            posiciones.vZ = posFutura.z - velocidad.vZ;
-            this->setPosicionesFisicas(-velocidad.vX, 0.0f, -velocidad.vZ);
-        }
-        else
-        {
-            posiciones.vX = posFutura.x + velocidad.vX;
-            posiciones.vZ = posFutura.z + velocidad.vZ;
-            this->setPosicionesFisicas(velocidad.vX, 0.0f, velocidad.vZ);
-        }
-
+        posiciones.vX = posFutura.x + velocidad.vX;
+        posiciones.vZ = posFutura.z + velocidad.vZ;
+        this->setPosicionesFisicas(velocidad.vX, 0.0f, velocidad.vZ);
+        
         if(!*seAcerca)
         {
             this->alinearse(&target, false);
