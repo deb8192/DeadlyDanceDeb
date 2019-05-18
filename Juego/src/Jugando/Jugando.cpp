@@ -1048,7 +1048,7 @@ void Jugando::UpdateIA()
                     if( tipoEnemigo == constantes.GUARDIAN_A ||
                         tipoEnemigo == constantes.GUARDIAN_B)
                     {
-                        CrearObjeto(x,y,z,2,2,2,constantes.LLAVE,0);
+                        CrearObjeto(x,y,z,2,2,2,constantes.LLAVE_BOSS,0);
                     }
                     else if (tipoEnemigo == constantes.ARANA)
                     {
@@ -1524,7 +1524,7 @@ void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
 {
     Recolectable* _rec = new Recolectable(-1,ancho,largo,alto,x,y,z,tipoObjeto,0,0);
     unsigned short accion = 0;
-    if (tipoObjeto == constantes.LLAVE)
+    if (tipoObjeto == constantes.LLAVE_BOSS)
     {
         _rec->setCodigo(20);
         _llaves.push_back(move(_rec));
