@@ -416,6 +416,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> BoardsEnem_Scena;//contiene los billboards de enemigos reservados
                 std::vector<unsigned short> Particulas_Scena; //contiene los sistemas de particulas de la escena
                 std::vector<unsigned short> Particulas_Accion; //consitne los sistemas de particulas de acciones especificas
+                std::vector<unsigned short> Particulas_Llave; //consitne los sistemas de particulas de llaves
                 std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
                 std::vector<unsigned short> RecoArmas_Scena;//contiene los recolectables reservados (ids)
                 std::vector<unsigned short> Llaves_Scena;
