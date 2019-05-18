@@ -110,6 +110,7 @@ class Jugando: public Estado {
         bool salaPenultima;
         bool meAtacan;
         bool poderEmpezar;
+        bool respawnMO;
         int estarAtacado;
         
         Enemigo* _boss;

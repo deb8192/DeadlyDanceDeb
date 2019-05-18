@@ -58,7 +58,6 @@ MotorAudioSystem::MotorAudioSystem()
    LoadEvent("event:/SFX/SFX-Jugador derrotado","JugadorDerrota",1);//error al cambiar estado
    LoadEvent("event:/SFX/SFX-Dialogo tipo1","Dialogo1",1);//error al cambiar estado
    LoadEvent("event:/SFX/SFX-Dialogo tipo2","Dialogo2",1);
-   LoadEvent("event:/SFX/SFX-Guardian sorpresa al encontrarlo","GuardianVisto",1);
   LoadEvent("event:/SFX/SFX-Personaje cabezazo del heavy","SinArma",1);
   LoadEvent("event:/SFX/SFX-Personaje Guitarra golpea","GolpeGuitarra",1);
   LoadEvent("event:/SFX/SFX-Personaje Guitarra Especial","GuitarraEspecial",1);

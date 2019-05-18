@@ -163,6 +163,7 @@ void Jugando::Iniciar()
     salaPenultima = false;
     meAtacan = false;
     poderEmpezar = false;
+    respawnMO = false;
     oirMuerteOmni = 0.0f;
     ValoresPorDefecto();
 
@@ -977,13 +978,27 @@ void Jugando::UpdateIA()
         {     
             //frases muerte omnipresente antes de la batalla final      
             _motora->getEvent("MuertePenultima")->start();
-            //para que no se escuchen el resto de frases, fari
-            estarDebil = true;
-            estarFuerte = true;
-            _motora->getEvent("MuerteEstasDebil")->stop();
-            _motora->getEvent("MuertePaseas")->stop();
+            //para que no se escuchen el resto de frases
         }
         salaPenultima = true;
+        estarDebil = true;
+        estarFuerte = true;
+        meAtacan = true;
+        respawnMO = true;
+        _motora->getEvent("MuerteEstasDebil")->stop();
+        _motora->getEvent("MuertePaseas")->stop();
+    }
+
+    if((nivelJ == 8 && _jugador->GetSala()->getPosicionEnGrafica() == 14) ||
+       (nivelJ == 7 && _jugador->GetSala()->getPosicionEnGrafica() == 22))
+    {
+        _motora->getEvent("MuerteEstasDebil")->stop();
+        _motora->getEvent("MuertePaseas")->stop();
+        _motora->getEvent("MuertePenultima")->stop();
+        _motora->getEvent("MuerteRespawn1")->stop();
+        _motora->getEvent("MuerteRespawn2")->stop();
+        _motora->getEvent("MuertePerseguido1")->stop();
+        _motora->getEvent("MuertePerseguido2")->stop();
     }
 
     Constantes constantes;
@@ -1758,7 +1773,7 @@ void Jugando::RespawnEnemigos()
 
             if(tipoEne == 2)
             {
-                if(_zonasRespawn[zonaElegida]->GetSala()->getPosicionEnGrafica() == _jugador->GetSala()->getPosicionEnGrafica())
+                if(!respawnMO && _zonasRespawn[zonaElegida]->GetSala()->getPosicionEnGrafica() == _jugador->GetSala()->getPosicionEnGrafica())
                 {
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
@@ -1767,7 +1782,7 @@ void Jugando::RespawnEnemigos()
             }
             else if(tipoEne != 0)
             {
-                if(_zonasRespawn[zonaElegida]->GetSala()->getPosicionEnGrafica() == _jugador->GetSala()->getPosicionEnGrafica())
+                if(!respawnMO && _zonasRespawn[zonaElegida]->GetSala()->getPosicionEnGrafica() == _jugador->GetSala()->getPosicionEnGrafica())
                 {
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
