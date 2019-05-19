@@ -12,8 +12,11 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
     maxRotacion = constantes.PI_CUARTOS;
     rotation = constantes.CERO;
 
-    _modelo = "assets/models/Cofre/cofreArana.obj";
+    _modelo = "assets/models/CofreArana/cofrearana_000001.obj";
     _textura = "assets/texture/cofreArana.png";
+    fps = 70;
+    _animacion = "assets/animaciones/CofreArana.xml";
+    estadoMuerte = 5;
 
     ancho = anchoN;
     largo = largoN;
@@ -60,9 +63,12 @@ CofreArana::CofreArana (const CofreArana& copia)
     rotation = copia.rotation;
     direccion = copia.direccion;
 
-    _modelo = "assets/models/Cofre/cofreArana.obj";
+    _modelo = "assets/models/CofreArana/cofrearana_000001.obj";
     _textura = "assets/texture/cofreArana.png";
-
+    fps = 70;
+    _animacion = "assets/animaciones/CofreArana.xml";
+    estadoMuerte = 5;
+    
     ancho = copia.ancho;
     largo = copia.largo;
     alto = copia.alto;
@@ -129,14 +135,17 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
     {
         switch (_ordenes[0])
         {
-            case EN_PERSIGUE: //El Pollo se mueve
+            case EN_PERSIGUE: //se mueve el cofrearana
+                _motor->cambiarAnimacion(5,*i,1);
                 funciona = this->perseguir(_jug, i);
                 break;
 
-            case EN_ATACAR: //El Pollo ataca
+            case EN_ATACAR: //se mueve el cofrearana
                 {
                     if(!atacado)
                     {
+                        _motor->cambiarAnimacion(5,*i,4);
+
                         int danyo;
                         danyo = this->Atacar(*i);
 

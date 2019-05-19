@@ -214,6 +214,12 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
         CrearSistemaDeParticulas(x,y,z,vx,vy,vz,npart,localz,vida,size,textura);
     }
 
+    for (pugi::xml_node hijo = doc.child("Level").child("TypeShadows"); hijo; hijo = hijo.next_sibling("TypeShadows"))//esto nos devuelve todos los hijos que esten al nivel del anterior
+    {
+        unsigned int level_shadows = hijo.attribute("tipoS").as_int();//nos devuelve un int
+        _motor->SombrasDelNivel(level_shadows);
+    }
+
     //Se crea el arbol de salas del mapa del nivel
     for (pugi::xml_node plat = anterior.back().child("Platform"); plat; plat = plat.next_sibling("Platform"))//esto nos devuelve todos los hijos que esten al nivel del anterior
     {
@@ -385,14 +391,21 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int numFrames = obj.attribute("Frames").as_int();//numero de frames de la animacion
         const char* logicaAnimacion = obj.attribute("Animation").value();//contiene la ruta a la logica de la animacion
 
+        if(obj.attribute("Texture2") && obj.attribute("Texture3"))
+        {
+            const char* textura2 = obj.attribute("Texture2").value();
+            const char* textura3 = obj.attribute("Texture3").value();
+            unsigned int timeAnima = obj.attribute("TimeTA").as_int();
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,NULL, tipoObj,nullptr,1,textura2,textura3,timeAnima);//no tiene logica de animacion porque es un objeto con un unico estado y frame
+        }
 
         if(obj.attribute("Frames") && obj.attribute("Animation"))
         {
-            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj, logicaAnimacion, numFrames); //cargamos el enemigo
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,NULL, tipoObj, logicaAnimacion, numFrames); //cargamos el enemigo
         }
         else
         {
-            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura, NULL, tipoObj);//no tiene logica de animacion porque es un objeto con un unico estado y frame
+            CrearObjeto(codigo,accion,nombre,ataque,rp,x,y,z,despX,despZ,ancho,largo,alto,modelo,textura,NULL, tipoObj);//no tiene logica de animacion porque es un objeto con un unico estado y frame
         }
 
     }
@@ -660,9 +673,8 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
             std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid);
+            _motora->LoadEvent("event:/SFX/SFX-Pollo enfadado", nameid, 1);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(0.4f);
             _motora->getEvent(nameid)->start();
         }
             break;
@@ -677,9 +689,8 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
             std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid);
+            _motora->LoadEvent("event:/SFX/SFX-Murcielago volando", nameid, 1);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(1.0f);
             _motora->getEvent(nameid)->start();
         }
             break;
@@ -695,10 +706,9 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             _ene = nullptr;
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
-            std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
+            std::string nameid = std::to_string(id); //pasar id a string                    
+            _motora->LoadEvent("event:/SFX/SFX-Guardián Caminando", nameid, 1);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(0.5f);
             _motora->getEvent(nameid)->start();
         }
         break;
@@ -714,10 +724,9 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             _ene = nullptr;
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
-            std::string nameid = std::to_string(id); //pasar id a string
-            _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid);
+            std::string nameid = std::to_string(id); //pasar id a string            
+            _motora->LoadEvent("event:/SFX/SFX-Guardián Caminando", nameid, 1);
             _motora->getEvent(nameid)->setPosition(x,y,z);
-            _motora->getEvent(nameid)->setVolume(0.5f);
             _motora->getEvent(nameid)->start();
         }
         break;
@@ -746,7 +755,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
 
-    _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false);//creamos la figura
+    _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false,_enemigos.back()->GetAnimacion(),_enemigos.back()->GetFps());//creamos la figura
 
     _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0,false);
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,false); //Para ataques
@@ -849,7 +858,7 @@ void CargadorNiveles::CrearZona(int accion,int x,int y,int z,int ancho,int largo
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
 void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, int ataque, int rp, int x,int y,int z,
-    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj, const char * anima , int frame)
+    int despX, int despZ, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, int* propiedades, unsigned short tipoObj, const char * anima , int frame, const char* ruta_textura2, const char* ruta_textura3, unsigned int timeA)
 {
     int posicionObjeto;
     switch (tipoObj)
@@ -911,6 +920,15 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         {
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura,nullptr,1,false);
             _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ,false);
+            //Animacion de textura si hay mas de una textura
+            if(ruta_textura2 != nullptr && ruta_textura3 != nullptr)
+            {
+                std::string text = std::string(ruta_textura);
+                std::string text2 = std::string(ruta_textura2);
+                std::string text3 = std::string(ruta_textura3);
+                float time_animation = (float)timeA;
+                _motor->animacionTextura(posicionObjeto,time_animation,text,text2,text3);
+            }
         }
         break;
 
@@ -918,6 +936,15 @@ void CargadorNiveles::CrearObjeto(int codigo, int accion, const char* nombre, in
         {
             posicionObjeto = _motor->CargarObjetos(accion,rp,x,y,z,ancho,largo,alto,ruta_objeto,ruta_textura);
             _fisicas->crearCuerpo(accion,x/2,y/2,z/2,2,ancho,alto,largo,3,despX,despZ,false);
+            //Animacion de textura si hay mas de una textura
+            if(ruta_textura2 != nullptr && ruta_textura3 != nullptr)
+            {
+                std::string text = std::string(ruta_textura);
+                std::string text2 = std::string(ruta_textura2);
+                std::string text3 = std::string(ruta_textura3);
+                float time_animation = (float)timeA;
+                _motor->animacionTextura(posicionObjeto,time_animation,text,text2,text3);
+            }
         }
         break;
     }
@@ -979,7 +1006,7 @@ unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
     _eneA->initPosicionesFisicas(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _eneA->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _eneA->definirSala(sala);//le pasamos la sala en donde esta
-    
+
     //_motor->CargarEnemigos(0,0,0,_eneA->GetModelo());//creamos la figura
     _eneCofres.push_back(move(_eneA));//guardamos el enemigo en el vector
     _eneA = nullptr;

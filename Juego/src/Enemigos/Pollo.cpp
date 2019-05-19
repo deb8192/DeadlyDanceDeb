@@ -11,9 +11,12 @@ Pollo::Pollo(float nX, float nY, float nZ, int maxVida)
     _ordenes = new short [constantes.DOS];
     maxRotacion = constantes.PI_CUARTOS;
     rotation = constantes.CERO;
-
-    _modelo = "assets/models/Pollo.obj";
+    
+    estadoMuerte = 4;
+    _modelo = "assets/models/Pollo/pollo_000001.obj";
     _textura = "assets/texture/texturas_pollito.png";
+    fps = 69;
+    _animacion = "assets/animaciones/Pollo.xml";
 }
 
 Pollo::~Pollo()
@@ -73,6 +76,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
         switch (_ordenes[0])
         {
             case EN_PERSIGUE: //El Pollo se mueve
+                _motor->cambiarAnimacion(5,*i,0);
                 funciona = this->perseguir(_jug, i);
                 break;
 
@@ -80,6 +84,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                 {
                     if(!atacado)
                     {
+                        _motor->cambiarAnimacion(5,*i,3);
                         int danyo;
                         danyo = this->Atacar(*i);
 
@@ -219,6 +224,11 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                         {
                             this->ContestarAyuda();
                         }
+                        else
+                        {
+                            _motor->cambiarAnimacion(5,*i,2);
+                        }
+                        
                     }
                     funciona = true;
                 }

@@ -11,6 +11,8 @@ TMalla::TMalla(int ft)
     frame_final = ft;
     frame_actual = 0;
     actual_time = 0;
+    actual_time_texture = 0;
+    velocidad_animacion_texture = 1.0f;
     bucle = true;//se ejecuta en bucle la animacion
     setVelocidadAnimacion(300);
 }
@@ -18,7 +20,7 @@ TMalla::TMalla(int ft)
 //Uso: destructor
 TMalla::~TMalla()
 {
-
+    textures_animation.clear();
 }
 
 //Uso: Pone el shader local nullptr
@@ -32,8 +34,15 @@ void TMalla::cargarMalla(unsigned short,unsigned short)
 // sobrecarga metodos TEntidad
 void TMalla::beginDraw()
 {
-    shader->Use();
-    shader->setFloat("trasparencia", transparente);
+    if(render == true)
+    {
+        shader->Use();
+        shader->setFloat("trasparencia", transparente);
+    }
+    else
+    {
+        shader2->Use();
+    }
     TimeEngine(); //Tiempo del motor
     //calcular el frame
     actual_time = actual_time + getTime();
@@ -45,7 +54,24 @@ void TMalla::beginDraw()
         {
             frame_actual++;
         }
+
         actual_time = 0;
+    }
+
+    //Animacion de textura si tiene
+    if(textures_animation.size() > 0)
+    {
+        actual_time_texture = actual_time_texture + getTime();
+        float end_time_text = ((1000.0f/velocidad_animacion_texture) / 1000.0f);
+        if(actual_time_texture >= end_time_text)
+        {
+            const char * newtext = textures_animation[actual_texture].c_str();
+            //std::cout << newtext << std::endl;
+            setTexture(newtext);
+            actual_texture++;
+            if(actual_texture == textures_animation.size())actual_texture = 0;
+            actual_time_texture = 0;
+        }
     }
 
     //bucle de la animacion
@@ -105,8 +131,16 @@ void TMalla::beginDraw()
         {
             if(frame_actual <= frame_final)//pasa por los frames de la animacion
             {
-                shader->setMat4("model", (*_matriz_resultado));
-                objetos->Draw(shader,frame_actual);
+                if(render == true)
+                {
+                    shader->setMat4("model", (*_matriz_resultado));
+                    objetos->Draw(shader,frame_actual);
+                }
+                else
+                {
+                    shader2->setMat4("model", (*_matriz_resultado));
+                    objetos->Draw(shader2,frame_actual);
+                }
             }
         }
 
@@ -124,12 +158,25 @@ void TMalla::beginDraw()
         {
             if(frame_actual < frame_final)//pasa por los frames de la animacion
             {
-                shader->setMat4("model", (*matriz_compartida));
-                objetos->Draw(shader,frame_actual);
+                if(render == true)
+                {
+                    shader->setMat4("model", (*matriz_compartida));
+                    objetos->Draw(shader,frame_actual);
+                }
+                else
+                {
+                    shader2->setMat4("model", (*matriz_compartida));
+                    objetos->Draw(shader2,frame_actual);
+                }
             }
         }
     }
-
+    if(render == false)
+    {
+        render = true; //para que en el siguiente draw sea render
+    }else if(render){
+        render = false;
+    }
 }
 
 void TMalla::endDraw()
@@ -199,4 +246,17 @@ void TMalla::setTransparencia(float t)
         if(t < 0.0f)t = 0.0f;
         transparente = t;
     }
+}
+
+void TMalla::Setanimationtexture(std::string ruta_textura1, std::string ruta_textura2, std::string ruta_textura3, float velocidad)
+{
+    if(!ruta_textura1.empty())textures_animation.push_back(ruta_textura1);
+    if(!ruta_textura2.empty())textures_animation.push_back(ruta_textura2);
+    if(!ruta_textura3.empty())textures_animation.push_back(ruta_textura3);
+    velocidad_animacion_texture = velocidad;
+}
+
+void TMalla::setRender(bool r)
+{
+    render = r;
 }

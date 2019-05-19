@@ -77,6 +77,8 @@ protected:
 
     const char* _modelo; // Malla 3D
     const char* _textura; // textura
+    unsigned int fps; //fps que tiene el modelo 
+    const char* _animacion;//archivo de la logica de las animaciones
 };
 
 #endif /* INdrawable_HPP */

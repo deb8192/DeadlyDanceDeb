@@ -86,7 +86,6 @@ class Jugando: public Estado {
         void AbrirCofre(float x, float y, float z, bool esArana);
         void CrearEnemigoArana();
         void CargarBossEnMemoria();
-        void StopSonidos();
         void CambiarAranyaPorCofre(int idC, unsigned int posMotorG, unsigned int posObs,
             float x, float y, float z, unsigned int posArana, Sala* sala);
 
@@ -110,6 +109,8 @@ class Jugando: public Estado {
         bool estarFuerte;
         bool salaPenultima;
         bool meAtacan;
+        bool poderEmpezar;
+        bool respawnMO;
         int estarAtacado;
         
         Enemigo* _boss;
@@ -141,10 +142,13 @@ class Jugando: public Estado {
         bool ganarPuzzle;
         bool desactivarColisionesJugador;
         Cofre* _cofreP;
+        int cofrePosicion;//le indica la posicion del cofre para cambiar su animacion
 
         Jugador* _jugador;
         bool jugadorInmovil; // Para las colisiones
         float drawTime, lastDrawTime, respawnTime, lastRespawnTime;
+        float startPlayTime;
+        float oirMuerteOmni;
         float atacktime; //tiempo de ejecucion del ataque
         float mov_weapon_posX,mov_weapon_posY,mov_weapon_posZ;
         float mov_weapon_rotX,mov_weapon_rotY,mov_weapon_rotZ;

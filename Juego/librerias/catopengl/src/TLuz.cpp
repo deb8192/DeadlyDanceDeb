@@ -47,12 +47,16 @@ float TLuz::getIntensidad()
     return 0.0f;
 }
 
+glm::vec3 TLuz::getPosicion()
+{
+    return posicion;
+}
+
 void TLuz::beginDraw()
 {
     //comprobamos que la cola o pila no haya tenido cambios, si los tiene se vuelve a calcular
     if(matriz_compartida == nullptr)
     {
-        glm::vec3 posicion;
         glm::mat4 rotacion;
         glm::mat4 * _matriz_resultado = nullptr;
         std::queue<glm::mat4 *> * cola_compartidaAuxiliar = new std::queue<glm::mat4 *>; //creamos una cola nueva para ir encolando  los elementos que desencolamos de la cola compartida(se aplicaria parecido con una pila)
@@ -110,7 +114,7 @@ void TLuz::beginDraw()
             //Animacion 2
             else if(tipo_anim == 2)
             {
-                if(animaescala == 100)cambiaranima = true;
+                if(animaescala == 50)cambiaranima = true;
                 if(animaescala == 0)cambiaranima = false;
                 if(cambiaranima)
                 {
@@ -249,6 +253,11 @@ float TLuz::transformToRGB(float c)
     if(c < 0.0f)c = 0.0f;
     float t = (1.0f/255.0f) * c;
     return t;
+}
+
+unsigned int TLuz::getTipoLuz()
+{
+    return tipo_luz;
 }
 
 void TLuz::endDraw()

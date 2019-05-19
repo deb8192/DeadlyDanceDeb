@@ -127,6 +127,7 @@ using Constantes = struct ValoresConstantes
     // Tipos de objetos interactuables y recolectables
     const unsigned short PALANCA = 0;
     const unsigned short LLAVE = 1;
+    const unsigned short LLAVE_BOSS = 18;
     const unsigned short PUERTA2 = 2;
     const unsigned short PUERTA_OBJ = 3;
     const unsigned short COFRE_OBJ = 4;

@@ -151,6 +151,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool GetRespawnBoss();
         const char* GetModelo(); // Malla 3D
         const char* GetTextura(); //textura
+        unsigned int GetFps();
+        const char* GetAnimacion();
         bool GetPedirAyuda();
         void SetPedirAyuda(bool);
         bool GetContestar();
@@ -188,6 +190,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
             MODO_OCULTACION,
             MODO_PELIGRO
         };
+
+        unsigned int GetEstadoMuerte();
 
     protected:
         Times* _tiempo;
@@ -267,7 +271,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         };
 
         Sala* _estoy;//sala en la que esta el enemigo
-        float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc,iniAtposX, iniAtposY, iniAtposZ, atposX, atposY, atposZ, atespposX, atespposY, atespposZ;
+        float soundx, soundz, atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc,iniAtposX, iniAtposY, iniAtposZ, atposX, atposY, atposZ, atespposX, atespposY, atespposZ;
+        float tiempoDefenderse, lastTiempoDefenderse, tiempoMerodear, lastTiempoMerodear, tiempoMoverse, lastTiempoMoverse, tiempoOcultarse, lastTiempoOcultarse;
+        float detectiontime;
         float tiempoDefenderse, lastTiempoDefenderse, tiempoMerodear, lastTiempoMerodear, tiempoMoverse, lastTiempoMoverse, tiempoOcultarse, lastTiempoOcultarse;
         Arma* _armaEspecial;
         const char* _rutaArmaEspecial = "assets/models/objeto.obj";
@@ -289,8 +295,12 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool pedirAyuda;
         bool respawnBoss;
         bool contestar;
+        bool morirRapido;
+        bool caminando;
         bool defensa; //TO DO EXPANDIRLO AL JUGADOR cuando recibe danyo recibe la mitad si esta a true
         INnpc::VectorEspacial posicionComunBandada; //PUnto de cohesion de las bandadas
+        int estadoMuerte;//tiene el numero de estado que pertenece a estar muerto o muriendo [Por defecto 0]
+        int estadoIncial;//tiene el numero de estado con el que empieza el jugador [Por defecto 0]
 };
 
 #endif

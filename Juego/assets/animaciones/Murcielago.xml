@@ -1,0 +1,13 @@
+<!--<Animacion nombre="" inicio="" final="" bucle="" salto="" dondesaltar="" terminar="" velocidad=""/>-->
+<Animaciones numeroAnimaciones="10">
+	<!--0--><Animacion nombre="Reposo" inicio="1" final="8" bucle="true" salto="false" terminar="false" velocidad="6"></Animacion>
+	<!--1--><Animacion nombre="Andar" inicio="1" final="8" bucle="true" salto="false" dondesaltar="0" terminar="false" velocidad="10"></Animacion>
+	<!--2--><Animacion nombre="Correr" inicio="1" final="8" bucle="true" salto="false" dondesaltar="0" terminar="false" velocidad="14"></Animacion>
+	<!--3--><Animacion nombre="Atacar" inicio="8" final="20" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="18"></Animacion>
+	<!--4--><Animacion nombre="Defensa" inicio="20" final="34" bucle="false" salto="false" terminar="false" velocidad="10"></Animacion>
+	<!--5--><Animacion nombre="Irse Dormir" inicio="34" final="41" bucle="false" salto="true" dondesaltar="6" terminar="true" velocidad="10"></Animacion>
+	<!--6--><Animacion nombre="Dormido" inicio="41" final="41" bucle="true" salto="false" terminar="false" velocidad="10"></Animacion>
+	<!--7--><Animacion nombre="Despertarse" inicio="41" final="48" bucle="false" salto="false" terminar="false" velocidad="10"></Animacion>
+	<!--8--><Animacion nombre="Morir" inicio="48" final="59" bucle="false" salto="true" dondesaltar="9" terminar="true" velocidad="20"></Animacion>
+	<!--9--><Animacion nombre="Muerto" inicio="59" final="59" bucle="true" salto="false" terminar="false" velocidad="1"></Animacion>
+</Animaciones>

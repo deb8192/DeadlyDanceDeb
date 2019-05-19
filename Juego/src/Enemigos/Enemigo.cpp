@@ -18,6 +18,10 @@ Enemigo::Enemigo()
     _fisicas = MotorFisicas::getInstance();
     _eventos = SenseEventos::getInstance();
 
+    _animacion = nullptr;
+    estadoMuerte = 0;//por defecto zero
+    fps = 0;
+
     tiempoMerodear = 0.0f;
     tiempoMoverse = 0.0f;
     tiempoOcultarse = 0.0f;
@@ -31,6 +35,9 @@ Enemigo::Enemigo()
     vectorOrientacion.vX = 0.0f;
     vectorOrientacion.vY = 0.0f;
     vectorOrientacion.vZ = 0.0f;
+    detectiontime = 0.0f;
+    soundx= 0.0f; 
+    soundz= 0.0f;
     vectorOrientacion.modulo = 0.0f;
     modo = MODO_DEFAULT;
     pedirAyuda = false;
@@ -72,6 +79,10 @@ Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida/*,
     posIni.x = nX;
     posIni.y = nY;
     posIni.z = nZ;
+
+    _animacion = nullptr;
+    estadoMuerte = 0;//por defecto zero
+    fps = 0;
 
     /*ancho = anchoN;
     largo = largoN;
@@ -116,6 +127,8 @@ Enemigo::~Enemigo()
     respawnBoss = false;
     accionRealizada = false;
     controlRotacion = false;
+    morirRapido = false;
+    caminando = false;
     distanciaMinimaEsquivar = 0;
     multiplicadorAtaqueEspecial = 0;
     paredRota = 0;
@@ -582,7 +595,6 @@ int Enemigo::Atacar(int i)
             _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/sphere.obj",NULL);
             //Crear cuerpo de colision de ataque delante del enemigo
             _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
-            _motora->getEvent("GolpeGuitarra")->setVolume(0.5f);
             _motora->getEvent("GolpeGuitarra")->start();
         }
         */
@@ -657,7 +669,7 @@ int Enemigo::AtacarEspecial()
             _fisicas->updateAtaquEspecEnemigos(atespposX,atespposY,atespposZ,getPosAtaques());
 
             //Crear cuerpo de colision de ataque delante del jugador
-            /*_motora->getEvent("Arpa")->setVolume(0.8f);
+            /*
             _motora->getEvent("Arpa")->start();*/
             _motor->dibujarObjetoTemporal(atespx, atespy, atespz, atgx, atgy, atgz, 4, 4, 4, 2);
         }
@@ -716,16 +728,26 @@ void Enemigo::MuereEnemigo(int enemi){
     }
     //Sonido de muerte
     // TO DO: utilizar constantes de enemigos
-    if(tipoEnemigo == 0)
+    if(!morirRapido)
     {
-        _motora->getEvent("Chicken2")->setPosition(this->getX(),this->getY(),this->getZ());
-        _motora->getEvent("Chicken2")->start();
+        if(tipoEnemigo == 0)
+        {        
+            _motora->getEvent("Chicken2")->setPosition(this->getX(),this->getY(),this->getZ());
+            _motora->getEvent("Chicken2")->start();
+        }
+        else if(tipoEnemigo == 1)
+        {
+            _motora->getEvent("Murci2")->setPosition(this->getX(),this->getY(),this->getZ());
+            _motora->getEvent("Murci2")->start();
+        }
+        else if(tipoEnemigo == 3)
+        {
+            _motora->getEvent("GuardianDie")->setPosition(this->getX(),this->getY(),this->getZ());
+            _motora->getEvent("GuardianDie")->start();
+        }
     }
-    else if(tipoEnemigo == 1)
-    {
-        _motora->getEvent("Murci2")->setPosition(this->getX(),this->getY(),this->getZ());
-        _motora->getEvent("Murci2")->start();
-    }
+    morirRapido = true;
+    _motora->getEvent(soundID)->stop();
 
 }
 
@@ -752,8 +774,35 @@ void Enemigo::moverseEntidad(float updTime)
 
     posActual.x = posPasada.x * (1 - pt) + posFutura.x * pt;
     posActual.z = posPasada.z * (1 - pt) + posFutura.z * pt;
+    
+    if(tipoEnemigo == 0 || tipoEnemigo == 1)
+    {
+        _motora->getEvent(soundID)->setPosition(this->getX(),this->getY(),this->getZ());
+    }
+    else if(tipoEnemigo == 3)
+    {
+        _motora->getEvent(soundID)->setPosition(this->getX(),this->getY(),this->getZ());
 
-    _motora->getEvent(soundID)->setPosition(this->getX(),this->getY(),this->getZ());
+        if(soundx == posActual.x && soundz == posActual.z)
+        {
+            _motora->getEvent(soundID)->pause(); 
+        }
+        else
+        {
+            _motora->getEvent(soundID)->resume(); 
+        }       
+
+        if(_tiempo->CalcularTiempoPasado(detectiontime) > 2000.0f)
+        {
+        detectiontime = _tiempo->GetTiempo(1);
+        }
+
+        if(_tiempo->CalcularTiempoPasado(detectiontime) >= 1970.0f)
+        {
+            soundx = posActual.x;
+            soundz = posActual.z;
+        }
+    }
 }
 
 /*************** rotarEntidad *****************
@@ -1401,7 +1450,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     distanciaEnemigoObstaculo.vZ = loqueve[3] - posActual.z;
                     distanciaEnemigoObstaculo.modulo = sqrt(pow(distanciaEnemigoObstaculo.vX, constantes.DOS) + pow(distanciaEnemigoObstaculo.vY, constantes.DOS) + pow(distanciaEnemigoObstaculo.vZ, constantes.DOS));
 
-                    //Si entra aquí es que el visor central 
+                    //Si entra aquí es que el visor central
                     //y el enemigo en cuestion esta muy cerca del obstaculo que debe esquivar
                     if(distanciaEnemigoObstaculo.modulo <= distanciaMinimaEsquivar)
                     {
@@ -1413,7 +1462,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                         destino[4] = loqueve[5];
                         destino[5] = loqueve[6];
 
-                        
+
                         porcentajeVelocidad = (float) constantes.UNO;
                         //cout<<"QUE SE SALE"<<endl;
                     }
@@ -1500,7 +1549,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                     destino[4] = loqueve[19];
                     destino[5] = loqueve[20];
 
-                    
+
                     //cout<<"COLISIONA POR LA DERECHA"<<endl;
                 }
                 if(colisiona)
@@ -1531,7 +1580,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                         porcentajeVelocidad = 0.2;
                     }
                 }
-                
+
                 else if(!ve)
                 {
 
@@ -1697,15 +1746,15 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
         return false;
     }
-    
+
     /******************** perseguir **********************
      * Funcion que acerca los enemigos al jugador para
      * atacarlo posteriormente teniendo en cuenta la
      * orientacion del mismo
-     * 
+     *
      *      Entradas:
      *                  int* _jug: entero que es la direccion que apunta a donde se guarda el jugador
-     *      Salidas:    
+     *      Salidas:
      *                  bool funciona: booleano que indica si el comportamiento ha funcionado
     */
     bool Enemigo::perseguir(int* _jug, short int* _n)
@@ -2084,15 +2133,15 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 	    return false;
     }
     /********************************** Moverse ********************************
-     * Funcion a la que llama el boss para desplazarse por la sala mientras 
+     * Funcion a la que llama el boss para desplazarse por la sala mientras
      * pelea contra el jugador.
-     * 
-     *      Entradas:    
+     *
+     *      Entradas:
      *                  int nuevaDireccion: direccion que probablemente tomara
      *                  int direccion: direccion actual del boss
      *                  int* _jug: entero que contiene el puntero del jugador
      *                  int maxDistBossJugador: distancia maxima con el jugador
-     * 
+     *
      *      Salidas:
      *                  int direccion: la direccion que al final toma el boss
     */
@@ -2150,10 +2199,10 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 case 1:
                     rotation = constantes.DOS_PI_RADIAN;
                     break;
-                
+
                 case 2:
                     rotation = constantes.PI_TRES_MEDIOS_CUARTOS;
-                    break;   
+                    break;
 
                 case 3:
                     rotation = constantes.PI_TRES_MEDIOS;
@@ -2162,11 +2211,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 case 4:
                     rotation = constantes.PI_RADIAN_CUARTOS;
                     break;
-                
+
                 case 5:
                     rotation = constantes.PI_RADIAN;
                     break;
-                
+
                 case 6:
                     rotation = constantes.PI_MEDIOS_CUARTOS;
                     break;
@@ -2195,11 +2244,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         //Si no se acerca, se establece la rotacion determinada por la nueva direccion del movimiento para
         //desplazar al BOSS
         if(!*seAcerca)
-        {        
+        {
             this->setNewRotacion(rotActual.x, rotation, rotActual.z);
             this->setVectorOrientacion();
         }
-        
+      
         //Se establece que el BOSS se mueva con la mitad de su velocidad maxima
         if(porcentajeVelocidad != constantes.UN_MEDIO)
         {
@@ -2220,8 +2269,8 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
         this->setLastRotacion(rotActual.x, rotation, rotActual.z);
         this->setNewPosiciones(posiciones.vX, posFutura.y, posiciones.vZ);
-        
-	    return direccion;
+	    
+        return direccion;
     }
     INnpc::VectorEspacial Enemigo::normalizarVector(int* destino)
     {
@@ -2324,6 +2373,16 @@ const char* Enemigo::GetTextura()
     return _textura;
 }
 
+unsigned int Enemigo::GetFps()
+{
+    return fps;
+}
+
+const char* Enemigo::GetAnimacion()
+{
+    return _animacion;
+}
+
 bool Enemigo::GetPedirAyuda()
 {
     return pedirAyuda;
@@ -2395,4 +2454,9 @@ void Enemigo::BorrarEnemigos(unsigned short n)
 {
     _motor->EraseEnemigo(n);
     _fisicas->EraseEnemigo(n);
+}
+
+unsigned int Enemigo::GetEstadoMuerte()
+{
+    return estadoMuerte;
 }

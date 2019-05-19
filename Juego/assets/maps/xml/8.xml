@@ -5,7 +5,8 @@
 	<!-- Tenemos 36/50 enemigos -->
 
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
-	<Light Type="Ambiental" Tipo="0" Intensity="50" X="0" Y="10" Z="0" colorR="130" colorG="130" colorB="130" Animacion="0"> </Light>
+	<Light Type="Ambiental" Tipo="0" Intensity="50" X="0" Y="10" Z="0" colorR="100" colorG="100" colorB="100" Animacion="0"> </Light>
+	<TypeShadows tipoS="0"></TypeShadows>
 	<!--8 luces puntuales-->
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>
@@ -15,14 +16,14 @@
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>
 	<Light Type="Ambiental" Tipo="1" Intensity="250" X="200" Y="200" Z="200" colorR="54" colorG="255" colorB="205" Animacion="2"> </Light>
-	<Particles X="-36" Y="3" Z="-31" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="-36" Y="3" Z="31" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="26" Y="3" Z="-33" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="25" Y="3" Z="33" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="38" Y="3" Z="33" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="151" Y="3" Z="-30" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="150" Y="3" Z="70" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
-	<Particles X="157" Y="3" Z="70" VX="0" VY="9" VZ="1" nPart="40" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="-36" Y="3" Z="-31" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="-36" Y="3" Z="31" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="26" Y="3" Z="-33" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="25" Y="3" Z="33" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="38" Y="3" Z="33" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="151" Y="3" Z="-30" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="150" Y="3" Z="70" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
+	<Particles X="157" Y="3" Z="70" VX="0" VY="9" VZ="1" nPart="10" LZ="15" vida="5" size="2" Texture="assets/images/lightparticle.png"> </Particles>
 
 	<LightSala sala="1" minZ="-61" maxZ="155" minX="-60" maxX="153"></LightSala>
 		<LightPos X="-34" Y="4" Z="-31" sala="1"> </LightPos>
@@ -94,7 +95,7 @@
 	<!--Decoracion-Cristal-Luz--><Object tipoObj="18" Type="0" accion="9" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/icetextures.png" Model="assets/models/Escenario/Cristales.obj"></Object>
 	<!--Decoracion-Puente-Colgante--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/cartoonwood.png" Model="assets/models/Escenario/PuenteColganteMadera.obj"></Object>
 	<!--Decoracion-Puente-estacas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Palos.png" Model="assets/models/Escenario/PuenteColganteEstacas.obj"></Object>
-	<!--Decoracion-Laguna--><Object tipoObj="17" Type="0" accion="9" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/dcatyft.png" Model="assets/models/Escenario/LagunaSubterranea.obj"></Object>
+	<!--Decoracion-Laguna--><Object tipoObj="17" Type="0" accion="9" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/dcatyft.png" Texture2="assets/texture/dcatyft2.png" Texture3="assets/texture/dcatyft3.png" TimeTA="6" Model="assets/models/Escenario/LagunaSubterranea.obj"></Object>
 <!--ANIMACION-->	<!--Decoracion-Cascada-Animada--><Object tipoObj="17" Type="0" accion="9" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/dcascada.png" Model="assets/models/cascada_animada/CascadaAnimada_000001.obj" Animation="" Frames="22"></Object>
 	<!--Decoracion-Vegetacion-Lianas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Lianas.png" Model="assets/models/Escenario/DecoracionLianas.obj"></Object>
 	<!--Decoracion-Pinturas-Rupestres--><Object tipoObj="18" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/tribal.png" Model="assets/models/Escenario/DecoracionRupestre.obj"></Object>
@@ -110,8 +111,9 @@
 	<!--Waypoint-central--><Waypoint Type="1" tipoWaypoint="a" compartido="0" accion="7" id="1" ancho="4" largo="4" alto="4" X="0" Y="0" Z="0" conexiones="2"></Waypoint>
 	<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="b" compartido="1" accion="7" id="2" ancho="4" largo="4" alto="4" X="35" Y="0" Z="0" conexiones="1,3"></Waypoint>
 
+
 		<!--Sala-02--><Platform Type="1" tipoSala="1" accion="0" ancho="59" largo="92" alto="4" RP="0" X="94" Y="0" Z="52" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
-		<!--Llave--><Object tipoObj="1" Type="1" codigo="2" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="45" Y="0" Z="92" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
+		<!--Llave--><Object tipoObj="1" Type="1" codigo="2" nombre="llave" ataque="0" accion="8" ancho="4" largo="15" alto="10" X="45" Y="0" Z="96" Texture="assets/texture/platform1.png" Model="assets/models/llave.obj"></Object>
 		<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="2" largo="2" alto="10" X="112" Y="0" Z="3" Texture="" Model=""></Enemy>
 		<!--Zona-Oscura--><Zone Type="1" accion="0" tipo="zDark" elementos="4" ancho="20" largo="20" alto="5" X="62" Y="0" Z="93"></Zone>
 		<!--Murcielago--><Enemy Type="1" enemigo="1" accion="0" ancho="2" largo="2" alto="10" X="62" Y="0" Z="95" Texture="" Model=""></Enemy>
@@ -262,7 +264,7 @@
 														<!--Sala-15--><Platform Type="1" accion="0" ancho="60" largo="35" alto="4" RP="0" X="431" Y="0" Z="483" Texture="" TypeCenter="0" Model="" UserStar="False" StarX="0" StarY="0">
 														<!--Sala final boss -->
 														<!--Modelo-Suelo--><Object tipoObj="15" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="0" X="397" Y="0" Z="482" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/Plataformat2.obj"></Object>
-														<!--Modelo-Suelo--><Object tipoObj="18" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="457" Y="0" Z="483" despX="0" despZ="0" Texture="assets/texture/discofloor.png" Model="assets/models/Escenario/PistaDisco.obj"></Object>
+														<!--Modelo-Suelo--><Object tipoObj="18" Type="0" accion="7" ancho="0" largo="0" alto="0" RP="90" X="457" Y="0" Z="483" despX="0" despZ="0" Texture="assets/texture/discofloor.png" Texture2="assets/texture/discofloor2.png" Texture3="assets/texture/discofloor3.png" TimeTA="3" Model="assets/models/Escenario/PistaDisco.obj"></Object>
 														<!--Puerta--><Object tipoObj="3" Type="1" codigo="20" accion="3" ancho="1" largo="4" alto="10" RP="90" X="373" Y="0" Z="478" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
 														<!--BossUnicornio--><Enemy Type="1" enemigo="6" accion="1" ancho="1" largo="1" alto="10" X="453" Y="0" Z="468" Texture="" Model=""></Enemy>
 														<!--Zona-Respawn--><Zone Type="1" accion="0" tipo="zRespawn" elementos="1" boss="1" ancho="4" largo="4" alto="1" X="442" Y="0" Z="498"></Zone>

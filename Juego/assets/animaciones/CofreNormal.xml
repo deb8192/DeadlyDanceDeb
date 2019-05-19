@@ -1,0 +1,7 @@
+<!--<Animacion nombre="" inicio="" final="" bucle="" salto="" dondesaltar="" terminar="" velocidad=""/>-->
+<Animaciones numeroAnimaciones="4">
+	<!--0--><Animacion nombre="Cerrado" inicio="1" final="1" bucle="true" salto="false" terminar="false" velocidad="1"></Animacion>
+	<!--1--><Animacion nombre="Abrirse" inicio="1" final="10" bucle="false" salto="true" dondesaltar="2" terminar="true" velocidad="14"></Animacion>
+	<!--2--><Animacion nombre="Abierto" inicio="10" final="10" bucle="true" salto="false" terminar="false" velocidad="1"></Animacion>
+	<!--3--><Animacion nombre="Cerrandose" inicio="10" final="20" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="14"></Animacion>
+</Animaciones>

@@ -3,12 +3,13 @@
 
 #include "../Estado.hpp"
 #include "../Jugando/Configuration.hpp"
+#include "../Motores/MotorAudio.hpp"
 
 class Configuracion: public Estado {
     public:
         Configuracion();
         ~Configuracion();
-        
+
         void Iniciar();
         void Render();
         void Update();
@@ -29,5 +30,6 @@ class Configuracion: public Estado {
         unsigned int idsElementos[8];
         unsigned int resolucion[6];//contiene los desplegables de la resolucion
         
+        MotorAudioSystem* _motora;//instancia de la fachada audio
 };
 #endif /* CONFIGURACION_HPP */

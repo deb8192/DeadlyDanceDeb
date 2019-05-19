@@ -193,7 +193,7 @@ void MotorFisicas::crearCuerpo(int accion, float px, float py, float pz, int typ
                 Transform transformacion(posiciones,orientacion);
                 rp3d::CollisionBody * cuerpo;
                 cuerpo = space->createCollisionBody(transformacion);
-                rp3d::Vector3 medicion(ancho,alto,largo+3.5f);
+                rp3d::Vector3 medicion(ancho,alto,largo+6.5f);
                 BoxShape * formapared = new BoxShape(medicion);
                 cuerpo->addCollisionShape(formapared,transformacion);
                 paredeInvisiblesCamara.push_back(move(cuerpo));

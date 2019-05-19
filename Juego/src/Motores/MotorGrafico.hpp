@@ -241,7 +241,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void IniciarParticulasAccion(unsigned short i, float x, float y, float z, float time);
             void CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
             void CargarLuzEnSala(int sala,int x,int y,int z);
-            void CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss);
+            int CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima = nullptr, unsigned int fps = 1, float distanciaboard = 0.0f);
             void CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
             void CargarCofre(int pos, int rp, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
@@ -251,7 +251,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
             void dispararProyectil(float x, float y, float z, float rx, float ry, float rz, float es);
-
+            void cambiarTextura(unsigned int objeto, const char *ruta_textura);
+            void animacionTextura(unsigned int objeto, float velocidad, std::string ruta_textura1, std::string ruta_textura2 = nullptr, std::string ruta_textura3 = nullptr);
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz, float newy, float newz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
@@ -279,6 +280,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void colorearJugador(int a, int r, int g, int b);
             void colorearEnemigo(int a, int r, int g, int b, int enem);
             //void colorearObjeto(int a, int r, int g, int b, int obj);
+
+            void SombrasDelNivel(unsigned int tipo);
 
             #ifdef WEMOTOR
                 bool getArmaEspecial();
@@ -368,9 +371,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             //funciones para videos
             /**
-            *@param _ruta es la ruta desde el ejecutable al video 
-            *@param x posicion en anchura  
-            *@param y posicion en altura  
+            *@param _ruta es la ruta desde el ejecutable al video
+            *@param x posicion en anchura
+            *@param y posicion en altura
             *@param width anchura del video
             *@param height altura del video
             *@return retorna el id del video creado si no se ha podido crear es 0
@@ -413,6 +416,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> BoardsEnem_Scena;//contiene los billboards de enemigos reservados
                 std::vector<unsigned short> Particulas_Scena; //contiene los sistemas de particulas de la escena
                 std::vector<unsigned short> Particulas_Accion; //consitne los sistemas de particulas de acciones especificas
+                std::vector<unsigned short> Particulas_Llave; //consitne los sistemas de particulas de llaves
                 std::vector<unsigned short> Objetos_Scena;//contiene los objetos reservados (ids)
                 std::vector<unsigned short> RecoArmas_Scena;//contiene los recolectables reservados (ids)
                 std::vector<unsigned short> Llaves_Scena;
@@ -426,6 +430,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<Animaciones *> PowerUPAni_Scena;//contiene los objetos reservados (ids)
                 std::vector<Animaciones *> ParedesAni_Scena;
                 std::vector<Animaciones *> CofresAni_Scena;
+                std::vector<Animaciones *> EnemigosAni_Scena;//logico de las animaciones para los enemigos
 
                 std::vector<unsigned short> Objetos_Debug;//contiene los elementos que se ven en modo debug
                 std::vector<unsigned short> Objetos_Debug2;//para objetos con tiempo para desaparecer
