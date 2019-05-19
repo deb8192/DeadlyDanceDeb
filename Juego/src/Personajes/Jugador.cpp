@@ -461,7 +461,7 @@ int Jugador::AtacarEspecial()
         {
             aumentosAtaque += (float) _armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
         }
-        aumentosAtaque *= 2;
+        aumentosAtaque *= constantes.CUATRO;
         aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
 
         //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico

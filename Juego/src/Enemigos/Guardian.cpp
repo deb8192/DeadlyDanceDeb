@@ -287,7 +287,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
             break;
             case EN_PERSIGUE: //El Guardian se persigue al jugador
                 {
-                    funciona = this->perseguir(_jug);
+                    funciona = this->perseguir(_jug, i);
                 }
                 break;
 
@@ -358,7 +358,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
                         {
                             this->setRotation(this->randomBinomial() * maxRotacion);
                         }
-                        this->Merodear();
+                        this->Merodear(i);
                         this->setTimeMerodear(1.5f);
                         hecho = true;
                         //Comprueba si ve al jugador para atacarle en caso necesario
@@ -383,7 +383,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
                                 rotation *= rota;
                             }
                         }
-                        this->Merodear();
+                        this->Merodear(i);
                         //Comprueba si ve al jugador para atacarle en caso necesario
                         if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
                         {
@@ -448,7 +448,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
                     {
                         //Merodea estableciendo un nuevo angulo de rotacion
                         this->setRotation(this->randomBinomial() * maxRotacion);
-                        this->Merodear();
+                        this->Merodear(i);
                         this->setTimeMerodear(1.5f);
                         hecho = true;
                         //Comprueba si ve al jugador para atacarle en caso necesario
@@ -470,7 +470,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
                         {
                             rotation *= rota;
                         }
-                        this->Merodear();
+                        this->Merodear(i);
                         //Comprueba si ve al jugador para atacarle en caso necesario
                         if(this->ver(constantes.UNO, constantes.NUEVE * constantes.DIEZ))
                         {

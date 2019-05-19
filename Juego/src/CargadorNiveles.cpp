@@ -7,6 +7,7 @@
 #include "Enemigos/Murcielago.hpp"
 #include "Enemigos/CofreArana.hpp"
 #include "Enemigos/MuerteBoss.hpp"
+#include "Enemigos/TravornioBoss.hpp"
 #include "Enemigos/Guardian.hpp"
 
 CargadorNiveles::CargadorNiveles()
@@ -361,7 +362,7 @@ Sala* CargadorNiveles::crearSala(pugi::xml_node plat,Sala* padre)
         int alto = enem.attribute("ancho").as_int();//nos devuelve un int
         int enemigo = enem.attribute("enemigo").as_int(); //nos da un char[] = string
 
-        if (enemigo != constantes.BOSS)
+        if (enemigo < constantes.BOSS)
         {
             CrearEnemigo(accion,enemigo,x,y,z,ancho,largo,alto,padren); //cargamos el enemigo
         } else {
@@ -764,7 +765,24 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
 void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
     int ancho, int largo, int alto, Sala* sala)
 {
-    _boss = new MuerteBoss(x,y,z, 300); // Posiciones, vida
+    Constantes constantes;
+    if(enemigo == constantes.BOSS)
+    {
+        _boss = new MuerteBoss(x,y,z, 650); // Posiciones, vida
+        _boss->setDanyoCritico(80);
+        _boss->setProAtaCritico(20);
+        _boss->setAtaque(20);
+        _boss->SetMultiplicadorAtEsp(1.75);
+    }
+    else
+    {
+        _boss = new TravornioBoss(x,y,z, 500); // Posiciones, vida
+        _boss->setDanyoCritico(65);
+        _boss->setProAtaCritico(15);
+        _boss->setAtaque(15);
+        _boss->SetMultiplicadorAtEsp(1.5);
+    }
+    
     //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
     _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
     _boss->setID(++id);//le damos el id unico en esta partida al enemigo
@@ -779,16 +797,12 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
     _boss->setVelocidadMaxima(1.0f);
     _boss->setBarraAtEs(0);
     _boss->definirSala(sala);//le pasamos la sala en donde esta
-    _boss->setAtaque(20);
     _boss->setArmaEspecial(100);
     _boss->setTimeAtEsp(0.0f);
-    _boss->setDanyoCritico(80);
-    _boss->setProAtaCritico(20);
     _boss->setRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     _boss->setVectorOrientacion();
     _boss->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
     _boss->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
-    _boss->SetMultiplicadorAtEsp(2);
 }
 
 //lo utilizamos para crear zonas
