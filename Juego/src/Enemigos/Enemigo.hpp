@@ -95,7 +95,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void SetModo(int);
         void SetPosicionComunBandada(INnpc::VectorEspacial direccion);
         void SetRespawnBoss(bool creaEnemigos);
-        void SetMultiplicadorAtEsp(int multiplicador);
+        void SetMultiplicadorAtEsp(float multiplicador);
 
         int getID();
         int getVidaIni();

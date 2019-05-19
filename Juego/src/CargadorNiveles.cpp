@@ -763,7 +763,7 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
         _boss->setDanyoCritico(80);
         _boss->setProAtaCritico(20);
         _boss->setAtaque(20);
-        _boss->SetMultiplicadorAtEsp(2);
+        _boss->SetMultiplicadorAtEsp(1.75);
     }
     else
     {
@@ -771,7 +771,7 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
         _boss->setDanyoCritico(65);
         _boss->setProAtaCritico(15);
         _boss->setAtaque(15);
-        _boss->SetMultiplicadorAtEsp(1);
+        _boss->SetMultiplicadorAtEsp(1.5);
     }
     
     //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));

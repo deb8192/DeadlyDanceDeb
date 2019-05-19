@@ -86,8 +86,16 @@ void TravornioBoss::RunIA()
 
 void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
 {
+    Constantes constantes;
     Jugador* _jugador = (Jugador*)_jug;
     funciona = true;
+    int porcentaje_33 = this->getVidaIni() * constantes.MAX_VIDA_BOSS_PELIGRO / constantes.CIEN;
+    if(this->getVida() <= porcentaje_33 && modo != MODO_PELIGRO)
+    {
+        SetModo(MODO_PELIGRO);
+        this->ForzarCambioNodo(&constantes.SIETE);
+    }
+    
     if(_ordenes != nullptr)
     {
         switch (_ordenes[0])
@@ -98,7 +106,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                     {
                         case EN_MAX_VIDA_33:
                             {
-                                int porcentaje_33 = this->getVidaIni() * constantes.MAX_VIDA_BOSS_PELIGRO / constantes.CIEN;
+                                porcentaje_33 = this->getVidaIni() * constantes.MAX_VIDA_BOSS_PELIGRO / constantes.CIEN;
                                 if(this->getVida() <= porcentaje_33)
                                 {
                                     funciona = true;

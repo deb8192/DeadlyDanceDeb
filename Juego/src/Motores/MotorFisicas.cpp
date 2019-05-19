@@ -772,7 +772,7 @@ int MotorFisicas::enemyCollideAttackWall(unsigned int enemigo)
 int* MotorFisicas::ObtenerNormalColision(float x,float y,float z,float rotation)
 {
     Constantes constantes;
-    Ray * rayo = crearRayo(x,y,z,(-1*(rotation-180)),5);
+    Ray * rayo = crearRayo(x,y,z,(-1*(rotation-constantes.PI_RADIAN)),constantes.CINCO);
     RaycastInfo intersection;
     int* obj = new int[6];
     for(int i = 0; i < constantes.SEIS; i++)
