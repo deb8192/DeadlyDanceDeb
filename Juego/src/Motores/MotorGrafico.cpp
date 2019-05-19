@@ -36,6 +36,7 @@ MotorGrafico::MotorGrafico()
         BoardsArmas_Scena.reserve(500);
         BoardsEnem_Scena.reserve(50);
         Particulas_Scena.reserve(100);
+        Particulas_Llave.reserve(50);
 
         camara = 0;
         _jugEscena = 0;
@@ -126,6 +127,7 @@ void MotorGrafico::LimpiarElementosJuego()
         Salas_luz.clear();
         BoardsArmas_Scena.clear();
         BoardsEnem_Scena.clear();
+        Particulas_Llave.clear();
 
         // TO DO: revisar error munmap_chunk(): invalid pointer
         /*if(_aniJugEscena != nullptr)
@@ -1538,6 +1540,13 @@ int MotorGrafico::CargarObjetos(int accion, int rp, int x,int y,int z, int ancho
             {
                 Llaves_Scena.push_back(_objetoEnEscena);
                 LlavesAni_Scena.push_back(logicaAnim);
+
+                //Crear particulas
+                unsigned short particulas = _interfaz->AddParticles(0.0f,6.0f,0.0f,20,5.0f,3.5f,"assets/images/ParticulaLlave.png");
+                _interfaz->Trasladar(particulas,(float)x+1.0f,(float)y+2.0f,(float)z);
+                _interfaz->Escalar(particulas,0.5f,0.5f,0.5f);
+                Particulas_Llave.push_back(particulas);
+
                 return Llaves_Scena.size() - 1;
             }
 
@@ -2588,8 +2597,10 @@ void MotorGrafico::EraseLlave(long unsigned int idx)
         if(Llaves_Scena[idx] && idx < Llaves_Scena.size())
         {
             _interfaz->RemoveObject(Llaves_Scena[idx]);
+            _interfaz->RemoveObject(Particulas_Llave[idx]);
             Llaves_Scena.erase(Llaves_Scena.begin() + idx);
             LlavesAni_Scena.erase(LlavesAni_Scena.begin() + idx);
+            Particulas_Llave.erase(Particulas_Llave.begin() + idx);
         }
     #else
         //codigo motor irrlicht
