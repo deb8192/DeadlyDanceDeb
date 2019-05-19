@@ -40,6 +40,11 @@ class Ventana
         char * RecogerLetra();//devuelve el texto que tiene en el momento el campo
         void InicializarLetra(const char * letras);//inicializa el texto con lo que le pases
         void BorrarUltimaTecla();//borra la ultima tecla
+        
+        //obtener informacion de la pantalla 
+        int * GetSizeScreen();//Te devuelve las medidas de la pantalla [0] width [1] height
+        int GetRelationAspectScreen();//Te devuelve 1 -> 16:9, 0 -> 4:3
+        int GetFrameRate();//te devuelve el numero de fps a la que funciona el monitor
 
     private:
 
@@ -48,6 +53,7 @@ class Ventana
         static void redimensionar(GLFWwindow * ,int ,int );//se llama cuando se redimensiona la ventana
         void procesarInputs(GLFWwindow *);//procesa los inputs si estan pulsados o no (teclado,raton)
         void limpiar();//como dice limpia el buffer y la informacion por pantalla
+        void inicializarScreenParameter();
         GLFWwindow * _window;
         //color fondo
         float red = 0.0f;//rojo para el fondo
@@ -67,6 +73,18 @@ class Ventana
         static bool recogido;//esta a true si se ha recogido, y a false si no
         bool cursor;// la line que te aparece y parpadea | 
         static unsigned int numTecla;
+
+        //monitor
+        GLFWmonitor * monitorPrimario;//puntero a la estructura que guarda la informacion del monitos
+        const GLFWvidmode* mode;//te da una estructura sencilla para obtener las dimensiones, colores y aspecratio
+        int screenWidth,screenHeight;//dimensiones completas de la pantalla o monitos
+        int aspectRatio;//tipo de pantalla panoramica(16/9) = 1, normal(4:3) = 0
+        int frameRate;//framerate que soporta la pantalla
+        //monitor en modo ventana
+        int * screenWorkWidth; //son las dimensiones sin la barra del sistema
+        int * screenWorkHeight; //son las dimensiones sin la barra del sistema
+        int * posx;//donde empieza estas(screenWorkWidth,screenWorkHeight) dimensiones
+        int * posy;//donde empieza estas(screenWorkWidth,screenWorkHeight) dimensiones
 
 };
 #endif
