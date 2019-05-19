@@ -739,12 +739,46 @@ bool MotorFisicas::enemyCollideObstacle(unsigned int enemigo)
     return false;
 }
 
+bool MotorFisicas::enemyCollideParedesRompibles(unsigned int enemigo)
+{
+    for(long unsigned int i = 0; i < _paredes.size();i++)
+    {
+        if(_paredes[i])
+        {
+            if(space->testOverlap(enemigos[enemigo],_paredes[i]))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+int MotorFisicas::enemyCollideAttackWall(unsigned int enemigo)
+{
+    for(unsigned int i = 0; i < _paredes.size();i++)
+    {
+        if (_paredes[i])
+            if(space->testOverlap(enemigosAtack[enemigo],_paredes[i]))
+            {
+                //jugadorAtack = nullptr;
+                return i;
+            }
+    }
+    //jugadorAtack = nullptr;
+    return -1;
+}
+
 int* MotorFisicas::ObtenerNormalColision(float x,float y,float z,float rotation)
 {
     Constantes constantes;
-    Ray * rayo = crearRayo(x,y,z,(-1*(rotation-180)),constantes.CINCO);
+    Ray * rayo = crearRayo(x,y,z,(-1*(rotation-180)),5);
     RaycastInfo intersection;
-    int* obj = new int[7];
+    int* obj = new int[6];
+    for(int i = 0; i < constantes.SEIS; i++)
+    {
+        obj[i] = 0;
+    }
 
     bool colision = false;
     if(obstaculos.size() > 0)//posiciones interpolacion
@@ -758,18 +792,37 @@ int* MotorFisicas::ObtenerNormalColision(float x,float y,float z,float rotation)
             if(colision)
             {
                 //cout << "colisiona" << endl;
-                obj[0] = 1;
-                obj[1] = intersection.worldPoint.x;
-                obj[2] = intersection.worldPoint.y;
-                obj[3] = intersection.worldPoint.z;
-                obj[4] = intersection.worldNormal.x;
-                obj[5] = intersection.worldNormal.y;
-                obj[6] = intersection.worldNormal.z;
+                obj[0] = intersection.worldPoint.x;
+                obj[1] = intersection.worldPoint.y;
+                obj[2] = intersection.worldPoint.z;
+                obj[3] = intersection.worldNormal.x;
+                obj[4] = intersection.worldNormal.y;
+                obj[5] = intersection.worldNormal.z;
+                return obj;
+            }
+            else i++;
+        }
+        i = 0;
+        while(i<_paredes.size() && !colision)
+        {
+            if(_paredes[i])
+                colision = _paredes[i]->raycast(*rayo,intersection);
+
+            if(colision)
+            {
+                //cout << "colisiona" << endl;
+                obj[0] = intersection.worldPoint.x;
+                obj[1] = intersection.worldPoint.y;
+                obj[2] = intersection.worldPoint.z;
+                obj[3] = intersection.worldNormal.x;
+                obj[4] = intersection.worldNormal.y;
+                obj[5] = intersection.worldNormal.z;
+                return obj;
             }
             else i++;
         }
     }
-    return obj;
+    return nullptr;
 }
 
 bool MotorFisicas::collidePlatform()
@@ -805,7 +858,7 @@ int * MotorFisicas::colisionRayoUnCuerpo(float x,float y,float z,float rotation,
 {
     //se recomiendan usar modos especificos para ahorrar costes.
 
-    Ray * rayo = crearRayo(x/*-(2*(sin(constantes.PI * rotation / constantes.PI_RADIAN)))*/,y,z/*-(2*(cos(constantes.PI * rotation / constantes.PI_RADIAN)))*/,(-1*(rotation-180)),longitud);
+    Ray * rayo = crearRayo(x,y,z,(-1*(rotation-180)),longitud);
     RaycastInfo intersection;
 
     int * jug;

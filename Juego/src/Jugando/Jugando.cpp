@@ -690,12 +690,23 @@ void Jugando::Update()
                         updateRecorridoPathfinding(_enemigos[i]);
                 }
                 // TO DO: optimizar beha
-                if(_enemigos[i]->GetSala() == _jugador->GetSala())
+                if(_enemigos[i]->GetSala() == _jugador->GetSala() || _enemigos[i]->GetTipoEnemigo() >= constantes.BOSS || _enemigos[i]->GetTipoEnemigo() >= constantes.GUARDIAN_A  || _enemigos[i]->GetTipoEnemigo() >= constantes.GUARDIAN_B)
                 {
+                    if(_enemigos[i]->GetTipoEnemigo() >= constantes.BOSS && _enemigos[i]->GetRespawnBoss())
+                    {
+                        this->RespawnEnemigosBoss();
+                    }
                     if (_enemPideAyuda) {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                     } else {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    }
+                    short paredCol = _enemigos[i]->GetParedRota();
+                    if(paredCol >= 0)
+                    {
+                        _paredes[paredCol]->Borrar(paredCol);
+                        _paredes.erase(_paredes.begin() + paredCol);
+                        _enemigos[i]->SetParedRota(constantes.MENOS_UNO);
                     }
 
                     if(estarAtacado >= 2)
@@ -800,6 +811,26 @@ void Jugando::Update()
                         _enemigos[i]->setLastTimeAt(tiempoActual);
                     }
                     _enemigos[i]->setTimeAt(tiempoAtacar);
+                }
+                //Este bloque se da si el Boss esta en el proceso de ataque especial
+                if(_enemigos[i]->getTimeAtEsp() > constantes.CERO)
+                {
+                    if(_enemigos[i]->GetEnemigo() == constantes.TRAVORNIO && _enemigos[i]->getTimeAtEsp() == constantes.TIEMPO_ATESP_TRAVORNIO)
+                    {
+                        //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                        _enemigos[i]->setLastTimeAtEsp(_controladorTiempo->GetTiempo(2));
+                    }
+                    float tiempoActual = 0.0f, tiempoAtaqueEspecial = 0.0f, tiempoAntiguo = _enemigos[i]->getLastTimeAtEsp();
+                    tiempoActual = _controladorTiempo->GetTiempo(2);
+                    tiempoAtaqueEspecial = _enemigos[i]->getTimeAtEsp();
+                    tiempoAtaqueEspecial -= (tiempoActual - tiempoAntiguo);
+                    if(tiempoActual > tiempoAntiguo)
+                    {
+                        //Si no es la primera vez que entra al bucle de atacar, tiempoActual debe ser mayor que lastTimeMoverse
+                        //por lo que guardamos en lastTimeAtEsp a tiempoActual
+                        _enemigos[i]->setLastTimeAtEsp(tiempoActual);
+                    }
+                    _enemigos[i]->setTimeAtEsp(tiempoAtaqueEspecial);
                 }
                 //Este bloque se da si el Boss esta en el proceso de defenderse
                 if(_enemigos[i]->getTimeDefenderse() > constantes.CERO)
@@ -1103,10 +1134,6 @@ void Jugando::UpdateIA()
                         if(_enemigos[i]->GetSala() == _jugador->GetSala())
                         {
                             _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
-                            if(_enemigos[i]->GetTipoEnemigo() >= constantes.BOSS && _enemigos[i]->GetRespawnBoss())
-                            {
-                                this->RespawnEnemigosBoss();
-                            }
                         }
                         else
                         {

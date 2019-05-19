@@ -73,7 +73,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
         switch (_ordenes[0])
         {
             case EN_PERSIGUE: //El Pollo se mueve
-                funciona = this->perseguir(_jug);
+                funciona = this->perseguir(_jug, i);
                 break;
 
             case EN_ATACAR: //El Pollo ataca
@@ -169,7 +169,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                         {
                             this->setRotation(this->randomBinomial() * maxRotacion);
                         }
-                        this->Merodear();
+                        this->Merodear(i);
                         this->setTimeMerodear(1.5f);
                         hecho = true;
                         //Comprueba si ve al jugador para atacarle en caso necesario
@@ -201,7 +201,7 @@ void Pollo::UpdatePollo(short *i, int* _jug, bool ayuda)
                                 rotation *= rota;
                             }
                         }
-                        this->Merodear();
+                        this->Merodear(i);
                         //Comprueba si ve al jugador para atacarle en caso necesario
                         if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
                         {

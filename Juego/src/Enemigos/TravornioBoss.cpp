@@ -70,7 +70,6 @@ void TravornioBoss::RunIA()
         if(ataqueEspecial)
         {
             ataqueEspecial = false;
-            this->setBarraAtEs(constantes.CERO);
         }
         _ordenes = this->Enemigo::RunIA(funciona);
     }
@@ -150,7 +149,6 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                 {
                     case EN_AT_ESP_2:
                     {
-                        cout<<"Debe rebotar\r\n";
                         bool nuevaDireccion = false;
                         if(this->getTimeAtEsp() <= 0 && !ataqueEspecial)
                         {
@@ -166,7 +164,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
 
                             if(danyo > 0)
                             {
-                                _jugador->ModificarVida(-danyo);
+                                //_jugador->ModificarVida(-danyo);
                             }
                             this->setTimeAtEsp(this->getTimeAtEsp() - resto);
                         }
@@ -177,10 +175,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                 
                     default:
                         SetRespawnBoss(true);
-                        if(modo != MODO_PELIGRO)
-                        {
-                            this->setBarraAtEs(constantes.CERO);
-                        }
+                        this->setBarraAtEs(constantes.CERO);
                         /* Llamar animacion pedir ayuda */
                         break;
                 }
@@ -194,7 +189,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                         atacado = true;
                         nuevaDireccion = true;
                     }
-                    this->embestir(nuevaDireccion, _jug);   //TO DO: tener en cuenta las colisiones con la pared
+                    this->embestir(nuevaDireccion, _jug);
                     float resto = (float) ((int) (this->getTimeAt() * constantes.CIEN) % (int) (constantes.UN_CUARTO * constantes.CIEN)) / constantes.CIEN;
                     if(resto <= constantes.DIEZ_PORCIENTO)
                     {
@@ -202,7 +197,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
 
                         if(danyo > 0)
                         {
-                            _jugador->ModificarVida(-danyo);
+                            //_jugador->ModificarVida(-danyo);
                         }
                         this->setTimeAt(this->getTimeAt() - resto);
                     }

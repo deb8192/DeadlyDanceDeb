@@ -155,6 +155,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void SetPedirAyuda(bool);
         bool GetContestar();
         void SetContestar(bool);
+        void SetParedRota(int idPared);
+        int  GetParedRota();
         int  GetTipoEnemigo();
 
         bool ver(int tipo, int longitud);//1 si ve al jugador
@@ -201,7 +203,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void alinearse(VectorEspacial*, bool huir);
         bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
         bool buscar();//por defecto devuelve true
-        bool perseguir(int* _jug);//por defecto devuelve true TO IMPROVE
+        bool perseguir(int* _jug, short int* _n);//por defecto devuelve true TO IMPROVE
         void embestir(bool modificarDireccion, int* _jug);//Ataque por defecto de Travornio
         void ataqueRebote(bool modificarDireccion, int* _jug);//Ataque especial 2 por defecto de Travornio
         bool buscar(VectorEspacial*);//busca un objetivo
@@ -209,7 +211,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool PedirAyuda(bool);//pide ayuda
         bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
         void AuxiliarAliado();//se mueve hacia el proximo waypoint del camino a seguir
-        bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
+        bool Merodear(short int* _n);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         int Moverse(int nuevaDireccion, int direccion, int* _jug, int minDistBossJugador, int maxDistBossJugador, bool* seAcerca);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         INnpc::VectorEspacial normalizarVector(int*);//Convierte el vector que se pasa en un vector con la misma direccion y sentido pero con modulo 1
         void modificarTrayectoria(INnpc::VectorEspacial* vector, int* destino);
@@ -282,6 +284,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         VectorEspacial distanciaEnemigoJugador;
         int distanciaMinimaEsquivar; //Variable que contiene la distancia mínima para esquivar objetos;
         int distanciaMaximaCohesionBandada; //Distancia maxima de las bandadas con su centro con flocking
+        int paredRota;
 
         bool pedirAyuda;
         bool respawnBoss;

@@ -41,6 +41,7 @@ Enemigo::Enemigo()
     controlRotacion = false;
     distanciaMinimaEsquivar = 3;
     multiplicadorAtaqueEspecial = 1;
+    paredRota = -1;
 
     posicionComunBandada.vX = INT_MAX;
     posicionComunBandada.vY = INT_MAX;
@@ -117,6 +118,7 @@ Enemigo::~Enemigo()
     controlRotacion = false;
     distanciaMinimaEsquivar = 0;
     multiplicadorAtaqueEspecial = 0;
+    paredRota = 0;
 
     distanciaMaximaCohesionBandada = 0;
 
@@ -675,7 +677,7 @@ int Enemigo::AtacarEspecial()
         //cout << "daño: " <<danyoF<<endl;
 
         //Colision
-        if(_fisicas->IfCollision(_fisicas->getEnemiesAtEsp(getPosAtaques()),_fisicas->getJugador()))
+        if(_fisicas->IfCollision(_fisicas->getEnemiesAtEsp(constantes.CERO),_fisicas->getJugador()))
         {
             //cout << "Jugador Atacado por ataque especial" << endl;
             danyo = roundf(danyoF * por10) / por10;
@@ -1273,7 +1275,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             case 1://ve al jugador
                 return ver(1, 30);
             case 2://merodeo
-                return Merodear();//merodeo pollo
+                //return Merodear();//merodeo pollo
             case 3://esta cerca del jugador
                 return true;
             case 4://atacar
@@ -1296,10 +1298,6 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     {
         float contraRotacion = 0.0f;
         Constantes constantes;
-        if(controlRotacion)
-        {
-            controlRotacion = false;
-        }
         if(modo == MODO_ATAQUE || modo == MODO_AUXILIAR_ALIADO)
         {
             pesoRotacion = constantes.UN_MEDIO;
@@ -1307,6 +1305,10 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             if(this->ver(constantes.TRES, constantes.SEIS * constantes.CINCO) && tipoEnemigo != constantes.BOSS)
             {
                 controlRotacion = true;
+            }
+            else if(controlRotacion)
+            {
+                controlRotacion = false;
             }
         }
         else
@@ -1507,7 +1509,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                         //rotation = 0.0f;
                     }
                     //Creamos un vector con una nueva direccion normalizando el vector director anterior
-                    VectorEspacial vectorDirector;// = this->normalizarVector(destino);
+                    VectorEspacial vectorDirector = this->normalizarVector(destino);
                     //Se suma la normal del obstaculo aplicando pesos a la normal y al vector director
                     this->modificarTrayectoria(&vectorDirector, destino); 
                     //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
@@ -1655,7 +1657,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             if(colisiona)
             {
                 //Creamos un vector con una nueva direccion normalizando el vector director anterior
-                VectorEspacial vectorDirector;// = this->normalizarVector(destino);
+                VectorEspacial vectorDirector = this->normalizarVector(destino);
                 //Se suma la normal del obstaculo aplicando pesos a la normal y al vector director
                 this->modificarTrayectoria(&vectorDirector, destino); 
                 //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
@@ -1698,7 +1700,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
      *      Salidas:    
      *                  bool funciona: booleano que indica si el comportamiento ha funcionado
     */
-    bool Enemigo::perseguir(int* _jug)
+    bool Enemigo::perseguir(int* _jug, short int* _n)
     {
         Jugador* _jugador = (Jugador*)_jug;
         bool funciona = true;
@@ -1735,59 +1737,70 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
             objetivo.vZ = _jugador->getZ();
         }
 
-        this->alinearse(&objetivo, false);
-
-        //Persiguen al objetivo teniendo en cuenta tambien la direccion que tiene para avanzarse a sus pasos
-        if(abs(_jugador->getX()) >= posActual.x + distanciaMinimaEsquivar)
+        datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima * porcentajeVelocidad;
+        datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima * porcentajeVelocidad;
+        if(_fisicas->enemyCollideObstacle((unsigned) *_n) || _fisicas->enemyCollideParedesRompibles((unsigned) *_n))
         {
-            if(abs(_jugador->getZ()) >= posActual.z + distanciaMinimaEsquivar)
-            {
-                datosDesplazamiento.vX = orientacion.x * velocidadMaxima * porcentajeVelocidad;
-                datosDesplazamiento.vZ = orientacion.z * velocidadMaxima * porcentajeVelocidad;
-            }
-            else
-            {
-                datosDesplazamiento.vX = orientacion.x * velocidadMaxima * porcentajeVelocidad;
-                datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima * porcentajeVelocidad ;
-            }
-            
+            this->setNewPosiciones(posFutura.x - (datosDesplazamiento.vX * constantes.DOS), posFutura.y, posFutura.z - (datosDesplazamiento.vZ * constantes.DOS));
+            this->setPosicionesFisicas(-(datosDesplazamiento.vX * constantes.DOS), constantes.CERO, -(datosDesplazamiento.vZ * constantes.DOS));
+            funciona = false;
         }
         else
         {
-            if(abs(_jugador->getZ()) >= posActual.z + distanciaMinimaEsquivar)
+            this->alinearse(&objetivo, false);
+
+            //Persiguen al objetivo teniendo en cuenta tambien la direccion que tiene para avanzarse a sus pasos
+            if(abs(_jugador->getX()) >= posActual.x + distanciaMinimaEsquivar)
             {
-                datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima * porcentajeVelocidad;
-                datosDesplazamiento.vZ = orientacion.z * velocidadMaxima * porcentajeVelocidad;
+                if(abs(_jugador->getZ()) >= posActual.z + distanciaMinimaEsquivar)
+                {
+                    datosDesplazamiento.vX = orientacion.x * velocidadMaxima * porcentajeVelocidad;
+                    datosDesplazamiento.vZ = orientacion.z * velocidadMaxima * porcentajeVelocidad;
+                }
+                else
+                {
+                    datosDesplazamiento.vX = orientacion.x * velocidadMaxima * porcentajeVelocidad;
+                    datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima * porcentajeVelocidad ;
+                }
+                
             }
             else
             {
-                datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima * porcentajeVelocidad;
-                datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima * porcentajeVelocidad;
+                if(abs(_jugador->getZ()) >= posActual.z + distanciaMinimaEsquivar)
+                {
+                    datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima * porcentajeVelocidad;
+                    datosDesplazamiento.vZ = orientacion.z * velocidadMaxima * porcentajeVelocidad;
+                }
+                else
+                {
+                    datosDesplazamiento.vX = vectorOrientacion.vX * velocidadMaxima * porcentajeVelocidad;
+                    datosDesplazamiento.vZ = vectorOrientacion.vZ * velocidadMaxima * porcentajeVelocidad;
+                }
             }
-        }
-        
-        
-        if((abs(objetivo.vX - this->getX())) > abs(distanciaMinimaEsquivar) || (abs(objetivo.vZ - this->getZ()) > abs(distanciaMinimaEsquivar)))
-        {
-            this->setNewPosiciones(posFutura.x + datosDesplazamiento.vX, posFutura.y, posFutura.z + datosDesplazamiento.vZ);
-            this->setPosicionesFisicas(datosDesplazamiento.vX, constantes.CERO, datosDesplazamiento.vZ);
-        }
-
-        //Se comprueba si la distancia entre el enemigo y el jugador es menor o igual a la distancia maxima que que indica la variable "distancia"
-        if(abs(objetivo.vZ - this->getZ()) <= abs(distanciaMinimaEsquivar))
-        {
-            if(abs(objetivo.vX - this->getX()) <= abs(distanciaMinimaEsquivar))
+            
+            
+            if((abs(objetivo.vX - this->getX())) > abs(distanciaMinimaEsquivar) || (abs(objetivo.vZ - this->getZ()) > abs(distanciaMinimaEsquivar)))
             {
-                funciona = true;
+                this->setNewPosiciones(posFutura.x + datosDesplazamiento.vX, posFutura.y, posFutura.z + datosDesplazamiento.vZ);
+                this->setPosicionesFisicas(datosDesplazamiento.vX, constantes.CERO, datosDesplazamiento.vZ);
+            }
+
+            //Se comprueba si la distancia entre el enemigo y el jugador es menor o igual a la distancia maxima que que indica la variable "distancia"
+            if(abs(objetivo.vZ - this->getZ()) <= abs(distanciaMinimaEsquivar))
+            {
+                if(abs(objetivo.vX - this->getX()) <= abs(distanciaMinimaEsquivar))
+                {
+                    funciona = true;
+                }
+                else
+                {
+                    funciona = false;
+                }
             }
             else
             {
                 funciona = false;
             }
-        }
-        else
-        {
-            funciona = false;
         }
         return funciona;
     }
@@ -1813,12 +1826,13 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         datosDesplazamiento.vX = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
         datosDesplazamiento.vZ = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
 
-        if(_fisicas->enemyCollideObstacle(constantes.CERO))
+        if(_fisicas->enemyCollideObstacle(constantes.CERO) || _fisicas->enemyCollideParedesRompibles(constantes.CERO))
         {
             this->setTimeAt(0);
             this->setLastTimeAt(0);
             this->setNewPosiciones(posFutura.x - (datosDesplazamiento.vX * constantes.DOS), posFutura.y, posFutura.z - (datosDesplazamiento.vZ * constantes.DOS));
             this->setPosicionesFisicas(-(datosDesplazamiento.vX * constantes.DOS), constantes.CERO, -(datosDesplazamiento.vZ * constantes.DOS));
+            paredRota = _fisicas->enemyCollideAttackWall(constantes.CERO);
         }
         else
         {
@@ -1832,7 +1846,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         Constantes constantes;
         Jugador* _jugador = (Jugador*) _jug;
         VectorEspacial velocidad, posiciones, target, datosDesplazamiento;
-        int* destino = new int [7];
+        int* destino = _fisicas->ObtenerNormalColision(posPasada.x, posPasada.y, posPasada.z, rotActual.y + constantes.PI_MEDIOS);
         if(modificarDireccion)
         {
             target.vX = _jugador->getX();
@@ -1842,20 +1856,23 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
 
             this->alinearse(&target, false);
         }
-        else if(_fisicas->enemyCollideObstacle(constantes.CERO))
+        else if(destino)
         {
-            int* destino = _fisicas->ObtenerNormalColision(posActual.x, posActual.y, posActual.z, rotActual.y);
-            //Creamos un vector con una nueva direccion normalizando el vector director anterior
-            VectorEspacial vectorDirector;// = this->normalizarVector(destino);
-            //Se suma la normal del obstaculo aplicando pesos a la normal y al vector director
-            this->modificarTrayectoria(&vectorDirector, destino); 
-            //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
-            vectorDirector.vZ < 0 ?
-                rotation = (constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ))):
-                rotation = (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ));
+            if(_fisicas->enemyCollideObstacle(constantes.CERO) || _fisicas->enemyCollideParedesRompibles(constantes.CERO))
+            {
+                //Creamos un vector con una nueva direccion normalizando el vector director anterior
+                VectorEspacial vectorDirector = this->normalizarVector(destino);
+                //Se suma la normal del obstaculo aplicando pesos a la normal y al vector director
+                this->modificarTrayectoria(&vectorDirector, destino); 
+                //esto es para que gire hacia atras ya que al valor que devuelve atan hay que darle la vuelta 180
+                vectorDirector.vZ < 0 ?
+                    rotation = (constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ))):
+                    rotation = (constantes.RAD_TO_DEG * atan(vectorDirector.vX/vectorDirector.vZ));
 
-            this->setNewRotacion(rotActual.x, rotation, rotActual.z);
-            this->setVectorOrientacion();
+                this->setNewRotacion(rotActual.x, rotation, rotActual.z);
+                this->setVectorOrientacion();
+                paredRota = _fisicas->enemyCollideAttackWall(constantes.CERO);
+            }
 
         }
         if(porcentajeVelocidad != constantes.PORC_VELOCIDAD_ATREBOTE)
@@ -1966,35 +1983,37 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
     }
 
-    bool Enemigo::Merodear()
+    bool Enemigo::Merodear(short int* _n)
     {
-        struct
-        {
-            float x = 0.0f;
-            float y = 0.0f;
-            float z = 0.0f;
-        }
-        velocidad, posiciones;
+        VectorEspacial datosDesplazamiento, posiciones;
+        datosDesplazamiento.vX = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        datosDesplazamiento.vZ = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
 
-        if(pesoRotacion != constantes.UN_TERCIO)
+        if(_fisicas->enemyCollideObstacle((unsigned) *_n) || _fisicas->enemyCollideParedesRompibles((unsigned) *_n))
         {
-            pesoRotacion = constantes.UN_TERCIO;
+            this->setNewPosiciones(posFutura.x - (datosDesplazamiento.vX * constantes.DOS), posFutura.y, posFutura.z - (datosDesplazamiento.vZ * constantes.DOS));
+            this->setPosicionesFisicas(-(datosDesplazamiento.vX * constantes.DOS), constantes.CERO, -(datosDesplazamiento.vZ * constantes.DOS));
         }
-        this->ver(constantes.DOS, constantes.CINCO * constantes.CINCO);
-
-        this->setNewRotacion(rotActual.x, rotActual.y + rotation, rotActual.z);
-        this->setVectorOrientacion();
-        if(rotation > maxRotacion)
+        else
         {
-            rotation = maxRotacion;
-        }
-        velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
-        velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
-        posiciones.x = posFutura.x + velocidad.x;
-        posiciones.z = posFutura.z + velocidad.z;
+            if(pesoRotacion != constantes.UN_TERCIO)
+            {
+                pesoRotacion = constantes.UN_TERCIO;
+            }
+            this->ver(constantes.DOS, constantes.CINCO * constantes.CINCO);
 
-        this->setNewPosiciones(posiciones.x, posFutura.y, posiciones.z);
-        this->setPosicionesFisicas(velocidad.x, 0.0f, velocidad.z);
+            this->setNewRotacion(rotActual.x, rotActual.y + rotation, rotActual.z);
+            this->setVectorOrientacion();
+            if(rotation > maxRotacion)
+            {
+                rotation = maxRotacion;
+            }
+            datosDesplazamiento.vX = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+            datosDesplazamiento.vZ = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+
+            this->setNewPosiciones(posFutura.x + datosDesplazamiento.vX, posFutura.y, posFutura.z + datosDesplazamiento.vZ);
+            this->setPosicionesFisicas(datosDesplazamiento.vX, constantes.CERO, datosDesplazamiento.vZ);
+        }
 
 	    return false;
     }
@@ -2031,7 +2050,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         if(abs(target.modulo) < maxDistBossJugador && !*seAcerca)
         {
             //Si colisiona con la pared el BOSS se mueve en el sentido contrario
-            if(_fisicas->enemyCollideObstacle(constantes.CERO))
+            if(_fisicas->enemyCollideObstacle(constantes.CERO) || _fisicas->enemyCollideParedesRompibles(constantes.CERO))
             {
                 direccion -= constantes.DOS;
                 if(direccion <= 0)
@@ -2142,9 +2161,9 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     {
         //Se obtiene el vector director del movimiento del enemigo y su modulo
         VectorEspacial vectorDirector;
-        vectorDirector.vX = destino[0] - posActual.x;
-        vectorDirector.vY = destino[1] - posActual.y;
-        vectorDirector.vZ = destino[2] - posActual.z;
+        vectorDirector.vX = destino[0] - posPasada.x;
+        vectorDirector.vY = destino[1] - posPasada.y;
+        vectorDirector.vZ = destino[2] - posPasada.z;
         vectorDirector.modulo = sqrt(pow(vectorDirector.vX, constantes.DOS) + pow(vectorDirector.vY, constantes.DOS) + pow(vectorDirector.vZ, constantes.DOS));
 
         //Se normaliza el vector director del movimiento del enemigo
@@ -2171,12 +2190,39 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         vectorDirector->vY = vectorDirector->vY * contraRotacion + (destino[4] * distanciaMinimaEsquivar) * pesoRotacion;
         vectorDirector->vZ = vectorDirector->vZ * contraRotacion + (destino[5] * distanciaMinimaEsquivar) * pesoRotacion;
         vectorDirector->modulo = 1;*/
-        vectorDirector->vX = destino[0] + destino[3] * distanciaMinimaEsquivar;
-        vectorDirector->vY = destino[1] + destino[4] * distanciaMinimaEsquivar;
-        vectorDirector->vZ = destino[2] + destino[5] * distanciaMinimaEsquivar;
-        if(vectorDirector->vZ == 0.0)
+        if(abs(destino[3]) == constantes.UNO)
         {
-            vectorDirector->vZ = 0.1;
+            vectorDirector->vX *= -constantes.CIEN;
+        }
+        else
+        {
+            vectorDirector->vX *= constantes.CIEN;
+        }
+        
+        if(abs(destino[4]) == constantes.UNO)
+        {
+            vectorDirector->vY *= -constantes.CIEN;
+        }
+        else
+        {
+            vectorDirector->vY *= constantes.CIEN;
+        }
+        
+        if(abs(destino[5]) == constantes.UNO)
+        {
+            vectorDirector->vZ *= -constantes.CIEN;
+        }
+        else
+        {
+            vectorDirector->vZ *= constantes.CIEN;
+        }
+
+        float div = (float)__gcd((int)abs(vectorDirector->vX),(int)abs(vectorDirector->vZ));
+
+        if(div != 1.0 && div != 0.0)
+        {
+            vectorDirector->vX /= div;
+            vectorDirector->vZ /= div;
         }
     }
 
@@ -2228,6 +2274,17 @@ bool Enemigo::GetContestar()
 void Enemigo::SetContestar(bool contesta)
 {
     contestar = contesta;
+}
+
+
+void Enemigo::SetParedRota(int idPared)
+{
+    paredRota = idPared;
+}
+
+int Enemigo::GetParedRota()
+{
+    return paredRota;
 }
 
 int Enemigo::GetTipoEnemigo()

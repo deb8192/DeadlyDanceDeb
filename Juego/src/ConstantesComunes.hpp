@@ -17,6 +17,7 @@ using Constantes = struct ValoresConstantes
     const float PI_OCTAVOS = 22.5f;
     const short CERO = 0;
     const short UNO = 1;
+    const short MENOS_UNO = -1;
     const short DOS = 2;
     const short TRES = 3;
     const short CUATRO = 4;
