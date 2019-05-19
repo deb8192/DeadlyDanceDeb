@@ -95,6 +95,15 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
             accion = 8;
         }
         break;
+
+        case 18: // Llave
+        {
+            _modelo = "assets/models/llaveboss.obj";
+            _textura = "assets/texture/llaveboss.png";
+            accion = 8;
+            tipoObjeto = 1;
+        }
+        break;
     }
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     posArrayFisicas = _fisicas->CrearCuerpoRec(accion,x/2,y/2,z/2,ancho,alto,largo,despX,despZ);

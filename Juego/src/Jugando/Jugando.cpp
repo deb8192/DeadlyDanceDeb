@@ -315,6 +315,8 @@ void Jugando::ManejarEventos() {
     {
         desactivarColisionesJugador = !desactivarColisionesJugador;
         _motor->ResetKey(KEY_U);
+        poderEmpezar = true;
+       if(nivelJ==8){_motora->getEvent("MuerteBienvenida1")->stop();} 
     }
 
     // Multicamara
@@ -1048,7 +1050,7 @@ void Jugando::UpdateIA()
                     if( tipoEnemigo == constantes.GUARDIAN_A ||
                         tipoEnemigo == constantes.GUARDIAN_B)
                     {
-                        CrearObjeto(x,y,z,2,2,2,constantes.LLAVE,0);
+                        CrearObjeto(x,y,z,2,2,2,constantes.LLAVE_BOSS,0);
                     }
                     else if (tipoEnemigo == constantes.ARANA)
                     {
@@ -1476,10 +1478,17 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     _llaves = cargador.GetLlaves();
 
     _motora->setListenerPosition(0.0f, 0.0f, 0.0f);
-    _motora->getEvent("Nivel1")->start(); //Reproducir musica juego
-    _motora->getEvent("AmbienteGritos")->start(); //Reproducir ambiente
-    _motora->getEvent("AmbienteLava")->setPosition(145.0f,0.0f,18.0f);
-    _motora->getEvent("AmbienteLava")->start(); //Reproducir ambiente
+    if(nivelJ == 7)
+    {
+        _motora->getEvent("Nivel11")->start(); //Reproducir musica juego
+        _motora->getEvent("AmbienteGritos")->start(); //Reproducir ambiente
+        _motora->getEvent("AmbienteLava")->setPosition(145.0f,0.0f,18.0f);
+        _motora->getEvent("AmbienteLava")->start(); //Reproducir ambiente
+    }
+    else if(nivelJ == 8)
+    {
+        _motora->getEvent("Nivel21")->start(); //Reproducir musica juego
+    }
 
     //esta ya todo ejecutamos ia y interpolado
     return true;
@@ -1529,7 +1538,7 @@ void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
 {
     Recolectable* _rec = new Recolectable(-1,ancho,largo,alto,x,y,z,tipoObjeto,0,0);
     unsigned short accion = 0;
-    if (tipoObjeto == constantes.LLAVE)
+    if (tipoObjeto == constantes.LLAVE_BOSS)
     {
         _rec->setCodigo(20);
         _llaves.push_back(move(_rec));
@@ -2204,8 +2213,17 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                 {
                     if(_puerta->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
                     {
-                        _motora->getEvent("Nivel1")->stop();
-                        _motora->getEvent("Nivel2")->start(); //Reproducir musica juego
+                        if(nivelJ == 7)
+                        {
+                            _motora->getEvent("Nivel11")->stop();
+                            _motora->getEvent("Nivel12")->start(); //Reproducir musica juego
+                        }
+                        else if(nivelJ == 8)
+                        {
+                            _motora->getEvent("Nivel21")->stop();
+                            _motora->getEvent("Nivel22")->start(); //Reproducir musica juego
+                        }
+                        
                         enSalaBoss = true;
                         this->CargarBossEnMemoria();
                     }
@@ -2567,8 +2585,9 @@ void Jugando::CargarBossEnMemoria()
     std::string nameid = std::to_string(_boss->getID()); //pasar id a string
     _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid, 1);
     _motora->getEvent(nameid)->setPosition(x,y,z);
-    _motora->getEvent(nameid)->start();
-
+    _motora->getEvent(nameid)->start();  
+   
+    
     _enemigos.insert(_enemigos.begin(), _boss);
 }
 

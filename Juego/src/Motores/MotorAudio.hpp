@@ -82,6 +82,7 @@ class MotorAudioEvent
     void start();                  //Reproducir el evento
     void stop();                   //Detener el evento
     void pause();                  //Pausar el evento, start() continuar reproduccion
+    void resume();
     void setVolume(float vol);     //Modifica el volumen del evento (entre 0 y 1)
     void setPosition(float posx, float posy, float posz); //Posicion 3D del evento
     void setReverbLevel(int index, float level);          //Reverb level
