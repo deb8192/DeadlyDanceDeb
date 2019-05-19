@@ -89,8 +89,8 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
     Constantes constantes;
     Jugador* _jugador = (Jugador*)_jug;
     funciona = true;
-    int porcentaje_33 = this->getVidaIni() * constantes.MAX_VIDA_BOSS_PELIGRO / constantes.CIEN;
-    if(this->getVida() <= porcentaje_33 && modo != MODO_PELIGRO)
+    int porcentaje_50 = this->getVidaIni() * constantes.MAX_VIDA_BOSS_PELIGRO / constantes.CIEN;
+    if(this->getVida() <= porcentaje_50 && modo != MODO_PELIGRO)
     {
         SetModo(MODO_PELIGRO);
         this->ForzarCambioNodo(&constantes.SIETE);
@@ -106,8 +106,8 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                     {
                         case EN_MAX_VIDA_33:
                             {
-                                porcentaje_33 = this->getVidaIni() * constantes.MAX_VIDA_BOSS_PELIGRO / constantes.CIEN;
-                                if(this->getVida() <= porcentaje_33)
+                                porcentaje_50 = this->getVidaIni() * constantes.MAX_VIDA_BOSS_PELIGRO / constantes.CIEN;
+                                if(this->getVida() <= porcentaje_50)
                                 {
                                     funciona = true;
                                 }
@@ -172,7 +172,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
 
                             if(danyo > 0)
                             {
-                                //_jugador->ModificarVida(-danyo);
+                                _jugador->ModificarVida(-danyo);
                             }
                             this->setTimeAtEsp(this->getTimeAtEsp() - resto);
                         }
@@ -205,7 +205,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
 
                         if(danyo > 0)
                         {
-                            //_jugador->ModificarVida(-danyo);
+                            _jugador->ModificarVida(-danyo);
                         }
                         this->setTimeAt(this->getTimeAt() - resto);
                     }

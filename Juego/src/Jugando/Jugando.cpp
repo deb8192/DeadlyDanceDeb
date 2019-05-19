@@ -1097,7 +1097,7 @@ void Jugando::UpdateIA()
 
                         AbrirCofre(x,y,z,true);
                     }
-                    else if (tipoEnemigo == constantes.BOSS)
+                    else if (tipoEnemigo >= constantes.BOSS)
                     {
                         StopSonidos();
                         Juego::GetInstance()->estado.CambioEstadoGanar();
