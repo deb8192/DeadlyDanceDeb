@@ -274,7 +274,6 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float soundx, soundz, atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc,iniAtposX, iniAtposY, iniAtposZ, atposX, atposY, atposZ, atespposX, atespposY, atespposZ;
         float tiempoDefenderse, lastTiempoDefenderse, tiempoMerodear, lastTiempoMerodear, tiempoMoverse, lastTiempoMoverse, tiempoOcultarse, lastTiempoOcultarse;
         float detectiontime;
-        float tiempoDefenderse, lastTiempoDefenderse, tiempoMerodear, lastTiempoMerodear, tiempoMoverse, lastTiempoMoverse, tiempoOcultarse, lastTiempoOcultarse;
         Arma* _armaEspecial;
         const char* _rutaArmaEspecial = "assets/models/objeto.obj";
         int tipoEnemigo;//Tipo del enemigo: pollo, murcielago, guardian, boss

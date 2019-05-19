@@ -43,6 +43,8 @@ class Interfaz
 
         void Draw();//pintamos el arbol de escena, antes se calcula la matriz view project y luego model individual para las mallas
 
+        void DrawProfundidad(); //pintamos las mallas con profundidad
+
         void RemoveObject(unsigned short);//remueve objeto de la escena
 
         void Trasladar(unsigned short,float,float,float);//trasladar
@@ -107,6 +109,8 @@ class Interfaz
 
         void SetTransparencia(unsigned short did, float transp); //Se pone transparente la malla
 
+        void SetAnimationTexture(unsigned short did, std::string ruta_textura1, std::string ruta_textura2, std::string ruta_textura3, float velocidad);//Animacion de textura
+
         void RemoveObjectForID(signed int idPerson);//borra por el id personalizado = si el id es -1 no funciona este metodo
 
         void DefinirIdPersonalizado(unsigned short did, signed int idPerson);//le asigna el id personalizado
@@ -123,6 +127,8 @@ class Interfaz
         void ColorAmbiental(unsigned short luz, float r,float g,float b);
         void ColorDifusa(unsigned short luz, float r,float g,float b);
         void ColorSpecular(unsigned short luz, float r,float g,float b);
+
+        void TipoDeSombras(unsigned int tipo); //Asigna un tipo de sombras activa
 
         //define el bucle de la animacion
         void setBucle(unsigned short,bool);
@@ -156,14 +162,22 @@ class Interfaz
         //Empieza la reproduccion con el id que le pases
         void PlayVideo(unsigned int id);
 
-
     private:
+        //Luces y sombras
+        unsigned int depthMapFBO;
+        unsigned int depthMap;
+        glm::mat4 lightProjection, lightView;
+        glm::mat4 lightSpaceMatrix;
+        float near_plane = 1.0f, far_plane = 35.0f;
+        bool configure_depthmap = true;
+        float minlightdistance = 1000.0f;
+        unsigned int sombras_en_tipo = 1; //Que luz tendra la sombra en el nivel
 
         bool ModoOneCamara;//nos sirve para saber si queremos tener una camara como si fueran varias (por defecto activo)
 
         Ventana * window;// instancia que contiene la clase que se encarga de gestionar las ventanas y las teclas / raton
 
-        Shader * shaders[7];//cuatro programas de shader(vertex y fragment cada uno)
+        Shader * shaders[8];//cuatro programas de shader(vertex y fragment cada uno)
 
         unsigned short ids = 0;//comenzamos a dar ids desde 0
 

@@ -19,6 +19,7 @@ class TLuz : public TEntidad
         int tipo_anim = 0;
         int animaescala = 0;
         bool cambiaranima = false;
+        glm::vec3 posicion;
 
     public:
 
@@ -37,6 +38,8 @@ class TLuz : public TEntidad
         void setLightRange(float);
         void setBrillos(float b);
         float transformToRGB(float c);
+        glm::vec3 getPosicion();
+        unsigned int getTipoLuz();
 
         //sobrecarga Tentidad
         void beginDraw();
