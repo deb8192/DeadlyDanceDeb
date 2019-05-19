@@ -40,8 +40,10 @@ MotorAudioSystem::MotorAudioSystem()
   if(pBank)banks["Dialogos"] = pBank; //Insertar en el mapa de Bancos
 
   //Cargar eventos
-  LoadEvent("event:/Musica/Musica-situacion estandar n1","Nivel1",0);
-  LoadEvent("event:/Musica/Musica-situacion estandar n2","Nivel2",0);
+  LoadEvent("event:/Musica/Musica-situacion estandar n1","Nivel11",0);
+  LoadEvent("event:/Musica/Musica-situacion estandar n2","Nivel12",0);
+  LoadEvent("event:/Musica/Musica-situacion estandar m1","Nivel21",0);
+  LoadEvent("event:/Musica/Musica-situacion estandar m2","Nivel22",0);
   LoadEvent("event:/Musica/Musica-menu principal","Menu",0);
   LoadEvent("event:/Ambientes/Ambiente-Gritos de lamentos","AmbienteGritos",0);
   LoadEvent("event:/Ambientes/Ambiente-rio de lava","AmbienteLava",0);
@@ -50,6 +52,7 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/SFX/SFX-Arma flauta","Flauta",1);
   LoadEvent("event:/SFX/SFX-ruido coger objeto","Recoger",1);
   LoadEvent("event:/SFX/SFX-ruido dejar objeto","Soltar",1);
+  LoadEvent("event:/SFX/SFX-Guardian muere","GuardianDie",1);
    LoadEvent("event:/SFX/SFX-Victoria en el puzzle","VictoriaPuzzle",1);
    LoadEvent("event:/SFX/SFX-Aparece puzzle en pantalla","AparecePuzzle",1);//error al cambiar estado
    LoadEvent("event:/SFX/SFX-Derrota en el puzzle","DerrotaPuzzle",1);
@@ -68,17 +71,43 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/SFX/SFX-Objetos Romper pared","RomperPared",1);
   LoadEvent("event:/SFX/SFX-Objetos Abrir cerradura con llave","AbrirCerradura",1);
 
-  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador debil","MuerteEstasDebil",2);
-  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador muere","MuerteMueres",2); //error con estados
-  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador pasea","MuertePaseas",2);
-  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Penultima sala","MuertePenultima",2);
-  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 1","MuerteBienvenida1",2);
-  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 2","MuerteBienvenida2",2);
-  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean enemigos","MuerteRespawn1",2);
-  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean murcis","MuerteRespawn2",2);
-  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente te persigue arana y murci","MuertePerseguido1",2);
-  LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente te persigue pollo","MuertePerseguido2",2);
-  //LoadEvent("event:/Chicken1","Chicken1");
+  //Muerte Omnipresente
+   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador debil","MuerteEstasDebil",2);
+   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador muere","MuerteMueres",2); //error con estados
+   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador pasea","MuertePaseas",2);
+   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Penultima sala","MuertePenultima",2);
+   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 1","MuerteBienvenida1",2);
+   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 2","MuerteBienvenida2",2);
+   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean enemigos","MuerteRespawn1",2);
+   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente respawnean murcis","MuerteRespawn2",2);
+   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente te persigue arana y murci","MuertePerseguido1",2);
+   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente te persigue pollo","MuertePerseguido2",2);
+  //Boss nivel 1 travornio //eventos 3d al ponerlos en el codigo se van quitando de aqui
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio ataca","BN1ataca",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio ataque especial1","BN1especial1",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio ataque especial2","BN1especial2",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio bailarina debil","BN1debilchica",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio rockero debil","BN1debilchico",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio bailarina le golpea","BN1golpechica",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio rockero le golpea","BN1golpechico",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio tiene vida vs bailarina","BN1fuertechica",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio tiene vida vs rockero","BN1fuertechico",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio derrotado","BN1pierde",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio fallas golpe","BN1nogolpe",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio invoca","BN1invoca",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Travornio poca vida","BN1debil",2);
+  //Boss nivel 2 la muerte //eventos 3d al ponerlos en el codigo se van quitando de aqui
+   LoadEvent("event:/Diálogos/Dialogo-Boss Muerte ataca","BN2ataca",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Muerte ataque especial1","BN2especial1",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Muerte ataque especial2","BN2especial2",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Muerte Jugador debil","BN2debiljugador",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Muerte le golpeas","BN2golpejugador",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Muerte tiene vida","BN2fuerte",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Muerte derrotado","BN2pierde",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Muerte fallas golpe","BN2nogolpe",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Muerte invoca","BN2invoca",2);
+   LoadEvent("event:/Diálogos/Dialogo-Boss Muerte poca vida","BN2debil",2);
+    //LoadEvent("event:/Chicken1","Chicken1");
 
  //***********EJEMPLO DE EJECUCION MUSICA*****************
   // FMOD::Studio::EventInstance* eventInstance;
@@ -267,6 +296,12 @@ void MotorAudioEvent::stop()
 void MotorAudioEvent::pause()
 {
   ERRCHECK(soundInstance->setPaused(true));
+}
+
+//Pausar instancia del evento
+void MotorAudioEvent::resume()
+{
+  ERRCHECK(soundInstance->setPaused(false));
 }
 
 //Modifica el volumen instancia del evento (entre 0 y 1)

@@ -263,8 +263,9 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         };
 
         Sala* _estoy;//sala en la que esta el enemigo
-        float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc,iniAtposX, iniAtposY, iniAtposZ, atposX, atposY, atposZ, atespposX, atespposY, atespposZ;
+        float soundx, soundz, atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc,iniAtposX, iniAtposY, iniAtposZ, atposX, atposY, atposZ, atespposX, atespposY, atespposZ;
         float atacktime;
+        float detectiontime;
         float tiempoMerodear, lastTiempoMerodear, tiempoMoverse, lastTiempoMoverse, tiempoOcultarse, lastTiempoOcultarse;
         Arma* _armaEspecial;
         const char* _rutaArmaEspecial = "assets/models/objeto.obj";
@@ -285,6 +286,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool pedirAyuda;
         bool respawnBoss;
         bool contestar;
+        bool morirRapido;
+        bool caminando;
         bool defensa; //TO DO EXPANDIRLO AL JUGADOR cuando recibe danyo recibe la mitad si esta a true
         INnpc::VectorEspacial posicionComunBandada; //PUnto de cohesion de las bandadas
         int estadoMuerte;//tiene el numero de estado que pertenece a estar muerto o muriendo [Por defecto 0]

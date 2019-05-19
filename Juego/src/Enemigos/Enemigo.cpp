@@ -30,6 +30,9 @@ Enemigo::Enemigo()
     vectorOrientacion.vX = 0.0f;
     vectorOrientacion.vY = 0.0f;
     vectorOrientacion.vZ = 0.0f;
+    detectiontime = 0.0f;
+    soundx= 0.0f; 
+    soundz= 0.0f;
     vectorOrientacion.modulo = 0.0f;
     modo = MODO_DEFAULT;
     atacktime = 0.0f;
@@ -118,6 +121,8 @@ Enemigo::~Enemigo()
     respawnBoss = false;
     accionRealizada = false;
     controlRotacion = false;
+    morirRapido = false;
+    caminando = false;
     distanciaMinimaEsquivar = 0;
     multiplicadorAtaqueEspecial = 0;
 
@@ -714,16 +719,26 @@ void Enemigo::MuereEnemigo(int enemi){
     }
     //Sonido de muerte
     // TO DO: utilizar constantes de enemigos
-    if(tipoEnemigo == 0)
+    if(!morirRapido)
     {
-        _motora->getEvent("Chicken2")->setPosition(this->getX(),this->getY(),this->getZ());
-        _motora->getEvent("Chicken2")->start();
+        if(tipoEnemigo == 0)
+        {        
+            _motora->getEvent("Chicken2")->setPosition(this->getX(),this->getY(),this->getZ());
+            _motora->getEvent("Chicken2")->start();
+        }
+        else if(tipoEnemigo == 1)
+        {
+            _motora->getEvent("Murci2")->setPosition(this->getX(),this->getY(),this->getZ());
+            _motora->getEvent("Murci2")->start();
+        }
+        else if(tipoEnemigo == 3)
+        {
+            _motora->getEvent("GuardianDie")->setPosition(this->getX(),this->getY(),this->getZ());
+            _motora->getEvent("GuardianDie")->start();
+        }
     }
-    else if(tipoEnemigo == 1)
-    {
-        _motora->getEvent("Murci2")->setPosition(this->getX(),this->getY(),this->getZ());
-        _motora->getEvent("Murci2")->start();
-    }
+    morirRapido = true;
+    _motora->getEvent(soundID)->stop();
 
 }
 
@@ -750,8 +765,35 @@ void Enemigo::moverseEntidad(float updTime)
 
     posActual.x = posPasada.x * (1 - pt) + posFutura.x * pt;
     posActual.z = posPasada.z * (1 - pt) + posFutura.z * pt;
+    
+    if(tipoEnemigo == 0 || tipoEnemigo == 1)
+    {
+        _motora->getEvent(soundID)->setPosition(this->getX(),this->getY(),this->getZ());
+    }
+    else if(tipoEnemigo == 3)
+    {
+        _motora->getEvent(soundID)->setPosition(this->getX(),this->getY(),this->getZ());
 
-    _motora->getEvent(soundID)->setPosition(this->getX(),this->getY(),this->getZ());
+        if(soundx == posActual.x && soundz == posActual.z)
+        {
+            _motora->getEvent(soundID)->pause(); 
+        }
+        else
+        {
+            _motora->getEvent(soundID)->resume(); 
+        }       
+
+        if(_tiempo->CalcularTiempoPasado(detectiontime) > 2000.0f)
+        {
+        detectiontime = _tiempo->GetTiempo(1);
+        }
+
+        if(_tiempo->CalcularTiempoPasado(detectiontime) >= 1970.0f)
+        {
+            soundx = posActual.x;
+            soundz = posActual.z;
+        }
+    }
 }
 
 /*************** rotarEntidad *****************
@@ -1986,7 +2028,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         {
             this->setNewRotacion(rotActual.x, rotation, rotActual.z);
             this->setVectorOrientacion();
-        }
+        }        
 
         if(porcentajeVelocidad != constantes.UN_MEDIO)
         {
@@ -2006,6 +2048,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         this->setLastRotacion(rotActual.x, rotation, rotActual.z);
         this->setNewPosiciones(posiciones.vX, posFutura.y, posiciones.vZ);
         this->setPosicionesFisicas(velocidad.vX, 0.0f, velocidad.vZ);
+        
 
 	    return direccion;
     }
