@@ -1,10 +1,10 @@
 <!--<Animacion nombre="" inicio="" final="" bucle="" salto="" dondesaltar="" terminar="" velocidad=""/>-->
 <Animaciones numeroAnimaciones="7">
-	<!--0--><Animacion nombre="Andar" inicio="25" final="48" bucle="false" salto="false" terminar="false" velocidad="8"></Animacion>
-	<!--1--><Animacion nombre="Correr" inicio="25" final="48" bucle="false" salto="false" terminar="false" velocidad="14"></Animacion>
-	<!--2--><Animacion nombre="Abrirse" inicio="15" final="24" bucle="false" salto="true" dondesaltar="1" terminar="true" velocidad="8"></Animacion>
+	<!--0--><Animacion nombre="Andar" inicio="25" final="48" bucle="true" salto="false" terminar="false" velocidad="8"></Animacion>
+	<!--1--><Animacion nombre="Correr" inicio="25" final="48" bucle="true" salto="false" terminar="false" velocidad="14"></Animacion>
+	<!--2--><Animacion nombre="Abrirse" inicio="15" final="24" bucle="false" salto="true" dondesaltar="1" terminar="true" velocidad="6"></Animacion>
 	<!--3--><Animacion nombre="Cerrardo" inicio="24" final="24" bucle="true" salto="false" terminar="false" velocidad="1"></Animacion>
 	<!--4--><Animacion nombre="Atacar" inicio="49" final="70" bucle="false" salto="true" dondesaltar="1" terminar="true" velocidad="14"></Animacion>
-	<!--5--><Animacion nombre="Morir" inicio="1" final="14" bucle="false" salto="true" dondesaltar="6" terminar="true" velocidad="10"></Animacion>
+	<!--5--><Animacion nombre="Morir" inicio="1" final="14" bucle="false" salto="true" dondesaltar="6" terminar="true" velocidad="8"></Animacion>
 	<!--6--><Animacion nombre="Muerto" inicio="14" final="14" bucle="true" salto="false" terminar="false" velocidad="1"></Animacion>	
 </Animaciones>

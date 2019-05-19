@@ -1053,7 +1053,7 @@ void Jugando::UpdateIA()
                     else if (tipoEnemigo == constantes.ARANA)
                     {
                         CofreArana* _cofA = (CofreArana*)_enemigos[i];
-
+                        cofrePosicion = i;
                         delete _cofres.at(_cofA->GetPosMotorCofre());
                         _cofres.at(_cofA->GetPosMotorCofre())=nullptr;
 
@@ -1401,8 +1401,13 @@ void Jugando::Reanudar()
         if (ganarPuzzle)
         {
             _cofreP->DesactivarCofre();
+            /*if(cofrePosicion != -1)
+            {
+                _motor->cambiarAnimacion(6,cofrePosicion,1);
+            }*/
             AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),true);
             _cofreP = nullptr;
+            cofrePosicion = -1;
         }
         else
         {
@@ -2089,16 +2094,21 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
     if (tipoObj == constantes.COFRE_OBJ) // TO DO: repasar todo lo de los cofres al terminar la IA
     {
         _cofreP = _cofres.at(pos);
+        cofrePosicion = pos;
 
         if (_cofreP->GetEsArana())
         {
             AbrirPantallaPuzzle();
+            //cofrePosicion = -1;
         }
         else
         {
             _cofreP->DesactivarCofre();
+
+            //_motor->cambiarAnimacion(6,pos,1);
             AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),false);
             _cofreP = nullptr;
+            cofrePosicion = -1;
         }
     }
     else if (tipoObj == constantes.PALANCA)
@@ -2456,10 +2466,12 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
         minArpa = 22;
         minGuitar = 31;
         minFlauta = 25;
+        _motor->cambiarAnimacion(6,cofrePosicion,1);//abrirse cofre
     }
     else
     {
         objeto = NumeroAleatorio(constantes.ARPA,constantes.ORO);
+        _motor->cambiarAnimacion(6,cofrePosicion,1);//abrirse cofre 
     }
 
     switch (objeto)
@@ -2500,7 +2512,8 @@ void Jugando::CrearEnemigoArana()
     float y = _cofreP->getY();
     float z = _cofreP->getZ();
 
-    _motor->CargarEnemigos(x,y,z,_eneA->GetModelo(),_eneA->GetTextura(), false ,_eneA->GetAnimacion(), _eneA->GetFps());//creamos la figura
+    int id = _motor->CargarEnemigos(x,y,z,_eneA->GetModelo(),_eneA->GetTextura(), false ,_eneA->GetAnimacion(), _eneA->GetFps());//creamos la figura
+    _motor->cambiarAnimacion(5,id,2);
     _fisicas->crearCuerpo(1,x/2,y/2,z/2,2,_eneA->GetAncho(),
         _eneA->GetAlto(),_eneA->GetLargo(),2,0,0,false);
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,false); //Para ataques

@@ -20,7 +20,7 @@ Cofre::Cofre(bool esEne, int id,
     /*posicionArrayObjetos = _motor->CargarObjetos(3,0,x,y,z,ancho,largo,alto,//2,2,2
         _modelo, _textura);*/
     posicionArrayObjetos = posMotorG;
-    _motor->CargarCofre(-1,0,x,y,z,_modelo, _textura);
+    _motor->CargarCofre(-1,0,x,y,z,_modelo, _textura,_animacion,fps);
 
     // Creamos la fisica aqui por el tema del cofre nuevo o cofre ya existente
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
@@ -45,7 +45,7 @@ Cofre::Cofre(int id, unsigned int posMotorG, unsigned int posObs,
 
     ModeloTextura();
     posicionArrayObjetos = posMotorG;
-    _motor->CargarCofre(posMotorG,0,x,y,z,_modelo, _textura);
+    _motor->CargarCofre(posMotorG,0,x,y,z,_modelo, _textura,_animacion,fps);
     
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     _fisicas->CargarCofre(posMotorG,posObs,x/2,y/2,z/2,ancho,alto,largo,0,0);
@@ -54,8 +54,10 @@ Cofre::Cofre(int id, unsigned int posMotorG, unsigned int posObs,
 
 void Cofre::ModeloTextura()
 {
-    _modelo = "assets/models/Cofre/cofre.obj";
+    _modelo = "assets/models/CofreNormal/cofrenormal_000001.obj";
     _textura = "assets/texture/cofreArana.png";
+    fps = 20;
+    _animacion = "assets/animaciones/CofreNormal.xml";
 }
 
 Cofre::~Cofre()
@@ -90,7 +92,7 @@ unsigned int Cofre::GetPosObs()
 void Cofre::DesactivarCofre()
 {
     // TO DO: Animacion abrir cofre y sonido de abrirse
-    setNewRotacion(getRX(), getRY(), getRZ() - 80.0);
+    //setNewRotacion(getRX(), getRY(), getRZ() - 80.0);
         
     accionado = !accionado;
     MotorFisicas* _fisicas = MotorFisicas::getInstance();

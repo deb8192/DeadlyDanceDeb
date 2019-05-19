@@ -142,6 +142,7 @@ class Jugando: public Estado {
         bool ganarPuzzle;
         bool desactivarColisionesJugador;
         Cofre* _cofreP;
+        int cofrePosicion;//le indica la posicion del cofre para cambiar su animacion
 
         Jugador* _jugador;
         bool jugadorInmovil; // Para las colisiones

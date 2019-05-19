@@ -67,8 +67,8 @@ CofreArana::CofreArana (const CofreArana& copia)
     _textura = "assets/texture/cofreArana.png";
     fps = 70;
     _animacion = "assets/animaciones/CofreArana.xml";
-    estadoMuerte = 6;
-
+    estadoMuerte = 5;
+    
     ancho = copia.ancho;
     largo = copia.largo;
     alto = copia.alto;
