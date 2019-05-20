@@ -2,6 +2,8 @@
 #define ESTADO_HPP
 
 #include "Motores/MotorGrafico.hpp"
+#include "GestorInterfaces.hpp"
+
 using namespace idsEventos;
 
 //aqui definimos la clase interfaz de los estados

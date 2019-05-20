@@ -161,6 +161,8 @@ class Interfaz
         void PausarVideo(unsigned int id);
         //Empieza la reproduccion con el id que le pases
         void PlayVideo(unsigned int id);
+        //Devuelve las dimensiones de la pantalla
+        int * GetDimensionesMonitor();
 
     private:
         //Luces y sombras

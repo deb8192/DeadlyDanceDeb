@@ -34,7 +34,7 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); //Solo para OS X
 
     //Creamos una ventana
-    _window = glfwCreateWindow(w, h,titulo, NULL, NULL);  //glfwCreateWindow(ancho,alto,nombre,NULL,NULL)
+    _window = glfwCreateWindow(winwidth, winheight,titulo, monitorPrimario, NULL);  //glfwCreateWindow(ancho,alto,nombre,NULL,NULL)
 
     if (_window == NULL) //si no se crea el objeto ventana, error
     {
@@ -395,6 +395,8 @@ void Ventana::inicializarScreenParameter()
     {
         screenWidth = mode->width;
         screenHeight = mode->height;
+        winwidth = screenWidth;
+        winheight = screenHeight;
         frameRate = mode->refreshRate;
         if(screenWidth/screenHeight == (((int)16)/((int)9)))
         {
