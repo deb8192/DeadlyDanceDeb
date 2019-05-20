@@ -3,6 +3,7 @@
 
 TPlano::TPlano(const char * archivo, unsigned int x, unsigned int y, float scale, Shader * sact, GLuint ww, GLuint wh, const char * rutapulsado , const char * rutaencima )
 {
+    //std::cout << ww << " " << wh << "\n";
     esVideo = false;
     winwidth = ww;
     winheight = wh;

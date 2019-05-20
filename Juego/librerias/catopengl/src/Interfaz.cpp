@@ -1764,3 +1764,14 @@ void Interfaz::PlayVideo(unsigned int id)
 {
 
 }
+
+//Devuelve las dimensiones del monitor
+int * Interfaz::GetDimensionesMonitor()
+{
+    if(window != nullptr)
+    {
+        return window->GetSizeScreen();
+    }
+
+    return nullptr;
+}

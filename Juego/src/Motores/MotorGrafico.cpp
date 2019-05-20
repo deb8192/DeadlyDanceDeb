@@ -517,7 +517,9 @@ bool MotorGrafico::CrearVentana(short tipo)
                 _interfaz = new Interfaz();
                 CrearCamara();
             }
-
+            GestorInterfaces * _gestori = GestorInterfaces::GetInstance();
+            _gestori->UpdateDimensionesVentana(_interfaz->GetDimensionesMonitor());
+            _gestori->DevolverParametrosHud();
             std::string titulo = "";
             switch(tipo)
             {
@@ -542,7 +544,7 @@ bool MotorGrafico::CrearVentana(short tipo)
                     break;
             }
 
-            _interfaz->DefinirVentana(width,height,titulo.c_str());
+            _interfaz->DefinirVentana(_interfaz->GetDimensionesMonitor()[0],_interfaz->GetDimensionesMonitor()[1],titulo.c_str());
 
             return true;
     #else
@@ -727,7 +729,7 @@ void MotorGrafico::RenderEscena()
 
             //if(debugGrafico)
             //{
-                _interfaz->DefinirVentana(800,600,std::to_string(fps).c_str());
+                //_interfaz->DefinirVentana(800,600,std::to_string(fps).c_str());
             //}
 
         }
