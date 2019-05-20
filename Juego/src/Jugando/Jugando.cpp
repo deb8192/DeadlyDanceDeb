@@ -1304,6 +1304,37 @@ void Jugando::Render()
        _fisicas->llevarBox(posArmaX, _jugador->getY()+mov_weapon_posY,posArmaZ, _jugador->getArma()->getAncho()+mov_weapon_rotX, _jugador->getArma()->getLargo()+mov_weapon_rotY, _jugador->getArma()->getAlto()+mov_weapon_rotZ);
     }
 
+    //Dibujado boards puertas
+    algunboardActivo = false;
+    for(unsigned int i=0; i<_puertas.size(); i++)
+    {
+        float distx = _jugador->getX() - _puertas[i]->getX();
+        float disty = _jugador->getY() - _puertas[i]->getY();
+        float distz = _jugador->getZ() - _puertas[i]->getZ();
+        if(distx > -15.0f && distx < 15.0f && disty > -15.0f && disty < 15.0f && distz > -15.0f && distz < 15.0f)
+        {
+            if(!_puertas[i]->getAccionado()) //puerta no esta abierta
+            {
+                if(_puertas[i]->getCodigo() != 0) //no es una puerta con llave o palanca
+                {
+                    if(_puertas[i]->getCodigo() == 20) //puerta del boss
+                    {
+                        _motor->mostrarBoardPuerta(2);
+                    }
+                    else if(_puertas[i]->getCodigo() > 0 && _puertas[i]->getCodigo() < 10 )//puerta de llave
+                    {
+                        _motor->mostrarBoardPuerta(0);
+                    }
+                    else if(_puertas[i]->getCodigo() >= 10 && _puertas[i]->getCodigo() < 20 )//puerta de palanca
+                    {
+                        _motor->mostrarBoardPuerta(1);
+                    }
+                    algunboardActivo = true;
+                }
+            }
+        }
+    }
+    if(!algunboardActivo)_motor->desactivarBoardPuertas();
 
     //Dibujado de los enemigos
     for(unsigned short i = 0; i < _enemigos.size(); i++)

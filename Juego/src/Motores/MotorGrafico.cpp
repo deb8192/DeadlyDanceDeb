@@ -35,6 +35,7 @@ MotorGrafico::MotorGrafico()
         Objetos_Debug2.reserve(500);
         BoardsArmas_Scena.reserve(500);
         BoardsEnem_Scena.reserve(50);
+        BoardsPuertas.reserve(50);
         Particulas_Scena.reserve(100);
         Particulas_Llave.reserve(50);
 
@@ -128,6 +129,7 @@ void MotorGrafico::LimpiarElementosJuego()
         BoardsArmas_Scena.clear();
         BoardsEnem_Scena.clear();
         Particulas_Llave.clear();
+        BoardsPuertas.clear();
 
         // TO DO: revisar error munmap_chunk(): invalid pointer
         /*if(_aniJugEscena != nullptr)
@@ -2070,6 +2072,53 @@ void MotorGrafico::animacionTextura(unsigned int objeto,float velocidad, std::st
 void MotorGrafico::cambiarTextura(unsigned int objeto, const char *ruta_textura)
 {
     _interfaz->SetTexture(objeto,ruta_textura);
+}
+
+void MotorGrafico::crearBillBoardPuertas()
+{
+    unsigned short _newboard = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/LlaveBoca.png", 0.01f);
+    _interfaz->Trasladar(_newboard,-4.0f,0.0f,0.0f);
+    _interfaz->Escalar(_newboard,2.25f,2.25f,2.25f);
+    _interfaz->DeshabilitarObjeto(_newboard);
+    BoardsPuertas.push_back(_newboard);
+
+    unsigned short _newboard2 = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/LlavePalancaBoca.png", 0.01f);
+    _interfaz->Trasladar(_newboard2,0.0f,0.0f,0.0f);
+    _interfaz->Escalar(_newboard2,2.25f,2.25f,2.25f);
+    _interfaz->DeshabilitarObjeto(_newboard2);
+    BoardsPuertas.push_back(_newboard2);
+
+    unsigned short _newboard3 = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/LlaveBossBoca.png", 0.01f);
+    _interfaz->Trasladar(_newboard3,2.0f,0.0f,0.0f);
+    _interfaz->Escalar(_newboard3,2.25f,2.25f,2.25f);
+    _interfaz->DeshabilitarObjeto(_newboard3);
+    BoardsPuertas.push_back(_newboard3);
+}
+
+void MotorGrafico::mostrarBoardPuerta(short tipo)
+{
+    if(tipo == 0)
+    {
+        _interfaz->Trasladar(BoardsPuertas[0],center_x+2.0f,center_y+13.0f,center_z);
+        _interfaz->HabilitarObjeto(BoardsPuertas[0]);
+    }
+    else if(tipo == 1)
+    {
+        _interfaz->Trasladar(BoardsPuertas[1],center_x+2.0f,center_y+13.0f,center_z);
+        _interfaz->HabilitarObjeto(BoardsPuertas[1]);
+    }
+    else if(tipo == 2)
+    {
+        _interfaz->Trasladar(BoardsPuertas[2],center_x+2.0f,center_y+13.0f,center_z);
+        _interfaz->HabilitarObjeto(BoardsPuertas[2]);
+    }
+}
+
+void MotorGrafico::desactivarBoardPuertas()
+{
+    _interfaz->DeshabilitarObjeto(BoardsPuertas[0]);
+    _interfaz->DeshabilitarObjeto(BoardsPuertas[1]);
+    _interfaz->DeshabilitarObjeto(BoardsPuertas[2]);
 }
 
 void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoequipada, int tiposuelo, unsigned int i)

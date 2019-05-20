@@ -237,6 +237,9 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
             padre.pop_back();
         }
     }
+
+    //Crear billboards puertas
+    _motor->crearBillBoardPuertas();
 }
 
 void CargadorNiveles::GuardarNivelXml(int level)
