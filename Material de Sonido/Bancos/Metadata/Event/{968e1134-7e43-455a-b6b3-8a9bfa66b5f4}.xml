@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{968e1134-7e43-455a-b6b3-8a9bfa66b5f4}">
         <property name="name">
-            <value>SFX-Pollo golpeado</value>
+            <value>SFX-Pollo golpeando</value>
         </property>
         <property name="outputFormat">
             <value>2</value>
@@ -31,6 +31,9 @@
         </relationship>
         <relationship name="timeline">
             <destination>{d05344e0-02b9-4170-8662-23205354cfb4}</destination>
+        </relationship>
+        <relationship name="banks">
+            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
         </relationship>
     </object>
     <object class="EventMixer" id="{7bf5f126-2d0b-4ea4-ad33-ec0b745aabf8}">
@@ -79,6 +82,9 @@
         </relationship>
     </object>
     <object class="EventMixerMaster" id="{3a8e5e67-00dc-4b98-b319-c37a5a139f14}">
+        <property name="volume">
+            <value>10</value>
+        </property>
         <relationship name="effectChain">
             <destination>{5c53dbb9-9fae-4f4e-8ebc-4f9a69cb3f2b}</destination>
         </relationship>
