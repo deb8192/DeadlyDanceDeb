@@ -93,8 +93,7 @@ void Murcielago::UpdateMurcielago(short *i, int* _jug, std::vector<ZonaOscura*> 
         {
             case EN_PERSIGUE: //El Murcielago se mueve
                 {
-                    funciona = this->perseguir(_jug);
-                    
+                    funciona = this->perseguir(_jug, i);   
                     _motor->cambiarAnimacion(5,(int)*i,2);
                 }
                 break;

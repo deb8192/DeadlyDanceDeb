@@ -47,15 +47,25 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/Musica/Musica-menu principal","Menu",0);
   LoadEvent("event:/Ambientes/Ambiente-Gritos de lamentos","AmbienteGritos",0);
   LoadEvent("event:/Ambientes/Ambiente-rio de lava","AmbienteLava",0);
+  LoadEvent("event:/Ambientes/Ambiente-sonido de viento","AmbienteViento",0);
 
+
+  LoadEvent("event:/SFX/SFX-Personaje Pasos sobre Charcos","pasoscharcos",1);
+  LoadEvent("event:/SFX/SFX-Personaje Pasos sobre madera","pasosmadera",1);
+  LoadEvent("event:/SFX/SFX-Personaje Pasos sobre piedra","pasospiedra",1);
+  LoadEvent("event:/SFX/SFX-Personaje Pasos sobre tierra","pasostierra",1);
   LoadEvent("event:/SFX/SFX-Personaje Arpa golpea","Arpa",1);
   LoadEvent("event:/SFX/SFX-Arma flauta","Flauta",1);
   LoadEvent("event:/SFX/SFX-ruido coger objeto","Recoger",1);
   LoadEvent("event:/SFX/SFX-ruido dejar objeto","Soltar",1);
   LoadEvent("event:/SFX/SFX-Guardian muere","GuardianDie",1);
-   LoadEvent("event:/SFX/SFX-Victoria en el puzzle","VictoriaPuzzle",1);
-   LoadEvent("event:/SFX/SFX-Aparece puzzle en pantalla","AparecePuzzle",1);//error al cambiar estado
-   LoadEvent("event:/SFX/SFX-Derrota en el puzzle","DerrotaPuzzle",1);
+  LoadEvent("event:/SFX/SFX-Coger llave","getkey",1);
+  LoadEvent("event:/SFX/SFX-Powerup vida","getvida",1);
+  LoadEvent("event:/SFX/SFX-Powerup mana","getmana",1);
+  LoadEvent("event:/SFX/SFX-Powerup oro","getgold",1);
+  LoadEvent("event:/SFX/SFX-Victoria en el puzzle","VictoriaPuzzle",1);
+  LoadEvent("event:/SFX/SFX-Aparece puzzle en pantalla","AparecePuzzle",1);//error al cambiar estado
+  LoadEvent("event:/SFX/SFX-Derrota en el puzzle","DerrotaPuzzle",1);
    LoadEvent("event:/SFX/SFX-Movimiento de piezas puzzle","MoverPieza",1);
    LoadEvent("event:/SFX/SFX-Boss derrotado","BossDerrota",1);
    LoadEvent("event:/SFX/SFX-Jugador derrotado","JugadorDerrota",1);//error al cambiar estado
@@ -70,6 +80,9 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/SFX/SFX-Objetos Cerrar puerta","CerrarPuerta",1);
   LoadEvent("event:/SFX/SFX-Objetos Romper pared","RomperPared",1);
   LoadEvent("event:/SFX/SFX-Objetos Abrir cerradura con llave","AbrirCerradura",1);
+  LoadEvent("event:/SFX/SFX-Murciélago Mordedura","murcihit",1);
+  LoadEvent("event:/SFX/SFX-Pollo golpeando","pollohit",1);
+  LoadEvent("event:/SFX/SFX-Enemigo golpea al jugador","enemyhit",1);
 
   //Muerte Omnipresente
    LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador debil","MuerteEstasDebil",2);

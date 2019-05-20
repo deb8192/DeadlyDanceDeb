@@ -137,7 +137,7 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
         {
             case EN_PERSIGUE: //se mueve el cofrearana
                 _motor->cambiarAnimacion(5,*i,1);
-                funciona = this->perseguir(_jug);
+                funciona = this->perseguir(_jug, i);
                 break;
 
             case EN_ATACAR: //se mueve el cofrearana
@@ -235,7 +235,7 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
                         {
                             this->setRotation(this->randomBinomial() * maxRotacion);
                         }
-                        this->Merodear();
+                        this->Merodear(i);
                         this->setTimeMerodear(1.5f);
                         hecho = true;
                         //Comprueba si ve al jugador para atacarle en caso necesario
@@ -267,7 +267,7 @@ void CofreArana::UpdateCofreArana(short *i, int* _jug, bool ayuda)
                                 rotation *= rota;
                             }
                         }
-                        this->Merodear();
+                        this->Merodear(i);
                         //Comprueba si ve al jugador para atacarle en caso necesario
                         if(this->ver(constantes.UNO, constantes.SEIS * constantes.CINCO))
                         {
