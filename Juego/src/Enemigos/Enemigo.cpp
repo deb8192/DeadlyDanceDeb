@@ -62,7 +62,10 @@ Enemigo::Enemigo()
 
     porcentajeVelocidad = 1.0;
     pesoRotacion = 0.0f;
-    }
+
+    
+
+}
 
 Enemigo::Enemigo(float nX, float nY, float nZ, int maxVida/*,
     int accion, int anchoN, int largoN, int altoN*/)
@@ -593,6 +596,23 @@ int Enemigo::Atacar(int i)
         {
             atacado = true;
             //cout << "Jugador Atacado" << endl;
+            //estos sonidos son para cuando nos ataca un enemigo
+            if(tipoEnemigo == 0)
+            {
+                _motora->getEvent("pollohit")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("pollohit")->start();  
+            }
+            else if(tipoEnemigo == 1)
+            {
+                //_motora->getEvent("murcihit")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("murcihit")->start();  
+            }
+            else
+            {
+                _motora->getEvent("enemyhit")->start(); 
+            }
+ 
+
         }
 
         if(atacado)
@@ -766,7 +786,7 @@ void Enemigo::moverseEntidad(float updTime)
     posActual.x = posPasada.x * (1 - pt) + posFutura.x * pt;
     posActual.z = posPasada.z * (1 - pt) + posFutura.z * pt;
     
-    if(tipoEnemigo == 0 || tipoEnemigo == 1)
+    if(tipoEnemigo == 0 || tipoEnemigo == 1 || tipoEnemigo == 2)
     {
         _motora->getEvent(soundID)->setPosition(this->getX(),this->getY(),this->getZ());
     }
@@ -796,6 +816,13 @@ void Enemigo::moverseEntidad(float updTime)
     }
 }
 
+void Enemigo::RespawnNoise()
+{
+    cout << "respawnNoise" << endl;
+    _motora->LoadEvent("event:/SFX/SFX-Muerte invoca enemigos","respawnfire",1);  
+    _motora->getEvent("respawnfire")->setPosition(this->getX(),this->getY(),this->getZ());
+    _motora->getEvent("respawnfire")->start();  
+}
 /*************** rotarEntidad *****************
  * Funcion con la que el enemigo rotara
  * sobre si mismo mediante una interpolacion desde
@@ -1102,6 +1129,15 @@ void Enemigo::SetEnemigo(int enemigo)
     tipoEnemigo = enemigo;
 }
 
+void Enemigo::SetAranaSound()
+{
+    if(tipoEnemigo == 2)
+    {
+        _motora->LoadEvent("event:/SFX/SFX-Arana grito enemigo", soundID, 1);
+        _motora->getEvent(soundID)->setPosition(posActual.x,0,posActual.z);
+        _motora->getEvent(soundID)->start();
+    }
+}
 void Enemigo::SetModo(int newModo)
 {
     modo = newModo;

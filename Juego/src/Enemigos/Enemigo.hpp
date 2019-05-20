@@ -66,6 +66,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void initPosicionesFisicasAtaque(float nx,float ny,float nz);
         void initPosicionesFisicas(float nx,float ny,float nz);
 
+        void RespawnNoise();
         void ModificarVida(int vid);
         void setVida(int vid);
         void setTipo(int tip);
@@ -143,6 +144,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getAtX();
         float getAtY();
         float getAtZ();
+        void SetAranaSound();
         float getVelocidadMaxima(); //se obtiene la VelocidadMaxima de desplazamiento
         int GetEnemigo();
         int GetModo();
