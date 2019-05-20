@@ -722,14 +722,14 @@ void Jugando::Update()
                 // Se coloca la posicionMedia de las bandadas
                 if(_enemigos[i]->GetModo() == Enemigo::modosEnemigo::MODO_ATAQUE)
                 {
-                    if(_enemigos[i]->GetSala() == _jugador->GetSala())
+                    /*if(_enemigos[i]->GetSala() == _jugador->GetSala())
                     {
                     _enemigos[i]->SetPosicionComunBandada(posicionMediaEnemigos);
                     }
                     else
-                    {
+                    {*/
                         _enemigos[i]->SetPosicionComunBandada(posicionMediaNula);
-                    }
+                    //}
                 }
 
 

@@ -55,14 +55,14 @@ void Guardian::RunIA()
 {
     if(modo == MODO_HUIDA)
     {
-        else if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR && _ordenes[0] != EN_DEFENDERSE  && _ordenes[0] != EN_MOVERSE)
+        if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR && _ordenes[0] != EN_DEFENDERSE  && _ordenes[0] != EN_MOVERSE)
         {
             this->ForzarCambioNodo(&constantes.DIEZ);
         }
     }
     else if(modo == MODO_ATAQUE)
     {
-        else if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR && _ordenes[0] != EN_DEFENDERSE)
+        if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR && _ordenes[0] != EN_DEFENDERSE)
         {
             this->ForzarCambioNodo(&constantes.VEINTE);
         }
