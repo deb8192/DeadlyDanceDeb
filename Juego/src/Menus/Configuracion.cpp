@@ -34,6 +34,10 @@ void Configuracion::Iniciar()
     {
         idsElementos[6] = _motor->CrearTexto("800x600 60Fps", 385, 80, 100, 20); // Parametros: texto, x1, y1, x2, y2
     }
+    else if(widthScreen == 1024)
+    {
+        idsElementos[6] = _motor->CrearTexto("1024x578 60Fps", 385, 80, 100, 20);
+    }
     else if(widthScreen == 1280)
     {
         idsElementos[6] = _motor->CrearTexto("1280x720 60Fps", 385, 80, 100, 20);
