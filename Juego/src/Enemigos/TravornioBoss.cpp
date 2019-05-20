@@ -256,6 +256,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                     this->alinearse(&posJugador, false);
                     funciona = true;
                 }
+                break;
             default:
                 break;
         }

@@ -7,12 +7,16 @@ Guardian::Guardian(float nX, float nY, float nZ, int maxVida, int disfraz)
 : Enemigo(nX,nY,nZ,maxVida)
 {
     funciona = true;
+    seAcerca = false;
     atacado = hecho = escondido = false;
     _ordenes = new short [constantes.DOS];
     maxRotacion = constantes.PI_CUARTOS / constantes.TRES;
     rotation = constantes.CERO;
     zonaElegida = nullptr;
     zonaSeleccionada = false;
+    maxDistanciaJugador = 30;
+    minDistanciaJugador = 15;
+    direccion = 0;
 
     switch(disfraz)
     {
@@ -24,6 +28,7 @@ Guardian::Guardian(float nX, float nY, float nZ, int maxVida, int disfraz)
         case 4 :
             _modelo = "assets/models/guardian_m/GuardianMuerteConTextura.obj";
             _textura = "assets/models/guardian_m/trocitos_G_M_prueba.jpg";
+            break;
     }
 }
 
@@ -33,6 +38,9 @@ Guardian::~Guardian()
     _ordenes = nullptr;
     _modelo = nullptr;
     _textura = nullptr;
+    maxDistanciaJugador = 0;
+    minDistanciaJugador = 0;
+    direccion = 0;
 }
 
 /***************** RunIA *****************
@@ -45,11 +53,18 @@ Guardian::~Guardian()
 */
 void Guardian::RunIA()
 {
-    if(modo == MODO_ATAQUE)
+    if(modo == MODO_HUIDA)
     {
-         if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR && _ordenes[0] != EN_DEFENDERSE)
+        else if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR && _ordenes[0] != EN_DEFENDERSE  && _ordenes[0] != EN_MOVERSE)
         {
             this->ForzarCambioNodo(&constantes.DIEZ);
+        }
+    }
+    else if(modo == MODO_ATAQUE)
+    {
+        else if(_ordenes[0] != EN_PERSIGUE && _ordenes[0] != EN_ATACAR && _ordenes[0] != EN_DEFENDERSE)
+        {
+            this->ForzarCambioNodo(&constantes.VEINTE);
         }
     }
     if(this->getTimeMerodear() <= 0)
@@ -193,6 +208,15 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
                     case EN_PELIGRO:
 
                         modo = MODO_HUIDA;
+                        if(zonaElegida !=nullptr)
+                        {
+                            zonaElegida->setProposito(false);
+                            zonaElegida = nullptr;
+                        }
+                        if(escondido)
+                        {
+                            escondido = false;
+                        }
                         funciona = true;
 
                         break;
@@ -315,23 +339,48 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
                     }
                 }
                 break;
-            case EN_DEFENDERSE: //El Guardian se defiende
+            case EN_MOVERSE: //El guardian se mueve tanteando al jugador
                 {
-                    /*if(!atacado)
+                    int nuevaDireccion = 0;
+                    if(!hecho)
                     {
-                        int danyo;
-                        danyo = this->Atacar(*i);
-                        if(danyo > 0)
+                        //Moverse estableciendo una direccion de movimiento 
+                        nuevaDireccion = rand() % 8 + 1;       
+                        direccion = this->Moverse(nuevaDireccion, direccion, _jug, minDistanciaJugador, maxDistanciaJugador, &seAcerca);
+                        nuevaDireccion = 0;
+                        this->setTimeMoverse(1.0f);
+                        hecho = true;
+                    }
+                    else
+                    { 
+                        //Se desplaza y cambia la direccion cada medio segundo de tiempo
+                        if(this->getTimeMoverse() > 0)
                         {
-                            _jugador->ModificarVida(-danyo);
-                            funciona = true;
-                            atacado = true;
+                            float resto = (float) ((int) (this->getTimeMoverse() * constantes.CIEN) % (int) (constantes.UN_CUARTO * constantes.CIEN)) / constantes.CIEN;
+                            if(resto <= constantes.DIEZ_PORCIENTO)
+                            {
+                                nuevaDireccion = rand() % 8 + 1;    
+                                this->setTimeMoverse(this->getTimeMoverse() - resto);
+                            }
                         }
-                        else
-                        {
-                            funciona = false;
-                        }
-                    }*/
+                        direccion = this->Moverse(nuevaDireccion, direccion, _jug, minDistanciaJugador, maxDistanciaJugador, &seAcerca);
+                        nuevaDireccion = 0;
+                    }
+                    funciona = true;
+                }
+                break;
+            case EN_DEFENDERSE: //El boss se defiende
+                {
+                    VectorEspacial posJugador;
+                    posJugador.vX = _jugador->getX();
+                    posJugador.vY = _jugador->getY();
+                    posJugador.vZ = _jugador->getZ();
+                    if(this->getTimeDefenderse() <= 0)
+                    {
+                        this->setTimeDefenderse(constantes.TIEMPO_DEFENSA);
+                        this->setDefenderse(true);
+                    }
+                    this->alinearse(&posJugador, false);
                     funciona = true;
                 }
                 break;
@@ -428,7 +477,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
                                     escondido = true;
                                     this->setTimeOcultarse(1.5f);
                                     modo = MODO_OCULTACION;
-                                    this->ForzarCambioNodo(&constantes.DIECIOCHO);
+                                    this->ForzarCambioNodo(&constantes.TREINTA);
                                 }
                             }
                             //this->ver(constantes.DOS, constantes.NUEVE * constantes.DIEZ);
