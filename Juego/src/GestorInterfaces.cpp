@@ -13,16 +13,22 @@ void GestorInterfaces::UpdateDimensionesVentana(int * dimensiones)
 {
         Width = dimensiones[0];//se actualiza ancho
         Height = dimensiones[1];//se actualiza alto
-        delete [] dimensiones;//se borra datos pasados
+        //delete [] dimensiones;//se borra datos pasados
 }
 
-void GestorInterfaces::DevolverParametrosHud()
+void GestorInterfaces::UpdateDimensionesVentana(unsigned int w, unsigned h)
+{
+        Width = w;//se actualiza ancho
+        Height = h;//se actualiza alto
+}
+
+void GestorInterfaces::ActualizarParametros()
 {
         
-        escaladoWidth = (float)Width/(float)800;
-        escaladoHeight = (float)Height/(float)600;
+        escaladoWidth = 1.0f;
+        escaladoHeight = 1.0f;
         
-        //std::cout << escaladoWidth << " " << escaladoHeight << "\n";
+        //std::cout << Width << " " << Height << "\n";
 
         _menu->xLogoM = Width*(_menu->xLogo);
         _menu->yLogoM = Height*(_menu->yLogo); 

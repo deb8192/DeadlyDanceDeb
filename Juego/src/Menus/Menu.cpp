@@ -94,7 +94,9 @@ void Menu::ManejarEventos()
 void Menu::pintarBotones()
 {
     GestorInterfaces * _ges = GestorInterfaces::GetInstance();
+    _ges->ActualizarParametros();
     GestorInterfaces::menu * m = _ges->GetMenu();
+    //std::cout << m->xLogoM << " " << m->yLogoM <<"\n";
     _motor->CrearImagen("assets/images/logo1.png",m->xLogoM,m->yLogoM,_ges->GetEscaladoY());
     _motor->CrearImagen("assets/images/logo2.png",m->xLogo2M,m->yLogo2M,_ges->GetEscaladoY());
     _motor->CrearImagen("assets/images/logo3.png",m->xLogo3M,m->yLogo3M,_ges->GetEscaladoY());

@@ -12,7 +12,7 @@ class Configuration
         Configuration();
         void GuardarConfiguracion(const char * ruta);
         bool CargarConfiguracion(const char * ruta);
-        void SetConfiguracion(unsigned int,unsigned int,unsigned int,unsigned int,unsigned int,bool,bool,bool);
+        void SetConfiguracion(unsigned int,unsigned int,unsigned int,unsigned int,unsigned int,bool,bool,bool,bool);
         unsigned int GetVolAmbiente();
         unsigned int GetVolEfectos();
         unsigned int GetVolVoces();
@@ -21,6 +21,7 @@ class Configuration
         bool GetMuteAll();
         bool GetVsync();
         bool GetSuavizadoMsaX1();
+        bool GetAllScreen();
         
 
     private:
@@ -35,6 +36,7 @@ class Configuration
             bool muteAll;
             bool vsync;
             bool suavizadoMsax1;
+            bool AllScreen;
         };
 
         Configuracion configuracion;

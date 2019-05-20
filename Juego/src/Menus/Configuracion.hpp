@@ -27,7 +27,8 @@ class Configuracion: public Estado {
         bool muteAll;
         bool vsync;
         bool suavizadoMsax1;
-        unsigned int idsElementos[8];
+        bool AllScreen;
+        unsigned int idsElementos[9];
         unsigned int resolucion[6];//contiene los desplegables de la resolucion
         
         MotorAudioSystem* _motora;//instancia de la fachada audio

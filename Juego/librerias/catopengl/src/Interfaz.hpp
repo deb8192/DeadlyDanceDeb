@@ -65,7 +65,7 @@ class Interfaz
 
         void CambiarFondo(float r, float g, float b,float a);//cambia el fondo de la ventana
 
-        void DefinirVentana(short unsigned int,short unsigned int,const char *); // cambia los valores width,height,title,si no existe tambien crea la ventana
+        void DefinirVentana(short unsigned int,short unsigned int,const char *,bool allscreen); // cambia los valores width,height,title,si no existe tambien crea la ventana
 
         unsigned short CrearTexto(std::string texto,short x,short y,float r = 0.0f,float g = 0.0f,float b = 0.0f); // texto, x e y(max y min de la pantalla), tamayo del texto siempre superior
 

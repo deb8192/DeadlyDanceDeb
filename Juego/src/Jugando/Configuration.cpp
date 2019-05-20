@@ -5,11 +5,12 @@ Configuration::Configuration()
     configuracion.volAmbiente = 50;
     configuracion.volEfectos = 50;
     configuracion.volVoces = 50;
-    configuracion.heightScreen = 600;
-    configuracion.widthScreen = 800;
+    configuracion.heightScreen = 576;
+    configuracion.widthScreen = 1024;
     configuracion.muteAll = false;
     configuracion.vsync = false;
     configuracion.suavizadoMsax1 = true;
+    configuracion.AllScreen = false;
 }
 
 bool Configuration::CargarConfiguracion(const char * ruta)
@@ -48,7 +49,7 @@ void Configuration::GuardarConfiguracion(const char * ruta)
     buffer.close();
 }
 
-void Configuration::SetConfiguracion(unsigned int vambiente,unsigned int vefecto,unsigned int vvoces,unsigned int height,unsigned int ancho,bool muteall,bool vsync,bool msax1)
+void Configuration::SetConfiguracion(unsigned int vambiente,unsigned int vefecto,unsigned int vvoces,unsigned int height,unsigned int ancho,bool muteall,bool vsync,bool msax1,bool allscreen)
 {
     configuracion.volAmbiente = vambiente;
     configuracion.volEfectos = vefecto;
@@ -58,6 +59,7 @@ void Configuration::SetConfiguracion(unsigned int vambiente,unsigned int vefecto
     configuracion.muteAll = muteall;
     configuracion.vsync = vsync;
     configuracion.suavizadoMsax1 = msax1;
+    configuracion.AllScreen = allscreen;
 }
 
 unsigned int Configuration::GetVolAmbiente()
@@ -98,4 +100,9 @@ bool Configuration::GetVsync()
 bool Configuration::GetSuavizadoMsaX1()
 {
     return configuracion.suavizadoMsax1;
+}
+
+bool Configuration::GetAllScreen()
+{
+    return configuracion.AllScreen;
 }

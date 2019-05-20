@@ -24,7 +24,9 @@ class GestorInterfaces
                 
                 void UpdateDimensionesVentana(int *);
 
-                void DevolverParametrosHud();
+                void UpdateDimensionesVentana(unsigned int w, unsigned h);
+
+                void ActualizarParametros();
 
                 float GetEscaladoX();//desde original
                 float GetEscaladoY();//desde original
@@ -46,29 +48,29 @@ class GestorInterfaces
                         float yLogo3 = 0.80;
                         unsigned int yLogo3M;
                         
-                        float xEmpezar = 0.44;
+                        float xEmpezar = 0.42;
                         unsigned int xEmpezarM;
-                        float yEmpezar = 0.30;
+                        float yEmpezar = 0.40;
                         unsigned int yEmpezarM;
 
-                        float xContinuar = 0.44;
+                        float xContinuar = 0.42;
                         unsigned int xContinuarM;
-                        float yContinuar = 0.34;
+                        float yContinuar = 0.50;
                         unsigned int yContinuarM;
 
-                        float xConfi = 0.44;
+                        float xConfi = 0.42;
                         unsigned int xConfiM;
-                        float yConfi = 0.38;
+                        float yConfi = 0.60;
                         unsigned int yConfiM;
 
-                        float xCre = 0.44;
+                        float xCre = 0.42;
                         unsigned int xCreM;
-                        float yCre = 0.42;
+                        float yCre = 0.70;
                         unsigned int yCreM;
 
-                        float xSalir = 0.44;
+                        float xSalir = 0.42;
                         unsigned int xSalirM;
-                        float ySalir = 0.46;
+                        float ySalir = 0.80;
                         unsigned int ySalirM;
                 };
 
