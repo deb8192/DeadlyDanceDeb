@@ -64,13 +64,14 @@ MotorAudioSystem::MotorAudioSystem()
   LoadEvent("event:/SFX/SFX-Powerup mana","getmana",1);
   LoadEvent("event:/SFX/SFX-Powerup oro","getgold",1);
   LoadEvent("event:/SFX/SFX-Victoria en el puzzle","VictoriaPuzzle",1);
-  LoadEvent("event:/SFX/SFX-Aparece puzzle en pantalla","AparecePuzzle",1);//error al cambiar estado
-  LoadEvent("event:/SFX/SFX-Derrota en el puzzle","DerrotaPuzzle",1);
+  LoadEvent("event:/SFX/SFX-Aparece puzzle en pantalla","AparecePuzzle",1);//error al cambiar estado, jugando.cpp: linea 2711
+  LoadEvent("event:/SFX/SFX-Derrota en el puzzle","DerrotaPuzzle",1);   
+  LoadEvent("event:/SFX/SFX-Dialogo tipo1","Dialogo1",1);//error al cambiar estado, menu.cpp: linea 64,72,79,86,94
+  LoadEvent("event:/SFX/SFX-Personaje activa palanca","PalancaUse",1);
+   LoadEvent("event:/SFX/SFX-Dialogo tipo2","Dialogo2",1);
    LoadEvent("event:/SFX/SFX-Movimiento de piezas puzzle","MoverPieza",1);
    LoadEvent("event:/SFX/SFX-Boss derrotado","BossDerrota",1);
-   LoadEvent("event:/SFX/SFX-Jugador derrotado","JugadorDerrota",1);//error al cambiar estado
-   LoadEvent("event:/SFX/SFX-Dialogo tipo1","Dialogo1",1);//error al cambiar estado
-   LoadEvent("event:/SFX/SFX-Dialogo tipo2","Dialogo2",1);
+   
   LoadEvent("event:/SFX/SFX-Personaje cabezazo del heavy","SinArma",1);
   LoadEvent("event:/SFX/SFX-Personaje Guitarra golpea","GolpeGuitarra",1);
   LoadEvent("event:/SFX/SFX-Personaje Guitarra Especial","GuitarraEspecial",1);
@@ -86,7 +87,7 @@ MotorAudioSystem::MotorAudioSystem()
 
   //Muerte Omnipresente
    LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador debil","MuerteEstasDebil",2);
-   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador muere","MuerteMueres",2); //error con estados
+   LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador muere","MuerteMueres",2); //error con estados, EstadoMuerte.cpp: lineas 98-103
    LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente jugador pasea","MuertePaseas",2);
    LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Penultima sala","MuertePenultima",2);
    LoadEvent("event:/Diálogos/Dialogo-Muerte Omnipresente Presentacion nivel 1","MuerteBienvenida1",2);

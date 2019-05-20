@@ -58,34 +58,40 @@ void Menu::Update()
 
 void Menu::ManejarEventos()
 {
+    
     if (_motor->OcurreEvento(GUI_ID_EMPEZAR_BUTTON))//cambiamos de estado porque han pulsado boton jugar
-    {
+    {   
+        _motora->getEvent("Dialogo1")->start();
         borrarEscenaResetearEvento(GUI_ID_EMPEZAR_BUTTON);// reseteamos el evento
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         jugar();
     }
 
     if (_motor->OcurreEvento(GUI_ID_CONFIGURACION_BUTTON))
-    {
+    {   
+        _motora->getEvent("Dialogo1")->start();
         borrarEscenaResetearEvento(GUI_ID_CONFIGURACION_BUTTON);
         configuracion();
     }
 
     if (_motor->OcurreEvento(GUI_ID_CREDITOS_BUTTON))
-    {
+    {   
+        _motora->getEvent("Dialogo1")->start();
         borrarEscenaResetearEvento(GUI_ID_CREDITOS_BUTTON);
         creditos();
     }
 
     if (_motor->OcurreEvento(GUI_ID_CONTINUARPARTIDA_BUTTON))
-    {
+    {   
+        _motora->getEvent("Dialogo1")->start();
         borrarEscenaResetearEvento(GUI_ID_CONTINUARPARTIDA_BUTTON);
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         continuarPartida();
     }
 
     if (_motor->OcurreEvento(GUI_ID_SALIR_BUTTON))
-    {
+    {   
+        _motora->getEvent("Dialogo1")->start();
         borrarEscenaResetearEvento(GUI_ID_SALIR_BUTTON);
         salir();
     }
