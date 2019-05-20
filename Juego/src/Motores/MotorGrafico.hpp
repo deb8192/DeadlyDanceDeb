@@ -254,6 +254,11 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void dispararProyectil(float x, float y, float z, float rx, float ry, float rz, float es);
             void cambiarTextura(unsigned int objeto, const char *ruta_textura);
             void animacionTextura(unsigned int objeto, float velocidad, std::string ruta_textura1, std::string ruta_textura2 = nullptr, std::string ruta_textura3 = nullptr);
+            void crearBillBoardFijos();
+            void mostrarBoardPuerta(short tipo);
+            void mostrarBoardGuardian(float x,float y,float z);
+            void borrarBoardGuardian();
+            void desactivarBoardPuertas();
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz, float newy, float newz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
@@ -415,6 +420,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Textos_Scena;//contiene los enemigos reservados (ids)
                 std::vector<unsigned short> BoardsArmas_Scena;//contiene los billboards de armas reservados (ids)
                 std::vector<unsigned short> BoardsEnem_Scena;//contiene los billboards de enemigos reservados
+                std::vector<unsigned short> BoardsPuertas;//Contiene los billboards de las puertas
                 std::vector<unsigned short> Particulas_Scena; //contiene los sistemas de particulas de la escena
                 std::vector<unsigned short> Particulas_Accion; //consitne los sistemas de particulas de acciones especificas
                 std::vector<unsigned short> Particulas_Llave; //consitne los sistemas de particulas de llaves
@@ -445,6 +451,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short _armaEnEscena;
                 unsigned short _armaProyectil; //id del proyectil
                 unsigned short _armaEsp;//id del arma especial cargado en memoria
+                unsigned short _boardguardianllave; //id del board de la llave del guardian
                 bool pathfinding;//sirve para sacar mensaje por pantalla de si esta activado o no
                 bool existearmaexp;
                 float center_x, center_y, center_z;

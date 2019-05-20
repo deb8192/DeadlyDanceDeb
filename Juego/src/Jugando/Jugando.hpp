@@ -153,6 +153,7 @@ class Jugando: public Estado {
         float mov_weapon_posX,mov_weapon_posY,mov_weapon_posZ;
         float mov_weapon_rotX,mov_weapon_rotY,mov_weapon_rotZ;
         float proyectilFuera;
+        bool algunboardActivo = false;
 
         // TO DO: Cambia comentado porque ya se ha arreglado la entrada de inputs, quitar al asegurarnos
         int danyo, danyo2;
