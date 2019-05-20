@@ -715,6 +715,13 @@ void MotorGrafico::RenderEscena()
                     ActualizarAnimacionMotor(EnemigosAni_Scena[i]);
                 }
             }
+            for(unsigned int i = 0; i < CofresAni_Scena.size();i++)
+            {
+                if(CofresAni_Scena[i] != nullptr)//solo esta objetos luego seran todos los objetos
+                {
+                    ActualizarAnimacionMotor(CofresAni_Scena[i]);
+                }
+            }
             Times * tiempo = Times::GetInstance();
             unsigned int fps = tiempo->GetFramesPorSegundo();
 
@@ -1389,7 +1396,7 @@ void MotorGrafico::CargarLuzEnSala(int sala,int x,int y,int z)
 }
 
 
-void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima, unsigned int fps,float distanciaboard)
+int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima, unsigned int fps,float distanciaboard)
 {
     #ifdef WEMOTOR
 
@@ -1430,14 +1437,18 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
             _interfaz->DeshabilitarObjeto(_board);
             if(boss)
             {
+                _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+40.0f,(float)z);
                 BoardsEnem_Scena.insert(BoardsEnem_Scena.begin(), _board);
             }
             else
             {
                 BoardsEnem_Scena.push_back(move(_board));
             }
+
+            return (Enemigos_Scena.size()-1);
         }
 
+    return -1;
     #else
 
         //codigo motor irrlicht
@@ -1450,6 +1461,7 @@ void MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, co
             Enemigos_Scena.push_back(move(enemigo_en_scena));
         }
 
+        return -1;
     #endif
 }
 
@@ -2685,6 +2697,14 @@ void MotorGrafico::EraseCofre(unsigned short idx)
     #ifdef WEMOTOR
         //codigo motor catopengl
         _interfaz->DeshabilitarObjeto(Cofres_Scena[idx]);
+        if(idx < CofresAni_Scena.size())
+        {
+                if(CofresAni_Scena[idx])
+                {
+                    delete CofresAni_Scena[idx];
+                }
+                CofresAni_Scena.erase(CofresAni_Scena.begin() + idx);
+        }
     #else
         //codigo motor irrlicht
         Cofres_Scena[idx]->setVisible(false);
@@ -3820,10 +3840,14 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
         {
             anim = ParedesAni_Scena[did];
         }
-        else if(tipo == 5)
+        else if(tipo == 5) //enemigos
         {
             //std::cout << did << " " << estado << "\n";
             anim = EnemigosAni_Scena[did];
+        }
+        else if(tipo == 6) //cofres normales
+        {
+            anim = CofresAni_Scena[did];
         }
 
         //aqui mas

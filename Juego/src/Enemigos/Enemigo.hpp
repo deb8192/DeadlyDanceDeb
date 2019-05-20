@@ -84,9 +84,10 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setLastTimeMerodear(float t);
         void setTimeMoverse(float t);
         void setLastTimeMoverse(float t);
-        void setAtackTime(float t);
         void setTimeAt(float time);
         void setLastTimeAt(float time);
+        void setTimeDefenderse(float time);
+        void setLastTimeDefenderse(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
         void setPosAtaques(int p);
@@ -95,7 +96,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void SetModo(int);
         void SetPosicionComunBandada(INnpc::VectorEspacial direccion);
         void SetRespawnBoss(bool creaEnemigos);
-        void SetMultiplicadorAtEsp(int multiplicador);
+        void SetMultiplicadorAtEsp(float multiplicador);
 
         int getID();
         int getVidaIni();
@@ -115,9 +116,10 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getLastTimeMerodear();
         float getTimeMoverse();
         float getLastTimeMoverse();
-        float getAtackTime();
         float getTimeAt();
         float getLastTimeAt();
+        float getTimeDefenderse();
+        float getLastTimeDefenderse();
         float getTimeAtEsp();
         float getLastTimeAtEsp();
         float getX();
@@ -157,6 +159,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void SetPedirAyuda(bool);
         bool GetContestar();
         void SetContestar(bool);
+        void SetParedRota(int idPared);
+        int  GetParedRota();
         int  GetTipoEnemigo();
 
         bool ver(int tipo, int longitud);//1 si ve al jugador
@@ -205,18 +209,22 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void alinearse(VectorEspacial*, bool huir);
         bool oir(int tipo);//1 si se oye jugador, 2 si se oye enemigo(pedir ayuda)
         bool buscar();//por defecto devuelve true
-        bool perseguir(int* _jug);//por defecto devuelve true TO IMPROVE
+        bool perseguir(int* _jug, short int* _n);//por defecto devuelve true TO IMPROVE
+        void embestir(bool modificarDireccion, int* _jug);//Ataque por defecto de Travornio
+        void ataqueRebote(bool modificarDireccion, int* _jug);//Ataque especial 2 por defecto de Travornio
         bool buscar(VectorEspacial*);//busca un objetivo
         bool Acciones(int);//esto es para recorrer el arbol
         bool PedirAyuda(bool);//pide ayuda
         bool ContestarAyuda();//esto es de prueba no hace dayo tampoco
         void AuxiliarAliado();//se mueve hacia el proximo waypoint del camino a seguir
-        bool Merodear();//para dar vueltas por una zona, segun entero que reciba ira en una direccion
+        bool Merodear(short int* _n);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         int Moverse(int nuevaDireccion, int direccion, int* _jug, int minDistBossJugador, int maxDistBossJugador, bool* seAcerca);//para dar vueltas por una zona, segun entero que reciba ira en una direccion
         INnpc::VectorEspacial normalizarVector(int*);//Convierte el vector que se pasa en un vector con la misma direccion y sentido pero con modulo 1
         void modificarTrayectoria(INnpc::VectorEspacial* vector, int* destino);
         bool comprobarDistanciaFlocking();
         //fin comportamientos bases
+        void setDefenderse(bool activarDefensa);
+        bool getDefenderse();
         ZonaOscura* getZonaOscuraMasCercana(vector <ZonaOscura*> &zonasOscuras, ZonaOscura*);
         ZonaEscondite* getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zonasEscondite, ZonaEscondite*);
         //Comparadores de la lectura de las acciones y objetivos de las tareas
@@ -266,9 +274,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         Sala* _estoy;//sala en la que esta el enemigo
         float soundx, soundz, atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc,iniAtposX, iniAtposY, iniAtposZ, atposX, atposY, atposZ, atespposX, atespposY, atespposZ;
-        float atacktime;
+        float tiempoDefenderse, lastTiempoDefenderse, tiempoMerodear, lastTiempoMerodear, tiempoMoverse, lastTiempoMoverse, tiempoOcultarse, lastTiempoOcultarse;
         float detectiontime;
-        float tiempoMerodear, lastTiempoMerodear, tiempoMoverse, lastTiempoMoverse, tiempoOcultarse, lastTiempoOcultarse;
         Arma* _armaEspecial;
         const char* _rutaArmaEspecial = "assets/models/objeto.obj";
         int tipoEnemigo;//Tipo del enemigo: pollo, murcielago, guardian, boss
@@ -284,6 +291,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         VectorEspacial distanciaEnemigoJugador;
         int distanciaMinimaEsquivar; //Variable que contiene la distancia mínima para esquivar objetos;
         int distanciaMaximaCohesionBandada; //Distancia maxima de las bandadas con su centro con flocking
+        int paredRota;
 
         bool pedirAyuda;
         bool respawnBoss;

@@ -147,6 +147,7 @@ void MuerteBoss::UpdateMuerteBoss(short *i, int* _jug, bool ayuda)
                         /* Llamar animacion pedir ayuda */
                         break;
                 }
+                break;
             case EN_ATACAR: //El boss ataca
                 {
                     if(!atacado)

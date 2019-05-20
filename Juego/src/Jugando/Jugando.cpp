@@ -713,16 +713,25 @@ void Jugando::Update()
         for(short i=0;(unsigned)i<_enemigos.size();i++)
         {
             cercaJugador = false;
+            INnpc::VectorEspacial posicionMediaNula;
+            posicionMediaNula.vX = INT_MAX;
+            posicionMediaNula.vY = INT_MAX;
+            posicionMediaNula.vZ = INT_MAX;
             if(_enemigos[i] != nullptr && _enemigos[i]->getVida() > 0)
             {
                 // Se coloca la posicionMedia de las bandadas
-                if(_enemigos[i]->GetModo() == constantes.UNO)
+                if(_enemigos[i]->GetModo() == Enemigo::modosEnemigo::MODO_ATAQUE)
                 {
-                    if(posicionMediaEnemigos.vX != INT_MAX)
+                    if(_enemigos[i]->GetSala() == _jugador->GetSala())
                     {
-                        _enemigos[i]->SetPosicionComunBandada(posicionMediaEnemigos);
+                    _enemigos[i]->SetPosicionComunBandada(posicionMediaEnemigos);
+                    }
+                    else
+                    {
+                        _enemigos[i]->SetPosicionComunBandada(posicionMediaNula);
                     }
                 }
+                
 
                 // Comprobamos si alguno pide ayuda para el pathfinding
                 if (_enemigos[i]->GetPedirAyuda())
@@ -736,12 +745,23 @@ void Jugando::Update()
                         updateRecorridoPathfinding(_enemigos[i]);
                 }
                 // TO DO: optimizar beha
-                if(_enemigos[i]->GetSala() == _jugador->GetSala())
+                if(_enemigos[i]->GetSala() == _jugador->GetSala() || _enemigos[i]->GetTipoEnemigo() >= constantes.BOSS || _enemigos[i]->GetTipoEnemigo() >= constantes.GUARDIAN_A  || _enemigos[i]->GetTipoEnemigo() >= constantes.GUARDIAN_B)
                 {
+                    if(_enemigos[i]->GetTipoEnemigo() >= constantes.BOSS && _enemigos[i]->GetRespawnBoss())
+                    {
+                        this->RespawnEnemigosBoss();
+                    }
                     if (_enemPideAyuda) {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                     } else {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                    }
+                    short paredCol = _enemigos[i]->GetParedRota();
+                    if(paredCol >= 0)
+                    {
+                        _paredes[paredCol]->Borrar(paredCol);
+                        _paredes.erase(_paredes.begin() + paredCol);
+                        _enemigos[i]->SetParedRota(constantes.MENOS_UNO);
                     }
 
                     if(estarAtacado >= 2)
@@ -827,6 +847,66 @@ void Jugando::Update()
                     }
                     _enemigos[i]->setTimeMoverse(tiempoMoverse);
                 }
+                //Este bloque se da si el Boss esta en el proceso de atacar
+                if(_enemigos[i]->getTimeAt() > constantes.CERO)
+                {
+                    if(_enemigos[i]->GetEnemigo() == constantes.TRAVORNIO && _enemigos[i]->getTimeAt() == constantes.TIEMPO_EMBESTIR)
+                    {
+                        //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                        _enemigos[i]->setLastTimeAt(_controladorTiempo->GetTiempo(2));
+                    }
+                    float tiempoActual = 0.0f, tiempoAtacar = 0.0f, tiempoAntiguo = _enemigos[i]->getLastTimeAt();
+                    tiempoActual = _controladorTiempo->GetTiempo(2);
+                    tiempoAtacar = _enemigos[i]->getTimeAt();
+                    tiempoAtacar -= (tiempoActual - tiempoAntiguo);
+                    if(tiempoActual > tiempoAntiguo)
+                    {
+                        //Si no es la primera vez que entra al bucle de atacar, tiempoActual debe ser mayor que lastTimeMoverse
+                        //por lo que guardamos en lastTimeAt a tiempoActual
+                        _enemigos[i]->setLastTimeAt(tiempoActual);
+                    }
+                    _enemigos[i]->setTimeAt(tiempoAtacar);
+                }
+                //Este bloque se da si el Boss esta en el proceso de ataque especial
+                if(_enemigos[i]->getTimeAtEsp() > constantes.CERO)
+                {
+                    if(_enemigos[i]->GetEnemigo() == constantes.TRAVORNIO && _enemigos[i]->getTimeAtEsp() == constantes.TIEMPO_ATESP_TRAVORNIO)
+                    {
+                        //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                        _enemigos[i]->setLastTimeAtEsp(_controladorTiempo->GetTiempo(2));
+                    }
+                    float tiempoActual = 0.0f, tiempoAtaqueEspecial = 0.0f, tiempoAntiguo = _enemigos[i]->getLastTimeAtEsp();
+                    tiempoActual = _controladorTiempo->GetTiempo(2);
+                    tiempoAtaqueEspecial = _enemigos[i]->getTimeAtEsp();
+                    tiempoAtaqueEspecial -= (tiempoActual - tiempoAntiguo);
+                    if(tiempoActual > tiempoAntiguo)
+                    {
+                        //Si no es la primera vez que entra al bucle de atacar, tiempoActual debe ser mayor que lastTimeMoverse
+                        //por lo que guardamos en lastTimeAtEsp a tiempoActual
+                        _enemigos[i]->setLastTimeAtEsp(tiempoActual);
+                    }
+                    _enemigos[i]->setTimeAtEsp(tiempoAtaqueEspecial);
+                }
+                //Este bloque se da si el Boss esta en el proceso de defenderse
+                if(_enemigos[i]->getTimeDefenderse() > constantes.CERO)
+                {
+                    if(_enemigos[i]->getTimeDefenderse() == constantes.TIEMPO_DEFENSA)
+                    {
+                        //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+                        _enemigos[i]->setLastTimeDefenderse(_controladorTiempo->GetTiempo(2));
+                    }
+                    float tiempoActual = 0.0f, tiempoDefenderse = 0.0f, tiempoAntiguo = _enemigos[i]->getLastTimeDefenderse();
+                    tiempoActual = _controladorTiempo->GetTiempo(2);
+                    tiempoDefenderse = _enemigos[i]->getTimeDefenderse();
+                    tiempoDefenderse -= (tiempoActual - tiempoAntiguo);
+                    if(tiempoActual > tiempoAntiguo)
+                    {
+                        //Si no es la primera vez que entra al bucle de atacar, tiempoActual debe ser mayor que lastTimeDefenderse
+                        //por lo que guardamos en lastTimeDefenderse a tiempoActual
+                        _enemigos[i]->setLastTimeDefenderse(tiempoActual);
+                    }
+                    _enemigos[i]->setTimeDefenderse(tiempoDefenderse);
+                }
                 //Este bloque se da si el enemigo (de momento guardian) esta en modo ocultacion
                 if(_enemigos[i]->getTimeOcultarse() > 0.0f)
                 {
@@ -911,11 +991,14 @@ void Jugando::Update()
                 //Se tiene en cuenta al enemigo si esta en modo ataque para situar al nuevo centro del flocking
                 if(_enemigos[i]->GetModo() == Enemigo::modosEnemigo::MODO_ATAQUE)
                 {
-                    contadorEnemigos++;
-                    posicionTemporal.vX += _enemigos[i]->getX();
-                    posicionTemporal.vY += _enemigos[i]->getY();
-                    posicionTemporal.vZ += _enemigos[i]->getZ();
-
+                    //Solo tiene en cuenta el flocking para los enemigos que estan en la sala del jugador
+                    if(_enemigos[i]->GetSala() == _jugador->GetSala())
+                    {
+                        contadorEnemigos++;
+                        posicionTemporal.vX += _enemigos[i]->getX();
+                        posicionTemporal.vY += _enemigos[i]->getY();
+                        posicionTemporal.vZ += _enemigos[i]->getZ();
+                    }
                     //Ya que comprobamos el modo ataque, comprobamos aqui si esta en una sala distinta a la del jugador
                     if(_enemigos[i]->GetSala() != _jugador->GetSala())
                     {
@@ -1131,13 +1214,13 @@ void Jugando::UpdateIA()
                     else if (tipoEnemigo == constantes.ARANA)
                     {
                         CofreArana* _cofA = (CofreArana*)_enemigos[i];
-
+                        cofrePosicion = i;
                         delete _cofres.at(_cofA->GetPosMotorCofre());
                         _cofres.at(_cofA->GetPosMotorCofre())=nullptr;
 
                         AbrirCofre(x,y,z,true);
                     }
-                    else if (tipoEnemigo == constantes.BOSS)
+                    else if (tipoEnemigo >= constantes.BOSS)
                     {
                        
                         Juego::GetInstance()->estado.CambioEstadoGanar();
@@ -1175,10 +1258,6 @@ void Jugando::UpdateIA()
                         if(_enemigos[i]->GetSala() == _jugador->GetSala())
                         {
                             _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
-                            if(_enemigos[i]->GetTipoEnemigo() == constantes.BOSS && _enemigos[i]->GetRespawnBoss())
-                            {
-                                this->RespawnEnemigosBoss();
-                            }
                         }
                         else
                         {
@@ -1194,7 +1273,7 @@ void Jugando::UpdateIA()
                 // Si hay una arana activada y tiene que esconderse
                 if (esconderArana)
                 {
-                    if (_enemigos.at(i)->GetTipoEnemigo() == constantes.ARANA)
+                    if ((unsigned) i < _enemigos.size() && _enemigos.at(i)->GetTipoEnemigo() == constantes.ARANA)
                     {
                         CofreArana* _eneA = (CofreArana*)_enemigos.at(i);
 
@@ -1480,8 +1559,13 @@ void Jugando::Reanudar()
         {
             _motora->getEvent("VictoriaPuzzle")->start(); 
             _cofreP->DesactivarCofre();
+            /*if(cofrePosicion != -1)
+            {
+                _motor->cambiarAnimacion(6,cofrePosicion,1);
+            }*/
             AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),true);
             _cofreP = nullptr;
+            cofrePosicion = -1;
         }
         else
         {
@@ -2200,16 +2284,21 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
     if (tipoObj == constantes.COFRE_OBJ) // TO DO: repasar todo lo de los cofres al terminar la IA
     {
         _cofreP = _cofres.at(pos);
+        cofrePosicion = pos;
 
         if (_cofreP->GetEsArana())
         {
             AbrirPantallaPuzzle();
+            //cofrePosicion = -1;
         }
         else
         {
             _cofreP->DesactivarCofre();
+
+            //_motor->cambiarAnimacion(6,pos,1);
             AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),false);
             _cofreP = nullptr;
+            cofrePosicion = -1;
         }
     }
     else if (tipoObj == constantes.PALANCA)
@@ -2580,10 +2669,12 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
         minArpa = 22;
         minGuitar = 31;
         minFlauta = 25;
+        _motor->cambiarAnimacion(6,cofrePosicion,1);//abrirse cofre
     }
     else
     {
         objeto = NumeroAleatorio(constantes.ARPA,constantes.ORO);
+        _motor->cambiarAnimacion(6,cofrePosicion,1);//abrirse cofre 
     }
 
     switch (objeto)
@@ -2627,9 +2718,8 @@ void Jugando::CrearEnemigoArana()
     float y = _cofreP->getY();
     float z = _cofreP->getZ();
 
-    
-
-    _motor->CargarEnemigos(x,y,z,_eneA->GetModelo(),_eneA->GetTextura(), false ,_eneA->GetAnimacion(), _eneA->GetFps());//creamos la figura
+    int id = _motor->CargarEnemigos(x,y,z,_eneA->GetModelo(),_eneA->GetTextura(), false ,_eneA->GetAnimacion(), _eneA->GetFps());//creamos la figura
+    _motor->cambiarAnimacion(5,id,2);
     _fisicas->crearCuerpo(1,x/2,y/2,z/2,2,_eneA->GetAncho(),
         _eneA->GetAlto(),_eneA->GetLargo(),2,0,0,false);
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,false); //Para ataques
