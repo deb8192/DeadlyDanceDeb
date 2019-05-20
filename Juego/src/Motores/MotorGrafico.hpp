@@ -253,8 +253,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void dispararProyectil(float x, float y, float z, float rx, float ry, float rz, float es);
             void cambiarTextura(unsigned int objeto, const char *ruta_textura);
             void animacionTextura(unsigned int objeto, float velocidad, std::string ruta_textura1, std::string ruta_textura2 = nullptr, std::string ruta_textura3 = nullptr);
-            void crearBillBoardPuertas();
+            void crearBillBoardFijos();
             void mostrarBoardPuerta(short tipo);
+            void mostrarBoardGuardian(float x,float y,float z);
+            void borrarBoardGuardian();
             void desactivarBoardPuertas();
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz, float newy, float newz);
             void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
@@ -448,6 +450,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short _armaEnEscena;
                 unsigned short _armaProyectil; //id del proyectil
                 unsigned short _armaEsp;//id del arma especial cargado en memoria
+                unsigned short _boardguardianllave; //id del board de la llave del guardian
                 bool pathfinding;//sirve para sacar mensaje por pantalla de si esta activado o no
                 bool existearmaexp;
                 float center_x, center_y, center_z;

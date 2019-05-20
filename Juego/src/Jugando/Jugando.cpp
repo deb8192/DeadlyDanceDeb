@@ -189,9 +189,9 @@ void Jugando::Iniciar()
         _motora->getEvent("MuerteBienvenida2")->start();
         _motora->getEvent("pasospiedra")->start();
         _motora->getEvent("pasospiedra")->pause();
-        
-    }   
-        
+
+    }
+
 
       startPlayTime = _controladorTiempo->GetTiempo(1);
 }
@@ -333,7 +333,7 @@ void Jugando::ManejarEventos() {
         desactivarColisionesJugador = !desactivarColisionesJugador;
         _motor->ResetKey(KEY_U);
         poderEmpezar = true;
-       if(nivelJ==8){_motora->getEvent("MuerteBienvenida1")->stop();} 
+       if(nivelJ==8){_motora->getEvent("MuerteBienvenida1")->stop();}
     }
 
     // Multicamara
@@ -448,7 +448,7 @@ void Jugando::Update()
 {
     //esto es para que espere 5 segundos antes de reanudar/cortar sonidos al cambiar de sala
    if(oirMuerteOmni!= 0.0f && _controladorTiempo->CalcularTiempoPasado(oirMuerteOmni)/1000 > 5.0f)
-   {       
+   {
         meAtacan = false;
         estarAtacado = 0;
         estarDebil = false;
@@ -463,7 +463,7 @@ void Jugando::Update()
     else
     {
         _motora->getEvent("AmbienteViento")->pause();
-    }        
+    }
 
    if(_controladorTiempo->CalcularTiempoPasado(startPlayTime)/1000 > 20.0f && nivelJ == 8)
    {
@@ -496,7 +496,7 @@ void Jugando::Update()
         DesactivarDebug();
         _motor->cambiarAnimacionJugador(5);//la muerte del jugador tiene este id
 
-        
+
         Juego::GetInstance()->estado.CambioEstadoMuerte();
 
     }
@@ -548,7 +548,7 @@ void Jugando::Update()
         _motor->EstaPulsado(KEY_W)
         );
     }
-    
+
 
 
     _fisicas->updateJugador(_jugador->getX(),
@@ -731,7 +731,7 @@ void Jugando::Update()
                         _enemigos[i]->SetPosicionComunBandada(posicionMediaNula);
                     }
                 }
-                
+
 
                 // Comprobamos si alguno pide ayuda para el pathfinding
                 if (_enemigos[i]->GetPedirAyuda())
@@ -1086,8 +1086,8 @@ void Jugando::UpdateIA()
        (nivelJ == 7 && _jugador->GetSala()->getPosicionEnGrafica() == 21))
     {
         if(!salaPenultima)
-        {     
-            //frases muerte omnipresente antes de la batalla final      
+        {
+            //frases muerte omnipresente antes de la batalla final
             _motora->getEvent("MuertePenultima")->start();
             //para que no se escuchen el resto de frases
         }
@@ -1137,56 +1137,56 @@ void Jugando::UpdateIA()
         || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
         {
             _jugador->generarSonido(constantes.NUEVE * constantes.SEIS, constantes.CINCO, constantes.UNO);
-            
+
             if(nivelJ == 8)
             {
                 if(_jugador->GetSala()->getPosicionEnGrafica() ==0)
-                {  
-                    _motora->getEvent("pasospiedra")->resume(); 
+                {
+                    _motora->getEvent("pasospiedra")->resume();
                 }
                 if(_jugador->GetSala()->getPosicionEnGrafica() ==1)
-                { 
-                    _motora->getEvent("pasospiedra")->resume(); 
-                }   
+                {
+                    _motora->getEvent("pasospiedra")->resume();
+                }
                 if(_jugador->GetSala()->getPosicionEnGrafica() ==14)
-                {               
-                    _motora->getEvent("pasospiedra")->resume(); 
+                {
+                    _motora->getEvent("pasospiedra")->resume();
                 }
                 else if(_jugador->GetSala()->getPosicionEnGrafica() == 3)
-                {               
-                    _motora->getEvent("pasoscharcos")->resume(); 
+                {
+                    _motora->getEvent("pasoscharcos")->resume();
                 }
                 else if(_jugador->GetSala()->getPosicionEnGrafica() == 9)
-                {               
-                    _motora->getEvent("pasosmadera")->resume(); 
+                {
+                    _motora->getEvent("pasosmadera")->resume();
                 }
                 else
-                {             
-                    _motora->getEvent("pasostierra")->resume(); 
+                {
+                    _motora->getEvent("pasostierra")->resume();
                 }
-               
+
             }
             else if(nivelJ == 7)
-            {             
-                _motora->getEvent("pasospiedra")->resume(); 
+            {
+                _motora->getEvent("pasospiedra")->resume();
             }
-           
+
         }
         else
         {
             if(nivelJ == 8)
-            {                             
-                _motora->getEvent("pasospiedra")->pause(); 
+            {
+                _motora->getEvent("pasospiedra")->pause();
                 _motora->getEvent("pasoscharcos")->pause();
                 _motora->getEvent("pasosmadera")->pause();
-                _motora->getEvent("pasostierra")->pause(); 
-                
+                _motora->getEvent("pasostierra")->pause();
+
             }
             else if(nivelJ == 7)
-            {             
-                _motora->getEvent("pasospiedra")->pause(); 
+            {
+                _motora->getEvent("pasospiedra")->pause();
             }
-            
+
         }
     }
 
@@ -1210,6 +1210,7 @@ void Jugando::UpdateIA()
                         tipoEnemigo == constantes.GUARDIAN_B)
                     {
                         CrearObjeto(x,y,z,2,2,2,constantes.LLAVE_BOSS,0);
+                        _motor->borrarBoardGuardian();
                     }
                     else if (tipoEnemigo == constantes.ARANA)
                     {
@@ -1222,7 +1223,7 @@ void Jugando::UpdateIA()
                     }
                     else if (tipoEnemigo >= constantes.BOSS)
                     {
-                       
+
                         Juego::GetInstance()->estado.CambioEstadoGanar();
                     }
                     else
@@ -1496,6 +1497,10 @@ void Jugando::Render()
     {
         if(_enemigos[i])
         {
+            if(_enemigos.at(i)->GetTipoEnemigo() == constantes.GUARDIAN_A || _enemigos.at(i)->GetTipoEnemigo() == constantes.GUARDIAN_B)
+            {
+                _motor->mostrarBoardGuardian(_enemigos.at(i)->getX()+1.5f,_enemigos.at(i)->getY()+13.0f,_enemigos.at(i)->getZ());
+            }
             _enemigos.at(i)->Render(i, updateTime, resta);
         }
     }
@@ -1588,7 +1593,7 @@ void Jugando::Reanudar()
     {
         if (ganarPuzzle)
         {
-            _motora->getEvent("VictoriaPuzzle")->start(); 
+            _motora->getEvent("VictoriaPuzzle")->start();
             _cofreP->DesactivarCofre();
             /*if(cofrePosicion != -1)
             {
@@ -1675,7 +1680,7 @@ bool Jugando::CargarNivel(int nivel, int tipoJug)
     else if(nivelJ == 8)
     {
         _motora->getEvent("Nivel21")->start(); //Reproducir musica juego
-        
+
         _motora->LoadEvent("event:/Ambientes/Ambiente-Gota de agua","AmbienteGota",0);
         _motora->getEvent("AmbienteGota")->setPosition(335.0,0.0,69.0);
         _motora->getEvent("AmbienteGota")->start();
@@ -2075,14 +2080,14 @@ void Jugando::CambiarSalaJugador(unsigned short i)
             {
                 _jugador->SetSala(_jugador->GetSala()->getSalidas()[j]);
                 cambioRealizado = true;
-                //tiempo de espera para que no se corten frases de la muerte al cambiar sala            
+                //tiempo de espera para que no se corten frases de la muerte al cambiar sala
                 oirMuerteOmni = _controladorTiempo->GetTiempo(1);
                 //para poder cambiar de sonido de pasos segun que sala estamos hay que pausarlos
-                _motora->getEvent("pasospiedra")->pause(); 
+                _motora->getEvent("pasospiedra")->pause();
                 _motora->getEvent("pasoscharcos")->pause();
                 _motora->getEvent("pasosmadera")->pause();
-                _motora->getEvent("pasostierra")->pause(); 
-                
+                _motora->getEvent("pasostierra")->pause();
+
             }
             else if(!cambioRealizado)
             {
@@ -2105,13 +2110,13 @@ void Jugando::CambiarSalaJugador(unsigned short i)
             {
                 _jugador->SetSala(_jugador->GetSala()->getEntradas()[j]);
                 cambioRealizado = true;
-               //tiempo de espera para que no se corten frases de la muerte al cambiar sala  
+               //tiempo de espera para que no se corten frases de la muerte al cambiar sala
                 oirMuerteOmni = _controladorTiempo->GetTiempo(1);
                 //para poder cambiar de sonido de pasos segun que sala estamos hay que pausarlos
-                _motora->getEvent("pasospiedra")->pause(); 
+                _motora->getEvent("pasospiedra")->pause();
                 _motora->getEvent("pasoscharcos")->pause();
                 _motora->getEvent("pasosmadera")->pause();
-                _motora->getEvent("pasostierra")->pause(); 
+                _motora->getEvent("pasostierra")->pause();
             }
             else if(!cambioRealizado)
             {
@@ -2435,7 +2440,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                             _motora->getEvent("Nivel21")->stop();
                             _motora->getEvent("Nivel22")->start(); //Reproducir musica juego
                         }
-                        
+
                         enSalaBoss = true;
                         this->CargarBossEnMemoria();
                     }
@@ -2680,7 +2685,7 @@ Jugador* Jugando::GetJugador()
 
 void Jugando::AbrirPantallaPuzzle()
 {
-    _motora->getEvent("AparecePuzzle")->start();     
+    _motora->getEvent("AparecePuzzle")->start();
     ganarPuzzle = false;
     Juego::GetInstance()->estado.CambioEstadoPuzle((int*)cargPuzzles.GetPuzzle(2));
 }
@@ -2705,7 +2710,7 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     else
     {
         objeto = NumeroAleatorio(constantes.ARPA,constantes.ORO);
-        _motor->cambiarAnimacion(6,cofrePosicion,1);//abrirse cofre 
+        _motor->cambiarAnimacion(6,cofrePosicion,1);//abrirse cofre
     }
 
     switch (objeto)
@@ -2730,7 +2735,7 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
 
 void Jugando::CrearEnemigoArana()
 {
-    _motora->getEvent("DerrotaPuzzle")->start(); 
+    _motora->getEvent("DerrotaPuzzle")->start();
 
     // Crear Arana
     CofreArana* _eneA = (CofreArana*)_eneCofres.at(
@@ -2762,9 +2767,9 @@ void Jugando::CrearEnemigoArana()
     /*if (!_eneA->GetPrimeraVezActivada())
     {*/
         _eneA->SetPrimeraVezActivada(true);
-        
+
     //}
-    
+
     _enemigos.push_back(_eneA);
     _eneA = nullptr;
 
@@ -2801,9 +2806,9 @@ void Jugando::CargarBossEnMemoria()
     std::string nameid = std::to_string(_boss->getID()); //pasar id a string
     _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid, 1);
     _motora->getEvent(nameid)->setPosition(x,y,z);
-    _motora->getEvent(nameid)->start();  
-   
-    
+    _motora->getEvent(nameid)->start();
+
+
     _enemigos.insert(_enemigos.begin(), _boss);
 }
 

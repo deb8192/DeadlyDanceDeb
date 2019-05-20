@@ -2075,7 +2075,7 @@ void MotorGrafico::cambiarTextura(unsigned int objeto, const char *ruta_textura)
     _interfaz->SetTexture(objeto,ruta_textura);
 }
 
-void MotorGrafico::crearBillBoardPuertas()
+void MotorGrafico::crearBillBoardFijos()
 {
     unsigned short _newboard = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/LlaveBoca.png", 0.01f);
     _interfaz->Trasladar(_newboard,-4.0f,0.0f,0.0f);
@@ -2094,6 +2094,11 @@ void MotorGrafico::crearBillBoardPuertas()
     _interfaz->Escalar(_newboard3,2.25f,2.25f,2.25f);
     _interfaz->DeshabilitarObjeto(_newboard3);
     BoardsPuertas.push_back(_newboard3);
+
+    unsigned short _boardguard = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/LlaveBossBoca2.png", 0.01f);
+    _interfaz->Trasladar(_boardguard,0.0f,0.0f,0.0f);
+    _interfaz->Escalar(_boardguard,1.5f,1.7f,1.5f);
+    _boardguardianllave = _boardguard;
 }
 
 void MotorGrafico::mostrarBoardPuerta(short tipo)
@@ -2113,6 +2118,18 @@ void MotorGrafico::mostrarBoardPuerta(short tipo)
         _interfaz->Trasladar(BoardsPuertas[2],center_x+2.0f,center_y+13.0f,center_z);
         _interfaz->HabilitarObjeto(BoardsPuertas[2]);
     }
+}
+
+void MotorGrafico::mostrarBoardGuardian(float x,float y,float z)
+{
+    if(_boardguardianllave != 0)
+        _interfaz->Trasladar(_boardguardianllave,x,y,z);
+}
+
+void MotorGrafico::borrarBoardGuardian()
+{
+    _interfaz->RemoveObject(_boardguardianllave);
+    _boardguardianllave = 0;
 }
 
 void MotorGrafico::desactivarBoardPuertas()

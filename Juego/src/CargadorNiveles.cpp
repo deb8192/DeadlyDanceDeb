@@ -240,7 +240,7 @@ void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
     }
 
     //Crear billboards puertas
-    _motor->crearBillBoardPuertas();
+    _motor->crearBillBoardFijos();
 }
 
 void CargadorNiveles::GuardarNivelXml(int level)
