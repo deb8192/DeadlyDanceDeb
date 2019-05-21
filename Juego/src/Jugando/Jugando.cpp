@@ -444,8 +444,6 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
-    cout << "UPD: 1"<<endl;
-
     //esto es para que espere 5 segundos antes de reanudar/cortar sonidos al cambiar de sala
    if(oirMuerteOmni!= 0.0f && _controladorTiempo->CalcularTiempoPasado(oirMuerteOmni)/1000 > 5.0f)
    {
@@ -456,8 +454,6 @@ void Jugando::Update()
         oirMuerteOmni = 0.0f;
    }
 
-   cout << "UPD: 2"<<endl;
-
     if(_jugador->GetSala()->getPosicionEnGrafica() == 0 || _jugador->GetSala()->getPosicionEnGrafica() == 1)
     {
         _motora->getEvent("AmbienteViento")->resume();
@@ -466,8 +462,6 @@ void Jugando::Update()
     {
         _motora->getEvent("AmbienteViento")->pause();
     }
-
-    cout << "UPD: 3"<<endl;
 
    if(_controladorTiempo->CalcularTiempoPasado(startPlayTime)/1000 > 20.0f && nivelJ == 8)
    {
@@ -479,8 +473,6 @@ void Jugando::Update()
        //para que pueda moverse en el nivel antiguo
         poderEmpezar = true;
    }
-
-   cout << "UPD: 4"<<endl;
 
     bool colisionaWaypoint = false, waypointComun = false, cercaJugador = false;
     _motor->clearDebug();
@@ -494,8 +486,6 @@ void Jugando::Update()
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
 
-    cout << "UPD: 5"<<endl;
-
     if (_jugador != nullptr && _jugador->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
 
@@ -508,7 +498,6 @@ void Jugando::Update()
         Juego::GetInstance()->estado.CambioEstadoMuerte();
 
     }
-    cout << "UPD: 6"<<endl;
 
     // **********  Se actualiza el respawn si procede  **********
     if(respawnTime - lastRespawnTime >= constantes.TIEMPO_RESPAWN && !enSalaBoss)
@@ -521,18 +510,12 @@ void Jugando::Update()
         //if()
     }
 
-    cout << "UPD: 7"<<endl;
-
     // ********** se actualiza posiciones e interpolado **********
     //animacion
     _motor->cambiarAnimacionJugador(_jugador->getAnimacion());
 
-    cout << "UPD: 8"<<endl;
-
     //Comprueba la activacion de un powerup
     this->activarPowerUp();
-
-    cout << "UPD: 9"<<endl;
 
     // Adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
     _fisicas->colisionChecker(_motor->EstaPulsado(KEY_A),
@@ -544,12 +527,8 @@ void Jugando::Update()
         _jugador->getNewZ()
     );
 
-    cout << "UPD: 10"<<endl;
-
     //colisiones con todos los objetos y enemigos que no se traspasan
     jugadorInmovil = _jugador->ColisionEntornoEne();
-
-    cout << "UPD: 11"<<endl;
 
     //ESTO ES DE DEBUG PARA ATRAVESAR PAREDES
     if(desactivarColisionesJugador)
@@ -567,8 +546,6 @@ void Jugando::Update()
         _motor->EstaPulsado(KEY_W)
         );
     }
-
-    cout << "UPD: 12"<<endl;
 
     _fisicas->updateJugador(_jugador->getX(),
         _jugador->getY(),
@@ -594,6 +571,8 @@ void Jugando::Update()
             }
         }
     }
+    cout << "UPD: 1"<<endl;
+
     //Ha colisionado con un waypoint
     if(colisionaWaypoint)
     {
@@ -2929,20 +2908,8 @@ void Jugando::LimpiarJuego()
     _powerup.clear();
 
     cout << "Borro powerup" <<endl;
-    cout << "WAI" << _waypoints.capacity() <<endl;
-    cout << "WAI-cargador" << cargador.GetWaypointsCapacity() <<endl;
-    cout << "WAI-size" << _waypoints.size() <<endl;
-    cout << "WAI-cargador-size" << cargador.GetWaypoints().size() <<endl;
-
-    tam = _waypoints.size();
-    for(int i=0; i < tam; i++)
-    {
-        if (_waypoints.at(i) != nullptr)
-            delete _waypoints.at(i);
-    }
-    _waypoints.clear();
-
-    cout << "Borro _waypoints" <<endl;
+    //_waypoints.size()
+    // Waypoints se borran con la sala
 
     tam = _palancas.size();
     for(int i=0; i < tam; i++)
