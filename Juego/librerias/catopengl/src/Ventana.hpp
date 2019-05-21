@@ -11,7 +11,7 @@ class Ventana
     public:
 
         Ventana();//sirve para inicializar la ventana
-        bool CrearVentana(int ,int ,bool ,const char * );//creamos la ventana
+        bool CrearVentana(int ,int ,bool ,const char *,bool screenFull = false);//creamos la ventana
         void UpdateLimpiar();//actualiza las teclas y limpia la pantalla
         void UpdateDraw();//renderizada la informacion y cambia los buffers
         bool SigueAbierta();//nos sirve para saber si la ventana sigue en ejecucion
@@ -45,6 +45,8 @@ class Ventana
         int * GetSizeScreen();//Te devuelve las medidas de la pantalla [0] width [1] height
         int GetRelationAspectScreen();//Te devuelve 1 -> 16:9, 0 -> 4:3
         int GetFrameRate();//te devuelve el numero de fps a la que funciona el monitor
+        void AllScreen();//pone el motor como pantalla completa
+        void NoAllScreen();//desactiva modo completo
 
     private:
 
@@ -85,6 +87,8 @@ class Ventana
         int * screenWorkHeight; //son las dimensiones sin la barra del sistema
         int * posx;//donde empieza estas(screenWorkWidth,screenWorkHeight) dimensiones
         int * posy;//donde empieza estas(screenWorkWidth,screenWorkHeight) dimensiones
+        //pantalla completa
+        bool AllScreenB;
 
 };
 #endif

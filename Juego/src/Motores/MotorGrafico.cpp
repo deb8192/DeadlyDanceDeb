@@ -520,31 +520,16 @@ bool MotorGrafico::CrearVentana(short tipo)
                 CrearCamara();
             }
 
-            std::string titulo = "";
-            switch(tipo)
-            {
-                case 1:
-                    width=640; height=480;
-                    titulo = "DeadlyDance LowResolution";
-                    break;
+            configuracion.CargarConfiguracion("config.global");
 
-                case 2:
-                    width=800; height=600;
-                    titulo = "DeadlyDance MediumResolution";
-                    break;
+            GestorInterfaces * _gestori = GestorInterfaces::GetInstance();
 
-                case 3:
-                    width=1280; height=1024;
-                    titulo = "DeadlyDance HightResolution";
-                    break;
+            _gestori->UpdateDimensionesVentana(configuracion.GetWidth(),configuracion.GetHeight());
 
-                default:
-                    width=1024; height=768;
-                    titulo = "DeadlyDance NormalResolution";
-                    break;
-            }
+            _gestori->ActualizarParametros();
 
-            _interfaz->DefinirVentana(width,height,titulo.c_str());
+            std::string titulo = "DeadlyDance Game";
+            _interfaz->DefinirVentana(configuracion.GetWidth(),configuracion.GetHeight(),titulo.c_str(),configuracion.GetAllScreen());
 
             return true;
     #else
@@ -729,7 +714,7 @@ void MotorGrafico::RenderEscena()
 
             //if(debugGrafico)
             //{
-                _interfaz->DefinirVentana(800,600,std::to_string(fps).c_str());
+                //_interfaz->DefinirVentana(800,600,std::to_string(fps).c_str());
             //}
 
         }

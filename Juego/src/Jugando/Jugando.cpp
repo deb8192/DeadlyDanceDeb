@@ -152,7 +152,7 @@ void Jugando::Iniciar()
     #else
         CargarNivel(6, constantes.HEAVY);
     #endif
-    
+
     _auxiliadores.reserve(_enemigos.size());
     recorrido.reserve(_enemigos.size());
 
@@ -180,21 +180,19 @@ void Jugando::Iniciar()
         _motora->getEvent("pasospiedra")->pause();
 
     }
-
-
       startPlayTime = _controladorTiempo->GetTiempo(1);
 }
 
 void Jugando::ValoresPorDefecto()
 {
     //id = 0;
-
     reiniciando = false;
     puzzleResuelto = false;
     estarDebil = false;
     salaPenultima = false;
     meAtacan = false;
     poderEmpezar = false;
+    bocadillo = false;
     respawnMO = false;
     oirMuerteOmni = 0.0f;
     startPlayTime = 0.0f;
@@ -1497,22 +1495,42 @@ void Jugando::Render()
                 {
                     if(_puertas[i]->getCodigo() == 20) //puerta del boss
                     {
+                        if(!bocadillo)
+                        {
+                            _motora->getEvent("Dialogo1")->start();
+                            bocadillo = true;
+                        }
                         _motor->mostrarBoardPuerta(2);
                     }
                     else if(_puertas[i]->getCodigo() > 0 && _puertas[i]->getCodigo() < 10 )//puerta de llave
                     {
+                        if(!bocadillo)
+                        {
+                            _motora->getEvent("Dialogo1")->start();
+                            bocadillo = true;
+                        }
                         _motor->mostrarBoardPuerta(0);
                     }
                     else if(_puertas[i]->getCodigo() >= 10 && _puertas[i]->getCodigo() < 20 )//puerta de palanca
                     {
+                        if(!bocadillo)
+                        {
+                            _motora->getEvent("Dialogo1")->start();
+                            bocadillo = true;
+                        }
                         _motor->mostrarBoardPuerta(1);
                     }
+                    
                     algunboardActivo = true;
                 }
             }
         }
     }
-    if(!algunboardActivo)_motor->desactivarBoardPuertas();
+    if(!algunboardActivo)
+    {
+        _motor->desactivarBoardPuertas();
+        bocadillo = false;
+    }
 
     //Dibujado de los enemigos
     for(unsigned short i = 0; i < _enemigos.size(); i++)
@@ -1612,6 +1630,7 @@ void Jugando::Reanudar()
         if (ganarPuzzle)
         {
             _motora->getEvent("VictoriaPuzzle")->start();
+            
             _cofreP->DesactivarCofre();
             /*if(cofrePosicion != -1)
             {
@@ -2368,6 +2387,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
         }
         if (coincide)
         {
+            _motora->getEvent("PalancaUse")->start();
             //Se acciona o desacciona el mecanismo segun su estado actual
             bool activar = _palanca->accionar();
             Puerta* _puerta = _puertas.at(i);
@@ -2705,6 +2725,8 @@ void Jugando::AbrirPantallaPuzzle()
 
 void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
 {
+
+    _motora->getEvent("AbrirCerradura")->start();
     unsigned short objeto = 0;
     unsigned short minArpa = 15;
     unsigned short minGuitar = 22;
@@ -2759,7 +2781,6 @@ void Jugando::CrearEnemigoArana()
     _eneA->SetIdCofre(_cofreP->getID());
     _eneA->SetPosObsCofre(_cofreP->GetPosObs());
     _eneA->SetPosArana(_cofreP->GetPosArrayArana());
-    _eneA->SetAranaSound();
     _eneA->SetPosMotorCofre(_cofreP->GetPosicionArrayObjetos());
     _eneA->SetActivada(true);
 
@@ -2788,6 +2809,9 @@ void Jugando::CrearEnemigoArana()
 
     _cofreP->BorrarCofre();
     _cofreP = nullptr;
+
+
+    _eneA->SetAranaSound();
 }
 
 void Jugando::CargarBossEnMemoria()

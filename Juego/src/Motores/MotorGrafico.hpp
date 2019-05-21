@@ -8,6 +8,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
     #include <Interfaz.hpp>
     #include "../Eventos.hpp"
     #include "../Times.hpp"
+    #include "../GestorInterfaces.hpp"
+    #include "../Jugando/Configuration.hpp"
 #else
     //motorirrlicht
     #include <irrlicht.h> //la utilizaremos para las funcionalidades del motor
@@ -482,6 +484,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short _txtP;
                 vector<unsigned short> _imagenesP;
                 vector<unsigned short> _textosP;
+
+                //configuracion del juego 
+                Configuration configuracion;
 
             #else
                 //variables y parametros motor irrlicht

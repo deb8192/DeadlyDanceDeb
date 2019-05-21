@@ -732,7 +732,7 @@ void Interfaz::ventanaInicializar()
         window = new Ventana();
     }
     //se inicializa por defecto a estos valores la ventana, se puede cambiar los valores por defecto llamando a las funciones de ventana
-    window->CrearVentana(600,800,true," Sin titulo ");
+    window->CrearVentana(576,1024,true," Sin titulo ");
 
     shaders[0] = new Shader("assets/shaders/shaderlucesvs.glsl","assets/shaders/shaderlucesfs.glsl");
     shaders[1] = new Shader("assets/shaders/shaderguivs.glsl","assets/shaders/shaderguifs.glsl");
@@ -746,7 +746,7 @@ void Interfaz::ventanaInicializar()
 
 void Interfaz::ventanaLimpiar()
 {
-    if(window != nullptr && VentanaEstaAbierta())
+    if(window != nullptr)
     {
         window->Drop();
         window = nullptr;
@@ -819,7 +819,7 @@ void Interfaz::CambiarFondo(float r, float g, float b,float a)
     }
 }
 
-void Interfaz::DefinirVentana(short unsigned int width, short unsigned int height, const char * title)
+void Interfaz::DefinirVentana(short unsigned int width, short unsigned int height, const char * title, bool allscreen)
 {
     if(ventana_inicializada)
     {
@@ -831,6 +831,10 @@ void Interfaz::DefinirVentana(short unsigned int width, short unsigned int heigh
     {
         window->UpdateTitle(title);
         window->UpdateSize(width,height);
+        if(allscreen)
+        {
+            window->AllScreen();
+        }
     }
 }
 
@@ -1763,4 +1767,15 @@ void Interfaz::PausarVideo(unsigned int id)
 void Interfaz::PlayVideo(unsigned int id)
 {
 
+}
+
+//Devuelve las dimensiones del monitor
+int * Interfaz::GetDimensionesMonitor()
+{
+    if(window != nullptr)
+    {
+        return window->GetSizeScreen();
+    }
+
+    return nullptr;
 }

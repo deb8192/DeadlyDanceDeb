@@ -621,6 +621,12 @@ int Enemigo::Atacar(int i)
                 //_motora->getEvent("murcihit")->setPosition(this->getX(),this->getY(),this->getZ());
                 _motora->getEvent("murcihit")->start();  
             }
+             else if(tipoEnemigo == 6)
+            {
+                _motora->getEvent("BN1ataca")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1ataca")->start(); 
+                _motora->getEvent("enemyhit")->start(); 
+            }
             else
             {
                 _motora->getEvent("enemyhit")->start(); 
@@ -1151,13 +1157,10 @@ void Enemigo::SetEnemigo(int enemigo)
 }
 
 void Enemigo::SetAranaSound()
-{
-    if(tipoEnemigo == 2)
-    {
-        _motora->LoadEvent("event:/SFX/SFX-Arana grito enemigo", soundID, 1);
-        _motora->getEvent(soundID)->setPosition(posActual.x,0,posActual.z);
-        _motora->getEvent(soundID)->start();
-    }
+{    
+    _motora->LoadEvent("event:/SFX/SFX-Arana grito enemigo", soundID, 1);
+    _motora->getEvent(soundID)->setPosition(posActual.x,0,posActual.z);
+    _motora->getEvent(soundID)->start();
 }
 void Enemigo::SetModo(int newModo)
 {

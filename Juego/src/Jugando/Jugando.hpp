@@ -111,6 +111,7 @@ class Jugando: public Estado {
         bool meAtacan;
         bool poderEmpezar;
         bool respawnMO;
+        bool bocadillo;
         int estarAtacado;
         
         Enemigo* _boss;
