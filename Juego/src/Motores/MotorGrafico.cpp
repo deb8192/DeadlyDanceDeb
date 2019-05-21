@@ -1411,6 +1411,7 @@ int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, con
 
                 Animaciones * _ani = new Animaciones(anima);//cargamos las animaciones
                 _ani->AsignarID(enemigo);
+                
                 if(boss)
                 {
                     EnemigosAni_Scena.insert(EnemigosAni_Scena.begin(),_ani);
@@ -1419,7 +1420,7 @@ int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, con
                 {
                     EnemigosAni_Scena.push_back(_ani);
                 }
-                EnemigosAni_Scena.push_back(_ani);
+
                 //std::cout << ruta_objeto << " "  << fps << " " << anima << " " << EnemigosAni_Scena.size()-1 << "\n";
             }
             else
