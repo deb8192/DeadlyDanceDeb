@@ -17,6 +17,7 @@ MotorGrafico::MotorGrafico()
         Plataformas_Scena.reserve(200);//salas reservadas
         Luces_Scena.reserve(60);//luces reservadas
         Salas_luz.reserve(20);
+        Sprites_Scena.reserve(20);
         Enemigos_Scena.reserve(50);//enemigos reservados
         Textos_Scena.reserve(18);//textos estaticos en la escena o gui
         RecoArmas_Scena.reserve(50);
@@ -126,6 +127,7 @@ void MotorGrafico::LimpiarElementosJuego()
         Particulas_Accion.clear();
         Luces_Scena.clear();
         Salas_luz.clear();
+        Sprites_Scena.clear();
         BoardsArmas_Scena.clear();
         BoardsEnem_Scena.clear();
         Particulas_Llave.clear();
@@ -1810,6 +1812,70 @@ void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *rut
             RecoArmas_Scena.push_back(recol_en_scena);
         }
     #endif
+}
+
+void MotorGrafico::CargarSprite(int id, std::vector<const char *> ruta_sprite)
+{
+    //crear animacion
+    AnimacionSprite sprites;
+    sprites.id = id;
+    sprites.posx = 0.0f;
+    sprites.posy = 0.0f;
+    sprites.posz = 0.0f;
+
+    //crear boards
+    for(unsigned int i=0; i<ruta_sprite.size(); i++)
+    {
+        unsigned short _newboard = _interfaz->AddBoard(0,0,0, -1.0f, 0, ruta_sprite[i], 0.01f);
+        _interfaz->Trasladar(_newboard,0.0f,0.0f,0.0f);
+        _interfaz->Escalar(_newboard,2.0f,2.0f,2.0f);
+        _interfaz->DeshabilitarObjeto(_newboard);
+        sprites.sprite_board.push_back(_newboard);
+    }
+
+    //Guardar la animacion
+    Sprites_Scena.push_back(sprites);
+}
+
+void MotorGrafico::startAnimaSprite(int id, bool start, float posx, float posy, float posz)
+{
+    //Buscar Anima Sprite
+    for(unsigned int i=0; i<Sprites_Scena.size(); i++)
+    {
+        //Si el sprite coincide
+        if(Sprites_Scena[i].id == id)
+        {
+            Sprites_Scena[i].start = start;
+            Sprites_Scena[i].posx = posx;
+            Sprites_Scena[i].posy = posy + 4.0f;
+            Sprites_Scena[i].posz = posz;
+        }
+    }
+}
+
+void MotorGrafico::updateAnimaSprite()
+{
+    for(unsigned int i=0; i < Sprites_Scena.size(); i++)
+    {
+        if(Sprites_Scena[i].start == true)
+        {
+            //si el sprite actual
+            if(Sprites_Scena[i].actualsprite != 0)
+            {
+                _interfaz->DeshabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite-1]);
+            }
+            _interfaz->Trasladar(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite],Sprites_Scena[i].posx,Sprites_Scena[i].posy,Sprites_Scena[i].posz);
+            //std::cout << Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite] << std::endl;
+            _interfaz->HabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite]);
+            Sprites_Scena[i].actualsprite++;
+            if(Sprites_Scena[i].actualsprite == Sprites_Scena[i].sprite_board.size())
+            {
+                Sprites_Scena[i].actualsprite = 0;
+                _interfaz->DeshabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].sprite_board.size()-1]);
+                Sprites_Scena[i].start = false;
+            }
+        }
+    }
 }
 
 void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, float rz)

@@ -172,6 +172,9 @@ void Jugando::Iniciar()
     _motor->FondoEscena(255,0,0,0);
     _motor->BorrarCargando();
 
+    //Crear Sprites
+    CrearSprites();
+
     //si esta puesto el nivel 1 suena la bienvenida del nivel 1, sino del 2
     if(nivelJ == 8)
     {
@@ -1369,6 +1372,9 @@ void Jugando::Render()
     //********************************************************************
     //Dibujado del personaje
     _jugador->Render(updateTime, resta);
+
+    //Update animaciones sprites
+    _motor->updateAnimaSprite();
 
     //Armas
     if(_jugador->getArma() != nullptr)
@@ -2849,4 +2855,38 @@ void Jugando::CambiarAranyaPorCofre(int idC, unsigned int posMotorG, unsigned in
 
     _cofres.at(posMotorG) = move(_cofre);
     _cofre = nullptr;
+}
+
+//Crear sprites del juego
+void Jugando::CrearSprites()
+{
+    std::vector<const char *> sprites;
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_1.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_2.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_3.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_4.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_5.png");
+    _motor->CargarSprite(0, sprites);
+    sprites.clear();
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_1.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_2.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_3.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_4.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_5.png");
+    _motor->CargarSprite(1, sprites);
+    sprites.clear();
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_1.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_2.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_3.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_4.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_5.png");
+    _motor->CargarSprite(2, sprites);
+    sprites.clear();
+    sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_1.png");
+    sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_2.png");
+    sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_3.png");
+    sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_4.png");
+    sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_5.png");
+    _motor->CargarSprite(3, sprites);
+    sprites.clear();
 }

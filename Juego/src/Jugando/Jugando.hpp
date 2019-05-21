@@ -81,13 +81,14 @@ class Jugando: public Estado {
         Enemigo* getEnemigoPideAyuda();
         std::vector<Enemigo*> getEnemigos();
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
-        
+
         void AbrirPantallaPuzzle();
         void AbrirCofre(float x, float y, float z, bool esArana);
         void CrearEnemigoArana();
         void CargarBossEnMemoria();
         void CambiarAranyaPorCofre(int idC, unsigned int posMotorG, unsigned int posObs,
             float x, float y, float z, unsigned int posArana, Sala* sala);
+        void CrearSprites();
 
     private:
 

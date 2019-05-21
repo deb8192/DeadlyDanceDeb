@@ -614,25 +614,25 @@ int Enemigo::Atacar(int i)
             if(tipoEnemigo == 0)
             {
                 _motora->getEvent("pollohit")->setPosition(this->getX(),this->getY(),this->getZ());
-                _motora->getEvent("pollohit")->start();  
+                _motora->getEvent("pollohit")->start();
             }
             else if(tipoEnemigo == 1)
             {
                 //_motora->getEvent("murcihit")->setPosition(this->getX(),this->getY(),this->getZ());
-                _motora->getEvent("murcihit")->start();  
+                _motora->getEvent("murcihit")->start();
             }
              else if(tipoEnemigo == 6)
             {
                 _motora->getEvent("BN1ataca")->setPosition(this->getX(),this->getY(),this->getZ());
-                _motora->getEvent("BN1ataca")->start(); 
-                _motora->getEvent("enemyhit")->start(); 
+                _motora->getEvent("BN1ataca")->start();
+                _motora->getEvent("enemyhit")->start();
             }
             else
             {
-                _motora->getEvent("enemyhit")->start(); 
+                _motora->getEvent("enemyhit")->start();
             }
- 
 
+            //_motor->startAnimaSprite(0,true,this->getX(),this->getY(),this->getZ());
         }
 
         if(atacado)
