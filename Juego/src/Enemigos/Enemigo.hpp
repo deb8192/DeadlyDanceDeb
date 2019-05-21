@@ -167,7 +167,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         //ia
         float randomBinomial();//devuelve un valor random entre -1 y 1
-        void setArbol(Arbol);//asigna un arbol de ia al enemigo
+        void setArbol(Arbol*);//asigna un arbol de ia al enemigo
         Arbol* getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
         void UpdateBehavior(short *i, int* _jugador, std::vector<ZonaOscura*> &_getZonasOscuras, std::vector<ZonaEscondite*> &_getZonasEscondite, bool ayuda); //actualiza el comportamiento actual del pollo

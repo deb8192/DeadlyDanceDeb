@@ -1319,9 +1319,9 @@ ZonaEscondite* Enemigo::getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zona
 }
 //ia
 
-void Enemigo::setArbol(Arbol ia)
+void Enemigo::setArbol(Arbol* ia)
 {
-    arbol = new Arbol(ia.GetRaiz(), ia.GetRaiz()->getNombre());
+    arbol = new Arbol(ia->GetRaiz(), ia->GetRaiz()->getNombre());
 }
 
 Arbol * Enemigo::getArbol()

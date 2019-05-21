@@ -45,7 +45,6 @@ class Jugando: public Estado {
         //Funciones propias
         void ValoresPorDefecto();
         void ValoresPorDefectoJugador();
-        void ValoresPorDefectoBoss();
         void PosicionesIniEnemigos();
         void DesactivarDebug();
         void InteractuarNivel();
@@ -88,10 +87,12 @@ class Jugando: public Estado {
         void CargarBossEnMemoria();
         void CambiarAranyaPorCofre(int idC, unsigned int posMotorG, unsigned int posObs,
             float x, float y, float z, unsigned int posArana, Sala* sala);
+        void BorrarTodosLosEnemigos();
+        void LimpiarJuego();
 
     private:
 
-        short auxiliarPathfinding = 0;
+        short auxiliarPathfinding;
         MotorAudioSystem* _motora;
         SenseEventos* _sense;
         MotorFisicas* _fisicas;
@@ -101,7 +102,6 @@ class Jugando: public Estado {
         
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         CargadorPuzzles cargPuzzles; // contiene todos los puzzles
-        Puzzle* _puzzle;
 
         bool enSalaBoss;
         bool lvDificil;         //Nivel de dificultad del juego. Se modifica cada minuto
