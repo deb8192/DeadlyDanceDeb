@@ -259,7 +259,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void borrarBoardGuardian();
             void desactivarBoardPuertas();
             void mostrarJugador(float x, float y, float z, float rx, float ry, float rz, float newy, float newz);
-            void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
+            void mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i, float distanciaboard = 0.0f);
             void mostrarObjetos(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarCofres(float x, float y, float z, float rx, float ry, float rz, unsigned int i);
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);

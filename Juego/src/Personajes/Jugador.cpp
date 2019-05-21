@@ -9,6 +9,7 @@ Jugador::Jugador()
     _interfaz = InterfazJugador::getInstance();
     _fisicas = MotorFisicas::getInstance();
 
+    invulnerabilidad = false; 
     animacion = 0;
     //tiempos de animacion
     tiempoAtaque=2000.0f;//tiempo en milisegundos
@@ -22,6 +23,14 @@ Jugador::Jugador()
 
     dinero = 0;
     _armaEquipada = NULL;
+    
+    //tiempos de ejecucion de acciones
+    atackTime = 0.0f;
+    atackEspTime = 0.0f;
+    painAtackTime = 0.0f;
+    lastAtackTime = 0.0f;
+    lastAtackEspTime = 0.0f;
+    lastPainAtackTime = 0.0f;
     velocidadMaxima = 2.5f;
     porcentajeVelocidad = 1.0f;
 }
@@ -74,6 +83,8 @@ Jugador::~Jugador()
 
     dinero = 0;
 
+    invulnerabilidad = false; 
+
     // INnpc
     tipo = 0;
     vida = 0;
@@ -85,8 +96,10 @@ Jugador::~Jugador()
     //TO DO: int buffos[4];
     atackTime = 0;
     atackEspTime = 0;
+    painAtackTime = 0;
     lastAtackTime = 0;
     lastAtackEspTime = 0;
+    lastPainAtackTime = 0;
     animacionMuerteTiem = 0;
     tiempoPasadoMuerte = 0;
     tiempoAtaque = 0;
@@ -877,6 +890,11 @@ int Jugador::getBarraAtEs()
     return 1;
 }
 
+bool Jugador::GetInvulnerabilidad()
+{
+    return invulnerabilidad;
+}
+
 int Jugador::getAtaque()
 {
     return -1;
@@ -932,6 +950,16 @@ float Jugador::getTimeAtEsp()
 float Jugador::getLastTimeAtEsp()
 {
     return lastAtackEspTime;
+}
+
+float Jugador::getTimeInvulnerable()
+{
+    return painAtackTime;
+}
+
+float Jugador::getLastTimeInvulnerable()
+{
+    return lastPainAtackTime;
 }
 
 const char*Jugador::getRutaArmaEsp()
@@ -1076,9 +1104,31 @@ void Jugador::setPosicionesFisicas(float nx,float ny,float nz)
  */
 void Jugador::ModificarVida(int vid)
 {
+    struct
+    {
+        float x = 0.0f;
+        float y = 0.0f;
+        float z = 0.0f;
+    }
+    velocidad, posiciones;
+    Constantes constantes;
     if (vid < 0) // QuitarVida, aumenta barra ataque especial
     {
         ModificarBarraAtEs(abs(vid));
+        SetInvulnerabilidad(constantes.TRUE);
+        setTimeInvulnerable(constantes.CIEN_PORCIENTO);
+
+        if(porcentajeVelocidad != constantes.UNO)
+        {
+            porcentajeVelocidad = constantes.UNO;
+        }
+        velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+
+        posiciones.x = posFutura.x - velocidad.x;
+        posiciones.z = posFutura.z - velocidad.z;
+        setNewPosiciones(posiciones.x, posActual.y, posiciones.z);
+        this->ColisionEntornoEne();
     }
 
     vida += vid;
@@ -1122,6 +1172,11 @@ void Jugador::setBarraAtEs(int bar)
 {
     barraAtEs = bar;
     _interfaz->setAtaqueEspecial(barraAtEs);
+}
+
+void Jugador::SetInvulnerabilidad(bool invulnerable)
+{
+    invulnerabilidad = invulnerable;
 }
 
 void Jugador::setAtaque(int ataq)
@@ -1216,6 +1271,15 @@ void Jugador::setLastTimeAtEsp(float time)
     lastAtackEspTime = time;
 }
 
+void Jugador::setTimeInvulnerable(float time)
+{
+    painAtackTime = time;
+}
+
+void Jugador::setLastTimeInvulnerable(float time)
+{
+    lastPainAtackTime = time;
+}
 
 void Jugador::setAnimacion(int est)
 {

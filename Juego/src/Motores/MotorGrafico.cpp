@@ -1439,7 +1439,7 @@ int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, con
             _interfaz->DeshabilitarObjeto(_board);
             if(boss)
             {
-                _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+40.0f,(float)z);
+                _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+distanciaboard,(float)z);
                 BoardsEnem_Scena.insert(BoardsEnem_Scena.begin(), _board);
             }
             else
@@ -1959,7 +1959,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
     #endif
 }
 
-void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
+void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i, float distanciaboard)
 {
     #ifdef WEMOTOR
 
@@ -1972,7 +1972,7 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
 
         if(BoardsEnem_Scena.size() > 0 && BoardsEnem_Scena.size() > i && BoardsEnem_Scena[i] != 0)
         {
-            _interfaz->Trasladar(BoardsEnem_Scena[i],x+2.0f,y+10.0f,z);
+            _interfaz->Trasladar(BoardsEnem_Scena[i],x+2.0f,y+10.0f+distanciaboard,z);
 
             //Habilitar si esta cerca del pesonaje
             float distx = center_x - x;
@@ -2836,6 +2836,11 @@ void MotorGrafico::EraseTodosEnemigos()
         {
             _interfaz->RemoveObject(BoardsEnem_Scena[valor]);
             BoardsEnem_Scena.erase(BoardsEnem_Scena.begin());
+        }
+
+        if(valor >= 0 && valor < EnemigosAni_Scena.size())
+        {
+            EnemigosAni_Scena.erase(EnemigosAni_Scena.begin());
         }
 
     #else

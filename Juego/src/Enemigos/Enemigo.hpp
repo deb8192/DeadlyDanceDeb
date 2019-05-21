@@ -72,6 +72,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setTipo(int tip);
         void ModificarBarraAtEs(int bar);
         void setBarraAtEs(int bar);
+        void SetInvulnerabilidad(bool esVulnerable);
         void setAtaque(int ataq);
         void setArmaEspecial(int ataque);
         void setSuerte(int suer);
@@ -90,6 +91,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setLastTimeDefenderse(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
+        void setTimeInvulnerable(float time);
+        void setLastTimeInvulnerable(float time);
         void setPosAtaques(int p);
         void setVelocidadMaxima(float velocidad); //modifica la VelocidadMaxima de desplazamiento
         void SetEnemigo(int);
@@ -103,6 +106,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getVida();
         int getTipo();
         int getBarraAtEs();
+        bool GetInvulnerabilidad();
         int getAtaque();
         int getPosAtaques();
         int getSuerte();
@@ -122,6 +126,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getLastTimeDefenderse();
         float getTimeAtEsp();
         float getLastTimeAtEsp();
+        float getTimeInvulnerable();
+        float getLastTimeInvulnerable();
         float getX();
         float getY();
         float getZ();

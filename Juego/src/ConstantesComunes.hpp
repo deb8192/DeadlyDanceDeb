@@ -43,6 +43,7 @@ using Constantes = struct ValoresConstantes
     const float RAD_TO_DEG = 57.295779513082320876f;
 
     /******************** Porcentajes *******************/
+    const float CIEN_PORCIENTO = 1.00f;
     const float DIEZ_PORCIENTO = 0.10f;
     const float UN_CUARTO = 0.25f;
     const float UN_MEDIO = 0.5f;
@@ -170,6 +171,10 @@ using Constantes = struct ValoresConstantes
 
     // Codigo de la puerta del boss
     const unsigned short PUERTA_BOSS = 20;
+
+    // Booleanos
+    const bool TRUE = true;
+    const bool FALSE = false;
 
 };
 #endif

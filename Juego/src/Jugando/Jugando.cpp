@@ -507,10 +507,6 @@ void Jugando::Update()
         this->RespawnEnemigos();
         lastRespawnTime = respawnTime;
     }
-    else if(enSalaBoss)
-    {
-        //if()
-    }
 
     // ********** se actualiza posiciones e interpolado **********
     //animacion
@@ -704,6 +700,35 @@ void Jugando::Update()
         }
         //_jugador->setTimeAt(0);
     }
+
+    //Este bloque se da si el enemigo esta en el proceso de merodear
+    if(_jugador->getTimeInvulnerable() > 0.0f)
+    {
+        if(_jugador->getTimeInvulnerable() == 1.5f)
+        {
+            //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+            _jugador->setLastTimeInvulnerable(_controladorTiempo->GetTiempo(2));
+        }
+        float tiempoActual = 0.0f, tiempoInvulnerable = 0.0f;
+        tiempoActual = _controladorTiempo->GetTiempo(2);
+        tiempoInvulnerable = _jugador->getTimeInvulnerable();
+        tiempoInvulnerable -= (tiempoActual - _jugador->getLastTimeInvulnerable());
+        if(tiempoActual > _jugador->getLastTimeInvulnerable())
+        {
+            //Si no es la primera vez que entra al bucle de invulnerabilidad, tiempoActual debe ser mayor que lastTimeInvulnerable
+            //por lo que guardamos en lastTimeInvulnerable a tiempoActual
+            _jugador->setLastTimeInvulnerable(tiempoActual);
+        }
+        _jugador->setTimeInvulnerable(tiempoInvulnerable);
+    }
+    else
+    {
+        if(_jugador->GetInvulnerabilidad())
+        {
+            _jugador->SetInvulnerabilidad(constantes.FALSE);
+        }
+    }
+    
 
     //actualizamos los enemigos
     if(_enemigos.size() > 0)//posiciones interpolacion
@@ -1870,7 +1895,7 @@ void Jugando::RespawnEnemigosBoss()
             _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
             _enemigos.back()->SetModo(Enemigo::modosEnemigo::MODO_ATAQUE);
             _enemigos.back()->RespawnNoise();
-            _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false);//creamos la figura
+            _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false,_enemigos.back()->GetAnimacion(),_enemigos.back()->GetFps());//creamos la figura
 
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0,false);
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,false); //Para ataques
@@ -2779,6 +2804,8 @@ void Jugando::CrearEnemigoArana()
 
 void Jugando::CargarBossEnMemoria()
 {
+    Constantes constantes;
+    int boss = _boss->GetEnemigo();
     float x = _boss->getX();
     float y = _boss->getY();
     float z = _boss->getZ();
@@ -2792,13 +2819,20 @@ void Jugando::CargarBossEnMemoria()
         _fisicas->EraseTodosEnemigos();
     }
 
-    //cargador.BorrarVectorEnemigosBossActivado();
     if(_jugador->GetSala() != _boss->GetSala())
     {
         _jugador->SetSala(_boss->GetSala());
     }
 
-    _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true);//creamos la figura
+    if(boss == constantes.BOSS)
+    {
+        _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true);//creamos la figura
+    }
+    else if(boss == constantes.TRAVORNIO)
+    {
+        _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true, nullptr, constantes.UNO, constantes.DIEZ);//creamos la figura
+    }
+
     _fisicas->crearCuerpo(1,x/2,y/2,z/2,2,1,1,1,2,0,0,true);
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,true); //Para ataques
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0,true); //Para ataques especiales
