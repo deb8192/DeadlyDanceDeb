@@ -882,6 +882,14 @@ void Enemigo::UpdateTimeRotate(float updTime)
  */
 void Enemigo::ModificarVida(int vid)
 {
+    struct
+    {
+        float x = 0.0f;
+        float y = 0.0f;
+        float z = 0.0f;
+    }
+    velocidad, posiciones;
+
     if(defensa && vid < 0)
     {
         vida += vid/constantes.DOS;
@@ -890,11 +898,25 @@ void Enemigo::ModificarVida(int vid)
         {
             vida += vid;
         }
-    float ultimoEstertor = vidaIni * constantes.UN_CUARTO;
-    if(vid < 0)
+    float ultimoEstertor = vidaIni * constantes.UN_TERCIO;
+    if(vid < 0 && !invulnerabilidad)
     {
+        vida += vid;
         SetInvulnerabilidad(constantes.TRUE);
-        setTimeInvulnerable(constantes.UN_MEDIO);
+        setTimeInvulnerable(constantes.CIEN_PORCIENTO);
+
+        if(porcentajeVelocidad != constantes.UNO)
+        {
+            porcentajeVelocidad = constantes.UNO;
+        }
+        velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+
+        posiciones.x = posFutura.x - velocidad.x;
+        posiciones.z = posFutura.z - velocidad.z;
+        setNewPosiciones(posiciones.x, posActual.y, posiciones.z);
+        setPosicionesFisicas(velocidad.x, constantes.CERO, velocidad.z);
+
         if(tipoEnemigo == 3 || tipoEnemigo == 4)
         {
             if(vida <= ultimoEstertor)
@@ -911,6 +933,13 @@ void Enemigo::ModificarVida(int vid)
             ModificarBarraAtEs(abs(vid));
         }
 
+    }
+    else
+    {
+        if(vid >= constantes.CERO)
+        {
+            vida += vid;
+        }
     }
     if (vida > vidaIni)
         vida = vidaIni;

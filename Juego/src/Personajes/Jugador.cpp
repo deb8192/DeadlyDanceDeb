@@ -393,7 +393,6 @@ int Jugador::Atacar(int i)
         {
             aumentosAtaque += (float) _armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
         }
-        aumentosAtaque *= 2;
         aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
 
         //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
@@ -570,6 +569,7 @@ void Jugador::CrearCuerpoAtaque()
 
 void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
 {
+    Constantes constantes;
     if(vida > 0)
     {
         //Enteros con los enemigos colisionados (atacados)
@@ -602,6 +602,13 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
                     danyo += (int) variacion;
                     //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
                     _getEnemigos.at(atacados.at(i))->ModificarVida(-danyo);
+
+                    if(_fisicas->enemyCollideParedesRompibles(atacados.at(i)) || _fisicas->enemyCollideObstacleAndEnemies(atacados.at(i)))
+                    {
+                        _getEnemigos.at(atacados.at(i))->setNewPosiciones(posActual.x, posActual.y, posActual.z);
+                        _getEnemigos.at(atacados.at(i))->initPosicionesFisicas(posActual.x/constantes.DOS, 0.0f, posActual.z/constantes.DOS);
+                    }
+
                     danyo -= (int) variacion;
                     _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
                     //guardar el atacado para no repetir
@@ -1112,8 +1119,9 @@ void Jugador::ModificarVida(int vid)
     }
     velocidad, posiciones;
     Constantes constantes;
-    if (vid < 0) // QuitarVida, aumenta barra ataque especial
+    if (vid < 0 && !invulnerabilidad) // QuitarVida, aumenta barra ataque especial
     {
+        vida += vid;
         ModificarBarraAtEs(abs(vid));
         SetInvulnerabilidad(constantes.TRUE);
         setTimeInvulnerable(constantes.CIEN_PORCIENTO);
@@ -1130,8 +1138,13 @@ void Jugador::ModificarVida(int vid)
         setNewPosiciones(posiciones.x, posActual.y, posiciones.z);
         this->ColisionEntornoEne();
     }
-
-    vida += vid;
+    else
+    {
+        if(vid >= constantes.CERO)
+        {
+            vida += vid;
+        }
+    }
     if (vida > vidaIni)
         vida = vidaIni;
     else if (vida < 0)

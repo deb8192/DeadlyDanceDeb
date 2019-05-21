@@ -701,12 +701,12 @@ void Jugando::Update()
         //_jugador->setTimeAt(0);
     }
 
-    //Este bloque se da si el enemigo esta en el proceso de merodear
+    //Este bloque se da si el enemigo esta en el proceso de invulnerabilidad
     if(_jugador->getTimeInvulnerable() > 0.0f)
     {
-        if(_jugador->getTimeInvulnerable() == 1.5f)
+        if(_jugador->getTimeInvulnerable() == 1.0f)
         {
-            //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
+            //Si es la primera vez que entra al bucle de invulnerabilidad debe guardar el tiempo actual desde el reloj
             _jugador->setLastTimeInvulnerable(_controladorTiempo->GetTiempo(2));
         }
         float tiempoActual = 0.0f, tiempoInvulnerable = 0.0f;
@@ -895,7 +895,7 @@ void Jugando::Update()
                 //Este bloque se da si el Boss esta en el proceso de ataque especial
                 if(_enemigos[i]->getTimeAtEsp() > constantes.CERO)
                 {
-                    if(_enemigos[i]->GetEnemigo() == constantes.TRAVORNIO && _enemigos[i]->getTimeAtEsp() == constantes.TIEMPO_ATESP_TRAVORNIO)
+                    if(_enemigos[i]->GetEnemigo() == constantes.TRAVORNIO && _enemigos[i]->getTimeAtEsp() >= constantes.TIEMPO_ATESP_TRAVORNIO)
                     {
                         //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
                         _enemigos[i]->setLastTimeAtEsp(_controladorTiempo->GetTiempo(2));
@@ -951,6 +951,33 @@ void Jugando::Update()
                         _enemigos[i]->setLastTimeOcultarse(tiempoActual);
                     }
                     _enemigos[i]->setTimeOcultarse(tiempoOcultarse);
+                }
+                //Este bloque se da si el enemigo esta en el proceso de invulnerabilidad
+                if(_enemigos[i]->getTimeInvulnerable() > 0.0f)
+                {
+                    if(_enemigos[i]->getTimeInvulnerable() == 1.5f)
+                    {
+                        //Si es la primera vez que entra al bucle de invulnerabilidad debe guardar el tiempo actual desde el reloj
+                        _enemigos[i]->setLastTimeInvulnerable(_controladorTiempo->GetTiempo(2));
+                    }
+                    float tiempoActual = 0.0f, tiempoInvulnerable = 0.0f;
+                    tiempoActual = _controladorTiempo->GetTiempo(2);
+                    tiempoInvulnerable = _enemigos[i]->getTimeInvulnerable();
+                    tiempoInvulnerable -= (tiempoActual - _enemigos[i]->getLastTimeInvulnerable());
+                    if(tiempoActual > _enemigos[i]->getLastTimeInvulnerable())
+                    {
+                        //Si no es la primera vez que entra al bucle de invulnerabilidad, tiempoActual debe ser mayor que lastTimeInvulnerable
+                        //por lo que guardamos en lastTimeInvulnerable a tiempoActual
+                        _enemigos[i]->setLastTimeInvulnerable(tiempoActual);
+                    }
+                    _enemigos[i]->setTimeInvulnerable(tiempoInvulnerable);
+                }
+                else
+                {
+                    if(_enemigos[i]->GetInvulnerabilidad())
+                    {
+                        _enemigos[i]->SetInvulnerabilidad(constantes.FALSE);
+                    }
                 }
                 colisionaWaypoint = false;
                 //Aqui se comprueba si el jugador cambia de sala
