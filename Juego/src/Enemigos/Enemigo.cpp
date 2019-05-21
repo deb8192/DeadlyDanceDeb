@@ -69,7 +69,7 @@ Enemigo::Enemigo()
     porcentajeVelocidad = 1.0;
     pesoRotacion = 0.0f;
 
-    
+    escalado = 1.0f;
 
 }
 
@@ -2498,4 +2498,9 @@ void Enemigo::BorrarEnemigos(unsigned short n)
 unsigned int Enemigo::GetEstadoMuerte()
 {
     return estadoMuerte;
+}
+
+float Enemigo::GetEscalado()
+{
+    return escalado;
 }

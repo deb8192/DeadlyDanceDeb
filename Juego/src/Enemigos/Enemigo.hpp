@@ -194,6 +194,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         };
 
         unsigned int GetEstadoMuerte();
+        float GetEscalado();
 
     protected:
         Times* _tiempo;
@@ -302,6 +303,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         INnpc::VectorEspacial posicionComunBandada; //PUnto de cohesion de las bandadas
         int estadoMuerte;//tiene el numero de estado que pertenece a estar muerto o muriendo [Por defecto 0]
         int estadoIncial;//tiene el numero de estado con el que empieza el jugador [Por defecto 0]
+
+        float escalado;//por defecto 1.0f
 };
 
 #endif

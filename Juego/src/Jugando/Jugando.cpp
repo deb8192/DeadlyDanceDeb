@@ -2825,10 +2825,15 @@ void Jugando::CargarBossEnMemoria()
         _jugador->SetSala(_boss->GetSala());
     }
 
-    _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true);//creamos la figura
+    unsigned int did = _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true,_boss->GetAnimacion(),_boss->GetFps());//creamos la figura
     _fisicas->crearCuerpo(1,x/2,y/2,z/2,2,1,1,1,2,0,0,true);
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,true); //Para ataques
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0,true); //Para ataques especiales
+    
+    if(_boss->GetEscalado() != 1.0f)
+    {
+        _motor->EscalarMalla(_motor->ObtenerIDOpengl(5,did),_boss->GetEscalado());
+    }
 
     std::string nameid = std::to_string(_boss->getID()); //pasar id a string
     _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid, 1);
