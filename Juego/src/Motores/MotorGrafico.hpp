@@ -393,6 +393,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void PausarVideo(unsigned int id);
             //@param id es el id del video que se quiere reproducir
             void PlayVideo(unsigned int id);
+
+            void EscalarMalla(unsigned int did, float escalado);
+            unsigned int ObtenerIDOpengl(unsigned int tipo,unsigned int idVector);
+
         private: //clases solo accesibles por MotorGrafico
 
             struct SalasLuz

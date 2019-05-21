@@ -69,7 +69,7 @@ Enemigo::Enemigo()
     porcentajeVelocidad = 1.0;
     pesoRotacion = 0.0f;
 
-    
+    escalado = 1.0f;
 
 }
 
@@ -1322,9 +1322,9 @@ ZonaEscondite* Enemigo::getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zona
 }
 //ia
 
-void Enemigo::setArbol(Arbol ia)
+void Enemigo::setArbol(Arbol* ia)
 {
-    arbol = new Arbol(ia.GetRaiz(), ia.GetRaiz()->getNombre());
+    arbol = new Arbol(ia->GetRaiz(), ia->GetRaiz()->getNombre());
 }
 
 Arbol * Enemigo::getArbol()
@@ -2498,4 +2498,9 @@ void Enemigo::BorrarEnemigos(unsigned short n)
 unsigned int Enemigo::GetEstadoMuerte()
 {
     return estadoMuerte;
+}
+
+float Enemigo::GetEscalado()
+{
+    return escalado;
 }

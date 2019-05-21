@@ -69,7 +69,7 @@ Nodo* CargadorBehaviorTrees::anyadirHijo(Arbol *arbol, Nodo* padre, Nodo* nodo, 
  * Salidas:
  *      tree: nodo del archivo xml
  */
-Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tree, Nodo *nodo, Nodo *padre, int nivel) {
+Arbol* CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tree, Nodo *nodo, Nodo *padre, int nivel) {
     Constantes constantes;
     unsigned int i = 0;
     const char** atributos = (const char**) malloc(8 * sizeof(const char*));
@@ -244,7 +244,7 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
             }
         }
     }
-    return *arbol;
+    return arbol;
 }
 
 /*
@@ -257,7 +257,7 @@ Arbol CargadorBehaviorTrees::CrearArbolComportamiento(vector<pugi::xml_node> tre
  *      behavior_tree: estructura que contiene un arbol de comportamiento
  */
 
-Arbol CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
+Arbol* CargadorBehaviorTrees::cargarBehaviorTreeXml(string nombre_arbol)
 {
     int level = 0;
     Nodo *nodo = nullptr;

@@ -1,0 +1,13 @@
+<!--<Animacion nombre="" inicio="" final="" bucle="" salto="" dondesaltar="" terminar="" velocidad=""/>-->
+<Animaciones numeroAnimaciones="9">
+	<!--0--><Animacion nombre="Andar" inicio="1" final="27" bucle="true" salto="false" terminar="false" velocidad="10"></Animacion>
+	<!--1--><Animacion nombre="Correr" inicio="1" final="27" bucle="true" salto="false" terminar="false" velocidad="16"></Animacion>
+	<!--2--><Animacion nombre="Defenderse" inicio="28" final="49" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="16"></Animacion>
+	<!--3--><Animacion nombre="PedirAyuda" inicio="50" final="75" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="16"></Animacion>
+	<!--4--><Animacion nombre="AtaqueEmbestida" inicio="76" final="96" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="16"></Animacion>
+	<!--5--><Animacion nombre="AtaqueBola" inicio="97" final="105" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="16"></Animacion>
+	<!--6--><Animacion nombre="Bola" inicio="105" final="120" bucle="true" salto="false" terminar="true" velocidad="16"></Animacion>
+	<!--7--><Animacion nombre="Bola" inicio="120" final="128" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="16"></Animacion>
+	<!--8--><Animacion nombre="Muere" inicio="129" final="150" bucle="false" salto="true" dondesaltar="7" terminar="true" velocidad="20"></Animacion>
+	<!--9--><Animacion nombre="Muerto" inicio="150" final="150" bucle="true" salto="false" terminar="false" velocidad="1"></Animacion>
+</Animaciones>

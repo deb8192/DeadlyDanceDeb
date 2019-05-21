@@ -167,7 +167,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         //ia
         float randomBinomial();//devuelve un valor random entre -1 y 1
-        void setArbol(Arbol);//asigna un arbol de ia al enemigo
+        void setArbol(Arbol*);//asigna un arbol de ia al enemigo
         Arbol* getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
         void UpdateBehavior(short *i, int* _jugador, std::vector<ZonaOscura*> &_getZonasOscuras, std::vector<ZonaEscondite*> &_getZonasEscondite, bool ayuda); //actualiza el comportamiento actual del pollo
@@ -194,6 +194,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         };
 
         unsigned int GetEstadoMuerte();
+        float GetEscalado();
 
     protected:
         Times* _tiempo;
@@ -302,6 +303,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         INnpc::VectorEspacial posicionComunBandada; //PUnto de cohesion de las bandadas
         int estadoMuerte;//tiene el numero de estado que pertenece a estar muerto o muriendo [Por defecto 0]
         int estadoIncial;//tiene el numero de estado con el que empieza el jugador [Por defecto 0]
+
+        float escalado;//por defecto 1.0f
 };
 
 #endif

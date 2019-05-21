@@ -1411,6 +1411,14 @@ int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, con
 
                 Animaciones * _ani = new Animaciones(anima);//cargamos las animaciones
                 _ani->AsignarID(enemigo);
+                if(boss)
+                {
+                    EnemigosAni_Scena.insert(EnemigosAni_Scena.begin(),_ani);
+                }
+                else
+                {
+                    EnemigosAni_Scena.push_back(_ani);
+                }
                 EnemigosAni_Scena.push_back(_ani);
                 //std::cout << ruta_objeto << " "  << fps << " " << anima << " " << EnemigosAni_Scena.size()-1 << "\n";
             }
@@ -1433,8 +1441,16 @@ int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, con
             {
                 BoardsEnem_Scena.push_back(move(_board));
             }
-
+        
+        if(boss)
+        {
+            return 0;
+        }
+        else
+        {
             return (Enemigos_Scena.size()-1);
+        }
+
         }
 
     return -1;
@@ -4237,4 +4253,55 @@ void MotorGrafico::PlayVideo(unsigned int id)
 
         }
     #endif
+}
+
+void MotorGrafico::EscalarMalla(unsigned int did, float escalado)
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            _interfaz->Escalar(did,escalado,escalado,escalado);
+        }
+    #endif 
+}
+
+unsigned int MotorGrafico::ObtenerIDOpengl(unsigned int tipo,unsigned int idVector)
+{
+    #ifdef WEMOTOR
+
+        unsigned int idOpengl = 0;
+
+        if(tipo == 0) //animaciones objetos
+        {
+            idOpengl = Objetos_Scena[idVector];
+        }
+        else if(tipo == 1) //animaciones recolectables
+        {
+            idOpengl = RecoArmas_Scena[idVector];
+        }
+        else if(tipo == 2) //animaciones powerup
+        {
+            idOpengl = PowerUP_Scena[idVector];
+        }
+        else if(tipo == 3) //animaciones llaves
+        {
+            idOpengl = Llaves_Scena[idVector];
+        }
+        else if(tipo == 4) //animaciones paredes
+        {
+            idOpengl = Paredes_Scena[idVector];
+        }
+        else if(tipo == 5) //enemigos
+        {
+            //std::cout << did << " " << estado << "\n";
+            idOpengl = Enemigos_Scena[idVector];
+        }
+        else if(tipo == 6) //cofres normales
+        {
+            idOpengl = Cofres_Scena[idVector];
+        }
+
+    #endif 
+
+        return idOpengl;
 }
