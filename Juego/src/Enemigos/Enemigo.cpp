@@ -632,7 +632,7 @@ int Enemigo::Atacar(int i)
                 _motora->getEvent("enemyhit")->start();
             }
 
-            //_motor->startAnimaSprite(0,true,this->getX(),this->getY(),this->getZ());
+            _motor->startAnimaSprite(0,true,0.0f,0.0f,0.0f);
         }
 
         if(atacado)
@@ -719,6 +719,7 @@ int Enemigo::AtacarEspecial()
         {
             //cout << "Jugador Atacado por ataque especial" << endl;
             danyo = roundf(danyoF * por10) / por10;
+            _motor->startAnimaSprite(0,true,0.0f,0.0f,0.0f);
         }
         return danyo;
     }
@@ -834,9 +835,10 @@ void Enemigo::moverseEntidad(float updTime)
 void Enemigo::RespawnNoise()
 {
     cout << "respawnNoise" << endl;
-    _motora->LoadEvent("event:/SFX/SFX-Muerte invoca enemigos","respawnfire",1);  
+    _motora->LoadEvent("event:/SFX/SFX-Muerte invoca enemigos","respawnfire",1);
     _motora->getEvent("respawnfire")->setPosition(this->getX(),this->getY(),this->getZ());
-    _motora->getEvent("respawnfire")->start();  
+    _motora->getEvent("respawnfire")->start();
+    _motor->startAnimaSprite(3,true,this->getX()+2.0f,this->getY(),this->getZ());
 }
 /*************** rotarEntidad *****************
  * Funcion con la que el enemigo rotara

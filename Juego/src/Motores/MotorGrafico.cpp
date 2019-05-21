@@ -1862,6 +1862,12 @@ void MotorGrafico::startAnimaSprite(int id, bool start, float posx, float posy, 
         if(Sprites_Scena[i].id == id)
         {
             Sprites_Scena[i].start = start;
+            if(posx == 0.0f && posy == 0.0f && posz == 0.0f)
+            {
+                posx = center_x + 2.0f;
+                posy = center_y;
+                posz = center_z - 1.0f;
+            }
             Sprites_Scena[i].posx = posx;
             Sprites_Scena[i].posy = posy + 4.0f;
             Sprites_Scena[i].posz = posz;
