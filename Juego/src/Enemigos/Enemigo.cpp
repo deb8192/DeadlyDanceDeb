@@ -27,8 +27,10 @@ Enemigo::Enemigo()
     tiempoOcultarse = 0.0f;
     atackTime = 0.0f;
     atackEspTime = 0.0f;
+    painAtackTime = 0.0f;
     lastAtackTime = 0.0f;
     lastAtackEspTime = 0.0f;
+    lastPainAtackTime = 0.0f;
     lastTiempoMerodear = 0.0f;
     lastTiempoMoverse = 0.0f;
     lastTiempoOcultarse = 0.0f;
@@ -163,8 +165,10 @@ Enemigo::~Enemigo()
     //TO DO: int buffos[4];
     atackTime = 0;
     atackEspTime = 0;
+    painAtackTime = 0;
     lastAtackTime = 0;
     lastAtackEspTime = 0;
+    lastPainAtackTime = 0;
     tiempoMerodear = 0;
     tiempoMoverse = 0;
     tiempoOcultarse = 0;
@@ -886,17 +890,41 @@ void Enemigo::UpdateTimeRotate(float updTime)
  */
 void Enemigo::ModificarVida(int vid)
 {
+    struct
+    {
+        float x = 0.0f;
+        float y = 0.0f;
+        float z = 0.0f;
+    }
+    velocidad, posiciones;
+
     if(defensa && vid < 0)
     {
         vida += vid/constantes.DOS;
     }
     else
-        {
-            vida += vid;
-        }
-    float ultimoEstertor = vidaIni * constantes.UN_CUARTO;
-    if(vid < 0)
     {
+        vida += vid;
+    }
+    float ultimoEstertor = vidaIni * constantes.UN_TERCIO;
+    if(vid < 0 && !invulnerabilidad)
+    {
+        vida += vid;
+        SetInvulnerabilidad(constantes.TRUE);
+        setTimeInvulnerable(constantes.CIEN_PORCIENTO);
+
+        if(porcentajeVelocidad != constantes.UNO)
+        {
+            porcentajeVelocidad = constantes.UNO;
+        }
+        velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+
+        posiciones.x = posFutura.x - velocidad.x;
+        posiciones.z = posFutura.z - velocidad.z;
+        setNewPosiciones(posiciones.x, posActual.y, posiciones.z);
+        setPosicionesFisicas(-velocidad.x, constantes.CERO, -velocidad.z);
+
         if(tipoEnemigo == 3 || tipoEnemigo == 4)
         {
             if(vida <= ultimoEstertor)
@@ -913,6 +941,13 @@ void Enemigo::ModificarVida(int vid)
             ModificarBarraAtEs(abs(vid));
         }
 
+    }
+    else
+    {
+        if(vid >= constantes.CERO)
+        {
+            vida += vid;
+        }
     }
     if (vida > vidaIni)
         vida = vidaIni;
@@ -954,6 +989,11 @@ void Enemigo::ModificarBarraAtEs(int bar)
 void Enemigo::setBarraAtEs(int bar)
 {
     barraAtEs = bar;
+}
+
+void Enemigo::SetInvulnerabilidad(bool invulnerable)
+{
+    invulnerabilidad = invulnerable;
 }
 
 void Enemigo::setAtaque(int ataq)
@@ -1021,6 +1061,15 @@ void Enemigo::setLastTimeAtEsp(float time)
     lastAtackEspTime = time;
 }
 
+void Enemigo::setTimeInvulnerable(float time)
+{
+    painAtackTime = time;
+}
+
+void Enemigo::setLastTimeInvulnerable(float time)
+{
+    lastPainAtackTime = time;
+}
 void Enemigo::SetSala(Sala* sala)
 {
     _estoy = sala;
@@ -1044,6 +1093,11 @@ int Enemigo::getTipo()
 int Enemigo::getBarraAtEs()
 {
     return barraAtEs;
+}
+
+bool Enemigo::GetInvulnerabilidad()
+{
+    return invulnerabilidad;
 }
 
 int Enemigo::getAtaque()
@@ -1242,6 +1296,16 @@ float Enemigo::getTimeAtEsp()
 float Enemigo::getLastTimeAtEsp()
 {
     return lastAtackEspTime;
+}
+
+float Enemigo::getTimeInvulnerable()
+{
+    return painAtackTime;
+}
+
+float Enemigo::getLastTimeInvulnerable()
+{
+    return lastPainAtackTime;
 }
 
 int Enemigo::GetEnemigo()
@@ -2463,16 +2527,29 @@ int Enemigo::GetTipoEnemigo()
 void Enemigo::Render(short posArray,
     float updTime, float drawTime)
 {
+    Constantes constantes;
     moverseEntidad(1 / updTime);
     UpdateTimeMove(drawTime);
     RotarEntidad(1 / updTime);
     UpdateTimeRotate(drawTime);
 
-    _motor->mostrarEnemigos(
-        posActual.x, posActual.y, posActual.z,
-        rotActual.x, rotActual.y, rotActual.z,
-        posArray
-    );
+    if(tipoEnemigo == constantes.TRAVORNIO)
+    {
+        _motor->mostrarEnemigos(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y, rotActual.z,
+            posArray, constantes.CINCO
+        );
+    }
+    else
+    {
+        _motor->mostrarEnemigos(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y, rotActual.z,
+            posArray
+        );
+    }
+    
 
     _motor->UpdateBoardsVidaEne(posArray,vida,vidaIni);
 

@@ -519,10 +519,6 @@ void Jugando::Update()
         this->RespawnEnemigos();
         lastRespawnTime = respawnTime;
     }
-    else if(enSalaBoss)
-    {
-        //if()
-    }
 
     cout << "UPD: 7"<<endl;
 
@@ -727,6 +723,35 @@ void Jugando::Update()
         //_jugador->setTimeAt(0);
     }
 
+    //Este bloque se da si el enemigo esta en el proceso de invulnerabilidad
+    if(_jugador->getTimeInvulnerable() > 0.0f)
+    {
+        if(_jugador->getTimeInvulnerable() == 1.0f)
+        {
+            //Si es la primera vez que entra al bucle de invulnerabilidad debe guardar el tiempo actual desde el reloj
+            _jugador->setLastTimeInvulnerable(_controladorTiempo->GetTiempo(2));
+        }
+        float tiempoActual = 0.0f, tiempoInvulnerable = 0.0f;
+        tiempoActual = _controladorTiempo->GetTiempo(2);
+        tiempoInvulnerable = _jugador->getTimeInvulnerable();
+        tiempoInvulnerable -= (tiempoActual - _jugador->getLastTimeInvulnerable());
+        if(tiempoActual > _jugador->getLastTimeInvulnerable())
+        {
+            //Si no es la primera vez que entra al bucle de invulnerabilidad, tiempoActual debe ser mayor que lastTimeInvulnerable
+            //por lo que guardamos en lastTimeInvulnerable a tiempoActual
+            _jugador->setLastTimeInvulnerable(tiempoActual);
+        }
+        _jugador->setTimeInvulnerable(tiempoInvulnerable);
+    }
+    else
+    {
+        if(_jugador->GetInvulnerabilidad())
+        {
+            _jugador->SetInvulnerabilidad(constantes.FALSE);
+        }
+    }
+    
+
     //actualizamos los enemigos
     if(_enemigos.size() > 0)//posiciones interpolacion
     {
@@ -744,14 +769,14 @@ void Jugando::Update()
                 // Se coloca la posicionMedia de las bandadas
                 if(_enemigos[i]->GetModo() == Enemigo::modosEnemigo::MODO_ATAQUE)
                 {
-                    if(_enemigos[i]->GetSala() == _jugador->GetSala())
+                    /*if(_enemigos[i]->GetSala() == _jugador->GetSala())
                     {
                     _enemigos[i]->SetPosicionComunBandada(posicionMediaEnemigos);
                     }
                     else
-                    {
+                    {*/
                         _enemigos[i]->SetPosicionComunBandada(posicionMediaNula);
-                    }
+                    //}
                 }
 
 
@@ -892,7 +917,7 @@ void Jugando::Update()
                 //Este bloque se da si el Boss esta en el proceso de ataque especial
                 if(_enemigos[i]->getTimeAtEsp() > constantes.CERO)
                 {
-                    if(_enemigos[i]->GetEnemigo() == constantes.TRAVORNIO && _enemigos[i]->getTimeAtEsp() == constantes.TIEMPO_ATESP_TRAVORNIO)
+                    if(_enemigos[i]->GetEnemigo() == constantes.TRAVORNIO && _enemigos[i]->getTimeAtEsp() >= constantes.TIEMPO_ATESP_TRAVORNIO)
                     {
                         //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
                         _enemigos[i]->setLastTimeAtEsp(_controladorTiempo->GetTiempo(2));
@@ -948,6 +973,33 @@ void Jugando::Update()
                         _enemigos[i]->setLastTimeOcultarse(tiempoActual);
                     }
                     _enemigos[i]->setTimeOcultarse(tiempoOcultarse);
+                }
+                //Este bloque se da si el enemigo esta en el proceso de invulnerabilidad
+                if(_enemigos[i]->getTimeInvulnerable() > 0.0f)
+                {
+                    if(_enemigos[i]->getTimeInvulnerable() == 1.5f)
+                    {
+                        //Si es la primera vez que entra al bucle de invulnerabilidad debe guardar el tiempo actual desde el reloj
+                        _enemigos[i]->setLastTimeInvulnerable(_controladorTiempo->GetTiempo(2));
+                    }
+                    float tiempoActual = 0.0f, tiempoInvulnerable = 0.0f;
+                    tiempoActual = _controladorTiempo->GetTiempo(2);
+                    tiempoInvulnerable = _enemigos[i]->getTimeInvulnerable();
+                    tiempoInvulnerable -= (tiempoActual - _enemigos[i]->getLastTimeInvulnerable());
+                    if(tiempoActual > _enemigos[i]->getLastTimeInvulnerable())
+                    {
+                        //Si no es la primera vez que entra al bucle de invulnerabilidad, tiempoActual debe ser mayor que lastTimeInvulnerable
+                        //por lo que guardamos en lastTimeInvulnerable a tiempoActual
+                        _enemigos[i]->setLastTimeInvulnerable(tiempoActual);
+                    }
+                    _enemigos[i]->setTimeInvulnerable(tiempoInvulnerable);
+                }
+                else
+                {
+                    if(_enemigos[i]->GetInvulnerabilidad())
+                    {
+                        _enemigos[i]->SetInvulnerabilidad(constantes.FALSE);
+                    }
                 }
                 colisionaWaypoint = false;
                 //Aqui se comprueba si el jugador cambia de sala
@@ -1910,7 +1962,7 @@ void Jugando::RespawnEnemigosBoss()
             _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
             _enemigos.back()->SetModo(Enemigo::modosEnemigo::MODO_ATAQUE);
             _enemigos.back()->RespawnNoise();
-            _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false);//creamos la figura
+            _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false,_enemigos.back()->GetAnimacion(),_enemigos.back()->GetFps());//creamos la figura
 
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0,false);
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,false); //Para ataques
@@ -2655,7 +2707,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
         _destinoPathFinding = _enemPideAyuda->GetSala();
     }
     //Ejecucion del pathfinding si hay una sala de destino guardada
-    if(_destinoPathFinding != nullptr)
+    if(_destinoPathFinding != nullptr && _jugador->GetSala() == _destinoPathFinding)
     {
         while(!_auxiliadores.empty())
         {
@@ -2679,6 +2731,10 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
             contadorEnem--;
             _auxiliadores.erase(_auxiliadores.begin());
         }
+    }
+    else if(_destinoPathFinding != nullptr)
+    {
+        auxiliarPathfinding = 19;
     }
     auxiliarPathfinding++;
 }
@@ -2822,9 +2878,12 @@ void Jugando::CrearEnemigoArana()
 
 void Jugando::CargarBossEnMemoria()
 {
+    Constantes constantes;
+    int boss = _boss->GetEnemigo();
     float x = _boss->getX();
     float y = _boss->getY();
     float z = _boss->getZ();
+    unsigned int did = 0;
 
     //cargador.SetVectorEnemigos(_enemigos);
     BorrarTodosLosEnemigos();
@@ -2833,8 +2892,15 @@ void Jugando::CargarBossEnMemoria()
     {
         _jugador->SetSala(_boss->GetSala());
     }
+    if(boss == constantes.BOSS)
+    {
+        did = _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true, _boss->GetAnimacion(), _boss->GetFps(),);//creamos la figura
+    }
+    else if(boss == constantes.TRAVORNIO)
+    {
+        did = _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true, _boss->GetAnimacion(), _boss->GetFps(), constantes.DIEZ);//creamos la figura
+    }
 
-    unsigned int did = _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true,_boss->GetAnimacion(),_boss->GetFps());//creamos la figura
     _fisicas->crearCuerpo(1,x/2,y/2,z/2,2,1,1,1,2,0,0,true);
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,true); //Para ataques
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0,true); //Para ataques especiales
