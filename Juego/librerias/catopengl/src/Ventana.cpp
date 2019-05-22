@@ -2,7 +2,7 @@
 
 unsigned int Ventana::numTecla = 0;
 
-char Ventana::tecla [30]; 
+char * Ventana::tecla = new char[30]; 
 
 bool Ventana::recogido = false;
 
@@ -303,7 +303,6 @@ void Ventana::ActivarRecogida()
     {
         tecla[i] = ' ';
     }
-
 }
 
 void Ventana::DesactivarRecogida()
@@ -311,7 +310,7 @@ void Ventana::DesactivarRecogida()
     glfwSetCharCallback(_window,nullptr);
     recogido = true;
     numTecla = 0;
-    for(int i = 0; i < 30;i++)
+    for(int i = 0; i < 31;i++)
     {
         tecla[i] = ' ';
     }
