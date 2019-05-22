@@ -627,7 +627,7 @@ int Enemigo::Atacar(int i)
                 //_motora->getEvent("murcihit")->setPosition(this->getX(),this->getY(),this->getZ());
                 _motora->getEvent("murcihit")->start();
             }
-             else if(tipoEnemigo == 6)
+            else if(tipoEnemigo == 6)
             {
                 if(!unAtaque)
                 {
@@ -636,6 +636,21 @@ int Enemigo::Atacar(int i)
                     _motora->getEvent("BN1especial1")->stop();
                     _motora->getEvent("BN1golpechica")->stop();
                     _motora->getEvent("BN1golpechico")->stop();
+
+                    tiempoAtaques = _tiempo->GetTiempo(1);
+                }
+                unAtaque = true;
+                
+                _motora->getEvent("enemyhit")->start(); 
+            }
+            else if(tipoEnemigo == 5)
+            {
+                if(!unAtaque)
+                {
+                    _motora->getEvent("BN2ataca")->setPosition(this->getX(),this->getY(),this->getZ());
+                    _motora->getEvent("BN2ataca")->start();
+                    _motora->getEvent("BN2especial1")->stop();
+                    _motora->getEvent("BN2golpejugador")->stop();
 
                     tiempoAtaques = _tiempo->GetTiempo(1);
                 }
@@ -744,11 +759,22 @@ int Enemigo::AtacarEspecial()
 
             if(!unEspecial)
             {
-                _motora->getEvent("BN1especial1")->setPosition(this->getX(),this->getY(),this->getZ());
-                _motora->getEvent("BN1especial1")->start();
+                if(tipoEnemigo == 6)
+                {
+                    _motora->getEvent("BN1especial1")->setPosition(this->getX(),this->getY(),this->getZ());
+                    _motora->getEvent("BN1especial1")->start();
                 	_motora->getEvent("BN1ataca")->stop();
                     _motora->getEvent("BN1golpechica")->stop();
                     _motora->getEvent("BN1golpechico")->stop();
+                }
+                else if(tipoEnemigo == 5)
+                {
+                    _motora->getEvent("BN2especial1")->setPosition(this->getX(),this->getY(),this->getZ());
+                    _motora->getEvent("BN2especial1")->start();
+                	_motora->getEvent("BN2ataca")->stop();
+                    _motora->getEvent("BN2golpejugador")->stop();
+                }
+                
                 tiempoAtaques = _tiempo->GetTiempo(1);
             }
             unEspecial = true;
@@ -873,7 +899,7 @@ void Enemigo::moverseEntidad(float updTime)
 
 void Enemigo::RespawnNoise()
 {
-    cout << "respawnNoise" << endl;
+    
     _motora->LoadEvent("event:/SFX/SFX-Muerte invoca enemigos","respawnfire",1);
     _motora->getEvent("respawnfire")->setPosition(this->getX(),this->getY(),this->getZ());
     _motora->getEvent("respawnfire")->start();
@@ -932,17 +958,37 @@ void Enemigo::ModificarVida(int vid)
         {
             if(oponenteSound == 2)
             {
-                _motora->getEvent("BN1golpechica")->setPosition(this->getX(),this->getY(),this->getZ());
-                _motora->getEvent("BN1golpechica")->start();
+                if(tipoEnemigo == 6)
+                {
+                    _motora->getEvent("BN1golpechica")->setPosition(this->getX(),this->getY(),this->getZ());
+                    _motora->getEvent("BN1golpechica")->start();
                 	_motora->getEvent("BN1ataca")->stop();
                     _motora->getEvent("BN1especial1")->stop();
+                }
+                else if(tipoEnemigo == 5)
+                {
+                    _motora->getEvent("BN2golpejugador")->setPosition(this->getX(),this->getY(),this->getZ());
+                    _motora->getEvent("BN2golpejugador")->start();
+                	_motora->getEvent("BN2ataca")->stop();
+                    _motora->getEvent("BN2especial1")->stop();
+                }
             }
             else if(oponenteSound == 1)
             {
-                _motora->getEvent("BN1golpechico")->setPosition(this->getX(),this->getY(),this->getZ());
-                _motora->getEvent("BN1golpechico")->start();
+                if(tipoEnemigo == 6)
+                {
+                    _motora->getEvent("BN1golpechico")->setPosition(this->getX(),this->getY(),this->getZ());
+                    _motora->getEvent("BN1golpechico")->start();
                 	_motora->getEvent("BN1ataca")->stop();
                     _motora->getEvent("BN1especial1")->stop();
+                }
+                else if(tipoEnemigo == 5)
+                {
+                    _motora->getEvent("BN2golpejugador")->setPosition(this->getX(),this->getY(),this->getZ());
+                    _motora->getEvent("BN2golpejugador")->start();
+                	_motora->getEvent("BN2ataca")->stop();
+                    _motora->getEvent("BN2especial1")->stop();
+                }
             }
            
             tiempoVida = _tiempo->GetTiempo(1);
@@ -960,21 +1006,36 @@ void Enemigo::ModificarVida(int vid)
         //sonido para cuando le quitas vida
         if(!unDerrota)
         {
-            
-            _motora->getEvent("BN1pierde")->setPosition(this->getX(),this->getY(),this->getZ());
-            _motora->getEvent("BN1pierde")->start();
-            		_motora->getEvent("BN1ataca")->stop();
-                    _motora->getEvent("BN1especial1")->stop();
-                    _motora->getEvent("BN1debilchica")->stop();
-                    _motora->getEvent("BN1debilchico")->stop();
-                    _motora->getEvent("BN1golpechica")->stop();
-                    _motora->getEvent("BN1golpechico")->stop();
-                    _motora->getEvent("BN1fuertechica")->stop();
-                    _motora->getEvent("BN1fuertechico")->stop();
-                    _motora->getEvent("BN1nogolpe")->stop();
-                    _motora->getEvent("BN1invoca")->stop();
-                    _motora->getEvent("BN1debil")->stop();
-           
+            if(tipoEnemigo == 6)
+            {
+                _motora->getEvent("BN1pierde")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1pierde")->start();
+        		_motora->getEvent("BN1ataca")->stop();
+                _motora->getEvent("BN1especial1")->stop();
+                _motora->getEvent("BN1debilchica")->stop();
+                _motora->getEvent("BN1debilchico")->stop();
+                _motora->getEvent("BN1golpechica")->stop();
+                _motora->getEvent("BN1golpechico")->stop();
+                _motora->getEvent("BN1fuertechica")->stop();
+                _motora->getEvent("BN1fuertechico")->stop();
+                _motora->getEvent("BN1nogolpe")->stop();
+                _motora->getEvent("BN1invoca")->stop();
+                _motora->getEvent("BN1debil")->stop();
+            }
+            else if(tipoEnemigo == 5)
+            {
+                _motora->getEvent("BN2pierde")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN2pierde")->start();
+        		_motora->getEvent("BN2ataca")->stop();
+                _motora->getEvent("BN2especial1")->stop();
+                _motora->getEvent("BN2debiljugador")->stop();
+                _motora->getEvent("BN2golpejugador")->stop();
+                _motora->getEvent("BN2fuerte")->stop();
+                _motora->getEvent("BN2nogolpe")->stop();
+                _motora->getEvent("BN2invoca")->stop();
+                _motora->getEvent("BN2debil")->stop();
+            }
+                
             tiempoDerrota = _tiempo->GetTiempo(1);
         }
         unDerrota = true;
@@ -1955,7 +2016,8 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
         else
         {
-
+            _motora->getEvent("BN2invoca")->setPosition(this->getX(),this->getY(),this->getZ());
+            _motora->getEvent("BN2invoca")->start();
         }
     }
 
@@ -1968,7 +2030,8 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
         else
         {
-
+            _motora->getEvent("BN2nogolpe")->setPosition(this->getX(),this->getY(),this->getZ());
+            _motora->getEvent("BN2nogolpe")->start();
         }
     }
     void Enemigo::ventajaSound(int gender)
@@ -1993,9 +2056,17 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 _motora->getEvent("BN1debilchico")->start();
             }
         }
-        else // para boss muerte
+        else if(tipoEnemigo == 5)// para boss muerte
         {
-
+            if(vida <= 170)
+            {
+                _motora->getEvent("BN2debil")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN2debil")->start();
+            }
+            else 
+            {   _motora->getEvent("BN2debiljugador")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN2debiljugador")->start();
+            }
         }
     }
 
@@ -2023,7 +2094,16 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
         else // para boss muerte
         {
-
+            if(vida <= 170)
+            {
+                _motora->getEvent("BN2debil")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN2debil")->start();
+            }
+            else
+            {   
+                _motora->getEvent("BN2fuerte")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN2fuerte")->start();
+            }
         }
         
        
@@ -2037,7 +2117,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
         else
         {
-
+            _motora->getEvent("BN2invoca")->stop();
         }
     }
 
@@ -2049,7 +2129,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
         else
         {
-
+            _motora->getEvent("BN2nogolpe")->stop();
         }
     }
 
@@ -2057,12 +2137,11 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
     {
         if(tipoEnemigo == 6)
         {
-            _motora->getEvent("BN1invoca")->stop();
             _motora->getEvent("BN1debil")->stop();
         }
         else
         {
-
+            _motora->getEvent("BN2debil")->stop();
         }
     }
 
@@ -2081,9 +2160,9 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
                 _motora->getEvent("BN1debilchico")->stop();
             }
         }
-        else // para boss muerte
+        else if(tipoEnemigo == 5) // para boss muerte
         {
-
+            _motora->getEvent("BN2debiljugador")->stop(); 
         }
     }
 
@@ -2104,7 +2183,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         }
         else // para boss muerte
         {
-
+                _motora->getEvent("BN2fuerte")->stop();
         }
         
        

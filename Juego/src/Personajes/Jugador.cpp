@@ -630,7 +630,6 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
                 _getEnemigos.at(0)->fallasSound();
                 _getEnemigos.at(0)->stopPasearSound(GetTipoJug());
                 _getEnemigos.at(0)->stopVentajaSound(GetTipoJug());
-                _getEnemigos.at(0)->stopInvocaSound();
             }
         }
     }
@@ -670,7 +669,6 @@ void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
             _getEnemigos.at(0)->fallasSound();
             _getEnemigos.at(0)->stopPasearSound(GetTipoJug());
             _getEnemigos.at(0)->stopVentajaSound(GetTipoJug());
-            _getEnemigos.at(0)->stopInvocaSound();
         }
     }
 
