@@ -21,7 +21,7 @@ TravornioBoss::TravornioBoss(float nX, float nY, float nZ, int maxVida)
     _textura = "";
     fps = 150;
     _animacion = "assets/animaciones/Unicornio.xml";
-    escalado = 0.50f;//es muy grande, por eso se escala
+    escalado = 0.60f;//es muy grande, por eso se escala
 }
 
 TravornioBoss::~TravornioBoss()

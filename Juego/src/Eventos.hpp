@@ -48,6 +48,10 @@ namespace idsEventos
         GUI_ID_SLOT2,
         GUI_ID_SLOT3,
         GUI_ID_CAMPONOMBRE,
+        GUI_ID_USER,
+        GUI_ID_PASS,
+        GUI_ID_REGISTERANDSEND,
+        GUI_ID_SEND,
         GUI_ID_ATRAS,
         
         GUI_ID_ATRAS_BUTTON,

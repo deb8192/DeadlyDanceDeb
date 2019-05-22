@@ -301,7 +301,7 @@ void Ventana::ActivarRecogida()
     numTecla = 0;
     for(int i = 0; i < 30;i++)
     {
-        tecla[i] = ' ';
+        tecla[i] = '\0';
     }
 }
 
@@ -310,9 +310,9 @@ void Ventana::DesactivarRecogida()
     glfwSetCharCallback(_window,nullptr);
     recogido = true;
     numTecla = 0;
-    for(int i = 0; i < 31;i++)
+    for(int i = 0; i < 30;i++)
     {
-        tecla[i] = ' ';
+        tecla[i] = '\0';
     }
 
 }
@@ -333,6 +333,7 @@ void Ventana::InicializarLetra(const char * letras)
     //inicializamos a los valores que hayan
     int longitud = strlen(letras);
     numTecla = longitud;
+    //std::cout << longitud << " \n";
     for(int i = 0; i < 30 && i < longitud;i++)
     { 
         tecla[i] = letras[i];
@@ -344,7 +345,8 @@ void Ventana::BorrarUltimaTecla()
     if(numTecla != 0)
     {
         numTecla--;
-        tecla[numTecla] = ' ';
+        tecla[numTecla] = '\0';
+        recogido = false;
     }
 }
 
