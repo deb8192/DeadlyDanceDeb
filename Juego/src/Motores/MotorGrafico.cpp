@@ -2174,6 +2174,12 @@ void MotorGrafico::crearBillBoardFijos()
     _interfaz->DeshabilitarObjeto(_newboard3);
     BoardsPuertas.push_back(_newboard3);
 
+    unsigned short _newboard4 = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/Mano.png", 0.01f);
+    _interfaz->Trasladar(_newboard4,2.0f,0.0f,0.0f);
+    _interfaz->Escalar(_newboard4,2.25f,2.25f,2.25f);
+    _interfaz->DeshabilitarObjeto(_newboard4);
+    BoardsPuertas.push_back(_newboard4);
+
     unsigned short _boardguard = _interfaz->AddBoard(0,0,0, -1.0f, 0, "assets/images/LlaveBossBoca2.png", 0.01f);
     _interfaz->Trasladar(_boardguard,0.0f,0.0f,0.0f);
     _interfaz->Escalar(_boardguard,1.5f,1.7f,1.5f);
@@ -2197,6 +2203,11 @@ void MotorGrafico::mostrarBoardPuerta(short tipo)
         _interfaz->Trasladar(BoardsPuertas[2],center_x+2.0f,center_y+13.0f,center_z);
         _interfaz->HabilitarObjeto(BoardsPuertas[2]);
     }
+    else if(tipo == 3)
+    {
+        _interfaz->Trasladar(BoardsPuertas[3],center_x+2.0f,center_y+13.0f,center_z);
+        _interfaz->HabilitarObjeto(BoardsPuertas[3]);
+    }
 }
 
 void MotorGrafico::mostrarBoardGuardian(float x,float y,float z)
@@ -2216,6 +2227,7 @@ void MotorGrafico::desactivarBoardPuertas()
     _interfaz->DeshabilitarObjeto(BoardsPuertas[0]);
     _interfaz->DeshabilitarObjeto(BoardsPuertas[1]);
     _interfaz->DeshabilitarObjeto(BoardsPuertas[2]);
+    _interfaz->DeshabilitarObjeto(BoardsPuertas[3]);
 }
 
 void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoequipada, int tiposuelo, unsigned int i)
