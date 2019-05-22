@@ -339,8 +339,8 @@ int Jugador::Atacar(int i)
     if(vida > 0)
     {
         //Calcular posiciones que no se modifican
-        int distance = 5;
-        if(this->getArma() == nullptr)distance= 3;
+        int distance = 2;
+        if(this->getArma() == nullptr)distance= 1;
         atx = distance * sin(constantes.PI * getRY() / constantes.PI_RADIAN) + getX();
         aty = getY();
         atz = distance * cos(constantes.PI * getRY() / constantes.PI_RADIAN) + getZ();
