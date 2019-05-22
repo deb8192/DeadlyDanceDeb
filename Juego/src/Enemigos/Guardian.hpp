@@ -16,11 +16,12 @@ class Guardian : public Enemigo
         void SetNuevosObjetivos(short i);
 
     private:
-        bool funciona, hecho, escondido, atacado, forzadoCambio, zonaSeleccionada;
+        bool funciona, hecho, escondido, atacado, forzadoCambio, zonaSeleccionada, seAcerca;
         short int* _ordenes;
         short int direccion;
         std::stack<VectorEspacial> puertasAtravesadas;
         ZonaEscondite* zonaElegida;
+        int minDistanciaJugador, maxDistanciaJugador;
 };
 
 #endif

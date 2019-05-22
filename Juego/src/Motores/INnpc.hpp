@@ -30,12 +30,15 @@ public:
     virtual void setTipo(int tip)=0;
     virtual void ModificarBarraAtEs(int bar)=0;//aumenta/disminuye el valor de la barra de ataque critico
     virtual void setBarraAtEs(int bar)=0;
+    virtual void SetInvulnerabilidad(bool esVulnerable)=0;
     virtual void setAtaque(int ataq)=0;
     virtual void setSuerte(int suer)=0;
     virtual void setTimeAt(float time)=0;
     virtual void setLastTimeAt(float time)=0;
     virtual void setTimeAtEsp(float time)=0;
     virtual void setLastTimeAtEsp(float time)=0;
+    virtual void setTimeInvulnerable(float time)=0;
+    virtual void setLastTimeInvulnerable(float time)=0;
     virtual void setDanyoCritico(int danyoC)=0;
     virtual void setProAtaCritico(int probabilidad)=0;
     virtual void setVectorOrientacion()=0;
@@ -44,12 +47,15 @@ public:
     virtual int getVida()=0;
     virtual int getTipo()=0;
     virtual int getBarraAtEs()=0;
+    virtual bool GetInvulnerabilidad()=0;
     virtual int getAtaque()=0;
     virtual int getSuerte()=0;
     virtual float getTimeAtEsp()=0;
     virtual float getLastTimeAtEsp()=0;
     virtual float getTimeAt()=0;
     virtual float getLastTimeAt()=0;
+    virtual float getTimeInvulnerable()=0;
+    virtual float getLastTimeInvulnerable()=0;
     virtual int getDanyoCritico()=0;
     virtual int getProAtaCritico()=0;
     virtual int* getBuffos()=0;
@@ -58,6 +64,7 @@ public:
 /*el protected es para que tenga acceso sus descendientes o parientes*/
 protected:
     VectorEspacial vectorOrientacion; //vector para indicar la velocidad vectorial del npc
+    bool invulnerabilidad;
     float velocidadMaxima; //Valor de la velocidad maxima del npc
     float porcentajeVelocidad;  //Porcentaje de la velocidad que usara para desplazarse (valores de 0 - 1)
     int tipo;//tipo de enemigo(mayor de cero) o jugador(0)
@@ -70,8 +77,8 @@ protected:
     int proAtaCritico;//valor que determina cuantas veces se hacen ataques criticos.
     int buffos[4];//1 aumento de vida, 2 aumento de ataque, 3 aumento de suerte, 4 aumento de pCritica.
     //Variables para el metodo morir
-    float atackTime, atackEspTime;//Tiempo actual del ataque y del ataque especial
-    float lastAtackTime, lastAtackEspTime;//Tiempo antiguo del ataque y del ataque especial
+    float atackTime, atackEspTime, painAtackTime;//Tiempo actual del ataque, del ataque especial y del ultimo danyo recibido
+    float lastAtackTime, lastAtackEspTime, lastPainAtackTime;//Tiempo antiguo del ataque, del ataque especial y del ultimo danyo recibido
     float animacionMuerteTiem = 3000.0f;//tiempo de animacion del estado muerte para cualquier NPC
     float tiempoPasadoMuerte = 0;
     //tiempos animaciones

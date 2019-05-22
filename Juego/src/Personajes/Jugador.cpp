@@ -9,6 +9,7 @@ Jugador::Jugador()
     _interfaz = InterfazJugador::getInstance();
     _fisicas = MotorFisicas::getInstance();
 
+    invulnerabilidad = false; 
     animacion = 0;
     //tiempos de animacion
     tiempoAtaque=2000.0f;//tiempo en milisegundos
@@ -22,6 +23,14 @@ Jugador::Jugador()
 
     dinero = 0;
     _armaEquipada = NULL;
+    
+    //tiempos de ejecucion de acciones
+    atackTime = 0.0f;
+    atackEspTime = 0.0f;
+    painAtackTime = 0.0f;
+    lastAtackTime = 0.0f;
+    lastAtackEspTime = 0.0f;
+    lastPainAtackTime = 0.0f;
     velocidadMaxima = 2.5f;
     porcentajeVelocidad = 1.0f;
 }
@@ -74,6 +83,8 @@ Jugador::~Jugador()
 
     dinero = 0;
 
+    invulnerabilidad = false; 
+
     // INnpc
     tipo = 0;
     vida = 0;
@@ -85,8 +96,10 @@ Jugador::~Jugador()
     //TO DO: int buffos[4];
     atackTime = 0;
     atackEspTime = 0;
+    painAtackTime = 0;
     lastAtackTime = 0;
     lastAtackEspTime = 0;
+    lastPainAtackTime = 0;
     animacionMuerteTiem = 0;
     tiempoPasadoMuerte = 0;
     tiempoAtaque = 0;
@@ -326,8 +339,8 @@ int Jugador::Atacar(int i)
     if(vida > 0)
     {
         //Calcular posiciones que no se modifican
-        int distance = 5;
-        if(this->getArma() == nullptr)distance= 3;
+        int distance = 2;
+        if(this->getArma() == nullptr)distance= 1;
         atx = distance * sin(constantes.PI * getRY() / constantes.PI_RADIAN) + getX();
         aty = getY();
         atz = distance * cos(constantes.PI * getRY() / constantes.PI_RADIAN) + getZ();
@@ -380,7 +393,6 @@ int Jugador::Atacar(int i)
         {
             aumentosAtaque += (float) _armaEquipada->getAtaque() / por100;// + (float) variacion / 100;
         }
-        aumentosAtaque *= 2;
         aumentosAtaque = roundf(aumentosAtaque * por10) / por10;
 
         //Se lanza un random y si esta dentro de la probabilidad de critico lanza un critico
@@ -407,6 +419,11 @@ int Jugador::Atacar(int i)
  *      Entradas:
  *      Salidas: int danyo;
  */
+
+int Jugador::GetTipoJug()
+{
+    return tipoJug;
+}
 int Jugador::AtacarEspecial()
 {
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
@@ -557,6 +574,7 @@ void Jugador::CrearCuerpoAtaque()
 
 void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
 {
+    Constantes constantes;
     if(vida > 0)
     {
         //Enteros con los enemigos colisionados (atacados)
@@ -585,15 +603,33 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
                 //Si no se ha encontrado es que no se le a atacado
                 if (encontrado == false && _getEnemigos.at(atacados.at(i)))
                 {
+                    _motor->startAnimaSprite(2,true,_getEnemigos.at(atacados.at(i))->getX(),
+                        _getEnemigos.at(atacados.at(i))->getY(),_getEnemigos.at(atacados.at(i))->getZ());
                     float variacion = rand() % 7 - 3;
                     danyo += (int) variacion;
                     //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
                     _getEnemigos.at(atacados.at(i))->ModificarVida(-danyo);
+
+                    /*if(_fisicas->enemyCollideParedesRompibles(atacados.at(i)) || _fisicas->enemyCollideObstacleAndEnemies(atacados.at(i)))
+                    {
+                        _getEnemigos.at(atacados.at(i))->setNewPosiciones(posActual.x, posActual.y, posActual.z);
+                        _getEnemigos.at(atacados.at(i))->initPosicionesFisicas(posActual.x/constantes.DOS, 0.0f, posActual.z/constantes.DOS);
+                    }*/
+
                     danyo -= (int) variacion;
                     _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
                     //guardar el atacado para no repetir
                     atacados_normal.push_back(atacados.at(i));
                 }
+            }
+        }
+        else if(atacados.empty() && danyo > 0)
+        {
+            if(GetSala()->getPosicionEnGrafica() == 14)
+            {
+                _getEnemigos.at(0)->fallasSound();
+                _getEnemigos.at(0)->stopPasearSound(GetTipoJug());
+                _getEnemigos.at(0)->stopVentajaSound(GetTipoJug());
             }
         }
     }
@@ -616,14 +652,26 @@ void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
         {
             if(_getEnemigos.at(atacados.at(i)))
             {
+                _motor->startAnimaSprite(2,true,_getEnemigos.at(atacados.at(i))->getX()+2.0f,
+                    _getEnemigos.at(atacados.at(i))->getY(),_getEnemigos.at(atacados.at(i))->getZ()-1.0f);
                 float variacion = rand() % 7 - 3;
                 *danyo += (int) variacion;
-                _getEnemigos.at(atacados.at(i))->ModificarVida(-(*danyo));
+                _getEnemigos.at(atacados.at(i))->ModificarVida(-(*danyo));    
                 *danyo -= (int) variacion;
                 _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
             }
         }
     }
+    else if(atacados.empty() && *danyo > 0)
+    {
+        if(GetSala()->getPosicionEnGrafica() == 14)
+        {
+            _getEnemigos.at(0)->fallasSound();
+            _getEnemigos.at(0)->stopPasearSound(GetTipoJug());
+            _getEnemigos.at(0)->stopVentajaSound(GetTipoJug());
+        }
+    }
+
 }
 
 void Jugador::generarSonido(int intensidad,double duracion,int tipo)
@@ -877,6 +925,11 @@ int Jugador::getBarraAtEs()
     return 1;
 }
 
+bool Jugador::GetInvulnerabilidad()
+{
+    return invulnerabilidad;
+}
+
 int Jugador::getAtaque()
 {
     return -1;
@@ -932,6 +985,16 @@ float Jugador::getTimeAtEsp()
 float Jugador::getLastTimeAtEsp()
 {
     return lastAtackEspTime;
+}
+
+float Jugador::getTimeInvulnerable()
+{
+    return painAtackTime;
+}
+
+float Jugador::getLastTimeInvulnerable()
+{
+    return lastPainAtackTime;
 }
 
 const char*Jugador::getRutaArmaEsp()
@@ -1076,12 +1139,40 @@ void Jugador::setPosicionesFisicas(float nx,float ny,float nz)
  */
 void Jugador::ModificarVida(int vid)
 {
-    if (vid < 0) // QuitarVida, aumenta barra ataque especial
+    struct
     {
-        ModificarBarraAtEs(abs(vid));
+        float x = 0.0f;
+        float y = 0.0f;
+        float z = 0.0f;
     }
+    velocidad, posiciones;
+    Constantes constantes;
+    if (vid < 0 && !invulnerabilidad) // QuitarVida, aumenta barra ataque especial
+    {
+        vida += vid;
+        ModificarBarraAtEs(abs(vid));
+        SetInvulnerabilidad(constantes.TRUE);
+        setTimeInvulnerable(constantes.CIEN_PORCIENTO);
 
-    vida += vid;
+        if(porcentajeVelocidad != constantes.UNO)
+        {
+            porcentajeVelocidad = constantes.UNO;
+        }
+        velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+
+        posiciones.x = posFutura.x - velocidad.x;
+        posiciones.z = posFutura.z - velocidad.z;
+        setNewPosiciones(posiciones.x, posActual.y, posiciones.z);
+        this->ColisionEntornoEne();
+    }
+    else
+    {
+        if(vid >= constantes.CERO)
+        {
+            vida += vid;
+        }
+    }
     if (vida > vidaIni)
         vida = vidaIni;
     else if (vida < 0)
@@ -1122,6 +1213,11 @@ void Jugador::setBarraAtEs(int bar)
 {
     barraAtEs = bar;
     _interfaz->setAtaqueEspecial(barraAtEs);
+}
+
+void Jugador::SetInvulnerabilidad(bool invulnerable)
+{
+    invulnerabilidad = invulnerable;
 }
 
 void Jugador::setAtaque(int ataq)
@@ -1216,6 +1312,15 @@ void Jugador::setLastTimeAtEsp(float time)
     lastAtackEspTime = time;
 }
 
+void Jugador::setTimeInvulnerable(float time)
+{
+    painAtackTime = time;
+}
+
+void Jugador::setLastTimeInvulnerable(float time)
+{
+    lastPainAtackTime = time;
+}
 
 void Jugador::setAnimacion(int est)
 {

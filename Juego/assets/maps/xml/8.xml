@@ -41,8 +41,6 @@
 		<LightPos X="267" Z="111" Y="4" sala="2"> </LightPos>
 
 	<LightSala sala="3" minZ="28" maxZ="128" minX="269" maxX="416"></LightSala>
-		<LightPos X="307" Z="90" Y="-8" sala="3"> </LightPos>
-		<LightPos X="379" Z="74" Y="-8" sala="3"> </LightPos>
 
 	<LightSala sala="4" minZ="129" maxZ="220" minX="288" maxX="420"></LightSala>
 		<LightPos X="302" Z="157" Y="3" sala="4"> </LightPos>
@@ -54,7 +52,7 @@
 		<LightPos X="450" Z="209" Y="3" sala="5"> </LightPos>
 		<LightPos X="450" Z="273" Y="3" sala="5"> </LightPos>
 
-	<LightSala sala="6" minZ="220" maxZ="325" minX="187" maxX="421"></LightSala>		
+	<LightSala sala="6" minZ="220" maxZ="325" minX="187" maxX="421"></LightSala>
 		<LightPos X="358" Z="313" Y="3" sala="6"> </LightPos>
 		<LightPos X="314" Z="317" Y="3" sala="6"> </LightPos>
 		<LightPos X="270" Z="282" Y="3" sala="6"> </LightPos>
@@ -75,13 +73,13 @@
 		<LightPos X="344" Z="418" Y="3" sala="8"> </LightPos>
 
 	<!--Sala-01--><Platform Type="1" tipoSala="0" accion="0" ancho="35" largo="34" alto="4" RP="0" X="0" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
-	<!--Decoracion-cavernas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/RocaCaverna.png" Model="assets/models/Escenario/DecoracionCavernas.obj"></Object>
-	<!--Decoracion-detalles-rocas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/DecoracionDetallesRocas.obj"></Object>
-	<!--Decoracion-laberinto--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/greengrass.png" Model="assets/models/Escenario/DecoracionLaberinto.obj"></Object>
-	<!--Decoracion-Contrucciones-Piedra--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/Escenario/DecoracionPiedraMarmol.obj"></Object>
-	<!--Decoracion-Arboles-Tipo1--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/ArbolBonito.png" Model="assets/models/Escenario/ArbolBonito.obj"></Object>
-	<!--Decoracion-Arboles-Tipo2--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/pino1.png" Model="assets/models/Escenario/ArbolPinoUno.obj"></Object>
-	<!--Decoracion-Arboles-Tipo3--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/pino2.png" Model="assets/models/Escenario/ArbolPinoDos.obj"></Object>
+	<!--Decoracion-cavernas--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/RocaCaverna.png" Model="assets/models/Escenario/DecoracionCavernas.obj"></Object>
+	<!--Decoracion-detalles-rocas--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/DecoracionDetallesRocas.obj"></Object>
+	<!--Decoracion-laberinto--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/greengrass.png" Model="assets/models/Escenario/DecoracionLaberinto.obj"></Object>
+	<!--Decoracion-Contrucciones-Piedra--><Object tipoObj="17" Type="0" accion="01" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/Escenario/DecoracionPiedraMarmol.obj"></Object>
+	<!--Decoracion-Arboles-Tipo1--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/ArbolBonito.png" Model="assets/models/Escenario/ArbolBonito.obj"></Object>
+	<!--Decoracion-Arboles-Tipo2--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/pino1.png" Model="assets/models/Escenario/ArbolPinoUno.obj"></Object>
+	<!--Decoracion-Arboles-Tipo3--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/pino2.png" Model="assets/models/Escenario/ArbolPinoDos.obj"></Object>
 	<!--Decoracion-Cristal-Luz--><Object tipoObj="18" Type="0" accion="9" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/icetextures.png" Model="assets/models/Escenario/Cristales.obj"></Object>
 	<!--Decoracion-Puente-Colgante--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/cartoonwood.png" Model="assets/models/Escenario/PuenteColganteMadera.obj"></Object>
 	<!--Decoracion-Puente-estacas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Palos.png" Model="assets/models/Escenario/PuenteColganteEstacas.obj"></Object>

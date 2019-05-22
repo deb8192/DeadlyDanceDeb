@@ -21,7 +21,7 @@ EstadoContinuar::~EstadoContinuar()
 void EstadoContinuar::Iniciar()
 {
     _motor->CambiarAnchuraTexto( _motor->CrearTexto("Iniciar Nueva partida - ESC para salir", 0, 0, 300, 20),300);
-    _motor->CrearImagen("assets/images/pr2.png",150,100,10.0f);
+    _motor->CrearImagen("assets/images/pr2.png",150,100,2.2f);
     unsigned short did = _motor->CrearTexto("Seleccione slot de guardado:",180,120,0,0);
     _motor->CambiarAnchuraTexto(did,300);
     _motor->CrearBoton2(205,160,8.0f,170,40,300,GUI_ID_SLOT1,L"Slot 1",L"assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
@@ -42,7 +42,7 @@ void EstadoContinuar::Render()
 
 void EstadoContinuar::Update()
 {
-    
+
 }
 
 void EstadoContinuar::ManejarEventos()
@@ -73,7 +73,7 @@ void EstadoContinuar::ManejarEventos()
                 slotSeleccionado = 0;
                 fase = 0;
             }
-            
+
         }
 
         if(fase == 2 && _motor->OcurreEvento(999))
