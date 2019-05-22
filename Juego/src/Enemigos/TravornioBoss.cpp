@@ -16,9 +16,12 @@ TravornioBoss::TravornioBoss(float nX, float nY, float nZ, int maxVida)
     maxDistanciaJugador = 30;
     minDistanciaJugador = 15;
 
-
-    _modelo = "assets/models/Travornio/Travornio.obj";
+    estadoMuerte = 8;
+    _modelo = "assets/models/Travornio/travornio_000001.obj";
     _textura = "";
+    fps = 150;
+    _animacion = "assets/animaciones/Unicornio.xml";
+    escalado = 0.50f;//es muy grande, por eso se escala
 }
 
 TravornioBoss::~TravornioBoss()
@@ -70,6 +73,7 @@ void TravornioBoss::RunIA()
         if(ataqueEspecial)
         {
             ataqueEspecial = false;
+            _motor->cambiarAnimacion(5,0,7);
         }
         _ordenes = this->Enemigo::RunIA(funciona);
     }
@@ -160,21 +164,17 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                         bool nuevaDireccion = false;
                         if(this->getTimeAtEsp() <= 0 && !ataqueEspecial)
                         {
-                            this->setTimeAtEsp(constantes.TIEMPO_ATESP_TRAVORNIO);
+                            _motor->cambiarAnimacion(5,*i,5);
+                            this->setTimeAtEsp(7.5);
                             ataqueEspecial = true;
                             nuevaDireccion = true;
                         }
                         this->ataqueRebote(nuevaDireccion, _jug);   //TO DO: tener en cuenta las colisiones con la pared
-                        float resto = (float) ((int) (this->getTimeAt() * constantes.CIEN) % (int) (constantes.UN_CUARTO * constantes.CIEN)) / constantes.CIEN;
-                        if(resto <= constantes.DIEZ_PORCIENTO)
-                        {
-                            int danyo = this->AtacarEspecial();
+                        int danyo = this->AtacarEspecial();
 
-                            if(danyo > 0)
-                            {
-                                _jugador->ModificarVida(-danyo);
-                            }
-                            this->setTimeAtEsp(this->getTimeAtEsp() - resto);
+                        if(danyo > 0)
+                        {
+                            _jugador->ModificarVida(-danyo);
                         }
                         //funciona = true;
                         /* ataque especial 1 */
@@ -184,6 +184,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                     default:
                         SetRespawnBoss(true);
                         this->setBarraAtEs(constantes.CERO);
+                        _motor->cambiarAnimacion(5,*i,3);
                         /* Llamar animacion pedir ayuda */
                         break;
                 }
@@ -193,6 +194,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                     bool nuevaDireccion = false;
                     if(this->getTimeAt() <= 0 && !atacado)
                     {
+                        _motor->cambiarAnimacion(5,0,4);
                         this->setTimeAt(constantes.DOS);
                         atacado = true;
                         nuevaDireccion = true;
@@ -252,10 +254,12 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                     {
                         this->setTimeDefenderse(constantes.TIEMPO_DEFENSA);
                         this->setDefenderse(true);
+                        _motor->cambiarAnimacion(5,*i,2);
                     }
                     this->alinearse(&posJugador, false);
                     funciona = true;
                 }
+                break;
             default:
                 break;
         }

@@ -27,8 +27,10 @@ Enemigo::Enemigo()
     tiempoOcultarse = 0.0f;
     atackTime = 0.0f;
     atackEspTime = 0.0f;
+    painAtackTime = 0.0f;
     lastAtackTime = 0.0f;
     lastAtackEspTime = 0.0f;
+    lastPainAtackTime = 0.0f;
     lastTiempoMerodear = 0.0f;
     lastTiempoMoverse = 0.0f;
     lastTiempoOcultarse = 0.0f;
@@ -71,7 +73,7 @@ Enemigo::Enemigo()
     porcentajeVelocidad = 1.0;
     pesoRotacion = 0.0f;
 
-    
+    escalado = 1.0f;
 
 }
 
@@ -165,8 +167,10 @@ Enemigo::~Enemigo()
     //TO DO: int buffos[4];
     atackTime = 0;
     atackEspTime = 0;
+    painAtackTime = 0;
     lastAtackTime = 0;
     lastAtackEspTime = 0;
+    lastPainAtackTime = 0;
     tiempoMerodear = 0;
     tiempoMoverse = 0;
     tiempoOcultarse = 0;
@@ -616,12 +620,12 @@ int Enemigo::Atacar(int i)
             if(tipoEnemigo == 0)
             {
                 _motora->getEvent("pollohit")->setPosition(this->getX(),this->getY(),this->getZ());
-                _motora->getEvent("pollohit")->start();  
+                _motora->getEvent("pollohit")->start();
             }
             else if(tipoEnemigo == 1)
             {
                 //_motora->getEvent("murcihit")->setPosition(this->getX(),this->getY(),this->getZ());
-                _motora->getEvent("murcihit")->start();  
+                _motora->getEvent("murcihit")->start();
             }
              else if(tipoEnemigo == 6)
             {
@@ -641,7 +645,7 @@ int Enemigo::Atacar(int i)
             }
             else
             {
-                _motora->getEvent("enemyhit")->start(); 
+                _motora->getEvent("enemyhit")->start();
             }
 
             if(unAtaque && _tiempo->CalcularTiempoPasado(tiempoAtaques) >= 5000)//sino se cumple no ha acabado
@@ -650,6 +654,7 @@ int Enemigo::Atacar(int i)
             }
  
 
+            _motor->startAnimaSprite(0,true,0.0f,0.0f,0.0f);
         }
 
         if(atacado)
@@ -753,6 +758,7 @@ int Enemigo::AtacarEspecial()
                unEspecial = false;
             }
 
+            _motor->startAnimaSprite(0,true,0.0f,0.0f,0.0f);
         }
         return danyo;
     }
@@ -868,9 +874,10 @@ void Enemigo::moverseEntidad(float updTime)
 void Enemigo::RespawnNoise()
 {
     cout << "respawnNoise" << endl;
-    _motora->LoadEvent("event:/SFX/SFX-Muerte invoca enemigos","respawnfire",1);  
+    _motora->LoadEvent("event:/SFX/SFX-Muerte invoca enemigos","respawnfire",1);
     _motora->getEvent("respawnfire")->setPosition(this->getX(),this->getY(),this->getZ());
-    _motora->getEvent("respawnfire")->start();  
+    _motora->getEvent("respawnfire")->start();
+    _motor->startAnimaSprite(3,true,this->getX()+2.0f,this->getY(),this->getZ());
 }
 /*************** rotarEntidad *****************
  * Funcion con la que el enemigo rotara
@@ -977,18 +984,41 @@ void Enemigo::ModificarVida(int vid)
            unDerrota = false;
         }
     }
+    struct
+    {
+        float x = 0.0f;
+        float y = 0.0f;
+        float z = 0.0f;
+    }
+    velocidad, posiciones;
 
     if(defensa && vid < 0)
     {
         vida += vid/constantes.DOS;
     }
     else
-        {
-            vida += vid;
-        }
-    float ultimoEstertor = vidaIni * constantes.UN_CUARTO;
-    if(vid < 0)
     {
+        vida += vid;
+    }
+    float ultimoEstertor = vidaIni * constantes.UN_TERCIO;
+    if(vid < 0 && !invulnerabilidad)
+    {
+        vida += vid;
+        SetInvulnerabilidad(constantes.TRUE);
+        setTimeInvulnerable(constantes.CIEN_PORCIENTO);
+
+        if(porcentajeVelocidad != constantes.UNO)
+        {
+            porcentajeVelocidad = constantes.UNO;
+        }
+        velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+
+        posiciones.x = posFutura.x - velocidad.x;
+        posiciones.z = posFutura.z - velocidad.z;
+        setNewPosiciones(posiciones.x, posActual.y, posiciones.z);
+        setPosicionesFisicas(-velocidad.x, constantes.CERO, -velocidad.z);
+
         if(tipoEnemigo == 3 || tipoEnemigo == 4)
         {
             if(vida <= ultimoEstertor)
@@ -1005,6 +1035,13 @@ void Enemigo::ModificarVida(int vid)
             ModificarBarraAtEs(abs(vid));
         }
 
+    }
+    else
+    {
+        if(vid >= constantes.CERO)
+        {
+            vida += vid;
+        }
     }
     if (vida > vidaIni)
         vida = vidaIni;
@@ -1046,6 +1083,11 @@ void Enemigo::ModificarBarraAtEs(int bar)
 void Enemigo::setBarraAtEs(int bar)
 {
     barraAtEs = bar;
+}
+
+void Enemigo::SetInvulnerabilidad(bool invulnerable)
+{
+    invulnerabilidad = invulnerable;
 }
 
 void Enemigo::setAtaque(int ataq)
@@ -1113,6 +1155,15 @@ void Enemigo::setLastTimeAtEsp(float time)
     lastAtackEspTime = time;
 }
 
+void Enemigo::setTimeInvulnerable(float time)
+{
+    painAtackTime = time;
+}
+
+void Enemigo::setLastTimeInvulnerable(float time)
+{
+    lastPainAtackTime = time;
+}
 void Enemigo::SetSala(Sala* sala)
 {
     _estoy = sala;
@@ -1136,6 +1187,11 @@ int Enemigo::getTipo()
 int Enemigo::getBarraAtEs()
 {
     return barraAtEs;
+}
+
+bool Enemigo::GetInvulnerabilidad()
+{
+    return invulnerabilidad;
 }
 
 int Enemigo::getAtaque()
@@ -1336,6 +1392,16 @@ float Enemigo::getLastTimeAtEsp()
     return lastAtackEspTime;
 }
 
+float Enemigo::getTimeInvulnerable()
+{
+    return painAtackTime;
+}
+
+float Enemigo::getLastTimeInvulnerable()
+{
+    return lastPainAtackTime;
+}
+
 int Enemigo::GetEnemigo()
 {
     return tipoEnemigo;
@@ -1416,9 +1482,9 @@ ZonaEscondite* Enemigo::getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zona
 }
 //ia
 
-void Enemigo::setArbol(Arbol ia)
+void Enemigo::setArbol(Arbol* ia)
 {
-    arbol = new Arbol(ia.GetRaiz(), ia.GetRaiz()->getNombre());
+    arbol = new Arbol(ia->GetRaiz(), ia->GetRaiz()->getNombre());
 }
 
 Arbol * Enemigo::getArbol()
@@ -2720,16 +2786,29 @@ int Enemigo::GetTipoEnemigo()
 void Enemigo::Render(short posArray,
     float updTime, float drawTime)
 {
+    Constantes constantes;
     moverseEntidad(1 / updTime);
     UpdateTimeMove(drawTime);
     RotarEntidad(1 / updTime);
     UpdateTimeRotate(drawTime);
 
-    _motor->mostrarEnemigos(
-        posActual.x, posActual.y, posActual.z,
-        rotActual.x, rotActual.y, rotActual.z,
-        posArray
-    );
+    if(tipoEnemigo == constantes.TRAVORNIO)
+    {
+        _motor->mostrarEnemigos(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y, rotActual.z,
+            posArray, constantes.CINCO
+        );
+    }
+    else
+    {
+        _motor->mostrarEnemigos(
+            posActual.x, posActual.y, posActual.z,
+            rotActual.x, rotActual.y, rotActual.z,
+            posArray
+        );
+    }
+    
 
     _motor->UpdateBoardsVidaEne(posArray,vida,vidaIni);
 
@@ -2757,4 +2836,9 @@ void Enemigo::BorrarEnemigos(unsigned short n)
 unsigned int Enemigo::GetEstadoMuerte()
 {
     return estadoMuerte;
+}
+
+float Enemigo::GetEscalado()
+{
+    return escalado;
 }

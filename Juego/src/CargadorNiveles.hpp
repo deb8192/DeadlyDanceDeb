@@ -23,6 +23,7 @@
 
 //cargaremos el arbol(ia) desde nivel y se lo pasaremos a su entidad correspondiente, el enemigo la activa llamando a enemigo->runIA()
 #include "CargadorBehaviorTrees.hpp"
+#include "Arbol.hpp"
 
 #include "Objetos/Puerta.hpp"
 #include "Objetos/Palanca.hpp"
@@ -67,8 +68,12 @@ class CargadorNiveles
         std::vector<Palanca*> GetPalancas();
         std::vector<Cofre*> GetCofres();
 
+        Arbol* GetArbolPollo();
+        Arbol* GetArbolMurcielago();
+        Arbol* GetArbolGuardian();
+        Arbol* GetArbolBoss();
+
         void ReservarMemoriaVectores(int eneMax, int doorsMax, int leversMax, int chestsMax, int waypointsMax, int zonesMax);
-        void BorrarVectorEnemigosBossActivado();
         Sala* CrearPlataforma(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, int centro, const char* ruta_objeto, const char* ruta_textura);//lo utilizamos para crear su modelo en motorgrafico y su objeto
         void CrearLuz(int x,int y,int z,int tipo,float dist,int r, int g, int b, int anim);
         void CrearSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
@@ -123,6 +128,12 @@ class CargadorNiveles
         std::vector<Palanca*> _palancas;
         std::vector<Puerta*> _puertas;
         std::vector<Cofre*> _cofres;
+
+        // Arboles de IA
+        Arbol* _arbolPollo;
+        Arbol* _arbolMurcielago;
+        Arbol* _arbolGuardian;
+        Arbol* _arbolBoss;
 };
 
 #endif /* CargadorNiveles_HPP */

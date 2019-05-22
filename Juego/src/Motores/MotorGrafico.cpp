@@ -17,6 +17,7 @@ MotorGrafico::MotorGrafico()
         Plataformas_Scena.reserve(200);//salas reservadas
         Luces_Scena.reserve(60);//luces reservadas
         Salas_luz.reserve(20);
+        Sprites_Scena.reserve(20);
         Enemigos_Scena.reserve(50);//enemigos reservados
         Textos_Scena.reserve(18);//textos estaticos en la escena o gui
         RecoArmas_Scena.reserve(50);
@@ -126,6 +127,7 @@ void MotorGrafico::LimpiarElementosJuego()
         Particulas_Accion.clear();
         Luces_Scena.clear();
         Salas_luz.clear();
+        Sprites_Scena.clear();
         BoardsArmas_Scena.clear();
         BoardsEnem_Scena.clear();
         Particulas_Llave.clear();
@@ -1409,7 +1411,16 @@ int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, con
 
                 Animaciones * _ani = new Animaciones(anima);//cargamos las animaciones
                 _ani->AsignarID(enemigo);
-                EnemigosAni_Scena.push_back(_ani);
+                
+                if(boss)
+                {
+                    EnemigosAni_Scena.insert(EnemigosAni_Scena.begin(),_ani);
+                }
+                else
+                {
+                    EnemigosAni_Scena.push_back(_ani);
+                }
+
                 //std::cout << ruta_objeto << " "  << fps << " " << anima << " " << EnemigosAni_Scena.size()-1 << "\n";
             }
             else
@@ -1424,15 +1435,23 @@ int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, con
             _interfaz->DeshabilitarObjeto(_board);
             if(boss)
             {
-                _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+40.0f,(float)z);
+                _interfaz->Trasladar(_board,(float)x+4.0f,(float)y+distanciaboard,(float)z);
                 BoardsEnem_Scena.insert(BoardsEnem_Scena.begin(), _board);
             }
             else
             {
                 BoardsEnem_Scena.push_back(move(_board));
             }
-
+        
+        if(boss)
+        {
+            return 0;
+        }
+        else
+        {
             return (Enemigos_Scena.size()-1);
+        }
+
         }
 
     return -1;
@@ -1812,6 +1831,76 @@ void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *rut
     #endif
 }
 
+void MotorGrafico::CargarSprite(int id, std::vector<const char *> ruta_sprite)
+{
+    //crear animacion
+    AnimacionSprite sprites;
+    sprites.id = id;
+    sprites.posx = 0.0f;
+    sprites.posy = 0.0f;
+    sprites.posz = 0.0f;
+
+    //crear boards
+    for(unsigned int i=0; i<ruta_sprite.size(); i++)
+    {
+        unsigned short _newboard = _interfaz->AddBoard(0,0,0, -1.0f, 0, ruta_sprite[i], 0.01f);
+        _interfaz->Trasladar(_newboard,0.0f,0.0f,0.0f);
+        _interfaz->Escalar(_newboard,2.0f,2.0f,2.0f);
+        _interfaz->DeshabilitarObjeto(_newboard);
+        sprites.sprite_board.push_back(_newboard);
+    }
+
+    //Guardar la animacion
+    Sprites_Scena.push_back(sprites);
+}
+
+void MotorGrafico::startAnimaSprite(int id, bool start, float posx, float posy, float posz)
+{
+    //Buscar Anima Sprite
+    for(unsigned int i=0; i<Sprites_Scena.size(); i++)
+    {
+        //Si el sprite coincide
+        if(Sprites_Scena[i].id == id)
+        {
+            Sprites_Scena[i].start = start;
+            if(posx == 0.0f && posy == 0.0f && posz == 0.0f)
+            {
+                posx = center_x + 2.0f;
+                posy = center_y;
+                posz = center_z - 1.0f;
+            }
+            Sprites_Scena[i].posx = posx;
+            Sprites_Scena[i].posy = posy + 4.0f;
+            Sprites_Scena[i].posz = posz;
+        }
+    }
+}
+
+void MotorGrafico::updateAnimaSprite()
+{
+    for(unsigned int i=0; i < Sprites_Scena.size(); i++)
+    {
+        if(Sprites_Scena[i].start == true)
+        {
+            //si el sprite actual
+            if(Sprites_Scena[i].actualsprite != 0)
+            {
+                _interfaz->DeshabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite-1]);
+            }
+            _interfaz->Trasladar(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite],Sprites_Scena[i].posx,Sprites_Scena[i].posy,Sprites_Scena[i].posz);
+            //std::cout << Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite] << std::endl;
+            _interfaz->HabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite]);
+            Sprites_Scena[i].actualsprite++;
+            if(Sprites_Scena[i].actualsprite == Sprites_Scena[i].sprite_board.size())
+            {
+                Sprites_Scena[i].actualsprite = 0;
+                _interfaz->DeshabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].sprite_board.size()-1]);
+                Sprites_Scena[i].start = false;
+            }
+        }
+    }
+}
+
 void MotorGrafico::llevarObjeto(float x, float y, float z, float rx, float ry, float rz)
 {
     #ifdef WEMOTOR
@@ -1944,7 +2033,7 @@ void MotorGrafico::mostrarJugador(float x, float y, float z, float rx, float ry,
     #endif
 }
 
-void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i)
+void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry, float rz, unsigned int i, float distanciaboard)
 {
     #ifdef WEMOTOR
 
@@ -1957,7 +2046,7 @@ void MotorGrafico::mostrarEnemigos(float x, float y, float z, float rx, float ry
 
         if(BoardsEnem_Scena.size() > 0 && BoardsEnem_Scena.size() > i && BoardsEnem_Scena[i] != 0)
         {
-            _interfaz->Trasladar(BoardsEnem_Scena[i],x+2.0f,y+10.0f,z);
+            _interfaz->Trasladar(BoardsEnem_Scena[i],x+2.0f,y+10.0f+distanciaboard,z);
 
             //Habilitar si esta cerca del pesonaje
             float distx = center_x - x;
@@ -2821,6 +2910,11 @@ void MotorGrafico::EraseTodosEnemigos()
         {
             _interfaz->RemoveObject(BoardsEnem_Scena[valor]);
             BoardsEnem_Scena.erase(BoardsEnem_Scena.begin());
+        }
+
+        if(valor >= 0 && valor < EnemigosAni_Scena.size())
+        {
+            EnemigosAni_Scena.erase(EnemigosAni_Scena.begin());
         }
 
     #else
@@ -4171,4 +4265,55 @@ void MotorGrafico::PlayVideo(unsigned int id)
 
         }
     #endif
+}
+
+void MotorGrafico::EscalarMalla(unsigned int did, float escalado)
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            _interfaz->Escalar(did,escalado,escalado,escalado);
+        }
+    #endif 
+}
+
+unsigned int MotorGrafico::ObtenerIDOpengl(unsigned int tipo,unsigned int idVector)
+{
+    #ifdef WEMOTOR
+
+        unsigned int idOpengl = 0;
+
+        if(tipo == 0) //animaciones objetos
+        {
+            idOpengl = Objetos_Scena[idVector];
+        }
+        else if(tipo == 1) //animaciones recolectables
+        {
+            idOpengl = RecoArmas_Scena[idVector];
+        }
+        else if(tipo == 2) //animaciones powerup
+        {
+            idOpengl = PowerUP_Scena[idVector];
+        }
+        else if(tipo == 3) //animaciones llaves
+        {
+            idOpengl = Llaves_Scena[idVector];
+        }
+        else if(tipo == 4) //animaciones paredes
+        {
+            idOpengl = Paredes_Scena[idVector];
+        }
+        else if(tipo == 5) //enemigos
+        {
+            //std::cout << did << " " << estado << "\n";
+            idOpengl = Enemigos_Scena[idVector];
+        }
+        else if(tipo == 6) //cofres normales
+        {
+            idOpengl = Cofres_Scena[idVector];
+        }
+
+    #endif 
+
+        return idOpengl;
 }

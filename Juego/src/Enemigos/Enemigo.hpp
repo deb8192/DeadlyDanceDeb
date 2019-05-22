@@ -72,6 +72,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setTipo(int tip);
         void ModificarBarraAtEs(int bar);
         void setBarraAtEs(int bar);
+        void SetInvulnerabilidad(bool esVulnerable);
         void setAtaque(int ataq);
         void setArmaEspecial(int ataque);
         void setSuerte(int suer);
@@ -90,6 +91,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setLastTimeDefenderse(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
+        void setTimeInvulnerable(float time);
+        void setLastTimeInvulnerable(float time);
         void setPosAtaques(int p);
         void setVelocidadMaxima(float velocidad); //modifica la VelocidadMaxima de desplazamiento
         void SetEnemigo(int);
@@ -103,6 +106,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getVida();
         int getTipo();
         int getBarraAtEs();
+        bool GetInvulnerabilidad();
         int getAtaque();
         int getPosAtaques();
         int getSuerte();
@@ -122,6 +126,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getLastTimeDefenderse();
         float getTimeAtEsp();
         float getLastTimeAtEsp();
+        float getTimeInvulnerable();
+        float getLastTimeInvulnerable();
         float getX();
         float getY();
         float getZ();
@@ -167,7 +173,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
 
         //ia
         float randomBinomial();//devuelve un valor random entre -1 y 1
-        void setArbol(Arbol);//asigna un arbol de ia al enemigo
+        void setArbol(Arbol*);//asigna un arbol de ia al enemigo
         Arbol* getArbol();//devuelve el puntero al arbol de ia que tiene, CUIDADO si no tiene arbol devuelve nullptr
         void UpdateIA(); //funcion que llama desde nivel a la IA del enemigo que sea que activara la lectura del arbol segun sea un pollo, un murcielago... etc
         void UpdateBehavior(short *i, int* _jugador, std::vector<ZonaOscura*> &_getZonasOscuras, std::vector<ZonaEscondite*> &_getZonasEscondite, bool ayuda); //actualiza el comportamiento actual del pollo
@@ -203,6 +209,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         };
 
         unsigned int GetEstadoMuerte();
+        float GetEscalado();
 
     protected:
         Times* _tiempo;
@@ -320,6 +327,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float tiempoVida;
         float tiempoDerrota;
         int oponenteSound;
+
+        float escalado;//por defecto 1.0f
 };
 
 #endif

@@ -15,6 +15,11 @@ CargadorNiveles::CargadorNiveles()
     _motor = MotorGrafico::GetInstance();
     _fisicas = MotorFisicas::getInstance();
     _motora = MotorAudioSystem::getInstance();
+
+    _arbolPollo = cargadorIA.cargarBehaviorTreeXml("PolloBT");
+    _arbolMurcielago = cargadorIA.cargarBehaviorTreeXml("MurcielagoBT");
+    _arbolGuardian = cargadorIA.cargarBehaviorTreeXml("GuardianBT");
+    _arbolBoss = cargadorIA.cargarBehaviorTreeXml("BossesBT");
 }
 
 CargadorNiveles::~CargadorNiveles()
@@ -117,11 +122,19 @@ CargadorNiveles::~CargadorNiveles()
     }
     _cofres.clear();
 
+    tam = _paredes.size();
+    for(short i=0; i < tam; i++)
+    {
+        delete _paredes.at(i);
+    }
+    _paredes.clear();
+
     delete _primeraSala;
 }
 
 void CargadorNiveles::CargarNivelXml(int level, int tipoJug)
 {
+    id = 0;
     this->tipoJug = tipoJug;
 
     //definimos los strings
@@ -588,6 +601,26 @@ std::vector<Cofre*> CargadorNiveles::GetCofres()
     return _cofres;
 }
 
+Arbol* CargadorNiveles::GetArbolPollo()
+{
+    return _arbolPollo;
+}
+
+Arbol* CargadorNiveles::GetArbolMurcielago()
+{
+    return _arbolMurcielago;
+}
+
+Arbol* CargadorNiveles::GetArbolGuardian()
+{
+    return _arbolGuardian;
+}
+
+Arbol* CargadorNiveles::GetArbolBoss()
+{
+    return _arbolBoss;
+}
+
 void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int doorsMax, int leversMax, int chestsMax,
     int waypointsMax, int zonesMax)
 {
@@ -597,7 +630,7 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int doorsMax, int leve
     _cofres.reserve(chestsMax);
     _zonasRespawn.reserve(zonesMax);
     _waypoints.reserve(waypointsMax);
-    _eneCofres.reserve(chestsMax/4);
+    _eneCofres.reserve(chestsMax/2); // Antes estaba a /4 por el nivel de la muerte
 
     // TO DO:
     /*
@@ -607,15 +640,6 @@ void CargadorNiveles::ReservarMemoriaVectores(int eneMax, int doorsMax, int leve
     _llaves.reserve(20);
     _powerup.reserve(20);
     */
-}
-
-void CargadorNiveles::BorrarVectorEnemigosBossActivado()
-{
-    short tam = _enemigos.size();
-    for(short i=0; i < tam; i++)
-    {
-        delete _enemigos.at(i);
-    }
 }
 
 //lo utilizamos para crear su modelo en motorgrafico y su objeto
@@ -668,7 +692,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         {
             Pollo* _ene = new Pollo(x,y,z, 50); // Posiciones, vida
             //ia
-            _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
+            _ene->setArbol(_arbolPollo);
             _ene->setVelocidadMaxima(1.0f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
             _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
@@ -685,7 +709,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         {
             Murcielago* _ene = new Murcielago(x,y,z, 75); // Posiciones, vida
             //ia
-            _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("MurcielagoBT"));
+            _ene->setArbol(_arbolMurcielago);
             _ene->setVelocidadMaxima(1.0f);
             _enemigos.push_back(_ene);//guardamos el enemigo en el vector
             _enemigos.back()->setID(++id);//le damos el id unico en esta partida al enemigo
@@ -702,7 +726,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         {
             Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
-            _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
+            _ene->setArbol(_arbolGuardian);
             _ene->setVelocidadMaxima(1.5f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
             _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
@@ -720,7 +744,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
         {
             Guardian* _ene = new Guardian(x,y,z, 150, enemigo);
             //ia
-            _ene->setArbol(cargadorIA.cargarBehaviorTreeXml("GuardianBT"));
+            _ene->setArbol(_arbolGuardian);
             _ene->setVelocidadMaxima(1.5f);
             _ene->setID(++id);//le damos el id unico en esta partida al enemigo
             _enemigos.push_back(move(_ene));//guardamos el enemigo en el vector
@@ -786,8 +810,7 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
         _boss->SetMultiplicadorAtEsp(1.5);
     }
     
-    //_boss->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
-    _boss->setArbol(cargadorIA.cargarBehaviorTreeXml("BossesBT"));
+    _boss->setArbol(_arbolBoss);
     _boss->setID(++id);//le damos el id unico en esta partida al enemigo
 
     _boss->SetEnemigo(enemigo); // Se utiliza en UpdateBehavior()
@@ -985,8 +1008,7 @@ unsigned short CargadorNiveles::CrearCofreArana(float x, float y, float z,
 {
     CofreArana* _eneA = new CofreArana(x,y,z, 150, ancho, alto, largo, sala); // Posiciones, vida
 
-    //_eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("CofreAranyaBT"));
-    _eneA->setArbol(cargadorIA.cargarBehaviorTreeXml("PolloBT"));
+    _eneA->setArbol(_arbolPollo);
     _eneA->setID(++id);//le damos el id unico en esta partida al enemigo
     _eneA->SetEnemigo(constantes.ARANA);
 

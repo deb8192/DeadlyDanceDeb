@@ -1,7 +1,7 @@
 <Level><!--- Esto nos indica que estamos definiendo un nivel -->
 
 	<!-- Para reservar memoria en los vectores --> 	<!-- TO DO: Poner todos los numeros a Walls -->
-	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="6" Levers="6" Chests="7" Waypoints="70" Zones="21"></MaxNumberOf>
+	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="6" Levers="6" Chests="7" Waypoints="46" Zones="21"></MaxNumberOf>
 	<!-- Tenemos 36/50 enemigos -->
 
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
@@ -75,13 +75,13 @@
 		<LightPos X="344" Z="418" Y="3" sala="8"> </LightPos>
 
 	<!--Sala-01--><Platform Type="1" tipoSala="0" accion="0" ancho="35" largo="34" alto="4" RP="0" X="0" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
-	<!--Decoracion-cavernas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/RocaCaverna.png" Model="assets/models/Escenario/DecoracionCavernas.obj"></Object>
-	<!--Decoracion-detalles-rocas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/DecoracionDetallesRocas.obj"></Object>
-	<!--Decoracion-laberinto--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/greengrass.png" Model="assets/models/Escenario/DecoracionLaberinto.obj"></Object>
-	<!--Decoracion-Contrucciones-Piedra--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/Escenario/DecoracionPiedraMarmol.obj"></Object>
-	<!--Decoracion-Arboles-Tipo1--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/ArbolBonito.png" Model="assets/models/Escenario/ArbolBonito.obj"></Object>
-	<!--Decoracion-Arboles-Tipo2--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/pino1.png" Model="assets/models/Escenario/ArbolPinoUno.obj"></Object>
-	<!--Decoracion-Arboles-Tipo3--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/pino2.png" Model="assets/models/Escenario/ArbolPinoDos.obj"></Object>
+	<!--Decoracion-cavernas--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/RocaCaverna.png" Model="assets/models/Escenario/DecoracionCavernas.obj"></Object>
+	<!--Decoracion-detalles-rocas--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/ulrick.png" Model="assets/models/Escenario/DecoracionDetallesRocas.obj"></Object>
+	<!--Decoracion-laberinto--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/greengrass.png" Model="assets/models/Escenario/DecoracionLaberinto.obj"></Object>
+	<!--Decoracion-Contrucciones-Piedra--><Object tipoObj="17" Type="0" accion="01" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/rocasuelo.png" Model="assets/models/Escenario/DecoracionPiedraMarmol.obj"></Object>
+	<!--Decoracion-Arboles-Tipo1--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/ArbolBonito.png" Model="assets/models/Escenario/ArbolBonito.obj"></Object>
+	<!--Decoracion-Arboles-Tipo2--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/pino1.png" Model="assets/models/Escenario/ArbolPinoUno.obj"></Object>
+	<!--Decoracion-Arboles-Tipo3--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/pino2.png" Model="assets/models/Escenario/ArbolPinoDos.obj"></Object>
 	<!--Decoracion-Cristal-Luz--><Object tipoObj="18" Type="0" accion="9" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/icetextures.png" Model="assets/models/Escenario/Cristales.obj"></Object>
 	<!--Decoracion-Puente-Colgante--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/cartoonwood.png" Model="assets/models/Escenario/PuenteColganteMadera.obj"></Object>
 	<!--Decoracion-Puente-estacas--><Object tipoObj="17" Type="0" accion="1" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/Palos.png" Model="assets/models/Escenario/PuenteColganteEstacas.obj"></Object>
@@ -146,7 +146,7 @@
 				<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="8" ancho="4" largo="4" alto="4" X="367" Y="0" Z="128" conexiones="7,9"></Waypoint>
 
 					<!--Sala-05--><Platform Type="1" tipoSala="0" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="176" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
-					<!--Puerta--><Object tipoObj="2" Type="1" codigo="0" accion="3" ancho="1" largo="4" alto="10" RP="0" X="363" Y="0" Z="128" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
+					<!--Puerta2--><Object tipoObj="2" Type="1" codigo="0" accion="3" ancho="4" largo="1" alto="10" RP="0" X="363" Y="0" Z="128" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
 					<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="365" Y="0" Z="171"></Zone>
 					<!--Palanca--><Object tipoObj="0" Type="1" codigo="11" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="322" Y="0" Z="203" despX="0" despZ="0" Texture="assets/texture/platform1.png" Model=""></Object>
 					<!--Base--><Object tipoObj="16" Type="1" accion="1" ancho="3" largo="2" alto="5" X="322" Y="0" Z="203" Texture="assets/texture/platform1.png" Model="assets/models/Base.obj"></Object>
