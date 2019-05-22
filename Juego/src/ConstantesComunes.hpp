@@ -28,19 +28,22 @@ using Constantes = struct ValoresConstantes
     const short NUEVE = 9;
     const short DIEZ = 10;
     const short DIECIOCHO = 18;
+    const short VEINTE = 20;
+    const short TREINTA = 30;
     const short CIEN = 100;
     const short TIEMPO_RESPAWN = 30;
     const int MAX_VIDA_BOSS_PELIGRO = 50;
-    const float TIEMPO_DEFENSA = 1.5;
-    const float TIEMPO_MERODEAR = 1.5;
-    const float TIEMPO_EMBESTIR = 2.0;
-    const float TIEMPO_ATESP_TRAVORNIO = 7.5;
-    const float PORC_VELOCIDAD_EMBESTIR = 1.5;
-    const float PORC_VELOCIDAD_ATREBOTE = 2.0;
+    const float TIEMPO_DEFENSA = 1.5f;
+    const float TIEMPO_MERODEAR = 1.5f;
+    const float TIEMPO_EMBESTIR = 2.0f;
+    const float TIEMPO_ATESP_TRAVORNIO = 7.5f;
+    const float PORC_VELOCIDAD_EMBESTIR = 1.5f;
+    const float PORC_VELOCIDAD_ATREBOTE = 2.0f;
     const float DEG_TO_RAD = 0.0174532925199432957f;
     const float RAD_TO_DEG = 57.295779513082320876f;
 
     /******************** Porcentajes *******************/
+    const float CIEN_PORCIENTO = 1.00f;
     const float DIEZ_PORCIENTO = 0.10f;
     const float UN_CUARTO = 0.25f;
     const float UN_MEDIO = 0.5f;
@@ -176,6 +179,10 @@ using Constantes = struct ValoresConstantes
 
     // Codigo de la puerta del boss
     const unsigned short PUERTA_BOSS = 20;
+
+    // Booleanos
+    const bool TRUE = true;
+    const bool FALSE = false;
 
 };
 #endif

@@ -117,6 +117,7 @@ void main()
 
 }
 
+//Codigo sacado de (www.learnopengl.com)
 float ShadowCalculation(vec4 fragPosLightSpace, vec3 lightDir)
 {
     // perform perspective divide

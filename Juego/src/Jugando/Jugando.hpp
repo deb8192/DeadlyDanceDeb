@@ -80,7 +80,7 @@ class Jugando: public Estado {
         Enemigo* getEnemigoPideAyuda();
         std::vector<Enemigo*> getEnemigos();
         Jugador* GetJugador(); // Por ahora solo se llama desde Pollo.cpp y Murcielago.cpp
-        
+
         void AbrirPantallaPuzzle();
         void AbrirCofre(float x, float y, float z, bool esArana);
         void CrearEnemigoArana();
@@ -89,6 +89,7 @@ class Jugando: public Estado {
             float x, float y, float z, unsigned int posArana, Sala* sala);
         void BorrarTodosLosEnemigos();
         void LimpiarJuego();
+        void CrearSprites();
 
     private:
 
@@ -99,7 +100,7 @@ class Jugando: public Estado {
         Times* _controladorTiempo;
         InterfazJugador* _interfaz;
         Constantes constantes;
-        
+
         CargadorNiveles cargador;//nos ayuda a cargar los niveles
         CargadorPuzzles cargPuzzles; // contiene todos los puzzles
 
@@ -113,7 +114,7 @@ class Jugando: public Estado {
         bool respawnMO;
         bool bocadillo;
         int estarAtacado;
-        
+
         Enemigo* _boss;
         std::vector<Enemigo*> _enemigos;//Enemigos en scena
         std::vector<Enemigo*> _eneCofres;//Cofres arana desactivados
@@ -138,7 +139,7 @@ class Jugando: public Estado {
         std::vector<Cofre*> _cofres;
 
         INnpc::VectorEspacial posicionMediaEnemigos;  //Posicion media que comparten los pollos que atacan en bandada
-        
+
         bool reiniciando, puzzleResuelto; // Se utiliza solo en Reanudar por el cambio entre Estados
         bool ganarPuzzle;
         bool desactivarColisionesJugador;
@@ -180,6 +181,6 @@ class Jugando: public Estado {
 
        // Debug del cofre arana
        bool esconderArana;
-       
+
 };
 #endif /* JUGANDO_HPP */

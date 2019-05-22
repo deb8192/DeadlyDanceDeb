@@ -47,7 +47,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         void CrearCuerpoAtaque();
         void AtacarUpdate(int danyo, vector<Enemigo*> &_getEnemigos);
         void Interactuar(int, int);//llama a la mecanica de interactuar
-
+        int GetTipoJug();
+        
         //Metodos de INsentidos
         void generarSonido(int intensidad, double duracion, int tipo);
         void queEscuchas();
@@ -80,6 +81,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         void setTipo(int tip);
         void ModificarBarraAtEs(int bar);
         void setBarraAtEs(int bar);
+        void SetInvulnerabilidad(bool invulnerable);
         void setAtaque(int ataq);
         void setArma(Recolectable* _armaRec);
         void setArmaEspecial(int ataque);
@@ -90,6 +92,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         void setLastTimeAt(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
+        void setTimeInvulnerable(float time);
+        void setLastTimeInvulnerable(float time);
 
         //Animacion
         void setAnimacion(int);
@@ -122,6 +126,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         int getVida();
         int getTipo();
         int getBarraAtEs();
+        bool GetInvulnerabilidad();
         int getAtaque();
         Arma* getArma();
         Arma* getArmaEspecial();
@@ -133,6 +138,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         float getLastTimeAtEsp();
         float getTimeAt();
         float getLastTimeAt();
+        float getTimeInvulnerable();
+        float getLastTimeInvulnerable();
         const char* getRutaArmaEsp();
         const char* getRutaTexturaArmaEsp();
         void girarCamara();

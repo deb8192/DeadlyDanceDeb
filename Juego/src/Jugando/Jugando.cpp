@@ -160,6 +160,9 @@ void Jugando::Iniciar()
     _motor->FondoEscena(255,0,0,0);
     _motor->BorrarCargando();
 
+    //Crear Sprites
+    CrearSprites();
+
     //si esta puesto el nivel 1 suena la bienvenida del nivel 1, sino del 2
     if(nivelJ == 8)
     {
@@ -463,6 +466,7 @@ void Jugando::Update()
         _motora->getEvent("AmbienteViento")->pause();
     }
 
+
    if(_controladorTiempo->CalcularTiempoPasado(startPlayTime)/1000 > 20.0f && nivelJ == 8)
    {
        //para que pueda moverse al decir el mensaje de bienvenida del nivel nuevo
@@ -504,10 +508,6 @@ void Jugando::Update()
     {
         this->RespawnEnemigos();
         lastRespawnTime = respawnTime;
-    }
-    else if(enSalaBoss)
-    {
-        //if()
     }
 
     // ********** se actualiza posiciones e interpolado **********
@@ -703,6 +703,35 @@ void Jugando::Update()
         //_jugador->setTimeAt(0);
     }
 
+    //Este bloque se da si el enemigo esta en el proceso de invulnerabilidad
+    if(_jugador->getTimeInvulnerable() > 0.0f)
+    {
+        if(_jugador->getTimeInvulnerable() == 1.0f)
+        {
+            //Si es la primera vez que entra al bucle de invulnerabilidad debe guardar el tiempo actual desde el reloj
+            _jugador->setLastTimeInvulnerable(_controladorTiempo->GetTiempo(2));
+        }
+        float tiempoActual = 0.0f, tiempoInvulnerable = 0.0f;
+        tiempoActual = _controladorTiempo->GetTiempo(2);
+        tiempoInvulnerable = _jugador->getTimeInvulnerable();
+        tiempoInvulnerable -= (tiempoActual - _jugador->getLastTimeInvulnerable());
+        if(tiempoActual > _jugador->getLastTimeInvulnerable())
+        {
+            //Si no es la primera vez que entra al bucle de invulnerabilidad, tiempoActual debe ser mayor que lastTimeInvulnerable
+            //por lo que guardamos en lastTimeInvulnerable a tiempoActual
+            _jugador->setLastTimeInvulnerable(tiempoActual);
+        }
+        _jugador->setTimeInvulnerable(tiempoInvulnerable);
+    }
+    else
+    {
+        if(_jugador->GetInvulnerabilidad())
+        {
+            _jugador->SetInvulnerabilidad(constantes.FALSE);
+        }
+    }
+
+
     //actualizamos los enemigos
     if(_enemigos.size() > 0)//posiciones interpolacion
     {
@@ -720,14 +749,14 @@ void Jugando::Update()
                 // Se coloca la posicionMedia de las bandadas
                 if(_enemigos[i]->GetModo() == Enemigo::modosEnemigo::MODO_ATAQUE)
                 {
-                    if(_enemigos[i]->GetSala() == _jugador->GetSala())
+                    /*if(_enemigos[i]->GetSala() == _jugador->GetSala())
                     {
                     _enemigos[i]->SetPosicionComunBandada(posicionMediaEnemigos);
                     }
                     else
-                    {
+                    {*/
                         _enemigos[i]->SetPosicionComunBandada(posicionMediaNula);
-                    }
+                    //}
                 }
 
 
@@ -868,7 +897,7 @@ void Jugando::Update()
                 //Este bloque se da si el Boss esta en el proceso de ataque especial
                 if(_enemigos[i]->getTimeAtEsp() > constantes.CERO)
                 {
-                    if(_enemigos[i]->GetEnemigo() == constantes.TRAVORNIO && _enemigos[i]->getTimeAtEsp() == constantes.TIEMPO_ATESP_TRAVORNIO)
+                    if(_enemigos[i]->GetEnemigo() == constantes.TRAVORNIO && _enemigos[i]->getTimeAtEsp() >= constantes.TIEMPO_ATESP_TRAVORNIO)
                     {
                         //Si es la primera vez que entra al bucle de merodear debe guardar el tiempo actual desde el reloj
                         _enemigos[i]->setLastTimeAtEsp(_controladorTiempo->GetTiempo(2));
@@ -924,6 +953,33 @@ void Jugando::Update()
                         _enemigos[i]->setLastTimeOcultarse(tiempoActual);
                     }
                     _enemigos[i]->setTimeOcultarse(tiempoOcultarse);
+                }
+                //Este bloque se da si el enemigo esta en el proceso de invulnerabilidad
+                if(_enemigos[i]->getTimeInvulnerable() > 0.0f)
+                {
+                    if(_enemigos[i]->getTimeInvulnerable() == 1.5f)
+                    {
+                        //Si es la primera vez que entra al bucle de invulnerabilidad debe guardar el tiempo actual desde el reloj
+                        _enemigos[i]->setLastTimeInvulnerable(_controladorTiempo->GetTiempo(2));
+                    }
+                    float tiempoActual = 0.0f, tiempoInvulnerable = 0.0f;
+                    tiempoActual = _controladorTiempo->GetTiempo(2);
+                    tiempoInvulnerable = _enemigos[i]->getTimeInvulnerable();
+                    tiempoInvulnerable -= (tiempoActual - _enemigos[i]->getLastTimeInvulnerable());
+                    if(tiempoActual > _enemigos[i]->getLastTimeInvulnerable())
+                    {
+                        //Si no es la primera vez que entra al bucle de invulnerabilidad, tiempoActual debe ser mayor que lastTimeInvulnerable
+                        //por lo que guardamos en lastTimeInvulnerable a tiempoActual
+                        _enemigos[i]->setLastTimeInvulnerable(tiempoActual);
+                    }
+                    _enemigos[i]->setTimeInvulnerable(tiempoInvulnerable);
+                }
+                else
+                {
+                    if(_enemigos[i]->GetInvulnerabilidad())
+                    {
+                        _enemigos[i]->SetInvulnerabilidad(constantes.FALSE);
+                    }
                 }
                 colisionaWaypoint = false;
                 //Aqui se comprueba si el jugador cambia de sala
@@ -1056,6 +1112,12 @@ void Jugando::UpdateIA()
         if(!estarDebil)
         {
             _motora->getEvent("MuerteEstasDebil")->start();
+
+            if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
+            {
+                _enemigos[0]->ventajaSound(_jugador->GetTipoJug());
+                _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
+            }
         }
 
         estarDebil = true;
@@ -1074,9 +1136,18 @@ void Jugando::UpdateIA()
             }
             estarFuerte = true;
         }
+        else if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
+        {
+            if(!estarFuerte)
+            {
+                _enemigos[0]->pasearSound(_jugador->GetTipoJug());
+            }
+            estarFuerte = true;
+        }
 
         estarDebil = false;
         _motora->getEvent("MuerteEstasDebil")->stop();
+        _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
 
     }
 
@@ -1368,6 +1439,9 @@ void Jugando::Render()
     //Dibujado del personaje
     _jugador->Render(updateTime, resta);
 
+    //Update animaciones sprites
+    _motor->updateAnimaSprite();
+
     //Armas
     if(_jugador->getArma() != nullptr)
     {
@@ -1474,38 +1548,44 @@ void Jugando::Render()
         {
             if(!_puertas[i]->getAccionado()) //puerta no esta abierta
             {
-                if(_puertas[i]->getCodigo() != 0) //no es una puerta con llave o palanca
+                if(_puertas[i]->getCodigo() == 20) //puerta del boss
                 {
-                    if(_puertas[i]->getCodigo() == 20) //puerta del boss
+                    if(!bocadillo)
                     {
-                        if(!bocadillo)
-                        {
-                            _motora->getEvent("Dialogo1")->start();
-                            bocadillo = true;
-                        }
-                        _motor->mostrarBoardPuerta(2);
+                        _motora->getEvent("Dialogo1")->start();
+                        bocadillo = true;
                     }
-                    else if(_puertas[i]->getCodigo() > 0 && _puertas[i]->getCodigo() < 10 )//puerta de llave
-                    {
-                        if(!bocadillo)
-                        {
-                            _motora->getEvent("Dialogo1")->start();
-                            bocadillo = true;
-                        }
-                        _motor->mostrarBoardPuerta(0);
-                    }
-                    else if(_puertas[i]->getCodigo() >= 10 && _puertas[i]->getCodigo() < 20 )//puerta de palanca
-                    {
-                        if(!bocadillo)
-                        {
-                            _motora->getEvent("Dialogo1")->start();
-                            bocadillo = true;
-                        }
-                        _motor->mostrarBoardPuerta(1);
-                    }
-                    
-                    algunboardActivo = true;
+                    _motor->mostrarBoardPuerta(2);
                 }
+                else if(_puertas[i]->getCodigo() > 0 && _puertas[i]->getCodigo() < 10 )//puerta de llave
+                {
+                    if(!bocadillo)
+                    {
+                        _motora->getEvent("Dialogo1")->start();
+                        bocadillo = true;
+                    }
+                    _motor->mostrarBoardPuerta(0);
+                }
+                else if(_puertas[i]->getCodigo() >= 10 && _puertas[i]->getCodigo() < 20 )//puerta de palanca
+                {
+                    if(!bocadillo)
+                    {
+                        _motora->getEvent("Dialogo1")->start();
+                        bocadillo = true;
+                    }
+                    _motor->mostrarBoardPuerta(1);
+                }
+                else if(_puertas[i]->getCodigo() == 0)
+                {
+                    if(!bocadillo)
+                    {
+                        _motora->getEvent("Dialogo1")->start();
+                        bocadillo = true;
+                    }
+                    _motor->mostrarBoardPuerta(3);
+                }
+
+                algunboardActivo = true;
             }
         }
     }
@@ -1613,7 +1693,7 @@ void Jugando::Reanudar()
         if (ganarPuzzle)
         {
             _motora->getEvent("VictoriaPuzzle")->start();
-            
+
             _cofreP->DesactivarCofre();
             /*if(cofrePosicion != -1)
             {
@@ -1887,7 +1967,7 @@ void Jugando::RespawnEnemigosBoss()
             _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
             _enemigos.back()->SetModo(Enemigo::modosEnemigo::MODO_ATAQUE);
             _enemigos.back()->RespawnNoise();
-            _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false);//creamos la figura
+            _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false,_enemigos.back()->GetAnimacion(),_enemigos.back()->GetFps());//creamos la figura
 
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0,false);
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,false); //Para ataques
@@ -2012,6 +2092,12 @@ void Jugando::RespawnEnemigos()
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
                     _motora->getEvent("MuerteRespawn2")->start();
+                    if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
+                    {
+                        _enemigos[0]->invocaSound();
+                        _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
+                        _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
+                    }
                 }
             }
             else if(tipoEne != 0)
@@ -2021,6 +2107,12 @@ void Jugando::RespawnEnemigos()
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
                     _motora->getEvent("MuerteRespawn1")->start();
+                    if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
+                    {
+                        _enemigos[0]->invocaSound();
+                        _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
+                        _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
+                    }
                 }
             }
             _enemigos.back()->SetEnemigo(enemigo);
@@ -2636,7 +2728,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
         _destinoPathFinding = _enemPideAyuda->GetSala();
     }
     //Ejecucion del pathfinding si hay una sala de destino guardada
-    if(_destinoPathFinding != nullptr)
+    if(_destinoPathFinding != nullptr && _jugador->GetSala() == _destinoPathFinding)
     {
         while(!_auxiliadores.empty())
         {
@@ -2660,6 +2752,10 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
             contadorEnem--;
             _auxiliadores.erase(_auxiliadores.begin());
         }
+    }
+    else if(_destinoPathFinding != nullptr)
+    {
+        auxiliarPathfinding = 19;
     }
     auxiliarPathfinding++;
 }
@@ -2821,9 +2917,12 @@ void Jugando::CrearEnemigoArana()
 
 void Jugando::CargarBossEnMemoria()
 {
+    Constantes constantes;
+    int boss = _boss->GetEnemigo();
     float x = _boss->getX();
     float y = _boss->getY();
     float z = _boss->getZ();
+    unsigned int did = 0;
 
     //cargador.SetVectorEnemigos(_enemigos);
     BorrarTodosLosEnemigos();
@@ -2832,16 +2931,39 @@ void Jugando::CargarBossEnMemoria()
     {
         _jugador->SetSala(_boss->GetSala());
     }
+    if(boss == constantes.BOSS)
+    {
+        did = _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true, _boss->GetAnimacion(), _boss->GetFps());//creamos la figura
+    }
+    else if(boss == constantes.TRAVORNIO)
+    {
+        did = _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true, _boss->GetAnimacion(), _boss->GetFps(), constantes.DIEZ);//creamos la figura
+    }
 
-    _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true);//creamos la figura
     _fisicas->crearCuerpo(1,x/2,y/2,z/2,2,1,1,1,2,0,0,true);
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,true); //Para ataques
     _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0,true); //Para ataques especiales
 
+    if(_boss->GetEscalado() != 1.0f)
+    {
+        _motor->EscalarMalla(_motor->ObtenerIDOpengl(5,did),_boss->GetEscalado());
+    }
+
     std::string nameid = std::to_string(_boss->getID()); //pasar id a string
-    _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid, 1);
-    _motora->getEvent(nameid)->setPosition(x,y,z);
-    _motora->getEvent(nameid)->start();
+
+   if(nivelJ == 8)
+   {
+        _motora->LoadEvent("event:/SFX/SFX-Unicornio Caminando", nameid, 1);
+        _motora->getEvent(nameid)->setPosition(x,y,z);
+        _motora->getEvent(nameid)->start();
+   }
+   else if(nivelJ == 7)
+   {
+        _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid, 1);
+        _motora->getEvent(nameid)->setPosition(x,y,z);
+        _motora->getEvent(nameid)->start();
+   }
+
 
 
     _enemigos.insert(_enemigos.begin(), _boss);
@@ -2992,4 +3114,38 @@ void Jugando::LimpiarJuego()
     recorrido.clear();
 
     cout << "Borro recorrido" <<endl;
+}
+
+//Crear sprites del juego
+void Jugando::CrearSprites()
+{
+    std::vector<const char *> sprites;
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_1.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_2.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_3.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_4.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_5.png");
+    _motor->CargarSprite(0, sprites, 2.0f);
+    sprites.clear();
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_1.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_2.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_3.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_4.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_5.png");
+    _motor->CargarSprite(1, sprites, 2.0f);
+    sprites.clear();
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_1.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_2.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_3.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_4.png");
+    sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_5.png");
+    _motor->CargarSprite(2, sprites, 2.0f);
+    sprites.clear();
+    sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_1.png");
+    sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_2.png");
+    sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_3.png");
+    sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_4.png");
+    sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_5.png");
+    _motor->CargarSprite(3, sprites, 4.0f);
+    sprites.clear();
 }

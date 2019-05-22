@@ -2,7 +2,7 @@
 
 unsigned int Ventana::numTecla = 0;
 
-char Ventana::tecla [30]; 
+char * Ventana::tecla = new char[30]; 
 
 bool Ventana::recogido = false;
 
@@ -301,9 +301,8 @@ void Ventana::ActivarRecogida()
     numTecla = 0;
     for(int i = 0; i < 30;i++)
     {
-        tecla[i] = ' ';
+        tecla[i] = '\0';
     }
-
 }
 
 void Ventana::DesactivarRecogida()
@@ -313,7 +312,7 @@ void Ventana::DesactivarRecogida()
     numTecla = 0;
     for(int i = 0; i < 30;i++)
     {
-        tecla[i] = ' ';
+        tecla[i] = '\0';
     }
 
 }
@@ -334,6 +333,7 @@ void Ventana::InicializarLetra(const char * letras)
     //inicializamos a los valores que hayan
     int longitud = strlen(letras);
     numTecla = longitud;
+    //std::cout << longitud << " \n";
     for(int i = 0; i < 30 && i < longitud;i++)
     { 
         tecla[i] = letras[i];
@@ -345,7 +345,8 @@ void Ventana::BorrarUltimaTecla()
     if(numTecla != 0)
     {
         numTecla--;
-        tecla[numTecla] = ' ';
+        tecla[numTecla] = '\0';
+        recogido = false;
     }
 }
 

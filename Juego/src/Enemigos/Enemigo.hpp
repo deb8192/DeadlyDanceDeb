@@ -72,6 +72,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setTipo(int tip);
         void ModificarBarraAtEs(int bar);
         void setBarraAtEs(int bar);
+        void SetInvulnerabilidad(bool esVulnerable);
         void setAtaque(int ataq);
         void setArmaEspecial(int ataque);
         void setSuerte(int suer);
@@ -90,6 +91,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void setLastTimeDefenderse(float time);
         void setTimeAtEsp(float time);
         void setLastTimeAtEsp(float time);
+        void setTimeInvulnerable(float time);
+        void setLastTimeInvulnerable(float time);
         void setPosAtaques(int p);
         void setVelocidadMaxima(float velocidad); //modifica la VelocidadMaxima de desplazamiento
         void SetEnemigo(int);
@@ -103,6 +106,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         int getVida();
         int getTipo();
         int getBarraAtEs();
+        bool GetInvulnerabilidad();
         int getAtaque();
         int getPosAtaques();
         int getSuerte();
@@ -122,6 +126,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         float getLastTimeDefenderse();
         float getTimeAtEsp();
         float getLastTimeAtEsp();
+        float getTimeInvulnerable();
+        float getLastTimeInvulnerable();
         float getX();
         float getY();
         float getZ();
@@ -175,6 +181,15 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         void ForzarCambioNodo(const short *nodo);//Modifica el nodo actual en el que se encuentra la IA
         void AnnadirRecorridoAyuda(vector <Posiciones> recorrido);
         void ResetTree();
+        void pasearSound(int gender);
+        void ventajaSound(int gender);
+        void invocaSound();
+        void fallasSound();
+        void stopPasearSound(int gender);
+        void stopVentajaSound(int gender);
+        void stopInvocaSound();
+        void stopFallasSound();
+        void stopOtherSound();
         //fin ia
 
         //Funciones relacionadas con los motores
@@ -194,6 +209,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         };
 
         unsigned int GetEstadoMuerte();
+        float GetEscalado();
 
     protected:
         Times* _tiempo;
@@ -298,10 +314,21 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool contestar;
         bool morirRapido;
         bool caminando;
+        bool unAtaque;
+        bool unEspecial;
+        bool unVida;
+        bool unDerrota;
         bool defensa; //TO DO EXPANDIRLO AL JUGADOR cuando recibe danyo recibe la mitad si esta a true
         INnpc::VectorEspacial posicionComunBandada; //PUnto de cohesion de las bandadas
         int estadoMuerte;//tiene el numero de estado que pertenece a estar muerto o muriendo [Por defecto 0]
         int estadoIncial;//tiene el numero de estado con el que empieza el jugador [Por defecto 0]
+        float tiempoAtaques;
+        float tiempoEspecial;
+        float tiempoVida;
+        float tiempoDerrota;
+        int oponenteSound;
+
+        float escalado;//por defecto 1.0f
 };
 
 #endif
