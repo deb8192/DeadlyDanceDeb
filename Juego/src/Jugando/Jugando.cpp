@@ -2894,7 +2894,7 @@ void Jugando::CargarBossEnMemoria()
     }
     if(boss == constantes.BOSS)
     {
-        did = _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true, _boss->GetAnimacion(), _boss->GetFps(),);//creamos la figura
+        did = _motor->CargarEnemigos(x,y,z,_boss->GetModelo(), _boss->GetTextura(), true, _boss->GetAnimacion(), _boss->GetFps());//creamos la figura
     }
     else if(boss == constantes.TRAVORNIO)
     {
