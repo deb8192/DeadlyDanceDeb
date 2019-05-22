@@ -603,11 +603,11 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
                     //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
                     _getEnemigos.at(atacados.at(i))->ModificarVida(-danyo);
 
-                    if(_fisicas->enemyCollideParedesRompibles(atacados.at(i)) || _fisicas->enemyCollideObstacleAndEnemies(atacados.at(i)))
+                    /*if(_fisicas->enemyCollideParedesRompibles(atacados.at(i)) || _fisicas->enemyCollideObstacleAndEnemies(atacados.at(i)))
                     {
                         _getEnemigos.at(atacados.at(i))->setNewPosiciones(posActual.x, posActual.y, posActual.z);
                         _getEnemigos.at(atacados.at(i))->initPosicionesFisicas(posActual.x/constantes.DOS, 0.0f, posActual.z/constantes.DOS);
-                    }
+                    }*/
 
                     danyo -= (int) variacion;
                     _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));

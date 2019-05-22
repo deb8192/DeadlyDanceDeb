@@ -2668,7 +2668,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
         _destinoPathFinding = _enemPideAyuda->GetSala();
     }
     //Ejecucion del pathfinding si hay una sala de destino guardada
-    if(_destinoPathFinding != nullptr)
+    if(_destinoPathFinding != nullptr && _jugador->GetSala() == _destinoPathFinding)
     {
         while(!_auxiliadores.empty())
         {
@@ -2692,6 +2692,10 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
             contadorEnem--;
             _auxiliadores.erase(_auxiliadores.begin());
         }
+    }
+    else if(_destinoPathFinding != nullptr)
+    {
+        auxiliarPathfinding = 19;
     }
     auxiliarPathfinding++;
 }

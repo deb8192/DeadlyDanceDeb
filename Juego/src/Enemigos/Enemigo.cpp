@@ -895,9 +895,9 @@ void Enemigo::ModificarVida(int vid)
         vida += vid/constantes.DOS;
     }
     else
-        {
-            vida += vid;
-        }
+    {
+        vida += vid;
+    }
     float ultimoEstertor = vidaIni * constantes.UN_TERCIO;
     if(vid < 0 && !invulnerabilidad)
     {
@@ -915,7 +915,7 @@ void Enemigo::ModificarVida(int vid)
         posiciones.x = posFutura.x - velocidad.x;
         posiciones.z = posFutura.z - velocidad.z;
         setNewPosiciones(posiciones.x, posActual.y, posiciones.z);
-        setPosicionesFisicas(velocidad.x, constantes.CERO, velocidad.z);
+        setPosicionesFisicas(-velocidad.x, constantes.CERO, -velocidad.z);
 
         if(tipoEnemigo == 3 || tipoEnemigo == 4)
         {

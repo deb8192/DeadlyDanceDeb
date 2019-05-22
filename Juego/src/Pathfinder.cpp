@@ -214,14 +214,14 @@ std::vector <Waypoint *> Pathfinder::encontrarCamino(Sala *start, Sala *end)
                 j = 0;
                 i++;
             }
-            while(j < camino[i - 1].nodo->GetWaypoints().size())
+            /*while(j < camino[i - 1].nodo->GetWaypoints().size())
             {
                 if(!camino[i - 1].nodo->GetWaypoints()[j]->GetCompartido())
                 {
                     waypointsRecorridos.push_back(camino[i - 1].nodo->GetWaypoints()[j]);
                 }
                 j++;
-            }
+            }*/
 
             return waypointsRecorridos;
         }

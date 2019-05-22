@@ -160,7 +160,7 @@ void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
                         bool nuevaDireccion = false;
                         if(this->getTimeAtEsp() <= 0 && !ataqueEspecial)
                         {
-                            this->setTimeAtEsp(constantes.TIEMPO_ATESP_TRAVORNIO);
+                            this->setTimeAtEsp(7.5);
                             ataqueEspecial = true;
                             nuevaDireccion = true;
                         }
