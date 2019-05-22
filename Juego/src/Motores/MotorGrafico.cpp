@@ -1411,7 +1411,7 @@ int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, con
 
                 Animaciones * _ani = new Animaciones(anima);//cargamos las animaciones
                 _ani->AsignarID(enemigo);
-                
+
                 if(boss)
                 {
                     EnemigosAni_Scena.insert(EnemigosAni_Scena.begin(),_ani);
@@ -1442,7 +1442,7 @@ int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, con
             {
                 BoardsEnem_Scena.push_back(move(_board));
             }
-        
+
         if(boss)
         {
             return 0;
@@ -1831,7 +1831,7 @@ void MotorGrafico::CargarRecolectable(int id, int x,int y,int z, const char *rut
     #endif
 }
 
-void MotorGrafico::CargarSprite(int id, std::vector<const char *> ruta_sprite)
+void MotorGrafico::CargarSprite(int id, std::vector<const char *> ruta_sprite, float size)
 {
     //crear animacion
     AnimacionSprite sprites;
@@ -1845,7 +1845,7 @@ void MotorGrafico::CargarSprite(int id, std::vector<const char *> ruta_sprite)
     {
         unsigned short _newboard = _interfaz->AddBoard(0,0,0, -1.0f, 0, ruta_sprite[i], 0.01f);
         _interfaz->Trasladar(_newboard,0.0f,0.0f,0.0f);
-        _interfaz->Escalar(_newboard,2.0f,2.0f,2.0f);
+        _interfaz->Escalar(_newboard,size,size,size);
         _interfaz->DeshabilitarObjeto(_newboard);
         sprites.sprite_board.push_back(_newboard);
     }
@@ -1882,20 +1882,25 @@ void MotorGrafico::updateAnimaSprite()
     {
         if(Sprites_Scena[i].start == true)
         {
-            //si el sprite actual
-            if(Sprites_Scena[i].actualsprite != 0)
+            contador_anim++;
+            if(contador_anim == 3)
             {
-                _interfaz->DeshabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite-1]);
-            }
-            _interfaz->Trasladar(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite],Sprites_Scena[i].posx,Sprites_Scena[i].posy,Sprites_Scena[i].posz);
-            //std::cout << Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite] << std::endl;
-            _interfaz->HabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite]);
-            Sprites_Scena[i].actualsprite++;
-            if(Sprites_Scena[i].actualsprite == Sprites_Scena[i].sprite_board.size())
-            {
-                Sprites_Scena[i].actualsprite = 0;
-                _interfaz->DeshabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].sprite_board.size()-1]);
-                Sprites_Scena[i].start = false;
+                //si el sprite actual
+                if(Sprites_Scena[i].actualsprite != 0)
+                {
+                    _interfaz->DeshabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite-1]);
+                }
+                _interfaz->Trasladar(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite],Sprites_Scena[i].posx,Sprites_Scena[i].posy,Sprites_Scena[i].posz);
+                //std::cout << Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite] << std::endl;
+                _interfaz->HabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].actualsprite]);
+                Sprites_Scena[i].actualsprite++;
+                if(Sprites_Scena[i].actualsprite == Sprites_Scena[i].sprite_board.size())
+                {
+                    Sprites_Scena[i].actualsprite = 0;
+                    _interfaz->DeshabilitarObjeto(Sprites_Scena[i].sprite_board[Sprites_Scena[i].sprite_board.size()-1]);
+                    Sprites_Scena[i].start = false;
+                }
+                contador_anim = 0;
             }
         }
     }
@@ -4274,7 +4279,7 @@ void MotorGrafico::EscalarMalla(unsigned int did, float escalado)
         {
             _interfaz->Escalar(did,escalado,escalado,escalado);
         }
-    #endif 
+    #endif
 }
 
 unsigned int MotorGrafico::ObtenerIDOpengl(unsigned int tipo,unsigned int idVector)
@@ -4313,7 +4318,7 @@ unsigned int MotorGrafico::ObtenerIDOpengl(unsigned int tipo,unsigned int idVect
             idOpengl = Cofres_Scena[idVector];
         }
 
-    #endif 
+    #endif
 
         return idOpengl;
 }

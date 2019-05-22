@@ -251,7 +251,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
-            void CargarSprite(int id, std::vector<const char *> ruta_sprite);
+            void CargarSprite(int id, std::vector<const char *> ruta_sprite,float size);
             void startAnimaSprite(int id, bool start, float posx, float posy, float posz);
             void updateAnimaSprite();
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
@@ -502,8 +502,11 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 vector<unsigned short> _imagenesP;
                 vector<unsigned short> _textosP;
 
-                //configuracion del juego 
+                //configuracion del juego
                 Configuration configuracion;
+
+                //sprites Animaciones
+                unsigned short contador_anim = 0;
 
             #else
                 //variables y parametros motor irrlicht
