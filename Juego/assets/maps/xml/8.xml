@@ -41,8 +41,6 @@
 		<LightPos X="267" Z="111" Y="4" sala="2"> </LightPos>
 
 	<LightSala sala="3" minZ="28" maxZ="128" minX="269" maxX="416"></LightSala>
-		<LightPos X="307" Z="90" Y="-8" sala="3"> </LightPos>
-		<LightPos X="379" Z="74" Y="-8" sala="3"> </LightPos>
 
 	<LightSala sala="4" minZ="129" maxZ="220" minX="288" maxX="420"></LightSala>
 		<LightPos X="302" Z="157" Y="3" sala="4"> </LightPos>
@@ -54,7 +52,7 @@
 		<LightPos X="450" Z="209" Y="3" sala="5"> </LightPos>
 		<LightPos X="450" Z="273" Y="3" sala="5"> </LightPos>
 
-	<LightSala sala="6" minZ="220" maxZ="325" minX="187" maxX="421"></LightSala>		
+	<LightSala sala="6" minZ="220" maxZ="325" minX="187" maxX="421"></LightSala>
 		<LightPos X="358" Z="313" Y="3" sala="6"> </LightPos>
 		<LightPos X="314" Z="317" Y="3" sala="6"> </LightPos>
 		<LightPos X="270" Z="282" Y="3" sala="6"> </LightPos>

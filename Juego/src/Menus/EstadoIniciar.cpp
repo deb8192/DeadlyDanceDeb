@@ -25,7 +25,7 @@ EstadoIniciar::~EstadoIniciar()
 void EstadoIniciar::Iniciar()
 {
     _motor->CambiarAnchuraTexto( _motor->CrearTexto("Iniciar Nueva partida - ESC para salir", 0, 0, 300, 20),300);
-    _motor->CrearImagen("assets/images/pr2.png",150,100,10.0f);
+    _motor->CrearImagen("assets/images/pr2.png",150,100,2.2f);
     unsigned short did = _motor->CrearTexto("Seleccione slot de guardado:",180,120,0,0);
     _motor->CambiarAnchuraTexto(did,300);
     _motor->CrearBoton2(205,160,8.0f,170,40,300,GUI_ID_SLOT1,L"Slot 1",L"assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
@@ -46,7 +46,7 @@ void EstadoIniciar::Render()
 
 void EstadoIniciar::Update()
 {
-    
+
 }
 
 void EstadoIniciar::ManejarEventos()
@@ -68,7 +68,7 @@ void EstadoIniciar::ManejarEventos()
             //escoger nombre
             _motor->BorrarGui();
             _motor->CambiarAnchuraTexto( _motor->CrearTexto("Escriba el nombre de la partida - ESC para salir", 0, 0, 300, 20),500);
-            _motor->CrearImagen("assets/images/pr2.png",150,100,10.0f);
+            _motor->CrearImagen("assets/images/pr2.png",150,100,2.2f);
             _motor->CrearBoton2(300,240,2.0f,170,40,300,GUI_ID_CAMPONOMBRE,L"Slot 1",L"assets/images/campoTexto.png",false);//no creamos texto
             idCampoTexto = _motor->CrearTexto("",310,260,0,0);
             _motor->CambiarColorTexto(idCampoTexto,0,0,0);
@@ -98,7 +98,7 @@ void EstadoIniciar::ManejarEventos()
             }
 
             Times * tiempo = Times::GetInstance();
-            
+
             if(tiempoCursor == 0.0f || tiempo->CalcularTiempoPasado(tiempoCursor) > 700.0f)
             {
                 if(cursor)
@@ -113,7 +113,7 @@ void EstadoIniciar::ManejarEventos()
                     cursor = true;
                     _motor->CambiarTexto(idCampoTexto,nombrePartida);
                 }
-                
+
                 tiempoCursor = tiempo->GetTiempo(1);
             }
         }
@@ -131,7 +131,7 @@ void EstadoIniciar::ManejarEventos()
             //cambiamos a escoger personaje ---- aqui detectar si no hay solo espacios
             fase = 4;
             _motor->BorrarGui();
-            _motor->CrearImagen("assets/images/pr2.png",150,100,10.0f);
+            _motor->CrearImagen("assets/images/pr2.png",150,100,2.2f);
             _motor->CrearBoton(200,200,0,0,998,L"          Chica",L"");
             _motor->CrearBoton(400,200,0,0,997,L"          Chico",L"");
             _motor->CrearBoton(300,300,0,0,996,L"  Empezar Partida",L"");
@@ -157,7 +157,7 @@ void EstadoIniciar::ManejarEventos()
             //guardamos los datos
             slots[slotSeleccionado-1].SetNombre(nombrePartida);
             slots[slotSeleccionado-1].SetTipo(tipo);
-            
+
             switch(slotSeleccionado)
             {
                 case 1:

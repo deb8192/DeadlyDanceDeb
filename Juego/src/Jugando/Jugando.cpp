@@ -750,7 +750,7 @@ void Jugando::Update()
             _jugador->SetInvulnerabilidad(constantes.FALSE);
         }
     }
-    
+
 
     //actualizamos los enemigos
     if(_enemigos.size() > 0)//posiciones interpolacion
@@ -1132,7 +1132,7 @@ void Jugando::UpdateIA()
         if(!estarDebil)
         {
             _motora->getEvent("MuerteEstasDebil")->start();
-            
+
             if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
             {
                 _enemigos[0]->ventajaSound(_jugador->GetTipoJug());
@@ -1564,38 +1564,44 @@ void Jugando::Render()
         {
             if(!_puertas[i]->getAccionado()) //puerta no esta abierta
             {
-                if(_puertas[i]->getCodigo() != 0) //no es una puerta con llave o palanca
+                if(_puertas[i]->getCodigo() == 20) //puerta del boss
                 {
-                    if(_puertas[i]->getCodigo() == 20) //puerta del boss
+                    if(!bocadillo)
                     {
-                        if(!bocadillo)
-                        {
-                            _motora->getEvent("Dialogo1")->start();
-                            bocadillo = true;
-                        }
-                        _motor->mostrarBoardPuerta(2);
+                        _motora->getEvent("Dialogo1")->start();
+                        bocadillo = true;
                     }
-                    else if(_puertas[i]->getCodigo() > 0 && _puertas[i]->getCodigo() < 10 )//puerta de llave
-                    {
-                        if(!bocadillo)
-                        {
-                            _motora->getEvent("Dialogo1")->start();
-                            bocadillo = true;
-                        }
-                        _motor->mostrarBoardPuerta(0);
-                    }
-                    else if(_puertas[i]->getCodigo() >= 10 && _puertas[i]->getCodigo() < 20 )//puerta de palanca
-                    {
-                        if(!bocadillo)
-                        {
-                            _motora->getEvent("Dialogo1")->start();
-                            bocadillo = true;
-                        }
-                        _motor->mostrarBoardPuerta(1);
-                    }
-
-                    algunboardActivo = true;
+                    _motor->mostrarBoardPuerta(2);
                 }
+                else if(_puertas[i]->getCodigo() > 0 && _puertas[i]->getCodigo() < 10 )//puerta de llave
+                {
+                    if(!bocadillo)
+                    {
+                        _motora->getEvent("Dialogo1")->start();
+                        bocadillo = true;
+                    }
+                    _motor->mostrarBoardPuerta(0);
+                }
+                else if(_puertas[i]->getCodigo() >= 10 && _puertas[i]->getCodigo() < 20 )//puerta de palanca
+                {
+                    if(!bocadillo)
+                    {
+                        _motora->getEvent("Dialogo1")->start();
+                        bocadillo = true;
+                    }
+                    _motor->mostrarBoardPuerta(1);
+                }
+                else if(_puertas[i]->getCodigo() == 0)
+                {
+                    if(!bocadillo)
+                    {
+                        _motora->getEvent("Dialogo1")->start();
+                        bocadillo = true;
+                    }
+                    _motor->mostrarBoardPuerta(3);
+                }
+
+                algunboardActivo = true;
             }
         }
     }
@@ -2938,7 +2944,7 @@ void Jugando::CargarBossEnMemoria()
     }
 
     std::string nameid = std::to_string(_boss->getID()); //pasar id a string
-   
+
    if(nivelJ == 8)
    {
         _motora->LoadEvent("event:/SFX/SFX-Unicornio Caminando", nameid, 1);
@@ -2951,7 +2957,7 @@ void Jugando::CargarBossEnMemoria()
         _motora->getEvent(nameid)->setPosition(x,y,z);
         _motora->getEvent(nameid)->start();
    }
-    
+
 
 
     _enemigos.insert(_enemigos.begin(), _boss);
@@ -3125,27 +3131,27 @@ void Jugando::CrearSprites()
     sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_3.png");
     sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_4.png");
     sprites.push_back("assets/Sprites/Sprites-Ataque-Enemigo/Sprites-ataque-Enemigos_5.png");
-    _motor->CargarSprite(0, sprites);
+    _motor->CargarSprite(0, sprites, 2.0f);
     sprites.clear();
     sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_1.png");
     sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_2.png");
     sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_3.png");
     sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_4.png");
     sprites.push_back("assets/Sprites/Sprites-Ataque-Epsecial-Muerte/Sprites-ataque-especial-boss-muerte_5.png");
-    _motor->CargarSprite(1, sprites);
+    _motor->CargarSprite(1, sprites, 2.0f);
     sprites.clear();
     sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_1.png");
     sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_2.png");
     sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_3.png");
     sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_4.png");
     sprites.push_back("assets/Sprites/Sprites-Ataque-Jugador/Sprites-ataque-jugador_5.png");
-    _motor->CargarSprite(2, sprites);
+    _motor->CargarSprite(2, sprites, 2.0f);
     sprites.clear();
     sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_1.png");
     sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_2.png");
     sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_3.png");
     sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_4.png");
     sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_5.png");
-    _motor->CargarSprite(3, sprites);
+    _motor->CargarSprite(3, sprites, 4.0f);
     sprites.clear();
 }

@@ -903,7 +903,7 @@ void Enemigo::RespawnNoise()
     _motora->LoadEvent("event:/SFX/SFX-Muerte invoca enemigos","respawnfire",1);
     _motora->getEvent("respawnfire")->setPosition(this->getX(),this->getY(),this->getZ());
     _motora->getEvent("respawnfire")->start();
-    _motor->startAnimaSprite(3,true,this->getX()+2.0f,this->getY(),this->getZ());
+    _motor->startAnimaSprite(3,true,this->getX()+1.0f,this->getY()+1.0f,this->getZ());
 }
 /*************** rotarEntidad *****************
  * Funcion con la que el enemigo rotara
