@@ -42,6 +42,8 @@ Enemigo::Enemigo()
     soundz= 0.0f;
     vectorOrientacion.modulo = 0.0f;
     modo = MODO_DEFAULT;
+    unAtaque = false;
+    unEspecial = false;
     pedirAyuda = false;
     respawnBoss = false;
     contestar = false;
@@ -627,14 +629,30 @@ int Enemigo::Atacar(int i)
             }
              else if(tipoEnemigo == 6)
             {
-                _motora->getEvent("BN1ataca")->setPosition(this->getX(),this->getY(),this->getZ());
-                _motora->getEvent("BN1ataca")->start();
-                _motora->getEvent("enemyhit")->start();
+                if(!unAtaque)
+                {
+                    _motora->getEvent("BN1ataca")->setPosition(this->getX(),this->getY(),this->getZ());
+                    _motora->getEvent("BN1ataca")->start();
+                    _motora->getEvent("BN1especial1")->stop();
+                    _motora->getEvent("BN1golpechica")->stop();
+                    _motora->getEvent("BN1golpechico")->stop();
+
+                    tiempoAtaques = _tiempo->GetTiempo(1);
+                }
+                unAtaque = true;
+                
+                _motora->getEvent("enemyhit")->start(); 
             }
             else
             {
                 _motora->getEvent("enemyhit")->start();
             }
+
+            if(unAtaque && _tiempo->CalcularTiempoPasado(tiempoAtaques) >= 5000)//sino se cumple no ha acabado
+            {
+               unAtaque = false;
+            }
+ 
 
             _motor->startAnimaSprite(0,true,0.0f,0.0f,0.0f);
         }
@@ -723,6 +741,23 @@ int Enemigo::AtacarEspecial()
         {
             //cout << "Jugador Atacado por ataque especial" << endl;
             danyo = roundf(danyoF * por10) / por10;
+
+            if(!unEspecial)
+            {
+                _motora->getEvent("BN1especial1")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1especial1")->start();
+                	_motora->getEvent("BN1ataca")->stop();
+                    _motora->getEvent("BN1golpechica")->stop();
+                    _motora->getEvent("BN1golpechico")->stop();
+                tiempoAtaques = _tiempo->GetTiempo(1);
+            }
+            unEspecial = true;
+
+            if(_tiempo->CalcularTiempoPasado(tiempoEspecial) >= 5000)//sino se cumple no ha acabado
+            {
+               unEspecial = false;
+            }
+
             _motor->startAnimaSprite(0,true,0.0f,0.0f,0.0f);
         }
         return danyo;
@@ -890,6 +925,65 @@ void Enemigo::UpdateTimeRotate(float updTime)
  */
 void Enemigo::ModificarVida(int vid)
 {
+    if(vid < 0)
+    {
+        //sonido para cuando le quitas vida
+        if(!unVida)
+        {
+            if(oponenteSound == 2)
+            {
+                _motora->getEvent("BN1golpechica")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1golpechica")->start();
+                	_motora->getEvent("BN1ataca")->stop();
+                    _motora->getEvent("BN1especial1")->stop();
+            }
+            else if(oponenteSound == 1)
+            {
+                _motora->getEvent("BN1golpechico")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1golpechico")->start();
+                	_motora->getEvent("BN1ataca")->stop();
+                    _motora->getEvent("BN1especial1")->stop();
+            }
+           
+            tiempoVida = _tiempo->GetTiempo(1);
+        }
+        unVida = true;
+
+        if(_tiempo->CalcularTiempoPasado(tiempoVida) >= 5000)//sino se cumple no ha acabado
+        {
+           unVida = false;
+        }
+    }
+
+    if(vida <= 0)
+    {
+        //sonido para cuando le quitas vida
+        if(!unDerrota)
+        {
+            
+            _motora->getEvent("BN1pierde")->setPosition(this->getX(),this->getY(),this->getZ());
+            _motora->getEvent("BN1pierde")->start();
+            		_motora->getEvent("BN1ataca")->stop();
+                    _motora->getEvent("BN1especial1")->stop();
+                    _motora->getEvent("BN1debilchica")->stop();
+                    _motora->getEvent("BN1debilchico")->stop();
+                    _motora->getEvent("BN1golpechica")->stop();
+                    _motora->getEvent("BN1golpechico")->stop();
+                    _motora->getEvent("BN1fuertechica")->stop();
+                    _motora->getEvent("BN1fuertechico")->stop();
+                    _motora->getEvent("BN1nogolpe")->stop();
+                    _motora->getEvent("BN1invoca")->stop();
+                    _motora->getEvent("BN1debil")->stop();
+           
+            tiempoDerrota = _tiempo->GetTiempo(1);
+        }
+        unDerrota = true;
+
+        if(_tiempo->CalcularTiempoPasado(tiempoDerrota) >= 5000)//sino se cumple no ha acabado
+        {
+           unDerrota = false;
+        }
+    }
     struct
     {
         float x = 0.0f;
@@ -1852,6 +1946,170 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
         return false;
     }
 
+    void Enemigo::invocaSound()
+    {
+        if(tipoEnemigo == 6)
+        {
+            _motora->getEvent("BN1invoca")->setPosition(this->getX(),this->getY(),this->getZ());
+            _motora->getEvent("BN1invoca")->start();
+        }
+        else
+        {
+
+        }
+    }
+
+    void Enemigo::fallasSound()
+    {
+        if(tipoEnemigo == 6)
+        {
+            _motora->getEvent("BN1nogolpe")->setPosition(this->getX(),this->getY(),this->getZ());
+            _motora->getEvent("BN1nogolpe")->start();
+        }
+        else
+        {
+
+        }
+    }
+    void Enemigo::ventajaSound(int gender)
+    {
+        oponenteSound = gender;
+        //este sonido es para cuando tiene poca vida el jugador
+        if(tipoEnemigo == 6)
+        {
+            if(vida <= 170)
+            {
+                _motora->getEvent("BN1debil")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1debil")->start();
+            }
+            else if(gender == 2)
+            {     
+                _motora->getEvent("BN1debilchica")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1debilchica")->start();          
+            }
+            else if(gender == 1)
+            {
+                _motora->getEvent("BN1debilchico")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1debilchico")->start();
+            }
+        }
+        else // para boss muerte
+        {
+
+        }
+    }
+
+    void Enemigo::pasearSound(int gender)
+    {
+        oponenteSound = gender;
+        //sonido para cuando tiene mucha vida travornio
+        if(tipoEnemigo == 6)
+        {
+            if(vida <= 170)
+            {
+                _motora->getEvent("BN1debil")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1debil")->start();
+            }
+            else if(gender == 2)
+            {     
+                _motora->getEvent("BN1fuertechica")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1fuertechica")->start();         
+            }
+            else if(gender == 1)
+            {
+                _motora->getEvent("BN1fuertechico")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1fuertechico")->start();
+            }
+        }
+        else // para boss muerte
+        {
+
+        }
+        
+       
+    }
+
+    void Enemigo::stopInvocaSound()
+    {
+        if(tipoEnemigo == 6)
+        {
+            _motora->getEvent("BN1invoca")->stop();
+        }
+        else
+        {
+
+        }
+    }
+
+    void Enemigo::stopFallasSound()
+    {
+        if(tipoEnemigo == 6)
+        {
+            _motora->getEvent("BN1nogolpe")->stop();
+        }
+        else
+        {
+
+        }
+    }
+
+    void Enemigo::stopOtherSound()
+    {
+        if(tipoEnemigo == 6)
+        {
+            _motora->getEvent("BN1invoca")->stop();
+            _motora->getEvent("BN1debil")->stop();
+        }
+        else
+        {
+
+        }
+    }
+
+    void Enemigo::stopVentajaSound(int gender)
+    {
+        oponenteSound = gender;
+        //este sonido es para cuando tiene poca vida el jugador
+        if(tipoEnemigo == 6)
+        {            
+            if(gender == 2)
+            {     
+                _motora->getEvent("BN1debilchica")->stop();                
+            }
+            else if(gender == 1)
+            {
+                _motora->getEvent("BN1debilchico")->stop();
+            }
+        }
+        else // para boss muerte
+        {
+
+        }
+    }
+
+    void Enemigo::stopPasearSound(int gender)
+    {
+        oponenteSound = gender;
+        //sonido para cuando tiene mucha vida travornio
+        if(tipoEnemigo == 6)
+        {
+            if(gender == 2)
+            {     
+                _motora->getEvent("BN1fuertechica")->stop();                
+            }
+            else if(gender == 1)
+            {
+                _motora->getEvent("BN1fuertechico")->stop();
+            }
+        }
+        else // para boss muerte
+        {
+
+        }
+        
+       
+    }
+
     /******************** perseguir **********************
      * Funcion que acerca los enemigos al jugador para
      * atacarlo posteriormente teniendo en cuenta la
@@ -1862,6 +2120,7 @@ void Enemigo::ForzarCambioNodo(const short * nodo)
      *      Salidas:
      *                  bool funciona: booleano que indica si el comportamiento ha funcionado
     */
+    
     bool Enemigo::perseguir(int* _jug, short int* _n)
     {
         Jugador* _jugador = (Jugador*)_jug;
