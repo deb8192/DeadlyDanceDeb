@@ -74,9 +74,61 @@ class GestorInterfaces
                         unsigned int ySalirM;
                 };
 
+                struct hud
+                {
+                        float xVida = 0.04f;
+                        unsigned int xVidaM;
+                        float yVida = 0.02f;
+                        unsigned int yVidaM;
+                        
+                        float xEnergia = 0.04f;
+                        unsigned int xEnergiaM;
+                        float yEnergia = 0.10f;
+                        unsigned int yEnergiaM;
+
+                        float xDinero = 0.85f;
+                        unsigned int xDineroM;
+                        float yDinero = 0.02f;
+                        unsigned int yDineroM;
+
+                        float xObjeto = 0.85f;
+                        unsigned int xObjetoM;
+                        float yObjeto = 0.88f;
+                        unsigned int yObjetoM;
+
+                        unsigned int xBarraVidaM;
+                        unsigned int yBarraVidaM;
+
+                        unsigned int xBarraEnergiaM;
+                        unsigned int yBarraEnergiaM;
+
+                        unsigned int xMarcaDineroM;
+                        unsigned int yMarcaDineroM;
+
+                        unsigned int xTipoObjetoM;
+                        unsigned int yTipoObjetoM;
+
+                };
+
+                struct carga
+                {
+                        float xCarga = 0.75f;
+                        unsigned int xCargaM;
+                        float yCarga = 0.68f;
+                        unsigned int yCargaM;
+                };
+
                 menu * _menu;
 
+                hud * _hud;
+
+                carga * _carga;
+
                 menu * GetMenu();
+
+                hud * GetHud();
+
+                carga * GetCarga();
 
         private:
                 //clase singleton 
@@ -91,17 +143,7 @@ class GestorInterfaces
 
                 //apartir de aqui definimos todos los valores (en porcentaje)
                 
-                struct hud
-                {
-                        float xVida = 0.10f;
-                        float yVida = 0.10f;
-                        float xEnergia = 0.10f;
-                        float yEnergia = 0.14f;
-                        float xDinero = 0.90f;
-                        float yDinero = 0.10f;
-                        float xObjeto = 0.90f;
-                        float yObjeto = 0.90f;
-                };
+
 
 
 };

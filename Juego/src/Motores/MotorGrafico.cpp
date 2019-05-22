@@ -524,13 +524,13 @@ bool MotorGrafico::CrearVentana(short tipo)
 
             configuracion.CargarConfiguracion("config.global");
 
-            GestorInterfaces * _gestori = GestorInterfaces::GetInstance();
+            _ges = GestorInterfaces::GetInstance();
 
-            _gestori->UpdateDimensionesVentana(configuracion.GetWidth(),configuracion.GetHeight());
+            _ges->UpdateDimensionesVentana(configuracion.GetWidth(),configuracion.GetHeight());
 
             width = configuracion.GetWidth();
             height = configuracion.GetHeight();
-            _gestori->ActualizarParametros();
+            _ges->ActualizarParametros();
 
             std::string titulo = "DeadlyDance Game";
             _interfaz->DefinirVentana(configuracion.GetWidth(),configuracion.GetHeight(),titulo.c_str(),configuracion.GetAllScreen());
@@ -3071,21 +3071,21 @@ void MotorGrafico::CargarInterfaz()
         //codigo motor catopengl
 
         //cargamos y mostramos la interfaz
-        vida_textura = _interfaz->AddImagen("assets/images/51.png",10,10,1);
-        energia_textura = _interfaz->AddImagen("assets/images/21.png",10,58,1);
-        dinero_textura = _interfaz->AddImagen("assets/images/61.png",680,10,1);
-        arma_textura =_interfaz->AddImagen("assets/images/11.png",730,530,1);
-        barraVida_textura = _interfaz->AddImagen("assets/images/4.png",50,18,1);
-        barraEnergia_textura = _interfaz->AddImagen("assets/images/3.png",48,67,1);
-        manos_textura = _interfaz->AddImagen("assets/images/manos.png",738,534,1);
-        llave_textura = _interfaz->AddImagen("assets/images/llave.png",738,534,1);
-        espada_textura = _interfaz->AddImagen("assets/images/espada.png",738,534,1);
-        daga_textura = _interfaz->AddImagen("assets/images/daga.png",738,534,1);
+        vida_textura = _interfaz->AddImagen("assets/images/51.png",_ges->GetHud()->xVidaM,_ges->GetHud()->yVidaM,1);
+        energia_textura = _interfaz->AddImagen("assets/images/21.png",_ges->GetHud()->xEnergiaM,_ges->GetHud()->yEnergiaM,1);
+        dinero_textura = _interfaz->AddImagen("assets/images/61.png",_ges->GetHud()->xDineroM,_ges->GetHud()->yDineroM,1);
+        arma_textura =_interfaz->AddImagen("assets/images/11.png",_ges->GetHud()->xObjetoM,_ges->GetHud()->yObjetoM,1);
+        barraVida_textura = _interfaz->AddImagen("assets/images/4.png",_ges->GetHud()->xBarraVidaM,_ges->GetHud()->yBarraVidaM,1);
+        barraEnergia_textura = _interfaz->AddImagen("assets/images/3.png",_ges->GetHud()->xBarraEnergiaM,_ges->GetHud()->yBarraEnergiaM,1);
+        manos_textura = _interfaz->AddImagen("assets/images/manos.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        llave_textura = _interfaz->AddImagen("assets/images/llave.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        espada_textura = _interfaz->AddImagen("assets/images/espada.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        daga_textura = _interfaz->AddImagen("assets/images/daga.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
 
         //calcular vida y energia
 
         //monedas y color de letra
-        moneyI = _interfaz->CrearTexto("0 M",710,25,255.0f,255.0f,255.0f);
+        moneyI = _interfaz->CrearTexto("0 M",_ges->GetHud()->xMarcaDineroM,_ges->GetHud()->yMarcaDineroM,255.0f,255.0f,255.0f);
 
     #else
         //codigo motor irrlicht

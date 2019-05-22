@@ -378,9 +378,10 @@ unsigned char * Gestor::CargarVideo(const char * _nombre,int * width, int * heig
 {
     //comprobamos si existe el video
     //devuelve primer frame del video
-    CargadorVideo * carga = new CargadorVideo(_nombre);
+    CargadorVideo * carga = new CargadorVideo();
     carga->DefinirSizeSalida(anchoVideo,altoVideo);
-
+    carga->PrepararVideo(_nombre);
+    
     if(carga->EstaListo())
     {
         Video * video = new Video();
@@ -431,7 +432,7 @@ unsigned char * Gestor::UpdateVideo(const char * _nombreVideo)
                 float tiempoactual = (clock()/((float)CLOCKS_PER_SEC/1000.0f));
                 float tiempoframeanterior = videos[idVideo]->tiempo_ultimoFrame+videos[idVideo]->tiempo_frame;
                 float salto = (tiempoactual/tiempoframeanterior)/videos[idVideo]->tiempo_frame;
-                std::cout << "Salto : " << salto << "\n";
+                //std::cout << "Salto : " << salto << "\n";
                 videos[idVideo]->tiempo_ultimoFrame =(float)(clock()/((float)CLOCKS_PER_SEC/1000.0f));
                 if(salto <= 1.0f)
                 {

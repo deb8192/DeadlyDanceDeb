@@ -425,7 +425,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             #ifdef WEMOTOR
                 //variables y parametros motor catopengl
-
+                GestorInterfaces * _ges;
                 Interfaz * _interfaz;//puntero que contiene la entrada al motorgrafico de catopengl
 
                 unsigned short camara;//id de la camara

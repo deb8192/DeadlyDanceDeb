@@ -7,6 +7,8 @@ GestorInterfaces * GestorInterfaces::_unica_instancia = 0;
 GestorInterfaces::GestorInterfaces()
 {
         _menu = new menu;
+        _hud = new hud;
+        _carga = new carga;
 }
 
 void GestorInterfaces::UpdateDimensionesVentana(int * dimensiones)
@@ -30,6 +32,8 @@ void GestorInterfaces::ActualizarParametros()
         
         //std::cout << Width << " " << Height << "\n";
 
+
+        //menu principal
         _menu->xLogoM = Width*(_menu->xLogo);
         _menu->yLogoM = Height*(_menu->yLogo); 
         
@@ -53,11 +57,59 @@ void GestorInterfaces::ActualizarParametros()
 
         _menu->xSalirM = Width*(_menu->xSalir);
         _menu->ySalirM = Height*(_menu->ySalir);
+
+        //configuracion
+
+        //iniciar partida
+
+        //continuar partida
+
+        //creditos
+
+        //hud
+        _hud->xVidaM = Width*(_hud->xVida);
+        _hud->yVidaM = Height*(_hud->yVida);
+
+        _hud->xEnergiaM = Width*(_hud->xEnergia);
+        _hud->yEnergiaM = Height*(_hud->yEnergia);
+
+        _hud->xObjetoM = Width*(_hud->xObjeto);
+        _hud->yObjetoM = Height*(_hud->yObjeto);
+
+        _hud->xDineroM = Width*(_hud->xDinero);
+        _hud->yDineroM = Height*(_hud->yDinero);
+
+
+        _hud->xBarraVidaM = _hud->xVidaM+40;
+        _hud->yBarraVidaM = _hud->yVidaM+8;
+
+        _hud->xBarraEnergiaM = _hud->xEnergiaM+40;
+        _hud->yBarraEnergiaM = _hud->yEnergiaM+8;
+
+        _hud->xMarcaDineroM = _hud->xDineroM+26;
+        _hud->yMarcaDineroM = _hud->yDineroM+14;
+
+        _hud->xTipoObjetoM = _hud->xObjetoM+10;
+        _hud->yTipoObjetoM = _hud->yObjetoM+8;
+
+        //puzzles
+
+        //carga
+
+        _carga->xCargaM = Width*(_carga->xCarga);
+        _carga->yCargaM = Height*(_carga->yCarga);
+
+
 }
 
 GestorInterfaces::menu * GestorInterfaces::GetMenu()
 {
         return _menu;
+}
+
+GestorInterfaces::hud * GestorInterfaces::GetHud()
+{
+        return _hud;
 }
 
 float GestorInterfaces::GetEscaladoX()
@@ -68,4 +120,9 @@ float GestorInterfaces::GetEscaladoX()
 float GestorInterfaces::GetEscaladoY()
 {
         return escaladoHeight;
+}
+
+GestorInterfaces::carga * GestorInterfaces::GetCarga()
+{
+        return _carga;
 }
