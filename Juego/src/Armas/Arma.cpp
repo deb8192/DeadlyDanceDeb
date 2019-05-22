@@ -18,20 +18,61 @@ Arma::Arma(int ataque, int anc, int lar, int alt,
 
     // INobjetos
     tipoObjeto = tipoObj;
-    if (tipoObj == constantes.GUITARRA) // GUITARRA
+    if (tipoObj == constantes.GUITARRA1) // GUITARRA
     {
-        _modelo = "assets/models/Arma.obj";
-        _textura = "assets/texture/Arma.png";
+        _modelo = "assets/models/Armas/Guitarras/guitarra-1.obj";
+        _textura = "assets/texture/guitarra-1.png";
     }
-    else if (tipoObj == constantes.ARPA)
+    else if (tipoObj == constantes.GUITARRA2)
     {
-        _modelo = "assets/models/Arpa.obj";
-        _textura = "assets/texture/Arpa.png";
+        _modelo = "assets/models/Armas/Guitarras/guitarra-2.obj";
+        _textura = "assets/texture/guitarra-2.png";
     }
-    else if (tipoObj == constantes.FLAUTA)
+    else if (tipoObj == constantes.GUITARRA3)
     {
-        _modelo = "assets/models/Flauta.obj";
-        _textura = nullptr;
+        _modelo = "assets/models/Armas/Guitarras/guitarra-3.obj";
+        _textura = "assets/texture/guitarra-3.png";
+    }
+    else if (tipoObj == constantes.ARPA1) // ARPA
+    {
+        _modelo = "assets/models/Armas/Arpas/arpa-1.obj";
+        _textura = "assets/texture/arpa-1.png";
+    }
+    else if (tipoObj == constantes.ARPA2)
+    {
+        _modelo = "assets/models/Armas/Arpas/arpa-2.obj";
+        _textura = "assets/texture/arpa-2.png";
+    }
+    else if (tipoObj == constantes.ARPA3)
+    {
+        _modelo = "assets/models/Armas/Arpas/arpa-3.obj";
+        _textura = "assets/texture/arpa-3.png";
+    }
+    else if (tipoObj == constantes.FLAUTA1) // FLAUTA
+    {
+        _modelo = "assets/models/Armas/Flautas/flauta-1.obj";
+        _textura = "assets/texture/flauta-1.png";
+    }
+    else if (tipoObj == constantes.FLAUTA2) // FLAUTA
+    {
+        _modelo = "assets/models/Armas/Flautas/flauta-2.obj";
+        _textura = "assets/texture/flauta-2.png";
+    }
+    else if (tipoObj == constantes.FLAUTA3) // FLAUTA
+    {
+        _modelo = "assets/models/Armas/Flautas/flauta-3.obj";
+        _textura = "assets/texture/flauta-3.png";
+    }
+    else if (tipoObj == constantes.ESP_HEAVY)
+    {
+        _modelo = "assets/models/Armas/Especiales/guitarra-electrica.obj";
+        _textura = "assets/texture/guitarra-electrica.png";
+    }
+    else if (tipoObj == constantes.ESP_BAILAORA)
+    {
+        // TO DO: cambiar nombres de los archivos cuando esten
+        _modelo = "assets/models/Armas/Especiales/castanuelas.obj";
+        _textura = "assets/texture/castanuelas.png";
     }
 }
 
