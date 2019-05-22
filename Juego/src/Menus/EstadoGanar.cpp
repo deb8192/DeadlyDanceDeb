@@ -11,6 +11,10 @@ EstadoGanar::EstadoGanar()
         nombreUser[i] = '\0';
     }
     nombrePass = new char [10];
+    for(int i = 0; i < 10; i++)
+    {
+        nombrePass[i] = '\0';
+    }
     campoSeleccion = -1;
 }
 
@@ -222,7 +226,7 @@ void EstadoGanar::pintarBotones()
     _motor->CambiarColorTexto(campo_user,0,0,0);
     campo_pass = _motor->CrearTexto("",402,180,0,0);
     _motor->CambiarColorTexto(campo_pass,0,0,0);
-    campo_web = _motor->CrearTexto(" ------------------------- ", 300,460,0,0);
+    campo_web = _motor->CrearTexto("", 300,460,0,0);
     _motor->CambiarAnchuraTexto(campo_web,250);
 }
 

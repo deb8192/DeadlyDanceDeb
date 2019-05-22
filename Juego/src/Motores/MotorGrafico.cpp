@@ -528,6 +528,8 @@ bool MotorGrafico::CrearVentana(short tipo)
 
             _gestori->UpdateDimensionesVentana(configuracion.GetWidth(),configuracion.GetHeight());
 
+            width = configuracion.GetWidth();
+            height = configuracion.GetHeight();
             _gestori->ActualizarParametros();
 
             std::string titulo = "DeadlyDance Game";
@@ -4296,9 +4298,9 @@ void MotorGrafico::EscalarMalla(unsigned int did, float escalado)
 
 unsigned int MotorGrafico::ObtenerIDOpengl(unsigned int tipo,unsigned int idVector)
 {
+    unsigned int idOpengl = 0;
+    
     #ifdef WEMOTOR
-
-        unsigned int idOpengl = 0;
 
         if(tipo == 0) //animaciones objetos
         {

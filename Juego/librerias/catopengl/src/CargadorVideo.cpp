@@ -1,5 +1,6 @@
 #include "CargadorVideo.hpp"
 
+/* Thanks for you code bramante http://bramante.github.io/blog/2015/07/27/extract-images-from-a-video-using-ffmpeg/ */
 CargadorVideo::CargadorVideo()
 {
         // Inicializamos a nulo para prevenir segmentation faults.
@@ -135,6 +136,7 @@ bool CargadorVideo::PrepararVideo(const char * _rutaVideo)
         }
 
         // Determina la longitud del buffer y cuantos bytes tendra
+        //std::cout << "3o w -> " << width << " h -> " << height << "\n";
         numBytes=av_image_get_buffer_size(AV_PIX_FMT_RGB24,width,height,1);
         //std::cout << "Tamayo en bytes " << numBytes << " w " << width << " h " << height << "\n";
         //reservamos memoria para el buffer del frame
@@ -255,19 +257,20 @@ void CargadorVideo::DefinirSizeSalida(unsigned int nwidth, unsigned int nheight)
 {
         width = nwidth;
         height = nheight;
+        //std::cout << "2o w -> " << width << " h -> " << height << "\n";
 }
 
 void CargadorVideo::flipFrame(AVFrame* pFrame) 
 {
         //(sizeof pFrame->data / sizeof * pFrame->data)
-        std::cout << "Entra \n ";
+        //std::cout << "Entra \n ";
         for (int i = 0; i < 3; i++) 
         {
-                std::cout << "Paso " << i << " " << pFrame->linesize[i] * (pFrame->height-1) << " " <<  pFrame->linesize[i] << "\n";
+                //std::cout << "Paso " << i << " " << pFrame->linesize[i] * (pFrame->height-1) << " " <<  pFrame->linesize[i] << "\n";
                 pFrame->data[i] += pFrame->linesize[i] * (pFrame->height);
                 pFrame->linesize[i] = -pFrame->linesize[i];            
         }
-        std::cout << "Sale \n ";
+        //std::cout << "Sale \n ";
 }
 
 void CargadorVideo::unflipFrame(AVFrame* pFrame) 
