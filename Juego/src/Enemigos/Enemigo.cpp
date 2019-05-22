@@ -71,7 +71,7 @@ Enemigo::Enemigo()
     porcentajeVelocidad = 1.0;
     pesoRotacion = 0.0f;
 
-    
+    escalado = 1.0f;
 
 }
 
@@ -618,19 +618,25 @@ int Enemigo::Atacar(int i)
             if(tipoEnemigo == 0)
             {
                 _motora->getEvent("pollohit")->setPosition(this->getX(),this->getY(),this->getZ());
-                _motora->getEvent("pollohit")->start();  
+                _motora->getEvent("pollohit")->start();
             }
             else if(tipoEnemigo == 1)
             {
                 //_motora->getEvent("murcihit")->setPosition(this->getX(),this->getY(),this->getZ());
-                _motora->getEvent("murcihit")->start();  
+                _motora->getEvent("murcihit")->start();
+            }
+             else if(tipoEnemigo == 6)
+            {
+                _motora->getEvent("BN1ataca")->setPosition(this->getX(),this->getY(),this->getZ());
+                _motora->getEvent("BN1ataca")->start();
+                _motora->getEvent("enemyhit")->start();
             }
             else
             {
-                _motora->getEvent("enemyhit")->start(); 
+                _motora->getEvent("enemyhit")->start();
             }
- 
 
+            _motor->startAnimaSprite(0,true,0.0f,0.0f,0.0f);
         }
 
         if(atacado)
@@ -717,6 +723,7 @@ int Enemigo::AtacarEspecial()
         {
             //cout << "Jugador Atacado por ataque especial" << endl;
             danyo = roundf(danyoF * por10) / por10;
+            _motor->startAnimaSprite(0,true,0.0f,0.0f,0.0f);
         }
         return danyo;
     }
@@ -832,9 +839,10 @@ void Enemigo::moverseEntidad(float updTime)
 void Enemigo::RespawnNoise()
 {
     cout << "respawnNoise" << endl;
-    _motora->LoadEvent("event:/SFX/SFX-Muerte invoca enemigos","respawnfire",1);  
+    _motora->LoadEvent("event:/SFX/SFX-Muerte invoca enemigos","respawnfire",1);
     _motora->getEvent("respawnfire")->setPosition(this->getX(),this->getY(),this->getZ());
-    _motora->getEvent("respawnfire")->start();  
+    _motora->getEvent("respawnfire")->start();
+    _motor->startAnimaSprite(3,true,this->getX()+2.0f,this->getY(),this->getZ());
 }
 /*************** rotarEntidad *****************
  * Funcion con la que el enemigo rotara
@@ -1205,13 +1213,10 @@ void Enemigo::SetEnemigo(int enemigo)
 }
 
 void Enemigo::SetAranaSound()
-{
-    if(tipoEnemigo == 2)
-    {
-        _motora->LoadEvent("event:/SFX/SFX-Arana grito enemigo", soundID, 1);
-        _motora->getEvent(soundID)->setPosition(posActual.x,0,posActual.z);
-        _motora->getEvent(soundID)->start();
-    }
+{    
+    _motora->LoadEvent("event:/SFX/SFX-Arana grito enemigo", soundID, 1);
+    _motora->getEvent(soundID)->setPosition(posActual.x,0,posActual.z);
+    _motora->getEvent(soundID)->start();
 }
 void Enemigo::SetModo(int newModo)
 {
@@ -1383,9 +1388,9 @@ ZonaEscondite* Enemigo::getZonaEsconditeMasCercana(vector <ZonaEscondite*> &zona
 }
 //ia
 
-void Enemigo::setArbol(Arbol ia)
+void Enemigo::setArbol(Arbol* ia)
 {
-    arbol = new Arbol(ia.GetRaiz(), ia.GetRaiz()->getNombre());
+    arbol = new Arbol(ia->GetRaiz(), ia->GetRaiz()->getNombre());
 }
 
 Arbol * Enemigo::getArbol()
@@ -2572,4 +2577,9 @@ void Enemigo::BorrarEnemigos(unsigned short n)
 unsigned int Enemigo::GetEstadoMuerte()
 {
     return estadoMuerte;
+}
+
+float Enemigo::GetEscalado()
+{
+    return escalado;
 }

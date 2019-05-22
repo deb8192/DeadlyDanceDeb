@@ -58,34 +58,40 @@ void Menu::Update()
 
 void Menu::ManejarEventos()
 {
+    
     if (_motor->OcurreEvento(GUI_ID_EMPEZAR_BUTTON))//cambiamos de estado porque han pulsado boton jugar
-    {
+    {   
+        _motora->getEvent("Dialogo1")->start();
         borrarEscenaResetearEvento(GUI_ID_EMPEZAR_BUTTON);// reseteamos el evento
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         jugar();
     }
 
     if (_motor->OcurreEvento(GUI_ID_CONFIGURACION_BUTTON))
-    {
+    {   
+        _motora->getEvent("Dialogo1")->start();
         borrarEscenaResetearEvento(GUI_ID_CONFIGURACION_BUTTON);
         configuracion();
     }
 
     if (_motor->OcurreEvento(GUI_ID_CREDITOS_BUTTON))
-    {
+    {   
+        _motora->getEvent("Dialogo1")->start();
         borrarEscenaResetearEvento(GUI_ID_CREDITOS_BUTTON);
         creditos();
     }
 
     if (_motor->OcurreEvento(GUI_ID_CONTINUARPARTIDA_BUTTON))
-    {
+    {   
+        _motora->getEvent("Dialogo1")->start();
         borrarEscenaResetearEvento(GUI_ID_CONTINUARPARTIDA_BUTTON);
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         continuarPartida();
     }
 
     if (_motor->OcurreEvento(GUI_ID_SALIR_BUTTON))
-    {
+    {   
+        _motora->getEvent("Dialogo1")->start();
         borrarEscenaResetearEvento(GUI_ID_SALIR_BUTTON);
         salir();
     }
@@ -93,14 +99,18 @@ void Menu::ManejarEventos()
 
 void Menu::pintarBotones()
 {
-    _motor->CrearImagen("assets/images/logo1.png",230,25,1.0f);
-    _motor->CrearImagen("assets/images/logo2.png",700,500,1.0f);
-    _motor->CrearImagen("assets/images/logo3.png",20,460,1.0f);
-    _motor->CrearBoton(300,200,500,230, GUI_ID_EMPEZAR_BUTTON, L"Iniciar Partida", L"Iniciar Partida");//te da la opcion de empezar una nueva partida
-    _motor->CrearBoton(300,240,500,270, GUI_ID_CONTINUARPARTIDA_BUTTON, L"Continuar Partida", L"Continuar Partida");//te da la opcion de cargar una partida
-    _motor->CrearBoton(300,280,500,310, GUI_ID_CONFIGURACION_BUTTON, L"Configuracion", L"Configuracion");
-    _motor->CrearBoton(300,320,500,350, GUI_ID_CREDITOS_BUTTON, L"Creditos", L"Creditos");
-    _motor->CrearBoton(300,360,500,390, GUI_ID_SALIR_BUTTON, L"Salir al Escritorio", L"Salir");
+    GestorInterfaces * _ges = GestorInterfaces::GetInstance();
+    _ges->ActualizarParametros();
+    GestorInterfaces::menu * m = _ges->GetMenu();
+    //std::cout << m->xLogoM << " " << m->yLogoM <<"\n";
+    _motor->CrearImagen("assets/images/logo1.png",m->xLogoM,m->yLogoM,_ges->GetEscaladoY());
+    _motor->CrearImagen("assets/images/logo2.png",m->xLogo2M,m->yLogo2M,_ges->GetEscaladoY());
+    _motor->CrearImagen("assets/images/logo3.png",m->xLogo3M,m->yLogo3M,_ges->GetEscaladoY());
+    _motor->CrearBoton(m->xEmpezarM,m->yEmpezarM,500,230, GUI_ID_EMPEZAR_BUTTON, L"Iniciar Partida", L"Iniciar Partida");//te da la opcion de empezar una nueva partida
+    _motor->CrearBoton(m->xContinuarM,m->yContinuarM,500,270, GUI_ID_CONTINUARPARTIDA_BUTTON, L"Continuar Partida", L"Continuar Partida");//te da la opcion de cargar una partida
+    _motor->CrearBoton(m->xConfiM,m->yConfiM,500,310, GUI_ID_CONFIGURACION_BUTTON, L"Configuracion", L"Configuracion");
+    _motor->CrearBoton(m->xCreM,m->yCreM,500,350, GUI_ID_CREDITOS_BUTTON, L"Creditos", L"Creditos");
+    _motor->CrearBoton(m->xSalirM,m->ySalirM,500,390, GUI_ID_SALIR_BUTTON, L"Salir al Escritorio", L"Salir");
 }
 
 void Menu::borrarEscenaResetearEvento(short id)

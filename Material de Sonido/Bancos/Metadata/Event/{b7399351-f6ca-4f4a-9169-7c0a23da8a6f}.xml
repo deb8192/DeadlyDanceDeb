@@ -31,6 +31,9 @@
         <relationship name="timeline">
             <destination>{ab9d6d7f-9eb5-4bc5-bd59-15f48cd68ab0}</destination>
         </relationship>
+        <relationship name="banks">
+            <destination>{e7838413-76e6-44c3-951b-98d3cba0b7e5}</destination>
+        </relationship>
     </object>
     <object class="EventMixer" id="{a9b8cabb-59e3-47ab-abb6-730ca64d91a9}">
         <relationship name="masterBus">
@@ -67,6 +70,9 @@
         <relationship name="modules">
             <destination>{6829ba14-87d3-4976-a103-06779902d801}</destination>
         </relationship>
+        <relationship name="markers">
+            <destination>{78e93414-3941-48a6-858d-e80fb0de6830}</destination>
+        </relationship>
     </object>
     <object class="EventMixerMaster" id="{64cb32ce-5ad6-41d0-839b-7dec99db8692}">
         <relationship name="effectChain">
@@ -95,7 +101,7 @@
     </object>
     <object class="EventMixerGroup" id="{6a66de05-2705-4ea7-92de-e0b521869283}">
         <property name="volume">
-            <value>-12.5</value>
+            <value>10</value>
         </property>
         <property name="name">
             <value>Audio 1</value>
@@ -108,6 +114,20 @@
         </relationship>
         <relationship name="output">
             <destination>{64cb32ce-5ad6-41d0-839b-7dec99db8692}</destination>
+        </relationship>
+    </object>
+    <object class="LoopRegion" id="{78e93414-3941-48a6-858d-e80fb0de6830}">
+        <property name="position">
+            <value>0</value>
+        </property>
+        <property name="length">
+            <value>79.098775510204078</value>
+        </property>
+        <relationship name="timeline">
+            <destination>{ab9d6d7f-9eb5-4bc5-bd59-15f48cd68ab0}</destination>
+        </relationship>
+        <relationship name="markerTrack">
+            <destination>{91a38192-b47b-4976-95a2-a825d0abe223}</destination>
         </relationship>
     </object>
     <object class="MixerBusEffectChain" id="{d3b47fb7-062f-42f6-826e-f183a1d0071b}">
@@ -142,5 +162,15 @@
             <value>3500</value>
         </property>
     </object>
-    <object class="SpatialiserEffect" id="{3dbfddb3-a47c-4397-a871-79e719b7be51}"/>
+    <object class="SpatialiserEffect" id="{3dbfddb3-a47c-4397-a871-79e719b7be51}">
+        <property name="minimumDistance">
+            <value>6.80000019</value>
+        </property>
+        <property name="maximumDistance">
+            <value>150</value>
+        </property>
+        <property name="soundSize">
+            <value>10000</value>
+        </property>
+    </object>
 </objects>

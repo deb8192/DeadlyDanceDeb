@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{322492cc-36b6-4cc7-b546-e049454a82ec}">
         <property name="name">
-            <value>SFX-Personaje cae al suelo</value>
+            <value>SFX-Personaje activa palanca</value>
         </property>
         <property name="outputFormat">
             <value>1</value>
@@ -30,6 +30,9 @@
         </relationship>
         <relationship name="timeline">
             <destination>{38e40b13-0e2f-4c59-bfbf-fdbc635dce74}</destination>
+        </relationship>
+        <relationship name="banks">
+            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
         </relationship>
     </object>
     <object class="EventMixer" id="{0bbdb48e-bbba-46b3-98af-16dd8f3b3c2e}">

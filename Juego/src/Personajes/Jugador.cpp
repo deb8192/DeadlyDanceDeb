@@ -598,6 +598,8 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
                 //Si no se ha encontrado es que no se le a atacado
                 if (encontrado == false && _getEnemigos.at(atacados.at(i)))
                 {
+                    _motor->startAnimaSprite(2,true,_getEnemigos.at(atacados.at(i))->getX(),
+                        _getEnemigos.at(atacados.at(i))->getY(),_getEnemigos.at(atacados.at(i))->getZ());
                     float variacion = rand() % 7 - 3;
                     danyo += (int) variacion;
                     //CUANDO LE QUITAN VIDA BUSCA AL JUGADOR PARA ATACARLE
@@ -636,6 +638,8 @@ void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
         {
             if(_getEnemigos.at(atacados.at(i)))
             {
+                _motor->startAnimaSprite(2,true,_getEnemigos.at(atacados.at(i))->getX()+2.0f,
+                    _getEnemigos.at(atacados.at(i))->getY(),_getEnemigos.at(atacados.at(i))->getZ()-1.0f);
                 float variacion = rand() % 7 - 3;
                 *danyo += (int) variacion;
                 _getEnemigos.at(atacados.at(i))->ModificarVida(-(*danyo));

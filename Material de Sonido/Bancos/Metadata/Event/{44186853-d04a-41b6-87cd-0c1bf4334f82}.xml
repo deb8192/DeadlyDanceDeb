@@ -31,6 +31,9 @@
         <relationship name="timeline">
             <destination>{87e49b40-b20e-4efd-a540-a5f1cae0e9cb}</destination>
         </relationship>
+        <relationship name="banks">
+            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
+        </relationship>
     </object>
     <object class="EventMixer" id="{23d7dad8-7b5b-4657-a7ab-311404b20b15}">
         <relationship name="masterBus">
@@ -110,6 +113,9 @@
     <object class="MixerBusEffectChain" id="{5b1ae390-f41a-4850-8c77-178f7961ba1c}">
         <relationship name="effects">
             <destination>{b5ddd473-5b92-45ac-af07-def8287647ae}</destination>
+            <destination>{7a60ffa3-da58-4333-a088-3475bc9fd0b6}</destination>
+            <destination>{8355e99d-2922-4f92-b7a9-a342562de840}</destination>
+            <destination>{f8dc93cb-f1e9-49e4-b8ae-54fe89292428}</destination>
         </relationship>
     </object>
     <object class="MixerBusPanner" id="{4896c673-db4d-42cf-973e-b046b3fd2fe4}"/>
@@ -121,5 +127,38 @@
     </object>
     <object class="MixerBusPanner" id="{5df708ad-c76a-472e-a2d1-a2759b0a93f5}"/>
     <object class="MixerBusFader" id="{b5ddd473-5b92-45ac-af07-def8287647ae}"/>
+    <object class="ChorusEffect" id="{7a60ffa3-da58-4333-a088-3475bc9fd0b6}">
+        <property name="rate">
+            <value>4.79999971</value>
+        </property>
+        <property name="depth">
+            <value>66</value>
+        </property>
+        <property name="mix">
+            <value>12</value>
+        </property>
+    </object>
+    <object class="ChorusEffect" id="{8355e99d-2922-4f92-b7a9-a342562de840}">
+        <property name="rate">
+            <value>0.199999988</value>
+        </property>
+        <property name="depth">
+            <value>71.5</value>
+        </property>
+        <property name="mix">
+            <value>8.5</value>
+        </property>
+    </object>
+    <object class="ChorusEffect" id="{f8dc93cb-f1e9-49e4-b8ae-54fe89292428}">
+        <property name="rate">
+            <value>14</value>
+        </property>
+        <property name="depth">
+            <value>13</value>
+        </property>
+        <property name="mix">
+            <value>93</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{6c9b96a2-16bb-471b-b580-c39c540a3a78}"/>
 </objects>

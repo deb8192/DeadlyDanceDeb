@@ -8,6 +8,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
     #include <Interfaz.hpp>
     #include "../Eventos.hpp"
     #include "../Times.hpp"
+    #include "../GestorInterfaces.hpp"
+    #include "../Jugando/Configuration.hpp"
 #else
     //motorirrlicht
     #include <irrlicht.h> //la utilizaremos para las funcionalidades del motor
@@ -249,6 +251,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
+            void CargarSprite(int id, std::vector<const char *> ruta_sprite);
+            void startAnimaSprite(int id, bool start, float posx, float posy, float posz);
+            void updateAnimaSprite();
             void llevarObjeto(float x, float y, float z, float rx, float ry, float rz);
             void dispararProyectil(float x, float y, float z, float rx, float ry, float rz, float es);
             void cambiarTextura(unsigned int objeto, const char *ruta_textura);
@@ -388,6 +393,10 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void PausarVideo(unsigned int id);
             //@param id es el id del video que se quiere reproducir
             void PlayVideo(unsigned int id);
+
+            void EscalarMalla(unsigned int did, float escalado);
+            unsigned int ObtenerIDOpengl(unsigned int tipo,unsigned int idVector);
+
         private: //clases solo accesibles por MotorGrafico
 
             struct SalasLuz
@@ -396,6 +405,15 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 int minz, maxz;
                 int minx, maxx;
                 std::vector<glm::vec3> luz;
+            };
+
+            struct AnimacionSprite
+            {
+                bool start = false;
+                int id;
+                float posx, posy, posz;
+                long unsigned int actualsprite = 0;
+                std::vector<unsigned int> sprite_board;
             };
 
             //clase singleton
@@ -415,6 +433,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 std::vector<unsigned short> Plataformas_Scena;//contiene las mmallas del suelo del juego
                 std::vector<unsigned short> Luces_Scena;//contiene las luces de la escena
                 std::vector<SalasLuz> Salas_luz; //contiene las salas con luz
+                std::vector<AnimacionSprite> Sprites_Scena; //Contiene sprites de movimiento
                 std::vector<unsigned short> Enemigos_Scena;//contiene los enemigos reservados (ids)
                 std::vector<unsigned short> Textos_Scena;//contiene los enemigos reservados (ids)
                 std::vector<unsigned short> BoardsArmas_Scena;//contiene los billboards de armas reservados (ids)
@@ -482,6 +501,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short _txtP;
                 vector<unsigned short> _imagenesP;
                 vector<unsigned short> _textosP;
+
+                //configuracion del juego 
+                Configuration configuracion;
 
             #else
                 //variables y parametros motor irrlicht

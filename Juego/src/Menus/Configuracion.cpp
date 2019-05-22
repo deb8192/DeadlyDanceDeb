@@ -14,6 +14,7 @@ Configuracion::Configuracion()
     muteAll = configuracion.GetMuteAll();
     vsync = configuracion.GetVsync();
     suavizadoMsax1 = configuracion.GetSuavizadoMsaX1();
+    AllScreen = configuracion.GetAllScreen();
     resolucion[0] = 0;
 }
 
@@ -29,22 +30,29 @@ void Configuracion::Iniciar()
     //_motor->CrearImagen("assets/images/pr2.png",150,100,10.0f);
     _motor->CrearTexto("Resolucion:", 30, 70, 100, 20); // Parametros: texto, x1, y1, x2, y2
 
-    if(heightScreen == 800)
+    if(widthScreen == 800)
     {
         idsElementos[6] = _motor->CrearTexto("800x600 60Fps", 385, 80, 100, 20); // Parametros: texto, x1, y1, x2, y2
     }
-    else if(heightScreen == 1280)
+    else if(widthScreen == 1024)
+    {
+        idsElementos[6] = _motor->CrearTexto("1024x578 60Fps", 385, 80, 100, 20);
+    }
+    else if(widthScreen == 1280)
     {
         idsElementos[6] = _motor->CrearTexto("1280x720 60Fps", 385, 80, 100, 20);
     }
-    else if (heightScreen == 1920)
+    else if (widthScreen == 1920)
     {
         idsElementos[6] = _motor->CrearTexto("1920x1080 60Fps", 385, 80, 100, 20);
     }
     else
     {
-        idsElementos[6] = _motor->CrearTexto("ErrorResolution", 385, 80, 100, 20);
+        idsElementos[6] = _motor->CrearTexto("1024x578 60Fps", 385, 80, 100, 20);
     }
+
+    _motor->CrearTexto("Pantalla Completa:", 580, 70, 100, 20);
+    //idsElementos[8] = _motor->CrearBoton2(760,55,2.0f,170,40,300,999,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
 
     _motor->CrearBoton2(348,65,2.0f,170,40,300,990,L"Slot 1",L"assets/images/camposeleccionn.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
     _motor->CrearTexto("Sonido Ambiente:", 30, 135, 100, 20); // Parametros: texto, x1, y1, x2, y2
@@ -83,8 +91,17 @@ void Configuracion::Iniciar()
     {
         idsElementos[5] = _motor->CrearBoton2(348,425,2.0f,170,40,300,996,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
     }
-    _motor->CrearBoton(300,520,0,0,997,L" Guardar Cambios",L"");
 
+    if(AllScreen)
+    {
+        idsElementos[8] = _motor->CrearBoton2(750,55,2.0f,570,65,300,1000,L"Slot 1",L"assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
+    }
+    else
+    {
+        idsElementos[8] = _motor->CrearBoton2(750,55,2.0f,170,40,300,1000,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
+    }
+
+    _motor->CrearBoton(300,520,0,0,997,L" Guardar Cambios",L"");
     _motor->ResetKey(LMOUSE_PRESSED_DOWN);
 
 }
@@ -197,6 +214,23 @@ void Configuracion::ManejarEventos()
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
     }
 
+    if(_motor->OcurreEvento(1000))
+    {
+        if(AllScreen)
+        {
+            AllScreen = false;
+            _motor->BorrarElementoPorIdReal(idsElementos[8]);
+            idsElementos[5] = _motor->CrearBoton2(750,55,2.0f,170,40,300,1000,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
+        }
+        else
+        {
+            AllScreen = true;
+            _motor->BorrarElementoPorIdReal(idsElementos[8]);
+            idsElementos[5] = _motor->CrearBoton2(750,55,2.0f,170,40,300,1000,L"Slot 1",L"assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
+        }
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
+    }
+
     if(_motor->OcurreEvento(990))
     {
         if(resolucion[0] == 0)
@@ -221,23 +255,23 @@ void Configuracion::ManejarEventos()
     {
         if(_motor->OcurreEvento(884))
         {
-            heightScreen = 800;
-            widthScreen = 600;
+            heightScreen = 600;
+            widthScreen = 800;
             _motor->CambiarTexto(idsElementos[6],"800x600 60Fps");
             borrarResoluciones();
         }
         if(_motor->OcurreEvento(885))
         {
-            heightScreen = 1280;
-            widthScreen = 720;
+            heightScreen = 720;
+            widthScreen = 1280;
             _motor->CambiarTexto(idsElementos[6],"1280x720 60Fps");
             borrarResoluciones();
 
         }
         if(_motor->OcurreEvento(886))
         {
-            heightScreen = 1920;
-            widthScreen = 1080;
+            heightScreen = 1080;
+            widthScreen = 1920;
             _motor->CambiarTexto(idsElementos[6],"1920x1080 60Fps");
             borrarResoluciones();
         }
@@ -245,7 +279,7 @@ void Configuracion::ManejarEventos()
 
     if(_motor->OcurreEvento(997))
     {
-        configuracion.SetConfiguracion(volAmbiente,volEfectos,volVoces,heightScreen,widthScreen,muteAll,vsync,suavizadoMsax1);
+        configuracion.SetConfiguracion(volAmbiente,volEfectos,volVoces,heightScreen,widthScreen,muteAll,vsync,suavizadoMsax1,AllScreen);
         configuracion.GuardarConfiguracion("config.global");
     }
 

@@ -10,6 +10,7 @@ bool Ventana::recogido = false;
 Ventana::Ventana()
 {
     _window = nullptr;
+    AllScreenB = false;
 }
 
 //USO: borra los datos que no se borren correctamente por el sistema
@@ -19,7 +20,7 @@ Ventana::~Ventana()
 }
 
 //USO: se utiliza para crear una ventana
-bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
+bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo,bool screenFull)
 {
     winwidth = w;
     winheight = h;
@@ -27,6 +28,7 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     // glfwWindowHint para configurar GLFW, mirar en la documentacion los distintos hint
     glfwInit();
     inicializarScreenParameter();//obtenemos informacion del monitor o pantalla
+    //std::cout << w << " - " << h << "\n";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  //glfwWindowHint(opcion_hint,valor_hint);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -34,7 +36,16 @@ bool Ventana::CrearVentana(int h, int w, bool redimensionar,const char * titulo)
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); //Solo para OS X
 
     //Creamos una ventana
-    _window = glfwCreateWindow(w, h,titulo, NULL, NULL);  //glfwCreateWindow(ancho,alto,nombre,NULL,NULL)
+    if(screenFull)
+    {
+        _window = glfwCreateWindow(w, h,titulo, monitorPrimario, NULL);  //glfwCreateWindow(ancho,alto,nombre,NULL,NULL)
+        AllScreenB= true;
+    }
+    else
+    {
+        _window = glfwCreateWindow(w, h,titulo, NULL, NULL);  //glfwCreateWindow(ancho,alto,nombre,NULL,NULL) 
+    }
+    
 
     if (_window == NULL) //si no se crea el objeto ventana, error
     {
@@ -114,6 +125,10 @@ void Ventana::Drop()
 {
     if(_window != nullptr)
     {
+        if(AllScreenB)
+        {
+            glfwSetWindowMonitor(_window, monitorPrimario, 0, 0, screenWidth, screenHeight, 0);
+        }
         glfwTerminate();//limpiar todos los recursos en memoria de GLFW
         _window = nullptr;
     }
@@ -123,6 +138,7 @@ void Ventana::Drop()
 //Entradas: _ventana = instancia de la ventana, width = ancho nuevo, height = alto nuevo
 void Ventana::redimensionar(GLFWwindow * _ventana, int width, int height)
 {
+    //std::cout << width << " - " << height << "\n";
     glViewport(0, 0, width, height);
 }
 
@@ -179,6 +195,9 @@ void Ventana::UpdateSize(short unsigned int w, short unsigned int h)
 {
     if(_window != nullptr)
     {
+        //std::cout << w << " - " << h << "\n";
+        winwidth = w;
+        winheight = h;
         glfwSetWindowSize(_window, w, h);
     }
 }
@@ -408,5 +427,23 @@ void Ventana::inicializarScreenParameter()
         } 
         std::cout << "\n\e[1;33mClawEngine v0.1 \e[0m \n\n";
         std::cout << "\e[33mMonitor Information -> Ancho Pantalla: " << screenWidth << ", Alto Pantalla: " << screenHeight << ", Aspect Ratio(1 = 16/9, 0 = 4/3): " << aspectRatio << ", Fps monitor: " << frameRate << "Hz" << "\e[0m \n\n";
+    }
+}
+
+void Ventana::AllScreen()
+{
+    if(_window && monitorPrimario)
+    {
+        glfwSetWindowMonitor(_window, monitorPrimario, 0, 0, winwidth, winheight, 0);
+        AllScreenB= true;
+    }
+}
+
+void Ventana::NoAllScreen()
+{
+    if(_window)
+    {
+        glfwSetWindowMonitor(_window, NULL, 0, 0, winwidth, winheight, 0);
+        AllScreenB = false;
     }
 }

@@ -1,7 +1,7 @@
 <Level><!--- Esto nos indica que estamos definiendo un nivel -->
 
 	<!-- Para reservar memoria en los vectores --> 	<!-- TO DO: Poner todos los numeros a Walls -->
-	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="6" Levers="6" Chests="7" Waypoints="70" Zones="21"></MaxNumberOf>
+	<MaxNumberOf Enemies="50" Walls="100" Doors="15" Keys="6" Levers="6" Chests="7" Waypoints="46" Zones="21"></MaxNumberOf>
 	<!-- Tenemos 36/50 enemigos -->
 
 	<!-- type indica..., codigo indica si es recolectable, arma..., accion es para guardarlo en un vector segun el tipo de objeto que sea -->
@@ -35,22 +35,16 @@
 		<LightPos X="151" Y="4" Z="70" sala="1"> </LightPos>
 
 	<LightSala sala="2" minZ="28" maxZ="144" minX="154" maxX="268"></LightSala>
-		<LightPos X="158" Z="70" Y="4" sala="2"> </LightPos>
 		<LightPos X="184" Z="133" Y="4" sala="2"> </LightPos>
 		<LightPos X="231" Z="133" Y="4" sala="2"> </LightPos>
-		<LightPos X="195" Z="37" Y="4" sala="2"> </LightPos>
 		<LightPos X="240" Z="35" Y="4" sala="2"> </LightPos>
 		<LightPos X="267" Z="111" Y="4" sala="2"> </LightPos>
 
 	<LightSala sala="3" minZ="28" maxZ="128" minX="269" maxX="416"></LightSala>
 		<LightPos X="307" Z="90" Y="-8" sala="3"> </LightPos>
-		<LightPos X="329" Z="88" Y="-8" sala="3"> </LightPos>
-		<LightPos X="353" Z="58" Y="-8" sala="3"> </LightPos>
 		<LightPos X="379" Z="74" Y="-8" sala="3"> </LightPos>
 
 	<LightSala sala="4" minZ="129" maxZ="220" minX="288" maxX="420"></LightSala>
-		<LightPos X="387" Z="132" Y="3" sala="4"> </LightPos>
-		<LightPos X="318" Z="131" Y="3" sala="4"> </LightPos>
 		<LightPos X="302" Z="157" Y="3" sala="4"> </LightPos>
 		<LightPos X="301" Z="181" Y="3" sala="4"> </LightPos>
 		<LightPos X="355" Z="218" Y="3" sala="4"> </LightPos>
@@ -60,15 +54,13 @@
 		<LightPos X="450" Z="209" Y="3" sala="5"> </LightPos>
 		<LightPos X="450" Z="273" Y="3" sala="5"> </LightPos>
 
-	<LightSala sala="6" minZ="220" maxZ="325" minX="187" maxX="421"></LightSala>
-		<LightPos X="406" Z="313" Y="3" sala="6"> </LightPos>
+	<LightSala sala="6" minZ="220" maxZ="325" minX="187" maxX="421"></LightSala>		
 		<LightPos X="358" Z="313" Y="3" sala="6"> </LightPos>
 		<LightPos X="314" Z="317" Y="3" sala="6"> </LightPos>
 		<LightPos X="270" Z="282" Y="3" sala="6"> </LightPos>
 		<LightPos X="219" Z="287" Y="3" sala="6"> </LightPos>
 		<LightPos X="192" Z="226" Y="3" sala="6"> </LightPos>
 		<LightPos X="302" Z="221" Y="3" sala="6"> </LightPos>
-		<LightPos X="385" Z="223" Y="3" sala="6"> </LightPos>
 
 	<LightSala sala="7" minZ="210" maxZ="320" minX="110" maxX="186"></LightSala>
 		<LightPos X="118" Z="218" Y="3" sala="7"> </LightPos>
@@ -81,8 +73,6 @@
 		<LightPos X="310" Z="542" Y="3" sala="8"> </LightPos>
 		<LightPos X="357" Z="542" Y="3" sala="8"> </LightPos>
 		<LightPos X="344" Z="418" Y="3" sala="8"> </LightPos>
-		<LightPos X="263" Z="385" Y="3" sala="8"> </LightPos>
-		<LightPos X="208" Z="387" Y="3" sala="8"> </LightPos>
 
 	<!--Sala-01--><Platform Type="1" tipoSala="0" accion="0" ancho="35" largo="34" alto="4" RP="0" X="0" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
 	<!--Decoracion-cavernas--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/RocaCaverna.png" Model="assets/models/Escenario/DecoracionCavernas.obj"></Object>
@@ -156,7 +146,7 @@
 				<!--Waypoint-acceso--><Waypoint Type="1" tipoWaypoint="c" compartido="1" accion="7" id="8" ancho="4" largo="4" alto="4" X="367" Y="0" Z="128" conexiones="7,9"></Waypoint>
 
 					<!--Sala-05--><Platform Type="1" tipoSala="0" accion="0" ancho="59" largo="46" alto="4" RP="0" X="362" Y="0" Z="176" Texture="assets/texture/ulrick.png" TypeCenter="0" Model="assets/models/Escenario/Plataformat3.obj" UserStar="False" StarX="0" StarY="0">
-					<!--Puerta--><Object tipoObj="2" Type="1" codigo="0" accion="3" ancho="1" largo="4" alto="10" RP="0" X="363" Y="0" Z="128" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
+					<!--Puerta2--><Object tipoObj="2" Type="1" codigo="0" accion="3" ancho="4" largo="1" alto="10" RP="0" X="363" Y="0" Z="128" despX="0" despZ="2" Texture="assets/texture/Puerta.png" Model=""></Object>
 					<!--Zona-Cofre--><Zone Type="1" accion="0" tipo="zChest" elementos="1" ancho="4" largo="4" alto="1" X="365" Y="0" Z="171"></Zone>
 					<!--Palanca--><Object tipoObj="0" Type="1" codigo="11" accion="3" nombre="palanca" ancho="3" largo="1" alto="10" X="322" Y="0" Z="203" despX="0" despZ="0" Texture="assets/texture/platform1.png" Model=""></Object>
 					<!--Base--><Object tipoObj="16" Type="1" accion="1" ancho="3" largo="2" alto="5" X="322" Y="0" Z="203" Texture="assets/texture/platform1.png" Model="assets/models/Base.obj"></Object>

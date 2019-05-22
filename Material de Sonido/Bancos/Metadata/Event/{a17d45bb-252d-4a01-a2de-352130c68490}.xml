@@ -2,7 +2,7 @@
 <objects serializationModel="Studio.01.10.00">
     <object class="Event" id="{a17d45bb-252d-4a01-a2de-352130c68490}">
         <property name="name">
-            <value>SFX-Araña grito enemigo</value>
+            <value>SFX-Arana grito enemigo</value>
         </property>
         <property name="outputFormat">
             <value>2</value>
@@ -30,6 +30,9 @@
         </relationship>
         <relationship name="timeline">
             <destination>{7ac29757-52d5-4a1c-b6e3-73cfbf148578}</destination>
+        </relationship>
+        <relationship name="banks">
+            <destination>{01b8af1f-82a9-4433-b1e9-1c856b526193}</destination>
         </relationship>
     </object>
     <object class="EventMixer" id="{08bb5bae-a9fb-403d-a790-5cee2330e65b}">
@@ -129,6 +132,9 @@
         </relationship>
     </object>
     <object class="EventMixerGroup" id="{027b8e4a-22d5-4d69-b36b-174ad6fbfb4d}">
+        <property name="volume">
+            <value>-6</value>
+        </property>
         <property name="name">
             <value>Audio 1</value>
         </property>
