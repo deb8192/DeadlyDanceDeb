@@ -1132,6 +1132,12 @@ void Jugando::UpdateIA()
         if(!estarDebil)
         {
             _motora->getEvent("MuerteEstasDebil")->start();
+            
+            if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
+            {
+                _enemigos[0]->ventajaSound(_jugador->GetTipoJug());
+                _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
+            }
         }
 
         estarDebil = true;
@@ -1150,9 +1156,18 @@ void Jugando::UpdateIA()
             }
             estarFuerte = true;
         }
+        else if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
+        {
+            if(!estarFuerte)
+            {
+                _enemigos[0]->pasearSound(_jugador->GetTipoJug());
+            }
+            estarFuerte = true;
+        }
 
         estarDebil = false;
         _motora->getEvent("MuerteEstasDebil")->stop();
+        _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
 
     }
 
@@ -2087,6 +2102,12 @@ void Jugando::RespawnEnemigos()
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
                     _motora->getEvent("MuerteRespawn2")->start();
+                    if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
+                    {
+                        _enemigos[0]->invocaSound();
+                        _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
+                        _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
+                    }
                 }
             }
             else if(tipoEne != 0)
@@ -2096,6 +2117,12 @@ void Jugando::RespawnEnemigos()
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
                     _motora->getEvent("MuerteRespawn1")->start();
+                    if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
+                    {
+                        _enemigos[0]->invocaSound();
+                        _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
+                        _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
+                    }
                 }
             }
             _enemigos.back()->SetEnemigo(enemigo);
@@ -2911,9 +2938,20 @@ void Jugando::CargarBossEnMemoria()
     }
 
     std::string nameid = std::to_string(_boss->getID()); //pasar id a string
-    _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid, 1);
-    _motora->getEvent(nameid)->setPosition(x,y,z);
-    _motora->getEvent(nameid)->start();
+   
+   if(nivelJ == 8)
+   {
+        _motora->LoadEvent("event:/SFX/SFX-Unicornio Caminando", nameid, 1);
+        _motora->getEvent(nameid)->setPosition(x,y,z);
+        _motora->getEvent(nameid)->start();
+   }
+   else if(nivelJ == 7)
+   {
+        _motora->LoadEvent("event:/SFX/SFX-Muerte Movimiento Esqueleto", nameid, 1);
+        _motora->getEvent(nameid)->setPosition(x,y,z);
+        _motora->getEvent(nameid)->start();
+   }
+    
 
 
     _enemigos.insert(_enemigos.begin(), _boss);

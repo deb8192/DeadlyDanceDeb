@@ -17,8 +17,8 @@ TravornioBoss::TravornioBoss(float nX, float nY, float nZ, int maxVida)
     minDistanciaJugador = 15;
 
     estadoMuerte = 8;
-    _modelo = "assets/models/Travornio/travornio_000001.obj";
-    _textura = "";
+    _modelo = "assets/models/Travornio/travornio_000001.obj";    
+    _textura = "assets/texture/texturas_Unicornio.png";
     fps = 150;
     _animacion = "assets/animaciones/Unicornio.xml";
     escalado = 0.50f;//es muy grande, por eso se escala

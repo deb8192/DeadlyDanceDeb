@@ -419,6 +419,11 @@ int Jugador::Atacar(int i)
  *      Entradas:
  *      Salidas: int danyo;
  */
+
+int Jugador::GetTipoJug()
+{
+    return tipoJug;
+}
 int Jugador::AtacarEspecial()
 {
     float danyoF = 0.f, aumentosAtaque = 0.f, critico = 1.f, por1 = 1.f;
@@ -618,6 +623,16 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
                 }
             }
         }
+        else if(atacados.empty() && danyo > 0)
+        {
+            if(GetSala()->getPosicionEnGrafica() == 14)
+            {
+                _getEnemigos.at(0)->fallasSound();
+                _getEnemigos.at(0)->stopPasearSound(GetTipoJug());
+                _getEnemigos.at(0)->stopVentajaSound(GetTipoJug());
+                _getEnemigos.at(0)->stopInvocaSound();
+            }
+        }
     }
     /*else
     {
@@ -642,12 +657,23 @@ void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
                     _getEnemigos.at(atacados.at(i))->getY(),_getEnemigos.at(atacados.at(i))->getZ()-1.0f);
                 float variacion = rand() % 7 - 3;
                 *danyo += (int) variacion;
-                _getEnemigos.at(atacados.at(i))->ModificarVida(-(*danyo));
+                _getEnemigos.at(atacados.at(i))->ModificarVida(-(*danyo));    
                 *danyo -= (int) variacion;
                 _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
             }
         }
     }
+    else if(atacados.empty() && *danyo > 0)
+    {
+        if(GetSala()->getPosicionEnGrafica() == 14)
+        {
+            _getEnemigos.at(0)->fallasSound();
+            _getEnemigos.at(0)->stopPasearSound(GetTipoJug());
+            _getEnemigos.at(0)->stopVentajaSound(GetTipoJug());
+            _getEnemigos.at(0)->stopInvocaSound();
+        }
+    }
+
 }
 
 void Jugador::generarSonido(int intensidad,double duracion,int tipo)
