@@ -179,11 +179,13 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         Arma* _armaEquipada;
         Arma* _armaEspecial;
         vector <Llave*> llaves;
+        
         //PRUEBAS ATAQUE ESPECIAL
-        const char* _rutaArmaEspecial = "assets/models/Arma.obj";
-        const char* _rutaTexturaArmaEspecial = "assets/texture/Arma.png";
+        const char* _rutaArmaEspecial = "assets/models/Armas/Especiales/guitarra-electrica.obj";
+        const char* _rutaTexturaArmaEspecial = "assets/texture/guitarra-electrica.png";
         unsigned short tipoJug; // Se asigna antes de cargar el nivel
         //!PRUEBAS ATAQUE ESPECIAL
+
        //  core::vector3df dir;
         float danyo_arma = 10.0f;
         float atx, atespx, aty, atespy, atz, atespz, atgx, atgy, atgz, incrAtDisCirc;

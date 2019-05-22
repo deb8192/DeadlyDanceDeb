@@ -447,8 +447,6 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
-    //cout << "UPD: 1"<<endl;
-
     //esto es para que espere 5 segundos antes de reanudar/cortar sonidos al cambiar de sala
    if(oirMuerteOmni!= 0.0f && _controladorTiempo->CalcularTiempoPasado(oirMuerteOmni)/1000 > 5.0f)
    {
@@ -459,8 +457,6 @@ void Jugando::Update()
         oirMuerteOmni = 0.0f;
    }
 
-   //cout << "UPD: 2"<<endl;
-
     if(_jugador->GetSala()->getPosicionEnGrafica() == 0 || _jugador->GetSala()->getPosicionEnGrafica() == 1)
     {
         _motora->getEvent("AmbienteViento")->resume();
@@ -470,7 +466,6 @@ void Jugando::Update()
         _motora->getEvent("AmbienteViento")->pause();
     }
 
-    //cout << "UPD: 3"<<endl;
 
    if(_controladorTiempo->CalcularTiempoPasado(startPlayTime)/1000 > 20.0f && nivelJ == 8)
    {
@@ -482,8 +477,6 @@ void Jugando::Update()
        //para que pueda moverse en el nivel antiguo
         poderEmpezar = true;
    }
-
-   //cout << "UPD: 4"<<endl;
 
     bool colisionaWaypoint = false, waypointComun = false, cercaJugador = false;
     _motor->clearDebug();
@@ -497,8 +490,6 @@ void Jugando::Update()
     _motora->update(false); //Actualiza el motor de audio
     _sense->update(); //Se actualizan sentidos
 
-    //cout << "UPD: 5"<<endl;
-
     if (_jugador != nullptr && _jugador->EstaMuerto()) // Comprobar si ha muerto el jugador, vida <= 0
     {
 
@@ -511,7 +502,6 @@ void Jugando::Update()
         Juego::GetInstance()->estado.CambioEstadoMuerte();
 
     }
-    //cout << "UPD: 6"<<endl;
 
     // **********  Se actualiza el respawn si procede  **********
     if(respawnTime - lastRespawnTime >= constantes.TIEMPO_RESPAWN && !enSalaBoss)
@@ -520,18 +510,12 @@ void Jugando::Update()
         lastRespawnTime = respawnTime;
     }
 
-    //cout << "UPD: 7"<<endl;
-
     // ********** se actualiza posiciones e interpolado **********
     //animacion
     _motor->cambiarAnimacionJugador(_jugador->getAnimacion());
 
-    //cout << "UPD: 8"<<endl;
-
     //Comprueba la activacion de un powerup
     this->activarPowerUp();
-
-    //cout << "UPD: 9"<<endl;
 
     // Adelanta posicion del bounding box al jugador, mientras pulses esa direccion si colisiona no se mueve
     _fisicas->colisionChecker(_motor->EstaPulsado(KEY_A),
@@ -543,12 +527,8 @@ void Jugando::Update()
         _jugador->getNewZ()
     );
 
-    //cout << "UPD: 10"<<endl;
-
     //colisiones con todos los objetos y enemigos que no se traspasan
     jugadorInmovil = _jugador->ColisionEntornoEne();
-
-    //cout << "UPD: 11"<<endl;
 
     //ESTO ES DE DEBUG PARA ATRAVESAR PAREDES
     if(desactivarColisionesJugador)
@@ -566,8 +546,6 @@ void Jugando::Update()
         _motor->EstaPulsado(KEY_W)
         );
     }
-
-    //cout << " 12"<<endl;
 
     _fisicas->updateJugador(_jugador->getX(),
         _jugador->getY(),
@@ -593,6 +571,8 @@ void Jugando::Update()
             }
         }
     }
+    //cout << "UPD: 1"<<endl;
+
     //Ha colisionado con un waypoint
     if(colisionaWaypoint)
     {
@@ -1318,7 +1298,7 @@ void Jugando::UpdateIA()
                     }
                     else
                     {
-                        unsigned short tipoObj = NumeroAleatorio(constantes.ORO,constantes.ENERGIA);
+                        unsigned short tipoObj = NumeroAleatorio(constantes.VIDA,constantes.ORO);
                         unsigned short cantidad = 0;
                         if (tipoObj == constantes.ORO) {
                             cantidad = NumeroAleatorio(1,5);
@@ -1465,8 +1445,10 @@ void Jugando::Render()
     //Armas
     if(_jugador->getArma() != nullptr)
     {
+        unsigned short tipoArma = _jugador->getArma()->GetTipoObjeto();
         //Ataque Animacion
-        if (_jugador->getArma()->GetTipoObjeto() == constantes.GUITARRA)
+        if ((tipoArma == constantes.GUITARRA1) || (tipoArma == constantes.GUITARRA2) ||
+            (tipoArma == constantes.GUITARRA3))
         {
             if(_jugador->getTimeAt() == 1.5f)
             {
@@ -1492,7 +1474,8 @@ void Jugando::Render()
                 mov_weapon_rotZ=0;
             }
         }
-        else if(_jugador->getArma()->GetTipoObjeto() == constantes.ARPA)
+        else if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.ARPA2) ||
+            (tipoArma == constantes.ARPA3))
         {
             if(_jugador->getTimeAt() == 1.5f)
             {
@@ -1517,7 +1500,8 @@ void Jugando::Render()
                 mov_weapon_rotZ=0;
             }
         }
-        else if(_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        else if ((tipoArma == constantes.FLAUTA1) || (tipoArma == constantes.FLAUTA2) ||
+            (tipoArma == constantes.FLAUTA3))
         {
             if(_jugador->getTimeAt() == 1.5f)
             {
@@ -2418,8 +2402,11 @@ void Jugando::DejarObjeto()
 void Jugando::ComprobarBorrarProyectil()
 {
     if (_jugador->getArma() != nullptr)
-        if ((_jugador->getArma()->GetTipoObjeto() == constantes.ARPA) ||
-            (_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA))
+    {
+        unsigned short tipoArma = _jugador->getArma()->GetTipoObjeto();
+        if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.FLAUTA1) || 
+            (tipoArma == constantes.ARPA2) || (tipoArma == constantes.FLAUTA2) ||
+            (tipoArma == constantes.ARPA3) || (tipoArma == constantes.FLAUTA3))
         {
             if(proyectilFuera == false)
             {
@@ -2429,6 +2416,7 @@ void Jugando::ComprobarBorrarProyectil()
                 _motora->getEvent("Arpa")->stop();
             }
         }
+    }
 }
 
 /*********** AccionarMecanismo ***********
@@ -2831,7 +2819,7 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     // El cofre suelta armas normales y oro, la arana suelta armas mas fuertes
     if (esArana)
     {
-        objeto = NumeroAleatorio(constantes.ARPA,constantes.ULTIMA_ARMA);
+        objeto = NumeroAleatorio(constantes.ARPA1,constantes.ULTIMA_ARMA);
         minArpa = 22;
         minGuitar = 31;
         minFlauta = 25;
@@ -2839,22 +2827,40 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     }
     else
     {
-        objeto = NumeroAleatorio(constantes.ARPA,constantes.ORO);
+        objeto = NumeroAleatorio(constantes.ORO,constantes.ULTIMA_ARMA);
         _motor->cambiarAnimacion(6,cofrePosicion,1);//abrirse cofre
     }
 
     switch (objeto)
     {
         case 7: // ARPA
-            CrearObjeto(x,y,z,2,2,2,constantes.ARPA,NumeroAleatorio(minArpa,25));
+            CrearObjeto(x,y,z,2,2,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
+            break;
+        case 8:
+            CrearObjeto(x,y,z,2,2,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
+            break;
+        case 9:
+            CrearObjeto(x,y,z,2,2,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
             break;
 
-        case 8: // GUITARRA
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(minGuitar,32));
+        case 10: // GUITARRA
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
+            break;
+        case 11:
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
+            break;
+        case 12:
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
             break;
 
-        case 9: // FLAUTA
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(minFlauta,23));
+        case 13: // FLAUTA
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
+            break;
+        case 14:
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
+            break;
+        case 15:
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
             break;
 
         default: // ORO
@@ -3050,20 +3056,8 @@ void Jugando::LimpiarJuego()
     _powerup.clear();
 
     cout << "Borro powerup" <<endl;
-    cout << "WAI" << _waypoints.capacity() <<endl;
-    cout << "WAI-cargador" << cargador.GetWaypointsCapacity() <<endl;
-    cout << "WAI-size" << _waypoints.size() <<endl;
-    cout << "WAI-cargador-size" << cargador.GetWaypoints().size() <<endl;
-
-    tam = _waypoints.size();
-    for(int i=0; i < tam; i++)
-    {
-        if (_waypoints.at(i) != nullptr)
-            delete _waypoints.at(i);
-    }
-    _waypoints.clear();
-
-    cout << "Borro _waypoints" <<endl;
+    //_waypoints.size()
+    // Waypoints se borran con la sala
 
     tam = _palancas.size();
     for(int i=0; i < tam; i++)

@@ -38,73 +38,93 @@ Recolectable::Recolectable(int id, int anc, int lar, int alt,
     //INobjetos
     tipoObjeto = tipoObj;
     unsigned short accion = 0;
-    switch (tipoObj)
+
+    if (tipoObj == constantes.ORO)
     {
-        case 7: // ARPA
-        {
-            _modelo = "assets/models/Arpa.obj";
-            _textura = "assets/texture/Arpa.png";
-            accion = 2;
-        }
-        break;
-
-        case 8: // GUITARRA
-        {
-            _modelo = "assets/models/Arma.obj";
-            _textura = "assets/texture/Arma.png";
-            accion = 2;
-        }
-        break;
-
-        case 9: // FLAUTA
-        {
-            _modelo = "assets/models/Flauta.obj";
-            _textura = nullptr;
-            accion = 2;
-        }
-        break;
-
-        case 10: // ORO
-        {
-            _modelo = "assets/models/gold.obj";
-            _textura = "assets/texture/gold.png";
-            accion = 4;
-        }
-        break;
-
-        case 11: // VIDA
-        {
-            _modelo = "assets/models/powerup0.obj";
-            _textura = "assets/texture/powerup0.png";
-            accion = 4;
-        }
-        break;
-
-        case 12: // ENERGIA
-        {
-            _modelo = "assets/models/powerup1.obj";
-            _textura = "assets/texture/powerup1.png";
-            accion = 4;
-        }
-        break;
-
-        case 1: // Llave
-        {
-            _modelo = "assets/models/llave.obj";
-            _textura = nullptr;
-            accion = 8;
-        }
-        break;
-
-        case 18: // Llave
-        {
-            _modelo = "assets/models/llaveboss.obj";
-            _textura = "assets/texture/llaveboss.png";
-            accion = 8;
-            tipoObjeto = 1;
-        }
-        break;
+        _modelo = "assets/models/gold.obj";
+        _textura = "assets/texture/gold.png";
+        accion = 4;
     }
+    else if (tipoObj == constantes.VIDA)
+    {
+        _modelo = "assets/models/powerup0.obj";
+        _textura = "assets/texture/powerup0.png";
+        accion = 4;
+    }
+    else if (tipoObj == constantes.ENERGIA)
+    {
+        _modelo = "assets/models/powerup1.obj";
+        _textura = "assets/texture/powerup1.png";
+        accion = 4;
+    }
+    else if (tipoObj == constantes.GUITARRA1) // GUITARRA
+    {
+        _modelo = "assets/models/Armas/Guitarras/guitarra-1.obj";
+        _textura = "assets/texture/guitarra-1.png";
+        accion = 2;
+    }
+    else if (tipoObj == constantes.GUITARRA2)
+    {
+        _modelo = "assets/models/Armas/Guitarras/guitarra-2.obj";
+        _textura = "assets/texture/guitarra-2.png";
+        accion = 2;
+    }
+    else if (tipoObj == constantes.GUITARRA3)
+    {
+        _modelo = "assets/models/Armas/Guitarras/guitarra-3.obj";
+        _textura = "assets/texture/guitarra-3.png";
+        accion = 2;
+    }
+    else if (tipoObj == constantes.ARPA1) // ARPA
+    {
+        _modelo = "assets/models/Armas/Arpas/arpa-1.obj";
+        _textura = "assets/texture/arpa-1.png";
+        accion = 2;
+    }
+    else if (tipoObj == constantes.ARPA2)
+    {
+        _modelo = "assets/models/Armas/Arpas/arpa-2.obj";
+        _textura = "assets/texture/arpa-2.png";
+        accion = 2;
+    }
+    else if (tipoObj == constantes.ARPA3)
+    {
+        _modelo = "assets/models/Armas/Arpas/arpa-3.obj";
+        _textura = "assets/texture/arpa-3.png";
+        accion = 2;
+    }
+    else if (tipoObj == constantes.FLAUTA1) // FLAUTA
+    {
+        _modelo = "assets/models/Armas/Flautas/flauta-1.obj";
+        _textura = "assets/texture/flauta-1.png";
+        accion = 2;
+    }
+    else if (tipoObj == constantes.FLAUTA2) // FLAUTA
+    {
+        _modelo = "assets/models/Armas/Flautas/flauta-2.obj";
+        _textura = "assets/texture/flauta-2.png";
+        accion = 2;
+    }
+    else if (tipoObj == constantes.FLAUTA3) // FLAUTA
+    {
+        _modelo = "assets/models/Armas/Flautas/flauta-3.obj";
+        _textura = "assets/texture/flauta-3.png";
+        accion = 2;
+    }
+    else if (tipoObj == constantes.LLAVE)
+    {
+        _modelo = "assets/models/llave.obj";
+        _textura = nullptr;
+        accion = 8;
+    }
+    else if (tipoObj == constantes.LLAVE_BOSS)
+    {
+        _modelo = "assets/models/llaveboss.obj";
+        _textura = "assets/texture/llaveboss.png";
+        accion = 8;
+        tipoObjeto = constantes.LLAVE;
+    }
+
     MotorFisicas* _fisicas = MotorFisicas::getInstance();
     posArrayFisicas = _fisicas->CrearCuerpoRec(accion,x/2,y/2,z/2,ancho,alto,largo,despX,despZ);
     _fisicas = nullptr;
