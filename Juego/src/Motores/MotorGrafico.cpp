@@ -240,6 +240,7 @@ void MotorGrafico::LimpiarElementosJuego()
         llaveI = nullptr;
         espadaI = nullptr;
         dagaI = nullptr;
+        flautaI = nullptr;
         moneyI = nullptr;
         vida_textura = nullptr;
         energia_textura = nullptr;
@@ -251,6 +252,7 @@ void MotorGrafico::LimpiarElementosJuego()
         llave_textura = nullptr;
         espada_textura = nullptr;
         daga_textura = nullptr;
+        flauta_textura = nullptr;
 
         // Cinematicas
         _actual = nullptr;
@@ -2968,6 +2970,7 @@ void MotorGrafico::CargarInterfaz()
         llave_textura = _interfaz->AddImagen("assets/images/llave.png",738,534,1);
         espada_textura = _interfaz->AddImagen("assets/images/espada.png",738,534,1);
         daga_textura = _interfaz->AddImagen("assets/images/daga.png",738,534,1);
+        flauta_textura = _interfaz->AddImagen("assets/images/flauta.png",738,534,1);
 
         //calcular vida y energia
 
@@ -2987,6 +2990,7 @@ void MotorGrafico::CargarInterfaz()
         llave_textura = _driver->getTexture("assets/images/llave.png");
         espada_textura = _driver->getTexture("assets/images/espada.png");
         daga_textura = _driver->getTexture("assets/images/daga.png");
+        flauta_textura = _driver->getTexture("assets/images/flauta.png");
         //aplicamos texturas
         vidaI = _guienv->addImage(vida_textura,position2d<int>(10,10));
         energiaI = _guienv->addImage(energia_textura,position2d<int>(10,58));
@@ -3000,6 +3004,7 @@ void MotorGrafico::CargarInterfaz()
         llaveI = _guienv->addImage(llave_textura,position2d<int>(738,534));
         espadaI = _guienv->addImage(espada_textura,position2d<int>(738,534));
         dagaI = _guienv->addImage(daga_textura,position2d<int>(738,534));
+        flautaI = _guienv->addImage(flauta_textura,position2d<int>(738,534));
 
         BarraVidaI->setMaxSize(dimension2du(121,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
         BarraEnergiaI->setMaxSize(dimension2du(63,27));//maximo 63/100 y esto multiplicado por la cantidad de energia
@@ -3089,6 +3094,12 @@ void MotorGrafico::DestruirInterfaz()
             daga_textura= 0;
         }
 
+        if(flauta_textura != 0)
+        {
+            _interfaz->RemoveObject(flauta_textura);
+            flauta_textura= 0;
+        }
+
     #else
         //codigo motor irrlicht
         if(vidaI)
@@ -3116,6 +3127,9 @@ void MotorGrafico::DestruirInterfaz()
 
         if(dagaI)
             dagaI->remove();
+        
+        if(flautaI)
+            flautaI->remove();
 
         if(espadaI)
             espadaI->remove();
@@ -3142,6 +3156,7 @@ void MotorGrafico::DestruirInterfaz()
         _driver->removeTexture(llave_textura);
         _driver->removeTexture(espada_textura);
         _driver->removeTexture(daga_textura);
+        _driver->removeTexture(flauta_textura);
     #endif
 }
 
@@ -3256,30 +3271,47 @@ void MotorGrafico::SetArma(int arma)
         {
             case 1: //es una llave
                 _interfaz->HabilitarObjeto(llave_textura);
+
                 _interfaz->DeshabilitarObjeto(manos_textura);
                 _interfaz->DeshabilitarObjeto(daga_textura);
                 _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura);
                 break;
 
-            case 2: //objeto ataque directo
+            case 2: //objeto ataque directo (GUITARRA)
+                _interfaz->HabilitarObjeto(espada_textura);
+
                 _interfaz->DeshabilitarObjeto(llave_textura);
                 _interfaz->DeshabilitarObjeto(manos_textura);
                 _interfaz->DeshabilitarObjeto(daga_textura);
-                _interfaz->HabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura);
                 break;
 
-            case 3: //objeto ataque a distancia
+            case 3: //objeto ataque a distancia (ARPA)
+                _interfaz->HabilitarObjeto(daga_textura);
+
                 _interfaz->DeshabilitarObjeto(llave_textura);
                 _interfaz->DeshabilitarObjeto(manos_textura);
-                _interfaz->HabilitarObjeto(daga_textura);
+                _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura);
+                break;
+            
+            case 4: //objeto ataque a distancia (FLAUTA)
+                _interfaz->HabilitarObjeto(flauta_textura);
+
+                _interfaz->DeshabilitarObjeto(llave_textura);
+                _interfaz->DeshabilitarObjeto(manos_textura);
+                _interfaz->DeshabilitarObjeto(daga_textura);
                 _interfaz->DeshabilitarObjeto(espada_textura);
                 break;
 
             default: //son las manos
-                _interfaz->DeshabilitarObjeto(llave_textura);
                 _interfaz->HabilitarObjeto(manos_textura);
+
+                _interfaz->DeshabilitarObjeto(llave_textura);
                 _interfaz->DeshabilitarObjeto(daga_textura);
                 _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura);
                 break;
         }
     #else
@@ -3287,31 +3319,48 @@ void MotorGrafico::SetArma(int arma)
         switch(arma)
         {
             case 1: //es una llave
-                manosI->setVisible(false);
-                dagaI->setVisible(false);
-                espadaI->setVisible(false);
                 llaveI->setVisible(true);
-                break;
-
-            case 2: //objeto ataque directo
+                
                 manosI->setVisible(false);
                 dagaI->setVisible(false);
-                espadaI->setVisible(true);
-                llaveI->setVisible(false);
+                espadaI->setVisible(false);
+                flautaI->setVisible(false);
                 break;
 
-            case 3: //objeto ataque a distancia
+            case 2: //objeto ataque directo (GUITARRA)
+                espadaI->setVisible(true);
+
                 manosI->setVisible(false);
+                dagaI->setVisible(false);
+                llaveI->setVisible(false);
+                flautaI->setVisible(false);
+                break;
+
+            case 3: //objeto ataque a distancia (ARPA)
                 dagaI->setVisible(true);
+
+                manosI->setVisible(false);
                 espadaI->setVisible(false);
                 llaveI->setVisible(false);
+                flautaI->setVisible(false);
+                break;
+
+            case 4: //objeto ataque a distancia (FLAUTA)
+                flautaI->setVisible(true);
+
+                manosI->setVisible(false);
+                espadaI->setVisible(false);
+                llaveI->setVisible(false);
+                dagaI->setVisible(false);
                 break;
 
             default: //son las manos
                 manosI->setVisible(true);
+
                 dagaI->setVisible(false);
                 espadaI->setVisible(false);
                 llaveI->setVisible(false);
+                flautaI->setVisible(false);
                 break;
         }
     #endif
@@ -3446,6 +3495,8 @@ void MotorGrafico::RenderInterfaz(bool activada)
                 manosI->setVisible(false);
             if(dagaI)
                 dagaI->setVisible(false);
+            if(flautaI)
+                flautaI->setVisible(false);
             if(espadaI)
                 espadaI->setVisible(false);
             if(llaveI)

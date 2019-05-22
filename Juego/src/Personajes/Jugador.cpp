@@ -347,33 +347,39 @@ int Jugador::Atacar(int i)
             _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,3,3,3,4,0,0,false);
             _motora->getEvent("SinArma")->start();
         }
-        //ATAQUE CUERPO A CUERPO
-        else if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)
+        else //ATAQUE CUERPO A CUERPO
         {
-            //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4,0,0,false);
-            _motora->getEvent("GolpeGuitarra")->start();
+            unsigned short tipoArma = this->getArma()->GetTipoObjeto();
+            if ((tipoArma == constantes.GUITARRA1) || (tipoArma == constantes.GUITARRA2) ||
+                (tipoArma == constantes.GUITARRA3))
+            {
+                //Crear cuerpo de colision de ataque delante del jugador
+                _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4,0,0,false);
+                _motora->getEvent("GolpeGuitarra")->start();
+            }
+            //ATAQUE A DISTANCIA
+            else if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.ARPA2) ||
+                (tipoArma == constantes.ARPA3))
+            {
+                _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj",NULL);
+                //Crear cuerpo de colision de ataque delante del jugador
+                _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
+                _motora->getEvent("Arpa")->start();
+            }
+            //ATAQUE A MEDIA DISTANCIA
+            else if ((tipoArma == constantes.FLAUTA1) || (tipoArma == constantes.FLAUTA2) ||
+                (tipoArma == constantes.FLAUTA3))
+            {
+                tamanyoflecha = 1.0;
+                aty = getY()+4;
+                atposY = ((getY()+4)/2);
+                _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Onda.obj",NULL);
+                //Crear cuerpo de colision de ataque delante del jugador
+                _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0,false);
+                _motora->getEvent("Flauta")->start();
+            }
         }
-        //ATAQUE A DISTANCIA
-        else if(this->getArma()->GetTipoObjeto() == constantes.ARPA)
-        {
-            _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj",NULL);
-            //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
-            _motora->getEvent("Arpa")->start();
-        }
-        //ATAQUE A MEDIA DISTANCIA
-        else if(this->getArma()->GetTipoObjeto() == constantes.FLAUTA)
-        {
-            tamanyoflecha = 1.0;
-            aty = getY()+4;
-            atposY = ((getY()+4)/2);
-            _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Onda.obj",NULL);
-            //Crear cuerpo de colision de ataque delante del jugador
-            _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0,false);
-            _motora->getEvent("Flauta")->start();
-        }
-
+        
         //Se calcula el danyo del ataque
         aumentosAtaque += por1;
         if(_armaEquipada != NULL)
@@ -490,11 +496,14 @@ void Jugador::CrearCuerpoAtaque()
     }
     else
     {
-        if(this->getArma()->GetTipoObjeto() == constantes.GUITARRA)
+        unsigned short tipoArma = this->getArma()->GetTipoObjeto();
+        if ((tipoArma == constantes.GUITARRA1) || (tipoArma == constantes.GUITARRA2) ||
+            (tipoArma == constantes.GUITARRA3))
         {
             var1 = 3, var2 = 1, var3 = 3, var4 = 1;
         }
-        else if(this->getArma()->GetTipoObjeto() == constantes.ARPA)
+        else if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.ARPA2) ||
+            (tipoArma == constantes.ARPA3))
         {
             float velocidadflecha = 3.0f;
             int distance = 1.5;
@@ -513,7 +522,8 @@ void Jugador::CrearCuerpoAtaque()
             var1 = 1, var2 = 1, var3 = 2, var4 = 3;
             tamanyoflecha = 1;
         }
-        else if(this->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        else if ((tipoArma == constantes.FLAUTA1) || (tipoArma == constantes.FLAUTA2) ||
+            (tipoArma == constantes.FLAUTA3))
         {
             float velocidadflecha = 0;
             int distance = 1.0;
@@ -548,11 +558,15 @@ void Jugador::CrearCuerpoAtaque()
         var1,var2,var3,var4);
 
     if (this->getArma() != nullptr)
-        if ((this->getArma()->GetTipoObjeto() == constantes.ARPA) ||
-            (this->getArma()->GetTipoObjeto() == constantes.FLAUTA))
+    {
+        unsigned short tipoArma = this->getArma()->GetTipoObjeto();
+        if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.FLAUTA1) || 
+            (tipoArma == constantes.ARPA2) || (tipoArma == constantes.FLAUTA2) ||
+            (tipoArma == constantes.ARPA3) || (tipoArma == constantes.FLAUTA3))
         {
             _motor->dispararProyectil(atx,aty,atz,atgx,atgy,atgz,tamanyoflecha);
         }
+    }
 }
 
 void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
@@ -1141,9 +1155,10 @@ void Jugador::setArma(Recolectable* _armaRec)
     // Se comprueba si ha recogido otra arma
     if(_armaRec)
     {
+        unsigned short tipoArma = _armaRec->GetTipoObjeto();
         _armaEquipada = new Arma(_armaRec->getAtaque(),
             _armaRec->getAncho(),_armaRec->getLargo(),_armaRec->getAlto(),
-            _armaRec->GetTipoObjeto());
+            tipoArma);
 
         //PROVISIONAL
         _armaEquipada->setRotacion(0.0, constantes.PI_RADIAN, 0.0);
@@ -1159,18 +1174,12 @@ void Jugador::setArma(Recolectable* _armaRec)
             _armaEquipada->getAncho(),_armaEquipada->getLargo(),_armaEquipada->getAlto(),
             9,0,0,false);
 
-        if(_armaEquipada->GetTipoObjeto() == constantes.GUITARRA)//entonces es la guitarra cuerpo a cuerpo
-        {
-            _interfaz->setArma(2);
-        }
-        else if(_armaEquipada->GetTipoObjeto() == constantes.ARPA)//entonces es el arpa a distancia
-        {
-            _interfaz->setArma(3);
-        }
+        // Cambiamos el dibujo del HUD con el arma equipada
+        _interfaz->setArma(tipoArma);
     }
     else
     {
-        _interfaz->setArma(0);
+        _interfaz->setArma(constantes.MANO);
         _armaEquipada = nullptr;
     }
 }

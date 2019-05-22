@@ -475,6 +475,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short llave_textura;
                 unsigned short espada_textura;
                 unsigned short daga_textura;
+                unsigned short flauta_textura;
 
                 //puzzles
 
@@ -543,6 +544,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 IGUIImage* llaveI;
                 IGUIImage* espadaI;
                 IGUIImage* dagaI;
+                IGUIImage* flautaI;
                 IGUIStaticText* moneyI;
                 ITexture* vida_textura;
                 ITexture* energia_textura;
@@ -554,6 +556,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 ITexture* llave_textura;
                 ITexture* espada_textura;
                 ITexture* daga_textura;
+                ITexture* flauta_textura;
 
                 //cinematicas
                 int frame_actual;//numero de frame actual

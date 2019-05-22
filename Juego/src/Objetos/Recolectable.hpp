@@ -3,6 +3,7 @@
 #include <iostream>
 #include "../Motores/INobjetos.hpp"
 #include "../Motores/INdrawable.hpp"
+#include "../ConstantesComunes.hpp"
 
 using namespace std;
 
@@ -70,6 +71,7 @@ class Recolectable : public INobjetos , public INdrawable //multiple herencia a 
         unsigned short GetPosArrayFis();
 
     private:
+        Constantes constantes;
 
         //creo que lo mejor esque el objeto que recojas tenga ya su valor de daño
         int potenciaAtaque;

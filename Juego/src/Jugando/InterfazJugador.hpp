@@ -32,6 +32,7 @@ class InterfazJugador
         //fin clase singleton private
 
         MotorGrafico* _motor;
+        Constantes constantes;
         bool estado;//true o false
 };
 

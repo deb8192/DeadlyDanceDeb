@@ -571,7 +571,7 @@ void Jugando::Update()
             }
         }
     }
-    cout << "UPD: 1"<<endl;
+    //cout << "UPD: 1"<<endl;
 
     //Ha colisionado con un waypoint
     if(colisionaWaypoint)
@@ -1037,7 +1037,7 @@ void Jugando::Update()
         //_enemigos->MuereEnemigo(acumulator);
         //acumulator -= dt;
     //}
-    cout << "UPD: 13"<<endl;
+    //cout << "UPD: 13"<<endl;
 }
 
 /**************** updateIA ***************
@@ -1227,7 +1227,7 @@ void Jugando::UpdateIA()
                     }
                     else
                     {
-                        unsigned short tipoObj = NumeroAleatorio(constantes.ORO,constantes.ENERGIA);
+                        unsigned short tipoObj = NumeroAleatorio(constantes.VIDA,constantes.ORO);
                         unsigned short cantidad = 0;
                         if (tipoObj == constantes.ORO) {
                             cantidad = NumeroAleatorio(1,5);
@@ -1371,8 +1371,10 @@ void Jugando::Render()
     //Armas
     if(_jugador->getArma() != nullptr)
     {
+        unsigned short tipoArma = _jugador->getArma()->GetTipoObjeto();
         //Ataque Animacion
-        if (_jugador->getArma()->GetTipoObjeto() == constantes.GUITARRA)
+        if ((tipoArma == constantes.GUITARRA1) || (tipoArma == constantes.GUITARRA2) ||
+            (tipoArma == constantes.GUITARRA3))
         {
             if(_jugador->getTimeAt() == 1.5f)
             {
@@ -1398,7 +1400,8 @@ void Jugando::Render()
                 mov_weapon_rotZ=0;
             }
         }
-        else if(_jugador->getArma()->GetTipoObjeto() == constantes.ARPA)
+        else if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.ARPA2) ||
+            (tipoArma == constantes.ARPA3))
         {
             if(_jugador->getTimeAt() == 1.5f)
             {
@@ -1423,7 +1426,8 @@ void Jugando::Render()
                 mov_weapon_rotZ=0;
             }
         }
-        else if(_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA)
+        else if ((tipoArma == constantes.FLAUTA1) || (tipoArma == constantes.FLAUTA2) ||
+            (tipoArma == constantes.FLAUTA3))
         {
             if(_jugador->getTimeAt() == 1.5f)
             {
@@ -2306,8 +2310,11 @@ void Jugando::DejarObjeto()
 void Jugando::ComprobarBorrarProyectil()
 {
     if (_jugador->getArma() != nullptr)
-        if ((_jugador->getArma()->GetTipoObjeto() == constantes.ARPA) ||
-            (_jugador->getArma()->GetTipoObjeto() == constantes.FLAUTA))
+    {
+        unsigned short tipoArma = _jugador->getArma()->GetTipoObjeto();
+        if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.FLAUTA1) || 
+            (tipoArma == constantes.ARPA2) || (tipoArma == constantes.FLAUTA2) ||
+            (tipoArma == constantes.ARPA3) || (tipoArma == constantes.FLAUTA3))
         {
             if(proyectilFuera == false)
             {
@@ -2317,6 +2324,7 @@ void Jugando::ComprobarBorrarProyectil()
                 _motora->getEvent("Arpa")->stop();
             }
         }
+    }
 }
 
 /*********** AccionarMecanismo ***********
@@ -2715,7 +2723,7 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     // El cofre suelta armas normales y oro, la arana suelta armas mas fuertes
     if (esArana)
     {
-        objeto = NumeroAleatorio(constantes.ARPA,constantes.ULTIMA_ARMA);
+        objeto = NumeroAleatorio(constantes.ARPA1,constantes.ULTIMA_ARMA);
         minArpa = 22;
         minGuitar = 31;
         minFlauta = 25;
@@ -2723,22 +2731,40 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     }
     else
     {
-        objeto = NumeroAleatorio(constantes.ARPA,constantes.ORO);
+        objeto = NumeroAleatorio(constantes.ORO,constantes.ULTIMA_ARMA);
         _motor->cambiarAnimacion(6,cofrePosicion,1);//abrirse cofre
     }
 
     switch (objeto)
     {
         case 7: // ARPA
-            CrearObjeto(x,y,z,2,2,2,constantes.ARPA,NumeroAleatorio(minArpa,25));
+            CrearObjeto(x,y,z,2,2,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
+            break;
+        case 8:
+            CrearObjeto(x,y,z,2,2,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
+            break;
+        case 9:
+            CrearObjeto(x,y,z,2,2,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
             break;
 
-        case 8: // GUITARRA
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA,NumeroAleatorio(minGuitar,32));
+        case 10: // GUITARRA
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
+            break;
+        case 11:
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
+            break;
+        case 12:
+            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
             break;
 
-        case 9: // FLAUTA
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA,NumeroAleatorio(minFlauta,23));
+        case 13: // FLAUTA
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
+            break;
+        case 14:
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
+            break;
+        case 15:
+            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
             break;
 
         default: // ORO

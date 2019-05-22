@@ -124,6 +124,10 @@ using Constantes = struct ValoresConstantes
     const unsigned short HEAVY = 1;
     const unsigned short BAILAORA = 2;
 
+    // Armas ataque especial jugador
+    const unsigned short ESP_HEAVY = 1;
+    const unsigned short ESP_BAILAORA = 2;
+
     // Tipos de objetos interactuables y recolectables
     const unsigned short PALANCA = 0;
     const unsigned short LLAVE = 1;
@@ -134,23 +138,27 @@ using Constantes = struct ValoresConstantes
     const unsigned short ARMA = 5;
     const unsigned short POWERUP = 6;
 
-    // Meter las armas seguidas:
-    // TO DO: contemplar que hay 3 armas por cada 
-    // tipo de arma (3 guitarras, 3 flautas y 3 arpas)
-    const unsigned short ARPA = 7;
-    const unsigned short GUITARRA = 8;
-    const unsigned short FLAUTA = 9;
-    const unsigned short ULTIMA_ARMA = FLAUTA;
+    const unsigned short VIDA = 4;
+    const unsigned short ENERGIA = 5;
+    const unsigned short ORO = 6;
 
-    const unsigned short ORO = 10;
-    const unsigned short VIDA = 11;
-    const unsigned short ENERGIA = 12;
+    // tipo de arma (3 guitarras, 3 flautas y 3 arpas)
+    const unsigned short ARPA1 = 7;
+    const unsigned short ARPA2 = 8;
+    const unsigned short ARPA3 = 9;
+    const unsigned short GUITARRA1 = 10;
+    const unsigned short GUITARRA2 = 11;
+    const unsigned short GUITARRA3 = 12;
+    const unsigned short FLAUTA1 = 13;
+    const unsigned short FLAUTA2 = 14;
+    const unsigned short FLAUTA3 = 15;
+    const unsigned short ULTIMA_ARMA = FLAUTA3;
+    const unsigned short MANO = 0;
 
     const unsigned short PARED_ROMPIBLE = 14;
 
     // Sin utilizar por ahora
     /*
-
     const unsigned short PARED_INVISIBLE = 12;
     const unsigned short PARED_OBSTACULO = 13;
     const unsigned short SUELO = 15;
