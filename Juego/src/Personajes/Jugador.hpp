@@ -47,7 +47,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         void CrearCuerpoAtaque();
         void AtacarUpdate(int danyo, vector<Enemigo*> &_getEnemigos);
         void Interactuar(int, int);//llama a la mecanica de interactuar
-
+        int GetTipoJug();
+        
         //Metodos de INsentidos
         void generarSonido(int intensidad, double duracion, int tipo);
         void queEscuchas();
