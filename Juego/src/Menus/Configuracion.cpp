@@ -5,6 +5,7 @@ Configuracion::Configuracion()
 {
     _motor = MotorGrafico::GetInstance();
     _motora = MotorAudioSystem::getInstance();
+    _confi = GestorInterfaces::GetInstance()->_config;
     configuracion.CargarConfiguracion("config.global");
     volAmbiente = configuracion.GetVolAmbiente();
     volEfectos = configuracion.GetVolEfectos();
@@ -21,12 +22,13 @@ Configuracion::Configuracion()
 Configuracion::~Configuracion()
 {
     _motor = nullptr;
+    _confi = nullptr;
 }
 
 void Configuracion::Iniciar()
 {
     //para 800 x 600 las barras son de 366 unidades
-    _motor->CrearTexto("Configuracion", 340, 20, 300, 20); // Parametros: texto, x1, y1, x2, y2
+    _motor->CrearTexto("Configuracion", _confi->xTituloM, _confi->yTituloM, 300, 20); // Parametros: texto, x1, y1, x2, y2
     //_motor->CrearImagen("assets/images/pr2.png",150,100,10.0f);
     _motor->CrearTexto("Resolucion:", 30, 70, 100, 20); // Parametros: texto, x1, y1, x2, y2
 

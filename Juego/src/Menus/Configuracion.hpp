@@ -30,7 +30,7 @@ class Configuracion: public Estado {
         bool AllScreen;
         unsigned int idsElementos[9];
         unsigned int resolucion[6];//contiene los desplegables de la resolucion
-        
+        GestorInterfaces::config * _confi;
         MotorAudioSystem* _motora;//instancia de la fachada audio
 };
 #endif /* CONFIGURACION_HPP */

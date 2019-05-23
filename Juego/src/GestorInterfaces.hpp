@@ -118,17 +118,35 @@ class GestorInterfaces
                         unsigned int yCargaM;
                 };
 
+                struct config
+                {
+                        float xTitulo = 0.52f; 
+                        unsigned int xTituloM;
+                        float yTitulo = 0.02f;
+                        unsigned int yTituloM;      
+
+                        float xNomResol = 0.06f;
+                        unsigned int xNomResolM;
+                        float yNomResol = 0.10f;
+                        unsigned int yNomResolM;
+
+                };
+
                 menu * _menu;
 
                 hud * _hud;
 
                 carga * _carga;
 
+                config * _config;
+
                 menu * GetMenu();
 
                 hud * GetHud();
 
                 carga * GetCarga();
+
+                config * GetConfig();
 
         private:
                 //clase singleton 

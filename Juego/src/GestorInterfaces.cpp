@@ -9,6 +9,7 @@ GestorInterfaces::GestorInterfaces()
         _menu = new menu;
         _hud = new hud;
         _carga = new carga;
+        _config = new config;
 }
 
 void GestorInterfaces::UpdateDimensionesVentana(int * dimensiones)
@@ -59,6 +60,9 @@ void GestorInterfaces::ActualizarParametros()
         _menu->ySalirM = Height*(_menu->ySalir);
 
         //configuracion
+
+        _config->xTituloM = Width*(_config->xTitulo);
+        _config->yTituloM = Height*(_config->yTitulo);
 
         //iniciar partida
 
@@ -125,4 +129,9 @@ float GestorInterfaces::GetEscaladoY()
 GestorInterfaces::carga * GestorInterfaces::GetCarga()
 {
         return _carga;
+}
+
+GestorInterfaces::config * GestorInterfaces::GetConfig()
+{
+        return _config;
 }
