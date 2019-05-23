@@ -76,3 +76,8 @@ void Bailaora::RenderAtaqueEsp(float updateTime, float drawTime)
         _armaEspecial->getRX(), _armaEspecial->getRY(), _armaEspecial->getRZ(),
         8, 1, 8, 3);
 }
+
+void Bailaora::resetContador()
+{
+    
+}

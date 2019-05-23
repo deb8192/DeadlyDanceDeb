@@ -9,12 +9,15 @@ class Heavy : public Jugador
         Heavy(Sala* sala,unsigned short tipoJug,int nX,int nY,int nZ,int ancho,int largo,int alto,int accion, int maxVida);
         ~Heavy();
 
-        
+
         void AtacarEspecialUpdate(int* danyo, vector<Enemigo*> &_getEnemigos);
         void AtacarEspecialUpdate(int* danyo, Enemigo* &_boss);
         void RenderAtaqueEsp(float updateTime, float drawTime);
+        void resetContador();
 
     private:
         void armaAtacarEspecialUpd();
+        float contadortime = 0.0f;
+        float new_pos_y = 15.0f;
 };
 #endif /* Heavy_HPP */

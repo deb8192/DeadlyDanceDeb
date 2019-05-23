@@ -166,6 +166,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
 
         virtual void AtacarEspecialUpdate(int* danyo, vector<Enemigo*> &_getEnemigos) = 0;
         virtual void RenderAtaqueEsp(float updateTime, float drawTime) = 0;
+        virtual void resetContador() = 0;
 
         void Render(float updTime, float drawTime);
 

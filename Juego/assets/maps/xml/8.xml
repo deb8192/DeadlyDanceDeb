@@ -30,22 +30,20 @@
 		<LightPos X="-35" Y="4" Z="31" sala="1"> </LightPos>
 		<LightPos X="28" Y="4" Z="-32" sala="1"> </LightPos>
 		<LightPos X="26" Y="4" Z="33" sala="1"> </LightPos>
-		<LightPos X="40" Y="4" Z="33" sala="1"> </LightPos>
 		<LightPos X="152" Y="4" Z="-31" sala="1"> </LightPos>
 		<LightPos X="151" Y="4" Z="70" sala="1"> </LightPos>
 
 	<LightSala sala="2" minZ="28" maxZ="144" minX="154" maxX="268"></LightSala>
+		<LightPos X="158" Z="70" Y="4" sala="2"> </LightPos>
 		<LightPos X="184" Z="133" Y="4" sala="2"> </LightPos>
-		<LightPos X="231" Z="133" Y="4" sala="2"> </LightPos>
 		<LightPos X="240" Z="35" Y="4" sala="2"> </LightPos>
 		<LightPos X="267" Z="111" Y="4" sala="2"> </LightPos>
 
 	<LightSala sala="3" minZ="28" maxZ="128" minX="269" maxX="416"></LightSala>
 
 	<LightSala sala="4" minZ="129" maxZ="220" minX="288" maxX="420"></LightSala>
-		<LightPos X="302" Z="157" Y="3" sala="4"> </LightPos>
+		<LightPos X="387" Z="132" Y="3" sala="4"> </LightPos>
 		<LightPos X="301" Z="181" Y="3" sala="4"> </LightPos>
-		<LightPos X="355" Z="218" Y="3" sala="4"> </LightPos>
 		<LightPos X="404" Z="218" Y="3" sala="4"> </LightPos>
 
 	<LightSala sala="5" minZ="179" maxZ="296" minX="422" maxX="460"></LightSala>
@@ -53,12 +51,12 @@
 		<LightPos X="450" Z="273" Y="3" sala="5"> </LightPos>
 
 	<LightSala sala="6" minZ="220" maxZ="325" minX="187" maxX="421"></LightSala>
-		<LightPos X="358" Z="313" Y="3" sala="6"> </LightPos>
+		<LightPos X="406" Z="313" Y="3" sala="6"> </LightPos>
 		<LightPos X="314" Z="317" Y="3" sala="6"> </LightPos>
-		<LightPos X="270" Z="282" Y="3" sala="6"> </LightPos>
 		<LightPos X="219" Z="287" Y="3" sala="6"> </LightPos>
 		<LightPos X="192" Z="226" Y="3" sala="6"> </LightPos>
 		<LightPos X="302" Z="221" Y="3" sala="6"> </LightPos>
+		<LightPos X="385" Z="223" Y="3" sala="6"> </LightPos>
 
 	<LightSala sala="7" minZ="210" maxZ="320" minX="110" maxX="186"></LightSala>
 		<LightPos X="118" Z="218" Y="3" sala="7"> </LightPos>
@@ -66,11 +64,10 @@
 
 	<LightSala sala="8" minZ="321" maxZ="555" minX="5" maxX="373"></LightSala>
 		<LightPos X="112" Z="462" Y="3" sala="8"> </LightPos>
-		<LightPos X="159" Z="460" Y="3" sala="8"> </LightPos>
 		<LightPos X="269" Z="483" Y="3" sala="8"> </LightPos>
-		<LightPos X="310" Z="542" Y="3" sala="8"> </LightPos>
 		<LightPos X="357" Z="542" Y="3" sala="8"> </LightPos>
 		<LightPos X="344" Z="418" Y="3" sala="8"> </LightPos>
+		<LightPos X="208" Z="387" Y="3" sala="8"> </LightPos>
 
 	<!--Sala-01--><Platform Type="1" tipoSala="0" accion="0" ancho="35" largo="34" alto="4" RP="0" X="0" Y="0" Z="0" Texture="" TypeCenter="0" Model="" StarTexture="assets/texture/HeavyTex.png" StarModel="assets/models/rockero.b3d" UserStar="True" StarX="0" StarY="0" StarZ="0">
 	<!--Decoracion-cavernas--><Object tipoObj="17" Type="0" accion="0" ancho="0" largo="0" alto="24" RP="180" X="0" Y="0" Z="0" despX="0" despZ="0" Texture="assets/texture/RocaCaverna.png" Model="assets/models/Escenario/DecoracionCavernas.obj"></Object>

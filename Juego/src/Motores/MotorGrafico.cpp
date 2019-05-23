@@ -1765,12 +1765,13 @@ void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto,
 
 }
 
-void MotorGrafico::CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, bool transparente)
 {
     #ifdef WEMOTOR
 
         //codigo motor catopengl
         unsigned short _arma = _interfaz->AddMalla(ruta_objeto,1,0);
+        if(transparente)mallaTransparente(_arma,0.45f);
         _interfaz->SetTexture(_arma,ruta_textura);
 
         if(_arma != 0)
@@ -2260,12 +2261,12 @@ void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoe
         }
 
         //DISTANCIA
-        if(tipoequipada == 7)tipoequipada = 2;
-        if(tipoequipada == 8)tipoequipada = 0;
-        if(tipoequipada == 9)tipoequipada = 1;
-        if(tiposuelo == 7)tiposuelo = 2;
-        if(tiposuelo == 8)tiposuelo = 0;
-        if(tiposuelo == 9)tiposuelo = 1;
+        if(tipoequipada == 7 || tipoequipada == 8 || tipoequipada == 9)tipoequipada = 2;
+        if(tipoequipada == 10 || tipoequipada == 11 || tipoequipada == 12)tipoequipada = 0;
+        if(tipoequipada == 13 || tipoequipada == 14 || tipoequipada == 15)tipoequipada = 1;
+        if(tiposuelo == 7 || tiposuelo == 8 || tiposuelo == 9)tiposuelo = 2;
+        if(tiposuelo == 10 || tiposuelo == 11 || tiposuelo == 12)tiposuelo = 0;
+        if(tiposuelo == 13 || tiposuelo == 14 || tiposuelo == 15)tiposuelo = 1;
         if(tipoequipada < tiposuelo)
         {
             _interfaz->HabilitarObjeto(BoardsArmas_Scena[pos+1]);
@@ -2380,6 +2381,20 @@ void MotorGrafico::borrarArmaEspecial()
         _armaEspJugador->remove();
         _armaEspJugador = nullptr;
     #endif
+}
+
+unsigned short MotorGrafico::getArmaenEscena()
+{
+    return _armaEnEscena;
+}
+
+void MotorGrafico::activarObjeto(unsigned short id)
+{
+    _interfaz->HabilitarObjeto(id);
+}
+void MotorGrafico::desactivarObjeto(unsigned short id)
+{
+    _interfaz->DeshabilitarObjeto(id);
 }
 
 void MotorGrafico::mallaTransparente(unsigned int id, float t)
@@ -3242,7 +3257,7 @@ void MotorGrafico::DestruirInterfaz()
 
         if(dagaI)
             dagaI->remove();
-        
+
         if(flautaI)
             flautaI->remove();
 
@@ -3410,7 +3425,7 @@ void MotorGrafico::SetArma(int arma)
                 _interfaz->DeshabilitarObjeto(espada_textura);
                 _interfaz->DeshabilitarObjeto(flauta_textura);
                 break;
-            
+
             case 4: //objeto ataque a distancia (FLAUTA)
                 _interfaz->HabilitarObjeto(flauta_textura);
 
@@ -3435,7 +3450,7 @@ void MotorGrafico::SetArma(int arma)
         {
             case 1: //es una llave
                 llaveI->setVisible(true);
-                
+
                 manosI->setVisible(false);
                 dagaI->setVisible(false);
                 espadaI->setVisible(false);
@@ -4352,7 +4367,7 @@ void MotorGrafico::EscalarMalla(unsigned int did, float escalado)
 unsigned int MotorGrafico::ObtenerIDOpengl(unsigned int tipo,unsigned int idVector)
 {
     unsigned int idOpengl = 0;
-    
+
     #ifdef WEMOTOR
 
         if(tipo == 0) //animaciones objetos
