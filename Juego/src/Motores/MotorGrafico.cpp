@@ -1763,12 +1763,13 @@ void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto,
 
 }
 
-void MotorGrafico::CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura)
+void MotorGrafico::CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, bool transparente)
 {
     #ifdef WEMOTOR
 
         //codigo motor catopengl
         unsigned short _arma = _interfaz->AddMalla(ruta_objeto,1,0);
+        if(transparente)mallaTransparente(_arma,0.45f);
         _interfaz->SetTexture(_arma,ruta_textura);
 
         if(_arma != 0)

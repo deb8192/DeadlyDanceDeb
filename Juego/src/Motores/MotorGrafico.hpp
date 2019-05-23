@@ -248,7 +248,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
             void CargarCofre(int pos, int rp, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
             void CargarArmaJugador(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
-            void CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura);
+            void CargarProyectil(int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, bool transparente = false);
             void CargarArmaEspecial(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarRecolectable(int id, int x,int y,int z, const char* ruta_objeto, const char* ruta_textura);
             void CargarSprite(int id, std::vector<const char *> ruta_sprite,float size);

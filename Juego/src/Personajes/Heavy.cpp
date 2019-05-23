@@ -44,11 +44,8 @@ void Heavy::AtacarEspecialUpdate(int* danyo, std::vector<Enemigo*> &_getEnemigos
 
 void Heavy::RenderAtaqueEsp(float updateTime, float drawTime)
 {
-    if(contadortime == 1.5f)
+    if(contadortime < 1.5f)
     {
-        contadortime = 0.0f;
-        new_pos_y = 20.0f;
-    }else{
         contadortime += drawTime;
         if(contadortime > 1.5f)contadortime = 1.5f;
         if(new_pos_y > 0)new_pos_y--;
@@ -71,5 +68,5 @@ void Heavy::RenderAtaqueEsp(float updateTime, float drawTime)
 void Heavy::resetContador()
 {
     contadortime = 0.0f;
-    new_pos_y = 20.0f;
+    new_pos_y = 15.0f;
 }

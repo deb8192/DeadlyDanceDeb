@@ -374,7 +374,7 @@ int Jugador::Atacar(int i)
             else if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.ARPA2) ||
                 (tipoArma == constantes.ARPA3))
             {
-                _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj",NULL);
+                _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Flecha.obj","assets/texture/flecha.png");
                 //Crear cuerpo de colision de ataque delante del jugador
                 _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
                 _motora->getEvent("Arpa")->start();
@@ -386,13 +386,13 @@ int Jugador::Atacar(int i)
                 tamanyoflecha = 1.0;
                 aty = getY()+4;
                 atposY = ((getY()+4)/2);
-                _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Onda.obj",NULL);
+                _motor->CargarProyectil(getX(),getY(),getZ(),"assets/models/Onda.obj","assets/texture/Aire.png",true);
                 //Crear cuerpo de colision de ataque delante del jugador
                 _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0,false);
                 _motora->getEvent("Flauta")->start();
             }
         }
-        
+
         //Se calcula el danyo del ataque
         aumentosAtaque += por1;
         if(_armaEquipada != NULL)
