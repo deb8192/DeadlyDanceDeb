@@ -150,7 +150,7 @@ src/puntuaciones.o: src/puntuaciones.cpp src/puntuaciones.hpp
 
 %.o: %.cpp %.hpp #para las clases normales
 	#Compilacion objeto con cabecera
-	$(CXX) -c $(CXXFLAGS) $(DIRECTIVA) $< -o $@ $(CABECERAS)
+	$(CXX) -c $(CXXFLAGS) $(DIRECTIVA) $< -o $@ $(CABECERAS) $(CABECERASWEB)
 
 %.o: %.cpp #esto es para el main sobretodo
 	#Compilacion objeto sin cabecera
