@@ -2639,6 +2639,7 @@ void Jugando::updateAtEsp()
     //Compureba si se realiza el ataque especial o si la animacion esta a medias
     if((_motor->EstaPulsado(RMOUSE_PRESSED_DOWN) || _motor->EstaPulsado(KEY_Q)) && _jugador->getTimeAtEsp() <= 0.0 && poderEmpezar)
     {
+        _jugador->resetContador();
         danyo = _jugador->AtacarEspecial();
         _motor->ResetKey(KEY_Q);
         _motor->ResetEvento(RMOUSE_PRESSED_DOWN);
