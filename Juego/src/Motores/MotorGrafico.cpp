@@ -2380,6 +2380,20 @@ void MotorGrafico::borrarArmaEspecial()
     #endif
 }
 
+unsigned short MotorGrafico::getArmaenEscena()
+{
+    return _armaEnEscena;
+}
+
+void MotorGrafico::activarObjeto(unsigned short id)
+{
+    _interfaz->HabilitarObjeto(id);
+}
+void MotorGrafico::desactivarObjeto(unsigned short id)
+{
+    _interfaz->DeshabilitarObjeto(id);
+}
+
 void MotorGrafico::mallaTransparente(unsigned int id, float t)
 {
     #ifdef WEMOTOR
@@ -3240,7 +3254,7 @@ void MotorGrafico::DestruirInterfaz()
 
         if(dagaI)
             dagaI->remove();
-        
+
         if(flautaI)
             flautaI->remove();
 
@@ -3408,7 +3422,7 @@ void MotorGrafico::SetArma(int arma)
                 _interfaz->DeshabilitarObjeto(espada_textura);
                 _interfaz->DeshabilitarObjeto(flauta_textura);
                 break;
-            
+
             case 4: //objeto ataque a distancia (FLAUTA)
                 _interfaz->HabilitarObjeto(flauta_textura);
 
@@ -3433,7 +3447,7 @@ void MotorGrafico::SetArma(int arma)
         {
             case 1: //es una llave
                 llaveI->setVisible(true);
-                
+
                 manosI->setVisible(false);
                 dagaI->setVisible(false);
                 espadaI->setVisible(false);
@@ -4350,7 +4364,7 @@ void MotorGrafico::EscalarMalla(unsigned int did, float escalado)
 unsigned int MotorGrafico::ObtenerIDOpengl(unsigned int tipo,unsigned int idVector)
 {
     unsigned int idOpengl = 0;
-    
+
     #ifdef WEMOTOR
 
         if(tipo == 0) //animaciones objetos

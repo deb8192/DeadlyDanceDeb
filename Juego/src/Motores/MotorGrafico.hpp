@@ -270,6 +270,9 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void mostrarArmaEspecial(float x, float y, float z, float rx, float ry, float rz);
             void mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoequipada, int tiposuelo, unsigned int i);
             void borrarArmaEspecial();
+            unsigned short getArmaenEscena();
+            void activarObjeto(unsigned short id);
+            void desactivarObjeto(unsigned short id);
 
             //TRansparencias
             void mallaTransparente(unsigned int id, float t);
