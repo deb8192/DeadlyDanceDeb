@@ -2258,12 +2258,12 @@ void MotorGrafico::mostrarBoardArma(int danyoequipada, int danyosuelo, int tipoe
         }
 
         //DISTANCIA
-        if(tipoequipada == 7)tipoequipada = 2;
-        if(tipoequipada == 8)tipoequipada = 0;
-        if(tipoequipada == 9)tipoequipada = 1;
-        if(tiposuelo == 7)tiposuelo = 2;
-        if(tiposuelo == 8)tiposuelo = 0;
-        if(tiposuelo == 9)tiposuelo = 1;
+        if(tipoequipada == 7 || tipoequipada == 8 || tipoequipada == 9)tipoequipada = 2;
+        if(tipoequipada == 10 || tipoequipada == 11 || tipoequipada == 12)tipoequipada = 0;
+        if(tipoequipada == 13 || tipoequipada == 14 || tipoequipada == 15)tipoequipada = 1;
+        if(tiposuelo == 7 || tiposuelo == 8 || tiposuelo == 9)tiposuelo = 2;
+        if(tiposuelo == 10 || tiposuelo == 11 || tiposuelo == 12)tiposuelo = 0;
+        if(tiposuelo == 13 || tiposuelo == 14 || tiposuelo == 15)tiposuelo = 1;
         if(tipoequipada < tiposuelo)
         {
             _interfaz->HabilitarObjeto(BoardsArmas_Scena[pos+1]);

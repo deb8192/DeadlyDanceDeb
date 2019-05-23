@@ -2827,7 +2827,7 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     }
     else
     {
-        objeto = NumeroAleatorio(constantes.ORO,constantes.ULTIMA_ARMA);
+        objeto = NumeroAleatorio(constantes.ORO,constantes.ULTIMA_ARMA+2);
         _motor->cambiarAnimacion(6,cofrePosicion,1);//abrirse cofre
     }
 
