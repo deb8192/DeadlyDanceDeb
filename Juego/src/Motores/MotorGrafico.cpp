@@ -1494,7 +1494,7 @@ void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int al
 
         if(_jugEscena != 0)
         {
-            _interfaz->SetTexture(_jugEscena,"assets/models/rockero/HeavyTex.png");
+            _interfaz->SetTexture(_jugEscena,"assets/texture/HeavyTex.png");
             _interfaz->Trasladar(_jugEscena,(float)x,(float)y,(float)z);
             _interfaz->Escalar(_jugEscena,(float)1.75,(float)1.75,(float)1.75);
             _aniJugEscena = new Animaciones("assets/animaciones/rockero.xml");//cargamos las animaciones
