@@ -5,6 +5,10 @@ Heavy::Heavy(Sala* sala,unsigned short tipoJug,int nX,int nY,int nZ,int ancho,in
 {
     #ifdef WEMOTOR
         _modelo = "assets/models/rockero/rockero_rigging_000001.obj";
+        escalado = 1.75f;
+        fps = 128;
+        _textura = "assets/models/rockero/HeavyTex.png";
+        _animacion = "assets/animaciones/rockero.xml";
     #else
         _modelo = "assets/models/rockero.b3d";
     #endif

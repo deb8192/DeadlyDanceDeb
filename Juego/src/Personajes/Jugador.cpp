@@ -33,6 +33,11 @@ Jugador::Jugador()
     lastPainAtackTime = 0.0f;
     velocidadMaxima = 2.5f;
     porcentajeVelocidad = 1.0f;
+
+    escalado = 1.0f;
+    fps = 1;
+    _textura = " ";
+    _animacion = " ";
 }
 
 Jugador::Jugador(Sala* sala, unsigned short tipoJug, int nX,int nY,int nZ, int ancho,
@@ -1434,4 +1439,24 @@ void Jugador::Render(float updTime, float drawTime)
         posActual.x, posActual.y, posActual.z,
         rotActual.x, rotActual.y, rotActual.z, newy, newz
     );
+}
+
+const char * Jugador::GetAnimacion()
+{
+    return _animacion;
+}
+
+const char * Jugador::GetTextura()
+{
+    return _textura;
+}
+
+unsigned int Jugador::GetFps()
+{
+    return fps;
+}
+
+float Jugador::GetEscalado()
+{
+    return escalado;
 }

@@ -1805,8 +1805,8 @@ void Jugando::CrearJugador()
     ValoresPorDefectoJugador();
 
     _motor->CargarJugador(_jugador->getX(),_jugador->getY(), _jugador->getZ(),
-        _jugador->GetAncho(), _jugador->GetLargo(), _jugador->GetAlto(),
-        _jugador->GetModelo());
+        _jugador->GetEscalado(), _jugador->GetEscalado(), _jugador->GetEscalado(),
+        _jugador->GetModelo(),_jugador->GetTextura(),_jugador->GetFps(),_jugador->GetAnimacion());
 
     _motor->CargarArmaEspecial(_jugador->getX(),_jugador->getY(),
         _jugador->getZ(), _jugador->getRutaArmaEsp(),_jugador->getRutaTexturaArmaEsp());

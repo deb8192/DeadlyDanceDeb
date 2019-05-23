@@ -5,9 +5,13 @@ Bailaora::Bailaora(Sala* sala,unsigned short tipoJug,int nX,int nY,int nZ,int an
 {
     // TO DO: cambiar por las suyas
     #ifdef WEMOTOR
-        _modelo = "assets/models/rockero/rockero_rigging_000001.obj";
+        _modelo = "assets/models/bailarina/bailarina_000001.obj";
+        escalado = 0.6f;
+        fps = 244;
+        _textura = "assets/texture/bailarina.png";
+        _animacion = "assets/animaciones/bailarina.xml";
     #else
-        _modelo = "assets/models/rockero.b3d";
+        _modelo = "assets/models/bailarina/bailarina_000001.obj";
     #endif
 }
 

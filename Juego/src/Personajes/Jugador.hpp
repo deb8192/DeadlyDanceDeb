@@ -152,6 +152,11 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         vector <Llave*> GetLlaves();
 
         const char* GetModelo();
+        const char* GetAnimacion();
+        const char* GetTextura();
+        unsigned int GetFps();
+        float GetEscalado();
+        
         int GetAncho();
         int GetLargo();
         int GetAlto();
@@ -203,6 +208,11 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         InterfazJugador* _interfaz;
         MotorFisicas* _fisicas;
         Constantes constantes;
+
+        float escalado;//indica si se debe escalar la malla cuando se crea por defecto es 1.0f
+        const char * _animacion;
+        const char * _textura;
+        unsigned int fps;
 };
 
 #endif /* Jugador_HPP */

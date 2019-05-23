@@ -1484,20 +1484,22 @@ int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, con
  * Salida:
  *
  */
-void MotorGrafico::CargarJugador(int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto)
+void MotorGrafico::CargarJugador(int x,int y,int z, float ancho, float largo, float alto, const char* ruta_objeto,const char * ruta_textura,unsigned int fps, const char * anima)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
 
-        _jugEscena = _interfaz->AddMalla(ruta_objeto,128,0);
+        _jugEscena = _interfaz->AddMalla(ruta_objeto,fps,0);
         //_interfaz->SetColor(_jugEscena,250,50,50,255); //color RGBA
 
         if(_jugEscena != 0)
         {
-            _interfaz->SetTexture(_jugEscena,"assets/models/rockero/HeavyTex.png");
+            //fps 128
+            //"assets/models/rockero/HeavyTex.png"
+            _interfaz->SetTexture(_jugEscena,ruta_textura);
             _interfaz->Trasladar(_jugEscena,(float)x,(float)y,(float)z);
-            _interfaz->Escalar(_jugEscena,(float)1.75,(float)1.75,(float)1.75);
-            _aniJugEscena = new Animaciones("assets/animaciones/rockero.xml");//cargamos las animaciones
+            _interfaz->Escalar(_jugEscena,ancho,largo,alto);
+            _aniJugEscena = new Animaciones(anima);//cargamos las animaciones
             _aniJugEscena->AsignarID(_jugEscena);//definimos el id para cuando luego se actualice sepa que id tiene
             //cout << _jugEscena << " INICIALMENTE: " << x << " " << y << " " << z << endl;
         }
