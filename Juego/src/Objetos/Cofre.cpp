@@ -12,7 +12,7 @@ Cofre::Cofre(bool esEne, int id,
     _estoy = sala;
     posArrayArana = posArana;
     ancho = 2;
-    largo = 4;
+    largo = 2;
     alto = 4;
 
     ModeloTextura();

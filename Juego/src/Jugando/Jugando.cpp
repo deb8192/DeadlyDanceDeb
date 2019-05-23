@@ -1279,7 +1279,7 @@ void Jugando::UpdateIA()
                     if( tipoEnemigo == constantes.GUARDIAN_A ||
                         tipoEnemigo == constantes.GUARDIAN_B)
                     {
-                        CrearObjeto(x,y,z,2,2,2,constantes.LLAVE_BOSS,0);
+                        CrearObjeto(x,y,z,4,4,2,constantes.LLAVE_BOSS,0);
                         _motor->borrarBoardGuardian();
                     }
                     else if (tipoEnemigo == constantes.ARANA)
