@@ -2875,14 +2875,6 @@ void MotorGrafico::EraseCofre(unsigned short idx)
     #ifdef WEMOTOR
         //codigo motor catopengl
         _interfaz->DeshabilitarObjeto(Cofres_Scena[idx]);
-        if(idx < CofresAni_Scena.size())
-        {
-                if(CofresAni_Scena[idx])
-                {
-                    delete CofresAni_Scena[idx];
-                }
-                CofresAni_Scena.erase(CofresAni_Scena.begin() + idx);
-        }
     #else
         //codigo motor irrlicht
         Cofres_Scena[idx]->setVisible(false);

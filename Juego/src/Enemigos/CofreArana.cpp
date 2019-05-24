@@ -47,44 +47,8 @@ CofreArana::~CofreArana()
     alto = 0;
 
     idCofre=0;
-    sala = nullptr;
     activada = false;
     primeraVezActivada = false;
-}
-
-CofreArana::CofreArana (const CofreArana& copia)
-{
-    funciona = copia.funciona;
-    atacado = copia.atacado;
-    hecho = copia.hecho;
-    _ordenes = new short [constantes.DOS];
-
-    maxRotacion = copia.maxRotacion;
-    rotation = copia.rotation;
-    direccion = copia.direccion;
-
-    _modelo = "assets/models/CofreArana/cofrearana_000001.obj";
-    _textura = "assets/texture/cofreArana.png";
-    fps = 70;
-    _animacion = "assets/animaciones/CofreArana.xml";
-    estadoMuerte = 5;
-    
-    ancho = copia.ancho;
-    largo = copia.largo;
-    alto = copia.alto;
-
-    idCofre = copia.idCofre;
-    sala = copia.sala;
-
-    posMotorCofre = copia.posMotorCofre;
-    posObsCofre = copia.posObsCofre;
-    posArana = copia.posArana;
-
-    activada = copia.activada;
-    primeraVezActivada = copia.primeraVezActivada;
-
-    id = copia.id;
-    //cout << "Entro a hacer copia" <<endl;
 }
 
 /***************** RunIA *****************

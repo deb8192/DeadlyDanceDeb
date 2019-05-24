@@ -10,7 +10,6 @@ class CofreArana : public Enemigo
         ~CofreArana();
         CofreArana(float nX, float nY, float nZ, int maxVida,
             float anchoN, float altoN, float largoN, Sala* salaC);
-        CofreArana (const CofreArana& copia);
         void RunIA();
         void UpdateCofreArana(short *i, int* _jug, bool ayuda);
         void SetNuevasOrdenes(short i);
