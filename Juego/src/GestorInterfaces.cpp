@@ -83,7 +83,6 @@ void GestorInterfaces::ActualizarParametros()
         _hud->xDineroM = Width*(_hud->xDinero);
         _hud->yDineroM = Height*(_hud->yDinero);
 
-
         _hud->xBarraVidaM = _hud->xVidaM+40;
         _hud->yBarraVidaM = _hud->yVidaM+8;
 
@@ -95,6 +94,12 @@ void GestorInterfaces::ActualizarParametros()
 
         _hud->xTipoObjetoM = _hud->xObjetoM+10;
         _hud->yTipoObjetoM = _hud->yObjetoM+8;
+
+        _hud->xContadorLlavesM = _hud->xDineroM+100;
+        _hud->yContadorLlavesM = _hud->yDineroM+100;
+
+        _hud->xLlaveBossM = _hud->xEnergiaM-20;
+        _hud->yLlaveBossM = _hud->yEnergiaM;
 
         //puzzles
 
