@@ -2551,6 +2551,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                 bool abrir = _puerta->accionar();
                 if(abrir)
                 {
+                    if(_puerta->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
                     {
                         if(nivelJ == 7)
                         {

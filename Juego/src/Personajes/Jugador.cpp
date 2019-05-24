@@ -1248,7 +1248,7 @@ void Jugador::ModificarVida(int vid)
         vida += vid;
         ModificarBarraAtEs(abs(vid));
         SetInvulnerabilidad(constantes.TRUE);
-        setTimeInvulnerable(constantes.CIEN_PORCIENTO);
+        setTimeInvulnerable(constantes.CINCUENTA_PORCIENTO);
 
         if(porcentajeVelocidad != constantes.UNO)
         {
