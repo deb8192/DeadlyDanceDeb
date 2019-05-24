@@ -1,3 +1,9 @@
+/*
+    Shader principal de dibujado de mallas, texturas, luces y sombras
+    Referencias usadas:
+        https://learnopengl.com/Lighting/Multiple-lights
+        https://learnopengl.com/Advanced-Lighting/Shadows/Shadow-Mapping
+*/
 #version 330 core
 
 out vec4 FragColor;

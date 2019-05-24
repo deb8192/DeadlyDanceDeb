@@ -378,7 +378,6 @@ void MotorFisicas::CargarCofre(unsigned int posAct, unsigned int posObs, float p
     BoxShape* forma = new BoxShape(medidas);
     cuerpo->addCollisionShape(forma,transformacion);
 
-    cout << "obstaculos: "<< posObs <<endl;
     obstaculos.at(posObs) = move(cuerpo);
 
     //Se le anade una zona de deteccion mediante colision

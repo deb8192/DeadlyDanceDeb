@@ -1,3 +1,7 @@
+/*
+Sacado de:
+    https://learnopengl.com/Lighting/Multiple-lights
+*/
 #version 330 core
 
 out vec4 FragColor;

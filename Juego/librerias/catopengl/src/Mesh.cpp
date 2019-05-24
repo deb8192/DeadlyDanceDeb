@@ -1,3 +1,8 @@
+/*
+    Codigo referencia https://learnopengl.com/Model-Loading/Mesh,
+    Adaptado para que funcione con c++, quitado textura especular y agregado default_texture
+*/
+
 #include "Mesh.hpp"
 
 //Constructor

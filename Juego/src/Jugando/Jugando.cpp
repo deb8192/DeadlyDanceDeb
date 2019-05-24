@@ -1465,6 +1465,7 @@ void Jugando::Render()
                 _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-2.0;
                 mov_weapon_posZ=-1.5;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-2.6;
                 mov_weapon_posY=5.0;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
@@ -1489,6 +1490,7 @@ void Jugando::Render()
                 _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-2.0;
                 mov_weapon_posZ=-0.5;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-1.8;
                 mov_weapon_posY=4.5;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
@@ -1512,7 +1514,9 @@ void Jugando::Render()
                 }
                 _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-0.7;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posX=-1.8;
                 mov_weapon_posZ=-0.5;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-1.6;
                 mov_weapon_posY=2.3;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
@@ -1956,6 +1960,10 @@ void Jugando::RespawnEnemigosBoss()
             _enemigos.back()->RespawnNoise();
             _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false,_enemigos.back()->GetAnimacion(),_enemigos.back()->GetFps());//creamos la figura
 
+            _enemigos[0]->invocaSound();
+            _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
+            _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
+
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0,false);
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,false); //Para ataques
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0,false); //Para ataques especiales
@@ -2077,12 +2085,7 @@ void Jugando::RespawnEnemigos()
                 {
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
-                    _motora->getEvent("MuerteRespawn2")->start();
-                    
-                    _enemigos[0]->invocaSound();
-                    _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
-                    _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
-                    
+                    _motora->getEvent("MuerteRespawn2")->start();                    
                 }
             }
             else if(tipoEne != 0)
@@ -2091,13 +2094,7 @@ void Jugando::RespawnEnemigos()
                 {
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
-                    _motora->getEvent("MuerteRespawn1")->start();
-                    if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
-                    {
-                        _enemigos[0]->invocaSound();
-                        _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
-                        _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
-                    }
+                    _motora->getEvent("MuerteRespawn1")->start();                   
                 }
             }
             _enemigos.back()->SetEnemigo(enemigo);
@@ -2119,7 +2116,7 @@ void Jugando::RespawnEnemigos()
             _enemigos.back()->setVectorOrientacion();
             _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
             _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
-            _enemigos.back()->RespawnNoise();
+            _enemigos.back()->RespawnNoise();            
 
             _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false,_enemigos.back()->GetAnimacion(),_enemigos.back()->GetFps());//creamos la figura
 

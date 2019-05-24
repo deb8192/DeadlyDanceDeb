@@ -24,7 +24,9 @@ class InterfazJugador
         void setVida(int);//0 a 100, si te sales o bajas se queda en los limites
         void setAtaqueEspecial(int);//0 a 100
         void setDinero(int);//0 a 9999, si llegas a esa cantidad eres rico.
+        void setLlaves(int llaves);
         void setArma(int);//0 al (maximo 100) numero de armas que hay
+        void ActivarLlaveBoss();
 
     private:
         //clase singleton 
@@ -34,6 +36,7 @@ class InterfazJugador
         MotorGrafico* _motor;
         Constantes constantes;
         bool estado;//true o false
+        bool llaveBosActivada;
 };
 
 #endif

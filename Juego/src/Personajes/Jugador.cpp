@@ -800,10 +800,15 @@ void Jugador::Interactuar(int id, int id2)
 void Jugador::AnnadirLlave(Llave* llave)
 {
     llaves.push_back(llave);
-    cout<<"Llave añadida. Nº de llaves: "<<llaves.size()<<endl;
 
-    // TO DO: terminar lo de la interfaz y la llave
-    //_interfaz->setArma(1);
+    if (llave->GetCodigoPuerta() != 20)
+    {
+        _interfaz->setLlaves(llaves.size());
+    }
+    else
+    {
+        _interfaz->ActivarLlaveBoss();
+    }
 }
 
 /***********EliminarLlave************
