@@ -15,14 +15,14 @@ EstadoMuerte::~EstadoMuerte()
 
 void EstadoMuerte::Iniciar()
 {
-        _motora->getEvent("MuerteEstasDebil")->stop(); 
+        _motora->getEvent("MuerteEstasDebil")->stop();
         _motora->getEvent("MuertePaseas")->stop();
         _motora->getEvent("MuertePenultima")->stop();
         _motora->getEvent("MuerteRespawn1")->stop();
         _motora->getEvent("MuerteRespawn2")->stop();
         _motora->getEvent("MuertePerseguido1")->stop();
-        _motora->getEvent("MuertePerseguido2")->stop();  
-        _motora->getEvent("MuerteMueres")->start();    
+        _motora->getEvent("MuertePerseguido2")->stop();
+        _motora->getEvent("MuerteMueres")->start();
 
     _motor->FondoEscena(255,0,0,0);
     _motor->ActivarFuenteDefault();
@@ -38,7 +38,7 @@ void EstadoMuerte::Render()
 
 void EstadoMuerte::Update()
 {
-     
+
 }
 
 void EstadoMuerte::ManejarEventos()
@@ -57,7 +57,7 @@ void EstadoMuerte::ManejarEventos()
         reiniciarPartida();
     }
 
-    if (_motor->OcurreEvento(GUI_ID_MENU_BUTTON) || 
+    if (_motor->OcurreEvento(GUI_ID_MENU_BUTTON) ||
         _motor->EstaPulsado(KEY_ESC))
     {
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
@@ -69,6 +69,10 @@ void EstadoMuerte::ManejarEventos()
 
 void EstadoMuerte::pintarBotones()
 {
+    GestorInterfaces * _ges = GestorInterfaces::GetInstance();
+    _ges->ActualizarParametros();
+    GestorInterfaces::menu * m = _ges->GetMenu();
+    titulo = _motor->CrearImagen("assets/images/TituloGameOver.png",m->xLogoM,m->yLogoM,_ges->GetEscaladoY());
     _motor->CrearBoton(300,200,500,230, GUI_ID_REINICIAR_BUTTON, L"Reiniciar partida", L"Reiniciar");
     _motor->CrearBoton(300,240,500,270, GUI_ID_MENU_BUTTON, L"Menu principal", L"M. principal");
     _motor->CrearBoton(300,280,500,310, GUI_ID_SALIR_BUTTON, L"salir del juego", L"Cierra el juego");
@@ -77,16 +81,18 @@ void EstadoMuerte::pintarBotones()
 // Para Salir y Menu principal, borra GUI y Escena
 void EstadoMuerte::borrarEscenaResetearEvento(short id)
 {
+    _motor->BorrarElementoPorIdReal(titulo);
     _motor->ResetEvento(id);
     // Limpiamos el gui y la escena
     _motor->BorrarScena();
     _motor->BorrarGui();
-    
+
 }
 
 // Para Atras y Reiniciar partida, borra solo los botones del GUI
 void EstadoMuerte::borrarGUIResetearEvento(short id)
 {
+    _motor->BorrarElementoPorIdReal(titulo);
     _motor->BorrarElemento(GUI_ID_REINICIAR_BUTTON);
     _motor->BorrarElemento(GUI_ID_MENU_BUTTON);
     _motor->BorrarElemento(GUI_ID_SALIR_BUTTON);
@@ -96,7 +102,7 @@ void EstadoMuerte::borrarGUIResetearEvento(short id)
 void EstadoMuerte::menuPrincipal()
 {
     _motora->getEvent("MuerteEstasDebil")->stop();
-    _motora->getEvent("MuertePaseas")->stop();  
+    _motora->getEvent("MuertePaseas")->stop();
     _motora->getEvent("AmbienteLava")->stop(); //Detener ambiente
     _motora->getEvent("AmbienteGritos")->stop(); //Detener musica ambiente
     _motora->getEvent("Nivel1")->stop(); //Detener musica Juego
@@ -109,7 +115,7 @@ void EstadoMuerte::menuPrincipal()
 void EstadoMuerte::reiniciarPartida()
 {
     _motora->getEvent("MuerteEstasDebil")->stop();
-    _motora->getEvent("MuertePaseas")->stop();  
+    _motora->getEvent("MuertePaseas")->stop();
     Juego::GetInstance()->estado.ReiniciarPartida();
 }
 

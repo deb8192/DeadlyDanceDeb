@@ -241,11 +241,17 @@ void MotorGrafico::LimpiarElementosJuego()
         manosI = nullptr;
         llaveI = nullptr;
         espadaI = nullptr;
+        guitarraI2 = nullptr;
+        guitarraI2 = nullptr;
         dagaI = nullptr;
+        arpaI2 = nullptr;
+        arpaI3 = nullptr;
         flautaI = nullptr;
+        flautaI2 = nullptr;
+        flautaI3 = nullptr;
         moneyI = nullptr;
+        contadorLlavesI = nullptr;
         vida_textura = nullptr;
-        energia_textura = nullptr;
         dinero_textura = nullptr;
         arma_textura = nullptr;
         barraVida_textura = nullptr;
@@ -1749,6 +1755,7 @@ void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto,
         if(_arma != 0)
         {
             _armaEnEscena = _arma;
+            _interfaz->Escalar(_armaEnEscena,0.8f,0.8f,0.8f);
             _interfaz->Trasladar(_armaEnEscena,(float)x,(float)y,(float)z);
         }
 
@@ -2875,14 +2882,6 @@ void MotorGrafico::EraseCofre(unsigned short idx)
     #ifdef WEMOTOR
         //codigo motor catopengl
         _interfaz->DeshabilitarObjeto(Cofres_Scena[idx]);
-        if(idx < CofresAni_Scena.size())
-        {
-                if(CofresAni_Scena[idx])
-                {
-                    delete CofresAni_Scena[idx];
-                }
-                CofresAni_Scena.erase(CofresAni_Scena.begin() + idx);
-        }
     #else
         //codigo motor irrlicht
         Cofres_Scena[idx]->setVisible(false);
@@ -3091,39 +3090,50 @@ void MotorGrafico::CargarInterfaz()
 
         //cargamos y mostramos la interfaz
         vida_textura = _interfaz->AddImagen("assets/images/51.png",_ges->GetHud()->xVidaM,_ges->GetHud()->yVidaM,1);
-        energia_textura = _interfaz->AddImagen("assets/images/21.png",_ges->GetHud()->xEnergiaM,_ges->GetHud()->yEnergiaM,1);
         dinero_textura = _interfaz->AddImagen("assets/images/61.png",_ges->GetHud()->xDineroM,_ges->GetHud()->yDineroM,1);
         arma_textura =_interfaz->AddImagen("assets/images/11.png",_ges->GetHud()->xObjetoM,_ges->GetHud()->yObjetoM,1);
         barraVida_textura = _interfaz->AddImagen("assets/images/4.png",_ges->GetHud()->xBarraVidaM,_ges->GetHud()->yBarraVidaM,1);
         barraEnergia_textura = _interfaz->AddImagen("assets/images/3.png",_ges->GetHud()->xBarraEnergiaM,_ges->GetHud()->yBarraEnergiaM,1);
         manos_textura = _interfaz->AddImagen("assets/images/manos.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
-        llave_textura = _interfaz->AddImagen("assets/images/llave.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
-        espada_textura = _interfaz->AddImagen("assets/images/espada.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
-        daga_textura = _interfaz->AddImagen("assets/images/daga.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
-        flauta_textura = _interfaz->AddImagen("assets/images/flauta.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        llave_textura = _interfaz->AddImagen("assets/images/llave.png",_ges->GetHud()->xLlaveBossM,_ges->GetHud()->yLlaveBossM,1);
+        espada_textura = _interfaz->AddImagen("assets/images/guitarra-1.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        guitarra_textura2 = _interfaz->AddImagen("assets/images/guitarra-2.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        guitarra_textura3 = _interfaz->AddImagen("assets/images/guitarra-3.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        daga_textura = _interfaz->AddImagen("assets/images/arpa-1.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        arpa_textura2 = _interfaz->AddImagen("assets/images/arpa-2.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        arpa_textura3 = _interfaz->AddImagen("assets/images/arpa-3.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        flauta_textura = _interfaz->AddImagen("assets/images/flauta-1.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        flauta_textura2 = _interfaz->AddImagen("assets/images/flauta-2.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
+        flauta_textura3 = _interfaz->AddImagen("assets/images/flauta-3.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
 
         //calcular vida y energia
 
         //monedas y color de letra
         moneyI = _interfaz->CrearTexto("0 M",_ges->GetHud()->xMarcaDineroM,_ges->GetHud()->yMarcaDineroM,255.0f,255.0f,255.0f);
-
+        contadorLlavesI = _interfaz->CrearTexto("0",_ges->GetHud()->xContadorLlavesM,_ges->GetHud()->yContadorLlavesM,255.0f,255.0f,255.0f);
+        _interfaz->DeshabilitarObjeto(llave_textura); // llaveBos desactivada
+        llaveBossActivada = false;
     #else
         //codigo motor irrlicht
         //creamos texturas
         vida_textura = _driver->getTexture("assets/images/51.png");
-        energia_textura = _driver->getTexture("assets/images/21.png");
         dinero_textura = _driver->getTexture("assets/images/61.png");
         arma_textura = _driver->getTexture("assets/images/11.png");
         barraVida_textura = _driver->getTexture("assets/images/4.png");
         barraEnergia_textura = _driver->getTexture("assets/images/3.png");
         manos_textura = _driver->getTexture("assets/images/manos.png");
         llave_textura = _driver->getTexture("assets/images/llave.png");
-        espada_textura = _driver->getTexture("assets/images/espada.png");
-        daga_textura = _driver->getTexture("assets/images/daga.png");
-        flauta_textura = _driver->getTexture("assets/images/flauta.png");
+        espada_textura = _driver->getTexture("assets/images/guitarra-1.png");
+        guitarra_textura2 = _driver->getTexture("assets/images/guitarra-2.png");
+        guitarra_textura3 = _driver->getTexture("assets/images/guitarra-3.png");
+        daga_textura = _driver->getTexture("assets/images/arpa-1.png");
+        arpa_textura2 = _driver->getTexture("assets/images/arpa-2.png");
+        arpa_textura3 = _driver->getTexture("assets/images/arpa-3.png");
+        flauta_textura = _driver->getTexture("assets/images/flauta-1.png");
+        flauta_textura2 = _driver->getTexture("assets/images/flauta-2.png");
+        flauta_textura3 = _driver->getTexture("assets/images/flauta-3.png");
         //aplicamos texturas
         vidaI = _guienv->addImage(vida_textura,position2d<int>(10,10));
-        energiaI = _guienv->addImage(energia_textura,position2d<int>(10,58));
         dineroI = _guienv->addImage(dinero_textura,position2d<int>(680,10));
         armaI = _guienv->addImage(arma_textura,position2d<int>(730,530));
         BarraVidaI = _guienv->addImage(barraVida_textura,position2d<int>(50,15));
@@ -3133,8 +3143,14 @@ void MotorGrafico::CargarInterfaz()
         manosI = _guienv->addImage(manos_textura,position2d<int>(738,534));
         llaveI = _guienv->addImage(llave_textura,position2d<int>(738,534));
         espadaI = _guienv->addImage(espada_textura,position2d<int>(738,534));
+        guitarraI2 = _guienv->addImage(guitarra_textura2,position2d<int>(738,534));
+        guitarraI3 = _guienv->addImage(guitarra_textura3,position2d<int>(738,534));
         dagaI = _guienv->addImage(daga_textura,position2d<int>(738,534));
+        arpaI2 = _guienv->addImage(arpa_textura2,position2d<int>(738,534));
+        arpaI3 = _guienv->addImage(arpa_textura3,position2d<int>(738,534));
         flautaI = _guienv->addImage(flauta_textura,position2d<int>(738,534));
+        flautaI2 = _guienv->addImage(flauta_textura2,position2d<int>(738,534));
+        flautaI3 = _guienv->addImage(flauta_textura3,position2d<int>(738,534));
 
         BarraVidaI->setMaxSize(dimension2du(121,29));//maximo 121/100 y esto multiplicado por la cantidad de vida
         BarraEnergiaI->setMaxSize(dimension2du(63,27));//maximo 63/100 y esto multiplicado por la cantidad de energia
@@ -3142,13 +3158,19 @@ void MotorGrafico::CargarInterfaz()
 
         //moneyI = _guienv->addStaticText(L"1000 M",rect<s32>(710,21,750,40),false); //falta ver los cambios de fuente y ponerlo correctamente
         moneyI = _guienv->addStaticText(L"0 M",rect<s32>(710,21,750,40),false); //falta ver los cambios de fuente y ponerlo correctamente
+        contadorLlavesI = _guienv->addStaticText(L"0",rect<s32>(710,21,750,40),false);
+        llaveI->setVisible(false); // llaveBos desactivada
+        llaveBossActivada = false;
 
         SColor COLOR  = SColor(255, 255, 255, 0);
         moneyI->enableOverrideColor(true);
         moneyI->setOverrideColor(COLOR);
+        contadorLlavesI->enableOverrideColor(true);
+        contadorLlavesI->setOverrideColor(COLOR);
         if(font2)
         {
             moneyI->setOverrideFont(font2);
+            contadorLlavesI->setOverrideFont(font2);
         }
     #endif
 }
@@ -3164,16 +3186,16 @@ void MotorGrafico::DestruirInterfaz()
             moneyI = 0;
         }
 
+        if(contadorLlavesI != 0)
+        {
+            _interfaz->RemoveObject(contadorLlavesI);
+            contadorLlavesI = 0;
+        }
+
         if(vida_textura != 0)
         {
             _interfaz->RemoveObject(vida_textura);
             vida_textura = 0;
-        }
-
-        if(energia_textura != 0)
-        {
-            _interfaz->RemoveObject(energia_textura);
-            energia_textura = 0;
         }
 
         if(dinero_textura != 0)
@@ -3218,16 +3240,52 @@ void MotorGrafico::DestruirInterfaz()
             espada_textura = 0;
         }
 
+        if(guitarra_textura2 != 0)
+        {
+            _interfaz->RemoveObject(guitarra_textura2);
+            guitarra_textura2 = 0;
+        }
+
+        if(guitarra_textura3 != 0)
+        {
+            _interfaz->RemoveObject(guitarra_textura3);
+            guitarra_textura3 = 0;
+        }
+
         if(daga_textura != 0)
         {
             _interfaz->RemoveObject(daga_textura);
             daga_textura= 0;
         }
 
+        if(arpa_textura2 != 0)
+        {
+            _interfaz->RemoveObject(arpa_textura2);
+            arpa_textura2= 0;
+        }
+
+        if(arpa_textura3 != 0)
+        {
+            _interfaz->RemoveObject(arpa_textura3);
+            arpa_textura3= 0;
+        }
+
         if(flauta_textura != 0)
         {
             _interfaz->RemoveObject(flauta_textura);
             flauta_textura= 0;
+        }
+
+        if(flauta_textura2 != 0)
+        {
+            _interfaz->RemoveObject(flauta_textura2);
+            flauta_textura2= 0;
+        }
+
+        if(flauta_textura3 != 0)
+        {
+            _interfaz->RemoveObject(flauta_textura3);
+            flauta_textura3= 0;
         }
 
     #else
@@ -3257,12 +3315,30 @@ void MotorGrafico::DestruirInterfaz()
 
         if(dagaI)
             dagaI->remove();
+        
+        if(arpaI2)
+            arpaI2->remove();
+        
+        if(arpaI3)
+            arpaI3->remove();
 
         if(flautaI)
             flautaI->remove();
+        
+        if(flautaI2)
+            flautaI2->remove();
+        
+        if(flautaI3)
+            flautaI3->remove();
 
         if(espadaI)
             espadaI->remove();
+        
+        if(guitarraI2)
+            guitarraI2->remove();
+
+        if(guitarraI3)
+            guitarraI3->remove();
 
         if(llaveI)
             llaveI->remove();
@@ -3275,9 +3351,11 @@ void MotorGrafico::DestruirInterfaz()
 
         if(moneyI)
             moneyI->remove();
+            
+        if(contadorLlavesI)
+            contadorLlavesI->remove();
 
         _driver->removeTexture(vida_textura);
-        _driver->removeTexture(energia_textura);
         _driver->removeTexture(dinero_textura);
         _driver->removeTexture(arma_textura);
         _driver->removeTexture(barraVida_textura);
@@ -3285,8 +3363,14 @@ void MotorGrafico::DestruirInterfaz()
         _driver->removeTexture(manos_textura);
         _driver->removeTexture(llave_textura);
         _driver->removeTexture(espada_textura);
+        _driver->removeTexture(guitarra_textura2);
+        _driver->removeTexture(guitarra_textura3);
         _driver->removeTexture(daga_textura);
+        _driver->removeTexture(arpa_textura2);
+        _driver->removeTexture(arpa_textura3);
         _driver->removeTexture(flauta_textura);
+        _driver->removeTexture(flauta_textura2);
+        _driver->removeTexture(flauta_textura3);
     #endif
 }
 
@@ -3390,7 +3474,27 @@ void MotorGrafico::SetDinero(int dinero)
             moneyI->setText(str.c_str());
         }
     #endif
+}
 
+void MotorGrafico::SetLlaves(int llaves)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        if(contadorLlavesI != 0)
+        {
+            string str = std::to_string(llaves);
+            //std::cout << "recoges tantas: " << str << std::endl;
+            _interfaz->CambiarTexto(contadorLlavesI,str);
+        }
+    #else
+        //codigo motor irrlicht
+        if(contadorLlavesI)
+        {
+            stringw str = L"";
+            str += llaves;
+            contadorLlavesI->setText(str.c_str());
+        }
+    #endif
 }
 
 void MotorGrafico::SetArma(int arma)
@@ -3399,98 +3503,288 @@ void MotorGrafico::SetArma(int arma)
         //codigo motor catopengl
         switch(arma)
         {
-            case 1: //es una llave
-                _interfaz->HabilitarObjeto(llave_textura);
-
-                _interfaz->DeshabilitarObjeto(manos_textura);
-                _interfaz->DeshabilitarObjeto(daga_textura);
-                _interfaz->DeshabilitarObjeto(espada_textura);
-                _interfaz->DeshabilitarObjeto(flauta_textura);
-                break;
-
             case 2: //objeto ataque directo (GUITARRA)
                 _interfaz->HabilitarObjeto(espada_textura);
 
-                _interfaz->DeshabilitarObjeto(llave_textura);
+                _interfaz->DeshabilitarObjeto(guitarra_textura2);
+                _interfaz->DeshabilitarObjeto(guitarra_textura3);
                 _interfaz->DeshabilitarObjeto(manos_textura);
                 _interfaz->DeshabilitarObjeto(daga_textura);
+                _interfaz->DeshabilitarObjeto(arpa_textura2);
+                _interfaz->DeshabilitarObjeto(arpa_textura3);
                 _interfaz->DeshabilitarObjeto(flauta_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura2);
+                _interfaz->DeshabilitarObjeto(flauta_textura3);
                 break;
 
-            case 3: //objeto ataque a distancia (ARPA)
+            case 3: //objeto ataque directo (GUITARRA)
+                _interfaz->HabilitarObjeto(guitarra_textura2);
+                
+                _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(guitarra_textura3);
+                _interfaz->DeshabilitarObjeto(manos_textura);
+                _interfaz->DeshabilitarObjeto(daga_textura);
+                _interfaz->DeshabilitarObjeto(arpa_textura2);
+                _interfaz->DeshabilitarObjeto(arpa_textura3);
+                _interfaz->DeshabilitarObjeto(flauta_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura2);
+                _interfaz->DeshabilitarObjeto(flauta_textura3);
+                break;
+            
+            case 4: //objeto ataque directo (GUITARRA)
+                _interfaz->HabilitarObjeto(guitarra_textura3);
+
+                _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(guitarra_textura2);
+                _interfaz->DeshabilitarObjeto(manos_textura);
+                _interfaz->DeshabilitarObjeto(daga_textura);
+                _interfaz->DeshabilitarObjeto(arpa_textura2);
+                _interfaz->DeshabilitarObjeto(arpa_textura3);
+                _interfaz->DeshabilitarObjeto(flauta_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura2);
+                _interfaz->DeshabilitarObjeto(flauta_textura3);
+                break;
+
+            case 5: //objeto ataque a distancia (ARPA)
                 _interfaz->HabilitarObjeto(daga_textura);
 
-                _interfaz->DeshabilitarObjeto(llave_textura);
-                _interfaz->DeshabilitarObjeto(manos_textura);
                 _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(guitarra_textura2);
+                _interfaz->DeshabilitarObjeto(guitarra_textura3);
+                _interfaz->DeshabilitarObjeto(manos_textura);
+                _interfaz->DeshabilitarObjeto(arpa_textura2);
+                _interfaz->DeshabilitarObjeto(arpa_textura3);
                 _interfaz->DeshabilitarObjeto(flauta_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura2);
+                _interfaz->DeshabilitarObjeto(flauta_textura3);
                 break;
+            
+            case 6: //objeto ataque a distancia (ARPA)
+                _interfaz->HabilitarObjeto(arpa_textura2);
 
-            case 4: //objeto ataque a distancia (FLAUTA)
-                _interfaz->HabilitarObjeto(flauta_textura);
-
-                _interfaz->DeshabilitarObjeto(llave_textura);
+                _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(guitarra_textura2);
+                _interfaz->DeshabilitarObjeto(guitarra_textura3);
                 _interfaz->DeshabilitarObjeto(manos_textura);
                 _interfaz->DeshabilitarObjeto(daga_textura);
+                _interfaz->DeshabilitarObjeto(arpa_textura3);
+                _interfaz->DeshabilitarObjeto(flauta_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura2);
+                _interfaz->DeshabilitarObjeto(flauta_textura3);
+                break;
+            
+            case 7: //objeto ataque a distancia (ARPA)
+                _interfaz->HabilitarObjeto(arpa_textura3);
+
                 _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(guitarra_textura2);
+                _interfaz->DeshabilitarObjeto(guitarra_textura3);
+                _interfaz->DeshabilitarObjeto(manos_textura);
+                _interfaz->DeshabilitarObjeto(daga_textura);
+                _interfaz->DeshabilitarObjeto(arpa_textura2);
+                _interfaz->DeshabilitarObjeto(flauta_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura2);
+                _interfaz->DeshabilitarObjeto(flauta_textura3);
+                break;
+
+            case 8: //objeto ataque a distancia (FLAUTA)
+                _interfaz->HabilitarObjeto(flauta_textura);
+
+                _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(guitarra_textura2);
+                _interfaz->DeshabilitarObjeto(guitarra_textura3);
+                _interfaz->DeshabilitarObjeto(manos_textura);
+                _interfaz->DeshabilitarObjeto(daga_textura);
+                _interfaz->DeshabilitarObjeto(arpa_textura2);
+                _interfaz->DeshabilitarObjeto(arpa_textura3);
+                _interfaz->DeshabilitarObjeto(flauta_textura2);
+                _interfaz->DeshabilitarObjeto(flauta_textura3);
+                break;
+
+            case 9: //objeto ataque a distancia (FLAUTA)
+                _interfaz->HabilitarObjeto(flauta_textura2);
+
+                _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(guitarra_textura2);
+                _interfaz->DeshabilitarObjeto(guitarra_textura3);
+                _interfaz->DeshabilitarObjeto(manos_textura);
+                _interfaz->DeshabilitarObjeto(daga_textura);
+                _interfaz->DeshabilitarObjeto(arpa_textura2);
+                _interfaz->DeshabilitarObjeto(arpa_textura3);
+                _interfaz->DeshabilitarObjeto(flauta_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura3);
+                break;
+            
+            case 10: //objeto ataque a distancia (FLAUTA)
+                _interfaz->HabilitarObjeto(flauta_textura3);
+
+                _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(guitarra_textura2);
+                _interfaz->DeshabilitarObjeto(guitarra_textura3);
+                _interfaz->DeshabilitarObjeto(manos_textura);
+                _interfaz->DeshabilitarObjeto(daga_textura);
+                _interfaz->DeshabilitarObjeto(arpa_textura2);
+                _interfaz->DeshabilitarObjeto(arpa_textura3);
+                _interfaz->DeshabilitarObjeto(flauta_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura2);
                 break;
 
             default: //son las manos
                 _interfaz->HabilitarObjeto(manos_textura);
 
-                _interfaz->DeshabilitarObjeto(llave_textura);
-                _interfaz->DeshabilitarObjeto(daga_textura);
                 _interfaz->DeshabilitarObjeto(espada_textura);
+                _interfaz->DeshabilitarObjeto(guitarra_textura2);
+                _interfaz->DeshabilitarObjeto(guitarra_textura3);
+                _interfaz->DeshabilitarObjeto(daga_textura);
+                _interfaz->DeshabilitarObjeto(arpa_textura2);
+                _interfaz->DeshabilitarObjeto(arpa_textura3);
                 _interfaz->DeshabilitarObjeto(flauta_textura);
+                _interfaz->DeshabilitarObjeto(flauta_textura2);
+                _interfaz->DeshabilitarObjeto(flauta_textura3);
                 break;
         }
     #else
         //codigo motor irrlicht
         switch(arma)
         {
-            case 1: //es una llave
-                llaveI->setVisible(true);
-
-                manosI->setVisible(false);
-                dagaI->setVisible(false);
-                espadaI->setVisible(false);
-                flautaI->setVisible(false);
-                break;
-
             case 2: //objeto ataque directo (GUITARRA)
                 espadaI->setVisible(true);
 
+                guitarraI2->setVisible(false);
+                guitarraI3->setVisible(false);
                 manosI->setVisible(false);
                 dagaI->setVisible(false);
-                llaveI->setVisible(false);
+                arpaI2->setVisible(false);
+                arpaI3->setVisible(false);
                 flautaI->setVisible(false);
+                flautaI2->setVisible(false);
+                flautaI3->setVisible(false);
                 break;
 
-            case 3: //objeto ataque a distancia (ARPA)
+            case 3: //objeto ataque directo (GUITARRA)
+                guitarraI2->setVisible(true);
+
+                espadaI->setVisible(false);
+                guitarraI3->setVisible(false);
+                manosI->setVisible(false);
+                dagaI->setVisible(false);
+                arpaI2->setVisible(false);
+                arpaI3->setVisible(false);
+                flautaI->setVisible(false);
+                flautaI2->setVisible(false);
+                flautaI3->setVisible(false);
+                break;
+
+            case 4: //objeto ataque directo (GUITARRA)
+                guitarraI3->setVisible(true);
+
+                espadaI->setVisible(false);
+                guitarraI2->setVisible(false);
+                manosI->setVisible(false);
+                dagaI->setVisible(false);
+                arpaI2->setVisible(false);
+                arpaI3->setVisible(false);
+                flautaI->setVisible(false);
+                flautaI2->setVisible(false);
+                flautaI3->setVisible(false);
+                break;
+            
+            case 5: //objeto ataque a distancia (ARPA)
                 dagaI->setVisible(true);
 
-                manosI->setVisible(false);
                 espadaI->setVisible(false);
-                llaveI->setVisible(false);
+                guitarraI2->setVisible(false);
+                guitarraI3->setVisible(false);
+                manosI->setVisible(false);
+                arpaI2->setVisible(false);
+                arpaI3->setVisible(false);
                 flautaI->setVisible(false);
+                flautaI2->setVisible(false);
+                flautaI3->setVisible(false);
                 break;
+            
+            case 6: //objeto ataque a distancia (ARPA)
+                arpaI2->setVisible(true);
 
-            case 4: //objeto ataque a distancia (FLAUTA)
+                espadaI->setVisible(false);
+                guitarraI2->setVisible(false);
+                guitarraI3->setVisible(false);
+                manosI->setVisible(false);
+                dagaI->setVisible(false);
+                arpaI3->setVisible(false);
+                flautaI->setVisible(false);
+                flautaI2->setVisible(false);
+                flautaI3->setVisible(false);
+                break;
+            
+            case 7: //objeto ataque a distancia (ARPA)
+                arpaI3->setVisible(true);
+
+                espadaI->setVisible(false);
+                guitarraI2->setVisible(false);
+                guitarraI3->setVisible(false);
+                manosI->setVisible(false);
+                dagaI->setVisible(false);
+                arpaI2->setVisible(false);
+                flautaI->setVisible(false);
+                flautaI2->setVisible(false);
+                flautaI3->setVisible(false);
+                break;
+            
+            case 8: //objeto ataque a distancia (FLAUTA)
                 flautaI->setVisible(true);
 
-                manosI->setVisible(false);
                 espadaI->setVisible(false);
-                llaveI->setVisible(false);
+                guitarraI2->setVisible(false);
+                guitarraI3->setVisible(false);
+                manosI->setVisible(false);
                 dagaI->setVisible(false);
+                arpaI2->setVisible(false);
+                arpaI3->setVisible(false);
+                flautaI2->setVisible(false);
+                flautaI3->setVisible(false);
+                break;
+            
+            case 9: //objeto ataque a distancia (FLAUTA)
+                flautaI2->setVisible(true);
+
+                espadaI->setVisible(false);
+                guitarraI2->setVisible(false);
+                guitarraI3->setVisible(false);
+                manosI->setVisible(false);
+                dagaI->setVisible(false);
+                arpaI2->setVisible(false);
+                arpaI3->setVisible(false);
+                flautaI->setVisible(false);
+                flautaI3->setVisible(false);
+                break;
+            
+            case 10: //objeto ataque a distancia (FLAUTA)
+                flautaI3->setVisible(true);
+
+                espadaI->setVisible(false);
+                guitarraI2->setVisible(false);
+                guitarraI3->setVisible(false);
+                manosI->setVisible(false);
+                dagaI->setVisible(false);
+                arpaI2->setVisible(false);
+                arpaI3->setVisible(false);
+                flautaI->setVisible(false);
+                flautaI2->setVisible(false);
                 break;
 
             default: //son las manos
                 manosI->setVisible(true);
 
-                dagaI->setVisible(false);
                 espadaI->setVisible(false);
-                llaveI->setVisible(false);
+                guitarraI2->setVisible(false);
+                guitarraI3->setVisible(false);
+                dagaI->setVisible(false);
+                arpaI2->setVisible(false);
+                arpaI3->setVisible(false);
                 flautaI->setVisible(false);
+                flautaI2->setVisible(false);
+                flautaI3->setVisible(false);
                 break;
         }
     #endif
@@ -3506,11 +3800,6 @@ void MotorGrafico::RenderInterfaz(bool activada)
             if(vida_textura != 0)
             {
                 _interfaz->HabilitarObjeto(vida_textura);
-            }
-
-            if(energia_textura != 0)
-            {
-                _interfaz->HabilitarObjeto(energia_textura);
             }
 
             if(dinero_textura != 0)
@@ -3533,22 +3822,19 @@ void MotorGrafico::RenderInterfaz(bool activada)
                 _interfaz->HabilitarObjeto(barraVida_textura);
             }
 
-            if(dinero_textura != 0)
+            if(llave_textura != 0)
             {
-                _interfaz->HabilitarObjeto(dinero_textura);
+                if (llaveBossActivada)
+                {
+                    _interfaz->HabilitarObjeto(llave_textura);
+                }
             }
-
         }
         else
         {
             if(vida_textura != 0)
             {
                 _interfaz->DeshabilitarObjeto(vida_textura);
-            }
-
-            if(energia_textura != 0)
-            {
-                _interfaz->DeshabilitarObjeto(energia_textura);
             }
 
             if(dinero_textura != 0)
@@ -3571,21 +3857,13 @@ void MotorGrafico::RenderInterfaz(bool activada)
                 _interfaz->DeshabilitarObjeto(barraVida_textura);
             }
 
-            if(dinero_textura != 0)
-            {
-                _interfaz->DeshabilitarObjeto(dinero_textura);
-            }
-
-            if(espada_textura != 0)
-            {
-                _interfaz->DeshabilitarObjeto(dinero_textura);
-            }
-
             if(llave_textura != 0)
             {
-                _interfaz->DeshabilitarObjeto(dinero_textura);
+                if (llaveBossActivada)
+                {
+                    _interfaz->DeshabilitarObjeto(llave_textura);
+                }
             }
-
         }
 
     #else
@@ -3606,6 +3884,12 @@ void MotorGrafico::RenderInterfaz(bool activada)
                 BarraVidaI->setVisible(true);
             if(moneyI)
                 moneyI->setVisible(true);
+            if(contadorLlavesI)
+                contadorLlavesI->setVisible(true);
+            if(llaveI)
+                llaveI->setVisible(true);
+            if(manosI)
+                manosI->setVisible(true);
         }
         else
         {
@@ -3621,18 +3905,14 @@ void MotorGrafico::RenderInterfaz(bool activada)
                 BarraEnergiaI->setVisible(false);
             if(BarraVidaI)
                 BarraVidaI->setVisible(false);
-            if(manosI)
-                manosI->setVisible(false);
-            if(dagaI)
-                dagaI->setVisible(false);
-            if(flautaI)
-                flautaI->setVisible(false);
-            if(espadaI)
-                espadaI->setVisible(false);
-            if(llaveI)
-                llaveI->setVisible(false);
             if(moneyI)
                 moneyI->setVisible(false);
+            if(contadorLlavesI)
+                contadorLlavesI->setVisible(false);
+            if(llaveI)
+                llaveI->setVisible(false);
+            if(manosI)
+                manosI->setVisible(false);
         }
     #endif
 }
@@ -4033,6 +4313,10 @@ void MotorGrafico::DeshabilitarDinero()
         {
             _interfaz->DeshabilitarObjeto(moneyI);
         }
+        if(contadorLlavesI != 0)
+        {
+            _interfaz->DeshabilitarObjeto(contadorLlavesI);
+        }
     #endif
 }
 
@@ -4042,6 +4326,10 @@ void MotorGrafico::HabilitarDinero()
         if(moneyI != 0)
         {
             _interfaz->HabilitarObjeto(moneyI);
+        }
+        if(contadorLlavesI != 0)
+        {
+            _interfaz->HabilitarObjeto(contadorLlavesI);
         }
     #endif
 }
@@ -4412,5 +4700,17 @@ void MotorGrafico::CargarArma(unsigned int id,const char * modelo,unsigned int f
         {
             
         } 
+    #endif
+}
+
+void MotorGrafico::ActivarLlaveBoss()
+{
+    llaveBossActivada = false;
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        _interfaz->HabilitarObjeto(llave_textura);
+    #else
+        //codigo motor irrlicht
+        llaveI->setVisible(true);
     #endif
 }

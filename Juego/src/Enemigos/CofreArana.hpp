@@ -10,7 +10,6 @@ class CofreArana : public Enemigo
         ~CofreArana();
         CofreArana(float nX, float nY, float nZ, int maxVida,
             float anchoN, float altoN, float largoN, Sala* salaC);
-        CofreArana (const CofreArana& copia);
         void RunIA();
         void UpdateCofreArana(short *i, int* _jug, bool ayuda);
         void SetNuevasOrdenes(short i);
@@ -22,13 +21,11 @@ class CofreArana : public Enemigo
         unsigned int GetPosObsCofre();
         unsigned int GetPosArana();
         bool GetActivada();
-        bool GetPrimeraVezActivada();
         void SetIdCofre(int idC);
         void SetPosMotorCofre(unsigned int pos);
         void SetPosObsCofre(unsigned int pos);
         void SetPosArana(unsigned int pos);
         void SetActivada(bool estado);
-        void SetPrimeraVezActivada(bool estado);
 
     private:
         bool funciona, atacado, hecho;
@@ -43,7 +40,6 @@ class CofreArana : public Enemigo
         unsigned int posObsCofre;
         unsigned int posArana;
         bool activada;
-        bool primeraVezActivada;
 };
 
 #endif

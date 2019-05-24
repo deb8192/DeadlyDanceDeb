@@ -9,7 +9,7 @@ class EstadoGanar: public Estado {
     public:
         EstadoGanar();
         ~EstadoGanar();
-        
+
         void Iniciar();
         void Render();
         void Update();
@@ -32,5 +32,6 @@ class EstadoGanar: public Estado {
         int campoSeleccion;//que campo esta actualmente cuando es menos -1 el campo no esta seleccionado
         MotorAudioSystem* _motora;//instancia de la fachada audio
         unsigned int campo_web;
+        int titulo;
 };
 #endif /* EstadoGanar_HPP */

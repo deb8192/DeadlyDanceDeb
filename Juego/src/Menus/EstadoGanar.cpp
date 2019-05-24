@@ -54,7 +54,7 @@ void EstadoGanar::Update()
         //tenemos que coger lo que hay y actualizar
         if(campoSeleccion == GUI_ID_USER)
         {
-           
+
             if(nombrePartida2 != nullptr)
             {
                 for(int i = 0; i < 10; i++)
@@ -64,7 +64,7 @@ void EstadoGanar::Update()
                 _motor->CambiarTexto(campo_user,nombreUser);
             }
 
-            
+
         }
         else if(campoSeleccion == GUI_ID_PASS)
         {
@@ -134,7 +134,7 @@ void EstadoGanar::ManejarEventos()
                         _motor->CambiarTexto(campo_web,"No hay internet o la pagina no responde.");
                     break;
                 }
-       }    
+       }
     }
 
     if(_motor->OcurreEvento(GUI_ID_REGISTERANDSEND))
@@ -168,7 +168,7 @@ void EstadoGanar::ManejarEventos()
                         _motor->CambiarTexto(campo_web,"No hay internet o la pagina no responde.");
                     break;
                 }
-        } 
+        }
     }
 
 
@@ -213,6 +213,10 @@ void EstadoGanar::ManejarEventos()
 
 void EstadoGanar::pintarBotones()
 {
+    GestorInterfaces * _ges = GestorInterfaces::GetInstance();
+    _ges->ActualizarParametros();
+    GestorInterfaces::menu * m = _ges->GetMenu();
+    titulo = _motor->CrearImagen("assets/images/TituloGanas.png",m->xLogoM,m->yLogoM,_ges->GetEscaladoY());
     _motor->CrearBoton(300,200,500,230, GUI_ID_SEND, L"Enviar puntuacion", L"Enviar puntuacion a la web.");
     _motor->CrearBoton(300,240,500,230, GUI_ID_REGISTERANDSEND, L"Registrarse y Enviar", L"Registrate y envia la puntuacion.");
     _motor->CrearBoton(300,280,500,230, GUI_ID_CONTINUAR, L"Siguiente nivel", L"Continua al siguiente nivel");
@@ -233,6 +237,7 @@ void EstadoGanar::pintarBotones()
 // Para Salir y Menu principal, borra GUI y Escena
 void EstadoGanar::borrarEscenaResetearEvento(short id)
 {
+    _motor->BorrarElementoPorIdReal(titulo);
     _motor->ResetEvento(id);
     // Limpiamos el gui y la escena
     _motor->BorrarScena();
@@ -242,6 +247,7 @@ void EstadoGanar::borrarEscenaResetearEvento(short id)
 // Para Atras y Reiniciar partida, borra solo los botones del GUI
 void EstadoGanar::borrarGUIResetearEvento(short id)
 {
+    _motor->BorrarElementoPorIdReal(titulo);
     _motor->BorrarElemento(GUI_ID_CONTINUAR);
     _motor->BorrarElemento(GUI_ID_MENU_BUTTON);
     _motor->BorrarElemento(GUI_ID_SALIR_BUTTON);

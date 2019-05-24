@@ -1,3 +1,8 @@
+/*
+    Codigo referencia https://learnopengl.com/code_viewer_gh.php?code=includes/learnopengl/shader_s.h,
+    Adaptado para que funcione con c++
+*/
+
 #include "Shader.hpp"
 
 //Constructor

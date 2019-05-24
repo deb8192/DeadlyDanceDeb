@@ -49,6 +49,11 @@ TravornioBoss::~TravornioBoss()
  *
  * Salidas:
 */
+
+void TravornioBoss::SetAtaqueEspecial()
+{
+    atacandoEspecial = ataqueEspecial;
+}
 void TravornioBoss::RunIA()
 {
     Constantes constantes;
@@ -90,6 +95,7 @@ void TravornioBoss::RunIA()
 
 void TravornioBoss::UpdateTravornioBoss(short *i, int* _jug, bool ayuda)
 {
+    SetAtaqueEspecial();
     Constantes constantes;
     Jugador* _jugador = (Jugador*)_jug;
     funciona = true;

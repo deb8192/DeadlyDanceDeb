@@ -124,7 +124,7 @@
             <value>0</value>
         </property>
         <property name="length">
-            <value>9.6000000000000014</value>
+            <value>14</value>
         </property>
         <relationship name="timeline">
             <destination>{7814cd86-e45a-49d8-8d51-c124730cc253}</destination>
@@ -169,7 +169,17 @@
     </object>
     <object class="MixerBusPanner" id="{07824984-9862-4aaf-967b-9b4fab8687f0}"/>
     <object class="MixerBusFader" id="{8e633445-3786-4494-8ae5-e0fd34d396b8}"/>
-    <object class="SpatialiserEffect" id="{367a5b84-160a-4a12-8e27-771a845149af}"/>
+    <object class="SpatialiserEffect" id="{367a5b84-160a-4a12-8e27-771a845149af}">
+        <property name="minimumDistance">
+            <value>60</value>
+        </property>
+        <property name="maximumDistance">
+            <value>300</value>
+        </property>
+        <property name="soundSize">
+            <value>10000</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{2b8f9ff8-e7c6-4077-9ba8-096e7fd37bd2}"/>
     <object class="SFXReverbEffect" id="{060cc41a-8edf-4ece-8a7e-21d230acaae0}">
         <property name="decayTime">

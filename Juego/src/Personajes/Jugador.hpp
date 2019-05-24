@@ -32,9 +32,11 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
 
         //Metodos de desplazamiento
         void movimiento(bool noMueve,bool a, bool s, bool d, bool w);
+        bool moverseAlCentroDeLaSala(VectorEspacial* target); //Funcion a la que se llama al entrar a la sala del boss para desplazar al jugador al centro de la sala
         void moverseEntidad(float);//Realiza el desplazamiento mediante la interpolacion
         void RotarEntidad(float);//Realiza la rotacion mediante la interpolacion
         void UpdateTimeMove(float time);//actualiza el tiempo del movimiento de la interpolacion
+        void Alinearse(VectorEspacial *target);
 
         //Metodos Muere jugador
         bool EstaMuerto();  // Comprueba si vida <= 0

@@ -71,7 +71,7 @@ class Ventana
         //para detectar las teclas que pulsa
         static void character_callback(GLFWwindow* window, unsigned int codepoint);
 
-        static char tecla [30];//tecla que almacena cuando se recibe una tecla cuando se activa la recepcion de texto
+        static char * tecla;//tecla que almacena cuando se recibe una tecla cuando se activa la recepcion de texto
         static bool recogido;//esta a true si se ha recogido, y a false si no
         bool cursor;// la line que te aparece y parpadea | 
         static unsigned int numTecla;
