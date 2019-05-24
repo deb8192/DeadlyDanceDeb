@@ -2820,7 +2820,8 @@ void Jugando::AbrirPantallaPuzzle()
 {
     _motora->getEvent("AparecePuzzle")->start();
     ganarPuzzle = false;
-    Juego::GetInstance()->estado.CambioEstadoPuzle((int*)cargPuzzles.GetPuzzle(2));
+    _motor->DeshabilitarDinero();
+    Juego::GetInstance()->estado.CambioEstadoPuzle((int*)cargPuzzles.GetPuzzle(4));
 }
 
 void Jugando::AbrirCofre(float x, float y, float z, bool esArana)

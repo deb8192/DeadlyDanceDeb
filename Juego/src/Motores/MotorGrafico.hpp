@@ -352,11 +352,20 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             // Funciones para Puzzles
             void IniIDPuzzles();
-            void BorrarGuiPuzzle(unsigned short tipo, unsigned short opciones);
+            void BorrarGuiPuzzle(unsigned int tipo, unsigned int opciones);
             void CargarFondoPuzzle();
-            void CargarIMGPuzzle(unsigned short x, unsigned short y, std::string img);
-            void CrearTextoPuzzles(std::string texto, unsigned short x1, unsigned short y1,
-                unsigned short x2, unsigned short y2);
+            void CargarIMGPuzzle(unsigned int x, unsigned int y, std::string img);
+            void CrearTextoPuzzles(std::string texto, unsigned int x1, unsigned int y1,
+                unsigned int x2, unsigned int y2);
+            void CrearEnunciadoHanoi(std::string texto, unsigned int x1,
+                unsigned int y1, unsigned int x2, unsigned int y2);
+            void CrearTextoPasos(unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2);
+            void ActualizarTextoPasos(unsigned int pasos);
+            void PosicionCamaraEnPuzzles();
+            void CrearMeshFicha(float tamanyo, int r, int g, int b);
+            void CrearFichas(int posX, int posY, float tamanyo, int r=0, int g=0, int b=0);
+            void ReiniciarHanoi();
+            void UpdateMotorPuzzles(int tipo, int x_linea1, int x_linea2);
 
             void HabilitarDinero();
             void DeshabilitarDinero();
@@ -513,6 +522,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short _txtP;
                 vector<unsigned short> _imagenesP;
                 vector<unsigned short> _textosP;
+                unsigned short _textoPasos;
 
                 //configuracion del juego
                 Configuration configuracion;
@@ -614,6 +624,16 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 IGUIStaticText* _txtP;
                 vector<IGUIImage*> _imagenesP;
                 vector<IGUIStaticText*> _textosP;
+
+                IGUIStaticText* _textoPasos;
+                IMesh* _fichaMesh;                         // Malla
+                IMeshSceneNode* _ficha;                    // Nodo
+                std::vector<IMeshSceneNode*> fichasMesh;  // Lista de nodos (fichas)
+
+                // Para seleccionar nodos
+                position2di initialCursorPosition;        // Posicion del clic raton
+                position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
+                ISceneNode* _nodoSeleccionado;
 
             #endif
 

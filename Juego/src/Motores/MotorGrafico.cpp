@@ -61,6 +61,8 @@ MotorGrafico::MotorGrafico()
         //para las animaciones
         EnemigosAni_Scena.reserve(50);
 
+        _textoPasos = 0;
+
     #else
         //codigo motor irrlicht
         input.setDevice(_device);//lo  utilizamos para que los eventos puedan llamar a funciones de
@@ -73,6 +75,11 @@ MotorGrafico::MotorGrafico()
         camx = 0;
         camz = 30;
         cams = -1;
+
+        _textoPasos = nullptr;
+        _fichaMesh = nullptr;
+        _ficha = nullptr;
+        _nodoSeleccionado = nullptr;
     #endif
 }
 
@@ -101,9 +108,9 @@ MotorGrafico::~MotorGrafico()
         _camera  = nullptr;
         _font    = nullptr;
         _skin    = nullptr;
-
-        LimpiarElementosJuego();
     #endif
+
+    LimpiarElementosJuego();
 }
 
 void MotorGrafico::LimpiarElementosJuego()
@@ -219,6 +226,7 @@ void MotorGrafico::LimpiarElementosJuego()
         idCargando = 0;
 
         tiempo = 0;
+        _textoPasos = 0;
 
     #else
         //codigo motor irrlicht
@@ -270,6 +278,10 @@ void MotorGrafico::LimpiarElementosJuego()
 
         debugGrafico = false;
         pathfinding = false;
+        _textoPasos = nullptr;
+        _fichaMesh = nullptr;
+        _ficha = nullptr;
+        _nodoSeleccionado = nullptr;
 
         // Liberar memoria
         int tam = Enemigos_Scena.size();
@@ -4141,29 +4153,29 @@ void MotorGrafico::IniIDPuzzles()
     #endif
 }
 
-void MotorGrafico::BorrarGuiPuzzle(unsigned short tipo, unsigned short opciones)
+void MotorGrafico::BorrarGuiPuzzle(unsigned int tipo, unsigned int opciones)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
 
         BorrarElemento(idsEventos::Enum::GUI_ID_ATRAS_PUZ);
 
+        unsigned int tam = _textosP.size();
+        for(unsigned int i=0; i < tam; i++)
+        {
+            BorrarElemento(_textosP.at(i));
+        }
+        _textosP.clear();
+
+        tam = _imagenesP.size();
+        for(unsigned int i=0; i < tam; i++)
+        {
+            BorrarElemento(_imagenesP.at(i));
+        }
+        _imagenesP.clear();
+
         if (tipo == 1)
         {
-            unsigned short tam = _imagenesP.size();
-            for(unsigned short i=0; i < tam; i++)
-            {
-                BorrarElemento(_imagenesP.at(i));
-            }
-            _imagenesP.clear();
-
-            tam = _textosP.size();
-            for(unsigned short i=0; i < tam; i++)
-            {
-                BorrarElemento(_textosP.at(i));
-            }
-            _textosP.clear();
-
             BorrarElemento(idsEventos::Enum::GUI_ID_OP1);
             BorrarElemento(idsEventos::Enum::GUI_ID_OP2);
 
@@ -4173,31 +4185,33 @@ void MotorGrafico::BorrarGuiPuzzle(unsigned short tipo, unsigned short opciones)
                 BorrarElemento(idsEventos::Enum::GUI_ID_OP4);
             }
         }
+        else
+        {
+            BorrarElemento(idsEventos::Enum::GUI_ID_REINICIAR_HANOI);
+        }
 
     #else
         //codigo motor irrlicht
-
         BorrarElemento(GUI_ID_ATRAS_PUZ);
 
         if (tipo == 1)
         {
-            unsigned short tam = _imagenesP.size();
-            for(unsigned short i=0; i < tam; i++)
+            unsigned int tam = _imagenesP.size();
+            for(unsigned int i=0; i < tam; i++)
             {
                 BorrarElemento(_imagenesP.at(i)->getID());
             }
             _imagenesP.clear();
 
             tam = _textosP.size();
-            for(unsigned short i=0; i < tam; i++)
+            for(unsigned int i=0; i < tam; i++)
             {
                 BorrarElemento(_textosP.at(i)->getID());
             }
-            _textosP.clear();
 
+            _textosP.clear();
             BorrarElemento(GUI_ID_OP1);
             BorrarElemento(GUI_ID_OP2);
-
             if (opciones > 2)
             {
                 BorrarElemento(GUI_ID_OP3);
@@ -4232,7 +4246,7 @@ void MotorGrafico::CargarFondoPuzzle()
     #endif
 }
 
-void MotorGrafico::CargarIMGPuzzle(unsigned short x, unsigned short y, std::string img)
+void MotorGrafico::CargarIMGPuzzle(unsigned int x, unsigned int y, std::string img)
 {
     std::string ruta = "assets/puzzles/"+img;
     const char* cruta = ruta.c_str();
@@ -4256,14 +4270,14 @@ void MotorGrafico::CargarIMGPuzzle(unsigned short x, unsigned short y, std::stri
     #endif
 }
 
-void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
-    unsigned short y1, unsigned short x2, unsigned short y2)
+void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned int x1,
+    unsigned int y1, unsigned int x2, unsigned int y2)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
         unsigned short num = _interfaz->CrearTexto(texto,x1,y1,255.0f,255.0f,255.0f);
         unsigned short nue = ++IDP;
-        _interfaz -> DefinirIdPersonalizado(num,nue);
+        _interfaz->DefinirIdPersonalizado(num,nue);
         _textosP.push_back(nue);
         _txtP = 0;
     #else
@@ -4274,6 +4288,152 @@ void MotorGrafico::CrearTextoPuzzles(std::string texto, unsigned short x1,
         _txtP->setID(++IDP);
         _textosP.push_back(move(_txtP));
         _txtP = nullptr;
+    #endif
+}
+
+void MotorGrafico::CrearEnunciadoHanoi(std::string texto, unsigned int x1,
+    unsigned int y1, unsigned int x2, unsigned int y2)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        unsigned short num = _interfaz->CrearTexto(texto,x1,y1,255.0f,255.0f,255.0f);
+        unsigned short nue = ++IDP;
+        _interfaz->DefinirIdPersonalizado(num,nue);
+        CambiarAnchuraTexto(num, 700);
+        _textosP.push_back(nue);
+        _txtP = 0;
+    #else
+        //codigo motor irrlicht
+        std::wstring widestr = std::wstring(texto.begin(), texto.end());
+        // Parametro false, indica que no pinte el recuadro alrededor del texto
+        _txtP = _guienv->addStaticText(widestr.c_str(), rect<s32>(x1, y1, x2, y2), false);
+        _txtP->setID(++IDP);
+        _textosP.push_back(move(_txtP));
+        _txtP = nullptr;
+    #endif
+}
+
+void MotorGrafico::CrearTextoPasos(unsigned int x1,
+    unsigned int y1, unsigned int x2, unsigned int y2)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        unsigned short num = _interfaz->CrearTexto("Pasos: 0",x1,y1,255.0f,255.0f,255.0f);
+        unsigned short nue = ++IDP;
+        _interfaz->DefinirIdPersonalizado(num,nue);
+        _textoPasos = num;
+        _textosP.push_back(nue);
+        _txtP = 0;
+    #else
+        //codigo motor irrlicht
+        _textoPasos = _guienv->addStaticText(L"Pasos: 0", rect<s32>(x1, y1, x2, y2), false);
+    #endif
+}
+
+void MotorGrafico::ActualizarTextoPasos(unsigned int pasos)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        string texto = "Pasos: ";
+        texto += std::to_string(pasos);
+
+        CambiarTexto(_textoPasos, texto.c_str());
+    #else
+        //codigo motor irrlicht
+        stringw str = L"Pasos: ";
+        str += pasos;
+        _textoPasos->setText(str.c_str());
+    #endif
+}
+
+void MotorGrafico::PosicionCamaraEnPuzzles()
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        _camera->setPosition(vector3df(14, 2, 0)); // No cambiar la Y, si nos la seleccion tendra errores
+    #endif
+}
+
+void MotorGrafico::CrearMeshFicha(float tamanyo, int r, int g, int b)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        //_fichaMesh = _geometryCreator->createCubeMesh(vector3df(tamanyo));
+        _fichaMesh = _geometryCreator->createCylinderMesh(
+            tamanyo,    //radius
+            1,          //length
+            50,         //tesselation
+            SColor(0, r, g, b));
+
+        // insensible a la iluminacion
+        _fichaMesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+    #endif
+}
+
+void MotorGrafico::CrearFichas(int posX, int posY, float tamanyo,
+    int r, int g, int b)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        CrearMeshFicha(tamanyo, r, g, b);
+        _ficha = _smgr->addMeshSceneNode(_fichaMesh);
+        _ficha->setPosition(vector3df(0, posY, posX));
+        _ficha->setID(tamanyo);
+
+        // La anyadimos a la lista
+        fichasMesh.push_back(move(_ficha));
+        _ficha = nullptr;
+    #endif
+}
+
+void MotorGrafico::ReiniciarHanoi()
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        int tam = fichasMesh.size();
+        int posY=0;
+        for (int pos = 0; pos<tam; pos++)
+        {
+            fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
+            posY++;
+        }
+    #endif
+}
+
+void MotorGrafico::UpdateMotorPuzzles(int tipo, int x_linea1, int x_linea2)
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+    #else
+        //codigo motor irrlicht
+        _driver->beginScene(true, true, SColor(255,255,255,255));//fondo blanco
+        _smgr->drawAll();
+        _guienv->drawAll();
+
+        /* Probando a dibujar objetos 2D
+        //Rectangulo
+        _driver->draw2DRectangle(SColor(255, 255, 128, 64), rect<s32>(40, 40, 200, 200));
+        //Poligono
+        _driver->draw2DPolygon(position2d<s32>(100, 300), 50.f, SColor(128, 40, 80, 16), 6);
+        */
+        if (tipo == P_HANOI)
+        {
+            // Lineas para dividir la pantalla
+            _driver->draw2DLine(position2d<s32>(x_linea1 , 200),
+                position2d<s32>(x_linea1, 400 ) , SColor(255, 0, 0, 0));
+            _driver->draw2DLine(position2d<s32>(x_linea2 , 200),
+                position2d<s32>(x_linea2, 400 ) , SColor(255, 0, 0, 0));
+            }
+
+        _driver->endScene();
     #endif
 }
 
