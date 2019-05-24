@@ -773,14 +773,14 @@ void Jugando::Update()
                     {
                         this->RespawnEnemigosBoss();
                     }
-                    if((enSalaBoss && poderEmpezar && enCentroSalaBoss) || !enSalaBoss)
-                    {
+                    /*if((enSalaBoss && poderEmpezar && enCentroSalaBoss) || !enSalaBoss)
+                    {*/
                         if (_enemPideAyuda) {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                         } else {
                             _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                         }
-                    }
+                    //}
                     short paredCol = _enemigos[i]->GetParedRota();
                     if(paredCol >= 0)
                     {
@@ -2728,7 +2728,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
                     _auxiliadores.front()->SetSala(_destinoPathFinding);
                 }
                 _auxiliadores.front()->AnnadirRecorridoAyuda(posicionesWaypoints);
-                delete path;
+                //delete path;
             }
             else if(_destinoPathFinding == _auxiliadores.front()->GetSala() && _auxiliadores.front()->GetModo() != Enemigo::modosEnemigo::MODO_ATAQUE)
             {
