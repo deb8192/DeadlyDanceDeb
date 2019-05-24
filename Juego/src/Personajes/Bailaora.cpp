@@ -6,10 +6,15 @@ Bailaora::Bailaora(Sala* sala,unsigned short tipoJug,int nX,int nY,int nZ,int an
     // TO DO: cambiar por las suyas
     #ifdef WEMOTOR
         _modelo = "assets/models/bailarina/bailarina_000001.obj";
-        escalado = 0.6f;
-        fps = 244;
+        escalado = 0.55f;
+        fps = 268;
         _textura = "assets/texture/bailarina.png";
         _animacion = "assets/animaciones/bailarina.xml";
+        
+        modelosArmas[0]= "assets/models/Armas/Guitarras/Guitarra1/guitarra1_000187.obj";
+        fpsArmas[0] = 24;
+        animacionesArmas[0] = "assets/animaciones/GuitarraBailarina.xml";
+
     #else
         _modelo = "assets/models/bailarina/bailarina_000001.obj";
     #endif

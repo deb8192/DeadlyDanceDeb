@@ -1460,3 +1460,23 @@ float Jugador::GetEscalado()
 {
     return escalado;
 }
+
+const char * Jugador::GetModeloArma(unsigned int e)
+{
+    return modelosArmas[e];
+}
+
+const char * Jugador::GetAnimacionArma(unsigned int e)
+{
+    return animacionesArmas[e];
+}
+
+unsigned int Jugador::GetFpsArma(unsigned int e)
+{
+    return fpsArmas[e];
+}
+
+float Jugador::GetEscaladoArma(unsigned int e)
+{
+    return escalado;
+}

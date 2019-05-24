@@ -4404,3 +4404,13 @@ unsigned int MotorGrafico::ObtenerIDOpengl(unsigned int tipo,unsigned int idVect
 
         return idOpengl;
 }
+
+void MotorGrafico::CargarArma(unsigned int id,const char * modelo,unsigned int fps, const char * anima, float escalado)
+{
+    #ifdef WEMOTOR
+        if(_interfaz)
+        {
+            
+        } 
+    #endif
+}

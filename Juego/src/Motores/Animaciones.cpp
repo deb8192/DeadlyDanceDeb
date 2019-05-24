@@ -18,7 +18,7 @@ Animaciones::Animaciones()
         short tam = numEstados;
         for(short i=0; i < tam; i++)
         {
-            if( _animaciones[i] != nullptr)
+            if(_animaciones[i] != nullptr)
             {
                 delete _animaciones[i];
             }
@@ -48,7 +48,7 @@ Animaciones::Animaciones(const char * ruta)
                 numEstados = comportamientos;
                 int i = 0;
                 
-                for(pugi::xml_node hij = hijo.child("Animacion"); hij; hij = hij.next_sibling("Animacion"))
+                for(pugi::xml_node hij = hijo.child("Animacion"); hij && i < comportamientos; hij = hij.next_sibling("Animacion"))
                 {
                     _animaciones[i] = new Animacion();
                     i++;
@@ -56,7 +56,7 @@ Animaciones::Animaciones(const char * ruta)
 
                 i = 0;
                 
-                for(pugi::xml_node hij = hijo.child("Animacion"); hij; hij = hij.next_sibling("Animacion"))
+                for(pugi::xml_node hij = hijo.child("Animacion"); hij && i < comportamientos; hij = hij.next_sibling("Animacion"))
                 {
                     if(i == 0)
                     {
@@ -72,10 +72,12 @@ Animaciones::Animaciones(const char * ruta)
                     _animaciones[i]->SetTermina(hij.attribute("terminar").as_bool());
                     _animaciones[i]->SetSalta(hij.attribute("salto").as_bool());
                     _animaciones[i]->SetRepite(hij.attribute("bucle").as_bool());
+
+                    int posicionASaltar = hij.attribute("dondesaltar").as_int();
                     
-                    if(hij.attribute("dondesaltar") && hij.attribute("dondesaltar").as_int() != -1)
+                    if(hij.attribute("dondesaltar") && posicionASaltar != -1 && posicionASaltar < comportamientos)
                     {
-                        _animaciones[i]->AsignarSiguiente(_animaciones[hij.attribute("dondesaltar").as_int()]);
+                        _animaciones[i]->AsignarSiguiente(_animaciones[posicionASaltar]);
                     }
                                         
                     i++;
