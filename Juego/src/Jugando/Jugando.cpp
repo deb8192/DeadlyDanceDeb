@@ -395,7 +395,7 @@ void Jugando::ManejarEventos() {
                 else
                 {
                     i--;
-                } 
+                }
             }
             poderEmpezar = true;
 
@@ -549,7 +549,7 @@ void Jugando::Update()
                 else
                 {
                     i--;
-                } 
+                }
             }
             poderEmpezar = true;
        }
@@ -1489,13 +1489,22 @@ void Jugando::Render()
         if ((tipoArma == constantes.GUITARRA1) || (tipoArma == constantes.GUITARRA2) ||
             (tipoArma == constantes.GUITARRA3))
         {
-            if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() <= 1.5f)
+            if(_jugador->getTimeAt() == 1.5f)
             {
-                _motor->desactivarObjeto(_motor->getArmaenEscena());
+                mov_weapon_rotX = -90;
+                mov_weapon_posX = 3.5;
+                mov_weapon_posZ = 3.5;
+                mov_weapon_posY = 4.0;
+            }
+            else if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() < 1.5f)
+            {
+                if(mov_weapon_rotX < 0)mov_weapon_rotX += 4;
+                if(mov_weapon_posY > 1.5)mov_weapon_posY -= 0.2;
+                if(mov_weapon_posX < 5.5)mov_weapon_posX += 0.3;
+                if(mov_weapon_posZ < 5.5)mov_weapon_posZ += 0.3;
             }
             else
             {
-                _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-2.0;
                 mov_weapon_posZ=-1.5;
                 if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-2.6;
@@ -1504,14 +1513,53 @@ void Jugando::Render()
                 mov_weapon_rotY=0;
                 mov_weapon_rotZ=0;
             }
+            // if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() <= 1.5f)
+            // {
+            //     _motor->desactivarObjeto(_motor->getArmaenEscena());
+            // }
+            // else
+            // {
+            //     _motor->activarObjeto(_motor->getArmaenEscena());
+            //     mov_weapon_posX=-2.0;
+            //     mov_weapon_posZ=-1.5;
+            //     if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-2.6;
+            //     mov_weapon_posY=5.0;
+            //     mov_weapon_rotX=90;
+            //     mov_weapon_rotY=0;
+            //     mov_weapon_rotZ=0;
+            // }
         }
         else if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.ARPA2) ||
             (tipoArma == constantes.ARPA3))
         {
+            // if(_jugador->getTimeAt() == 1.5f)
+            // {
+            //     _motor->desactivarObjeto(_motor->getArmaenEscena());
+            //     proyectilFuera = false;
+            // }
+            // else if(_jugador->getTimeAt() <= 0.0f)
+            // {
+            //     if(proyectilFuera == false)
+            //     {
+            //         _motor->EraseProyectil();
+            //         proyectilFuera = true;
+            //     }
+            //     _motor->activarObjeto(_motor->getArmaenEscena());
+            //     mov_weapon_posX=-2.0;
+            //     mov_weapon_posZ=-0.5;
+            //     if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-1.8;
+            //     mov_weapon_posY=4.5;
+            //     mov_weapon_rotX=90;
+            //     mov_weapon_rotY=0;
+            //     mov_weapon_rotZ=0;
+            // }
             if(_jugador->getTimeAt() == 1.5f)
             {
-                _motor->desactivarObjeto(_motor->getArmaenEscena());
                 proyectilFuera = false;
+                mov_weapon_rotX = 180;
+                mov_weapon_posX = 2;
+                mov_weapon_posZ = 2;
+                mov_weapon_posY = 2.5;
             }
             else if(_jugador->getTimeAt() <= 0.0f)
             {
@@ -1520,8 +1568,7 @@ void Jugando::Render()
                     _motor->EraseProyectil();
                     proyectilFuera = true;
                 }
-                _motor->activarObjeto(_motor->getArmaenEscena());
-                mov_weapon_posX=-2.0;
+                mov_weapon_posX=-0.7;
                 mov_weapon_posZ=-0.5;
                 if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-1.8;
                 mov_weapon_posY=4.5;
@@ -1533,10 +1580,35 @@ void Jugando::Render()
         else if ((tipoArma == constantes.FLAUTA1) || (tipoArma == constantes.FLAUTA2) ||
             (tipoArma == constantes.FLAUTA3))
         {
+            // if(_jugador->getTimeAt() == 1.5f)
+            // {
+            //     _motor->desactivarObjeto(_motor->getArmaenEscena());
+            //     proyectilFuera = false;
+            // }
+            // else if(_jugador->getTimeAt() <= 0.0f)
+            // {
+            //     if(proyectilFuera == false)
+            //     {
+            //         _motor->EraseProyectil();
+            //         proyectilFuera = true;
+            //     }
+            //     _motor->activarObjeto(_motor->getArmaenEscena());
+            //     mov_weapon_posX=-0.7;
+            //     if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posX=-1.8;
+            //     mov_weapon_posZ=-0.5;
+            //     if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-1.6;
+            //     mov_weapon_posY=2.3;
+            //     mov_weapon_rotX=90;
+            //     mov_weapon_rotY=0;
+            //     mov_weapon_rotZ=0;
+            // }
             if(_jugador->getTimeAt() == 1.5f)
             {
-                _motor->desactivarObjeto(_motor->getArmaenEscena());
                 proyectilFuera = false;
+                mov_weapon_rotX = 180;
+                mov_weapon_posX = 2;
+                mov_weapon_posZ = 2;
+                mov_weapon_posY = 5.5;
             }
             else if(_jugador->getTimeAt() <= 0.0f)
             {
@@ -1545,7 +1617,6 @@ void Jugando::Render()
                     _motor->EraseProyectil();
                     proyectilFuera = true;
                 }
-                _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-0.7;
                 if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posX=-1.8;
                 mov_weapon_posZ=-0.5;
@@ -1834,16 +1905,16 @@ void Jugando::CrearJugador()
         _jugador->GetModelo(),_jugador->GetTextura(),_jugador->GetFps(),_jugador->GetAnimacion());
 
     _motor->CargarArma(0,_jugador->GetModeloArma(0),_jugador->GetFpsArma(0),_jugador->GetAnimacionArma(0),_jugador->GetEscaladoArma(0));//carga arma 0 Guitarra-1
-    /*_motor->CargarArma(_jugador->GetModeloArma(2),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(2),_jugador->GetEscaladoArma(1));//carga arma 1 Guitarra-2 
-    _motor->CargarArma(_jugador->GetModeloArma(3),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(3),_jugador->GetEscaladoArma(1));//carga arma 2 Guitarra-3 
+    /*_motor->CargarArma(_jugador->GetModeloArma(2),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(2),_jugador->GetEscaladoArma(1));//carga arma 1 Guitarra-2
+    _motor->CargarArma(_jugador->GetModeloArma(3),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(3),_jugador->GetEscaladoArma(1));//carga arma 2 Guitarra-3
     _motor->CargarArma(_jugador->GetModeloArma(4),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(4),_jugador->GetEscaladoArma(1));//carga arma 3 Flauta-1
     _motor->CargarArma(_jugador->GetModeloArma(5),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(5),_jugador->GetEscaladoArma(1));//carga arma 4 Flauta-2
     _motor->CargarArma(_jugador->GetModeloArma(6),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(6),_jugador->GetEscaladoArma(1));//carga arma 5 Flauta-3
     _motor->CargarArma(_jugador->GetModeloArma(7),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(7),_jugador->GetEscaladoArma(1));//carga arma 6 Arpa-1
-    _motor->CargarArma(_jugador->GetModeloArma(8),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(8),_jugador->GetEscaladoArma(1));//carga arma 7 Arpa-2 
+    _motor->CargarArma(_jugador->GetModeloArma(8),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(8),_jugador->GetEscaladoArma(1));//carga arma 7 Arpa-2
     _motor->CargarArma(_jugador->GetModeloArma(9),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(9),_jugador->GetEscaladoArma(1));//carga arma 8 Arpa-3*/
-     
-    
+
+
     _motor->CargarArmaEspecial(_jugador->getX(),_jugador->getY(),
         _jugador->getZ(), _jugador->getRutaArmaEsp(),_jugador->getRutaTexturaArmaEsp());
 
@@ -2129,7 +2200,7 @@ void Jugando::RespawnEnemigos()
                 {
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
-                    _motora->getEvent("MuerteRespawn2")->start();                    
+                    _motora->getEvent("MuerteRespawn2")->start();
                 }
             }
             else if(tipoEne != 0)
@@ -2138,7 +2209,7 @@ void Jugando::RespawnEnemigos()
                 {
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
-                    _motora->getEvent("MuerteRespawn1")->start();                   
+                    _motora->getEvent("MuerteRespawn1")->start();
                 }
             }
             _enemigos.back()->SetEnemigo(enemigo);
@@ -2160,7 +2231,7 @@ void Jugando::RespawnEnemigos()
             _enemigos.back()->setVectorOrientacion();
             _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
             _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
-            _enemigos.back()->RespawnNoise();            
+            _enemigos.back()->RespawnNoise();
 
             _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false,_enemigos.back()->GetAnimacion(),_enemigos.back()->GetFps());//creamos la figura
 
