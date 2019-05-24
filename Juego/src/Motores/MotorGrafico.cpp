@@ -1749,6 +1749,7 @@ void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto,
         if(_arma != 0)
         {
             _armaEnEscena = _arma;
+            _interfaz->Escalar(_armaEnEscena,0.8f,0.8f,0.8f);
             _interfaz->Trasladar(_armaEnEscena,(float)x,(float)y,(float)z);
         }
 

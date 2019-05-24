@@ -1434,9 +1434,9 @@ void Jugando::Render()
                     proyectilFuera = true;
                 }
                 _motor->activarObjeto(_motor->getArmaenEscena());
-                mov_weapon_posX=-0.7;
+                mov_weapon_posX=-2.0;
                 mov_weapon_posZ=-0.5;
-                mov_weapon_posY=2.3;
+                mov_weapon_posY=4.5;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
                 mov_weapon_rotZ=0;
@@ -2764,33 +2764,33 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     switch (objeto)
     {
         case 7: // ARPA
-            CrearObjeto(x,y,z,2,2,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
+            CrearObjeto(x,y,z,3,4,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
             break;
         case 8:
-            CrearObjeto(x,y,z,2,2,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
+            CrearObjeto(x,y,z,3,4,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
             break;
         case 9:
-            CrearObjeto(x,y,z,2,2,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
+            CrearObjeto(x,y,z,3,4,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
             break;
 
         case 10: // GUITARRA
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
+            CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
             break;
         case 11:
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
+            CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
             break;
         case 12:
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
+            CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
             break;
 
         case 13: // FLAUTA
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
+            CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
             break;
         case 14:
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
+            CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
             break;
         case 15:
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
+            CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
             break;
 
         default: // ORO
