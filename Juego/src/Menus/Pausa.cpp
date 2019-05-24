@@ -29,7 +29,7 @@ void Pausa::Render()
 
 void Pausa::Update()
 {
-    
+
 }
 
 void Pausa::ManejarEventos()
@@ -40,7 +40,7 @@ void Pausa::ManejarEventos()
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         salir();
     }
-    
+
     if (_motor->OcurreEvento(GUI_ID_REINICIAR_BUTTON))
     {
         borrarGUIResetearEvento(GUI_ID_REINICIAR_BUTTON);
@@ -50,9 +50,9 @@ void Pausa::ManejarEventos()
 
     // ESC o P para cerrar menu de pausa
     if (_motor->OcurreEvento(GUI_ID_ATRAS_BUTTON) ||
-        _motor->EstaPulsado(KEY_ESC) || 
+        _motor->EstaPulsado(KEY_ESC) ||
         _motor->EstaPulsado(KEY_P)) {
-        
+
         borrarGUIResetearEvento(GUI_ID_ATRAS_BUTTON);
         _motor->ResetKey(KEY_ESC);
         _motor->ResetKey(KEY_P);
@@ -70,6 +70,10 @@ void Pausa::ManejarEventos()
 
 void Pausa::pintarBotones()
 {
+    GestorInterfaces * _ges = GestorInterfaces::GetInstance();
+    _ges->ActualizarParametros();
+    GestorInterfaces::menu * m = _ges->GetMenu();
+    titulo = _motor->CrearImagen("assets/images/TituloPausa.png",m->xLogoM,m->yLogoM,_ges->GetEscaladoY());
     _motor->CrearBoton(300,200,500,230, GUI_ID_ATRAS_BUTTON, L"Continuar", L"Volver al juego");
     _motor->CrearBoton(300,240,500,270, GUI_ID_REINICIAR_BUTTON, L"Reiniciar partida", L"Reiniciar");
     _motor->CrearBoton(300,280,500,310, GUI_ID_MENU_BUTTON, L"Menu principal", L"M. principal");
@@ -80,6 +84,7 @@ void Pausa::pintarBotones()
 void Pausa::borrarEscenaResetearEvento(short id)
 {
     // Limpiamos el gui y la escena
+    _motor->BorrarElementoPorIdReal(titulo);
     _motor->BorrarScena();
     _motor->BorrarGui();
     _motor->ResetEvento(id);
@@ -88,6 +93,7 @@ void Pausa::borrarEscenaResetearEvento(short id)
 // Para Atras y Reiniciar partida, borra solo los botones del GUI
 void Pausa::borrarGUIResetearEvento(short id)
 {
+    _motor->BorrarElementoPorIdReal(titulo);
     _motor->BorrarElemento(GUI_ID_ATRAS_BUTTON);
     _motor->BorrarElemento(GUI_ID_REINICIAR_BUTTON);
     _motor->BorrarElemento(GUI_ID_MENU_BUTTON);

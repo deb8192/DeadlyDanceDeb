@@ -8,7 +8,7 @@ class EstadoMuerte: public Estado {
     public:
         EstadoMuerte();
         ~EstadoMuerte();
-        
+
         void Iniciar();
         void Render();
         void Update();
@@ -23,7 +23,8 @@ class EstadoMuerte: public Estado {
         void menuPrincipal();
         void reiniciarPartida();
         void salir();
-        
+
         MotorAudioSystem* _motora;
+        int titulo;
 };
 #endif /* ESTADO_MUERTE_HPP */

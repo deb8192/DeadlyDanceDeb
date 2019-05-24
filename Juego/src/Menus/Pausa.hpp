@@ -8,7 +8,7 @@ class Pausa: public Estado {
     public:
         Pausa();
         ~Pausa();
-        
+
         void Iniciar();
         void Render();
         void Update();
@@ -26,5 +26,6 @@ class Pausa: public Estado {
         void salir();
 
         MotorAudioSystem* _motora;
+        int titulo;
 };
 #endif /* PAUSA_HPP */
