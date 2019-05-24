@@ -402,6 +402,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             unsigned int ObtenerIDOpengl(unsigned int tipo,unsigned int idVector);
             void ActivarLlaveBoss();
 
+            void CargarArma(unsigned int id,const char * modelo,unsigned int fps, const char * anima, float escalado);//crea un arma en el id(0 a maximo de armas) que le pases 
+
         private: //clases solo accesibles por MotorGrafico
 
             struct SalasLuz
@@ -519,6 +521,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
                 //sprites Animaciones
                 unsigned short contador_anim = 0;
+
+                int armas[14];//almacena los ids de las armas de los personajes principales
 
             #else
                 //variables y parametros motor irrlicht

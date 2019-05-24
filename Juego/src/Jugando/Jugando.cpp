@@ -1833,6 +1833,17 @@ void Jugando::CrearJugador()
         _jugador->GetEscalado(), _jugador->GetEscalado(), _jugador->GetEscalado(),
         _jugador->GetModelo(),_jugador->GetTextura(),_jugador->GetFps(),_jugador->GetAnimacion());
 
+    _motor->CargarArma(0,_jugador->GetModeloArma(0),_jugador->GetFpsArma(0),_jugador->GetAnimacionArma(0),_jugador->GetEscaladoArma(0));//carga arma 0 Guitarra-1
+    /*_motor->CargarArma(_jugador->GetModeloArma(2),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(2),_jugador->GetEscaladoArma(1));//carga arma 1 Guitarra-2 
+    _motor->CargarArma(_jugador->GetModeloArma(3),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(3),_jugador->GetEscaladoArma(1));//carga arma 2 Guitarra-3 
+    _motor->CargarArma(_jugador->GetModeloArma(4),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(4),_jugador->GetEscaladoArma(1));//carga arma 3 Flauta-1
+    _motor->CargarArma(_jugador->GetModeloArma(5),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(5),_jugador->GetEscaladoArma(1));//carga arma 4 Flauta-2
+    _motor->CargarArma(_jugador->GetModeloArma(6),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(6),_jugador->GetEscaladoArma(1));//carga arma 5 Flauta-3
+    _motor->CargarArma(_jugador->GetModeloArma(7),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(7),_jugador->GetEscaladoArma(1));//carga arma 6 Arpa-1
+    _motor->CargarArma(_jugador->GetModeloArma(8),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(8),_jugador->GetEscaladoArma(1));//carga arma 7 Arpa-2 
+    _motor->CargarArma(_jugador->GetModeloArma(9),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(9),_jugador->GetEscaladoArma(1));//carga arma 8 Arpa-3*/
+     
+    
     _motor->CargarArmaEspecial(_jugador->getX(),_jugador->getY(),
         _jugador->getZ(), _jugador->getRutaArmaEsp(),_jugador->getRutaTexturaArmaEsp());
 
