@@ -1,3 +1,8 @@
+/*
+    Codigo referencia de https://learnopengl.com/Model-Loading/Model,
+    Adaptado para que funcione con c++, y manejar varias mallas para las animaciones,
+    tambien poder cargar texturas o colores
+*/
 #include "RMalla.hpp"
 #include "Gestor.hpp"
 

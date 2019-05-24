@@ -1,3 +1,6 @@
+/*
+    Sacado de: https://learnopengl.com/Advanced-Lighting/Shadows/Shadow-Mapping
+*/
 #version 330 core
 layout (location = 0) in vec3 aPos;
 
