@@ -2893,6 +2893,9 @@ void Jugando::CrearEnemigoArana()
 
     //}
 
+
+    _eneA->SetAranaSound();
+
     _enemigos.push_back(_eneA);
     _eneA = nullptr;
 
@@ -2900,7 +2903,6 @@ void Jugando::CrearEnemigoArana()
     _cofreP = nullptr;
 
 
-    _eneA->SetAranaSound();
 }
 
 void Jugando::CargarBossEnMemoria()
