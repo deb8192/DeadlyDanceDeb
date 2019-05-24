@@ -1,3 +1,8 @@
+/*
+    Contiene los datos de sistema de particulas
+    Codigo referencia https://learnopengl.com/In-Practice/2D-Game/Particles,
+    Adaptado para que funcione con c++ y cambiado muchas cosas.
+*/
 #include "TParticle.hpp"
 
 // Constructor y destructor

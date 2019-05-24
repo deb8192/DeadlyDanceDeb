@@ -1,3 +1,9 @@
+/*
+    Crea un texto en pantalla
+    Codigo referencia https://learnopengl.com/In-Practice/Text-Rendering,
+    Adaptado para que funcione con c++
+*/
+
 #include "TTexto.hpp"
 
 TTexto::TTexto(GLuint width, GLuint height, Shader * sact)
