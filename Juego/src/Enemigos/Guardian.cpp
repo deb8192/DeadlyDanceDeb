@@ -21,15 +21,18 @@ Guardian::Guardian(float nX, float nY, float nZ, int maxVida, int disfraz)
     switch(disfraz)
     {
         case 3 :
-            _modelo = "assets/models/guardian_m/GuardianMuerteConTextura.obj";
+            _modelo = "assets/models/GuardianUnicornio/GuardianUnicornio_000001.obj";
             _textura = "assets/models/guardian_m/trocitos_G_M_prueba.jpg";
             break;
             //Cambiar por unicornio
         case 4 :
-            _modelo = "assets/models/guardian_m/GuardianMuerteConTextura.obj";
+            _modelo = "assets/models/GuardianUnicornio/GuardianUnicornio_000001.obj";
             _textura = "assets/models/guardian_m/trocitos_G_M_prueba.jpg";
             break;
     }
+
+    fps = 140;
+    _animacion = "assets/animaciones/Guardian.xml";
 }
 
 Guardian::~Guardian()
