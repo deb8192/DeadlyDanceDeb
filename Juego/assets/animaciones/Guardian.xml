@@ -5,6 +5,6 @@
 	<!--2--><Animacion nombre="Correr" inicio="31" final="60" bucle="true" salto="false" terminar="false" velocidad="20"></Animacion>
 	<!--3--><Animacion nombre="Ataca" inicio="61" final="90" bucle="false" salto="true" dondesaltar="1" terminar="true" velocidad="16"></Animacion>
 	<!--4--><Animacion nombre="Defensa" inicio="91" final="120" bucle="false" salto="true" dondesaltar="1" terminar="true" velocidad="16"></Animacion>
-	<!--5--><Animacion nombre="Muere" inicio="121" final="140" bucle="false" salto="true" dondesaltar="6" terminar="true" velocidad="16"></Animacion>
-	<!--5--><Animacion nombre="Muerto" inicio="140" final="140" bucle="true" salto="false" terminar="false" velocidad="1"></Animacion>
+	<!--5--><Animacion nombre="Muere" inicio="121" final="139" bucle="false" salto="true" dondesaltar="6" terminar="true" velocidad="16"></Animacion>
+	<!--5--><Animacion nombre="Muerto" inicio="139" final="139" bucle="true" salto="false" terminar="false" velocidad="1"></Animacion>
 </Animaciones>

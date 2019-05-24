@@ -18,7 +18,7 @@ Guardian::Guardian(float nX, float nY, float nZ, int maxVida, int disfraz)
     minDistanciaJugador = 15;
     direccion = 0;
     escalado = 0.60f;
-
+    estadoMuerte = 5;
     switch(disfraz)
     {
         case 3 :
@@ -315,6 +315,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
             break;
             case EN_PERSIGUE: //El Guardian se persigue al jugador
                 {
+                    _motor->cambiarAnimacion(5,*i,2);
                     funciona = this->perseguir(_jug, i);
                 }
                 break;
@@ -326,6 +327,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
                     {
                         int danyo;
                         danyo = this->Atacar(*i);
+                        _motor->cambiarAnimacion(5,*i,3);
                         if(danyo > 0)
                         {
                             _jugador->ModificarVida(-danyo);
@@ -346,6 +348,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
             case EN_MOVERSE: //El guardian se mueve tanteando al jugador
                 {
                     int nuevaDireccion = 0;
+                    _motor->cambiarAnimacion(5,*i,1);
                     if(!hecho)
                     {
                         //Moverse estableciendo una direccion de movimiento 
@@ -381,6 +384,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
                     posJugador.vZ = _jugador->getZ();
                     if(this->getTimeDefenderse() <= 0)
                     {
+                        _motor->cambiarAnimacion(5,*i,4);
                         this->setTimeDefenderse(constantes.TIEMPO_DEFENSA);
                         this->setDefenderse(true);
                     }
@@ -401,6 +405,7 @@ void Guardian::UpdateGuardian(short *i, int* _jug, std::vector<ZonaEscondite*> &
 
             case EN_MERODEA: //El Guardian merodea
             {
+                _motor->cambiarAnimacion(5,*i,0);
                 if(modo == MODO_DEFAULT)
                 {
                     //this->ver(constantes.DOS, constantes.SEIS * constantes.CINCO);

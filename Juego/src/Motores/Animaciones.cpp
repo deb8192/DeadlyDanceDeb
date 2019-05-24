@@ -100,14 +100,18 @@ void Animaciones::ProcesarAnimacion(unsigned int frame_actual)
         if(_ejecucion->GetTermina())
         {                  // std::cout << " entro en procesar animacion " << _ejecucion->GetSiguiente()->GetFinal() << std::endl;
             //esta puesto que termina entonces debemos hacer que termine saltando al estado que ponga
-            if(frame_actual+2 >= _ejecucion->GetFinal() && _ejecucion->GetSalta())
+            if((frame_actual >= _ejecucion->GetInicio() && frame_actual <= _ejecucion->GetFinal()))
             {
-                //saltamos al siguiente estado automaticamente
-                if(_ejecucion->GetSiguiente() != nullptr)
+                if(frame_actual+2 >= _ejecucion->GetFinal() && _ejecucion->GetSalta())
                 {
-                    cambio = true;
-                    _ejecucion = _ejecucion->GetSiguiente();
+                    //saltamos al siguiente estado automaticamente
+                    if(_ejecucion->GetSiguiente() != nullptr)
+                    {
+                        cambio = true;
+                        _ejecucion = _ejecucion->GetSiguiente();
+                    }
                 }
+                return;
             }
             return;
         }
@@ -119,7 +123,7 @@ void Animaciones::CambiarEstado(unsigned int e, unsigned int start, unsigned int
     if(_ejecucion != nullptr && _animaciones != nullptr && ExisteEstado(e))
     {
         if(_ejecucion != _animaciones[e])
-        {
+        { 
             if((!_ejecucion->GetTermina()) || actual >= _ejecucion->GetFinal())//la logica prevalece sobre el usuario
             {
                 cambio = true;
