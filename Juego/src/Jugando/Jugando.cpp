@@ -447,7 +447,6 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
-    Constantes constantes;
     //esto es para que espere 5 segundos antes de reanudar/cortar sonidos al cambiar de sala
    if(oirMuerteOmni!= 0.0f && _controladorTiempo->CalcularTiempoPasado(oirMuerteOmni)/1000 > 5.0f)
    {
@@ -475,7 +474,10 @@ void Jugando::Update()
    if(_controladorTiempo->CalcularTiempoPasado(startPlayTime)/1000 > 20.0f && nivelJ == 8)
    {
        //para que pueda moverse al decir el mensaje de bienvenida del nivel nuevo
-        poderEmpezar = true;
+       if((enSalaBoss && enCentroSalaBoss) || !enSalaBoss)
+        {
+            poderEmpezar = true;
+        }
    }
    else if(nivelJ == 7)
    {
@@ -777,14 +779,14 @@ void Jugando::Update()
                     {
                         this->RespawnEnemigosBoss();
                     }
-                    /*if((enSalaBoss && poderEmpezar && enCentroSalaBoss) || !enSalaBoss)
-                    {*/
+                    if((enSalaBoss && poderEmpezar && enCentroSalaBoss) || !enSalaBoss)
+                    {
                         if (_enemPideAyuda) {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                         } else {
                             _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                         }
-                    //}
+                    }
                     short paredCol = _enemigos[i]->GetParedRota();
                     if(paredCol >= 0)
                     {
@@ -1187,7 +1189,6 @@ void Jugando::UpdateIA()
         _motora->getEvent("MuertePerseguido2")->stop();
     }
 
-    Constantes constantes;
     bool cercaJugador = false;
     /* *********** Teclas para probar cosas *************** */
     // Bajar vida
@@ -1211,7 +1212,7 @@ void Jugando::UpdateIA()
         if((!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
         || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
         {
-            _jugador->generarSonido(constantes.NUEVE * constantes.SEIS, constantes.CINCO, constantes.UNO);
+            _jugador->generarSonido(constantes.TAMANYO_ONDA, constantes.CINCO, constantes.UNO);
 
             if(nivelJ == 8)
             {
@@ -1855,7 +1856,6 @@ void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
 */
 void Jugando::RespawnEnemigosBoss()
 {
-    Constantes constantes;
     int x = 0.0f;
     int y = 0.0f;
     int z = 0.0f;
@@ -1984,7 +1984,6 @@ void Jugando::RespawnEnemigosBoss()
 */
 void Jugando::RespawnEnemigos()
 {
-    Constantes constantes;
     int x = 0.0f;
     int y = 0.0f;
     int z = 0.0f;
@@ -2509,7 +2508,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
             //Comprueba las llaves que tiene el jugador
             while(i < _jugador->GetLlaves().size() && !coincide)
             {
-                if(_jugador->GetLlaves().at(i)->GetCodigoPuerta() == _puerta->getCodigo())
+                if(_jugador->GetLlaves().at(i) && _jugador->GetLlaves().at(i)->GetCodigoPuerta() == _puerta->getCodigo())
                 {
                     //Si el jugador tiene la llave cuyo codigo coincide con la puerta la abre
                     coincide = true;
@@ -2522,7 +2521,6 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                 bool abrir = _puerta->accionar();
                 if(abrir)
                 {
-                    if(_puerta->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
                     {
                         if(nivelJ == 7)
                         {
@@ -2537,6 +2535,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
 
                         enSalaBoss = true;
                         poderEmpezar = false;
+                        _jugador->SetSala(_jugador->GetSala()->getSalidas()[0]);
                         coordenadasCentroSalaBoss.vX = _jugador->GetSala()->getSizes()[2];
                         coordenadasCentroSalaBoss.vY = _jugador->GetSala()->getSizes()[3];
                         coordenadasCentroSalaBoss.vZ = _jugador->GetSala()->getSizes()[4];
@@ -2897,7 +2896,6 @@ void Jugando::CrearEnemigoArana()
 
 void Jugando::CargarBossEnMemoria()
 {
-    Constantes constantes;
     int boss = _boss->GetEnemigo();
     float x = _boss->getX();
     float y = _boss->getY();

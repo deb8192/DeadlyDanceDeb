@@ -33,6 +33,7 @@ using Constantes = struct ValoresConstantes
     const short CIEN = 100;
     const short TIEMPO_RESPAWN = 30;
     const int MAX_VIDA_BOSS_PELIGRO = 50;
+    const int TAMANYO_ONDA = 54;
     const float TIEMPO_DEFENSA = 1.5f;
     const float TIEMPO_MERODEAR = 1.5f;
     const float TIEMPO_EMBESTIR = 2.0f;
