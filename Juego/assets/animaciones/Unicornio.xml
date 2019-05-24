@@ -1,5 +1,5 @@
 <!--<Animacion nombre="" inicio="" final="" bucle="" salto="" dondesaltar="" terminar="" velocidad=""/>-->
-<Animaciones numeroAnimaciones="9">
+<Animaciones numeroAnimaciones="10">
 	<!--0--><Animacion nombre="Andar" inicio="1" final="27" bucle="true" salto="false" terminar="false" velocidad="10"></Animacion>
 	<!--1--><Animacion nombre="Correr" inicio="1" final="27" bucle="true" salto="false" terminar="false" velocidad="16"></Animacion>
 	<!--2--><Animacion nombre="Defenderse" inicio="28" final="49" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="16"></Animacion>

@@ -23,7 +23,7 @@ Animaciones::Animaciones()
                 delete _animaciones[i];
             }
         }
-        //delete [] _animaciones;
+        delete [] _animaciones;
     }
  }
 

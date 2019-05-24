@@ -366,6 +366,39 @@ void Jugando::ManejarEventos() {
         _jugador->setNewPosiciones(242+desplaza, 0, 490);
         _jugador->initPosicionesFisicas((242+desplaza)/2, 0/2, 490/2);
         enSalaBoss = true;
+        enCentroSalaBoss = true;
+
+            int i = _puertas.size() - constantes.UNO;
+            bool puertaBossCerrada = false;
+            bool abrir = false;
+            float rot = 0.0f;
+            while(i >= constantes.CERO && !puertaBossCerrada)
+            {
+                if(_puertas[i]->getCodigo() == constantes.PUERTA_BOSS)
+                {
+                    Puerta* _puerta = _puertas.at(i);
+                    abrir = _puerta->accionar();
+                    _puerta->accionar();
+                    abrir = _puerta->accionar();
+                    rot = (constantes.PI_MEDIOS + constantes.PI_CUARTOS);
+                    if(abrir)
+                    {   //Se abre/acciona la puerta / el mecanismo
+                        _puerta->GirarPuerta(rot, true);
+                    }
+                    else
+                    {   //Se cierra/desacciona la puerta / el mecanismo
+                        _puerta->GirarPuerta(-rot, true);
+                    }
+                    _puerta = nullptr;
+                    puertaBossCerrada = true;
+                }
+                else
+                {
+                    i--;
+                } 
+            }
+            poderEmpezar = true;
+
         CargarBossEnMemoria();
         _motor->ResetKey(KEY_B);
     }
