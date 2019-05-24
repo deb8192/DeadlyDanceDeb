@@ -1506,7 +1506,7 @@ void Jugando::Render()
             else
             {
                 mov_weapon_posX=-2.0;
-                mov_weapon_posZ=-1.5;
+                mov_weapon_posZ=-1.7;
                 if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-2.6;
                 mov_weapon_posY=5.0;
                 mov_weapon_rotX=90;
@@ -1568,7 +1568,7 @@ void Jugando::Render()
                     _motor->EraseProyectil();
                     proyectilFuera = true;
                 }
-                mov_weapon_posX=-0.7;
+                mov_weapon_posX=-2.0;
                 mov_weapon_posZ=-0.5;
                 if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-1.8;
                 mov_weapon_posY=4.5;
@@ -1609,6 +1609,7 @@ void Jugando::Render()
                 mov_weapon_posX = 2;
                 mov_weapon_posZ = 2;
                 mov_weapon_posY = 5.5;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posY = 5.8;
             }
             else if(_jugador->getTimeAt() <= 0.0f)
             {
