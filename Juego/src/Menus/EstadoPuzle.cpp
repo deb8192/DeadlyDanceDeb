@@ -165,7 +165,6 @@ void EstadoPuzle::ManejarEventos()
     {
         comprobarEventosHanoi();
     }
-    
 }
 
 // Vuelve al juego
@@ -295,24 +294,30 @@ void EstadoPuzle::comprobarGanar()
 
 void EstadoPuzle::crearFichasPila()
 {
-    int posY = 0;
-    for (int tam=opciones; tam>0; tam--) {
-
-        #ifdef WEMOTOR
-            //codigo motor catopengl
-            _motor->CrearFichas(IZQ, posY, tam);
-        #else
-            //codigo motor irrlicht
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        int posY_OpenGL = 400;
+        for (int tam=opciones; tam>0; tam--) 
+        {
+            _motor->CrearFichas(100, posY_OpenGL, tam); //X, Y, tamanyo
+            ficha = new PilaFichas(tam, posY_OpenGL);
+            pilaIzq.push(ficha);
+            posY_OpenGL-=80;
+        }
+    #else
+        //codigo motor irrlicht
+        int posY_irr = 0;
+        for (int tam=opciones; tam>0; tam--)
+        {
             int r = rand() % (256 + 100); // +100 para que no salga blanco
             int g = rand() % (256 + 0);
             int b = rand() % (256 + 0);
-            _motor->CrearFichas(IZQ, posY, tam, r, g, b);
-        #endif
-
-        ficha = new PilaFichas(tam, posY);
-        pilaIzq.push(ficha);
-        posY++;
-    }
+            _motor->CrearFichas(IZQ, posY_irr, tam, r, g, b);
+            ficha = new PilaFichas(tam, posY_irr);
+            pilaIzq.push(ficha);
+            posY_irr++;
+        }
+    #endif
 }
 
 bool EstadoPuzle::comprobarPilaVacia(int pila)

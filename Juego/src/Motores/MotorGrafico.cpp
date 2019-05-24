@@ -4188,6 +4188,13 @@ void MotorGrafico::BorrarGuiPuzzle(unsigned int tipo, unsigned int opciones)
         else
         {
             BorrarElemento(idsEventos::Enum::GUI_ID_REINICIAR_HANOI);
+
+            tam = _imagenesF.size();
+            for(unsigned int i=0; i < tam; i++)
+            {
+                BorrarElemento(_imagenesF.at(i));
+            }
+            _imagenesF.clear();
         }
 
     #else
@@ -4356,7 +4363,7 @@ void MotorGrafico::PosicionCamaraEnPuzzles()
     #endif
 }
 
-void MotorGrafico::CrearMeshFicha(float tamanyo, int r, int g, int b)
+void MotorGrafico::CrearMeshFicha(int tamanyo, int r, int g, int b)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
@@ -4374,11 +4381,31 @@ void MotorGrafico::CrearMeshFicha(float tamanyo, int r, int g, int b)
     #endif
 }
 
-void MotorGrafico::CrearFichas(int posX, int posY, float tamanyo,
+void MotorGrafico::CrearFichas(int posX, int posY, int tamanyo,
     int r, int g, int b)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+                // TO DO: esto es asi por el problema entre string y const char
+        switch(tamanyo)
+        {
+            case 2:
+                _imgP = _interfaz->AddImagen("assets/puzzles/fichas/ficha2.png",posX,posY,1.0f);
+            break;
+
+            case 3:
+                _imgP = _interfaz->AddImagen("assets/puzzles/fichas/ficha3.png",posX,posY,1.0f);
+            break;
+
+            default: // case 1:
+                _imgP = _interfaz->AddImagen("assets/puzzles/fichas/ficha1.png",posX,posY,1.0f);
+            break;
+        }
+
+        unsigned short nue = ++IDP;
+        _interfaz->DefinirIdPersonalizado(_imgP,nue);
+        _imagenesF.push_back(nue);
+        _imgP = 0;
     #else
         //codigo motor irrlicht
         CrearMeshFicha(tamanyo, r, g, b);
