@@ -771,7 +771,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
     _enemigos.back()->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
     _enemigos.back()->setBarraAtEs(0);
     _enemigos.back()->definirSala(sala);//le pasamos la sala en donde esta
-    _enemigos.back()->setAtaque(5);
+    _enemigos.back()->setAtaque(10);
     _enemigos.back()->setArmaEspecial(100);
     _enemigos.back()->setTimeAtEsp(0.0f);
     _enemigos.back()->setDanyoCritico(50);
@@ -798,7 +798,7 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
         _boss = new MuerteBoss(x,y,z, 650); // Posiciones, vida
         _boss->setDanyoCritico(80);
         _boss->setProAtaCritico(20);
-        _boss->setAtaque(20);
+        _boss->setAtaque(30);
         _boss->SetMultiplicadorAtEsp(1.75);
     }
     else
@@ -806,7 +806,7 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
         _boss = new TravornioBoss(x,y,z, 500); // Posiciones, vida
         _boss->setDanyoCritico(65);
         _boss->setProAtaCritico(15);
-        _boss->setAtaque(15);
+        _boss->setAtaque(25);
         _boss->SetMultiplicadorAtEsp(1.5);
     }
     

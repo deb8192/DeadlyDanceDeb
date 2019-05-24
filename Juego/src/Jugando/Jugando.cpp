@@ -2061,7 +2061,7 @@ void Jugando::RespawnEnemigosBoss()
             _enemigos.back()->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
             _enemigos.back()->setBarraAtEs(0);
             _enemigos.back()->definirSala(_zonasRespawn[zonaElegida]->GetSala());//le pasamos la sala en donde esta
-            _enemigos.back()->setAtaque(5);
+            _enemigos.back()->setAtaque(10);
             _enemigos.back()->setArmaEspecial(100);
             _enemigos.back()->setTimeAtEsp(0.0f);
             _enemigos.back()->setDanyoCritico(50);
@@ -2221,7 +2221,7 @@ void Jugando::RespawnEnemigos()
             _enemigos.back()->initPosicionesFisicasAtaque(x/2,y/2,z/2);//le pasamos las coordenadas donde esta
             _enemigos.back()->setBarraAtEs(0);
             _enemigos.back()->definirSala(_zonasRespawn[zonaElegida]->GetSala());//le pasamos la sala en donde esta
-            _enemigos.back()->setAtaque(5);
+            _enemigos.back()->setAtaque(10);
             _enemigos.back()->setArmaEspecial(100);
             _enemigos.back()->setTimeAtEsp(0.0f);
             _enemigos.back()->setDanyoCritico(50);
@@ -2633,6 +2633,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                 bool abrir = _puerta->accionar();
                 if(abrir)
                 {
+                    if(_puerta->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
                     {
                         if(nivelJ == 7)
                         {
