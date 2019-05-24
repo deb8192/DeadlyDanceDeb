@@ -2904,6 +2904,7 @@ void Jugando::AbrirPantallaPuzzle()
 {
     _motora->getEvent("AparecePuzzle")->start();
     ganarPuzzle = false;
+    _motor->DeshabilitarDinero();
     Juego::GetInstance()->estado.CambioEstadoPuzle((int*)cargPuzzles.GetPuzzle(2));
 }
 

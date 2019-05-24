@@ -11,6 +11,7 @@ EstadoPuzle::~EstadoPuzle()
 {
     _motor = nullptr;
     _puzzle = nullptr;
+    pulsado=false;
 }
 
 void EstadoPuzle::Iniciar()
@@ -20,32 +21,42 @@ void EstadoPuzle::Iniciar()
     _motor->CargarFondoPuzzle();
     _motor->ActivarFuenteDefault();
 
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        // No es necesario
+    #else
+        //codigo motor irrlicht
+        _motor->PosicionCamaraEnPuzzles();
+    #endif
+    
     width = _motor->GetWidth();
     height = _motor->GetHeight();
-
-    _motor->CrearBoton(560,height-115,720,height-50, GUI_ID_ATRAS_PUZ, L"          Atras", L"Salir del puzzle");
-    _motor->CrearTextoPuzzles(_puzzle->GetEnunciado(), 60,80,700,110); // Parametros: texto, x1, y1, x2, y2
-
     tipo = _puzzle->GetTipo();
     opciones = 0;
     solucion = _puzzle->GetSolucion();
+    opciones = _puzzle->GetOpciones();
+
+    width_aux = 0;
+    height_aux = (height/2)+100;
+    x_linea1 = 0;
+    x_linea2 = 0;
+
+    int yIMG = height_aux-125;
+    int xIMG = 20;
+    int anchoBtn = 40;
+    int altoBtn = 30;
+
+    _motor->CrearBoton(560,height-115,720,height-50, GUI_ID_ATRAS_PUZ,
+        L"           Atras", L"Salir del puzzle");
 
     if (tipo == P_ACERTIJO)
     {
         _motor->CrearTextoPuzzles("Acertijo", 40,60,200,80);
+        _motor->CrearTextoPuzzles(_puzzle->GetEnunciado(), 60,80,700,110); // Parametros: texto, x1, y1, x2, y2
         _motor->CrearTextoPuzzles("Ejemplo", (width-200),60,(width-160),80);
         
         // Imagen con la figura de ejemplo
         _motor->CargarIMGPuzzle(width-200, 80, _puzzle->GetImagen(0));
-
-        opciones = _puzzle->GetOpciones();
-        short width_aux = 0;
-
-        short height_aux = (height/2)+100;
-        short yIMG = height_aux-125;
-        short xIMG = 20;
-        short anchoBtn = 40;
-        short altoBtn = 30;
 
         if (opciones == 2)
         {
@@ -61,7 +72,7 @@ void EstadoPuzle::Iniciar()
         }
         else
         {
-            short altura = 160;
+            int altura = 160;
             width_aux = (width/8)-20;
             _motor->CrearBoton(width_aux*2,height_aux-altura,
                     width_aux+anchoBtn,(height_aux-altura)+altoBtn,
@@ -90,16 +101,32 @@ void EstadoPuzle::Iniciar()
     }
     else // Torres de Hanoi
     {
-        // Monta la interfaz dependiendo del tipo de puzzle
-        /*_motor->PuzzlesGui(GetTipo(), GetEnunciado(), GetOpciones());
-
         pasos = 0;
+        pulsado=false;
         pilaInicial = NO_SELECT; // Para colocar las fichas en pilaIzq
         pilaFinal = NO_SELECT;
+        fichaMover = 0;
+
+        // Monta la interfaz dependiendo del tipo de puzzle
+        _motor->CrearTextoPuzzles("Torres de hanoi", 40,60,200,80);
+        _motor->CrearEnunciadoHanoi(_puzzle->GetEnunciado(), 60,80,700,110); // Parametros: texto, x1, y1, x2, y2
+        _motor->CrearTextoPasos(50, 530, 100, 50);
+        _motor->CrearBoton(560,height-160,720,height-50, GUI_ID_REINICIAR_HANOI,
+            L"        Reiniciar", L"Reiniciar puzzle");
+
+        width_aux = (width-2)/6;
+        _motor->CrearTextoPuzzles("IZQ", width_aux,420,width_aux+anchoBtn,130);
+        _motor->CrearTextoPuzzles("CENTRO", width_aux*3,420,width_aux*3+anchoBtn,130);
+        _motor->CrearTextoPuzzles("DER", width_aux*5,420,width_aux*5+anchoBtn,130);
+
+        // Para la ventana de 800, 600
+        // width = 798, dejamos 1 punto a cada lado
+        width_aux = (width-2)/3;    // Dividimos la pantalla en 3 zonas
+        x_linea1 = width_aux;
+        x_linea2 = width_aux*2;
 
         // Rellenamos la pilaIzq
-        CrearFichasPila();
-        _motor->TextoPasos(pasos);*/
+        crearFichasPila();
     }
 }
 
@@ -113,7 +140,7 @@ void EstadoPuzle::Render()
 void EstadoPuzle::Update()
 {
     //cout << "Paso mas de 1 vez por aqui" <<endl;
-    //_motor->update_motorPuzzles(GetTipo());
+    _motor->UpdateMotorPuzzles(tipo, x_linea1, x_linea2);
 }
 
 void EstadoPuzle::ManejarEventos()
@@ -137,17 +164,16 @@ void EstadoPuzle::ManejarEventos()
     }
     else
     {
-        //ComprobarEventosHanoi();
+        comprobarEventosHanoi();
     }
-    
 }
 
 // Vuelve al juego
 void EstadoPuzle::atras()
 {
     _motor->BorrarGuiPuzzle(tipo, opciones);
-    Juego::GetInstance()->estado.QuitarPausa();
     _motor->HabilitarDinero();
+    Juego::GetInstance()->estado.QuitarPausa();
 }
 
 void EstadoPuzle::comprobarEventosOpciones()
@@ -174,7 +200,81 @@ void EstadoPuzle::comprobarEventosOpciones()
     }
 }
 
-void EstadoPuzle::corregirSolucion(unsigned short opcion)
+void EstadoPuzle::comprobarEventosHanoi()
+{
+    if(_motor->OcurreEvento(GUI_ID_REINICIAR_HANOI))
+    {
+        _motor->ResetEvento(GUI_ID_REINICIAR_HANOI);
+        if (pasos > 0) {
+            // Reiniciamos posiciones mallas fichas
+            _motor->ReiniciarHanoi();
+            reiniciarPilas();
+        }
+    }
+
+    _motor->ActualizarTextoPasos(pasos);
+
+    /*if((_motor->PulsadoClicIzq()) && (!_motor->EstaPulsado(MOUSE_MOVED)))
+    {
+        cout<<"Pulso solo"<<endl;
+        //pulsado=true;
+        std::vector<unsigned short> * vectorFichas = _motor->GetVectorFichas();
+        unsigned int cont = 0;
+        while ((!pulsado) && (cont < 3))
+        {
+            if(_motor->OcurreEvento((*vectorFichas)[cont]))
+            {
+                pulsado=true;
+                fichaMover = cont;
+            }
+            cont++;
+        }
+        cont = 0;*/
+        
+        /*if (pulsado)
+        {
+            //cout << "Objeto"<<endl;
+            // Obtenemos la zona seleccionada
+            pilaInicial = getZonaVentana();
+            // Comprobamos que la pila no este vacia
+            if (!comprobarPilaVacia(pilaInicial)) {
+                // Solo movemos la ficha si es la primera de la pila
+                if (!comprobarTopPila(_motor->GetFichaY()))
+                {
+                    _motor->DeseleccionarNodo();
+                    pilaInicial = NO_SELECT;
+                }
+            } else {
+                //cout << "Pila vacia"<<endl;
+                _motor->DeseleccionarNodo();
+                pilaInicial = NO_SELECT;
+            }
+        } else {
+            //cout << "Fondo"<<endl;
+            pilaInicial = NO_SELECT;se quedar
+        }*/
+    //}
+
+    /*if((_motor->PulsadoClicIzq()) &&se quedarsado(MOUSE_MOVED))) {
+        //cout<<"X: "<<_motor->GetPosicionRaton().X<<" Y: "<<_motor->GetPosicionRaton().Y<<endl;
+        cout<<"Arrastrar"<<endl;
+
+        if (pulsado)
+        {
+            _motor->CambiarPosicionImagen(fichaMover, _motor->GetPosicionRaton()[0], _motor->GetPosicionRaton()[1]);
+        }
+    }
+
+    if ((_motor->SueltoClicIzq()) && (pulsado))
+    {
+        //cout<<"Soltar"<<endl;
+        pulsado=false;
+        deseleccionarNodo();
+        _motor->ResetEventoMoveRaton();
+    }*/
+}
+
+void EstadoPuzle::corregirSolucion(int opcion)
 {
     _motor->ResetKey(LMOUSE_PRESSED_DOWN);
     _motor->BorrarGuiPuzzle(tipo, opciones);
@@ -186,113 +286,61 @@ void EstadoPuzle::corregirSolucion(unsigned short opcion)
     }
 }
 
-/*
-void EstadoPuzle::CrearFichasPila()
+void EstadoPuzle::comprobarGanar()
 {
-    
-    short posY = 0;
-    for (int tam=GetOpciones(); tam>0; tam--) {
+    int tam = pilaDer.size();
+    if (pasos <= solucion*2) {
+        // Comprobar fin de juego
+        if (tam == opciones) {
+            if (pilaDer.top()->GetTamayo() == 1) {
+                ficha = pilaDer.top();
+                pilaDer.pop();
+                if (pilaDer.top()->GetTamayo() == 2) {
 
-        short r = rand() % (256 + 100); // +100 para que no salga blanco
-        short g = rand() % (256 + 0);
-        short b = rand() % (256 + 0);
-        _motor->CrearFichas(posY, tam, r, g, b);
-
-        ficha = new PilaFichas(tam, posY);
-        pilaIzq.push(ficha);
-        posY++;
-    }
-}
-
-void EstadoPuzle::ComprobarEventosHanoi()
-{
-    if(_motor->OcurreEvento(GUI_ID_REINICIAR_HANOI))
-    {
-        _motor->ResetEvento(GUI_ID_REINICIAR_HANOI);
-        if (pasos > 0) {
-            // Reiniciamos posiciones mallas fichas
-            _motor->ReiniciarHanoi();
-            ReiniciarPilas();
-        }
-    }
-
-    if((_motor->PulsadoClicIzq()) && (!_motor->estaPulsado(MOUSE_MOVED)))
-    {
-        //cout<<"Pulso solo"<<endl;
-        pulsado=true;
-        if (_motor->SeleccionarNodo()) {
-            //cout << "Objeto"<<endl;
-
-            // Obtenemos la zona seleccionada
-            pilaInicial = _motor->GetZonaVentana();
-
-            // Comprobamos que la pila no este vacia
-            if (!ComprobarPilaVacia(pilaInicial)) {
-                // Solo movemos la ficha si es la primera de la pila
-                if (!ComprobarTopPila(_motor->GetFichaY()))
-                {
-                    _motor->DeseleccionarNodo();
-                    pilaInicial = NO_SELECT;
+                    cout << "Has ganado" << endl;
+                    Juego::GetInstance()->estado.ReanudarDesdePuzzle(true);
                 }
-            } else {
-                //cout << "Pila vacia"<<endl;
-                _motor->DeseleccionarNodo();
-                pilaInicial = NO_SELECT;
+                pilaDer.push(ficha);
             }
-
-        } else {
-            //cout << "Fondo"<<endl;
-            pilaInicial = NO_SELECT;
         }
-    }
+    } else {
 
-    if((_motor->PulsadoClicIzq()) && (_motor->estaPulsado(MOUSE_MOVED))) {
-        //cout<<"X: "<<_motor->GetPosicionRaton().X<<" Y: "<<_motor->GetPosicionRaton().Y<<endl;
-        //cout<<"Arrastrar"<<endl;
-        _motor->MoverFichas(pilaInicial);
+        cout << "Salta la araña" << endl;
+        Juego::GetInstance()->estado.ReanudarDesdePuzzle(false);
     }
-
-    if ((_motor->SueltoClicIzq()) && (pulsado))
-    {
-        //cout<<"Soltar"<<endl;
-        pulsado=false;
-        DeseleccionarNodo();
-        _motor->ResetEventoMoveRaton();
-    }
-    _motor->TextoPasos(pasos);
 }
 
-void EstadoPuzle::DeseleccionarNodo()
+void EstadoPuzle::crearFichasPila()
 {
-    // No mueve la ficha de zona
-    if (pilaInicial != NO_SELECT)
-    {
-        // Obtenemos la zona donde se suelta la ficha
-        pilaFinal = _motor->GetZonaVentana();
-
-        if (pilaInicial == pilaFinal)           // Misma zona
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        int img = 0;
+        int posY_OpenGL = 400;
+        for (int tam=opciones; tam>0; tam--) 
         {
-            _motor->RecolocarFicha(RecolocarFicha(), pilaInicial);
-        } else {                            // Distinta zona
-
-            if (ComprobarTamanyo()) {
-                pasos++;
-                SacarFicha();
-                _motor->RecolocarFicha(MeterFicha(), pilaFinal);
-                ComprobarGanar();
-
-            } else {
-                _motor->RecolocarFicha(RecolocarFicha(), pilaInicial);
-            }
+            img = _motor->CrearFichas(100, posY_OpenGL, tam); //X, Y, tamanyo
+            ficha = new PilaFichas(tam, posY_OpenGL);
+            ficha->SetIMG(img);
+            pilaIzq.push(ficha);
+            posY_OpenGL-=80;
         }
-    }
-
-    // Reiniciamos valores
-    pilaInicial = NO_SELECT;
-    pilaFinal = NO_SELECT;
+    #else
+        //codigo motor irrlicht
+        int posY_irr = 0;
+        for (int tam=opciones; tam>0; tam--)
+        {
+            int r = rand() % (256 + 100); // +100 para que no salga blanco
+            int g = rand() % (256 + 0);
+            int b = rand() % (256 + 0);
+            _motor->CrearFichas(IZQ, posY_irr, tam, r, g, b);
+            ficha = new PilaFichas(tam, posY_irr);
+            pilaIzq.push(ficha);
+            posY_irr++;
+        }
+    #endif
 }
 
-bool EstadoPuzle::ComprobarPilaVacia(short pila)
+bool EstadoPuzle::comprobarPilaVacia(int pila)
 {
     switch (pila) {
         case IZQ:
@@ -316,7 +364,7 @@ bool EstadoPuzle::ComprobarPilaVacia(short pila)
     return false;
 }
 
-bool EstadoPuzle::ComprobarTopPila(short fichaY)
+bool EstadoPuzle::comprobarTopPila(int fichaY)
 {
     switch (pilaInicial) {
         case IZQ:
@@ -341,10 +389,10 @@ bool EstadoPuzle::ComprobarTopPila(short fichaY)
 }
 
 // Si la ficha a mover es mas peque que donde va, se mueve
-bool EstadoPuzle::ComprobarTamanyo()
+bool EstadoPuzle::comprobarTamanyo()
 {
-    short tamPI = -1;
-    short tamPF = -1;
+    int tamPI = -1;
+    int tamPF = -1;
     switch (pilaInicial) {
         case IZQ:
             tamPI = pilaIzq.top()->GetTamayo();
@@ -361,19 +409,19 @@ bool EstadoPuzle::ComprobarTamanyo()
 
     switch (pilaFinal) {
         case IZQ:
-            if (!ComprobarPilaVacia(pilaFinal)) {
+            if (!comprobarPilaVacia(pilaFinal)) {
                 tamPF = pilaIzq.top()->GetTamayo();
             }
         break;
 
         case CENTRO:
-            if (!ComprobarPilaVacia(pilaFinal)) {
+            if (!comprobarPilaVacia(pilaFinal)) {
                 tamPF = pilaCentro.top()->GetTamayo();
             }
         break;
 
         case DER:
-            if (!ComprobarPilaVacia(pilaFinal)) {
+            if (!comprobarPilaVacia(pilaFinal)) {
                 tamPF = pilaDer.top()->GetTamayo();
             }
         break;
@@ -391,9 +439,9 @@ bool EstadoPuzle::ComprobarTamanyo()
     return false;
 }
 
-short EstadoPuzle::RecolocarFicha()
+int EstadoPuzle::recolocarFicha()
 {
-    short y = -1;
+    int y = -1;
     switch(pilaInicial)
     {
         case IZQ:
@@ -411,7 +459,7 @@ short EstadoPuzle::RecolocarFicha()
     return y;
 }
 
-void EstadoPuzle::SacarFicha()
+void EstadoPuzle::sacarFicha()
 {
     switch(pilaInicial)
     {
@@ -432,9 +480,9 @@ void EstadoPuzle::SacarFicha()
     }
 }
 
-short EstadoPuzle::MeterFicha()
+int EstadoPuzle::meterFicha()
 {
-    short y = 0;
+    int y = 0;
     switch(pilaFinal)
     {
         case IZQ:
@@ -464,11 +512,13 @@ short EstadoPuzle::MeterFicha()
     return y;
 }
 
-void EstadoPuzle::ReiniciarPilas()
+void EstadoPuzle::reiniciarPilas()
 {
     // Reiniciamos las variables
     pilaInicial = NO_SELECT;
     pasos = 0;
+    pulsado=false;
+    fichaMover = 0;
 
     // Reiniciamos la pila de fichas
     while (!pilaIzq.empty() )
@@ -493,207 +543,80 @@ void EstadoPuzle::ReiniciarPilas()
     }
 
     // Rellenamos la pilaIzq
-    short posY = 0;
-    for (int tam=GetOpciones(); tam>0; tam--) {
+    int posY = 0;
+    for (int tam=opciones; tam>0; tam--) {
         ficha = new PilaFichas(tam, posY);
         pilaIzq.push(ficha);
         posY++;
     }
 }
 
-void EstadoPuzle::ComprobarGanar()
+void EstadoPuzle::deseleccionarNodo()
 {
-    short tam = pilaDer.size();
-    if (pasos <= GetSolucion()*2) {
-        // Comprobar fin de juego
-        if (tam == GetOpciones()) {
-            if (pilaDer.top()->GetTamayo() == 1) {
-                ficha = pilaDer.top();
-                pilaDer.pop();
-                if (pilaDer.top()->GetTamayo() == 2) {
-                    cout << "Has ganado" << endl;
-                }
-                pilaDer.push(ficha);
+    // No mueve la ficha de zona
+    if (pilaInicial != NO_SELECT)
+    {
+        // Obtenemos la zona donde se suelta la ficha
+        pilaFinal = getZonaVentana();
+
+        if (pilaInicial == pilaFinal) // Misma zona
+        {
+            //_motor->RecolocarFicha(recolocarFicha(), pilaInicial);
+        }
+        else // Distinta zona
+        {
+            if (comprobarTamanyo())
+            {
+                pasos++;
+                sacarFicha();
+                //_motor->RecolocarFicha(meterFicha(), pilaFinal);
+                comprobarGanar();
+            }
+            else
+            {
+                //_motor->RecolocarFicha(recolocarFicha(), pilaInicial);
             }
         }
-    } else {
-        cout << "Salta la araña" << endl;
     }
-}*/
 
+    // Reiniciamos valores
+    pilaInicial = NO_SELECT;
+    pilaFinal = NO_SELECT;
+}
 
+int EstadoPuzle::getZonaVentana()
+{
+    #ifdef WEMOTOR
+        //codigo motor catopengl
+        int posX = (int)_motor->GetPosicionRaton()[0];
+    #else
+        //codigo motor irrlicht
+        int posX = _motor->GetPosicionRaton().X;
+    #endif
 
-
-
+    if ((posX > 0) && (posX <= width)) {
+        if ((posX > 0) && (posX <= width_aux)) {
+            return IZQ;
+        } else if ((posX > width_aux) && (posX <= width_aux*2)) {
+            return CENTRO;
+        } else {
+            return DER;
+        }
+    }
+    return NO_SELECT;// Fuera de ventana
+}
 
 
 // MotorGrafico *************************************************
-    /*// Funciones para puzzles
-    void PosicionCamaraEnPuzzles();
-    void updateMotorPuzzles(short tipo);
-    void PuzzlesGui(short tipo, std::string enun, short opciones);
-    void TextoPasos(short pasos);
-    void CrearFichas(short posY, float tamanyo,
-            int r, int g, int b);
-    short GetZonaVentana();
+/*  
     bool SeleccionarNodo();
     void DeseleccionarNodo();
-    short GetFichaY();
-    void MoverFichas(short pila);
-    void RecolocarFicha(short y, short z);
-    void ReiniciarHanoi();
-	void CrearMeshFicha(float tamanyo, int r, int g, int b);
+    int GetFichaY();
+    void MoverFichas(int pila);
+    void RecolocarFicha(int y, int z);
+*/
 
-
-             // Objetos y funciones para puzzles
-                IGUIStaticText* _myTextBox;
-
-                IMesh* _fichaMesh;                         // Malla
-                IMeshSceneNode* _ficha;                    // Nodo
-                std::vector<IMeshSceneNode*> fichasMesh;  // Lista de nodos (fichas)
-
-                // Para seleccionar nodos
-                position2di initialCursorPosition;        // Posicion del clic raton
-                position2di initialObjectPosition;        // Posicion del objeto que intersecta con el ray
-                ISceneNode* _nodoSeleccionado;
-
-                // Ventana
-                short x_linea1, x_linea2;
-
-                enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };*/
-
-
-
-
-
-
-
-/*_myTextBox = nullptr;
-_fichaMesh = nullptr;
-_ficha = nullptr;
-_nodoSeleccionado = nullptr;
-_img = nullptr;
-_puzParticleTexture = nullptr;
-WIDTH_AUX = 0; WIDTH = 0; HEIGHT = 0;
-x_linea1 = 0; x_linea2 = 0;*/
-
-/*void MotorGrafico::PosicionCamaraEnPuzzles()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        _camera->setPosition(vector3df(14, 2, 0)); // No cambiar la Y, si nos la seleccion tendra errores
-    #endif
-}
-
-
-void MotorGrafico::PuzzlesGui(short tipo, std::string enun, short opciones)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        short height_aux = (HEIGHT/2)+100;
-        short yIMG = height_aux-125;
-        short xIMG = 20;
-        short anchoBtn = 40;
-        short altoBtn = 30;
-
-        if (tipo == P_HANOI)
-        {
-            
-                _guienv->addStaticText(L"Torres de Hanoi", rect<s32>(0,0,200,20), false);
-
-                // Reiniciar
-                _guienv->addButton(rect<s32>(700,HEIGHT-90,750,HEIGHT-60), 0,
-                    GUI_ID_REINICIAR_HANOI,L"Reiniciar", L"Reinicia el juego");
-
-                _myTextBox = _guienv->addStaticText(L"Pasos: ", rect<s32>(60,(WIDTH/2)-10,100,(WIDTH/2)+30), false);
-
-                WIDTH_AUX = (WIDTH-2)/6;
-                _guienv->addStaticText(L"IZQ", rect<s32>(WIDTH_AUX,100,WIDTH_AUX+anchoBtn,130), false);
-                _guienv->addStaticText(L"CENTRO", rect<s32>(WIDTH_AUX*3,100,WIDTH_AUX*3+anchoBtn,130), false);
-                _guienv->addStaticText(L"DER", rect<s32>(WIDTH_AUX*5,100,WIDTH_AUX*5+anchoBtn,130), false);
-
-                // Para la ventana de 800, 600
-                // Width = 798, dejamos 1 punto a cada lado
-                WIDTH_AUX = (WIDTH-2)/3;    // Dividimos la pantalla en 3 zonas
-                x_linea1 = WIDTH_AUX;
-                x_linea2 = WIDTH_AUX*2;
-        }
-    #endif
-}
-
-void MotorGrafico::TextoPasos(short pasos)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        stringw str = L"Pasos: ";
-        str += pasos;
-        _myTextBox->setText(str.c_str());
-        _myTextBox = nullptr;
-    #endif
-}
-
-void MotorGrafico::CrearMeshFicha(float tamanyo, int r, int g, int b)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        //_fichaMesh = _geometryCreator->createCubeMesh(vector3df(tamanyo));
-        _fichaMesh = _geometryCreator->createCylinderMesh(
-            tamanyo,    //radius
-            1,          //length
-            50,         //tesselation
-            SColor(0, r, g, b));
-
-        // insensible a la iluminacion
-        _fichaMesh->setMaterialFlag(irr::video::EMF_LIGHTING, false);
-    #endif
-}
-
-void MotorGrafico::CrearFichas(short posY, float tamanyo,
-    int r, int g, int b)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        CrearMeshFicha(tamanyo, r, g, b);
-        _ficha = _smgr->addMeshSceneNode(_fichaMesh);
-        _ficha->setPosition(vector3df(0, posY, IZQ));
-        _ficha->setID(tamanyo);
-
-        // La anyadimos a la lista
-        fichasMesh.push_back(move(_ficha));
-        _ficha = nullptr;
-    #endif
-}
-
-short MotorGrafico::GetZonaVentana()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        short posX = GetPosicionRaton().X;
-        if ((posX > 0) && (posX <= WIDTH)) {
-            if ((posX > 0) && (posX <= WIDTH_AUX)) {
-                return IZQ;
-            } else if ((posX > WIDTH_AUX) && (posX <= WIDTH_AUX*2)) {
-                return CENTRO;
-            } else {
-                return DER;
-            }
-        }
-        return NO_SELECT;// Fuera de ventana
-    #endif
-}
-
+/*
 bool MotorGrafico::SeleccionarNodo()
 {
     #ifdef WEMOTOR
@@ -705,7 +628,6 @@ bool MotorGrafico::SeleccionarNodo()
         // Posicion, idBitMask (0=deshabilitada), bNoDebugObjects (true=No tiene en cuenta los objetos de depuracion)
         _nodoSeleccionado = _collmgr->getSceneNodeFromScreenCoordinatesBB(
             _device->getCursorControl()->getPosition(),0,true);
-
         // Si hay un nodo seleccionado
         if(_nodoSeleccionado)
         {
@@ -714,7 +636,6 @@ bool MotorGrafico::SeleccionarNodo()
             // Calcula la posición de la pantalla 2d desde una posición 3d.
             initialObjectPosition = _collmgr->getScreenCoordinatesFrom3DPosition(
                 _nodoSeleccionado->getAbsolutePosition(), _camera);
-
             if (_nodoSeleccionado->getID() != -1) { // Comprobamos que no sea el fondo
                 return true;
             }
@@ -726,7 +647,6 @@ bool MotorGrafico::SeleccionarNodo()
         return false;
     #endif
 }
-
 void MotorGrafico::DeseleccionarNodo()
 {
     #ifdef WEMOTOR
@@ -736,8 +656,7 @@ void MotorGrafico::DeseleccionarNodo()
         _nodoSeleccionado = 0;
     #endif
 }
-
-short MotorGrafico::GetFichaY()
+int MotorGrafico::GetFichaY()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
@@ -746,8 +665,7 @@ short MotorGrafico::GetFichaY()
         return _nodoSeleccionado->getAbsolutePosition().Y;
     #endif
 }
-
-void MotorGrafico::MoverFichas(short pila)
+void MotorGrafico::MoverFichas(int pila)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
@@ -756,12 +674,10 @@ void MotorGrafico::MoverFichas(short pila)
         if ((_nodoSeleccionado) && (pila != NO_SELECT))
         {
             plane3df const planeXZ(_nodoSeleccionado->getAbsolutePosition(), vector3df(1.f, 0.f, 0.f));
-
             position2di currentCursorPosition(_device->getCursorControl()->getPosition());
             position2di effectiveObjectPosition = initialObjectPosition + currentCursorPosition - initialCursorPosition;
             line3df ray(_collmgr->getRayFromScreenCoordinates(effectiveObjectPosition, _camera));
             vector3df intersectWithPlane;
-
             if(planeXZ.getIntersectionWithLine(ray.start, ray.getVector(), intersectWithPlane))
             {
                 _nodoSeleccionado->setPosition(intersectWithPlane);
@@ -769,60 +685,14 @@ void MotorGrafico::MoverFichas(short pila)
         }
     #endif
 }
-
-void MotorGrafico::RecolocarFicha(short y, short z)
+void MotorGrafico::RecolocarFicha(int y, int z)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
     #else
         //codigo motor irrlicht
-        short x = _nodoSeleccionado->getAbsolutePosition().X;
+        int x = _nodoSeleccionado->getAbsolutePosition().X;
         _nodoSeleccionado->setPosition(vector3df(x, y, z));
     #endif
 }
-
-void MotorGrafico::ReiniciarHanoi()
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        short tam = fichasMesh.size();
-        short posY=0;
-        for (int pos = 0; pos<tam; pos++)
-        {
-            fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
-            posY++;
-        }
-    #endif
-}
-
-void MotorGrafico::updateMotorPuzzles(short tipo)
-{
-    #ifdef WEMOTOR
-        //codigo motor catopengl
-    #else
-        //codigo motor irrlicht
-        _driver->beginScene(true, true, SColor(255,255,255,255));//fondo blanco
-        _smgr->drawAll();
-        _guienv->drawAll();
-
-         Probando a dibujar objetos 2D
-        //Rectangulo
-        _driver->draw2DRectangle(SColor(255, 255, 128, 64), rect<s32>(40, 40, 200, 200));
-
-        //Poligono
-        _driver->draw2DPolygon(position2d<s32>(100, 300), 50.f, SColor(128, 40, 80, 16), 6);*/
-
-        /*if (tipo == P_HANOI)
-        {
-		// Lineas para dividir la pantalla
-		_driver->draw2DLine(position2d<s32>(x_linea1 , 200),
-		    position2d<s32>(x_linea1, 400 ) , SColor(255, 0, 0, 0));
-		_driver->draw2DLine(position2d<s32>(x_linea2 , 200),
-		    position2d<s32>(x_linea2, 400 ) , SColor(255, 0, 0, 0));
-        }
-
-        _driver->endScene();
-    #endif
-}*/
+*/
