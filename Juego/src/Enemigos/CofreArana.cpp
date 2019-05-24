@@ -25,7 +25,6 @@ CofreArana::CofreArana(float nX, float nY, float nZ, int maxVida,
     idCofre = -1;
     sala = salaC;
     activada = false;
-    primeraVezActivada = false;
 }
 
 CofreArana::~CofreArana()
@@ -48,7 +47,6 @@ CofreArana::~CofreArana()
 
     idCofre=0;
     activada = false;
-    primeraVezActivada = false;
 }
 
 /***************** RunIA *****************
@@ -305,11 +303,6 @@ bool CofreArana::GetActivada()
     return activada;
 }
 
-bool CofreArana::GetPrimeraVezActivada()
-{
-    return primeraVezActivada;
-}
-
 void CofreArana::SetIdCofre(int idC)
 {
     idCofre = idC;
@@ -333,9 +326,4 @@ void CofreArana::SetPosArana(unsigned int pos)
 void CofreArana::SetActivada(bool estado)
 {
     activada = estado;
-}
-
-void CofreArana::SetPrimeraVezActivada(bool estado)
-{
-    primeraVezActivada = estado;
 }
