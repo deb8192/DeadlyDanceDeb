@@ -17,17 +17,18 @@ Guardian::Guardian(float nX, float nY, float nZ, int maxVida, int disfraz)
     maxDistanciaJugador = 30;
     minDistanciaJugador = 15;
     direccion = 0;
+    escalado = 0.60f;
 
     switch(disfraz)
     {
         case 3 :
             _modelo = "assets/models/GuardianUnicornio/GuardianUnicornio_000001.obj";
-            _textura = "assets/models/guardian_m/trocitos_G_M_prueba.jpg";
+            _textura = "assets/texture/GuardianUnicornio.png";
             break;
             //Cambiar por unicornio
         case 4 :
-            _modelo = "assets/models/GuardianUnicornio/GuardianUnicornio_000001.obj";
-            _textura = "assets/models/guardian_m/trocitos_G_M_prueba.jpg";
+            _modelo = "assets/models/GuardianMuerte/GuardianNormal_000001.obj";
+            _textura = "assets/texture/GuardianMuerte.png";
             break;
     }
 

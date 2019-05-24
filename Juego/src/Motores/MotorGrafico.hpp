@@ -243,7 +243,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void IniciarParticulasAccion(unsigned short i, float x, float y, float z, float time);
             void CargarSalaLuz(int sala,int minz,int maxz,int minx,int maxx);
             void CargarLuzEnSala(int sala,int x,int y,int z);
-            int CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima = nullptr, unsigned int fps = 1, float distanciaboard = 0.0f);
+            int CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima = nullptr, unsigned int fps = 1, float distanciaboard = 0.0f,float escalado = 1.0f);
             void CargarJugador(int x,int y,int z, float ancho, float largo, float alto, const char* ruta_objeto, const char * ruta_textura = nullptr, unsigned int fps = 1, const char * anima = nullptr);
             int CargarObjetos(int accion, int rp, int x,int y,int z, int ancho, int largo, int alto, const char* ruta_objeto, const char* ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);
             void CargarCofre(int pos, int rp, int x,int y,int z, const char *ruta_objeto, const char *ruta_textura, const char * anima = nullptr , int frame = 1, bool afectaluz = true);

@@ -721,12 +721,13 @@ void MotorGrafico::RenderEscena()
                     ActualizarAnimacionMotor(CofresAni_Scena[i]);
                 }
             }
-            Times * tiempo = Times::GetInstance();
-            unsigned int fps = tiempo->GetFramesPorSegundo();
+ 
 
             //if(debugGrafico)
             //{
-                //_interfaz->DefinirVentana(800,600,std::to_string(fps).c_str());
+              //  Times * tiempo = Times::GetInstance();
+             //   unsigned int fps = tiempo->GetFramesPorSegundo();
+              //  _interfaz->DefinirVentana(800,600,std::to_string(fps).c_str());
             //}
 
         }
@@ -1395,7 +1396,7 @@ void MotorGrafico::CargarLuzEnSala(int sala,int x,int y,int z)
 }
 
 
-int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima, unsigned int fps,float distanciaboard)
+int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, const char* ruta_textura, bool boss, const char * anima, unsigned int fps,float distanciaboard,float escalado)
 {
     #ifdef WEMOTOR
 
@@ -1407,6 +1408,13 @@ int MotorGrafico::CargarEnemigos(int x,int y,int z, const char* ruta_objeto, con
         if(enemigo != 0)
         {
             _interfaz->Trasladar(enemigo,(float)x,(float)y,(float)z);
+
+            if(escalado != 1.0f)
+            {
+                EscalarMalla(enemigo,escalado);
+                //std::cout << ruta_objeto << escalado << "\n";
+            }
+            
             if(boss)
             {
                 Enemigos_Scena.insert(Enemigos_Scena.begin(), enemigo);
