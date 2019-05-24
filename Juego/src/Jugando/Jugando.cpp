@@ -195,6 +195,7 @@ void Jugando::ValoresPorDefecto()
     salaPenultima = false;
     meAtacan = false;
     poderEmpezar = false;
+    enCentroSalaBoss = false;
     bocadillo = false;
     respawnMO = false;
     oirMuerteOmni = 0.0f;
@@ -231,7 +232,6 @@ void Jugando::ValoresPorDefecto()
     esconderArana = false;
     ganarPuzzle = false;
     _cofreP = nullptr;
-    cofrePosicion = -1;
 
     mov_weapon_posX = 0;
     mov_weapon_posY = 0;
@@ -447,6 +447,7 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
+    Constantes constantes;
     //esto es para que espere 5 segundos antes de reanudar/cortar sonidos al cambiar de sala
    if(oirMuerteOmni!= 0.0f && _controladorTiempo->CalcularTiempoPasado(oirMuerteOmni)/1000 > 5.0f)
    {
@@ -480,6 +481,43 @@ void Jugando::Update()
    {
        //para que pueda moverse en el nivel antiguo
         poderEmpezar = true;
+   }
+   if(enSalaBoss && !poderEmpezar)
+   {
+       enCentroSalaBoss = _jugador->moverseAlCentroDeLaSala(&coordenadasCentroSalaBoss);
+       if(enCentroSalaBoss)
+       {
+            int i = _puertas.size() - constantes.UNO;
+            bool puertaBossCerrada = false;
+            bool abrir = false;
+            float rot = 0.0f;
+            while(i >= constantes.CERO && !puertaBossCerrada)
+            {
+                if(_puertas[i]->getCodigo() == constantes.PUERTA_BOSS)
+                {
+                    Puerta* _puerta = _puertas.at(i);
+                    abrir = _puerta->accionar();
+                    _puerta->accionar();
+                    abrir = _puerta->accionar();
+                    rot = (constantes.PI_MEDIOS + constantes.PI_CUARTOS);
+                    if(abrir)
+                    {   //Se abre/acciona la puerta / el mecanismo
+                        _puerta->GirarPuerta(rot, true);
+                    }
+                    else
+                    {   //Se cierra/desacciona la puerta / el mecanismo
+                        _puerta->GirarPuerta(-rot, true);
+                    }
+                    _puerta = nullptr;
+                    puertaBossCerrada = true;
+                }
+                else
+                {
+                    i--;
+                } 
+            }
+            poderEmpezar = true;
+       }
    }
 
     bool colisionaWaypoint = false, waypointComun = false, cercaJugador = false;
@@ -638,49 +676,6 @@ void Jugando::Update()
                 _enemigos.at(i)->getFisZ(),
                 i
             );
-
-            // Si hay una arana activada y tiene que esconderse
-            if (esconderArana)
-            {
-                if (_enemigos.at(i)->GetTipoEnemigo() == constantes.ARANA)
-                {
-                    CofreArana* _eneA = (CofreArana*)_enemigos.at(i);
-
-                    if (_eneA->GetActivada())
-                    {
-                        _eneA->SetActivada(false);
-
-                        if (_enemigos.at(i)->GetPedirAyuda())
-                            enemDejarDePedirAyuda();
-
-                        // TO DO: hacer que se esconda en la zona de cofres
-                        CambiarAranyaPorCofre(_eneA->GetIdCofre(), _eneA->GetPosMotorCofre(),
-                            _eneA->GetPosObsCofre(),
-                            _eneA->getX(), _eneA->getY(), _eneA->getZ(),
-                            _eneA->GetPosArana(), _eneA->GetSala());
-
-                        //Eliminar sonido
-                        std::string nameid = std::to_string(_eneA->getID()); //pasar id a string
-                        _motora->getEvent(nameid)->stop();
-
-                        // Borrar grafico y fisicas de la arana
-                        _motor->EraseEnemigo(i);
-                        _fisicas->EraseEnemigo(i);
-
-                        CofreArana* _eneNew = new CofreArana(*_eneA);
-
-                        // La arana vuelve al array de cofres aranas
-                        _eneCofres.at(_eneNew->GetPosArana()) = _eneNew;
-                        _eneA = nullptr;
-
-                        //cout << "Puntero apunta bien: "<<_eneCofres.at(_eneNew->GetPosArana())->getID()<<endl;
-
-                        _enemigos.erase(_enemigos.begin() + i);//begin le suma las posiciones
-
-                        esconderArana = false;
-                    }
-                }
-            }
         }
     }
 
@@ -782,10 +777,13 @@ void Jugando::Update()
                     {
                         this->RespawnEnemigosBoss();
                     }
-                    if (_enemPideAyuda) {
+                    if((enSalaBoss && poderEmpezar && enCentroSalaBoss) || !enSalaBoss)
+                    {
+                        if (_enemPideAyuda) {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
-                    } else {
-                        _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                        } else {
+                            _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                        }
                     }
                     short paredCol = _enemigos[i]->GetParedRota();
                     if(paredCol >= 0)
@@ -828,13 +826,16 @@ void Jugando::Update()
                 }
                 else
                 {
-                    cercaJugador = this->ComprobarEnemigoSalaContiguaJugador(i);
-                    if(cercaJugador)
+                    if(!enSalaBoss)
                     {
-                        if (_enemPideAyuda) {
-                        _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
-                        } else {
-                            _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                        cercaJugador = this->ComprobarEnemigoSalaContiguaJugador(i);
+                        if(cercaJugador)
+                        {
+                            if (_enemPideAyuda) {
+                            _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                            } else {
+                                _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                            }
                         }
                     }
                 }
@@ -1283,13 +1284,12 @@ void Jugando::UpdateIA()
                     if( tipoEnemigo == constantes.GUARDIAN_A ||
                         tipoEnemigo == constantes.GUARDIAN_B)
                     {
-                        CrearObjeto(x,y,z,2,2,2,constantes.LLAVE_BOSS,0);
+                        CrearObjeto(x,y,z,4,4,2,constantes.LLAVE_BOSS,0);
                         _motor->borrarBoardGuardian();
                     }
                     else if (tipoEnemigo == constantes.ARANA)
                     {
                         CofreArana* _cofA = (CofreArana*)_enemigos[i];
-                        cofrePosicion = i;
                         delete _cofres.at(_cofA->GetPosMotorCofre());
                         _cofres.at(_cofA->GetPosMotorCofre())=nullptr;
 
@@ -1336,10 +1336,13 @@ void Jugando::UpdateIA()
                         }
                         else
                         {
-                            cercaJugador = this->ComprobarEnemigoSalaContiguaJugador(i);
-                            if(cercaJugador)
+                            if(!enSalaBoss)
                             {
-                                _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                                cercaJugador = this->ComprobarEnemigoSalaContiguaJugador(i);
+                                if(cercaJugador)
+                                {
+                                    _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                                }
                             }
                         }
                     }
@@ -1348,7 +1351,7 @@ void Jugando::UpdateIA()
                 // Si hay una arana activada y tiene que esconderse
                 if (esconderArana)
                 {
-                    if ((unsigned) i < _enemigos.size() && _enemigos.at(i)->GetTipoEnemigo() == constantes.ARANA)
+                    if (_enemigos.at(i)->GetTipoEnemigo() == constantes.ARANA)
                     {
                         CofreArana* _eneA = (CofreArana*)_enemigos.at(i);
 
@@ -1356,20 +1359,16 @@ void Jugando::UpdateIA()
                         {
                             _eneA->SetActivada(false);
 
-                            if (_eneA->GetPedirAyuda())
+                            if (_enemigos.at(i)->GetPedirAyuda())
                                 enemDejarDePedirAyuda();
 
-                            // TO DO: hacer que se esconda en la zona de cofres
-                            float x = _eneA->getX();
-                            float y = _eneA->getY();
-                            float z = _eneA->getZ();
+                            Cofre* _cofre = new Cofre(_eneA->GetIdCofre(), _eneA->GetPosMotorCofre(),
+                                _eneA->GetPosObsCofre(),
+                                _eneA->getX(), _eneA->getY(), _eneA->getZ(),
+                                constantes.COFRE_OBJ, _eneA->GetPosArana(), _eneA->GetSala());
 
-                            Cofre* _cof = _cofres.at(_eneA->GetPosMotorCofre());
-                            _cof->setPosiciones(x,y,z);//le pasamos las coordenadas donde esta
-                            _cof->setNewPosiciones(x,y,z);
-                            _cof->setLastPosiciones(x,y,z);
-                            _cof->ActivarCofre();
-                            _cof = nullptr;
+                            _cofres.at(_eneA->GetPosMotorCofre()) = move(_cofre);
+                            _cofre = nullptr;
 
                             //Eliminar sonido
                             std::string nameid = std::to_string(_eneA->getID()); //pasar id a string
@@ -1379,10 +1378,12 @@ void Jugando::UpdateIA()
                             _motor->EraseEnemigo(i);
                             _fisicas->EraseEnemigo(i);
 
+                            CofreArana* _eneNew = new CofreArana(*_eneA);
+
                             // La arana vuelve al array de cofres aranas
+                            _eneCofres.at(_eneNew->GetPosArana()) = _eneNew;
                             _eneA = nullptr;
                             _enemigos.erase(_enemigos.begin() + i);//begin le suma las posiciones
-
                             esconderArana = false;
                         }
                     }
@@ -1485,9 +1486,9 @@ void Jugando::Render()
                     proyectilFuera = true;
                 }
                 _motor->activarObjeto(_motor->getArmaenEscena());
-                mov_weapon_posX=-0.7;
+                mov_weapon_posX=-2.0;
                 mov_weapon_posZ=-0.5;
-                mov_weapon_posY=2.3;
+                mov_weapon_posY=4.5;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
                 mov_weapon_rotZ=0;
@@ -1686,13 +1687,8 @@ void Jugando::Reanudar()
             _motora->getEvent("VictoriaPuzzle")->start();
 
             _cofreP->DesactivarCofre();
-            /*if(cofrePosicion != -1)
-            {
-                _motor->cambiarAnimacion(6,cofrePosicion,1);
-            }*/
             AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),true);
             _cofreP = nullptr;
-            cofrePosicion = -1;
         }
         else
         {
@@ -2421,12 +2417,9 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
     if (tipoObj == constantes.COFRE_OBJ) // TO DO: repasar todo lo de los cofres al terminar la IA
     {
         _cofreP = _cofres.at(pos);
-        cofrePosicion = pos;
-
         if (_cofreP->GetEsArana())
         {
             AbrirPantallaPuzzle();
-            //cofrePosicion = -1;
         }
         else
         {
@@ -2435,7 +2428,6 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
             //_motor->cambiarAnimacion(6,pos,1);
             AbrirCofre(_cofreP->getX(),_cofreP->getY(),_cofreP->getZ(),false);
             _cofreP = nullptr;
-            cofrePosicion = -1;
         }
     }
     else if (tipoObj == constantes.PALANCA)
@@ -2544,6 +2536,10 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                         }
 
                         enSalaBoss = true;
+                        poderEmpezar = false;
+                        coordenadasCentroSalaBoss.vX = _jugador->GetSala()->getSizes()[2];
+                        coordenadasCentroSalaBoss.vY = _jugador->GetSala()->getSizes()[3];
+                        coordenadasCentroSalaBoss.vZ = _jugador->GetSala()->getSizes()[4];
                         this->CargarBossEnMemoria();
                     }
                     //Se abre/acciona la puerta / el mecanismo
@@ -2735,6 +2731,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
                     _auxiliadores.front()->SetSala(_destinoPathFinding);
                 }
                 _auxiliadores.front()->AnnadirRecorridoAyuda(posicionesWaypoints);
+                delete path;
             }
             else if(_destinoPathFinding == _auxiliadores.front()->GetSala() && _auxiliadores.front()->GetModo() != Enemigo::modosEnemigo::MODO_ATAQUE)
             {
@@ -2814,44 +2811,42 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
         minArpa = 22;
         minGuitar = 31;
         minFlauta = 25;
-        _motor->cambiarAnimacion(6,cofrePosicion,1);//abrirse cofre
     }
     else
     {
         objeto = NumeroAleatorio(constantes.ORO,constantes.ULTIMA_ARMA+2);
-        _motor->cambiarAnimacion(6,cofrePosicion,1);//abrirse cofre
     }
 
     switch (objeto)
     {
         case 7: // ARPA
-            CrearObjeto(x,y,z,2,2,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
+            CrearObjeto(x,y,z,3,4,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
             break;
         case 8:
-            CrearObjeto(x,y,z,2,2,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
+            CrearObjeto(x,y,z,3,4,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
             break;
         case 9:
-            CrearObjeto(x,y,z,2,2,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
+            CrearObjeto(x,y,z,3,4,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
             break;
 
         case 10: // GUITARRA
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
+            CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
             break;
         case 11:
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
+            CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
             break;
         case 12:
-            CrearObjeto(x,y,z,2,2,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
+            CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
             break;
 
         case 13: // FLAUTA
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
+            CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
             break;
         case 14:
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
+            CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
             break;
         case 15:
-            CrearObjeto(x,y,z,2,2,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
+            CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
             break;
 
         default: // ORO
@@ -2890,25 +2885,14 @@ void Jugando::CrearEnemigoArana()
    //Cargar sonido evento en una instancia con la id del enemigo como nombre
     std::string nameid = std::to_string(_eneA->getID()); //pasar id a string
     _motora->LoadEvent("event:/SFX/SFX-Arana grito enemigo", nameid, 1);
-    _motora->getEvent(nameid)->setPosition(x,0,z);
+    _motora->getEvent(nameid)->setPosition(x,y,z);
     _motora->getEvent(nameid)->start();
-
-    /*if (!_eneA->GetPrimeraVezActivada())
-    {*/
-        _eneA->SetPrimeraVezActivada(true);
-
-    //}
-
-
-    _eneA->SetAranaSound();
 
     _enemigos.push_back(_eneA);
     _eneA = nullptr;
 
     _cofreP->BorrarCofre();
     _cofreP = nullptr;
-
-
 }
 
 void Jugando::CargarBossEnMemoria()
@@ -2921,7 +2905,7 @@ void Jugando::CargarBossEnMemoria()
     unsigned int did = 0;
 
     //cargador.SetVectorEnemigos(_enemigos);
-    BorrarTodosLosEnemigos();
+    //BorrarTodosLosEnemigos();
 
     if(_jugador->GetSala() != _boss->GetSala())
     {
@@ -2963,18 +2947,6 @@ void Jugando::CargarBossEnMemoria()
 
 
     _enemigos.insert(_enemigos.begin(), _boss);
-}
-
-
-// TO DO: en proceso
-void Jugando::CambiarAranyaPorCofre(int idC, unsigned int posMotorG, unsigned int posObs,
-    float x, float y, float z, unsigned int posArana, Sala* sala)
-{
-    Cofre* _cofre = new Cofre(idC, posMotorG, posObs,
-        x, y, z, constantes.COFRE_OBJ, posArana, sala);
-
-    _cofres.at(posMotorG) = move(_cofre);
-    _cofre = nullptr;
 }
 
 void Jugando::BorrarTodosLosEnemigos()

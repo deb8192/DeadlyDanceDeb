@@ -246,6 +246,51 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
     setNewPosiciones(posiciones.x, posActual.y, posiciones.z);
 }
 
+/********** moverseAlCentroDeLaSala ***********
+ * Funcion que hace que al entrar el jugador en 
+ * la sala del boss, este se desplace hacia el 
+ * centro y, al llegar al sitio, le elimina las
+ * llaves y cierra la puerta
+ *                    
+ *                Entradas:
+ *                         VectorEspacial target: coordenadas de destino
+ *                Salidas:
+ *                         bool enDestino: booleano que indica que se ha llegado al centro
+ */
+bool Jugador::moverseAlCentroDeLaSala(VectorEspacial *target)
+{
+    bool enDestino = false;
+    struct
+    {
+        float x = 0.0f;
+        float y = 0.0f;
+        float z = 0.0f;
+    }
+    velocidad, posiciones;
+
+    if(posFutura.x == target->vX && posFutura.y == target->vY && posFutura.z == target->vZ)
+    {
+        enDestino = true;
+        for(unsigned int i = 0; i < llaves.size(); i++)
+        {
+            delete llaves[i];
+            llaves[i] = nullptr;
+        }
+    }
+    else
+    {
+        this->Alinearse(target);
+        velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
+        velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
+        posiciones.x = posFutura.x + velocidad.x;
+        posiciones.z = posFutura.z + velocidad.z;
+
+        //ahora actualizas movimiento y rotacion
+        this->setNewPosiciones(posiciones.x, posActual.y, posiciones.z);
+    }
+    return enDestino;
+}
+
 /*************** moverseEntidad *****************
  * Funcion con la que el jugador se desplazaran
  * por el escenario mediante una interpolacion desde
@@ -300,6 +345,23 @@ void Jugador::RotarEntidad(float updTime)
 void Jugador::UpdateTimeMove(float updTime)
 {
     moveTime += updTime;
+}
+
+void Jugador::Alinearse(VectorEspacial* target)
+{
+    VectorEspacial distancia;
+    distancia.vX = target->vX - this->getX();
+    distancia.vY = target->vY - this->getY();
+    distancia.vZ = target->vZ - this->getZ();
+    distancia.modulo = pow(distancia.vX, constantes.DOS) + pow(distancia.vY, constantes.DOS) + pow(distancia.vZ, constantes.DOS);
+    distancia.modulo = sqrt(distancia.modulo);
+
+    distancia.vZ < 0 ?
+        rotation = constantes.PI_RADIAN + (constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ)) :
+        rotation = constantes.RAD_TO_DEG * atan(distancia.vX/distancia.vZ);
+
+    this->setNewRotacion(rotActual.x, rotation, rotActual.z);
+    this->setVectorOrientacion();
 }
 
 // Se llama en update de jugando

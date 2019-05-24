@@ -85,11 +85,10 @@ class Jugando: public Estado {
         void AbrirCofre(float x, float y, float z, bool esArana);
         void CrearEnemigoArana();
         void CargarBossEnMemoria();
-        void CambiarAranyaPorCofre(int idC, unsigned int posMotorG, unsigned int posObs,
-            float x, float y, float z, unsigned int posArana, Sala* sala);
         void BorrarTodosLosEnemigos();
         void LimpiarJuego();
         void CrearSprites();
+        void ReanudarSonidos();
 
     private:
 
@@ -111,6 +110,7 @@ class Jugando: public Estado {
         bool salaPenultima;
         bool meAtacan;
         bool poderEmpezar;
+        bool enCentroSalaBoss;
         bool respawnMO;
         bool bocadillo;
         int estarAtacado;
@@ -139,12 +139,12 @@ class Jugando: public Estado {
         std::vector<Cofre*> _cofres;
 
         INnpc::VectorEspacial posicionMediaEnemigos;  //Posicion media que comparten los pollos que atacan en bandada
+        INnpc::VectorEspacial coordenadasCentroSalaBoss; //
 
         bool reiniciando, puzzleResuelto; // Se utiliza solo en Reanudar por el cambio entre Estados
         bool ganarPuzzle;
         bool desactivarColisionesJugador;
         Cofre* _cofreP;
-        int cofrePosicion;//le indica la posicion del cofre para cambiar su animacion
 
         Jugador* _jugador;
         bool jugadorInmovil; // Para las colisiones

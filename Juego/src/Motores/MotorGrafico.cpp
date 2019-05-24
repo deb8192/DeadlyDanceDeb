@@ -1749,6 +1749,7 @@ void MotorGrafico::CargarArmaJugador(int x,int y,int z, const char *ruta_objeto,
         if(_arma != 0)
         {
             _armaEnEscena = _arma;
+            _interfaz->Escalar(_armaEnEscena,0.8f,0.8f,0.8f);
             _interfaz->Trasladar(_armaEnEscena,(float)x,(float)y,(float)z);
         }
 
@@ -2875,14 +2876,6 @@ void MotorGrafico::EraseCofre(unsigned short idx)
     #ifdef WEMOTOR
         //codigo motor catopengl
         _interfaz->DeshabilitarObjeto(Cofres_Scena[idx]);
-        if(idx < CofresAni_Scena.size())
-        {
-                if(CofresAni_Scena[idx])
-                {
-                    delete CofresAni_Scena[idx];
-                }
-                CofresAni_Scena.erase(CofresAni_Scena.begin() + idx);
-        }
     #else
         //codigo motor irrlicht
         Cofres_Scena[idx]->setVisible(false);

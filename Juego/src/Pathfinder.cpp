@@ -13,6 +13,14 @@ Pathfinder::Pathfinder()
 
 }
 
+Pathfinder::~Pathfinder()
+{
+    camino.clear();//Si tiene datos, se vacia
+    waypointsRecorridos.clear();//Si tiene datos, se vacia
+    listaAbierta.clear();//Si tiene datos, se vacia
+    listaCerrada.clear();//Si tiene datos, se vacia
+}
+
 /********************* ComprobarListas ************************
  * Descripcion: Metodo que indica si una sala se encuentra en
  * cualquiera de las listas de nodos que se pasen
