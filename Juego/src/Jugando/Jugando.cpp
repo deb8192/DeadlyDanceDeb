@@ -1464,6 +1464,7 @@ void Jugando::Render()
                 _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-2.0;
                 mov_weapon_posZ=-1.5;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-2.6;
                 mov_weapon_posY=5.0;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
@@ -1488,6 +1489,7 @@ void Jugando::Render()
                 _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-2.0;
                 mov_weapon_posZ=-0.5;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-1.8;
                 mov_weapon_posY=4.5;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
@@ -1511,7 +1513,9 @@ void Jugando::Render()
                 }
                 _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-0.7;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posX=-1.8;
                 mov_weapon_posZ=-0.5;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-1.6;
                 mov_weapon_posY=2.3;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
