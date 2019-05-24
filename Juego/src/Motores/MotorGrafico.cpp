@@ -4381,7 +4381,7 @@ void MotorGrafico::CrearMeshFicha(int tamanyo, int r, int g, int b)
     #endif
 }
 
-void MotorGrafico::CrearFichas(int posX, int posY, int tamanyo,
+int MotorGrafico::CrearFichas(int posX, int posY, int tamanyo,
     int r, int g, int b)
 {
     #ifdef WEMOTOR
@@ -4403,10 +4403,13 @@ void MotorGrafico::CrearFichas(int posX, int posY, int tamanyo,
         }
 
         unsigned short nue = ++IDP;
+        cout << "ID creado:" << nue << endl;
         _interfaz->DeclararBoton(_imgP,nue);
         _interfaz->DefinirIdPersonalizado(_imgP,nue);
+
         _imagenesF.push_back(nue);
         _imgP = 0;
+        return nue;
     #else
         //codigo motor irrlicht
         CrearMeshFicha(tamanyo, r, g, b);
@@ -4417,6 +4420,7 @@ void MotorGrafico::CrearFichas(int posX, int posY, int tamanyo,
         // La anyadimos a la lista
         fichasMesh.push_back(move(_ficha));
         _ficha = nullptr;
+        return 0; // TO DO: cambiar lo de aqui
     #endif
 }
 

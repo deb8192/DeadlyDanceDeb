@@ -49,5 +49,6 @@ class EstadoPuzle: public Estado {
         int pasos, pilaInicial, pilaFinal;
         bool pulsado;
         int x_linea1, x_linea2;
+        int fichaMover;
 };
 #endif /* ESTADO_PUZLE_HPP */

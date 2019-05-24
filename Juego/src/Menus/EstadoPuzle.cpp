@@ -105,6 +105,7 @@ void EstadoPuzle::Iniciar()
         pulsado=false;
         pilaInicial = NO_SELECT; // Para colocar las fichas en pilaIzq
         pilaFinal = NO_SELECT;
+        fichaMover = 0;
 
         // Monta la interfaz dependiendo del tipo de puzzle
         _motor->CrearTextoPuzzles("Torres de hanoi", 40,60,200,80);
@@ -213,20 +214,24 @@ void EstadoPuzle::comprobarEventosHanoi()
 
     _motor->ActualizarTextoPasos(pasos);
 
-    if((_motor->PulsadoClicIzq()) && (!_motor->EstaPulsado(MOUSE_MOVED)))
+    /*if((_motor->PulsadoClicIzq()) && (!_motor->EstaPulsado(MOUSE_MOVED)))
     {
-        //cout<<"Pulso solo"<<endl;
-        pulsado=true;
+        cout<<"Pulso solo"<<endl;
+        //pulsado=true;
         std::vector<unsigned short> * vectorFichas = _motor->GetVectorFichas();
-        for(unsigned int i = 0;i < vectorFichas->size();i++)
+        unsigned int cont = 0;
+        while ((!pulsado) && (cont < 3))
         {
-            if(_motor->OcurreEvento((*vectorFichas)[i]))
+            if(_motor->OcurreEvento((*vectorFichas)[cont]))
             {
-                cout<< "Pulsas ficha" << i << endl;
+                pulsado=true;
+                fichaMover = cont;
             }
+            cont++;
         }
+        cont = 0;*/
         
-        /*if (_motor->SeleccionarNodo())
+        /*if (pulsado)
         {
             //cout << "Objeto"<<endl;
             // Obtenemos la zona seleccionada
@@ -246,14 +251,18 @@ void EstadoPuzle::comprobarEventosHanoi()
             }
         } else {
             //cout << "Fondo"<<endl;
-            pilaInicial = NO_SELECT;
+            pilaInicial = NO_SELECT;se quedar
         }*/
-    }
+    //}
 
-    if((_motor->PulsadoClicIzq()) && (_motor->EstaPulsado(MOUSE_MOVED))) {
+    /*if((_motor->PulsadoClicIzq()) &&se quedarsado(MOUSE_MOVED))) {
         //cout<<"X: "<<_motor->GetPosicionRaton().X<<" Y: "<<_motor->GetPosicionRaton().Y<<endl;
-        //cout<<"Arrastrar"<<endl;
-        //_motor->MoverFichas(pilaInicial);
+        cout<<"Arrastrar"<<endl;
+
+        if (pulsado)
+        {
+            _motor->CambiarPosicionImagen(fichaMover, _motor->GetPosicionRaton()[0], _motor->GetPosicionRaton()[1]);
+        }
     }
 
     if ((_motor->SueltoClicIzq()) && (pulsado))
@@ -262,7 +271,7 @@ void EstadoPuzle::comprobarEventosHanoi()
         pulsado=false;
         deseleccionarNodo();
         _motor->ResetEventoMoveRaton();
-    }
+    }*/
 }
 
 void EstadoPuzle::corregirSolucion(int opcion)
@@ -305,11 +314,13 @@ void EstadoPuzle::crearFichasPila()
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
+        int img = 0;
         int posY_OpenGL = 400;
         for (int tam=opciones; tam>0; tam--) 
         {
-            _motor->CrearFichas(100, posY_OpenGL, tam); //X, Y, tamanyo
+            img = _motor->CrearFichas(100, posY_OpenGL, tam); //X, Y, tamanyo
             ficha = new PilaFichas(tam, posY_OpenGL);
+            ficha->SetIMG(img);
             pilaIzq.push(ficha);
             posY_OpenGL-=80;
         }
@@ -507,6 +518,7 @@ void EstadoPuzle::reiniciarPilas()
     pilaInicial = NO_SELECT;
     pasos = 0;
     pulsado=false;
+    fichaMover = 0;
 
     // Reiniciamos la pila de fichas
     while (!pilaIzq.empty() )
