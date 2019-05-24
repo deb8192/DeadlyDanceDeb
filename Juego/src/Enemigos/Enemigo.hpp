@@ -299,6 +299,7 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         Arbol* arbol;//este arbol es la ia para hacerlo funcionar debes llamar a runIA() desde nivel, cuidado porque si es nullptr puede dar errores.
         int pos_ataques; //para controlar el array de ataques en colisiones
         bool accionRealizada, controlRotacion; //
+        bool atacandoEspecial;
         short modo;  //Modo de actuacion en que se encuentra el enemigo: normal, ataque, huida, esconderse
         float pesoRotacion;  //valor que sirve para dar mas importancia a un tipo de rotacion que a otra
         VectorEspacial vectorOrientacion; //Vector que sirve para orientar al enemigo
@@ -318,6 +319,8 @@ class Enemigo : public INnpc , public INdrawable, public INsentidos //multiple h
         bool unEspecial;
         bool unVida;
         bool unDerrota;
+        bool unicornioCorrecto;
+        bool aranaCorrecto;
         bool defensa; //TO DO EXPANDIRLO AL JUGADOR cuando recibe danyo recibe la mitad si esta a true
         INnpc::VectorEspacial posicionComunBandada; //PUnto de cohesion de las bandadas
         int estadoMuerte;//tiene el numero de estado que pertenece a estar muerto o muriendo [Por defecto 0]

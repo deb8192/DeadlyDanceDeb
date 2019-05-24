@@ -6,7 +6,7 @@ Bailaora::Bailaora(Sala* sala,unsigned short tipoJug,int nX,int nY,int nZ,int an
     // TO DO: cambiar por las suyas
     #ifdef WEMOTOR
         _modelo = "assets/models/bailarina/bailarina_000001.obj";
-        escalado = 0.6f;
+        escalado = 0.55f;
         fps = 244;
         _textura = "assets/texture/bailarina.png";
         _animacion = "assets/animaciones/bailarina.xml";

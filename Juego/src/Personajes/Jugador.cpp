@@ -260,15 +260,20 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 bool Jugador::moverseAlCentroDeLaSala(VectorEspacial *target)
 {
     bool enDestino = false;
+    int distanciaSeguridad = constantes.CINCO;
     struct
     {
         float x = 0.0f;
         float y = 0.0f;
         float z = 0.0f;
     }
-    velocidad, posiciones;
+    velocidad, posiciones, distancia;
+    distancia.x = abs(target->vX - posFutura.x);
+    distancia.y = abs(target->vY - posFutura.y);
+    distancia.z = abs(target->vZ - posFutura.z);
+    setAnimacion(1);
 
-    if(posFutura.x == target->vX && posFutura.y == target->vY && posFutura.z == target->vZ)
+    if(distancia.x <= distanciaSeguridad && distancia.y <= distanciaSeguridad && distancia.z <= distanciaSeguridad)
     {
         enDestino = true;
         for(unsigned int i = 0; i < llaves.size(); i++)
@@ -276,10 +281,15 @@ bool Jugador::moverseAlCentroDeLaSala(VectorEspacial *target)
             delete llaves[i];
             llaves[i] = nullptr;
         }
+        llaves.clear();
     }
     else
     {
         this->Alinearse(target);
+        if(porcentajeVelocidad != constantes.DOS_TERCIOS)
+        {
+            porcentajeVelocidad = constantes.DOS_TERCIOS;
+        }
         velocidad.x = vectorOrientacion.vX* velocidadMaxima * porcentajeVelocidad;
         velocidad.z = vectorOrientacion.vZ* velocidadMaxima * porcentajeVelocidad;
         posiciones.x = posFutura.x + velocidad.x;

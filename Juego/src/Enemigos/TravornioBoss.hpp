@@ -12,6 +12,7 @@ class TravornioBoss : public Enemigo
         void RunIA();
         void UpdateTravornioBoss(short *i, int* _jug, bool ayuda);
         void SetNuevasOrdenes(short newOrden);
+        void SetAtaqueEspecial();
 
     private:
         bool funciona, atacado, ataqueEspecial, hecho, seAcerca;

@@ -366,6 +366,39 @@ void Jugando::ManejarEventos() {
         _jugador->setNewPosiciones(242+desplaza, 0, 490);
         _jugador->initPosicionesFisicas((242+desplaza)/2, 0/2, 490/2);
         enSalaBoss = true;
+        enCentroSalaBoss = true;
+
+            int i = _puertas.size() - constantes.UNO;
+            bool puertaBossCerrada = false;
+            bool abrir = false;
+            float rot = 0.0f;
+            while(i >= constantes.CERO && !puertaBossCerrada)
+            {
+                if(_puertas[i]->getCodigo() == constantes.PUERTA_BOSS)
+                {
+                    Puerta* _puerta = _puertas.at(i);
+                    abrir = _puerta->accionar();
+                    _puerta->accionar();
+                    abrir = _puerta->accionar();
+                    rot = (constantes.PI_MEDIOS + constantes.PI_CUARTOS);
+                    if(abrir)
+                    {   //Se abre/acciona la puerta / el mecanismo
+                        _puerta->GirarPuerta(rot, true);
+                    }
+                    else
+                    {   //Se cierra/desacciona la puerta / el mecanismo
+                        _puerta->GirarPuerta(-rot, true);
+                    }
+                    _puerta = nullptr;
+                    puertaBossCerrada = true;
+                }
+                else
+                {
+                    i--;
+                } 
+            }
+            poderEmpezar = true;
+
         CargarBossEnMemoria();
         _motor->ResetKey(KEY_B);
     }
@@ -447,7 +480,6 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
-    Constantes constantes;
     //esto es para que espere 5 segundos antes de reanudar/cortar sonidos al cambiar de sala
    if(oirMuerteOmni!= 0.0f && _controladorTiempo->CalcularTiempoPasado(oirMuerteOmni)/1000 > 5.0f)
    {
@@ -475,7 +507,10 @@ void Jugando::Update()
    if(_controladorTiempo->CalcularTiempoPasado(startPlayTime)/1000 > 20.0f && nivelJ == 8)
    {
        //para que pueda moverse al decir el mensaje de bienvenida del nivel nuevo
-        poderEmpezar = true;
+       if((enSalaBoss && enCentroSalaBoss) || !enSalaBoss)
+        {
+            poderEmpezar = true;
+        }
    }
    else if(nivelJ == 7)
    {
@@ -777,14 +812,14 @@ void Jugando::Update()
                     {
                         this->RespawnEnemigosBoss();
                     }
-                    /*if((enSalaBoss && poderEmpezar && enCentroSalaBoss) || !enSalaBoss)
-                    {*/
+                    if((enSalaBoss && poderEmpezar && enCentroSalaBoss) || !enSalaBoss)
+                    {
                         if (_enemPideAyuda) {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                         } else {
                             _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
                         }
-                    //}
+                    }
                     short paredCol = _enemigos[i]->GetParedRota();
                     if(paredCol >= 0)
                     {
@@ -1187,7 +1222,6 @@ void Jugando::UpdateIA()
         _motora->getEvent("MuertePerseguido2")->stop();
     }
 
-    Constantes constantes;
     bool cercaJugador = false;
     /* *********** Teclas para probar cosas *************** */
     // Bajar vida
@@ -1211,7 +1245,7 @@ void Jugando::UpdateIA()
         if((!jugadorInmovil && (_motor->EstaPulsado(KEY_A)
         || _motor->EstaPulsado(KEY_S) || _motor->EstaPulsado(KEY_D) || _motor->EstaPulsado(KEY_W))))
         {
-            _jugador->generarSonido(constantes.NUEVE * constantes.SEIS, constantes.CINCO, constantes.UNO);
+            _jugador->generarSonido(constantes.TAMANYO_ONDA, constantes.CINCO, constantes.UNO);
 
             if(nivelJ == 8)
             {
@@ -1464,6 +1498,7 @@ void Jugando::Render()
                 _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-2.0;
                 mov_weapon_posZ=-1.5;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-2.6;
                 mov_weapon_posY=5.0;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
@@ -1488,6 +1523,7 @@ void Jugando::Render()
                 _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-2.0;
                 mov_weapon_posZ=-0.5;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-1.8;
                 mov_weapon_posY=4.5;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
@@ -1511,7 +1547,9 @@ void Jugando::Render()
                 }
                 _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-0.7;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posX=-1.8;
                 mov_weapon_posZ=-0.5;
+                if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-1.6;
                 mov_weapon_posY=2.3;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
@@ -1855,7 +1893,6 @@ void Jugando::CrearObjeto(int x,int y,int z,int ancho,int largo,int alto,
 */
 void Jugando::RespawnEnemigosBoss()
 {
-    Constantes constantes;
     int x = 0.0f;
     int y = 0.0f;
     int z = 0.0f;
@@ -1956,6 +1993,10 @@ void Jugando::RespawnEnemigosBoss()
             _enemigos.back()->RespawnNoise();
             _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false,_enemigos.back()->GetAnimacion(),_enemigos.back()->GetFps());//creamos la figura
 
+            _enemigos[0]->invocaSound();
+            _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
+            _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
+
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,ancho,alto,largo,2,0,0,false);
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,7,0,0,false); //Para ataques
             _fisicas->crearCuerpo(0,x/2,y/2,z/2,2,5,5,5,8,0,0,false); //Para ataques especiales
@@ -1984,7 +2025,6 @@ void Jugando::RespawnEnemigosBoss()
 */
 void Jugando::RespawnEnemigos()
 {
-    Constantes constantes;
     int x = 0.0f;
     int y = 0.0f;
     int z = 0.0f;
@@ -2078,12 +2118,7 @@ void Jugando::RespawnEnemigos()
                 {
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
-                    _motora->getEvent("MuerteRespawn2")->start();
-                    
-                    _enemigos[0]->invocaSound();
-                    _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
-                    _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
-                    
+                    _motora->getEvent("MuerteRespawn2")->start();                    
                 }
             }
             else if(tipoEne != 0)
@@ -2092,13 +2127,7 @@ void Jugando::RespawnEnemigos()
                 {
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
-                    _motora->getEvent("MuerteRespawn1")->start();
-                    if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
-                    {
-                        _enemigos[0]->invocaSound();
-                        _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
-                        _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
-                    }
+                    _motora->getEvent("MuerteRespawn1")->start();                   
                 }
             }
             _enemigos.back()->SetEnemigo(enemigo);
@@ -2120,7 +2149,7 @@ void Jugando::RespawnEnemigos()
             _enemigos.back()->setVectorOrientacion();
             _enemigos.back()->setNewRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
             _enemigos.back()->setLastRotacion(0.0f,0.0f,0.0f);//le pasamos las coordenadas donde esta
-            _enemigos.back()->RespawnNoise();
+            _enemigos.back()->RespawnNoise();            
 
             _motor->CargarEnemigos(x,y,z,_enemigos.back()->GetModelo(),_enemigos.back()->GetTextura(), false,_enemigos.back()->GetAnimacion(),_enemigos.back()->GetFps());//creamos la figura
 
@@ -2509,7 +2538,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
             //Comprueba las llaves que tiene el jugador
             while(i < _jugador->GetLlaves().size() && !coincide)
             {
-                if(_jugador->GetLlaves().at(i)->GetCodigoPuerta() == _puerta->getCodigo())
+                if(_jugador->GetLlaves().at(i) && _jugador->GetLlaves().at(i)->GetCodigoPuerta() == _puerta->getCodigo())
                 {
                     //Si el jugador tiene la llave cuyo codigo coincide con la puerta la abre
                     coincide = true;
@@ -2522,7 +2551,6 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                 bool abrir = _puerta->accionar();
                 if(abrir)
                 {
-                    if(_puerta->getCodigo() == constantes.PUERTA_BOSS && !enSalaBoss)
                     {
                         if(nivelJ == 7)
                         {
@@ -2537,6 +2565,7 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
 
                         enSalaBoss = true;
                         poderEmpezar = false;
+                        _jugador->SetSala(_jugador->GetSala()->getSalidas()[0]);
                         coordenadasCentroSalaBoss.vX = _jugador->GetSala()->getSizes()[2];
                         coordenadasCentroSalaBoss.vY = _jugador->GetSala()->getSizes()[3];
                         coordenadasCentroSalaBoss.vZ = _jugador->GetSala()->getSizes()[4];
@@ -2897,7 +2926,6 @@ void Jugando::CrearEnemigoArana()
 
 void Jugando::CargarBossEnMemoria()
 {
-    Constantes constantes;
     int boss = _boss->GetEnemigo();
     float x = _boss->getX();
     float y = _boss->getY();
