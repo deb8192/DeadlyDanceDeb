@@ -1124,7 +1124,7 @@ void Enemigo::ModificarVida(int vid)
     {
         vida += vid;
         SetInvulnerabilidad(constantes.TRUE);
-        setTimeInvulnerable(constantes.CINCUENTA_PORCIENTO);
+        setTimeInvulnerable(constantes.CIEN_PORCIENTO);
 
         if(porcentajeVelocidad != constantes.UNO)
         {
