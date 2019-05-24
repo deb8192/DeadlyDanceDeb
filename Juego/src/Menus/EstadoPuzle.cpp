@@ -217,6 +217,15 @@ void EstadoPuzle::comprobarEventosHanoi()
     {
         //cout<<"Pulso solo"<<endl;
         pulsado=true;
+        std::vector<unsigned short> * vectorFichas = _motor->GetVectorFichas();
+        for(unsigned int i = 0;i < vectorFichas->size();i++)
+        {
+            if(_motor->OcurreEvento((*vectorFichas)[i]))
+            {
+                cout<< "Pulsas ficha" << i << endl;
+            }
+        }
+        
         /*if (_motor->SeleccionarNodo())
         {
             //cout << "Objeto"<<endl;

@@ -4403,6 +4403,7 @@ void MotorGrafico::CrearFichas(int posX, int posY, int tamanyo,
         }
 
         unsigned short nue = ++IDP;
+        _interfaz->DeclararBoton(_imgP,nue);
         _interfaz->DefinirIdPersonalizado(_imgP,nue);
         _imagenesF.push_back(nue);
         _imgP = 0;
@@ -4462,6 +4463,17 @@ void MotorGrafico::UpdateMotorPuzzles(int tipo, int x_linea1, int x_linea2)
 
         _driver->endScene();
     #endif
+}
+
+std::vector<unsigned short> * MotorGrafico::GetVectorFichas()
+{
+    #ifdef WEMOTOR
+        if( _interfaz)
+        {
+            return &_imagenesF;
+        }
+    #endif
+    return nullptr;
 }
 
 unsigned short MotorGrafico::CrearImagen(const char * texto,unsigned int x,unsigned int y,float scale)

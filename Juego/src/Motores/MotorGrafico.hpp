@@ -366,7 +366,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CrearFichas(int posX, int posY, int tamanyo, int r=0, int g=0, int b=0);
             void ReiniciarHanoi();
             void UpdateMotorPuzzles(int tipo, int x_linea1, int x_linea2);
-
+            std::vector<unsigned short> * GetVectorFichas();
+            
             void HabilitarDinero();
             void DeshabilitarDinero();
             void CambiarCamara();
