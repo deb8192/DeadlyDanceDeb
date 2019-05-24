@@ -50,6 +50,9 @@ Enemigo::Enemigo()
     defensa = false;
     accionRealizada = false;
     controlRotacion = false;
+    unicornioCorrecto = false;
+    aranaCorrecto = false;
+    atacandoEspecial = false;
     distanciaMinimaEsquivar = 3;
     multiplicadorAtaqueEspecial = 1;
     paredRota = -1;
@@ -867,9 +870,64 @@ void Enemigo::moverseEntidad(float updTime)
     posActual.x = posPasada.x * (1 - pt) + posFutura.x * pt;
     posActual.z = posPasada.z * (1 - pt) + posFutura.z * pt;
     
-    if(tipoEnemigo == 0 || tipoEnemigo == 1 || tipoEnemigo == 2)
+    if(tipoEnemigo == 2)
+    {
+        //esto es porque carga el sonido de otro enemigo, esto lo soluciona
+        if(!aranaCorrecto)
+        {
+            _motora->getEvent(soundID)->stop();
+            _motora->LoadEvent("event:/SFX/SFX-Arana grito enemigo", "sonArana", 1);
+            _motora->getEvent("sonArana")->setPosition(posActual.x,0,posActual.z);
+            _motora->getEvent("sonArana")->start();
+
+            aranaCorrecto = true;
+        }
+    }
+    else if(tipoEnemigo == 6)
+    {
+        //esto es porque carga el sonido de otro enemigo, esto lo soluciona
+        if(!unicornioCorrecto)
+        {
+            _motora->getEvent(soundID)->stop();
+            _motora->LoadEvent("event:/SFX/SFX-Unicornio Caminando", "sonBoss", 1);
+            _motora->getEvent("sonBoss")->setPosition(posActual.x,0,posActual.z);
+            _motora->getEvent("sonBoss")->start();
+
+            unicornioCorrecto = true;
+        }
+    }
+
+    if(tipoEnemigo == 0 || tipoEnemigo == 1)
     {
         _motora->getEvent(soundID)->setPosition(this->getX(),this->getY(),this->getZ());
+    }
+    else if(tipoEnemigo == 2)
+    {
+        _motora->getEvent("sonArana")->setPosition(this->getX(),this->getY(),this->getZ());
+    }
+    else if(tipoEnemigo == 6)
+    {
+       _motora->getEvent("sonBoss")->setPosition(this->getX(),this->getY(),this->getZ());
+
+        if((soundx == posActual.x && soundz == posActual.z) || atacandoEspecial)
+        {
+            _motora->getEvent("sonBoss")->pause(); 
+        }
+        else
+        {
+            _motora->getEvent("sonBoss")->resume(); 
+        }       
+
+        if(_tiempo->CalcularTiempoPasado(detectiontime) > 1100.0f)
+        {
+        detectiontime = _tiempo->GetTiempo(1);
+        }
+
+        if(_tiempo->CalcularTiempoPasado(detectiontime) >= 1070.0f)
+        {
+            soundx = posActual.x;
+            soundz = posActual.z;
+        }
     }
     else if(tipoEnemigo == 3)
     {
