@@ -457,7 +457,11 @@ void Jugando::Update()
         oirMuerteOmni = 0.0f;
    }
 
-    if(_jugador->GetSala()->getPosicionEnGrafica() == 0 || _jugador->GetSala()->getPosicionEnGrafica() == 1)
+    if(_jugador->GetSala()->getPosicionEnGrafica() == 0 ||
+     _jugador->GetSala()->getPosicionEnGrafica() == 1 ||
+     _jugador->GetSala()->getPosicionEnGrafica() == 5 ||
+     _jugador->GetSala()->getPosicionEnGrafica() == 8||
+     _jugador->GetSala()->getPosicionEnGrafica() == 9)
     {
         _motora->getEvent("AmbienteViento")->resume();
     }
@@ -2079,12 +2083,11 @@ void Jugando::RespawnEnemigos()
                     _motora->getEvent("MuerteEstasDebil")->stop();
                     _motora->getEvent("MuertePaseas")->stop();
                     _motora->getEvent("MuerteRespawn2")->start();
-                    if(_jugador->GetSala()->getPosicionEnGrafica() == 14)
-                    {
-                        _enemigos[0]->invocaSound();
-                        _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
-                        _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
-                    }
+                    
+                    _enemigos[0]->invocaSound();
+                    _enemigos[0]->stopPasearSound(_jugador->GetTipoJug());
+                    _enemigos[0]->stopVentajaSound(_jugador->GetTipoJug());
+                    
                 }
             }
             else if(tipoEne != 0)
@@ -2886,6 +2889,9 @@ void Jugando::CrearEnemigoArana()
 
    //Cargar sonido evento en una instancia con la id del enemigo como nombre
     std::string nameid = std::to_string(_eneA->getID()); //pasar id a string
+    _motora->LoadEvent("event:/SFX/SFX-Arana grito enemigo", nameid, 1);
+    _motora->getEvent(nameid)->setPosition(x,0,z);
+    _motora->getEvent(nameid)->start();
 
     /*if (!_eneA->GetPrimeraVezActivada())
     {*/
