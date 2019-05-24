@@ -97,6 +97,9 @@
         </relationship>
     </object>
     <object class="EventMixerGroup" id="{18147539-718a-4a44-b09b-43f9f08d8507}">
+        <property name="volume">
+            <value>3</value>
+        </property>
         <property name="name">
             <value>Audio 1</value>
         </property>
@@ -113,6 +116,9 @@
     <object class="MixerBusEffectChain" id="{b0799fac-c7cf-4ca0-8959-4eeb7e05f886}">
         <relationship name="effects">
             <destination>{45ccbde7-6add-49c9-bf39-3c3d3ae973e5}</destination>
+            <destination>{92672248-a5eb-423f-9262-3e64be4b9a6b}</destination>
+            <destination>{5f875030-e7d9-4565-9684-1fc3478beb47}</destination>
+            <destination>{5e4ec294-6b17-42c5-991d-bbe09d865a70}</destination>
         </relationship>
     </object>
     <object class="MixerBusPanner" id="{97ea517f-b7a8-4182-bc40-7ed55ee1d0a1}"/>
@@ -124,5 +130,38 @@
     </object>
     <object class="MixerBusPanner" id="{b260a15e-c606-4b29-b623-07c9531c37a4}"/>
     <object class="MixerBusFader" id="{45ccbde7-6add-49c9-bf39-3c3d3ae973e5}"/>
+    <object class="ChorusEffect" id="{92672248-a5eb-423f-9262-3e64be4b9a6b}">
+        <property name="rate">
+            <value>11.5</value>
+        </property>
+        <property name="depth">
+            <value>90</value>
+        </property>
+        <property name="mix">
+            <value>5.5</value>
+        </property>
+    </object>
+    <object class="ChorusEffect" id="{5f875030-e7d9-4565-9684-1fc3478beb47}">
+        <property name="rate">
+            <value>11</value>
+        </property>
+        <property name="depth">
+            <value>26.5</value>
+        </property>
+        <property name="mix">
+            <value>13</value>
+        </property>
+    </object>
+    <object class="ChorusEffect" id="{5e4ec294-6b17-42c5-991d-bbe09d865a70}">
+        <property name="rate">
+            <value>0.0580000021</value>
+        </property>
+        <property name="depth">
+            <value>12.5</value>
+        </property>
+        <property name="mix">
+            <value>22.5</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{2713eb76-457e-42b1-94d8-f7702f9160a9}"/>
 </objects>

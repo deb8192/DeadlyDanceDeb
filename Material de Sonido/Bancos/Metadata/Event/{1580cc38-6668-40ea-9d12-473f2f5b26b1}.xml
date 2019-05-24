@@ -56,7 +56,11 @@
             <destination>{602e4272-9144-4d50-b7b9-fd78a1c31768}</destination>
         </relationship>
     </object>
-    <object class="EventAutomatableProperties" id="{afa7eefb-632b-4690-8678-263f04f5449a}"/>
+    <object class="EventAutomatableProperties" id="{afa7eefb-632b-4690-8678-263f04f5449a}">
+        <property name="priority">
+            <value>4</value>
+        </property>
+    </object>
     <object class="MarkerTrack" id="{c82d900a-0a21-4253-8a4e-0379055f5c1d}"/>
     <object class="GroupTrack" id="{26d12176-6861-41fb-805f-b69cbec9add4}">
         <relationship name="modules">
@@ -249,7 +253,17 @@
     </object>
     <object class="MixerBusPanner" id="{fef9fdf4-a9c5-4a07-9a83-e4eebd922635}"/>
     <object class="MixerBusFader" id="{cd985c4b-ec65-4479-a328-c9bc739d035a}"/>
-    <object class="SpatialiserEffect" id="{2e575395-4760-4426-922c-61d3c6b0ee1d}"/>
+    <object class="SpatialiserEffect" id="{2e575395-4760-4426-922c-61d3c6b0ee1d}">
+        <property name="minimumDistance">
+            <value>60</value>
+        </property>
+        <property name="maximumDistance">
+            <value>300</value>
+        </property>
+        <property name="soundSize">
+            <value>10000</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{4f45ce26-a4f4-4ca0-82d9-a2a54935a1bb}"/>
     <object class="SFXReverbEffect" id="{f257a657-7e85-4ba5-b6aa-ce51bfda4187}">
         <property name="decayTime">

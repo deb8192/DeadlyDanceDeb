@@ -99,7 +99,7 @@
     </object>
     <object class="EventMixerGroup" id="{30fcbb6b-b59c-4dfc-aa00-63200ec0e4e6}">
         <property name="volume">
-            <value>-10</value>
+            <value>-10.5</value>
         </property>
         <property name="name">
             <value>Audio 1</value>
@@ -140,7 +140,17 @@
     </object>
     <object class="MixerBusPanner" id="{57cf10d9-21e3-4d29-a641-3674c214d042}"/>
     <object class="MixerBusFader" id="{296ea7e7-8975-49b9-83db-097eab889884}"/>
-    <object class="SpatialiserEffect" id="{4be476d5-d88f-48b2-b1f6-a7af4f1242c4}"/>
+    <object class="SpatialiserEffect" id="{4be476d5-d88f-48b2-b1f6-a7af4f1242c4}">
+        <property name="minimumDistance">
+            <value>60</value>
+        </property>
+        <property name="maximumDistance">
+            <value>300</value>
+        </property>
+        <property name="soundSize">
+            <value>10000</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{99f6eee5-e827-4c48-9680-8d2fbba58cff}"/>
     <object class="SFXReverbEffect" id="{48a44483-c6b5-4088-8c3d-5ff1a1619eb3}">
         <property name="decayTime">

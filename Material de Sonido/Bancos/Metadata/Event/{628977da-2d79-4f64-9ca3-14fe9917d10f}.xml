@@ -73,7 +73,7 @@
     </object>
     <object class="EventMixerMaster" id="{1e899245-92ce-4445-b1d9-c6e12da031db}">
         <property name="volume">
-            <value>10</value>
+            <value>-0.5</value>
         </property>
         <relationship name="effectChain">
             <destination>{5a247e28-6609-4bad-a66e-3a6bc7164b46}</destination>
@@ -101,7 +101,7 @@
     </object>
     <object class="EventMixerGroup" id="{7f7b2e1f-1a49-471d-94d0-0440f003ce04}">
         <property name="volume">
-            <value>10</value>
+            <value>-4</value>
         </property>
         <property name="name">
             <value>Audio 1</value>
@@ -127,20 +127,56 @@
     <object class="MixerBusEffectChain" id="{789905bb-df1f-4a1e-8188-3cc34b943fa2}">
         <relationship name="effects">
             <destination>{ab6670ec-49b3-48f4-ae1d-46641f7fb3f6}</destination>
+            <destination>{07247c78-0696-4bdf-b7b2-fcee8ff32cff}</destination>
+            <destination>{fb18b8d4-8a21-443c-8d1c-8c503c34a756}</destination>
+            <destination>{cffebbb2-09bf-48b0-b659-d2a6eda854a0}</destination>
         </relationship>
     </object>
     <object class="MixerBusPanner" id="{563795b9-00e8-443d-a043-e1ad56703001}"/>
     <object class="MixerBusFader" id="{505b8f57-18f1-4de6-a300-5fa413ec2cab}"/>
     <object class="SpatialiserEffect" id="{865b7300-ade8-4d35-9c72-4917e8f51200}">
         <property name="minimumDistance">
-            <value>90</value>
+            <value>60</value>
         </property>
         <property name="maximumDistance">
-            <value>4850</value>
+            <value>200</value>
         </property>
         <property name="soundSize">
             <value>17.5</value>
         </property>
     </object>
     <object class="MixerBusFader" id="{ab6670ec-49b3-48f4-ae1d-46641f7fb3f6}"/>
+    <object class="ChorusEffect" id="{07247c78-0696-4bdf-b7b2-fcee8ff32cff}">
+        <property name="rate">
+            <value>11.5</value>
+        </property>
+        <property name="depth">
+            <value>90</value>
+        </property>
+        <property name="mix">
+            <value>5.5</value>
+        </property>
+    </object>
+    <object class="ChorusEffect" id="{fb18b8d4-8a21-443c-8d1c-8c503c34a756}">
+        <property name="rate">
+            <value>11</value>
+        </property>
+        <property name="depth">
+            <value>26.5</value>
+        </property>
+        <property name="mix">
+            <value>13</value>
+        </property>
+    </object>
+    <object class="ChorusEffect" id="{cffebbb2-09bf-48b0-b659-d2a6eda854a0}">
+        <property name="rate">
+            <value>0.0580000021</value>
+        </property>
+        <property name="depth">
+            <value>12.5</value>
+        </property>
+        <property name="mix">
+            <value>22.5</value>
+        </property>
+    </object>
 </objects>

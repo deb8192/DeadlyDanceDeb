@@ -159,15 +159,45 @@
     <object class="MixerBusFader" id="{90dae400-5ee7-4c44-b7ff-1459f23e9a0b}"/>
     <object class="SFXReverbEffect" id="{70f9692a-d9e7-4ea1-9285-2684c415e41d}">
         <property name="decayTime">
-            <value>3500</value>
+            <value>500</value>
+        </property>
+        <property name="earlyDelay">
+            <value>80</value>
+        </property>
+        <property name="HFReference">
+            <value>1500</value>
+        </property>
+        <property name="HFDecayRatio">
+            <value>56</value>
+        </property>
+        <property name="diffusion">
+            <value>85.5</value>
+        </property>
+        <property name="lowShelfFrequency">
+            <value>560</value>
+        </property>
+        <property name="lowShelfGain">
+            <value>5.5</value>
+        </property>
+        <property name="highCut">
+            <value>8000</value>
+        </property>
+        <property name="earlyLateMix">
+            <value>32</value>
+        </property>
+        <property name="wetLevel">
+            <value>-16</value>
+        </property>
+        <property name="dryLevel">
+            <value>-15.5</value>
         </property>
     </object>
     <object class="SpatialiserEffect" id="{3dbfddb3-a47c-4397-a871-79e719b7be51}">
         <property name="minimumDistance">
-            <value>6.80000019</value>
+            <value>8</value>
         </property>
         <property name="maximumDistance">
-            <value>150</value>
+            <value>200</value>
         </property>
         <property name="soundSize">
             <value>10000</value>

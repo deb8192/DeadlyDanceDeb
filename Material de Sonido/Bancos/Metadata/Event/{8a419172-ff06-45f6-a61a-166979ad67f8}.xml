@@ -56,7 +56,11 @@
             <destination>{602e4272-9144-4d50-b7b9-fd78a1c31768}</destination>
         </relationship>
     </object>
-    <object class="EventAutomatableProperties" id="{339d0d7b-a5d0-4acd-9481-7b74d7b25c66}"/>
+    <object class="EventAutomatableProperties" id="{339d0d7b-a5d0-4acd-9481-7b74d7b25c66}">
+        <property name="priority">
+            <value>4</value>
+        </property>
+    </object>
     <object class="MarkerTrack" id="{1eb10721-920c-4a1c-8a12-4508eae016ba}"/>
     <object class="GroupTrack" id="{10e6e2d3-ef6e-4418-b313-4a782905af56}">
         <relationship name="modules">
@@ -95,11 +99,12 @@
         <relationship name="sounds">
             <destination>{3e066172-ddf3-4774-89c3-e4fe8947c9c6}</destination>
             <destination>{65c0c769-b2df-4d2e-86d6-11de2031d6fe}</destination>
+            <destination>{a4434df4-a081-4286-8039-976610412ef6}</destination>
         </relationship>
     </object>
     <object class="EventMixerGroup" id="{284fb92d-f24e-44c7-9bb6-9adc6d9189dd}">
         <property name="volume">
-            <value>-10.5</value>
+            <value>-10</value>
         </property>
         <property name="name">
             <value>Audio 1</value>
@@ -132,6 +137,11 @@
             <destination>{d0cf710c-5bab-453d-ac6f-9bd5d2aab031}</destination>
         </relationship>
     </object>
+    <object class="SingleSound" id="{a4434df4-a081-4286-8039-976610412ef6}">
+        <relationship name="audioFile">
+            <destination>{43a82005-6c82-4e73-9f95-8f5971a59e48}</destination>
+        </relationship>
+    </object>
     <object class="MixerBusEffectChain" id="{a17b70bf-1a0e-4454-832f-fe4b478dd550}">
         <relationship name="effects">
             <destination>{3e79ae2e-8f0e-403d-a168-7ebeae900211}</destination>
@@ -140,7 +150,17 @@
     </object>
     <object class="MixerBusPanner" id="{2d5c7b56-6bd5-4f04-a6cd-fd5a00108433}"/>
     <object class="MixerBusFader" id="{ed2c2dfc-b625-47dd-88b9-3a1bd34aca78}"/>
-    <object class="SpatialiserEffect" id="{d537d50a-a409-4915-a3e0-85417b8463cd}"/>
+    <object class="SpatialiserEffect" id="{d537d50a-a409-4915-a3e0-85417b8463cd}">
+        <property name="minimumDistance">
+            <value>60</value>
+        </property>
+        <property name="maximumDistance">
+            <value>300</value>
+        </property>
+        <property name="soundSize">
+            <value>10000</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{3e79ae2e-8f0e-403d-a168-7ebeae900211}"/>
     <object class="SFXReverbEffect" id="{96bd4089-db87-4792-966d-aad489be504c}">
         <property name="decayTime">
