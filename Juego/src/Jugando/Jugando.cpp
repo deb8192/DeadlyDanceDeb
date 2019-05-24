@@ -2885,11 +2885,6 @@ void Jugando::CrearEnemigoArana()
     _motora->getEvent(nameid)->setPosition(x,y,z);
     _motora->getEvent(nameid)->start();
 
-    /*if (!_eneA->GetPrimeraVezActivada())
-    {*/
-        _eneA->SetPrimeraVezActivada(true);
-    //}
-
     _enemigos.push_back(_eneA);
     _eneA = nullptr;
 

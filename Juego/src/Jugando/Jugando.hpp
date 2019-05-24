@@ -88,6 +88,7 @@ class Jugando: public Estado {
         void BorrarTodosLosEnemigos();
         void LimpiarJuego();
         void CrearSprites();
+        void ReanudarSonidos();
 
     private:
 
