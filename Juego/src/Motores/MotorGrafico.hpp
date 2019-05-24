@@ -326,6 +326,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void SetVida(int vida);
             void SetBarraEnergia(int barra);
             void SetDinero(int dinero);
+            void SetLlaves(int llaves);
             void SetArma(int arma);
             void RenderInterfaz(bool activada);//TO DO: ¿separar graficos?
 
@@ -399,6 +400,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
             void EscalarMalla(unsigned int did, float escalado);
             unsigned int ObtenerIDOpengl(unsigned int tipo,unsigned int idVector);
+            void ActivarLlaveBoss();
 
         private: //clases solo accesibles por MotorGrafico
 
@@ -485,8 +487,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
 
                 //hud
                 unsigned short moneyI;
+                unsigned short contadorLlavesI;
                 unsigned short vida_textura;
-                unsigned short energia_textura;
                 unsigned short dinero_textura;
                 unsigned short arma_textura;
                 unsigned short barraVida_textura;
@@ -494,8 +496,14 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 unsigned short manos_textura;
                 unsigned short llave_textura;
                 unsigned short espada_textura;
+                unsigned short guitarra_textura2;
+                unsigned short guitarra_textura3;
                 unsigned short daga_textura;
+                unsigned short arpa_textura2;
+                unsigned short arpa_textura3;
                 unsigned short flauta_textura;
+                unsigned short flauta_textura2;
+                unsigned short flauta_textura3;
 
                 //puzzles
 
@@ -566,11 +574,17 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 IGUIImage* manosI;
                 IGUIImage* llaveI;
                 IGUIImage* espadaI;
+                IGUIImage* guitarraI2;
+                IGUIImage* guitarraI3;
                 IGUIImage* dagaI;
+                IGUIImage* arpaI2;
+                IGUIImage* arpaI3;
                 IGUIImage* flautaI;
+                IGUIImage* flautaI2;
+                IGUIImage* flautaI3;
                 IGUIStaticText* moneyI;
+                IGUIStaticText* contadorLlavesI;
                 ITexture* vida_textura;
-                ITexture* energia_textura;
                 ITexture* dinero_textura;
                 ITexture* arma_textura;
                 ITexture* barraVida_textura;
@@ -578,8 +592,14 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
                 ITexture* manos_textura;
                 ITexture* llave_textura;
                 ITexture* espada_textura;
+                ITexture* guitarra_textura2;
+                ITexture* guitarra_textura3;
                 ITexture* daga_textura;
+                ITexture* arpa_textura2;
+                ITexture* arpa_textura3;
                 ITexture* flauta_textura;
+                ITexture* flauta_textura2;
+                ITexture* flauta_textura3;
 
                 //cinematicas
                 int frame_actual;//numero de frame actual
@@ -610,6 +630,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             bool estadoteclas2[350];//contiene si esta pulsado
             void updateTeclas(); //actualiza los estados de las teclas
             float tiempo;//segun que valor se ponga los botones se actualizan mas rapido esta puesto para que se actualicen 10 veces por segundo
+            bool llaveBossActivada;
     };
 
 #endif /* MotorGrafico_HPP */

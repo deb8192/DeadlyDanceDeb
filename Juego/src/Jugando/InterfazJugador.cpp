@@ -7,11 +7,13 @@ InterfazJugador* InterfazJugador::_unica_instancia = 0;
 InterfazJugador::InterfazJugador()
 {
     _motor = MotorGrafico::GetInstance();
+    llaveBosActivada = false;
 }
 
 InterfazJugador::~InterfazJugador()
 {
     estado = false;
+    llaveBosActivada = false;
     
     _motor = nullptr;
     delete _unica_instancia;
@@ -47,27 +49,61 @@ void InterfazJugador::setDinero(int din)
     _motor->SetDinero(din);
 }
 
+void InterfazJugador::setLlaves(int llaves)
+{
+    if (llaveBosActivada)
+    {
+        llaves--;
+    }
+    _motor->SetLlaves(llaves);
+}
+
 void InterfazJugador::setArma(int arm)
 {
-    //_motor->SetArma(1); Esto es la llave que se cambiara de sitio
-
-    if ((arm == constantes.GUITARRA1) || (arm == constantes.GUITARRA2)
-        || (arm == constantes.GUITARRA3))
+    if (arm == constantes.GUITARRA1)
     {
         _motor->SetArma(2);
     }
-    else if ((arm == constantes.ARPA1) || (arm == constantes.ARPA2)
-        || (arm == constantes.ARPA3))
+    else if (arm == constantes.GUITARRA2)
     {
         _motor->SetArma(3);
     }
-    else if ((arm == constantes.FLAUTA1) || (arm == constantes.FLAUTA2)
-        || (arm == constantes.FLAUTA3))
+    else if (arm == constantes.GUITARRA3)
     {
         _motor->SetArma(4);
+    }
+    else if (arm == constantes.ARPA1)
+    {
+        _motor->SetArma(5);
+    }
+    else if (arm == constantes.ARPA2)
+    {
+        _motor->SetArma(6);
+    }
+    else if (arm == constantes.ARPA3)
+    {
+        _motor->SetArma(7);
+    }
+    else if (arm == constantes.FLAUTA1)
+    {
+        _motor->SetArma(8);
+    }
+    else if (arm == constantes.FLAUTA2)
+    {
+        _motor->SetArma(9);
+    }
+    else if (arm == constantes.FLAUTA3)
+    {
+        _motor->SetArma(10);
     }
     else // MANO
     {
         _motor->SetArma(0);
     }
+}
+
+void InterfazJugador::ActivarLlaveBoss()
+{
+    llaveBosActivada = true;
+    _motor->ActivarLlaveBoss();
 }

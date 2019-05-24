@@ -105,6 +105,12 @@ class GestorInterfaces
                         unsigned int xMarcaDineroM;
                         unsigned int yMarcaDineroM;
 
+                        unsigned int xContadorLlavesM;
+                        unsigned int yContadorLlavesM;
+
+                        unsigned int xLlaveBossM;
+                        unsigned int yLlaveBossM;
+
                         unsigned int xTipoObjetoM;
                         unsigned int yTipoObjetoM;
 
