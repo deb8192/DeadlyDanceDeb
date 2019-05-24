@@ -195,6 +195,7 @@ void Jugando::ValoresPorDefecto()
     salaPenultima = false;
     meAtacan = false;
     poderEmpezar = false;
+    enCentroSalaBoss = false;
     bocadillo = false;
     respawnMO = false;
     oirMuerteOmni = 0.0f;
@@ -446,6 +447,7 @@ void Jugando::InteractuarNivel()
 * */
 void Jugando::Update()
 {
+    Constantes constantes;
     //esto es para que espere 5 segundos antes de reanudar/cortar sonidos al cambiar de sala
    if(oirMuerteOmni!= 0.0f && _controladorTiempo->CalcularTiempoPasado(oirMuerteOmni)/1000 > 5.0f)
    {
@@ -475,6 +477,43 @@ void Jugando::Update()
    {
        //para que pueda moverse en el nivel antiguo
         poderEmpezar = true;
+   }
+   if(enSalaBoss && !poderEmpezar)
+   {
+       enCentroSalaBoss = _jugador->moverseAlCentroDeLaSala(&coordenadasCentroSalaBoss);
+       if(enCentroSalaBoss)
+       {
+            int i = _puertas.size() - constantes.UNO;
+            bool puertaBossCerrada = false;
+            bool abrir = false;
+            float rot = 0.0f;
+            while(i >= constantes.CERO && !puertaBossCerrada)
+            {
+                if(_puertas[i]->getCodigo() == constantes.PUERTA_BOSS)
+                {
+                    Puerta* _puerta = _puertas.at(i);
+                    abrir = _puerta->accionar();
+                    _puerta->accionar();
+                    abrir = _puerta->accionar();
+                    rot = (constantes.PI_MEDIOS + constantes.PI_CUARTOS);
+                    if(abrir)
+                    {   //Se abre/acciona la puerta / el mecanismo
+                        _puerta->GirarPuerta(rot, true);
+                    }
+                    else
+                    {   //Se cierra/desacciona la puerta / el mecanismo
+                        _puerta->GirarPuerta(-rot, true);
+                    }
+                    _puerta = nullptr;
+                    puertaBossCerrada = true;
+                }
+                else
+                {
+                    i--;
+                } 
+            }
+            poderEmpezar = true;
+       }
    }
 
     bool colisionaWaypoint = false, waypointComun = false, cercaJugador = false;
@@ -734,10 +773,13 @@ void Jugando::Update()
                     {
                         this->RespawnEnemigosBoss();
                     }
-                    if (_enemPideAyuda) {
+                    if((enSalaBoss && poderEmpezar && enCentroSalaBoss) || !enSalaBoss)
+                    {
+                        if (_enemPideAyuda) {
                         _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
-                    } else {
-                        _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                        } else {
+                            _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                        }
                     }
                     short paredCol = _enemigos[i]->GetParedRota();
                     if(paredCol >= 0)
@@ -780,13 +822,16 @@ void Jugando::Update()
                 }
                 else
                 {
-                    cercaJugador = this->ComprobarEnemigoSalaContiguaJugador(i);
-                    if(cercaJugador)
+                    if(!enSalaBoss)
                     {
-                        if (_enemPideAyuda) {
-                        _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
-                        } else {
-                            _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                        cercaJugador = this->ComprobarEnemigoSalaContiguaJugador(i);
+                        if(cercaJugador)
+                        {
+                            if (_enemPideAyuda) {
+                            _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, true);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                            } else {
+                                _enemigos[i]->UpdateBehavior(&i, (int*)_jugador, _zonasOscuras, _zonasEscondite, false);     //Actualiza el comportamiento segun el nodo actual del arbol de comportamiento
+                            }
                         }
                     }
                 }
@@ -1287,10 +1332,13 @@ void Jugando::UpdateIA()
                         }
                         else
                         {
-                            cercaJugador = this->ComprobarEnemigoSalaContiguaJugador(i);
-                            if(cercaJugador)
+                            if(!enSalaBoss)
                             {
-                                _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                                cercaJugador = this->ComprobarEnemigoSalaContiguaJugador(i);
+                                if(cercaJugador)
+                                {
+                                    _enemigos[i]->UpdateIA();    //Ejecuta la llamada al arbol de comportamiento para realizar la siguiente accion
+                                }
                             }
                         }
                     }
@@ -2485,6 +2533,10 @@ void Jugando::AccionarMecanismo(int pos, const unsigned short tipoObj)
                         }
 
                         enSalaBoss = true;
+                        poderEmpezar = false;
+                        coordenadasCentroSalaBoss.vX = _jugador->GetSala()->getSizes()[2];
+                        coordenadasCentroSalaBoss.vY = _jugador->GetSala()->getSizes()[3];
+                        coordenadasCentroSalaBoss.vZ = _jugador->GetSala()->getSizes()[4];
                         this->CargarBossEnMemoria();
                     }
                     //Se abre/acciona la puerta / el mecanismo
@@ -2676,6 +2728,7 @@ void Jugando::updateRecorridoPathfinding(Enemigo* _enem)
                     _auxiliadores.front()->SetSala(_destinoPathFinding);
                 }
                 _auxiliadores.front()->AnnadirRecorridoAyuda(posicionesWaypoints);
+                delete path;
             }
             else if(_destinoPathFinding == _auxiliadores.front()->GetSala() && _auxiliadores.front()->GetModo() != Enemigo::modosEnemigo::MODO_ATAQUE)
             {
@@ -2854,7 +2907,7 @@ void Jugando::CargarBossEnMemoria()
     unsigned int did = 0;
 
     //cargador.SetVectorEnemigos(_enemigos);
-    BorrarTodosLosEnemigos();
+    //BorrarTodosLosEnemigos();
 
     if(_jugador->GetSala() != _boss->GetSala())
     {

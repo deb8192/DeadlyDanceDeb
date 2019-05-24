@@ -109,6 +109,7 @@ class Jugando: public Estado {
         bool salaPenultima;
         bool meAtacan;
         bool poderEmpezar;
+        bool enCentroSalaBoss;
         bool respawnMO;
         bool bocadillo;
         int estarAtacado;
@@ -137,6 +138,7 @@ class Jugando: public Estado {
         std::vector<Cofre*> _cofres;
 
         INnpc::VectorEspacial posicionMediaEnemigos;  //Posicion media que comparten los pollos que atacan en bandada
+        INnpc::VectorEspacial coordenadasCentroSalaBoss; //
 
         bool reiniciando, puzzleResuelto; // Se utiliza solo en Reanudar por el cambio entre Estados
         bool ganarPuzzle;
