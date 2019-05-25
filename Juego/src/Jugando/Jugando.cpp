@@ -1491,43 +1491,41 @@ void Jugando::Render()
         {
             if(_jugador->getTimeAt() == 1.5f)
             {
-                mov_weapon_rotX = -90;
-                mov_weapon_posX = 3.5;
-                mov_weapon_posZ = 3.5;
-                mov_weapon_posY = 4.0;
+                //actualizar posicion de animaciones
+                unsigned short tipoArma = _jugador->getArma()->GetTipoObjeto();
+
+                switch (tipoArma)
+                {
+                    case 10:
+                    armaSeleccionada=0;
+                    break;
+                    case 11:
+                    armaSeleccionada=1;
+                    break;
+                    case 12:
+                    armaSeleccionada=2;
+                    break;
+                }
             }
-            else if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() < 1.5f)
+            else if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() <= 1.5f)
             {
-                if(mov_weapon_rotX < 0)mov_weapon_rotX += 4;
-                if(mov_weapon_posY > 1.5)mov_weapon_posY -= 0.2;
-                if(mov_weapon_posX < 5.5)mov_weapon_posX += 0.3;
-                if(mov_weapon_posZ < 5.5)mov_weapon_posZ += 0.3;
+                _motor->desactivarObjeto(_motor->getArmaenEscena());
+                _motor->MoverArma(armaSeleccionada,_jugador->getX(),_jugador->getY(),_jugador->getZ());
+                _motor->RotarArma(armaSeleccionada,_jugador->getRX(),_jugador->getRY()-180,_jugador->getRZ());
             }
             else
             {
+                _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-2.0;
-                mov_weapon_posZ=-1.7;
+                mov_weapon_posZ=-1.5;
                 if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-2.6;
                 mov_weapon_posY=5.0;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
                 mov_weapon_rotZ=0;
+                _motor->MoverArma(armaSeleccionada,_jugador->getX(),_jugador->getY(),_jugador->getZ());
+                _motor->RotarArma(armaSeleccionada,_jugador->getRX(),_jugador->getRY()-180,_jugador->getRZ());
             }
-            // if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() <= 1.5f)
-            // {
-            //     _motor->desactivarObjeto(_motor->getArmaenEscena());
-            // }
-            // else
-            // {
-            //     _motor->activarObjeto(_motor->getArmaenEscena());
-            //     mov_weapon_posX=-2.0;
-            //     mov_weapon_posZ=-1.5;
-            //     if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-2.6;
-            //     mov_weapon_posY=5.0;
-            //     mov_weapon_rotX=90;
-            //     mov_weapon_rotY=0;
-            //     mov_weapon_rotZ=0;
-            // }
         }
         else if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.ARPA2) ||
             (tipoArma == constantes.ARPA3))

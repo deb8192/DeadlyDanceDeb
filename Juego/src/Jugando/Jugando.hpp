@@ -173,6 +173,8 @@ class Jugando: public Estado {
         float lastAtackEsptime = 0.0f; //registro antiguo del tiempo de ataque especial para su animacion
         */
 
+        unsigned int armaSeleccionada; //arma de animacion
+
        //valores pasados por los estados del menu iniciar o continuar
        unsigned int nivelJ;
        unsigned int tipoJugadorJ;
