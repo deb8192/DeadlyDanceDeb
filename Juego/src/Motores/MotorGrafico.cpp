@@ -733,6 +733,13 @@ void MotorGrafico::RenderEscena()
                     ActualizarAnimacionMotor(CofresAni_Scena[i]);
                 }
             }
+            for(unsigned int i = 0; i < 14;i++)
+            {
+                if(armasAni[i] != nullptr)//solo esta objetos luego seran todos los objetos
+                {
+                    ActualizarAnimacionMotor(armasAni[i]);
+                }
+            }
  
 
             //if(debugGrafico)
@@ -4580,6 +4587,10 @@ void MotorGrafico::cambiarAnimacion(int tipo ,int did ,int estado)//modo,id y es
         {
             anim = CofresAni_Scena[did];
         }
+        else if(tipo == 7)
+        {
+            anim = armasAni[did];
+        }
 
         //aqui mas
 
@@ -4904,12 +4915,31 @@ unsigned int MotorGrafico::ObtenerIDOpengl(unsigned int tipo,unsigned int idVect
         return idOpengl;
 }
 
-void MotorGrafico::CargarArma(unsigned int id,const char * modelo,unsigned int fps, const char * anima, float escalado)
+void MotorGrafico::CargarArma(unsigned int id,const char * modelo,unsigned int fps, const char * anima, float escalado, const char * textura)
 {
     #ifdef WEMOTOR
-        if(_interfaz)
+        if(_interfaz && modelo && anima && textura)
         {
+            if(id >= 0 && id < 14)
+            {
+                //std::cout << fps << std::endl;
+                unsigned int idArma = _interfaz->AddMalla(modelo,fps,0);
             
+                if(idArma != 0)
+                {
+                    armas[id] = idArma;//guardamos el id
+                    _interfaz->SetTexture(idArma,textura);//creamos la textura
+
+                    if(escalado != 1.0f)
+                    {
+                        EscalarMalla(idArma,escalado);//escalamos arma
+                    }
+
+                    //creamos animacion y la guardamos 
+                    armasAni[id] = new Animaciones(anima);
+                    armasAni[id]->AsignarID(idArma);
+                }
+            }
         } 
     #endif
 }
@@ -4924,4 +4954,30 @@ void MotorGrafico::ActivarLlaveBoss()
         //codigo motor irrlicht
         llaveI->setVisible(true);
     #endif
+}
+
+void MotorGrafico::MoverArma(unsigned id, float x, float y, float z)
+{
+    #ifdef WEMOTOR
+        if(_interfaz)
+        {
+            if(id >= 0 && id < 14)
+            {
+                _interfaz->Trasladar(armas[id],x,y,z);
+            }     
+        }
+    #endif        
+}
+
+void MotorGrafico::RotarArma(unsigned id, float x, float y, float z)
+{
+    #ifdef WEMOTOR
+        if(_interfaz)
+        {
+            if(id >= 0 && id < 14)
+            {
+                _interfaz->Rotar(armas[id],(float)x,(float)y,(float)z);
+            }     
+        }
+    #endif        
 }

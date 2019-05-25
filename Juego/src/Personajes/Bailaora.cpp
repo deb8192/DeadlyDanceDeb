@@ -11,9 +11,20 @@ Bailaora::Bailaora(Sala* sala,unsigned short tipoJug,int nX,int nY,int nZ,int an
         _textura = "assets/texture/bailarina.png";
         _animacion = "assets/animaciones/bailarina.xml";
         
-        modelosArmas[0]= "assets/models/Armas/Guitarras/Guitarra1/guitarra1_000187.obj";
+        modelosArmas[0]= "assets/models/Armas/Bailarina/Guitarra1/Guitarra1_000001.obj";
         fpsArmas[0] = 24;
-        animacionesArmas[0] = "assets/animaciones/GuitarraBailarina.xml";
+        texturasArmas[0] = "assets/texture/guitarra-1.png";
+        animacionesArmas[0] = "assets/animaciones/BGuitarra1.xml";
+
+        modelosArmas[1]= "assets/models/Armas/Bailarina/Guitarra2/Guitarra2_000001.obj";
+        fpsArmas[1] = 24;
+        texturasArmas[1] = "assets/texture/guitarra-2.png";
+        animacionesArmas[1] = "assets/animaciones/BGuitarra1.xml";
+
+        modelosArmas[2]= "assets/models/Armas/Bailarina/Guitarra3/Guitarra3_000001.obj";
+        fpsArmas[2] = 24;
+        texturasArmas[2] = "assets/texture/guitarra-3.png";
+        animacionesArmas[2] = "assets/animaciones/BGuitarra1.xml";
 
     #else
         _modelo = "assets/models/bailarina/bailarina_000001.obj";

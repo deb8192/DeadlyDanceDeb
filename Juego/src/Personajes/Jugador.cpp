@@ -446,6 +446,26 @@ int Jugador::Atacar(int i)
                 //Crear cuerpo de colision de ataque delante del jugador
                 _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4,0,0,false);
                 _motora->getEvent("GolpeGuitarra")->start();
+                
+                unsigned int armaSeleccionada;
+
+                switch (tipoArma)
+                {
+                   case 10:
+                    armaSeleccionada=0;
+                   break;
+                   case 11:
+                    armaSeleccionada=1;
+                   break;
+                   case 12:
+                    armaSeleccionada=2;
+                   break;
+                }
+
+                //_motor->RotarArma(armaSeleccionada,getRX(),getRY(),getRZ());
+                _motor->MoverArma(armaSeleccionada,getX(),getY(),getZ());
+                _motor->cambiarAnimacionJugador(7);
+                _motor->cambiarAnimacion(7,armaSeleccionada,1);
             }
             //ATAQUE A DISTANCIA
             else if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.ARPA2) ||
@@ -670,6 +690,32 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
     {
         //Enteros con los enemigos colisionados (atacados)
         vector <unsigned int> atacados = _fisicas->updateArma(atposX,atposY,atposZ);
+
+
+        //actualizar posicion de animaciones
+        if(getArma())
+        {
+            unsigned short tipoArma = this->getArma()->GetTipoObjeto();
+            unsigned int armaSeleccionada;
+
+            switch (tipoArma)
+            {
+                case 10:
+                armaSeleccionada=0;
+                break;
+                case 11:
+                armaSeleccionada=1;
+                break;
+                case 12:
+                armaSeleccionada=2;
+                break;
+            }
+
+            //_motor->RotarArma(armaSeleccionada,getRX(),getRY(),getRZ());
+            _motor->MoverArma(armaSeleccionada,getX(),getY(),getZ());
+        }
+
+
 
         if(!atacados.empty())
         {
@@ -1548,6 +1594,11 @@ const char * Jugador::GetAnimacionArma(unsigned int e)
     return animacionesArmas[e];
 }
 
+const char *Jugador::GetTexturaArma(unsigned int e)
+{
+    return texturasArmas[e];
+}
+
 unsigned int Jugador::GetFpsArma(unsigned int e)
 {
     return fpsArmas[e];
@@ -1557,3 +1608,4 @@ float Jugador::GetEscaladoArma(unsigned int e)
 {
     return escalado;
 }
+

@@ -175,8 +175,10 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         //para las animaciones de las armas
         const char * GetModeloArma(unsigned int);//lee el numero de arma que le pases siempre que exista
         const char * GetAnimacionArma(unsigned int);//lee el archivo de animacion del arma siempre que exista
+        const char * GetTexturaArma(unsigned int);//devuelve la ruta de la textura perteneciente al id que se le pasa
         unsigned int GetFpsArma(unsigned int);//te devuelve el numero de fps que tiene el arma
         float GetEscaladoArma(unsigned int);
+
     protected:
         void atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos);
         virtual void armaAtacarEspecialUpd() = 0;
@@ -226,6 +228,7 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
 
         const char * modelosArmas[14];
         const char * animacionesArmas[14];
+        const char * texturasArmas[14];
         unsigned int fpsArmas[14];
 };
 
