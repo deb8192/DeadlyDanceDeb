@@ -1489,7 +1489,7 @@ void Jugando::Render()
         if ((tipoArma == constantes.GUITARRA1) || (tipoArma == constantes.GUITARRA2) ||
             (tipoArma == constantes.GUITARRA3))
         {
-            if(_jugador->getTimeAt() == 1.5f)
+            if(_jugador->getTimeAt() == 2.0f)
             {
                 //actualizar posicion de animaciones
                 unsigned short tipoArma = _jugador->getArma()->GetTipoObjeto();
@@ -1507,7 +1507,7 @@ void Jugando::Render()
                     break;
                 }
             }
-            else if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() <= 1.5f)
+            else if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() <= 2.0f)
             {
                 _motor->desactivarObjeto(_motor->getArmaenEscena());
                 _motor->MoverArma(armaSeleccionada,_jugador->getX(),_jugador->getY(),_jugador->getZ());
@@ -1551,7 +1551,7 @@ void Jugando::Render()
             //     mov_weapon_rotY=0;
             //     mov_weapon_rotZ=0;
             // }
-            if(_jugador->getTimeAt() == 1.5f)
+            if(_jugador->getTimeAt() == 2.0f)
             {
                 proyectilFuera = false;
                 mov_weapon_rotX = 180;
@@ -1600,7 +1600,7 @@ void Jugando::Render()
             //     mov_weapon_rotY=0;
             //     mov_weapon_rotZ=0;
             // }
-            if(_jugador->getTimeAt() == 1.5f)
+            if(_jugador->getTimeAt() == 2.0f)
             {
                 proyectilFuera = false;
                 mov_weapon_rotX = 180;
@@ -2724,7 +2724,7 @@ void Jugando::updateAt(int* danyo)
         _motor->ResetKey(KEY_ESPACIO);
         _motor->ResetEvento(LMOUSE_DOWN);
         //atacktime = 1.5f;
-        _jugador->setTimeAt(1.5f);
+        _jugador->setTimeAt(2.0f);
         _jugador->setLastTimeAt(_controladorTiempo->GetTiempo(2));
     } else {
         if(_jugador->getTimeAt() > 0.0f)
