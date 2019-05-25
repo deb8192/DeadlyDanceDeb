@@ -63,7 +63,9 @@ void Pausa::ManejarEventos()
     if (_motor->OcurreEvento(GUI_ID_MENU_BUTTON))
     {
         borrarEscenaResetearEvento(GUI_ID_MENU_BUTTON);
+
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
+
         menuPrincipal();
     }
 }
@@ -104,11 +106,8 @@ void Pausa::borrarGUIResetearEvento(short id)
 // Vuelve al menu principal
 void Pausa::menuPrincipal()
 {
-    _motora->getEvent("AmbienteLava")->stop(); //Detener ambiente
-    _motora->getEvent("AmbienteGritos")->stop(); //Detener musica ambiente
-    _motora->getEvent("Nivel1")->stop(); //Detener musica Juego
-    _motora->getEvent("Nivel2")->stop(); //Detener musica Juego
     _motor->LimpiarElementosJuego();
+    _motora->stopAll();
     // Elimina todos los estados y anyade el de menu
     Juego::GetInstance()->estado.CambioDeJuegoAMenu();
 }
@@ -116,6 +115,7 @@ void Pausa::menuPrincipal()
 // Elimina el estado pausa e indica al juego que se tiene que reiniciar
 void Pausa::reiniciarPartida()
 {
+    _motora->stopAll();
     Juego::GetInstance()->estado.ReiniciarPartida();
 }
 
@@ -126,5 +126,6 @@ void Pausa::atras()
 
 void Pausa::salir()
 {
+    _motora->stopAll();    
     _motor->CerrarJuego();
 }

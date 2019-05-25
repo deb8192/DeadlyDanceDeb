@@ -260,10 +260,7 @@ void EstadoGanar::borrarGUIResetearEvento(short id)
 
 void EstadoGanar::menuPrincipal()
 {
-    _motora->getEvent("AmbienteLava")->stop(); //Detener ambiente
-    _motora->getEvent("AmbienteGritos")->stop(); //Detener musica ambiente
-    _motora->getEvent("Nivel1")->stop(); //Detener musica Juego
-    _motora->getEvent("Nivel2")->stop(); //Detener musica Juego
+    _motora->stopAll();
     _motor->LimpiarElementosJuego();
     // Elimina todos los estados y anyade el de menu
     Juego::GetInstance()->estado.CambioDeGanarAMenu();
@@ -277,5 +274,6 @@ void EstadoGanar::siguienteNivel()
 
 void EstadoGanar::salir()
 {
+    _motora->stopAll();
     _motor->CerrarJuego();
 }

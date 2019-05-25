@@ -1530,7 +1530,7 @@ void Jugando::Render()
         else if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.ARPA2) ||
             (tipoArma == constantes.ARPA3))
         {
-            // if(_jugador->getTimeAt() == 1.5f)
+            // if(_jugador->getTimeAt() == 2.0f)
             // {
             //     _motor->desactivarObjeto(_motor->getArmaenEscena());
             //     proyectilFuera = false;
@@ -1578,7 +1578,7 @@ void Jugando::Render()
         else if ((tipoArma == constantes.FLAUTA1) || (tipoArma == constantes.FLAUTA2) ||
             (tipoArma == constantes.FLAUTA3))
         {
-            // if(_jugador->getTimeAt() == 1.5f)
+            // if(_jugador->getTimeAt() == 2.0f)
             // {
             //     _motor->desactivarObjeto(_motor->getArmaenEscena());
             //     proyectilFuera = false;
