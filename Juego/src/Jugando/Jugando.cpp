@@ -1487,8 +1487,7 @@ void Jugando::Render()
         unsigned short tipoArma = _jugador->getArma()->GetTipoObjeto();
         //Ataque Animacion
         if ((tipoArma == constantes.GUITARRA1) || (tipoArma == constantes.GUITARRA2) ||
-            (tipoArma == constantes.GUITARRA3) || (tipoArma == constantes.FLAUTA1) ||
-        (tipoArma == constantes.FLAUTA2) || (tipoArma == constantes.FLAUTA3))
+            (tipoArma == constantes.GUITARRA3))
         {
             if(_jugador->getTimeAt() == 2.0f)
             {

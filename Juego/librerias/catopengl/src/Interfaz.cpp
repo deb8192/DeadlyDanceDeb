@@ -696,10 +696,13 @@ void Interfaz::Rotar(unsigned short id,float gx,float gy,float gz)
 
     if(nodo != nullptr)
     {
-        TNodo * tnodo = nodo->recurso->GetHijo(1);
-        if(tnodo != nullptr)
+        if(nodo->recurso)
         {
-            tnodo->GetEntidad()->rotar(gx,gy,gz);
+            TNodo * tnodo = nodo->recurso->GetHijo(1);
+            if(tnodo != nullptr)
+            {
+                tnodo->GetEntidad()->rotar(gx,gy,gz);
+            }
         }
     }
 }
