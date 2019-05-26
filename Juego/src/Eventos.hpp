@@ -67,8 +67,11 @@ namespace idsEventos
         GUI_ID_OP2,
         GUI_ID_OP3,
         GUI_ID_OP4,
+        GUI_FICHA_1,
+        GUI_FICHA_2,
+        GUI_FICHA_3,
         GUI_ID_PUZZLE, 
-
+        
         UltimoEvento = GUI_ID_PUZZLE
     };
 }

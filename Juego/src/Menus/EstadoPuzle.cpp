@@ -106,6 +106,7 @@ void EstadoPuzle::Iniciar()
         pilaInicial = NO_SELECT; // Para colocar las fichas en pilaIzq
         pilaFinal = NO_SELECT;
         fichaMover = 0;
+        iniXFichas = 100.0f;
 
         // Monta la interfaz dependiendo del tipo de puzzle
         _motor->CrearTextoPuzzles("Torres de hanoi", 40,60,200,80);
@@ -145,19 +146,6 @@ void EstadoPuzle::Update()
 
 void EstadoPuzle::ManejarEventos()
 {
-    // Temporal para pruebas
-    if (_motor->EstaPulsado(KEY_ESC)) {
-        _motor->ResetKey(KEY_ESC);
-        atras();
-    }
-
-    if (_motor->OcurreEvento(GUI_ID_ATRAS_PUZ))
-    {
-        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
-        _motor->ResetEvento(GUI_ID_ATRAS_PUZ);
-        atras();
-    }
-
     if (tipo == P_ACERTIJO)
     {
        comprobarEventosOpciones();
@@ -168,16 +156,24 @@ void EstadoPuzle::ManejarEventos()
     }
 }
 
-// Vuelve al juego
 void EstadoPuzle::atras()
 {
-    _motor->BorrarGuiPuzzle(tipo, opciones);
-    _motor->HabilitarDinero();
-    Juego::GetInstance()->estado.QuitarPausa();
+    if ((_motor->OcurreEvento(GUI_ID_ATRAS_PUZ)) ||
+        (_motor->EstaPulsado(KEY_ESC)))
+    {
+        _motor->ResetKey(KEY_ESC);
+        _motor->ResetKey(LMOUSE_PRESSED_DOWN);
+        _motor->ResetEvento(GUI_ID_ATRAS_PUZ);
+        _motor->BorrarGuiPuzzle(tipo, opciones);
+        _motor->HabilitarDinero();
+        Juego::GetInstance()->estado.QuitarPausa();
+    }
 }
 
 void EstadoPuzle::comprobarEventosOpciones()
 {
+    atras(); // Comprobamos si se pulsan los botones para volver al juego
+
     if(_motor->OcurreEvento(GUI_ID_OP1))// Boton A
     {
         _motor->ResetEvento(GUI_ID_OP1);
@@ -202,35 +198,52 @@ void EstadoPuzle::comprobarEventosOpciones()
 
 void EstadoPuzle::comprobarEventosHanoi()
 {
-    if(_motor->OcurreEvento(GUI_ID_REINICIAR_HANOI))
+    if (!pulsado)
     {
-        _motor->ResetEvento(GUI_ID_REINICIAR_HANOI);
-        if (pasos > 0) {
-            // Reiniciamos posiciones mallas fichas
-            _motor->ReiniciarHanoi();
-            reiniciarPilas();
+        atras();
+        if(_motor->OcurreEvento(GUI_ID_REINICIAR_HANOI))
+        {
+            _motor->ResetEvento(GUI_ID_REINICIAR_HANOI);
+            if (pasos > 0) {
+                // Reiniciamos posiciones mallas fichas
+                _motor->ReiniciarHanoi(IZQ, 400);
+
+                _motor->CambiarPosicionImagen(GUI_FICHA_1, iniXFichas, 400);
+                _motor->CambiarPosicionImagen(GUI_FICHA_2, iniXFichas, 480);
+                _motor->CambiarPosicionImagen(GUI_FICHA_3, iniXFichas, 560);
+
+                reiniciarPilas();
+            }
+        }
+    }
+    _motor->ActualizarTextoPasos(pasos);
+
+    if((_motor->PulsadoClicIzq()) && (!pulsado))
+    {
+        if(_motor->OcurreEvento(GUI_FICHA_1))
+        {
+            pulsado=true;
+            fichaMover = GUI_FICHA_1;
+        } else if(_motor->OcurreEvento(GUI_FICHA_2))
+        {
+            pulsado=true;
+            fichaMover = GUI_FICHA_2;
+        } else if(_motor->OcurreEvento(GUI_FICHA_3))
+        {
+            pulsado=true;
+            fichaMover = GUI_FICHA_3;
         }
     }
 
-    _motor->ActualizarTextoPasos(pasos);
-
-    /*if((_motor->PulsadoClicIzq()) && (!_motor->EstaPulsado(MOUSE_MOVED)))
+    //if((_motor->PulsadoClicIzq()) && (!_motor->EstaPulsado(MOUSE_MOVED)))
+    if ( ((float)_motor->GetPosicionRaton()[0] >= 0.0f && (float)_motor->GetPosicionRaton()[0] <= 800.0f) &&
+         ((float)_motor->GetPosicionRaton()[1] >= 0.0f && (float)_motor->GetPosicionRaton()[1] <= 600.0f) &&
+         (pulsado)
+        )
     {
-        cout<<"Pulso solo"<<endl;
-        //pulsado=true;
-        std::vector<unsigned short> * vectorFichas = _motor->GetVectorFichas();
-        unsigned int cont = 0;
-        while ((!pulsado) && (cont < 3))
-        {
-            if(_motor->OcurreEvento((*vectorFichas)[cont]))
-            {
-                pulsado=true;
-                fichaMover = cont;
-            }
-            cont++;
-        }
-        cont = 0;*/
-        
+        _motor->CambiarPosicionImagen(fichaMover, _motor->GetPosicionRaton()[0]-25, _motor->GetPosicionRaton()[1]-20);
+    }
+
         /*if (pulsado)
         {
             //cout << "Objeto"<<endl;
@@ -263,15 +276,14 @@ void EstadoPuzle::comprobarEventosHanoi()
         {
             _motor->CambiarPosicionImagen(fichaMover, _motor->GetPosicionRaton()[0], _motor->GetPosicionRaton()[1]);
         }
-    }
-
-    if ((_motor->SueltoClicIzq()) && (pulsado))
-    {
-        //cout<<"Soltar"<<endl;
-        pulsado=false;
-        deseleccionarNodo();
-        _motor->ResetEventoMoveRaton();
     }*/
+
+    if ((!_motor->PulsadoClicIzq()) && (pulsado))
+    {
+        pulsado=false;
+        //deseleccionarNodo();
+        //_motor->ResetEventoMoveRaton();
+    }
 }
 
 void EstadoPuzle::corregirSolucion(int opcion)
@@ -318,7 +330,7 @@ void EstadoPuzle::crearFichasPila()
         int posY_OpenGL = 400;
         for (int tam=opciones; tam>0; tam--) 
         {
-            img = _motor->CrearFichas(100, posY_OpenGL, tam); //X, Y, tamanyo
+            img = _motor->CrearFichas(iniXFichas, posY_OpenGL, tam); //X, Y, tamanyo
             ficha = new PilaFichas(tam, posY_OpenGL);
             ficha->SetIMG(img);
             pilaIzq.push(ficha);

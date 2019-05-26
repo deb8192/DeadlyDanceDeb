@@ -50,5 +50,6 @@ class EstadoPuzle: public Estado {
         bool pulsado;
         int x_linea1, x_linea2;
         int fichaMover;
+        float iniXFichas;
 };
 #endif /* ESTADO_PUZLE_HPP */
