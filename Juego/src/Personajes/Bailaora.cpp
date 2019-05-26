@@ -26,6 +26,9 @@ Bailaora::Bailaora(Sala* sala,unsigned short tipoJug,int nX,int nY,int nZ,int an
         texturasArmas[2] = "assets/texture/guitarra-3.png";
         animacionesArmas[2] = "assets/animaciones/BGuitarra1.xml";
 
+        _rutaArmaEspecial = "assets/models/Armas/Especiales/castanyuela.obj";
+        _rutaTexturaArmaEspecial = "assets/texture/castanyuela.png";
+
     #else
         _modelo = "assets/models/bailarina/bailarina_000001.obj";
     #endif

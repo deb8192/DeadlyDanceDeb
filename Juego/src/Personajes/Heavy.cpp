@@ -9,6 +9,9 @@ Heavy::Heavy(Sala* sala,unsigned short tipoJug,int nX,int nY,int nZ,int ancho,in
         fps = 128;
         _textura = "assets/texture/HeavyTex.png";
         _animacion = "assets/animaciones/rockero.xml";
+
+        _rutaArmaEspecial = "assets/models/Armas/Especiales/guitarra-electrica.obj";
+        _rutaTexturaArmaEspecial = "assets/texture/guitarra-electrica.png";
     #else
         _modelo = "assets/models/rockero.b3d";
     #endif
