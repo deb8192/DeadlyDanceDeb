@@ -536,13 +536,14 @@ bool MotorGrafico::CrearVentana(short tipo)
     #ifdef WEMOTOR
             //codigo motor catopengl
 
+            configuracion.CargarConfiguracion("config.global");
+
             if(_interfaz == nullptr)
             {
                 _interfaz = new Interfaz();
+                _interfaz->CambiarResolucionPorDefecto(configuracion.GetWidth(),configuracion.GetHeight());
                 CrearCamara();
             }
-
-            configuracion.CargarConfiguracion("config.global");
 
             _ges = GestorInterfaces::GetInstance();
 

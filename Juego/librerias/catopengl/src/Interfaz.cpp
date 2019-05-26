@@ -18,12 +18,19 @@ Interfaz::Interfaz()
     z = 0.0f;
     ModoOneCamara = true;
     countlights = 0;
-
+    height_default = 600;
+    width_default = 800;
     //inicializamos todos los punteros a nullptr por si acaso
     for(unsigned int e = 0;e < maxNodos;e++)
     {
         banco[e] = nullptr;
     }
+}
+
+void Interfaz::CambiarResolucionPorDefecto(unsigned int width, unsigned int height)
+{
+    height_default = height;
+    width_default = width;
 }
 
 Interfaz::~Interfaz()
@@ -735,7 +742,8 @@ void Interfaz::ventanaInicializar()
         window = new Ventana();
     }
     //se inicializa por defecto a estos valores la ventana, se puede cambiar los valores por defecto llamando a las funciones de ventana
-    window->CrearVentana(576,1024,true," Sin titulo ");
+    //std::cout << height_default << " " << width_default << "\n";
+    window->CrearVentana(height_default,width_default,true," Sin titulo ");
 
     shaders[0] = new Shader("assets/shaders/shaderlucesvs.glsl","assets/shaders/shaderlucesfs.glsl");
     shaders[1] = new Shader("assets/shaders/shaderguivs.glsl","assets/shaders/shaderguifs.glsl");
