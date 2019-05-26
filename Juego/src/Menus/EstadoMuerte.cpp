@@ -101,12 +101,7 @@ void EstadoMuerte::borrarGUIResetearEvento(short id)
 
 void EstadoMuerte::menuPrincipal()
 {
-    _motora->getEvent("MuerteEstasDebil")->stop();
-    _motora->getEvent("MuertePaseas")->stop();
-    _motora->getEvent("AmbienteLava")->stop(); //Detener ambiente
-    _motora->getEvent("AmbienteGritos")->stop(); //Detener musica ambiente
-    _motora->getEvent("Nivel1")->stop(); //Detener musica Juego
-    _motora->getEvent("Nivel2")->stop(); //Detener musica Juego
+    _motora->stopAll();
     _motor->LimpiarElementosJuego();
     // Elimina todos los estados y anyade el de menu
     Juego::GetInstance()->estado.CambioDeJuegoAMenu();
@@ -114,8 +109,7 @@ void EstadoMuerte::menuPrincipal()
 
 void EstadoMuerte::reiniciarPartida()
 {
-    _motora->getEvent("MuerteEstasDebil")->stop();
-    _motora->getEvent("MuertePaseas")->stop();
+    _motora->stopAll();
     Juego::GetInstance()->estado.ReiniciarPartida();
 }
 

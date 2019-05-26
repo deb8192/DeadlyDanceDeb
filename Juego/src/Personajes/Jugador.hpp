@@ -196,8 +196,8 @@ class Jugador : public INnpc , public INdrawable, public INsentidos //multiple h
         vector <Llave*> llaves;
         
         //PRUEBAS ATAQUE ESPECIAL
-        const char* _rutaArmaEspecial = "assets/models/Armas/Especiales/guitarra-electrica.obj";
-        const char* _rutaTexturaArmaEspecial = "assets/texture/guitarra-electrica.png";
+        const char* _rutaArmaEspecial;
+        const char* _rutaTexturaArmaEspecial;
         unsigned short tipoJug; // Se asigna antes de cargar el nivel
         //!PRUEBAS ATAQUE ESPECIAL
 

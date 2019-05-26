@@ -9,7 +9,7 @@ Jugador::Jugador()
     _interfaz = InterfazJugador::getInstance();
     _fisicas = MotorFisicas::getInstance();
 
-    invulnerabilidad = false; 
+    invulnerabilidad = false;
     animacion = 0;
     //tiempos de animacion
     tiempoAtaque=2000.0f;//tiempo en milisegundos
@@ -23,7 +23,7 @@ Jugador::Jugador()
 
     dinero = 0;
     _armaEquipada = NULL;
-    
+
     //tiempos de ejecucion de acciones
     atackTime = 0.0f;
     atackEspTime = 0.0f;
@@ -88,7 +88,7 @@ Jugador::~Jugador()
 
     dinero = 0;
 
-    invulnerabilidad = false; 
+    invulnerabilidad = false;
 
     // INnpc
     tipo = 0;
@@ -247,11 +247,11 @@ void Jugador::movimiento(bool noMueve,bool a, bool s, bool d, bool w)
 }
 
 /********** moverseAlCentroDeLaSala ***********
- * Funcion que hace que al entrar el jugador en 
- * la sala del boss, este se desplace hacia el 
+ * Funcion que hace que al entrar el jugador en
+ * la sala del boss, este se desplace hacia el
  * centro y, al llegar al sitio, le elimina las
  * llaves y cierra la puerta
- *                    
+ *
  *                Entradas:
  *                         VectorEspacial target: coordenadas de destino
  *                Salidas:
@@ -446,7 +446,7 @@ int Jugador::Atacar(int i)
                 //Crear cuerpo de colision de ataque delante del jugador
                 _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4,0,0,false);
                 _motora->getEvent("GolpeGuitarra")->start();
-                
+
                 unsigned int armaSeleccionada;
 
                 switch (tipoArma)
@@ -476,7 +476,27 @@ int Jugador::Atacar(int i)
                 _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
                 _motora->getEvent("Arpa")->start();
 
+
+                unsigned int armaSeleccionada;
+
+                switch (tipoArma)
+                {
+                   case 7:
+                    armaSeleccionada=6;
+                   break;
+                   case 8:
+                    armaSeleccionada=7;
+                   break;
+                   case 9:
+                    armaSeleccionada=8;
+                   break;
+                }
+
+                //_motor->RotarArma(armaSeleccionada,getRX(),getRY(),getRZ());
+                _motor->MoverArma(armaSeleccionada,getX(),getY(),getZ());
                 _motor->cambiarAnimacionJugador(6);
+                _motor->cambiarAnimacion(7,armaSeleccionada,1);
+
             }
             //ATAQUE A MEDIA DISTANCIA
             else if ((tipoArma == constantes.FLAUTA1) || (tipoArma == constantes.FLAUTA2) ||
@@ -697,7 +717,7 @@ void Jugador::CrearCuerpoAtaque()
     if (this->getArma() != nullptr)
     {
         unsigned short tipoArma = this->getArma()->GetTipoObjeto();
-        if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.FLAUTA1) || 
+        if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.FLAUTA1) ||
             (tipoArma == constantes.ARPA2) || (tipoArma == constantes.FLAUTA2) ||
             (tipoArma == constantes.ARPA3) || (tipoArma == constantes.FLAUTA3))
         {
@@ -711,34 +731,23 @@ void Jugador::AtacarUpdate(int danyo, std::vector<Enemigo*> &_getEnemigos)
     Constantes constantes;
     if(vida > 0)
     {
-        //Enteros con los enemigos colisionados (atacados)
-        vector <unsigned int> atacados = _fisicas->updateArma(atposX,atposY,atposZ);
-
-
-        //actualizar posicion de animaciones
-        if(getArma())
+        if (this->getArma() != nullptr)
         {
             unsigned short tipoArma = this->getArma()->GetTipoObjeto();
-            unsigned int armaSeleccionada;
-
-            switch (tipoArma)
+            if ((tipoArma == constantes.GUITARRA1) || (tipoArma == constantes.GUITARRA2) ||
+                (tipoArma == constantes.GUITARRA3))
             {
-                case 10:
-                armaSeleccionada=0;
-                break;
-                case 11:
-                armaSeleccionada=1;
-                break;
-                case 12:
-                armaSeleccionada=2;
-                break;
+                int distance = 2;
+                atx = distance * sin(constantes.PI * getRY() / constantes.PI_RADIAN) + getX();
+                atz = distance * cos(constantes.PI * getRY() / constantes.PI_RADIAN) + getZ();
+                atposX = (atx/2);
+                atposZ = (atz/2);
+                _fisicas->updateAtaque(atposX,atposY,atposZ,getRX(),getRY(),getRZ());
             }
-
-            //_motor->RotarArma(armaSeleccionada,getRX(),getRY(),getRZ());
-            _motor->MoverArma(armaSeleccionada,getX(),getY(),getZ());
         }
 
-
+        //Enteros con los enemigos colisionados (atacados)
+        vector <unsigned int> atacados = _fisicas->updateArma(atposX,atposY,atposZ);
 
         if(!atacados.empty())
         {
@@ -816,7 +825,7 @@ void Jugador::atacarEspUpdComun(int* danyo, std::vector<Enemigo*> &_getEnemigos)
                     _getEnemigos.at(atacados.at(i))->getY(),_getEnemigos.at(atacados.at(i))->getZ()-1.0f);
                 float variacion = rand() % 7 - 3;
                 *danyo += (int) variacion;
-                _getEnemigos.at(atacados.at(i))->ModificarVida(-(*danyo));    
+                _getEnemigos.at(atacados.at(i))->ModificarVida(-(*danyo));
                 *danyo -= (int) variacion;
                 _motor->colorearEnemigo(255, 0, 255, 55, atacados.at(i));
             }
@@ -1631,4 +1640,3 @@ float Jugador::GetEscaladoArma(unsigned int e)
 {
     return escalado;
 }
-

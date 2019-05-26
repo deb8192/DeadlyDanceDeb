@@ -1487,52 +1487,51 @@ void Jugando::Render()
         unsigned short tipoArma = _jugador->getArma()->GetTipoObjeto();
         //Ataque Animacion
         if ((tipoArma == constantes.GUITARRA1) || (tipoArma == constantes.GUITARRA2) ||
-            (tipoArma == constantes.GUITARRA3))
+            (tipoArma == constantes.GUITARRA3) || (tipoArma == constantes.FLAUTA1) ||
+        (tipoArma == constantes.FLAUTA2) || (tipoArma == constantes.FLAUTA3))
         {
-            if(_jugador->getTimeAt() == 1.5f)
+            if(_jugador->getTimeAt() == 2.0f)
             {
-                mov_weapon_rotX = -90;
-                mov_weapon_posX = 3.5;
-                mov_weapon_posZ = 3.5;
-                mov_weapon_posY = 4.0;
+                //actualizar posicion de animaciones
+                unsigned short tipoArma = _jugador->getArma()->GetTipoObjeto();
+
+                switch (tipoArma)
+                {
+                    case 10:
+                    armaSeleccionada=0;
+                    break;
+                    case 11:
+                    armaSeleccionada=1;
+                    break;
+                    case 12:
+                    armaSeleccionada=2;
+                    break;
+                }
             }
-            else if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() < 1.5f)
+            else if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() <= 2.0f)
             {
-                if(mov_weapon_rotX < 0)mov_weapon_rotX += 4;
-                if(mov_weapon_posY > 1.5)mov_weapon_posY -= 0.2;
-                if(mov_weapon_posX < 5.5)mov_weapon_posX += 0.3;
-                if(mov_weapon_posZ < 5.5)mov_weapon_posZ += 0.3;
+                _motor->desactivarObjeto(_motor->getArmaenEscena());
+                _motor->MoverArma(armaSeleccionada,_jugador->getX(),_jugador->getY(),_jugador->getZ());
+                _motor->RotarArma(armaSeleccionada,_jugador->getRX(),_jugador->getRY()-180,_jugador->getRZ());
             }
             else
             {
+                _motor->activarObjeto(_motor->getArmaenEscena());
                 mov_weapon_posX=-2.0;
-                mov_weapon_posZ=-1.7;
+                mov_weapon_posZ=-1.5;
                 if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-2.6;
                 mov_weapon_posY=5.0;
                 mov_weapon_rotX=90;
                 mov_weapon_rotY=0;
                 mov_weapon_rotZ=0;
+                _motor->MoverArma(armaSeleccionada,_jugador->getX(),_jugador->getY(),_jugador->getZ());
+                _motor->RotarArma(armaSeleccionada,_jugador->getRX(),_jugador->getRY()-180,_jugador->getRZ());
             }
-            // if(_jugador->getTimeAt() > 0.0f && _jugador->getTimeAt() <= 1.5f)
-            // {
-            //     _motor->desactivarObjeto(_motor->getArmaenEscena());
-            // }
-            // else
-            // {
-            //     _motor->activarObjeto(_motor->getArmaenEscena());
-            //     mov_weapon_posX=-2.0;
-            //     mov_weapon_posZ=-1.5;
-            //     if(_jugador->GetTipoJug() == constantes.BAILAORA)mov_weapon_posZ=-2.6;
-            //     mov_weapon_posY=5.0;
-            //     mov_weapon_rotX=90;
-            //     mov_weapon_rotY=0;
-            //     mov_weapon_rotZ=0;
-            // }
         }
         else if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.ARPA2) ||
             (tipoArma == constantes.ARPA3))
         {
-            // if(_jugador->getTimeAt() == 1.5f)
+            // if(_jugador->getTimeAt() == 2.0f)
             // {
             //     _motor->desactivarObjeto(_motor->getArmaenEscena());
             //     proyectilFuera = false;
@@ -1553,7 +1552,7 @@ void Jugando::Render()
             //     mov_weapon_rotY=0;
             //     mov_weapon_rotZ=0;
             // }
-            if(_jugador->getTimeAt() == 1.5f)
+            if(_jugador->getTimeAt() == 2.0f)
             {
                 proyectilFuera = false;
                 mov_weapon_rotX = 180;
@@ -1580,7 +1579,7 @@ void Jugando::Render()
         else if ((tipoArma == constantes.FLAUTA1) || (tipoArma == constantes.FLAUTA2) ||
             (tipoArma == constantes.FLAUTA3))
         {
-            // if(_jugador->getTimeAt() == 1.5f)
+            // if(_jugador->getTimeAt() == 2.0f)
             // {
             //     _motor->desactivarObjeto(_motor->getArmaenEscena());
             //     proyectilFuera = false;
@@ -1602,7 +1601,7 @@ void Jugando::Render()
             //     mov_weapon_rotY=0;
             //     mov_weapon_rotZ=0;
             // }
-            if(_jugador->getTimeAt() == 1.5f)
+            if(_jugador->getTimeAt() == 2.0f)
             {
                 proyectilFuera = false;
                 mov_weapon_rotX = 180;
@@ -1911,6 +1910,9 @@ void Jugando::CrearJugador()
     _motor->CargarArma(3,_jugador->GetModeloArma(3),_jugador->GetFpsArma(3),_jugador->GetAnimacionArma(3),_jugador->GetEscaladoArma(3),_jugador->GetTexturaArma(3));
     _motor->CargarArma(4,_jugador->GetModeloArma(4),_jugador->GetFpsArma(4),_jugador->GetAnimacionArma(4),_jugador->GetEscaladoArma(4),_jugador->GetTexturaArma(4));
     _motor->CargarArma(5,_jugador->GetModeloArma(5),_jugador->GetFpsArma(5),_jugador->GetAnimacionArma(5),_jugador->GetEscaladoArma(5),_jugador->GetTexturaArma(5));
+    _motor->CargarArma(6,_jugador->GetModeloArma(6),_jugador->GetFpsArma(6),_jugador->GetAnimacionArma(6),_jugador->GetEscaladoArma(6),_jugador->GetTexturaArma(6));
+    _motor->CargarArma(7,_jugador->GetModeloArma(7),_jugador->GetFpsArma(7),_jugador->GetAnimacionArma(7),_jugador->GetEscaladoArma(7),_jugador->GetTexturaArma(7));
+    _motor->CargarArma(8,_jugador->GetModeloArma(8),_jugador->GetFpsArma(8),_jugador->GetAnimacionArma(8),_jugador->GetEscaladoArma(8),_jugador->GetTexturaArma(8));
     /*_motor->CargarArma(_jugador->GetModeloArma(2),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(2),_jugador->GetEscaladoArma(1));//carga arma 1 Guitarra-2
     _motor->CargarArma(_jugador->GetModeloArma(3),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(3),_jugador->GetEscaladoArma(1));//carga arma 2 Guitarra-3
     _motor->CargarArma(_jugador->GetModeloArma(4),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(4),_jugador->GetEscaladoArma(1));//carga arma 3 Flauta-1
@@ -2729,7 +2731,7 @@ void Jugando::updateAt(int* danyo)
         _motor->ResetKey(KEY_ESPACIO);
         _motor->ResetEvento(LMOUSE_DOWN);
         //atacktime = 1.5f;
-        _jugador->setTimeAt(1.5f);
+        _jugador->setTimeAt(2.0f);
         _jugador->setLastTimeAt(_controladorTiempo->GetTiempo(2));
     } else {
         if(_jugador->getTimeAt() > 0.0f)
