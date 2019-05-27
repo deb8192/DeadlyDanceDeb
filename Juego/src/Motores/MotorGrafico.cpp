@@ -4205,12 +4205,16 @@ void MotorGrafico::BorrarGuiPuzzle(unsigned int tipo, unsigned int opciones)
         {
             BorrarElemento(idsEventos::Enum::GUI_ID_REINICIAR_HANOI);
 
-            tam = _imagenesF.size();
+            BorrarElemento(idsEventos::Enum::GUI_FICHA_1);
+            BorrarElemento(idsEventos::Enum::GUI_FICHA_2);
+            BorrarElemento(idsEventos::Enum::GUI_FICHA_3);
+
+            /*tam = _imagenesF.size();
             for(unsigned int i=0; i < tam; i++)
             {
                 BorrarElemento(_imagenesF.at(i));
             }
-            _imagenesF.clear();
+            _imagenesF.clear();*/
         }
 
     #else
@@ -4407,25 +4411,25 @@ int MotorGrafico::CrearFichas(int posX, int posY, int tamanyo,
         {
             case 2:
                 _imgP = _interfaz->AddImagen("assets/puzzles/fichas/ficha2.png",posX,posY,1.0f);
-            break;
+                _interfaz->DeclararBoton(_imgP,idsEventos::Enum::GUI_FICHA_2);
+                _imagenesF.push_back(idsEventos::Enum::GUI_FICHA_2);
+                _interfaz->DefinirIdPersonalizado(_imgP,idsEventos::Enum::GUI_FICHA_2);
+            return idsEventos::Enum::GUI_FICHA_2;
 
             case 3:
                 _imgP = _interfaz->AddImagen("assets/puzzles/fichas/ficha3.png",posX,posY,1.0f);
-            break;
+                _interfaz->DeclararBoton(_imgP,idsEventos::Enum::GUI_FICHA_3);
+                _imagenesF.push_back(idsEventos::Enum::GUI_FICHA_3);
+                _interfaz->DefinirIdPersonalizado(_imgP,idsEventos::Enum::GUI_FICHA_3);
+            return idsEventos::Enum::GUI_FICHA_3;
 
             default: // case 1:
                 _imgP = _interfaz->AddImagen("assets/puzzles/fichas/ficha1.png",posX,posY,1.0f);
-            break;
+                _interfaz->DeclararBoton(_imgP,idsEventos::Enum::GUI_FICHA_1);
+                _imagenesF.push_back(idsEventos::Enum::GUI_FICHA_1);
+                _interfaz->DefinirIdPersonalizado(_imgP,idsEventos::Enum::GUI_FICHA_1);
+            return idsEventos::Enum::GUI_FICHA_1;
         }
-
-        unsigned short nue = ++IDP;
-        cout << "ID creado:" << nue << endl;
-        _interfaz->DeclararBoton(_imgP,nue);
-        _interfaz->DefinirIdPersonalizado(_imgP,nue);
-
-        _imagenesF.push_back(nue);
-        _imgP = 0;
-        return nue;
     #else
         //codigo motor irrlicht
         CrearMeshFicha(tamanyo, r, g, b);
@@ -4440,7 +4444,7 @@ int MotorGrafico::CrearFichas(int posX, int posY, int tamanyo,
     #endif
 }
 
-void MotorGrafico::ReiniciarHanoi()
+void MotorGrafico::ReiniciarHanoi(int posX, int posY)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
@@ -4450,7 +4454,7 @@ void MotorGrafico::ReiniciarHanoi()
         int posY=0;
         for (int pos = 0; pos<tam; pos++)
         {
-            fichasMesh.at(pos)->setPosition(vector3df(0, posY, IZQ));
+            fichasMesh.at(pos)->setPosition(vector3df(0, posY, posX));
             posY++;
         }
     #endif
