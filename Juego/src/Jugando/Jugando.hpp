@@ -184,5 +184,7 @@ class Jugando: public Estado {
        // Debug del cofre arana
        bool esconderArana;
 
+       //PARA PRESENTACION
+       unsigned short objetopresentacion = 0;
 };
 #endif /* JUGANDO_HPP */
