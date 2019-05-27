@@ -33,7 +33,7 @@ class GestorInterfaces
 
                 struct menu
                 {
-                        float xLogo = 0.34;
+                        float xLogo = 0.30;
                         unsigned int xLogoM;
                         float yLogo = 0.02;
                         unsigned int yLogoM;
@@ -48,27 +48,27 @@ class GestorInterfaces
                         float yLogo3 = 0.80;
                         unsigned int yLogo3M;
                         
-                        float xEmpezar = 0.42;
+                        float xEmpezar = 0.38;
                         unsigned int xEmpezarM;
                         float yEmpezar = 0.40;
                         unsigned int yEmpezarM;
 
-                        float xContinuar = 0.42;
+                        float xContinuar = 0.38;
                         unsigned int xContinuarM;
                         float yContinuar = 0.50;
                         unsigned int yContinuarM;
 
-                        float xConfi = 0.42;
+                        float xConfi = 0.38;
                         unsigned int xConfiM;
                         float yConfi = 0.60;
                         unsigned int yConfiM;
 
-                        float xCre = 0.42;
+                        float xCre = 0.38;
                         unsigned int xCreM;
                         float yCre = 0.70;
                         unsigned int yCreM;
 
-                        float xSalir = 0.42;
+                        float xSalir = 0.38;
                         unsigned int xSalirM;
                         float ySalir = 0.80;
                         unsigned int ySalirM;

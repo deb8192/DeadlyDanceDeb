@@ -4512,10 +4512,11 @@ unsigned short MotorGrafico::CrearImagen(const char * texto,unsigned int x,unsig
     return 0;
 }
 
-void MotorGrafico::AsignarCargando(unsigned short did)
+void MotorGrafico::AsignarCargando(unsigned short did,unsigned short did2)
 {
     #ifdef WEMOTOR
         idCargando = did;
+        idControles = did2;
     #endif
 }
 
@@ -4525,6 +4526,10 @@ void MotorGrafico::BorrarCargando()
         if(idCargando != 0)
         {
             _interfaz->RemoveObject(idCargando);
+            if(idControles != 0)
+            {
+                _interfaz->RemoveObject(idControles);
+            }
         }
     #endif
 }
