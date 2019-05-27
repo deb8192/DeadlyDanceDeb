@@ -7,7 +7,7 @@
 
 class EstadoGanar: public Estado {
     public:
-        EstadoGanar();
+        EstadoGanar(unsigned int);
         ~EstadoGanar();
 
         void Iniciar();
@@ -33,5 +33,6 @@ class EstadoGanar: public Estado {
         MotorAudioSystem* _motora;//instancia de la fachada audio
         unsigned int campo_web;
         int titulo;
+        unsigned int tiempoPartida;
 };
 #endif /* EstadoGanar_HPP */

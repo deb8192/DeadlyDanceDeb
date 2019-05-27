@@ -110,10 +110,10 @@ void GestorEstados::CambioEstadoMuerte()
     anyadir(new EstadoMuerte(), false);
 }
 
-void GestorEstados::CambioEstadoGanar()
+void GestorEstados::CambioEstadoGanar(unsigned int tiempoDePartida)
 {
     _estados.pop(); // Juego
-    _estados.push(new EstadoGanar());
+    _estados.push(new EstadoGanar(tiempoDePartida));
     _estados.top()->Iniciar();
     //anyadir(new EstadoGanar(), true);
 }

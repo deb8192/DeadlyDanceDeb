@@ -22,7 +22,7 @@ public:
     void CambioEstadoCreditos();
     void CambioEstadoPausa();
     void CambioEstadoMuerte();
-    void CambioEstadoGanar();
+    void CambioEstadoGanar(unsigned int);
     void CambioEstadoIniciarPartida();
     void CambioEstadoContinuarPartida();
 

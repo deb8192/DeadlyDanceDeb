@@ -152,6 +152,9 @@ void Jugando::Iniciar()
     #else
         CargarNivel(6, constantes.HEAVY);
     #endif
+    _controladorTiempo = Times::GetInstance();
+
+    tiempoInicioNivel = _controladorTiempo->GetTiempo(1);//se coge la marca de tiempo de iniciar el nivel para calcular la puntuacion
 
     _auxiliadores.reserve(_enemigos.size());
     recorrido.reserve(_enemigos.size());
@@ -317,7 +320,7 @@ void Jugando::ManejarEventos() {
     {
         _motor->ResetKey(KEY_K);
         //_jugador->setVida(0);
-        Juego::GetInstance()->estado.CambioEstadoGanar();
+        Juego::GetInstance()->estado.CambioEstadoGanar(GetTiempoPasadoNivel());
 
     }*/
 
@@ -1302,7 +1305,7 @@ void Jugando::UpdateIA()
                     else if (tipoEnemigo >= constantes.BOSS)
                     {
 
-                        Juego::GetInstance()->estado.CambioEstadoGanar();
+                        Juego::GetInstance()->estado.CambioEstadoGanar(GetTiempoPasadoNivel());
                     }
                     else
                     {
@@ -1873,15 +1876,19 @@ void Jugando::CrearJugador()
         _jugador->GetEscalado(), _jugador->GetEscalado(), _jugador->GetEscalado(),
         _jugador->GetModelo(),_jugador->GetTextura(),_jugador->GetFps(),_jugador->GetAnimacion());
 
-    _motor->CargarArma(0,_jugador->GetModeloArma(0),_jugador->GetFpsArma(0),_jugador->GetAnimacionArma(0),_jugador->GetEscaladoArma(0),_jugador->GetTexturaArma(0));
-    _motor->CargarArma(1,_jugador->GetModeloArma(1),_jugador->GetFpsArma(1),_jugador->GetAnimacionArma(1),_jugador->GetEscaladoArma(1),_jugador->GetTexturaArma(1));
-    _motor->CargarArma(2,_jugador->GetModeloArma(2),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(2),_jugador->GetEscaladoArma(2),_jugador->GetTexturaArma(2));
-    _motor->CargarArma(3,_jugador->GetModeloArma(3),_jugador->GetFpsArma(3),_jugador->GetAnimacionArma(3),_jugador->GetEscaladoArma(3),_jugador->GetTexturaArma(3));
-    _motor->CargarArma(4,_jugador->GetModeloArma(4),_jugador->GetFpsArma(4),_jugador->GetAnimacionArma(4),_jugador->GetEscaladoArma(4),_jugador->GetTexturaArma(4));
-    _motor->CargarArma(5,_jugador->GetModeloArma(5),_jugador->GetFpsArma(5),_jugador->GetAnimacionArma(5),_jugador->GetEscaladoArma(5),_jugador->GetTexturaArma(5));
-    _motor->CargarArma(6,_jugador->GetModeloArma(6),_jugador->GetFpsArma(6),_jugador->GetAnimacionArma(6),_jugador->GetEscaladoArma(6),_jugador->GetTexturaArma(6));
-    _motor->CargarArma(7,_jugador->GetModeloArma(7),_jugador->GetFpsArma(7),_jugador->GetAnimacionArma(7),_jugador->GetEscaladoArma(7),_jugador->GetTexturaArma(7));
-    _motor->CargarArma(8,_jugador->GetModeloArma(8),_jugador->GetFpsArma(8),_jugador->GetAnimacionArma(8),_jugador->GetEscaladoArma(8),_jugador->GetTexturaArma(8));
+    if(_jugador->GetTipoJug() == constantes.BAILAORA)
+    {
+        _motor->CargarArma(0,_jugador->GetModeloArma(0),_jugador->GetFpsArma(0),_jugador->GetAnimacionArma(0),_jugador->GetEscaladoArma(0),_jugador->GetTexturaArma(0));
+        _motor->CargarArma(1,_jugador->GetModeloArma(1),_jugador->GetFpsArma(1),_jugador->GetAnimacionArma(1),_jugador->GetEscaladoArma(1),_jugador->GetTexturaArma(1));
+        _motor->CargarArma(2,_jugador->GetModeloArma(2),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(2),_jugador->GetEscaladoArma(2),_jugador->GetTexturaArma(2));
+        _motor->CargarArma(3,_jugador->GetModeloArma(3),_jugador->GetFpsArma(3),_jugador->GetAnimacionArma(3),_jugador->GetEscaladoArma(3),_jugador->GetTexturaArma(3));
+        _motor->CargarArma(4,_jugador->GetModeloArma(4),_jugador->GetFpsArma(4),_jugador->GetAnimacionArma(4),_jugador->GetEscaladoArma(4),_jugador->GetTexturaArma(4));
+        _motor->CargarArma(5,_jugador->GetModeloArma(5),_jugador->GetFpsArma(5),_jugador->GetAnimacionArma(5),_jugador->GetEscaladoArma(5),_jugador->GetTexturaArma(5));
+        _motor->CargarArma(6,_jugador->GetModeloArma(6),_jugador->GetFpsArma(6),_jugador->GetAnimacionArma(6),_jugador->GetEscaladoArma(6),_jugador->GetTexturaArma(6));
+        _motor->CargarArma(7,_jugador->GetModeloArma(7),_jugador->GetFpsArma(7),_jugador->GetAnimacionArma(7),_jugador->GetEscaladoArma(7),_jugador->GetTexturaArma(7));
+        _motor->CargarArma(8,_jugador->GetModeloArma(8),_jugador->GetFpsArma(8),_jugador->GetAnimacionArma(8),_jugador->GetEscaladoArma(8),_jugador->GetTexturaArma(8));
+    }
+
     /*_motor->CargarArma(_jugador->GetModeloArma(2),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(2),_jugador->GetEscaladoArma(1));//carga arma 1 Guitarra-2
     _motor->CargarArma(_jugador->GetModeloArma(3),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(3),_jugador->GetEscaladoArma(1));//carga arma 2 Guitarra-3
     _motor->CargarArma(_jugador->GetModeloArma(4),_jugador->GetFpsArma(2),_jugador->GetAnimacionArma(4),_jugador->GetEscaladoArma(1));//carga arma 3 Flauta-1
@@ -2895,19 +2902,6 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     unsigned short minFlauta = 13;
     x = x + 5;
 
-    // El cofre suelta armas normales y oro, la arana suelta armas mas fuertes
-    if (esArana)
-    {
-        objeto = NumeroAleatorio(constantes.ARPA1,constantes.ULTIMA_ARMA);
-        minArpa = 22;
-        minGuitar = 31;
-        minFlauta = 25;
-    }
-    else
-    {
-        objeto = NumeroAleatorio(constantes.ORO,constantes.ULTIMA_ARMA+2);
-    }
-
     //PRESENTACION
     switch (objetopresentacion) {
         case 0:
@@ -2925,46 +2919,60 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     }
     objetopresentacion++;
 
-    if(objetopresentacion > 4)
-    {
-    //***********
-        switch (objeto)
-        {
-            case 7: // ARPA
-                CrearObjeto(x,y,z,3,4,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
-                break;
-            case 8:
-                CrearObjeto(x,y,z,3,4,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
-                break;
-            case 9:
-                CrearObjeto(x,y,z,3,4,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
-                break;
-
-            case 10: // GUITARRA
-                CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
-                break;
-            case 11:
-                CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
-                break;
-            case 12:
-                CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
-                break;
-
-            case 13: // FLAUTA
-                CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
-                break;
-            case 14:
-                CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
-                break;
-            case 15:
-                CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
-                break;
-
-            default: // ORO
-                CrearPowerUp(x,y,z,constantes.ORO,NumeroAleatorio(20,30));
-                break;
-        }
-    }
+    // if(objetopresentacion > 5)
+    // {
+    //     //***********
+    //
+    //     // El cofre suelta armas normales y oro, la arana suelta armas mas fuertes
+    //     if (esArana)
+    //     {
+    //         objeto = NumeroAleatorio(constantes.ARPA1,constantes.ULTIMA_ARMA);
+    //         minArpa = 22;
+    //         minGuitar = 31;
+    //         minFlauta = 25;
+    //     }
+    //     else
+    //     {
+    //         objeto = NumeroAleatorio(constantes.ORO,constantes.ULTIMA_ARMA+2);
+    //     }
+    //
+    //     switch (objeto)
+    //     {
+    //         case 7: // ARPA
+    //             CrearObjeto(x,y,z,3,4,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
+    //             break;
+    //         case 8:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
+    //             break;
+    //         case 9:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
+    //             break;
+    //
+    //         case 10: // GUITARRA
+    //             CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
+    //             break;
+    //         case 11:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
+    //             break;
+    //         case 12:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
+    //             break;
+    //
+    //         case 13: // FLAUTA
+    //             CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
+    //             break;
+    //         case 14:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
+    //             break;
+    //         case 15:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
+    //             break;
+    //
+    //         default: // ORO
+    //             CrearPowerUp(x,y,z,constantes.ORO,NumeroAleatorio(20,30));
+    //             break;
+    //     }
+    // }
 }
 
 void Jugando::CrearEnemigoArana()
@@ -3227,4 +3235,14 @@ void Jugando::CrearSprites()
     sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_5.png");
     _motor->CargarSprite(3, sprites, 4.0f);
     sprites.clear();
+}
+
+unsigned int Jugando::GetTiempoPasadoNivel()
+{
+    if(_controladorTiempo)
+    {
+        return (unsigned int)_controladorTiempo->CalcularTiempoPasado(tiempoInicioNivel);
+    }
+
+    return 0;
 }

@@ -24,11 +24,11 @@ void EstadoContinuar::Iniciar()
     _motor->CrearImagen("assets/images/pr2.png",150,100,2.2f);
     unsigned short did = _motor->CrearTexto("Seleccione slot de guardado:",180,120,0,0);
     _motor->CambiarAnchuraTexto(did,300);
-    _motor->CrearBoton2(205,160,8.0f,170,40,300,GUI_ID_SLOT1,L"Slot 1",L"assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
+    _motor->CrearBoton2(205,160,8.0f,170,40,300,GUI_ID_SLOT1,"Slot 1","assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
     _motor->CrearTexto(slots[0].GetNombre(),205+166,160+60,0,0);
-    _motor->CrearBoton2(205,260,8.0f,170,40,300,GUI_ID_SLOT2,L"Slot 2",L"assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
+    _motor->CrearBoton2(205,260,8.0f,170,40,300,GUI_ID_SLOT2,"Slot 2","assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
     _motor->CrearTexto(slots[1].GetNombre(),205+166,260+60,0,0);
-    _motor->CrearBoton2(205,360,8.0f,170,40,300,GUI_ID_SLOT3,L"Slot 3",L"assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
+    _motor->CrearBoton2(205,360,8.0f,170,40,300,GUI_ID_SLOT3,"Slot 3","assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
     _motor->CrearTexto(slots[2].GetNombre(),205+166,360+60,0,0);
     _motor->ResetKey(LMOUSE_PRESSED_DOWN);
 }

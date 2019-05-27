@@ -28,11 +28,11 @@ void EstadoIniciar::Iniciar()
     _motor->CrearImagen("assets/images/pr2.png",150,100,2.2f);
     unsigned short did = _motor->CrearTexto("Seleccione slot de guardado:",180,120,0,0);
     _motor->CambiarAnchuraTexto(did,300);
-    _motor->CrearBoton2(205,160,8.0f,170,40,300,GUI_ID_SLOT1,L"Slot 1",L"assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
+    _motor->CrearBoton2(205,160,8.0f,170,40,300,GUI_ID_SLOT1,"Slot 1","assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
     _motor->CrearTexto(slots[0].GetNombre(),205+166,160+60,0,0);
-    _motor->CrearBoton2(205,260,8.0f,170,40,300,GUI_ID_SLOT2,L"Slot 2",L"assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
+    _motor->CrearBoton2(205,260,8.0f,170,40,300,GUI_ID_SLOT2,"Slot 2","assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
     _motor->CrearTexto(slots[1].GetNombre(),205+166,260+60,0,0);
-    _motor->CrearBoton2(205,360,8.0f,170,40,300,GUI_ID_SLOT3,L"Slot 3",L"assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
+    _motor->CrearBoton2(205,360,8.0f,170,40,300,GUI_ID_SLOT3,"Slot 3","assets/images/slot.png",true,"assets/images/slotpulsado.png","assets/images/slotencima.png");
     _motor->CrearTexto(slots[2].GetNombre(),205+166,360+60,0,0);
     _motor->ResetKey(LMOUSE_PRESSED_DOWN);
 }
@@ -69,13 +69,14 @@ void EstadoIniciar::ManejarEventos()
             _motor->BorrarGui();
             _motor->CambiarAnchuraTexto( _motor->CrearTexto("Escriba el nombre de la partida - ESC para salir", 0, 0, 300, 20),500);
             _motor->CrearImagen("assets/images/pr2.png",150,100,2.2f);
-            _motor->CrearBoton2(300,240,2.0f,170,40,300,GUI_ID_CAMPONOMBRE,L"Slot 1",L"assets/images/campoTexto.png",false);//no creamos texto
+            _motor->CrearBoton2(300,240,2.0f,170,40,300,GUI_ID_CAMPONOMBRE,"Slot 1","assets/images/campoTexto.png",false);//no creamos texto
             idCampoTexto = _motor->CrearTexto("",310,260,0,0);
             _motor->CambiarColorTexto(idCampoTexto,0,0,0);
             _motor->CrearBoton(300,300,0,0,999,L"       Siguiente",L"");
             _motor->CambiarAnchuraTexto(idCampoTexto,180);
             tiempoCursor = 0.0f;
             fase = 2;
+            _motor->ResetKey(LMOUSE_PRESSED_DOWN);
             return;
         }
 
@@ -132,9 +133,10 @@ void EstadoIniciar::ManejarEventos()
             fase = 4;
             _motor->BorrarGui();
             _motor->CrearImagen("assets/images/pr2.png",150,100,2.2f);
-            _motor->CrearBoton(200,200,0,0,998,L"          Chica",L"");
-            _motor->CrearBoton(400,200,0,0,997,L"          Chico",L"");
-            _motor->CrearBoton(300,300,0,0,996,L"  Empezar Partida",L"");
+            _motor->CrearBoton2(430,120,0.5f,170,40,300,997,"Slot 1","assets/images/heavyboton1.png",false,"assets/images/heavyboton2.png","assets/images/heavyboton3.png");
+            _motor->CrearBoton2(150,120,0.5f,170,40,300,998,"Slot 1","assets/images/bailarinaboton1.png",false,"assets/images/bailarinaboton2.png","assets/images/bailarinaboton3.png");
+            _motor->CrearBoton(300,463,0,0,996,L"  Empezar Partida",L"");
+            _motor->ResetKey(LMOUSE_PRESSED_DOWN);
         }
 
         if(fase == 4)//escoger personaje
