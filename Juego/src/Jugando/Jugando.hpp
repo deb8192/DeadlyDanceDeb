@@ -90,6 +90,9 @@ class Jugando: public Estado {
         void CrearSprites();
         void ReanudarSonidos();
 
+        //Se utiliza para recoger el tiempo pasado desde que iniciaste el nivel hasta ahora, en minutos
+        unsigned int GetTiempoPasadoNivel();
+
     private:
 
         short auxiliarPathfinding;
@@ -183,6 +186,8 @@ class Jugando: public Estado {
 
        // Debug del cofre arana
        bool esconderArana;
+
+       float tiempoInicioNivel;//tiempo inicial que empiezas el nivel
 
 };
 #endif /* JUGANDO_HPP */

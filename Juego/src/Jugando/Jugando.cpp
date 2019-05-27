@@ -152,6 +152,9 @@ void Jugando::Iniciar()
     #else
         CargarNivel(6, constantes.HEAVY);
     #endif
+    _controladorTiempo = Times::GetInstance();
+
+    tiempoInicioNivel = _controladorTiempo->GetTiempo(1);//se coge la marca de tiempo de iniciar el nivel para calcular la puntuacion
 
     _auxiliadores.reserve(_enemigos.size());
     recorrido.reserve(_enemigos.size());
@@ -317,7 +320,7 @@ void Jugando::ManejarEventos() {
     {
         _motor->ResetKey(KEY_K);
         //_jugador->setVida(0);
-        Juego::GetInstance()->estado.CambioEstadoGanar();
+        Juego::GetInstance()->estado.CambioEstadoGanar(GetTiempoPasadoNivel());
 
     }
 
@@ -1332,7 +1335,7 @@ void Jugando::UpdateIA()
                     else if (tipoEnemigo >= constantes.BOSS)
                     {
 
-                        Juego::GetInstance()->estado.CambioEstadoGanar();
+                        Juego::GetInstance()->estado.CambioEstadoGanar(GetTiempoPasadoNivel());
                     }
                     else
                     {
@@ -3236,4 +3239,14 @@ void Jugando::CrearSprites()
     sprites.push_back("assets/Sprites/Sprites-Respawn/Sprites-respawn_5.png");
     _motor->CargarSprite(3, sprites, 4.0f);
     sprites.clear();
+}
+
+unsigned int Jugando::GetTiempoPasadoNivel()
+{
+    if(_controladorTiempo)
+    {
+        return (unsigned int)_controladorTiempo->CalcularTiempoPasado(tiempoInicioNivel);
+    }
+
+    return 0;
 }
