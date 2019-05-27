@@ -25,6 +25,7 @@ Enemigo::Enemigo()
     tiempoMerodear = 0.0f;
     tiempoMoverse = 0.0f;
     tiempoOcultarse = 0.0f;
+    tiempoDefenderse = 0.0f;
     atackTime = 0.0f;
     atackEspTime = 0.0f;
     painAtackTime = 0.0f;
@@ -34,6 +35,7 @@ Enemigo::Enemigo()
     lastTiempoMerodear = 0.0f;
     lastTiempoMoverse = 0.0f;
     lastTiempoOcultarse = 0.0f;
+    lastTiempoDefenderse = 0.0f;
     vectorOrientacion.vX = 0.0f;
     vectorOrientacion.vY = 0.0f;
     vectorOrientacion.vZ = 0.0f;
@@ -177,9 +179,11 @@ Enemigo::~Enemigo()
     tiempoMerodear = 0;
     tiempoMoverse = 0;
     tiempoOcultarse = 0;
+    tiempoDefenderse = 0;
     lastTiempoMerodear = 0;
     lastTiempoMerodear = 0;
     lastTiempoOcultarse = 0;
+    lastTiempoDefenderse = 0;
     animacionMuerteTiem = 0;
     tiempoPasadoMuerte = 0;
     tiempoAtaque = 0;
