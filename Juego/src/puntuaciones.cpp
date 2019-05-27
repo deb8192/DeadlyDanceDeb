@@ -1,33 +1,5 @@
 #include "puntuaciones.hpp"
 
-
-///ejemplo de uso 
-/*	puntuaciones puntuar;
-	puntuar.setUser((char*)"jose4");
-	puntuar.setPass((char*)"44445");
-	puntuar.setPuntuacion(9000);
-	puntuar.setTiempo(30);
-	puntuar.setNivel(0);
-	int retu =  puntuar.subirpuntuacion(false);
-	switch(retu)
-	{
-		case 0:
-			std::cout << "Todo correcto "<< std::endl;
-			break;
-		case -1:
-			std::cout << "usuario no valido"<< std::endl;
-			break;
-		case -2:
-			std::cout << "Credenciales no validos"<< std::endl;
-			break;
-		case -3:
-			std::cout << "Servicio no disponible" << std::endl;
-			break;
-		case -4:
-			std::cout << "No hay internet o la pagina no responde" << std::endl;
-			break;
-}*/
-
 namespace
 {
     std::size_t callback(const char* in,std::size_t size,std::size_t num,std::string* out)
@@ -74,19 +46,29 @@ int puntuaciones::subirpuntuacion(bool registro)
             reg = 0;//registr false
         }
 
-        std::string us = user;
-        std::string pa = pass; 
-        std::string tipo = std::to_string(tip); 
-        std::string pu = std::to_string(puntuacion); 
-        std::string ti = std::to_string(tiempo); 
-        std::string ni = std::to_string(nivel);
-        std::string re = std::to_string(reg);
+        std::string us = " ";
+        std::string pa = " "; 
+        std::string tipo = " "; 
+        std::string pu = " "; 
+        std::string ti = " "; 
+        std::string ni = " ";
+        std::string re = " ";
+
+
+        us = user;
+        pa = pass; 
+        tipo = std::to_string(tip); 
+        pu = std::to_string(puntuacion); 
+        ti = std::to_string(tiempo); 
+        ni = std::to_string(nivel);
+        re = std::to_string(reg);
 
         //auto $parametros = "tipo=1&us=&pa=&pu=&ti=&ni=&re=0";
-        
-        std::string ruta_completa = "tipo="+tipo+"&us="+us+"&pa="+pa+"&pu="+pu+"&ti="+ti+"&ni="+ni+"&re="+re;
+        std::string ruta_completa = " ";
+        ruta_completa = "tipo="+tipo+"&us="+us+"&pa="+pa+"&pu="+pu+"&ti="+ti+"&ni="+ni+"&re="+re;
+        //std::cout << ruta_completa << std::endl;
         const char * c = ruta_completa.c_str();
-
+        //std::cout << c << std::endl;
         //esto transforma el string std 11 a char
         //char cadena[sizeof(ruta_completa)];//le dice la longitud del char que sera igual a la longitud del string
         //strcpy(cadena,ruta_completa.c_str()); //pasa el string a char

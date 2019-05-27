@@ -1,10 +1,11 @@
 #include "EstadoGanar.hpp"
 #include "../Juego.hpp"
 
-EstadoGanar::EstadoGanar()
+EstadoGanar::EstadoGanar(unsigned int tiempoDePartida)
 {
     _motor = MotorGrafico::GetInstance();
     _motora = MotorAudioSystem::getInstance();
+    tiempoPartida = tiempoDePartida;
     nombreUser = new char [10];
     for(int i = 0; i < 10; i++)
     {
@@ -109,12 +110,16 @@ void EstadoGanar::ManejarEventos()
        int retu;
        if(strlen(nombreUser) > 0 && strlen(nombrePass) > 0)
        {
-            puntuar.setUser(nombreUser);
-	        puntuar.setPass(nombrePass);
-            puntuar.setPuntuacion(9000);
-            puntuar.setTiempo(30);
-            puntuar.setNivel(0);
-            retu =  puntuar.subirpuntuacion(false);
+                puntuar.setUser(nombreUser);
+                puntuar.setPass(nombrePass);
+                unsigned int points = 600-(tiempoPartida/1000);
+                float porcentaje = ((float)1/(float)600)*(float)points;
+                int puntua = ((float)10000*porcentaje);
+                //std::cout << porcentaje << " " << puntua << " "  << points << std::endl;
+                puntuar.setPuntuacion(puntua);
+                puntuar.setTiempo((tiempoPartida/1000));
+                puntuar.setNivel(1);
+                retu =  puntuar.subirpuntuacion(false);
 
             	switch(retu)
                 {
@@ -145,18 +150,22 @@ void EstadoGanar::ManejarEventos()
         {
                 puntuar.setUser(nombreUser);
                 puntuar.setPass(nombrePass);
-                puntuar.setPuntuacion(9000);
-                puntuar.setTiempo(30);
-                puntuar.setNivel(0);
+                unsigned int points = 600-(tiempoPartida/1000);
+                float porcentaje = ((float)1/(float)600)*(float)points;
+                int puntua = ((float)10000*porcentaje);
+                //std::cout << porcentaje << " " << puntua << " "  << points << std::endl;
+                puntuar.setPuntuacion(puntua);
+                puntuar.setTiempo((tiempoPartida/1000));
+                puntuar.setNivel(1);
                 retu =  puntuar.subirpuntuacion(true);
 
                 switch(retu)
                 {
                     case 0:
-                        _motor->CambiarTexto(campo_web,"Puntuacion Subida.");
+                        _motor->CambiarTexto(campo_web,"    Puntuacion Subida.");
                     break;
                     case -1:
-                        _motor->CambiarTexto(campo_web,"Usuario no valido.");
+                        _motor->CambiarTexto(campo_web,"    Usuario no valido.");
                     break;
                     case -2:
                         _motor->CambiarTexto(campo_web,"Credenciales no validos.");

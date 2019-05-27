@@ -1,6 +1,6 @@
 <!--<Animacion nombre="" inicio="" final="" bucle="" salto="" dondesaltar="" terminar="" velocidad=""/>-->
 <Animaciones numeroAnimaciones="9">
-	<Animacion nombre="Quieto" inicio="246" final="268" bucle="true" salto="false" terminar="false" velocidad="1"/>
+	<Animacion nombre="Quieto" inicio="246" final="268" bucle="true" salto="false" terminar="false" velocidad="10"/>
 	<Animacion nombre="Movimiento" inicio="14" final="20" bucle="true" salto="false" terminar="false" velocidad="10"/>
 	<Animacion nombre="Atacar" inicio="38" final="50" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="4"/>
 	<Animacion nombre="Ataque Especial" inicio="96" final="120" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="10"/>
