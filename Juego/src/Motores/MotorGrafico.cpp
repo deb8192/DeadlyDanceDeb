@@ -3117,11 +3117,11 @@ void MotorGrafico::CargarInterfaz()
         //codigo motor catopengl
 
         //cargamos y mostramos la interfaz
+        barraVida_textura = _interfaz->AddImagen("assets/images/4.png",_ges->GetHud()->xBarraVidaM,_ges->GetHud()->yBarraVidaM,1);
+        barraEnergia_textura = _interfaz->AddImagen("assets/images/3.png",_ges->GetHud()->xBarraEnergiaM,_ges->GetHud()->yBarraEnergiaM,1);
         vida_textura = _interfaz->AddImagen("assets/images/51.png",_ges->GetHud()->xVidaM,_ges->GetHud()->yVidaM,1);
         dinero_textura = _interfaz->AddImagen("assets/images/61.png",_ges->GetHud()->xDineroM,_ges->GetHud()->yDineroM,1);
         arma_textura =_interfaz->AddImagen("assets/images/11.png",_ges->GetHud()->xObjetoM,_ges->GetHud()->yObjetoM,1);
-        barraVida_textura = _interfaz->AddImagen("assets/images/4.png",_ges->GetHud()->xBarraVidaM,_ges->GetHud()->yBarraVidaM,1);
-        barraEnergia_textura = _interfaz->AddImagen("assets/images/3.png",_ges->GetHud()->xBarraEnergiaM,_ges->GetHud()->yBarraEnergiaM,1);
         manos_textura = _interfaz->AddImagen("assets/images/manos.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
         llave_textura = _interfaz->AddImagen("assets/images/llave.png",_ges->GetHud()->xLlaveBossM,_ges->GetHud()->yLlaveBossM,1);
         espada_textura = _interfaz->AddImagen("assets/images/guitarra-1.png",_ges->GetHud()->xTipoObjetoM,_ges->GetHud()->yTipoObjetoM,1);
@@ -3408,18 +3408,16 @@ void MotorGrafico::SetVida(int vida)
         //codigo motor catopengl
         if(barraVida_textura != 0)
         {
-            float unidad = ((float)121/100);
-            float unidad_min = 0.0030f;
 
-            float resultado = (unidad*(float)vida)*unidad_min;
+            float resultado = (float) vida/100;
 
             if(resultado <= 0)
             {
-                _interfaz->EscalarImagen(barraVida_textura,0.01f,0.48f,true,true);
+                _interfaz->EscalarImagen(barraVida_textura,0.0f,1.0f,true,true);
             }
             else
             {
-                _interfaz->EscalarImagen(barraVida_textura,resultado,0.48f,true,true);
+                _interfaz->EscalarImagen(barraVida_textura,resultado,1.0f,true,true);
             }
         }
 
@@ -3449,19 +3447,15 @@ void MotorGrafico::SetBarraEnergia(int barra)
         //codigo motor catopengl
         if(barraEnergia_textura != 0)
         {
-            float unidad = ((float)63/100);
-            float unidad_min = 0.0030f;
-
-            float resultado = (unidad*(float)barra)*unidad_min;
-
+            float resultado = (float) barra/100;
 
             if(resultado <= 0)
             {
-                _interfaz->EscalarImagen(barraEnergia_textura,0.01f,0.48f,true,true);
+                _interfaz->EscalarImagen(barraEnergia_textura,0.0f,1.0f,true,true);
             }
             else
             {
-                _interfaz->EscalarImagen(barraEnergia_textura,resultado,0.48f,true,true);
+                _interfaz->EscalarImagen(barraEnergia_textura,resultado,1.0f,true,true);
             }
         }
     #else

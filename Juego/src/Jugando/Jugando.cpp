@@ -329,13 +329,13 @@ void Jugando::ManejarEventos() {
     }*/
 
     // Desactivar fisicas jugador
-    /*if(_motor->EstaPulsado(KEY_U))
+    if(_motor->EstaPulsado(KEY_U))
     {
         desactivarColisionesJugador = !desactivarColisionesJugador;
         _motor->ResetKey(KEY_U);
         poderEmpezar = true;
        if(nivelJ==8){_motora->getEvent("MuerteBienvenida1")->stop();}
-    }*/
+    }
 
     // Multicamara
     if(_motor->EstaPulsado(KEY_C))
