@@ -446,26 +446,7 @@ int Jugador::Atacar(int i)
                 //Crear cuerpo de colision de ataque delante del jugador
                 _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,5,0,0,4,0,0,false);
                 _motora->getEvent("GolpeGuitarra")->start();
-
-                unsigned int armaSeleccionada;
-
-                switch (tipoArma)
-                {
-                   case 10:
-                    armaSeleccionada=0;
-                   break;
-                   case 11:
-                    armaSeleccionada=1;
-                   break;
-                   case 12:
-                    armaSeleccionada=2;
-                   break;
-                }
-
-                //_motor->RotarArma(armaSeleccionada,getRX(),getRY(),getRZ());
-                _motor->MoverArma(armaSeleccionada,getX(),getY(),getZ());
                 _motor->cambiarAnimacionJugador(7);
-                _motor->cambiarAnimacion(7,armaSeleccionada,1);
             }
             //ATAQUE A DISTANCIA
             else if ((tipoArma == constantes.ARPA1) || (tipoArma == constantes.ARPA2) ||
@@ -475,27 +456,7 @@ int Jugador::Atacar(int i)
                 //Crear cuerpo de colision de ataque delante del jugador
                 _fisicas->crearCuerpo(0,atposX,atposY,atposZ,2,2,0.5,1,4,0,0,false);
                 _motora->getEvent("Arpa")->start();
-
-
-                unsigned int armaSeleccionada;
-
-                switch (tipoArma)
-                {
-                   case 7:
-                    armaSeleccionada=6;
-                   break;
-                   case 8:
-                    armaSeleccionada=7;
-                   break;
-                   case 9:
-                    armaSeleccionada=8;
-                   break;
-                }
-
-                //_motor->RotarArma(armaSeleccionada,getRX(),getRY(),getRZ());
-                _motor->MoverArma(armaSeleccionada,getX(),getY(),getZ());
                 _motor->cambiarAnimacionJugador(6);
-                _motor->cambiarAnimacion(7,armaSeleccionada,1);
 
             }
             //ATAQUE A MEDIA DISTANCIA
@@ -509,27 +470,7 @@ int Jugador::Atacar(int i)
                 //Crear cuerpo de colision de ataque delante del jugador
                 _fisicas->crearCuerpo(0,atposX,atposY,atposZ,1,tamanyoflecha*2,0,0,4,0,0,false);
                 _motora->getEvent("Flauta")->start();
-
-
-                unsigned int armaSeleccionada;
-
-                switch (tipoArma)
-                {
-                   case 13:
-                    armaSeleccionada=3;
-                   break;
-                   case 14:
-                    armaSeleccionada=4;
-                   break;
-                   case 15:
-                    armaSeleccionada=5;
-                   break;
-                }
-
-                //_motor->RotarArma(armaSeleccionada,getRX(),getRY(),getRZ());
-                _motor->MoverArma(armaSeleccionada,getX(),getY(),getZ());
                 _motor->cambiarAnimacionJugador(8);
-                _motor->cambiarAnimacion(7,armaSeleccionada,1);
             }
         }
 
@@ -579,7 +520,6 @@ int Jugador::AtacarEspecial()
     if(vida > 0 && barraAtEs == por100)
     {
         //Calcular posiciones si se inicia el ataque especial
-        setAnimacion(3);
         if(atackEspTime <= 0)
         {
             int distancia = 5;
