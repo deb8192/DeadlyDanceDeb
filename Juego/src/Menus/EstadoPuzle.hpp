@@ -27,9 +27,9 @@ class EstadoPuzle: public Estado {
         bool comprobarPilaVacia(int pila);
         bool comprobarTopPila(int fichaY);
         bool comprobarTamanyo();
-        int  recolocarFicha();
+        PilaFichas* recolocarFicha();
         void sacarFicha();
-        int  meterFicha();
+        void meterFicha();
         void reiniciarPilas();
         void deseleccionarNodo();
         int  getZonaVentana();
@@ -45,7 +45,12 @@ class EstadoPuzle: public Estado {
         stack <PilaFichas*> pilaDer;
         PilaFichas* ficha;
 
-        enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
+        #ifdef WEMOTOR
+            enum posZ { IZQ=75, CENTRO=275, DER=500, NO_SELECT=-1 };
+        #else
+            enum posZ { IZQ=-9, CENTRO=0, DER=9, NO_SELECT=-1 };
+        #endif
+        
         int pasos, pilaInicial, pilaFinal;
         bool pulsado;
         int x_linea1, x_linea2;
