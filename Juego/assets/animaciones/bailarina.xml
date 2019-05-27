@@ -2,9 +2,9 @@
 <Animaciones numeroAnimaciones="9">
 	<Animacion nombre="Quieto" inicio="246" final="268" bucle="true" salto="false" terminar="false" velocidad="1"/>
 	<Animacion nombre="Movimiento" inicio="14" final="20" bucle="true" salto="false" terminar="false" velocidad="10"/>
-	<Animacion nombre="Atacar" inicio="38" final="50" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="10"/>
-	<Animacion nombre="Ataque Especial" inicio="96" final="120" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="6"/>
-	<Animacion nombre="Coger Objeto" inicio="220" final="243" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="6"/>
+	<Animacion nombre="Atacar" inicio="38" final="50" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="4"/>
+	<Animacion nombre="Ataque Especial" inicio="96" final="120" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="10"/>
+	<Animacion nombre="Coger Objeto" inicio="220" final="243" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="10"/>
 	<Animacion nombre="Muere" inicio="210" final="218" bucle="false" salto="false" dondesaltar="0" terminar="true" velocidad="10"/>
 	<Animacion nombre="AtaqueArpa" inicio="124" final="144" bucle="false" salto="true" dondesaltar="0" terminar="true" velocidad="14"/>
 	<Animacion nombre="AtaqueGuitarra" inicio="186" final="210" bucle="false"  salto="true" dondesaltar="0" terminar="true" velocidad="14"/>
