@@ -376,7 +376,7 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             void CambiarAnchuraTexto(unsigned short,unsigned int);
 
             //boton
-            unsigned int CrearBoton2(short xImagen, short yImagen, unsigned int escalado, short xTexto, short yTexto, unsigned int anchotexto, signed int id,const wchar_t* texto, const wchar_t * rutaimagen = L"assets/images/boton3.png",bool esTexto = true,const char * rutapulsado = nullptr,const char * rutaencima = nullptr);
+            unsigned int CrearBoton2(short xImagen, short yImagen, float escalado, short xTexto, short yTexto, unsigned int anchotexto, signed int id,const char * texto, const char * rutaimagen = "assets/images/boton3.png",bool esTexto = true,const char * rutapulsado = nullptr,const char * rutaencima = nullptr);
 
             //para deshabilitar y habilitar captura de texto
             void ActivarCapturaTexto();

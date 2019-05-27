@@ -56,51 +56,51 @@ void Configuracion::Iniciar()
     _motor->CrearTexto("Pantalla Completa:", 580, 70, 100, 20);
     //idsElementos[8] = _motor->CrearBoton2(760,55,2.0f,170,40,300,999,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
 
-    _motor->CrearBoton2(348,65,2.0f,170,40,300,990,L"Slot 1",L"assets/images/camposeleccionn.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
+    _motor->CrearBoton2(348,65,2.0f,170,40,300,990,"Slot 1","assets/images/camposeleccionn.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
     _motor->CrearTexto("Sonido Ambiente:", 30, 135, 100, 20); // Parametros: texto, x1, y1, x2, y2
     _motor->CrearImagen("assets/images/barradeslizante.png",350,120,2.0f);
-    idsElementos[0] = _motor->CrearBoton2(362+(((float)366/(float)100)*(float)volAmbiente),125,2.0f,170,40,300,991,L"Slot 1",L"assets/images/deslizadorn.png",false,"assets/images/deslizadorp.png","assets/images/deslizadore.png");
+    idsElementos[0] = _motor->CrearBoton2(362+(((float)366/(float)100)*(float)volAmbiente),125,2.0f,170,40,300,991,"Slot 1","assets/images/deslizadorn.png",false,"assets/images/deslizadorp.png","assets/images/deslizadore.png");
     _motor->CrearTexto("Volumen de Efectos:", 30, 200, 100, 20); // Parametros: texto, x1, y1, x2, y2
     _motor->CrearImagen("assets/images/barradeslizante.png",350,180,2.0f);
-    idsElementos[1] = _motor->CrearBoton2(362+(((float)366/(float)100)*(float)volEfectos),185,2.0f,170,40,300,992,L"Slot 1",L"assets/images/deslizadorn.png",false,"assets/images/deslizadorp.png","assets/images/deslizadore.png");
+    idsElementos[1] = _motor->CrearBoton2(362+(((float)366/(float)100)*(float)volEfectos),185,2.0f,170,40,300,992,"Slot 1","assets/images/deslizadorn.png",false,"assets/images/deslizadorp.png","assets/images/deslizadore.png");
     _motor->CrearTexto("Volumen de las Voces:", 30, 260, 100, 20); // Parametros: texto, x1, y1, x2, y2
     _motor->CrearImagen("assets/images/barradeslizante.png",350,240,2.0f);
-    idsElementos[2] = _motor->CrearBoton2(362+(((float)366/(float)100)*(float)volVoces),245,2.0f,170,40,300,993,L"Slot 1",L"assets/images/deslizadorn.png",false,"assets/images/deslizadorp.png","assets/images/deslizadore.png");
+    idsElementos[2] = _motor->CrearBoton2(362+(((float)366/(float)100)*(float)volVoces),245,2.0f,170,40,300,993,"Slot 1","assets/images/deslizadorn.png",false,"assets/images/deslizadorp.png","assets/images/deslizadore.png");
     _motor->CrearTexto("Mute All: ", 30, 320, 100, 20);
     if(muteAll)
     {
-        idsElementos[3] = _motor->CrearBoton2(348,305,2.0f,170,40,300,994,L"Slot 1",L"assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
+        idsElementos[3] = _motor->CrearBoton2(348,305,2.0f,170,40,300,994,"Slot 1","assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
     }
     else
     {
-        idsElementos[3] = _motor->CrearBoton2(348,305,2.0f,170,40,300,994,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
+        idsElementos[3] = _motor->CrearBoton2(348,305,2.0f,170,40,300,994,"Slot 1","assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
     }
     _motor->CrearTexto("Activar Vsync: ", 30, 380, 100, 20);
     if(vsync)
     {
-        idsElementos[4] = _motor->CrearBoton2(348,365,2.0f,170,40,300,995,L"Slot 1",L"assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
+        idsElementos[4] = _motor->CrearBoton2(348,365,2.0f,170,40,300,995,"Slot 1","assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
     }
     else
     {
-        idsElementos[4] = _motor->CrearBoton2(348,365,2.0f,170,40,300,995,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
+        idsElementos[4] = _motor->CrearBoton2(348,365,2.0f,170,40,300,995,"Slot 1","assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
     }
     _motor->CrearTexto("Suavizado MSAX1: ", 30, 440, 100, 20);
     if(suavizadoMsax1)
     {
-        idsElementos[5] = _motor->CrearBoton2(348,425,2.0f,170,40,300,996,L"Slot 1",L"assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
+        idsElementos[5] = _motor->CrearBoton2(348,425,2.0f,170,40,300,996,"Slot 1","assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
     }
     else
     {
-        idsElementos[5] = _motor->CrearBoton2(348,425,2.0f,170,40,300,996,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
+        idsElementos[5] = _motor->CrearBoton2(348,425,2.0f,170,40,300,996,"Slot 1","assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
     }
 
     if(AllScreen)
     {
-        idsElementos[8] = _motor->CrearBoton2(750,55,2.0f,570,65,300,1000,L"Slot 1",L"assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
+        idsElementos[8] = _motor->CrearBoton2(750,55,2.0f,570,65,300,1000,"Slot 1","assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
     }
     else
     {
-        idsElementos[8] = _motor->CrearBoton2(750,55,2.0f,170,40,300,1000,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
+        idsElementos[8] = _motor->CrearBoton2(750,55,2.0f,170,40,300,1000,"Slot 1","assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
     }
 
     _motor->CrearBoton(300,520,0,0,997,L" Guardar Cambios",L"");
@@ -169,13 +169,13 @@ void Configuracion::ManejarEventos()
         {
             muteAll = false;
             _motor->BorrarElementoPorIdReal(idsElementos[3]);
-            idsElementos[3] = _motor->CrearBoton2(348,305,2.0f,170,40,300,994,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
+            idsElementos[3] = _motor->CrearBoton2(348,305,2.0f,170,40,300,994,"Slot 1","assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
         }
         else
         {
             muteAll = true;
             _motor->BorrarElementoPorIdReal(idsElementos[3]);
-            idsElementos[3] = _motor->CrearBoton2(348,305,2.0f,170,40,300,994,L"Slot 1",L"assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
+            idsElementos[3] = _motor->CrearBoton2(348,305,2.0f,170,40,300,994,"Slot 1","assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
         }
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
     }
@@ -186,14 +186,14 @@ void Configuracion::ManejarEventos()
         {
             vsync = false;
             _motor->BorrarElementoPorIdReal(idsElementos[4]);
-            idsElementos[4] = _motor->CrearBoton2(348,365,2.0f,170,40,300,995,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
+            idsElementos[4] = _motor->CrearBoton2(348,365,2.0f,170,40,300,995,"Slot 1","assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
 
         }
         else
         {
             vsync = true;
             _motor->BorrarElementoPorIdReal(idsElementos[4]);
-            idsElementos[4] = _motor->CrearBoton2(348,365,2.0f,170,40,300,995,L"Slot 1",L"assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
+            idsElementos[4] = _motor->CrearBoton2(348,365,2.0f,170,40,300,995,"Slot 1","assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
 
         }
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
@@ -205,13 +205,13 @@ void Configuracion::ManejarEventos()
         {
             suavizadoMsax1 = false;
             _motor->BorrarElementoPorIdReal(idsElementos[5]);
-            idsElementos[5] = _motor->CrearBoton2(348,425,2.0f,170,40,300,996,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
+            idsElementos[5] = _motor->CrearBoton2(348,425,2.0f,170,40,300,996,"Slot 1","assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
         }
         else
         {
             suavizadoMsax1 = true;
             _motor->BorrarElementoPorIdReal(idsElementos[5]);
-            idsElementos[5] = _motor->CrearBoton2(348,425,2.0f,170,40,300,996,L"Slot 1",L"assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
+            idsElementos[5] = _motor->CrearBoton2(348,425,2.0f,170,40,300,996,"Slot 1","assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
         }
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
     }
@@ -222,13 +222,13 @@ void Configuracion::ManejarEventos()
         {
             AllScreen = false;
             _motor->BorrarElementoPorIdReal(idsElementos[8]);
-            idsElementos[5] = _motor->CrearBoton2(750,55,2.0f,170,40,300,1000,L"Slot 1",L"assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
+            idsElementos[5] = _motor->CrearBoton2(750,55,2.0f,170,40,300,1000,"Slot 1","assets/images/marcadorn.png",false,"assets/images/marcadorp.png","assets/images/marcadore.png");
         }
         else
         {
             AllScreen = true;
             _motor->BorrarElementoPorIdReal(idsElementos[8]);
-            idsElementos[5] = _motor->CrearBoton2(750,55,2.0f,170,40,300,1000,L"Slot 1",L"assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
+            idsElementos[5] = _motor->CrearBoton2(750,55,2.0f,170,40,300,1000,"Slot 1","assets/images/marcadorp.png",false,"assets/images/marcadorn.png","assets/images/marcadore.png");
         }
         _motor->ResetKey(LMOUSE_PRESSED_DOWN);
     }
@@ -238,11 +238,11 @@ void Configuracion::ManejarEventos()
         if(resolucion[0] == 0)
         {
             resolucion[0] = _motor->CrearTexto("800x600 60Fps", 385, 120, 100, 20);
-            resolucion[1] = _motor->CrearBoton2(348,105,2.0f,170,40,300,884,L"Slot 1",L"assets/images/camposelecciono.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
+            resolucion[1] = _motor->CrearBoton2(348,105,2.0f,170,40,300,884,"Slot 1","assets/images/camposelecciono.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
             resolucion[2] = _motor->CrearTexto("1280x720 60Fps", 385, 160, 100, 20);
-            resolucion[3] = _motor->CrearBoton2(348,145,2.0f,170,40,300,885,L"Slot 1",L"assets/images/camposelecciono.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
+            resolucion[3] = _motor->CrearBoton2(348,145,2.0f,170,40,300,885,"Slot 1","assets/images/camposelecciono.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
             resolucion[4] = _motor->CrearTexto("1920x1080 60Fps", 385, 200, 100, 20);
-            resolucion[5] = _motor->CrearBoton2(348,185,2.0f,170,40,300,886,L"Slot 1",L"assets/images/camposelecciono.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
+            resolucion[5] = _motor->CrearBoton2(348,185,2.0f,170,40,300,886,"Slot 1","assets/images/camposelecciono.png",false,"assets/images/camposeleccionp.png","assets/images/camposeleccione.png");
         }
         else
         {

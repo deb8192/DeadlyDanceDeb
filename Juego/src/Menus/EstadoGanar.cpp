@@ -233,8 +233,8 @@ void EstadoGanar::pintarBotones()
     _motor->CrearBoton(300,360,500,310, GUI_ID_SALIR_BUTTON, L"Salir del juego", L"Cierra el juego");
     _motor->CambiarAnchuraTexto( _motor->CrearTexto("Usuario: ", 300, 145, 300, 20),70);
     _motor->CambiarAnchuraTexto( _motor->CrearTexto("Password: ",300, 175, 300, 20),90);
-    _motor->CrearBoton2(400,140,1.0f,170,40,300,GUI_ID_USER,L"Pass",L"assets/images/campoTexto.png",false);//no creamos texto
-    _motor->CrearBoton2(400,170,1.0f,170,40,300,GUI_ID_PASS,L"User",L"assets/images/campoTexto.png",false);//no creamos texto
+    _motor->CrearBoton2(400,140,1.0f,170,40,300,GUI_ID_USER,"Pass","assets/images/campoTexto.png",false);//no creamos texto
+    _motor->CrearBoton2(400,170,1.0f,170,40,300,GUI_ID_PASS,"User","assets/images/campoTexto.png",false);//no creamos texto
     campo_user = _motor->CrearTexto("",402,150,0,0);
     _motor->CambiarColorTexto(campo_user,0,0,0);
     campo_pass = _motor->CrearTexto("",402,180,0,0);

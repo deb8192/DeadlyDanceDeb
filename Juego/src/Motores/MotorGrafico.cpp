@@ -4724,22 +4724,19 @@ void MotorGrafico::CambiarAnchuraTexto(unsigned short did,unsigned int nuevoAnch
     #endif
 }
 
-unsigned int MotorGrafico::CrearBoton2(short xImagen, short yImagen, unsigned int escalado, short xTexto, short yTexto, unsigned int anchotexto, signed int id,const wchar_t* texto, const wchar_t* rutaimagen,bool esTexto,const char * rutapulsado,const char * rutaencima)
+unsigned int MotorGrafico::CrearBoton2(short xImagen, short yImagen, float escalado, short xTexto, short yTexto, unsigned int anchotexto, signed int id,const char * texto, const char * rutaimagen,bool esTexto,const char * rutapulsado,const char * rutaencima)
 {
     #ifdef WEMOTOR
         //codigo motor catopengl
-        wstring ws(rutaimagen);
-        string str(ws.begin(),ws.end());
-        const char * pru = str.c_str();
         unsigned short num = 0;
 
         if(rutapulsado != nullptr || rutaencima != nullptr)
         {
-            num = _interfaz->AddImagen(pru,xImagen,yImagen ,(float)escalado, rutapulsado , rutaencima );
+            num = _interfaz->AddImagen(rutaimagen,xImagen,yImagen ,(float)escalado, rutapulsado , rutaencima );
         }
         else
         {
-            num = _interfaz->AddImagen(pru,xImagen,yImagen ,(float)escalado);
+            num = _interfaz->AddImagen(rutaimagen,xImagen,yImagen ,(float)escalado);
         }
 
         if(num != 0)
@@ -4748,9 +4745,7 @@ unsigned int MotorGrafico::CrearBoton2(short xImagen, short yImagen, unsigned in
             _interfaz->DefinirIdPersonalizado(num,id);
             if(esTexto)//si se debe crear texto con el boton
             {
-                wstring ws(texto);
-                string str(ws.begin(),ws.end());
-                unsigned short num2 = _interfaz->CrearTexto(str,xImagen+xTexto,yImagen+yTexto,255.0f,255.0f,255.0f);
+                unsigned short num2 = _interfaz->CrearTexto(texto,xImagen+xTexto,yImagen+yTexto,255.0f,255.0f,255.0f);
                 _interfaz->DefinirTextoBoton(num,num2);
             }
         }
