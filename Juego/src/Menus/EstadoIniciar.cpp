@@ -59,7 +59,7 @@ void EstadoIniciar::ManejarEventos()
             _motor->BorrarGui();
             _motora->getEvent("Menu")->stop(); //Detener musica Menu
             Juego::GetInstance()->estado.CambioEstadoJugar(slots[slotSeleccionado-1].GetNivel(),slots[slotSeleccionado-1].GetTipo(),slots[slotSeleccionado-1].GetDinero(),slotSeleccionado);
-            _motor->AsignarCargando(_motor->CrearImagen("assets/images/cargando.png",540,330,1.0f));
+            _motor->AsignarCargando(_motor->CrearImagen("assets/images/cargando.png",540,330,1.0f),_motor->CrearImagen("assets/images/inputs.png",50,85,0.5f));
             return;
         }
 
