@@ -1083,18 +1083,26 @@ void CargadorNiveles::CargarCofres()
                 _zonasCofre[zonasDisponibles[numAlt]]->annadirElemento();
 
                 //Colocar cofre
-                unsigned short posArrayArana = 0;
+                unsigned short posArrayArana = 3;
                 bool esArana = false;
-                if (aranasCreadas < eneAranas)
+                // if (aranasCreadas < eneAranas)
+                // {
+                //     posArrayArana = CrearCofreArana(newx,newy,newz, 2,4,2, _zonasCofre[zonasDisponibles[numAlt]]->GetSala());
+                //     ++aranasCreadas;
+                //     esArana = true;
+                //
+                //     // Debug: para cambiar la posicion del jugador al lado de un cofre
+                //     posCofre[0] = newx;
+                //     posCofre[1] = newy;
+                //     posCofre[2] = newz;
+                // }
+
+                //std::cout << zonasDisponibles[numAlt] << std::endl;
+                if(zonasDisponibles[numAlt] == 2)
                 {
                     posArrayArana = CrearCofreArana(newx,newy,newz, 2,4,2, _zonasCofre[zonasDisponibles[numAlt]]->GetSala());
-                    ++aranasCreadas;
                     esArana = true;
-
-                    // Debug: para cambiar la posicion del jugador al lado de un cofre
-                    posCofre[0] = newx;
-                    posCofre[1] = newy;
-                    posCofre[2] = newz;
+                    //std::cout << "cofre arana en su sitio" << std::endl;
                 }
 
                 Cofre* _cofre = new Cofre(esArana, ++id,

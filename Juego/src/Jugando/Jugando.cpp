@@ -2925,19 +2925,6 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     unsigned short minFlauta = 13;
     x = x + 5;
 
-    // El cofre suelta armas normales y oro, la arana suelta armas mas fuertes
-    if (esArana)
-    {
-        objeto = NumeroAleatorio(constantes.ARPA1,constantes.ULTIMA_ARMA);
-        minArpa = 22;
-        minGuitar = 31;
-        minFlauta = 25;
-    }
-    else
-    {
-        objeto = NumeroAleatorio(constantes.ORO,constantes.ULTIMA_ARMA+2);
-    }
-
     //PRESENTACION
     switch (objetopresentacion) {
         case 0:
@@ -2955,46 +2942,60 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
     }
     objetopresentacion++;
 
-    if(objetopresentacion > 4)
-    {
-    //***********
-        switch (objeto)
-        {
-            case 7: // ARPA
-                CrearObjeto(x,y,z,3,4,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
-                break;
-            case 8:
-                CrearObjeto(x,y,z,3,4,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
-                break;
-            case 9:
-                CrearObjeto(x,y,z,3,4,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
-                break;
-
-            case 10: // GUITARRA
-                CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
-                break;
-            case 11:
-                CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
-                break;
-            case 12:
-                CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
-                break;
-
-            case 13: // FLAUTA
-                CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
-                break;
-            case 14:
-                CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
-                break;
-            case 15:
-                CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
-                break;
-
-            default: // ORO
-                CrearPowerUp(x,y,z,constantes.ORO,NumeroAleatorio(20,30));
-                break;
-        }
-    }
+    // if(objetopresentacion > 5)
+    // {
+    //     //***********
+    //
+    //     // El cofre suelta armas normales y oro, la arana suelta armas mas fuertes
+    //     if (esArana)
+    //     {
+    //         objeto = NumeroAleatorio(constantes.ARPA1,constantes.ULTIMA_ARMA);
+    //         minArpa = 22;
+    //         minGuitar = 31;
+    //         minFlauta = 25;
+    //     }
+    //     else
+    //     {
+    //         objeto = NumeroAleatorio(constantes.ORO,constantes.ULTIMA_ARMA+2);
+    //     }
+    //
+    //     switch (objeto)
+    //     {
+    //         case 7: // ARPA
+    //             CrearObjeto(x,y,z,3,4,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
+    //             break;
+    //         case 8:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
+    //             break;
+    //         case 9:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
+    //             break;
+    //
+    //         case 10: // GUITARRA
+    //             CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
+    //             break;
+    //         case 11:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
+    //             break;
+    //         case 12:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
+    //             break;
+    //
+    //         case 13: // FLAUTA
+    //             CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
+    //             break;
+    //         case 14:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
+    //             break;
+    //         case 15:
+    //             CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
+    //             break;
+    //
+    //         default: // ORO
+    //             CrearPowerUp(x,y,z,constantes.ORO,NumeroAleatorio(20,30));
+    //             break;
+    //     }
+    // }
 }
 
 void Jugando::CrearEnemigoArana()
