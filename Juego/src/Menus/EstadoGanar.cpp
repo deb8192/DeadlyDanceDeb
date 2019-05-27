@@ -110,12 +110,16 @@ void EstadoGanar::ManejarEventos()
        int retu;
        if(strlen(nombreUser) > 0 && strlen(nombrePass) > 0)
        {
-            puntuar.setUser(nombreUser);
-	        puntuar.setPass(nombrePass);
-            puntuar.setPuntuacion(9000);
-            puntuar.setTiempo(30);
-            puntuar.setNivel(0);
-            retu =  puntuar.subirpuntuacion(false);
+                puntuar.setUser(nombreUser);
+                puntuar.setPass(nombrePass);
+                unsigned int points = 600-(tiempoPartida/1000);
+                float porcentaje = ((float)1/(float)600)*(float)points;
+                int puntua = ((float)10000*porcentaje);
+                //std::cout << porcentaje << " " << puntua << " "  << points << std::endl;
+                puntuar.setPuntuacion(puntua);
+                puntuar.setTiempo((tiempoPartida/1000));
+                puntuar.setNivel(1);
+                retu =  puntuar.subirpuntuacion(false);
 
             	switch(retu)
                 {
