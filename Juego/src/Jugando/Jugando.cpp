@@ -303,39 +303,39 @@ void Jugando::ManejarEventos() {
     }
 
      //para modo camara
-    if(_motor->EstaPulsado(KEY_1))
+    /*if(_motor->EstaPulsado(KEY_1))
     {
         _motor->girarCamara();
         _fisicas->girarCamara();
         _jugador->girarCamara();
         _motor->ResetKey(KEY_1);
-    }
+    }*/
 
     /* *********** Teclas para probar cosas *************** */
 
-    if (_motor->EstaPulsado(KEY_K))
+    /*if (_motor->EstaPulsado(KEY_K))
     {
         _motor->ResetKey(KEY_K);
         //_jugador->setVida(0);
         Juego::GetInstance()->estado.CambioEstadoGanar();
 
-    }
+    }*/
 
     //para modo debug
-    if(_motor->EstaPulsado(KEY_G_DEBUG))
+    /*if(_motor->EstaPulsado(KEY_G_DEBUG))
     {
         _motor->activarDebugGrafico();
         _motor->ResetKey(KEY_G_DEBUG);
-    }
+    }*/
 
     // Desactivar fisicas jugador
-    if(_motor->EstaPulsado(KEY_U))
+    /*if(_motor->EstaPulsado(KEY_U))
     {
         desactivarColisionesJugador = !desactivarColisionesJugador;
         _motor->ResetKey(KEY_U);
         poderEmpezar = true;
        if(nivelJ==8){_motora->getEvent("MuerteBienvenida1")->stop();}
-    }
+    }*/
 
     // Multicamara
     if(_motor->EstaPulsado(KEY_C))
@@ -346,18 +346,18 @@ void Jugando::ManejarEventos() {
 
 
     // Debug para probar cofres
-    if(_motor->EstaPulsado(KEY_I))
+    /*if(_motor->EstaPulsado(KEY_I))
     {
         cargador.TrasladarJugadorACofres();
         _motor->ResetKey(KEY_I);
-    }
+    }*/
 
     // Debug para probar esconder arana cofre
-    if(_motor->EstaPulsado(KEY_Z))
+    /*if(_motor->EstaPulsado(KEY_Z))
     {
         esconderArana = !esconderArana;
         _motor->ResetKey(KEY_Z);
-    }
+    }*/
 
     if(_motor->EstaPulsado(KEY_B))
     {
@@ -367,37 +367,7 @@ void Jugando::ManejarEventos() {
         _jugador->initPosicionesFisicas((242+desplaza)/2, 0/2, 490/2);
         enSalaBoss = true;
         enCentroSalaBoss = true;
-
-            int i = _puertas.size() - constantes.UNO;
-            bool puertaBossCerrada = false;
-            bool abrir = false;
-            float rot = 0.0f;
-            while(i >= constantes.CERO && !puertaBossCerrada)
-            {
-                if(_puertas[i]->getCodigo() == constantes.PUERTA_BOSS)
-                {
-                    Puerta* _puerta = _puertas.at(i);
-                    abrir = _puerta->accionar();
-                    _puerta->accionar();
-                    abrir = _puerta->accionar();
-                    rot = (constantes.PI_MEDIOS + constantes.PI_CUARTOS);
-                    if(abrir)
-                    {   //Se abre/acciona la puerta / el mecanismo
-                        _puerta->GirarPuerta(rot, true);
-                    }
-                    else
-                    {   //Se cierra/desacciona la puerta / el mecanismo
-                        _puerta->GirarPuerta(-rot, true);
-                    }
-                    _puerta = nullptr;
-                    puertaBossCerrada = true;
-                }
-                else
-                {
-                    i--;
-                }
-            }
-            poderEmpezar = true;
+        poderEmpezar = true;
 
         CargarBossEnMemoria();
         _motor->ResetKey(KEY_B);
@@ -1225,11 +1195,11 @@ void Jugando::UpdateIA()
     bool cercaJugador = false;
     /* *********** Teclas para probar cosas *************** */
     // Bajar vida
-    if (_motor->EstaPulsado(KEY_J))
+    /*if (_motor->EstaPulsado(KEY_J))
     {
         _motor->ResetKey(KEY_J);
         _jugador->ModificarVida(-20);
-    }
+    }*/
 
     // Subir vida
     if (_motor->EstaPulsado(KEY_H))
@@ -2938,41 +2908,62 @@ void Jugando::AbrirCofre(float x, float y, float z, bool esArana)
         objeto = NumeroAleatorio(constantes.ORO,constantes.ULTIMA_ARMA+2);
     }
 
-    switch (objeto)
-    {
-        case 7: // ARPA
-            CrearObjeto(x,y,z,3,4,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
+    //PRESENTACION
+    switch (objetopresentacion) {
+        case 0:
+            CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA3,NumeroAleatorio(23,23));
             break;
-        case 8:
-            CrearObjeto(x,y,z,3,4,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
+        case 2:
+            CrearObjeto(x,y,z,3,4,2,constantes.ARPA1,NumeroAleatorio(26,26));
             break;
-        case 9:
-            CrearObjeto(x,y,z,3,4,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
+        case 4:
+            CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA1,NumeroAleatorio(31,31));
             break;
-
-        case 10: // GUITARRA
-            CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
-            break;
-        case 11:
-            CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
-            break;
-        case 12:
-            CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
-            break;
-
-        case 13: // FLAUTA
-            CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
-            break;
-        case 14:
-            CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
-            break;
-        case 15:
-            CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
-            break;
-
-        default: // ORO
+        default:
             CrearPowerUp(x,y,z,constantes.ORO,NumeroAleatorio(20,30));
             break;
+    }
+    objetopresentacion++;
+
+    if(objetopresentacion > 4)
+    {
+    //***********
+        switch (objeto)
+        {
+            case 7: // ARPA
+                CrearObjeto(x,y,z,3,4,2,constantes.ARPA1,NumeroAleatorio(minArpa,25));
+                break;
+            case 8:
+                CrearObjeto(x,y,z,3,4,2,constantes.ARPA2,NumeroAleatorio(minArpa,25));
+                break;
+            case 9:
+                CrearObjeto(x,y,z,3,4,2,constantes.ARPA3,NumeroAleatorio(minArpa,25));
+                break;
+
+            case 10: // GUITARRA
+                CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA1,NumeroAleatorio(minGuitar,32));
+                break;
+            case 11:
+                CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA2,NumeroAleatorio(minGuitar,32));
+                break;
+            case 12:
+                CrearObjeto(x,y,z,3,4,2,constantes.GUITARRA3,NumeroAleatorio(minGuitar,32));
+                break;
+
+            case 13: // FLAUTA
+                CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA1,NumeroAleatorio(minFlauta,23));
+                break;
+            case 14:
+                CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA2,NumeroAleatorio(minFlauta,23));
+                break;
+            case 15:
+                CrearObjeto(x,y,z,3,4,2,constantes.FLAUTA3,NumeroAleatorio(minFlauta,23));
+                break;
+
+            default: // ORO
+                CrearPowerUp(x,y,z,constantes.ORO,NumeroAleatorio(20,30));
+                break;
+        }
     }
 }
 

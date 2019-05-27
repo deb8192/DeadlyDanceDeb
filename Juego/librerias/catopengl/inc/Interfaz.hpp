@@ -25,6 +25,8 @@ class Interfaz
 
         ~Interfaz();
 
+        void CambiarResolucionPorDefecto(unsigned int width, unsigned int height);
+
         void CerrarVentana();//cierra la ventana
 
         unsigned short AddCamara();//creamos una camara
@@ -252,5 +254,7 @@ class Interfaz
         unsigned int countlights; //cuenta las luces puntuales
 
         void pulgarReferencia(Nodo * referencia,unsigned short tipo);//limpia la referencia del tipo de objeto que le pases
+
+        unsigned int height_default,width_default;//dimensiones de la ventana por defecto
 
 };

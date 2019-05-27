@@ -226,8 +226,8 @@ cuando este opengl se agregaran mas dependencias. Es una clase singleton (solo h
             bool GetDebugActivado(); // para saber si esta activado
 
             //cargando
-            unsigned short idCargando;
-            void AsignarCargando(unsigned short);
+            unsigned short idCargando,idControles;
+            void AsignarCargando(unsigned short,unsigned short did2 = 0);
             void BorrarCargando();
 
             //----------------- Revisar
