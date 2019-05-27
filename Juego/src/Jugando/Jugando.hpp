@@ -189,5 +189,7 @@ class Jugando: public Estado {
 
        float tiempoInicioNivel;//tiempo inicial que empiezas el nivel
 
+       //PARA PRESENTACION
+       unsigned short objetopresentacion = 0;
 };
 #endif /* JUGANDO_HPP */
