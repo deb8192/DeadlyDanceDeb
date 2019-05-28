@@ -733,7 +733,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             _ene = nullptr;
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
-            std::string nameid = std::to_string(id); //pasar id a string                    
+            std::string nameid = std::to_string(id); //pasar id a string
             _motora->LoadEvent("event:/SFX/SFX-Guardián Caminando", nameid, 1);
             _motora->getEvent(nameid)->setPosition(x,y,z);
             _motora->getEvent(nameid)->start();
@@ -751,7 +751,7 @@ void CargadorNiveles::CrearEnemigo(int accion, int enemigo, int x,int y,int z,
             _ene = nullptr;
 
             //Cargar sonido evento en una instancia con la id del enemigo como nombre
-            std::string nameid = std::to_string(id); //pasar id a string            
+            std::string nameid = std::to_string(id); //pasar id a string
             _motora->LoadEvent("event:/SFX/SFX-Guardián Caminando", nameid, 1);
             _motora->getEvent(nameid)->setPosition(x,y,z);
             _motora->getEvent(nameid)->start();
@@ -809,7 +809,7 @@ void CargadorNiveles::CrearBoss(int accion,int enemigo,int x,int y,int z,
         _boss->setAtaque(25);
         _boss->SetMultiplicadorAtEsp(1.5);
     }
-    
+
     _boss->setArbol(_arbolBoss);
     _boss->setID(++id);//le damos el id unico en esta partida al enemigo
 
@@ -1083,26 +1083,18 @@ void CargadorNiveles::CargarCofres()
                 _zonasCofre[zonasDisponibles[numAlt]]->annadirElemento();
 
                 //Colocar cofre
-                unsigned short posArrayArana = 3;
+                unsigned short posArrayArana = 0;
                 bool esArana = false;
-                // if (aranasCreadas < eneAranas)
-                // {
-                //     posArrayArana = CrearCofreArana(newx,newy,newz, 2,4,2, _zonasCofre[zonasDisponibles[numAlt]]->GetSala());
-                //     ++aranasCreadas;
-                //     esArana = true;
-                //
-                //     // Debug: para cambiar la posicion del jugador al lado de un cofre
-                //     posCofre[0] = newx;
-                //     posCofre[1] = newy;
-                //     posCofre[2] = newz;
-                // }
-
-                //std::cout << zonasDisponibles[numAlt] << std::endl;
-                if(zonasDisponibles[numAlt] == 2)
+                if (aranasCreadas < eneAranas)
                 {
                     posArrayArana = CrearCofreArana(newx,newy,newz, 2,4,2, _zonasCofre[zonasDisponibles[numAlt]]->GetSala());
+                    ++aranasCreadas;
                     esArana = true;
-                    //std::cout << "cofre arana en su sitio" << std::endl;
+
+                    // Debug: para cambiar la posicion del jugador al lado de un cofre
+                    posCofre[0] = newx;
+                    posCofre[1] = newy;
+                    posCofre[2] = newz;
                 }
 
                 Cofre* _cofre = new Cofre(esArana, ++id,
